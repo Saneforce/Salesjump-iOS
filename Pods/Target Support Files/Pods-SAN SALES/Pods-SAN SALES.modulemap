@@ -1,0 +1,6 @@
+framework module Pods_SAN_SALES {
+  umbrella header "Pods-SAN SALES-umbrella.h"
+
+  export *
+  module * { export * }
+}
