@@ -55,7 +55,9 @@ class HomePageViewController: IViewController{
         
         strMenuList.append(mnuItem.init(MnuId: 1, MenuName: UserSetup.shared.SecondaryCaption, MenuImage: "mnuPrimary"))
         strMenuList.append(mnuItem.init(MnuId: 2, MenuName: UserSetup.shared.PrimaryCaption, MenuImage: "mnuPrimary"))
-        
+        if UserSetup.shared.BrndRvwNd >= 0{
+            strMenuList.append(mnuItem.init(MnuId: 3, MenuName: UserSetup.shared.BrandReviewVisit, MenuImage: "mnuPrimary"))
+        }
         var moveMyPln: Bool=false
         if LocalStoreage.string(forKey: "Mydayplan") == nil {
             moveMyPln=true
@@ -352,6 +354,10 @@ class HomePageViewController: IViewController{
         case 2:
             let vc=self.storyboard?.instantiateViewController(withIdentifier: "sbPrimaryVisit") as!  PrimaryVisit
             self.navigationController?.pushViewController(vc, animated: true)
+        case 3:
+            let vc=self.storyboard?.instantiateViewController(withIdentifier:"sbbrandReviewVisit") as! BrandReviewVisit
+            self.navigationController?.pushViewController(vc, animated: true)
+    
         default:
             return
         }
@@ -364,4 +370,6 @@ class HomePageViewController: IViewController{
         self.present(vc, animated: true, completion: nil)
     }
 }
+//Username: Sankafo2
+//Paswoord :123
 

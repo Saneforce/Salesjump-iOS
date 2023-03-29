@@ -343,6 +343,9 @@
                                         <color key="tintColor" red="1" green="0.1137254902" blue="0.1450980392" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                         <state key="normal" image="multiply.circle.fill" catalog="system"/>
+                                        <connections>
+                                            <action selector="closeWin:" destination="ob4-dT-d1O" eventType="touchUpInside" id="vEC-eR-Gxs"/>
+                                        </connections>
                                     </button>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="FTT-8A-mYa">
                                         <rect key="frame" x="8" y="70" width="374" height="34"/>
@@ -352,6 +355,9 @@
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
+                                        <connections>
+                                            <action selector="searchBytext:" destination="ob4-dT-d1O" eventType="editingChanged" id="CGm-qv-rXx"/>
+                                        </connections>
                                     </textField>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="Tm8-BZ-Y2Q">
                                         <rect key="frame" x="8" y="109" width="374" height="669"/>

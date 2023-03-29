@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		38D0F76829BB2447003EEB03 /* BrandReviewVisit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38D0F76729BB2447003EEB03 /* BrandReviewVisit.swift */; };
 		3F063527283A8C070027842E /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F063526283A8C070027842E /* CardView.swift */; };
 		3F06352A283A8C920027842E /* ColorTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F063529283A8C920027842E /* ColorTheme.swift */; };
 		3F06352C283BC9790027842E /* PhotoGallary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F06352B283BC9790027842E /* PhotoGallary.swift */; };
@@ -82,6 +83,7 @@
 
 /* Begin PBXFileReference section */
 		3453EBBCA5603BC17DBC6D2A /* Pods-SAN SALES.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SAN SALES.release.xcconfig"; path = "Target Support Files/Pods-SAN SALES/Pods-SAN SALES.release.xcconfig"; sourceTree = "<group>"; };
+		38D0F76729BB2447003EEB03 /* BrandReviewVisit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrandReviewVisit.swift; sourceTree = "<group>"; };
 		3C05F882C905DE5237A46D02 /* Pods_SAN_SALES.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SAN_SALES.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F063526283A8C070027842E /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		3F063529283A8C920027842E /* ColorTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorTheme.swift; sourceTree = "<group>"; };
@@ -217,6 +219,7 @@
 				3F06352F283E04580027842E /* PrimaryVisit.swift */,
 				3F063531283F5FEF0027842E /* PrimaryOrder.swift */,
 				3F7CCF0228F14CA3002A7C03 /* GEOTagging.swift */,
+				38D0F76729BB2447003EEB03 /* BrandReviewVisit.swift */,
 			);
 			path = Activity;
 			sourceTree = "<group>";
@@ -515,6 +518,7 @@
 				3F0861BF2801D589006A30FB /* CollectionCell.swift in Sources */,
 				3F06352E283BF36A0027842E /* FlowLayout.swift in Sources */,
 				3F06352A283A8C920027842E /* ColorTheme.swift in Sources */,
+				38D0F76829BB2447003EEB03 /* BrandReviewVisit.swift in Sources */,
 				3F97F9F62831B5950097166D /* AddNewCustomer.swift in Sources */,
 				3F5B2FC3284B59E400574D7C /* MsgLoader.swift in Sources */,
 				3F9F379C28631F2C002CC408 /* layBranswsSal.swift in Sources */,

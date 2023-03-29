@@ -218,7 +218,6 @@ class GEOTagging: IViewController, UITableViewDelegate, UITableViewDataSource, M
             if sStrloc==", " { sStrloc = ""
                 cell.imgSelect?.image = UIImage(named: "markeroff50")?.withRenderingMode(.alwaysTemplate)
                 cell.imgSelect.tintColor = .systemGray4
-                
             }
             cell.lblUOM.text = sStrloc
         }else{cell.imgSelect.isHidden=true}
@@ -347,6 +346,7 @@ class GEOTagging: IViewController, UITableViewDelegate, UITableViewDataSource, M
             self.lblLatLng.text = self.CurrLoc
             
             var circle = MKCircle(center: center, radius: 500 as CLLocationDistance)
+            var placemrk = MKPlacemark(coordinate:center)
             self.mapView.addOverlay(circle)
         }else{
             LocationService.sharedInstance.getNewLocation(location: { location in

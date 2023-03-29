@@ -27,6 +27,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             let mainTabBarController = storyboard.instantiateViewController(identifier: "CheckPermission")
             window?.rootViewController = mainTabBarController
         }else if( ConfUser != nil) {
+            
+            UserSetup.shared.initUserSetup()
             let Conf=LocalStoreage.string(forKey: "APPConfig")
             if Conf != nil{
                 let data = Data(Conf!.utf8)
@@ -38,6 +40,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 }
                 
                 APIClient.shared.BaseURL=prettyJsonData["BaseURL"] as? String ?? APIClient.shared.BaseURL
+                
             }
             let mainTabBarController = storyboard.instantiateViewController(identifier: "NavController")
             window?.rootViewController = mainTabBarController

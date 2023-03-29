@@ -85,7 +85,7 @@ class DayReport:IViewController,UICollectionViewDelegate,UICollectionViewDataSou
         formatter.dateFormat = "yyyy-MM-dd"
         StrRptDt = formatter.string(from: date)
         getDayReport()
-        closeWin(self)
+        clswindow(self)
     }
     func getUserDetails(){
         let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
@@ -216,7 +216,8 @@ class DayReport:IViewController,UICollectionViewDelegate,UICollectionViewDataSou
         
         navigationController?.popViewController(animated: true)
     }
-    @IBAction func closeWin(_ sender:Any){
+   
+    @IBAction func clswindow(_ sender: Any) {
         vwSelWindow.isHidden=true
     }
 }

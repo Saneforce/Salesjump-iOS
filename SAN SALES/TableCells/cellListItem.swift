@@ -26,9 +26,18 @@ class cellListItem:UITableViewCell{
     @IBOutlet weak var txtQty: UITextField!
     @IBOutlet weak var lblQty: UILabel!
     @IBOutlet weak var imgSelect: UIImageView!
+    @IBOutlet weak var imgSelect2: UIImageView!
     @IBOutlet weak var imgBtnDel: UIImageView!
     @IBOutlet weak var btnPlus: UIView!
     @IBOutlet weak var btnMinus: UIView!
     @IBOutlet weak var btnViewDet: UIButton!
-   
+    @IBOutlet weak var ActionTB: UILabel!
+    @IBOutlet weak var ActionTB1: UILabel!
+    @IBOutlet weak var ActionTB2: UILabel!
+    @IBOutlet weak var ActionTB3: UILabel!
+    @IBOutlet weak var ActionTB4: UILabel!
+    @IBOutlet weak var ActionTB5: UILabel!
+    var ischeck = false
+
 }
+

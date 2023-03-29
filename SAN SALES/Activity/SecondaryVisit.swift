@@ -131,7 +131,7 @@ class SecondaryVisit: IViewController, UITableViewDelegate, UITableViewDataSourc
     }
     
     @IBAction func changeSwitch(_ sender: Any) {
-        var swtch: UISwitch = sender as! UISwitch
+        let swtch: UISwitch = sender as! UISwitch
         if swtch.isOn == false {
             VisitData.shared.OrderMode.id = "1"
             VisitData.shared.OrderMode.name = "Phone Order"
@@ -144,6 +144,7 @@ class SecondaryVisit: IViewController, UITableViewDelegate, UITableViewDataSourc
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell:cellListItem = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
         if tableView == tbJWKSelect {
+            
             let item: [String: Any]=lstJWNms[indexPath.row] as! [String : Any]
             cell.lblText?.text = item["name"] as? String
             cell.imgBtnDel.addTarget(target: self, action: #selector(self.delJWK(_:)))
@@ -187,7 +188,8 @@ class SecondaryVisit: IViewController, UITableViewDelegate, UITableViewDataSourc
                     tableView.reloadData()
                 }
             }
-        }else{
+        }
+        else{
             if SelMode == "RET" {
                 if vwVstContainer != nil{ vwVstContainer.removeFromSuperview()
                 }

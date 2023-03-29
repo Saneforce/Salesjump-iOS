@@ -180,81 +180,81 @@ class ViewController: IViewController {
             switch AFdata.result
             {
                 case .success(let value):
-                    if let json = value as? [String: Any] {
-                        if json["success"] as! Bool == false {
-                            Toast.show(message: json["msg"] as! String) //, controller: self
-                            self.LoadingDismiss()
-                            return
-                        }
-                        guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
-                            print("Error: Cannot convert JSON object to Pretty JSON data")
-                            self.LoadingDismiss()
-                            return
-                        }
-                        guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
-                            print("Error: Could print JSON in String")
-                            self.LoadingDismiss()
-                            return
-                        }
-                        let LocalStoreage = UserDefaults.standard
-                        let AppConfig: [String: Any]=[
-                            "BaseURL": APIClient.shared.BaseURL,
-                            "DBURL": APIClient.shared.DBURL
-                        ]
-                        
-                        let jsonData = try? JSONSerialization.data(withJSONObject: AppConfig, options: [])
-                        let jsonString = String(data: jsonData!, encoding: .utf8)!
-                        LocalStoreage.set(jsonString, forKey: "APPConfig")
-                        LocalStoreage.set(prettyPrintedJson, forKey: "UserDetails")
-                        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+"login", method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
-                            AFdata in
-                            self.LoadingDismiss()
-                            switch AFdata.result
-                            {
-                            case .success(let value):
-                                if let json = value as? [String: Any] {
-                                    /// checking
-                                    self.SyncSetup()
-                                    let sWTDets=LocalStoreage.string(forKey: "Worktype_Master")
-                                    LocalStoreage.set(true, forKey: "UserLogged")
-                                    if sWTDets==nil {
-                                        let vc=self.storyboard?.instantiateViewController(withIdentifier: "MasterSyncVwControl") as!  MasterSync
-                                        vc.modalPresentationStyle = .overCurrentContext
-                                        self.present(vc, animated: true, completion: nil)
-                                    } else {
-                                        let sDyPlnDets=LocalStoreage.string(forKey: "Mydayplan")?.replacingOccurrences(of: "\n", with: "")
-                                        var myDyPlFl:Bool=false
-                                        /*if sDyPlnDets==nil {
-                                            myDyPlFl=true
-                                        }else{
-                                            let PlnDets: String=LocalStoreage.string(forKey: "Mydayplan")!
-                                            if let list = GlobalFunc.convertToDictionary(text: PlnDets) as? [AnyObject] {
-                                                self.lstPlnDets = list;
-                                            }else{
-                                                myDyPlFl=true
-                                            }
-                                           
-                                            if( self.lstPlnDets.isEmpty || self.lstPlnDets.count<1){ myDyPlFl=true }
-                                            
-                                        }*/
-                                        
-                                        if myDyPlFl==true {
-                                            let vc=self.storyboard?.instantiateViewController(withIdentifier: "sbMydayplan") as!  MydayPlanCtrl
-                                            vc.modalPresentationStyle = .overCurrentContext
-                                            self.present(vc, animated: true, completion: nil)
-                                            
-                                        } else {
-                                            let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
-                                            UIApplication.shared.windows.first?.rootViewController = viewController
-                                            UIApplication.shared.windows.first?.makeKeyAndVisible()
-                                        }
-                                    }
-                                    
-                                }
-                            case .failure(_):
-                                print("Error")
+                if let json = value as? [String: Any] {
+                    if json["success"] as! Bool == false {
+                        Toast.show(message: json["msg"] as! String) //, controller: self
+                        self.LoadingDismiss()
+                        return
+                    }
+                    guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
+                        print("Error: Cannot convert JSON object to Pretty JSON data")
+                        self.LoadingDismiss()
+                        return
+                    }
+                    guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+                        print("Error: Could print JSON in String")
+                        self.LoadingDismiss()
+                        return
+                    }
+                    let LocalStoreage = UserDefaults.standard
+                    let AppConfig: [String: Any]=[
+                        "BaseURL": APIClient.shared.BaseURL,
+                        "DBURL": APIClient.shared.DBURL
+                    ]
+                    
+                    let jsonData = try? JSONSerialization.data(withJSONObject: AppConfig, options: [])
+                    let jsonString = String(data: jsonData!, encoding: .utf8)!
+                    LocalStoreage.set(jsonString, forKey: "APPConfig")
+                    LocalStoreage.set(prettyPrintedJson, forKey: "UserDetails")
+                    //                        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+"login", method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
+                    //                            AFdata in
+                    self.LoadingDismiss()
+                    //                            switch AFdata.result
+                    //                            {
+                    //                            case .success(let value):
+                    //                                if let json = value as? [String: Any] {
+                    /// checking
+                    self.SyncSetup(){
+                        let sWTDets=LocalStoreage.string(forKey: "Worktype_Master")
+                        LocalStoreage.set(true, forKey: "UserLogged")
+                        if sWTDets==nil {
+                            let vc=self.storyboard?.instantiateViewController(withIdentifier: "MasterSyncVwControl") as!  MasterSync
+                            vc.modalPresentationStyle = .overCurrentContext
+                            self.present(vc, animated: true, completion: nil)
+                        } else {
+                            let sDyPlnDets=LocalStoreage.string(forKey: "Mydayplan")?.replacingOccurrences(of: "\n", with: "")
+                            var myDyPlFl:Bool=false
+                            /*if sDyPlnDets==nil {
+                             myDyPlFl=true
+                             }else{
+                             let PlnDets: String=LocalStoreage.string(forKey: "Mydayplan")!
+                             if let list = GlobalFunc.convertToDictionary(text: PlnDets) as? [AnyObject] {
+                             self.lstPlnDets = list;
+                             }else{
+                             myDyPlFl=true
+                             }
+                             
+                             if( self.lstPlnDets.isEmpty || self.lstPlnDets.count<1){ myDyPlFl=true }
+                             
+                             }*/
+                            
+                            if myDyPlFl==true {
+                                let vc=self.storyboard?.instantiateViewController(withIdentifier: "sbMydayplan") as!  MydayPlanCtrl
+                                vc.modalPresentationStyle = .overCurrentContext
+                                self.present(vc, animated: true, completion: nil)
+                                
+                            } else {
+                                let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
+                                UIApplication.shared.windows.first?.rootViewController = viewController
+                                UIApplication.shared.windows.first?.makeKeyAndVisible()
                             }
                         }
+                    }
+ //                               }
+//                            case .failure(_):
+//                                print("Error")
+//                            }
+                       // }
                         
                     }
                 case .failure(let error):
@@ -285,7 +285,7 @@ class ViewController: IViewController {
 //        self.view.frame.origin.y = 0
 //    }
     
-    func SyncSetup() {
+    func SyncSetup(completion: (() -> Void)? = nil) {
         let LocalStoreage = UserDefaults.standard
         let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
         let data = Data(prettyPrintedJson!.utf8)
@@ -319,8 +319,11 @@ class ViewController: IViewController {
                     let LocalStoreage = UserDefaults.standard
                     LocalStoreage.set(prettyPrintedJson, forKey: "UserSetup")
                     UserSetup.shared.initUserSetup()
+                
+                    completion?()
                 case .failure(let error):
                     print(error.errorDescription!)
+                    completion?()
                     /*let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
                         return

@@ -16,7 +16,9 @@ class UserSetup{
     var Fenching: Bool = false
     var PrimaryCaption: String = "Primary Order"
     var SecondaryCaption: String = "Secondary Order"
+    var BrandReviewVisit: String = "Brand Review"
     var DistBased: Int = 0
+    var BrndRvwNd: Int = 0
     var DistRad: Double = 0
     var OrderMode: item = item()
     func initUserSetup(){
@@ -29,7 +31,9 @@ class UserSetup{
         
         SecondaryCaption = lstSetups[0]["EDrCap"] as? String ?? "Secondary Order"
         PrimaryCaption = lstSetups[0]["EStkCap"] as? String ?? "Primary Order"
+        BrandReviewVisit = "Brand Review Visit"
         DistBased = lstSetups[0]["DistBased"] as? Int ?? 0
+        BrndRvwNd = Int(lstSetups[0]["outlet_review_need"] as? Double ?? 0)
         DistRad = lstSetups[0]["DisRad"] as? Double ?? 0
         if(lstSetups[0]["Geo_Fencing"] as? Int == 1){
             Fenching = true

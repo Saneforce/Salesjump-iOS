@@ -73,6 +73,7 @@ class LeaveForm: IViewController, UITableViewDelegate,
         formatter.dateFormat = "dd/MM/yyyy"
         lblFDate.text = formatter.string(from: Date())
         lblTDate.text = formatter.string(from: Date())
+        
         formatter.dateFormat = "yyyy/MM/dd"
         sDOF = formatter.string(from: Date())
         sDOT = formatter.string(from: Date())
@@ -121,35 +122,51 @@ class LeaveForm: IViewController, UITableViewDelegate,
     
     @objc private func selDOT() {
         isDate = true
+        
         openWin(Mode: "DOT")
         lblSelTitle.text="Select the leave to date"
     }
+    //
+   
     
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
         let formatter = DateFormatter()
         formatter.dateFormat = "dd/MM/yyyy"
         print("did select date \(formatter.string(from: date))")
+       // let selectedDates = calendar.selectedDates.sorted(by: {formatter.string(from: $0)})
         let selectedDates = calendar.selectedDates.map({formatter.string(from: $0)})
         print("selected dates is \(selectedDates)")
         if monthPosition == .next || monthPosition == .previous {
             calendar.setCurrentPage(date, animated: true)
         }
-        if SelMode == "DOF" {
+        if SelMode == "DOF"{
+            //lblFDate.text = selectedDates.first
             lblFDate.text = selectedDates[0]
             formatter.dateFormat = "yyyy/MM/dd"
             sDOF = formatter.string(from: date)
             FDate=date
             datediff()
         }
+//        if TDate>FDate{
+//                   Toast.show(message: "To date must be grater or equal")
+//               }
+        
         if SelMode == "DOT" {
+            //lblTDate.text = selectedDates.first
             lblTDate.text = selectedDates[0]
-            formatter.dateFormat = "yyyy/MM/dd"
+           formatter.dateFormat = "yyyy/MM/dd"
             sDOT = formatter.string(from: date)
             TDate = date
             datediff()
         }
         closeWin(self)
     }
+    
+    func minimumDate(for calendar: FSCalendar) -> Date {
+        return Date()
+    }
+    
+   
     
     func openWin(Mode:String){
         self.view.endEditing(true)
@@ -167,9 +184,25 @@ class LeaveForm: IViewController, UITableViewDelegate,
         vwSelWindow.isHidden=false
         
     }
-
+// crrection by mani closewin 17/03/23
     @IBAction func closeWin(_ sender:Any){
         vwSelWindow.isHidden=true
+    }
+    
+    // crrection by mani 17/03/23
+    @IBAction func searchBytext(_ sender: Any) {
+        let txtbx: UITextField = sender as! UITextField
+        if txtbx.text!.isEmpty {
+            lObjSel = lAllObjSel
+        }
+        else{
+            lObjSel = lAllObjSel.filter({(product) in
+                let name: String = String(format: "%@", product["name"] as! CVarArg)
+                return name.lowercased().contains(txtbx.text!.lowercased())
+            })
+        }
+        tbDataSelect.reloadData()
+        
     }
     
     func validateForm() -> Bool {
@@ -187,9 +220,14 @@ class LeaveForm: IViewController, UITableViewDelegate,
             return false
         }
         if (datediff()<0){
-            Toast.show(message: "To date must be grater or equal") //, controller: self
+            Toast.show(message: "Check From and To Date")
             return false
         }
+    
+//        if FDate>=TDate{
+//            Toast.show(message: "To date must be grater or equal")
+//            return false
+//        }
         if txReason.text == "" {
             Toast.show(message: "Select the Reason", controller: self)
             return false
@@ -293,6 +331,7 @@ class LeaveForm: IViewController, UITableViewDelegate,
         var sdys = ("\(String(describing: components.day!+1)) Day")
         if(components.day!>0){ sdys += "s" }
         lblNoDays.text = sdys
+        
         return components.day!;
     }
     
@@ -302,4 +341,8 @@ class LeaveForm: IViewController, UITableViewDelegate,
         self.navigationController?.popViewController(animated: true)
         return
     }
+    
+    //
+    
+   
 }
