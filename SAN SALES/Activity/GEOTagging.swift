@@ -319,7 +319,7 @@ class GEOTagging: IViewController, UITableViewDelegate, UITableViewDataSource, M
     }
     
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
-        if overlay is MKCircle {
+         if overlay is MKCircle {
             let circle = MKCircleRenderer(overlay: overlay)
             circle.strokeColor = UIColor.red
             circle.fillColor = UIColor(red: 255, green: 0, blue: 0, alpha: 0.1)
@@ -335,13 +335,12 @@ class GEOTagging: IViewController, UITableViewDelegate, UITableViewDataSource, M
         self.mapView.showsUserLocation = true
         if(flag=="1"){
             self.btntag.isHidden = true
+            self.mapView.removeOverlays(mapView.overlays)
             var str: [String] = self.CurrLoc.replacingOccurrences(of: " ", with: "").components(separatedBy: ",")
             let lat: Double = Double("\(str[0] as! String)")!
             let lon: Double = Double("\(str[1] as! String)")!
-            
             let center = CLLocationCoordinate2D(latitude: lat , longitude: lon)
             let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))
-            
             self.mapView.setRegion(region, animated: true)
             self.lblLatLng.text = self.CurrLoc
             
@@ -413,7 +412,27 @@ class GEOTagging: IViewController, UITableViewDelegate, UITableViewDataSource, M
         self.lblLatLng.text = sLocation
         self.CurrLoc = sLocation
     }
-    
+    private func addCustompin(){
+        let pin = MKPointAnnotation()
+        pin.title = ""
+        pin.subtitle = ""
+        mapView.addAnnotation(pin)
+    }
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        guard !(annotation is MKUserLocation) else {
+            return nil
+        }
+        var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: "custom")
+        if annotationView == nil{
+            annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: "custom")
+            annotationView?.canShowCallout = true
+        }
+        else {
+            annotationView?.annotation = annotation
+        }
+        annotationView?.image = UIImage (named: "marker50")
+        return annotationView
+    }
     
     //to be replace Common function
     func MasSync(apiKey: String,aFormData: [String: Any],aStoreKey:String) {

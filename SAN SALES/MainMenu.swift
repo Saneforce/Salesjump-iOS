@@ -90,7 +90,7 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
     }
     @objc func onDidRegistered(_ notification: Notification) {
        
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let storyboard = UIStoryboard(name: "Main", bundle: nil) 
             let mainTabBarController = storyboard.instantiateViewController(identifier: "sbLogin")
             
             (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(mainTabBarController)

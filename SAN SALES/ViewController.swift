@@ -150,6 +150,7 @@ class ViewController: IViewController {
             }
             userAuth()
         }
+        
     }
    /* func MsgLoader(){
         alert = UIAlertController(title: nil, message: "Please wait...", preferredStyle: .alert)
@@ -348,6 +349,25 @@ class ViewController: IViewController {
         }, completion: {(isCompleted) in
             toastLabel.removeFromSuperview()
         })
+    }
+    func checkIfSessionExpired() -> Bool {
+        let defaults = UserDefaults.standard
+        let loginTime = defaults.object(forKey: "loginTime") as? Date
+        let allowedDuration: TimeInterval = 3600
+        let currentTime = Date()
+        
+        guard let timeSinceLogin = loginTime?.timeIntervalSince(currentTime),
+              abs(timeSinceLogin) < allowedDuration else {
+           
+            return true
+        }
+        
+        defaults.set(currentTime, forKey: "loginTime")
+        return false
+    }
+    func applicationDidBecomeActive(_ application: UIApplication) {
+        if checkIfSessionExpired() {
+        }
     }
 }
 

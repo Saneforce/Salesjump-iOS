@@ -220,10 +220,9 @@ class LeaveForm: IViewController, UITableViewDelegate,
             return false
         }
         if (datediff()<0){
-            Toast.show(message: "Check From and To Date")
+            Toast.show(message: "Invalid date selection")
             return false
         }
-    
 //        if FDate>=TDate{
 //            Toast.show(message: "To date must be grater or equal")
 //            return false

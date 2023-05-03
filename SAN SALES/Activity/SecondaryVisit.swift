@@ -96,10 +96,16 @@ class SecondaryVisit: IViewController, UITableViewDelegate, UITableViewDataSourc
         if let list = GlobalFunc.convertToDictionary(text: RmkDatas) as? [AnyObject] {
             lstRmksTmpl = list;
         }
-        let lstRetailData: String = LocalStoreage.string(forKey: "Retail_Master_"+DataSF)!
-        if let list = GlobalFunc.convertToDictionary(text: lstRetailData) as? [AnyObject] {
-            lstRetails = list;
+        //new
+        if let lstRetailData = LocalStoreage.string(forKey: "Retail_Master_"+DataSF),
+           let list = GlobalFunc.convertToDictionary(text:  lstRetailData) as? [AnyObject] {
+            lstRetails = list
         }
+        //new
+//        let lstRetailData: String = LocalStoreage.string(forKey: "Retail_Master_"+DataSF)!
+//        if let list = GlobalFunc.convertToDictionary(text: lstRetailData) as? [AnyObject] {
+//            lstRetails = list;
+//        }
         if let list = GlobalFunc.convertToDictionary(text: JointWData) as? [AnyObject] {
             lstJoint = list;
         }
@@ -148,7 +154,8 @@ class SecondaryVisit: IViewController, UITableViewDelegate, UITableViewDataSourc
             let item: [String: Any]=lstJWNms[indexPath.row] as! [String : Any]
             cell.lblText?.text = item["name"] as? String
             cell.imgBtnDel.addTarget(target: self, action: #selector(self.delJWK(_:)))
-        }else{
+        }
+        else{
             let item: [String: Any] = lObjSel[indexPath.row] as! [String : Any]
             cell.lblText?.text = item["name"] as? String
             cell.imgSelect?.image = nil
@@ -251,6 +258,7 @@ class SecondaryVisit: IViewController, UITableViewDelegate, UITableViewDataSourc
         if validateForm() == false {
             return
         }
+        
         if VisitData.shared.VstRemarks.name == "" {
             Toast.show(message: "Select the Reason", controller: self)
             return
@@ -405,7 +413,7 @@ class SecondaryVisit: IViewController, UITableViewDelegate, UITableViewDataSourc
                 })
                 self.lAllObjSel = self.lObjSel
                 self.tbDataSelect.reloadData()
-            }, error:{ errMsg in
+            }, error:{ errMsg in 
                 print (errMsg)
             })
         } else {

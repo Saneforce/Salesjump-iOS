@@ -377,15 +377,28 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                 if let indexToDelete = lstHQs.firstIndex(where: { String(format: "%@", $0["id"] as! CVarArg) == sfid }) {
                     lblHQ.text = lstHQs[indexToDelete]["name"] as? String
                     let sfname: String = lstHQs[indexToDelete]["name"] as! String
-                    let DistData: String=LocalStoreage.string(forKey: "Distributors_Master_"+sfid)!
-                    let RouteData: String=LocalStoreage.string(forKey: "Route_Master_"+sfid)!
-                    if let list = GlobalFunc.convertToDictionary(text: DistData) as? [AnyObject] {
-                        lstDist = list;
+                    //new
+                    if let DistData = LocalStoreage.string(forKey: "Distributors_Master_"+sfid),
+                       let list = GlobalFunc.convertToDictionary(text:  DistData) as? [AnyObject] {
+                        lstDist = list
                     }
-                    if let list = GlobalFunc.convertToDictionary(text: RouteData) as? [AnyObject] {
+                    if let RouteData = LocalStoreage.string(forKey: "Route_Master_"+sfid),
+                       let list = GlobalFunc.convertToDictionary(text:  RouteData) as? [AnyObject] {
                         lstAllRoutes = list
                         lstRoutes = list
                     }
+                    //new
+        
+//                    let DistData: String=LocalStoreage.string(forKey: "Distributors_Master_"+sfid)!
+//                    let RouteData: String=LocalStoreage.string(forKey: "Route_Master_"+sfid)!
+//                    if let list = GlobalFunc.convertToDictionary(text: DistData) as? [AnyObject] {
+//                        lstDist = list;
+//                    }
+//                    if let list = GlobalFunc.convertToDictionary(text: RouteData) as? [AnyObject] {
+//                        lstAllRoutes = list
+//                        lstRoutes = list
+//                    }
+                    
                     myDyTp.updateValue(lItem(id: sfid, name: sfname,FWFlg: ""), forKey: "HQ")
                 }
                 let stkid=String(format: "%@", lstPlnDetail[0]["stockistid"] as! CVarArg)
