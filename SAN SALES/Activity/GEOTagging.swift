@@ -135,12 +135,19 @@ class GEOTagging: IViewController, UITableViewDelegate, UITableViewDataSource, M
         if(LocalStoreage.string(forKey: "Distributors_Master_"+DataSF)==nil){
             GlobalFunc.FieldMasterSync(SFCode: DataSF) {
                 
-                let lstRetailData: String = self.LocalStoreage.string(forKey: "Retail_Master_"+self.DataSF)!
-                let lstDistData: String = self.LocalStoreage.string(forKey: "Distributors_Master_"+self.DataSF)!
-                    
-                if let list = GlobalFunc.convertToDictionary(text: lstRetailData) as? [AnyObject] {
+                //new
+                if let lstRetailData = self.LocalStoreage.string(forKey: "Retail_Master_"+self.DataSF),
+                   let list = GlobalFunc.convertToDictionary(text:  lstRetailData) as? [AnyObject] {
                     self.lstRetails = list;
                 }
+                //new
+                
+                //let lstRetailData: String = self.LocalStoreage.string(forKey: "Retail_Master_"+self.DataSF)!
+                let lstDistData: String = self.LocalStoreage.string(forKey: "Distributors_Master_"+self.DataSF)!
+                    
+//                if let list = GlobalFunc.convertToDictionary(text: lstRetailData) as? [AnyObject] {
+//                    self.lstRetails = list;
+//                }
                 if let list = GlobalFunc.convertToDictionary(text: lstDistData) as? [AnyObject] {
                     self.lstDists = list;
                 }
