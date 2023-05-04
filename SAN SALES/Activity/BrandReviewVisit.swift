@@ -395,7 +395,7 @@ class BrandReviewVisit: UIViewController, UITableViewDataSource, UITableViewDele
     }
     
     
-    func selectcustomer(mslno : String ){
+    func selectcustomer(mslno : String , sfcode : String ){
         let apiKey: String = "\(axn)&divisionCode=\(DivCode)&Msl_No=\(mslno)&sfCode=\(SFCode)&Mode=\(StrMode)"
 
         AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
@@ -420,6 +420,7 @@ class BrandReviewVisit: UIViewController, UITableViewDataSource, UITableViewDele
                         strMasList.append(mnuItem.init(MasId: 2, MasName: "Customer Channal", MasLbl:json["DrSpl"] as! String))//Doc_Spec_ShortName
                         strMasList.append(mnuItem.init(MasId: 3, MasName: "Address", MasLbl:json["Address"] as! String))
                         strMasList.append(mnuItem.init(MasId: 4, MasName: "GST", MasLbl:json["GST"] as! String))
+                        strMasList.append(mnuItem(MasId:5, MasName: "Last Order Date", MasLbl: json["Last_Order_Date"] as! String))
                         // strMasList.append(mnuItem.init(MasId: 5, MasName: "Potential", MasLbl:"-"))
                         //trMasList.append(mnuItem.init(MasId: 6, MasName: "Monthly Order Value", MasLbl:"-"))
                         //strMasList.append(mnuItem.init(MasId: 7, MasName: "Last Order Amount", MasLbl:"-"))
@@ -506,7 +507,7 @@ class BrandReviewVisit: UIViewController, UITableViewDataSource, UITableViewDele
         
         //lblselectcustomer.text = name
        // txvRmks.text = name
-        selectcustomer(mslno: id)
+        selectcustomer(mslno: id , sfcode: SFCode)
         if SelMode == "RET"{
             VisitData.shared.CustID = id
             VisitData.shared.CustName = name
