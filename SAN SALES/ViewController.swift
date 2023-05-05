@@ -116,7 +116,7 @@ class ViewController: IViewController {
         self.ShowLoading(Message: "Please wait...")
         let Conf=LocalStoreage.string(forKey: "APPConfig")
         if Conf==nil &&  ((txUsrNm.text?.firstIndex(of: "-")) != nil) {
-            AF.request("https://fmcg.sanfmcg.com/server/url_config.json", method: .get, parameters: nil, encoding: URLEncoding.default, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
+            AF.request("http://fmcg.sanfmcg.com/server/url_config.json", method: .get, parameters: nil, encoding: URLEncoding.default, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
                 AFdata in
                 switch AFdata.result
                 {

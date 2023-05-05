@@ -10,7 +10,7 @@ import UIKit
 import Alamofire
 import CoreLocation
 
-class BrandReviewVisit: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class BrandReviewVisit: IViewController, UITableViewDataSource, UITableViewDelegate {
     @IBOutlet weak var btrmktp: UIButton!
     @IBOutlet weak var txvRmks: UITextView!
     @IBOutlet weak var lblSelTitle: UILabel!
@@ -24,6 +24,8 @@ class BrandReviewVisit: UIViewController, UITableViewDataSource, UITableViewDele
     @IBOutlet weak var BTback: UIImageView!
     @IBOutlet weak var BTcam: UIView!
     @IBOutlet weak var itmSmryHeight: NSLayoutConstraint!
+    @IBOutlet weak var BrandTit: UIView!
+    @IBOutlet weak var textField: UITextField!
     
     let product:[String] = ["Start Time","Customer Channal","Address","GST"]
     
@@ -157,6 +159,8 @@ class BrandReviewVisit: UIViewController, UITableViewDataSource, UITableViewDele
         //            objgetprecall = list;
         //        }
         
+        BrandTit.layer.cornerRadius=10.0
+       // BrandTit.layer.borderWidth=1.0
         
         getUserDetails()
         Checkboxtable.delegate=self
@@ -182,6 +186,8 @@ class BrandReviewVisit: UIViewController, UITableViewDataSource, UITableViewDele
         
         // Do any additional setup after loading the view.
     }
+    
+
     @objc private func selRmksTemp() {
         //isDate = false
         isMulti=false
@@ -570,6 +576,7 @@ class BrandReviewVisit: UIViewController, UITableViewDataSource, UITableViewDele
           }
           tbDataSelect.reloadData()
       }
+    
     func openWin(Mode:String){
         SelMode=Mode
         lAllObjSel = lObjSel
