@@ -209,6 +209,7 @@ class BrandReviewVisit: IViewController, UITableViewDataSource, UITableViewDeleg
         if Checkboxtable == tableView { return brandListData.count }
         if ActionTable == tableView {return strMasList.count }
         if ActioTable2 == tableView {return product.count}
+        if ActioTable2 == tableView {return strMasList.count}
         //if tableView == ActionTable(product.count)
         if tbDataSelect == tableView {return lObjSel.count}
         
