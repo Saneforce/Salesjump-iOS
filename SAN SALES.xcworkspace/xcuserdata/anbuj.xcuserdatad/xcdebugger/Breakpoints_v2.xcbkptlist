@@ -48,7 +48,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "336"
             endingLineNumber = "336"
-            landmarkName = "moveMenuScreen(_:)"
+            landmarkName = "getMyDayPlan(Validate:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -64,7 +64,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "335"
             endingLineNumber = "335"
-            landmarkName = "moveMenuScreen(_:)"
+            landmarkName = "getMyDayPlan(Validate:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -2784,7 +2784,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "137"
             endingLineNumber = "137"
-            landmarkName = "viewDidAppear(_:)"
+            landmarkName = "getUserDetails()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -5132,7 +5132,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "125"
             endingLineNumber = "125"
-            landmarkName = "getUserDetails()"
+            landmarkName = "viewDidLoad()"
             landmarkType = "7">
             <Locations>
                <Location
@@ -5196,7 +5196,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "150"
             endingLineNumber = "150"
-            landmarkName = "Dashboard()"
+            landmarkName = "TimeDisplay()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -5204,7 +5204,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "1792D04C-3F60-44B2-8773-95A6B38EBD8A"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SAN SALES/HomePageViewController.swift"
@@ -5228,7 +5228,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "212"
             endingLineNumber = "212"
-            landmarkName = "makeMenuView()"
+            landmarkName = "Dashboard()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -5308,7 +5308,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "285"
             endingLineNumber = "285"
-            landmarkName = "addMonthVstDetControl(aY:h:Caption:text:textAlign:)"
+            landmarkName = "addVstDetControl(aY:h:Caption:text:textAlign:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -5324,7 +5324,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "303"
             endingLineNumber = "303"
-            landmarkName = "getMyDayPlan(Validate:)"
+            landmarkName = "addMonthVstDetControl(aY:h:Caption:text:textAlign:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
