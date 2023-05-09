@@ -311,6 +311,7 @@ class GEOTagging: IViewController, UITableViewDelegate, UITableViewDataSource, M
                         self.mapView.isHidden = false
                         self.btntag.isHidden = true
                     }
+                print(value)
                 case .failure(let error):
                     Toast.show(message: error.errorDescription ?? "", controller: self)
                 }

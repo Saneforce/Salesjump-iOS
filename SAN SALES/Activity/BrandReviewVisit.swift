@@ -19,7 +19,7 @@ class BrandReviewVisit: IViewController, UITableViewDataSource, UITableViewDeleg
     @IBOutlet weak var veselwindow: UIView!
     @IBOutlet weak var lblselectcustomer: LabelSelect!
     @IBOutlet weak var ActionTable: UITableView!
-    @IBOutlet weak var ActioTable2: UITableView!
+    @IBOutlet weak var ActionTable2: UITableView!
     @IBOutlet weak var Checkboxtable: UITableView!
     @IBOutlet weak var BTback: UIImageView!
     @IBOutlet weak var BTcam: UIView!
@@ -169,8 +169,8 @@ class BrandReviewVisit: IViewController, UITableViewDataSource, UITableViewDeleg
         ActionTable.delegate=self
         ActionTable.dataSource=self
         
-        ActioTable2.delegate=self
-        ActioTable2.dataSource=self
+        ActionTable2.delegate=self
+        ActionTable2.dataSource=self
         
         tbDataSelect.delegate=self
         tbDataSelect.dataSource=self
@@ -209,10 +209,8 @@ class BrandReviewVisit: IViewController, UITableViewDataSource, UITableViewDeleg
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if Checkboxtable == tableView { return brandListData.count }
         if ActionTable == tableView {return strMasList.count }
-        if ActioTable2 == tableView {return product.count}
-        if ActioTable2 == tableView {return strMasList.count}
-        //if tableView == ActionTable(product.count)
         if tbDataSelect == tableView {return lObjSel.count}
+        if ActionTable2 == tableView {return product.count}
         
         return 0
     }
@@ -239,12 +237,17 @@ class BrandReviewVisit: IViewController, UITableViewDataSource, UITableViewDeleg
             cell.ActionTB.text = strMasList[indexPath.row].MasLbl
             cell.ActionTB.numberOfLines = 0
             cell.ActionTB.lineBreakMode = .byWordWrapping
+            
+            ActionTable.isHidden = false
+            ActionTable2.isHidden = true
+            
+
         }
-        else if ActioTable2 == tableView {
-            cell = tableView.dequeueReusableCell(withIdentifier: "Cell" ) as! cellListItem
+        else if ActionTable2 == tableView {
+            cell = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
             cell.lblText.text = product[indexPath.row]
+            ActionTable2.isHidden = false
         }
-       
         
         else{
             cell = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
@@ -261,6 +264,7 @@ class BrandReviewVisit: IViewController, UITableViewDataSource, UITableViewDeleg
         }
         return cell
     }
+     
     
     func getUserDetails(){
         let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
@@ -366,7 +370,7 @@ class BrandReviewVisit: IViewController, UITableViewDataSource, UITableViewDeleg
                 let jsonString = "[{\"svCallRevw\":{\"worktype\":\"" + (self.lstPlnDetail[0]["worktype"] as! String) + "\",\"entryDate\":\"" + VisitData.shared.cInTime + "\",\"eDt\":\"" + VisitData.shared.cInTime + "\",\"subordinate\":\"'" + (vstDets["HQ"]?.id ?? SFCode) + "'\",\"stockist\":\"'" + (vstDets["DIS"]?.id ?? "") + "'\",\"cluster\":\"'" + (vstDets["RUT"]?.id ?? "") + "'\",\"clusterNm\":\"'" + (vstDets["RUT"]?.name ?? "") + "'\",\"doctorid\":\"" + VisitData.shared.CustID + "\",\"remarks\":\"" + VisitData.shared.VstRemarks.name + "\",\"BrandList\":\"[" + brndlst + "]\",\"photosList\":[" + sImgItems + "]}}]";
 //                let jsonString = "[{\"svCallRevw\":{\"worktype\":\"1386\",\"entryDate\":\"2023-04-27 10:48:21\",\"eDt\":\"2023-04-27 00:00:00\",\"subordinate\":\"mgr1018\",\"stockist\":\"32538\",\"cluster\":\"114726\",\"clusterNm\":\"SAIDAPET\",\"doctorid\":\"2051498\",\"remarks\":\"OWNER NOT AVAILABLE\",\"BrandList\":\"[{\\\"id\\\":\\\"1658\\\",\\\"name\\\":\\\"Brittania\\\",\\\"Avai\\\":false,\\\"EC\\\":true},{\\\"id\\\":\\\"909\\\",\\\"name\\\":\\\"BUTTERFLY FAN\\\",\\\"Avai\\\":true,\\\"EC\\\":false}]\",\"photosList\":\"[]\"}}]";
 //                print(jsonString)
-                
+            
                 let params: Parameters = [
                     "data": jsonString
                 ]
@@ -438,13 +442,16 @@ class BrandReviewVisit: IViewController, UITableViewDataSource, UITableViewDeleg
                         //strMasList.append(mnuItem.init(MasId: 9, MasName: "Last Visted", MasLbl:"-"))
                         //strMasList.append(mnuItem.init(MasId: 10, MasName: "Remark", MasLbl:"-"))
                         //strMasList.append(mnuItem.init(MasId: 11, MasName: "Mobile Number", MasLbl:"-")) //Mobile_Number
+                        
 
                     }
 
                     print(prettyPrintedJson)
                    // self.objgetprecall = json
                  self.ActionTable.reloadData()
+                    ActionTable.isHidden = true
                     
+                                        
                 }
                case .failure(let error):
                 Toast.show(message: error.errorDescription!)  //, controller: self
