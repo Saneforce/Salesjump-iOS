@@ -205,6 +205,7 @@ class BrandReviewVisit: IViewController, UITableViewDataSource, UITableViewDeleg
         }
     }
     
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if Checkboxtable == tableView { return brandListData.count }
         if ActionTable == tableView {return strMasList.count }
@@ -236,6 +237,8 @@ class BrandReviewVisit: IViewController, UITableViewDataSource, UITableViewDeleg
             //cell.lblText.text = self.product [indexPath.row]
             cell.lblText.text = strMasList[indexPath.row].MasName
             cell.ActionTB.text = strMasList[indexPath.row].MasLbl
+            cell.ActionTB.numberOfLines = 0
+            cell.ActionTB.lineBreakMode = .byWordWrapping
         }
         else if ActioTable2 == tableView {
             cell = tableView.dequeueReusableCell(withIdentifier: "Cell" ) as! cellListItem
@@ -424,7 +427,7 @@ class BrandReviewVisit: IViewController, UITableViewDataSource, UITableViewDeleg
                       strMasList=[]
                     if(json.count>1){
                         strMasList.append(mnuItem.init(MasId: 1, MasName: "Start Time", MasLbl:VisitData.shared.cInTime))
-                        strMasList.append(mnuItem.init(MasId: 2, MasName: "Customer Channal", MasLbl:json["DrSpl"] as! String))//Doc_Spec_ShortName
+                        strMasList.append(mnuItem.init(MasId: 2, MasName: "Customer Channel", MasLbl:json["DrSpl"] as! String))//Doc_Spec_ShortName
                         strMasList.append(mnuItem.init(MasId: 3, MasName: "Address", MasLbl:json["Address"] as! String))
                         strMasList.append(mnuItem.init(MasId: 4, MasName: "GST", MasLbl:json["GST"] as! String))
                         strMasList.append(mnuItem(MasId:5, MasName: "Last Order Date", MasLbl: json["Last_Order_Date"] as! String))
