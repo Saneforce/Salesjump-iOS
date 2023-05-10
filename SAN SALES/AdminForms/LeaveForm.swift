@@ -70,9 +70,15 @@ class LeaveForm: IViewController, UITableViewDelegate,
         calendar.delegate=self
         calendar.dataSource=self
         let formatter = DateFormatter()
-        formatter.dateFormat = "dd/MM/yyyy"
-        lblFDate.text = formatter.string(from: Date())
-        lblTDate.text = formatter.string(from: Date())
+        //formatter.dateFormat = "dd/MM/yyyy"
+//        lblFDate.text = formatter.string(from: Date())
+//        lblTDate.text = formatter.string(from: Date())
+        self.lblFDate.text = "Select Date"
+        lblFDate.textColor = UIColor.systemBlue
+        self.lblTDate.text = "Select Date"
+        lblTDate.textColor = UIColor.systemBlue
+        
+        
         
         formatter.dateFormat = "yyyy/MM/dd"
         sDOF = formatter.string(from: Date())
@@ -146,6 +152,8 @@ class LeaveForm: IViewController, UITableViewDelegate,
             sDOF = formatter.string(from: date)
             FDate=date
             datediff()
+//            minimumDate(for: FDate)
+            
         }
 //        if TDate>FDate{
 //                   Toast.show(message: "To date must be grater or equal")
@@ -158,14 +166,26 @@ class LeaveForm: IViewController, UITableViewDelegate,
             sDOT = formatter.string(from: date)
             TDate = date
             datediff()
+            
+          
         }
+        var maximumDate: Date? { date }
         closeWin(self)
     }
+    
+//    func maximumDate(for calendar: FSCalendar) -> Date {
+//          return date
+//     }
     
     func minimumDate(for calendar: FSCalendar) -> Date {
         return Date()
     }
     
+//    func maximumDate(for calendar: FSCalendar) -> Date {
+//          let dateFormatter = DateFormatter()
+//          dateFormatter.dateFormat = "YYYY-MM-dd"
+//          return dateFormatter.date(from: "2050-01-01") ?? Date()
+//    }
    
     
     func openWin(Mode:String){
