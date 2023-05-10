@@ -75,6 +75,7 @@ class LeaveForm: IViewController, UITableViewDelegate,
 //        lblTDate.text = formatter.string(from: Date())
         self.lblFDate.text = "Select Date"
         lblFDate.textColor = UIColor.systemBlue
+        
         self.lblTDate.text = "Select Date"
         lblTDate.textColor = UIColor.systemBlue
         
