@@ -156,12 +156,18 @@ class GEOTagging: IViewController, UITableViewDelegate, UITableViewDataSource, M
             }
             return
         }else{
-            let lstRetailData: String = LocalStoreage.string(forKey: "Retail_Master_"+DataSF)!
+            //let lstRetailData: String = LocalStoreage.string(forKey: "Retail_Master_"+DataSF)!
+            
+            if let lstRetailData = LocalStoreage.string(forKey: "Retail_Master_"+DataSF),
+               let list = GlobalFunc.convertToDictionary(text:  lstRetailData) as? [AnyObject] {
+                lstRetails = list
+            }
+            
             let lstDistData: String = LocalStoreage.string(forKey: "Distributors_Master_"+DataSF)!
             
-            if let list = GlobalFunc.convertToDictionary(text: lstRetailData) as? [AnyObject] {
-                lstRetails = list;
-            }
+//            if let list = GlobalFunc.convertToDictionary(text: lstRetailData) as? [AnyObject] {
+//                lstRetails = list;
+//            }
             if let list = GlobalFunc.convertToDictionary(text: lstDistData) as? [AnyObject] {
                 lstDists = list;
             }
