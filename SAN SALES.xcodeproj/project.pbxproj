@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		38A2E9B22A0E1B940061B854 /* Brand Availability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38A2E9B12A0E1B940061B854 /* Brand Availability.swift */; };
 		38D0F76829BB2447003EEB03 /* BrandReviewVisit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38D0F76729BB2447003EEB03 /* BrandReviewVisit.swift */; };
 		3F063527283A8C070027842E /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F063526283A8C070027842E /* CardView.swift */; };
 		3F06352A283A8C920027842E /* ColorTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F063529283A8C920027842E /* ColorTheme.swift */; };
@@ -83,6 +84,7 @@
 
 /* Begin PBXFileReference section */
 		3453EBBCA5603BC17DBC6D2A /* Pods-SAN SALES.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SAN SALES.release.xcconfig"; path = "Target Support Files/Pods-SAN SALES/Pods-SAN SALES.release.xcconfig"; sourceTree = "<group>"; };
+		38A2E9B12A0E1B940061B854 /* Brand Availability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Brand Availability.swift"; sourceTree = "<group>"; };
 		38D0F76729BB2447003EEB03 /* BrandReviewVisit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrandReviewVisit.swift; sourceTree = "<group>"; };
 		3C05F882C905DE5237A46D02 /* Pods_SAN_SALES.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SAN_SALES.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F063526283A8C070027842E /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
@@ -349,6 +351,7 @@
 				3F9F3799285B5FBA002CC408 /* ReportMenu.swift */,
 				3FF57C1C286C4A76009E3FE5 /* RptVisitDetail.swift */,
 				3F0ED6BD2872F61A00FF4460 /* OrderDetailView.swift */,
+				38A2E9B12A0E1B940061B854 /* Brand Availability.swift */,
 			);
 			path = Reports;
 			sourceTree = "<group>";
@@ -515,6 +518,7 @@
 				3F619F3C27EAEDC000F3D05F /* LocationService.swift in Sources */,
 				3F2F812127D0E9670015E1CA /* RootViewController.swift in Sources */,
 				3F2F811F27D0E7430015E1CA /* HomePageViewController.swift in Sources */,
+				38A2E9B22A0E1B940061B854 /* Brand Availability.swift in Sources */,
 				3F0861BF2801D589006A30FB /* CollectionCell.swift in Sources */,
 				3F06352E283BF36A0027842E /* FlowLayout.swift in Sources */,
 				3F06352A283A8C920027842E /* ColorTheme.swift in Sources */,
