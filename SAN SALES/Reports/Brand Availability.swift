@@ -24,6 +24,7 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
     @IBOutlet weak var calendar: FSCalendar!
     @IBOutlet weak var lblHQ: LabelSelect!
     
+    
     @IBOutlet weak var Brandname: UILabel!
     @IBOutlet weak var EC: UILabel!
     @IBOutlet weak var AC: UILabel!
@@ -54,6 +55,8 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
     var isDate: Bool = false
     let LocalStoreage = UserDefaults.standard
     var SFCode: String = "", StateCode: String = "", DivCode: String = "",StrRptDt: String="",StrMode: String=""
+    var objcalls: [AnyObject]=[]
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         BrandAV.delegate=self
@@ -65,7 +68,7 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
         calendar.dataSource=self
         calendar.delegate=self
     
-        Brandavailability ()
+        //Brandavailability ()
         getUserDetails()
         
         BTback.addTarget(target: self, action: #selector(GotoHome))
@@ -125,14 +128,7 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
         }
         // Do any additional setup after loading the view.
     }
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if BrandAV == tableView {
-            
-            return product.count
-        }
-        
-        return lObjSel.count
-    }
+
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
         Brandavailability ()
         let formatter = DateFormatter()
@@ -151,28 +147,38 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
         Brandavailability ()
         closeWin(self)
     }
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if tableView==BrandAV { return objcalls.count }
+        
+        return lObjSel.count
+    }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        var cell:cellListItem
-        cell = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
-        if tableView == BrandAV{
-            cell.lblText.text = product[indexPath.row]
-        }else{
-            let item: [String: Any]=lObjSel[indexPath.row] as! [String : Any]
-            cell.lblText?.text = item["name"] as? String
-            cell.imgSelect?.image = nil
-//            if SelMode == "JWK" {
-//                let sid=(item["id"] as! String)
-//                let sfind: String = (";"+sid+";")
-//                if let range: Range<String.Index> = (";"+strSelJWCd).range(of: sfind) {
-//                    cell.imgSelect?.image = UIImage(named: "Select")
-//                }
-//            }
+        autoreleasepool{
+            let cell:cellListItem = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
+            if tableView == BrandAV{
+                let item: [String: Any] = objcalls[indexPath.row] as! [String : Any]
+                cell.lblText?.text = item["BName"] as? String
+                cell.TC?.text = item["tc"] as? String
+                cell.AC?.text = item["Avail"] as? String
+                cell.EC?.text = item["EC"] as? String
+            }else{
+                let item: [String: Any]=lObjSel[indexPath.row] as! [String : Any]
+                cell.lblText?.text = item["name"] as? String
+                cell.imgSelect?.image = nil
+                //            if SelMode == "JWK" {
+                //                let sid=(item["id"] as! String)
+                //                let sfind: String = (";"+sid+";")
+                //                if let range: Range<String.Index> = (";"+strSelJWCd).range(of: sfind) {
+                //                    cell.imgSelect?.image = UIImage(named: "Select")
+                //                }
+                //            }
+                
+            }
+            
+            return cell
             
         }
-        
-        return cell
-     
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
         let item: [String: Any]=lObjSel[indexPath.row] as! [String : Any]
@@ -347,7 +353,7 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
                
                 case .success(let value):
                 print(value)
-                if let json = value as? [String:Any] {
+                if let json = value as? [AnyObject] {
                     guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
                         print("Error: Cannot convert JSON object to Pretty JSON data")
                         return
@@ -357,33 +363,9 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
                         return
                     }
                     print(prettyPrintedJson)
-                    //cell.lblText.text = product[indexPath.row]
-//                    if(json.count>1){
-//                        var cell = cellListItem()
-//
-//                        if let tc = json["TC"] as? String {
-//                            cell.TC.text = tc
-//                        }
-//
-//                        if let ac = json["AC"] as? String {
-//                            cell.AC.text = ac
-//                        }
-//
-//                        if let ec = json["EC"] as? String {
-//                            cell.EC.text = ec
-//                        }
-//
-//                    }
+                    self.objcalls = json
+                    BrandAV.reloadData()
                     
-                    
-//                    if(todayData.count>0){
-//                        self.
-//                    }
-                    
-                   
-                 self.BrandAV.reloadData()
-                    
-                                        
                 }
                case .failure(let error):
                 Toast.show(message: error.errorDescription!)  //, controller: self

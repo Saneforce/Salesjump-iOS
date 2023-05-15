@@ -174,6 +174,7 @@ class RptVisitDetail: IViewController, UITableViewDelegate, UITableViewDataSourc
                     ContentHeight.constant = 100+CGFloat(55*self.objVstDetail.count)+CGFloat(42*self.objItmSmryDetail.count)
                     self.view.layoutIfNeeded()
                     print(ContentHeight.constant)
+                    print(tbItemSumry)
                 }
                case .failure(let error):
                 Toast.show(message: error.errorDescription!)  //, controller: self
