@@ -294,6 +294,8 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
         
     }
     @objc private func selHeadquaters() {
+        calendar.isHidden = true
+        HeadquarterTable.isHidden = false
         isMulti=false
         lObjSel=lstHQs
         HeadquarterTable.reloadData()
@@ -359,6 +361,8 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
         navigationController?.popViewController(animated: true)
     }
     @objc private func selDORpt() {
+        calendar.isHidden = false
+        HeadquarterTable.isHidden = true
         isDate = true
         openWin(Mode: "DOP")
         lblSelTitle.text="Select the Date"

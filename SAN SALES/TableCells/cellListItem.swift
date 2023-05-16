@@ -33,9 +33,7 @@ class cellListItem:UITableViewCell{
     @IBOutlet weak var btnViewDet: UIButton!
     @IBOutlet weak var ActionTB: UILabel!
     @IBOutlet weak var TC: UILabel!
-    
     @IBOutlet weak var ACC: UILabel!
-    
     @IBOutlet weak var ECC: UILabel!
     var ischeck = false
 
