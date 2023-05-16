@@ -116,14 +116,14 @@ class ViewController: IViewController {
         self.ShowLoading(Message: "Please wait...")
         let Conf=LocalStoreage.string(forKey: "APPConfig")
         if Conf==nil &&  ((txUsrNm.text?.firstIndex(of: "-")) != nil) {
-            AF.request("https://fmcg.sanfmcg.com/server/url_config.json", method: .get, parameters: nil, encoding: URLEncoding.default, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
+            AF.request("http://fmcg.sanfmcg.com/server/url_config.json", method: .get, parameters: nil, encoding: URLEncoding.default, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
                 AFdata in
                 switch AFdata.result
                 {
                 case .success(let value):
                     if let json = value as? [String: Any] {
                         let CompSH: String = CompDet[0] as! String
-                        let config:[String:Any] = json[CompSH] as? [String: Any] ?? [:]
+                        let config:[String:Any] = json[CompSH.uppercased()] as? [String: Any] ?? [:]
                         if config.count > 0 {
                             APIClient.shared.BaseURL = config["base_url"] as! String ?? APIClient.shared.BaseURL
                         }
