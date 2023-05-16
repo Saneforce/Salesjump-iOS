@@ -11,7 +11,6 @@ import FSCalendar
 
 class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataSource, FSCalendarDataSource, FSCalendarDelegate {
   
-    let product:[String] = [""]
     @IBOutlet weak var BrandAV: UITableView!
     @IBOutlet weak var BTback: UIImageView!
     @IBOutlet weak var Titview: UIView!
@@ -24,15 +23,8 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
     @IBOutlet weak var calendar: FSCalendar!
     @IBOutlet weak var lblHQ: LabelSelect!
     
-    
-    @IBOutlet weak var Brandname: UILabel!
-    @IBOutlet weak var EC: UILabel!
-    @IBOutlet weak var AC: UILabel!
-    @IBOutlet weak var TC: UILabel!
-    
     let axn="get/brandavail"
     
-   
     struct lItem: Any {
         let id: String
         let name: String
@@ -130,7 +122,6 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
     }
 
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
-        Brandavailability ()
         let formatter = DateFormatter()
         formatter.dateFormat = "dd/MM/yyyy"
         print("did select date \(formatter.string(from: date))")
@@ -142,44 +133,43 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
         lblRptDt.text = selectedDates[0]
         formatter.dateFormat = "yyyy-MM-dd"
         StrRptDt = formatter.string(from: date)
-       // getDayReport()
-        //calendar.isHidden = true
-        Brandavailability ()
+       Brandavailability ()
         closeWin(self)
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if BrandAV == tableView { return 55}
+        return 42
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView==BrandAV { return objcalls.count }
-        
-        return lObjSel.count
+        if tableView==HeadquarterTable {return lObjSel.count}
+        return 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        autoreleasepool{
             let cell:cellListItem = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
-            if tableView == BrandAV{
+            if BrandAV == tableView{
                 let item: [String: Any] = objcalls[indexPath.row] as! [String : Any]
-                cell.lblText?.text = item["BName"] as? String
-                cell.TC?.text = item["tc"] as? String
-                cell.AC?.text = item["Avail"] as? String
-                cell.EC?.text = item["EC"] as? String
+                let value = item["value"] as! [[String : Any]]
+              
+                if !value.isEmpty {
+                    cell.lblText?.text = value[0]["BName"] as? String
+                    cell.TC?.text = String( value[0]["tc"] as! Int)
+                   
+                    cell.ACC?.text =  String( value[0]["Avail"] as! Int)
+                    cell.ECC?.text = String(value[0]["EC"] as! Int)
+                }
+                
+               
             }else{
                 let item: [String: Any]=lObjSel[indexPath.row] as! [String : Any]
                 cell.lblText?.text = item["name"] as? String
-                cell.imgSelect?.image = nil
-                //            if SelMode == "JWK" {
-                //                let sid=(item["id"] as! String)
-                //                let sfind: String = (";"+sid+";")
-                //                if let range: Range<String.Index> = (";"+strSelJWCd).range(of: sfind) {
-                //                    cell.imgSelect?.image = UIImage(named: "Select")
-                //                }
-                //            }
-                
             }
             
             return cell
             
         }
-    }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
         let item: [String: Any]=lObjSel[indexPath.row] as! [String : Any]
         let name=item["name"] as! String
@@ -228,7 +218,7 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
                 }
             }
             lblHQ.text = name
-            //calendar.isHidden = true
+    
         }
         lblHQ.text = name
         closeWin(self)
@@ -271,17 +261,7 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
                         lstAllRoutes = list
                         lstRoutes = list
                     }
-                    //new
-        
-//                    let DistData: String=LocalStoreage.string(forKey: "Distributors_Master_"+sfid)!
-//                    let RouteData: String=LocalStoreage.string(forKey: "Route_Master_"+sfid)!
-//                    if let list = GlobalFunc.convertToDictionary(text: DistData) as? [AnyObject] {
-//                        lstDist = list;
-//                    }
-//                    if let list = GlobalFunc.convertToDictionary(text: RouteData) as? [AnyObject] {
-//                        lstAllRoutes = list
-//                        lstRoutes = list
-//                    }
+                    
                     
                     myDyTp.updateValue(lItem(id: sfid, name: sfname,FWFlg: ""), forKey: "HQ")
                 }
@@ -363,8 +343,11 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
                         return
                     }
                     print(prettyPrintedJson)
+                  // let Brand:[String: Any] = json["value"] as! [String: Any]
                     self.objcalls = json
-                    BrandAV.reloadData()
+                    self.BrandAV.reloadData()
+//                    vstHeight.constant = CGFloat(55*self.objcalls.count)
+//                    self.view.layoutIfNeeded()
                     
                 }
                case .failure(let error):
@@ -390,7 +373,6 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
     
     @IBAction func closeWin(_ sender: Any) {
         veselwindow.isHidden=true
-//        calendar.isHidden=true
     }
     
 }
