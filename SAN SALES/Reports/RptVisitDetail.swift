@@ -46,7 +46,7 @@ class RptVisitDetail: IViewController, UITableViewDelegate, UITableViewDataSourc
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if tbVstDetail == tableView { return 55}
+        if tbVstDetail == tableView { return 70}
         return 42
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -63,6 +63,7 @@ class RptVisitDetail: IViewController, UITableViewDelegate, UITableViewDataSourc
             cell.lblText?.text = item["OutletName"] as? String
             cell.lblTime?.text = item["VstTime"] as? String
             cell.lblActRate?.text = String(format: "Rs. %.02f", item["OrdVal"] as! Double)
+            cell.lblremark?.text = item["Activity_Remarks"] as? String
             //cell.btnViewDet.addTarget(target: self, action:  )
             cell.btnViewDet.isHidden = true
             if item["OrdVal"] as! Double > 0 { cell.btnViewDet.isHidden = false }

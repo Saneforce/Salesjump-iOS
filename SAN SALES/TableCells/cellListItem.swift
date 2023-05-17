@@ -16,6 +16,7 @@ class cellListItem:UITableViewCell{
     @IBOutlet weak var lblFreeCap: UILabel!
     @IBOutlet weak var lblFreeProd: UILabel!
     @IBOutlet weak var lblActRate: UILabel!
+    @IBOutlet weak var lblremark: UILabel!
     @IBOutlet weak var lblDisc: UILabel!
     @IBOutlet weak var lblSellRate: UILabel!
     @IBOutlet weak var lblTax: UILabel!

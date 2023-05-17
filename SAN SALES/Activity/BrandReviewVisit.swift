@@ -195,6 +195,7 @@ class BrandReviewVisit: IViewController, UITableViewDataSource, UITableViewDeleg
         tbDataSelect.reloadData()
         lblSelTitle.text="Select the Reason"
         openWin(Mode: "RMK")
+        
     }
     
     func updateData () {
