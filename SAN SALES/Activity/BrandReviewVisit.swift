@@ -159,7 +159,7 @@ class BrandReviewVisit: IViewController, UITableViewDataSource, UITableViewDeleg
         //            objgetprecall = list;
         //        }
         
-        BrandTit.layer.cornerRadius=10.0
+      //  BrandTit.layer.cornerRadius=10.0
        // BrandTit.layer.borderWidth=1.0
         
         getUserDetails()
@@ -450,7 +450,7 @@ class BrandReviewVisit: IViewController, UITableViewDataSource, UITableViewDeleg
                     print(prettyPrintedJson)
                    // self.objgetprecall = json
                  self.ActionTable.reloadData()
-                    ActionTable.isHidden = true
+                    ActionTable.isHidden = false
                     
                                         
                 }
@@ -525,8 +525,9 @@ class BrandReviewVisit: IViewController, UITableViewDataSource, UITableViewDeleg
         
         //lblselectcustomer.text = name
        // txvRmks.text = name
-        selectcustomer(mslno: id , sfcode: SFCode)
+       
         if SelMode == "RET"{
+            selectcustomer(mslno: id , sfcode: SFCode)
             VisitData.shared.CustID = id
             VisitData.shared.CustName = name
             VisitData.shared.cInTime = GlobalFunc.getCurrDateAsString()
@@ -573,6 +574,7 @@ class BrandReviewVisit: IViewController, UITableViewDataSource, UITableViewDeleg
             txvRmks.text = name
             VisitData.shared.VstRemarks.name = name
             VisitData.shared.VstRemarks.id = id
+            
         }
     clswindow(self)
     }
