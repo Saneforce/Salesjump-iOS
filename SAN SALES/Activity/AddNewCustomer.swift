@@ -184,15 +184,27 @@ class AddNewCustomer: IViewController, UITableViewDelegate, UITableViewDataSourc
             NewOutlet.shared.HQ.name = name
             
             let LocalStoreage = UserDefaults.standard
-            let DistData: String=LocalStoreage.string(forKey: "Distributors_Master_"+id)!
-            let RouteData: String=LocalStoreage.string(forKey: "Route_Master_"+id)!
-            if let list = GlobalFunc.convertToDictionary(text: DistData) as? [AnyObject] {
-                lstDist = list;
+           // let DistData: String=LocalStoreage.string(forKey: "Distributors_Master_"+id)!
+            //new
+            if let DistData = LocalStoreage.string(forKey: "Distributors_Master_"+id),
+               let list = GlobalFunc.convertToDictionary(text:  DistData) as? [AnyObject] {
+                lstDist = list
             }
-            if let list = GlobalFunc.convertToDictionary(text: RouteData) as? [AnyObject] {
+            
+            if let RouteData = LocalStoreage.string(forKey: "Route_Master_"+id),
+               let list = GlobalFunc.convertToDictionary(text:  RouteData) as? [AnyObject] {
                 lstAllRoutes = list
                 lstRoutes = list
             }
+            //new
+            //let RouteData: String=LocalStoreage.string(forKey: "Route_Master_"+id)!
+//            if let list = GlobalFunc.convertToDictionary(text: DistData) as? [AnyObject] {
+//                lstDist = list;
+//            }
+//            if let list = GlobalFunc.convertToDictionary(text: RouteData) as? [AnyObject] {
+//                lstAllRoutes = list
+//                lstRoutes = list
+//            }
         }else if SelMode == "CLS" {
             lblCls.text = name  //+(item["id"] as! String)
             NewOutlet.shared.Class.id = id
