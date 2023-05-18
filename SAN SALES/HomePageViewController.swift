@@ -156,7 +156,7 @@ class HomePageViewController: IViewController{
             "data": jsonString
         ]
         
-        let apiKey="get/calls&divisionCode=" + DivCode + "&rSF=" + SFCode + "&sfCode=" + SFCode
+        let apiKey="get/calls&get/newcalls&divisionCode=" + DivCode + "&rSF=" + SFCode + "&sfCode=" + SFCode
         AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
             AFdata in
             switch AFdata.result
@@ -192,12 +192,18 @@ class HomePageViewController: IViewController{
                         mOrdVal = MonthData["orderVal"] as! Double
                     }
                     let OAmt = mOrdVal
-                    let TAmt = MonthData["TAmt"] as! Double
+                    var TAmt = ""
+                    if let targetValue = MonthData["target_val"] as? String {
+
+                        TAmt = targetValue
+                    } else {
+                        TAmt = "0"
+                    }
                     let AAmt = MonthData["AAmt"] as! Double
                     x = self.addMonthVstDetControl(aY: x, h: 20, Caption: "Visited", text: String(format: "%i", Mcalls),textAlign: .right)
                     x = self.addMonthVstDetControl(aY: x, h: 20, Caption: "Ordered", text: String(format: "%i", PMcalls),textAlign: .right)
                     x = self.addMonthVstDetControl(aY: x, h: 20, Caption: "Order Value", text: String(format: "%.02f", OAmt),textAlign: .right)
-                    x = self.addMonthVstDetControl(aY: x, h: 20, Caption: "Target", text: String(format: "%.02f", TAmt),textAlign: .right)
+                    x = self.addMonthVstDetControl(aY: x, h: 20, Caption: "Target", text: String(TAmt),textAlign: .right)
                     x = self.addMonthVstDetControl(aY: x, h: 20, Caption: "Achieve", text: String(format: "%.02f", AAmt),textAlign: .right)
                 }
                case .failure(let error):
