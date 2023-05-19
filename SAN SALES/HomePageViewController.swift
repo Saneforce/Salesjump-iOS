@@ -156,7 +156,7 @@ class HomePageViewController: IViewController{
             "data": jsonString
         ]
         
-        let apiKey="get/calls&get/newcalls&divisionCode=" + DivCode + "&rSF=" + SFCode + "&sfCode=" + SFCode
+        let apiKey="get/calls&divisionCode=" + DivCode + "&rSF=" + SFCode + "&sfCode=" + SFCode
         AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
             AFdata in
             switch AFdata.result

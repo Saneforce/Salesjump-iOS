@@ -118,6 +118,8 @@ class AddNewCustomer: IViewController, UITableViewDelegate, UITableViewDataSourc
         tbDataSelect.delegate=self
         tbDataSelect.dataSource=self
         
+       // imgOutlet.image = UIImage(imageLiteralResourceName: "")
+        
     }
     override func viewDidDisappear(_ animated: Bool) {
         vwScroll = nil

@@ -27,7 +27,8 @@ class BrandReviewVisit: IViewController, UITableViewDataSource, UITableViewDeleg
     @IBOutlet weak var BrandTit: UIView!
     @IBOutlet weak var textField: UITextField!
     
-    let product:[String] = ["Start Time","Customer Channal","Address","GST"]
+    
+    let product:[String] = ["Start Time","Customer Channel","Address","GST"]
     
     struct SVCallRevw: Codable {
         let svCallRevw: SVCallRevwDetails
@@ -183,6 +184,7 @@ class BrandReviewVisit: IViewController, UITableViewDataSource, UITableViewDeleg
         self.ActionTable.register(UINib(nibName: "cellListItem", bundle: nil), forCellReuseIdentifier: "cellListItem")
         
         self.updateData()
+        
         
         // Do any additional setup after loading the view.
     }

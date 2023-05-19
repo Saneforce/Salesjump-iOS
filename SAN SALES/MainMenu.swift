@@ -57,6 +57,7 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
         strMasList.append(mnuItem.init(MasId: 9, MasName: "GEO Tagging", MasImage: "GEOTag"))/*
         strMasList.append(mnuItem.init(MasId: 10, MasName: "Closing Stock Entry", MasImage: "ClosingStock"))*/
         strMasList.append(mnuItem.init(MasId: 11, MasName: "Master Sync", MasImage: "MasterSync"))
+        strMasList.append(mnuItem(MasId:12, MasName: "Submitted Calls", MasImage: "SubmittedCalls"))
         
         menuClose.addTarget(target: self, action: #selector(closeMenuWin))
         tbMenuDetail.delegate=self
@@ -145,6 +146,11 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
             let MasSync = storyboard.instantiateViewController(withIdentifier: "MasterSyncVwControl") as! MasterSync
             MasSync.AutoSync = false
             viewController.setViewControllers([MasSync], animated: false)
+            //viewController.navigationController?.pushViewController(myDyPln, animated: true)
+        }else if lItm.MasId == 12 {
+            let SBCalls = storyboard.instantiateViewController(withIdentifier: "SubmittedCalls") as! SubmittedCalls
+            viewController.setViewControllers([SBCalls], animated: false)
+            
             //viewController.navigationController?.pushViewController(myDyPln, animated: true)
         }
         (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)

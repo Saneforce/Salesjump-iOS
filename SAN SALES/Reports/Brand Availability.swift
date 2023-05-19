@@ -184,39 +184,39 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
                 vwHQCtrl.isHidden=true
                 
             }
-            else if SelMode == "HQ" {
-                lblHQ.text = name  //+(item["id"] as! String)
-                var DistData: String=""
-                if(LocalStoreage.string(forKey: "Distributors_Master_"+id)==nil){
-                    Toast.show(message: "No Distributors found. Please will try to sync", controller: self)
-                    GlobalFunc.FieldMasterSync(SFCode: id){
-                        DistData = self.LocalStoreage.string(forKey: "Distributors_Master_"+id)!
-                        let RouteData: String=self.LocalStoreage.string(forKey: "Route_Master_"+id)!
-                        if let list = GlobalFunc.convertToDictionary(text: DistData) as? [AnyObject] {
-                            self.lstDist = list;
-                        }
-                        if let list = GlobalFunc.convertToDictionary(text: RouteData) as? [AnyObject] {
-                            self.lstAllRoutes = list
-                            self.lstRoutes = list
-                        }
-                    }
-                    return
-                }else{
-                    DistData = LocalStoreage.string(forKey: "Distributors_Master_"+id)!
-                    
-                    let RouteData: String=LocalStoreage.string(forKey: "Route_Master_"+id)!
-                    if let list = GlobalFunc.convertToDictionary(text: DistData) as? [AnyObject] {
-                        lstDist = list;
-                    }
-                    if let list = GlobalFunc.convertToDictionary(text: RouteData) as? [AnyObject] {
-                        lstAllRoutes = list
-                        lstRoutes = list
-                    }
-                }
-                if(UserSetup.shared.DistBased == 1){
-                    
-                }
-            }
+//            else if SelMode == "HQ" {
+//                lblHQ.text = name  //+(item["id"] as! String)
+//                var DistData: String=""
+//                if(LocalStoreage.string(forKey: "Distributors_Master_"+id)==nil){
+//                    Toast.show(message: "No Distributors found. Please will try to sync", controller: self)
+//                    GlobalFunc.FieldMasterSync(SFCode: id){
+//                        DistData = self.LocalStoreage.string(forKey: "Distributors_Master_"+id)!
+//                        let RouteData: String=self.LocalStoreage.string(forKey: "Route_Master_"+id)!
+//                        if let list = GlobalFunc.convertToDictionary(text: DistData) as? [AnyObject] {
+//                            self.lstDist = list;
+//                        }
+//                        if let list = GlobalFunc.convertToDictionary(text: RouteData) as? [AnyObject] {
+//                            self.lstAllRoutes = list
+//                            self.lstRoutes = list
+//                        }
+//                    }
+//                    return
+//                }else{
+//                    DistData = LocalStoreage.string(forKey: "Distributors_Master_"+id)!
+//
+//                    let RouteData: String=LocalStoreage.string(forKey: "Route_Master_"+id)!
+//                    if let list = GlobalFunc.convertToDictionary(text: DistData) as? [AnyObject] {
+//                        lstDist = list;
+//                    }
+//                    if let list = GlobalFunc.convertToDictionary(text: RouteData) as? [AnyObject] {
+//                        lstAllRoutes = list
+//                        lstRoutes = list
+//                    }
+//                }
+//                if(UserSetup.shared.DistBased == 1){
+//
+//                }
+//            }
             lblHQ.text = name
     
         }
