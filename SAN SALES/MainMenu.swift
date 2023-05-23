@@ -149,6 +149,7 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
             //viewController.navigationController?.pushViewController(myDyPln, animated: true)
         }
         else if lItm.MasId == 12 {
+           // let rptstoryboard = UIStoryboard(name: "Submittedcalls", bundle: nil)
 //            let Homevc = storyboard.instantiateViewController(withIdentifier: "HomePageVwControl") as! HomePageViewController
             let SBCalls = storyboard.instantiateViewController(withIdentifier: "SubmittedCalls") as! SubmittedCalls
             viewController.setViewControllers([SBCalls], animated: false)
