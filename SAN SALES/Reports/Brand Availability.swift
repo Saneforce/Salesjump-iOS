@@ -16,7 +16,6 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
     @IBOutlet weak var Titview: UIView!
     @IBOutlet weak var veselwindow: UIView!
     @IBOutlet weak var HeadquarterTable: UITableView!
-    @IBOutlet weak var txSearchSel: UITextField!
     @IBOutlet weak var vwHQCtrl: UIView!
     @IBOutlet weak var lblRptDt: UILabel!
     @IBOutlet weak var lblSelTitle: UILabel!
@@ -43,6 +42,8 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
     var lstJWNms: [AnyObject] = []
     var strJWCd: String = ""
     var strJWNm: String = ""
+    var strSelJWCd: String = ""
+    var strSelJWNm: String = ""
     var isMulti: Bool = false
     var isDate: Bool = false
     let LocalStoreage = UserDefaults.standard
@@ -370,10 +371,31 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
     func openWin(Mode:String){
         SelMode=Mode
         lAllObjSel = lObjSel
-        txSearchSel.text = ""
         veselwindow.isHidden=false
         self.view.endEditing(true)
     }
+    
+    @IBAction func setSelValues(_ sender: Any) {
+        strJWCd=strSelJWCd
+        strJWNm=strSelJWNm
+//        lstJWNms=lstSelJWNms
+//        tbJWKSelect.reloadData()
+        closeWin(self)
+    }
+    
+    @IBAction func searchBytext(_ sender: Any) {
+        let txtbx: UITextField = sender as! UITextField
+        if txtbx.text!.isEmpty {
+            lObjSel = lAllObjSel
+        }else{
+            lObjSel = lAllObjSel.filter({(product) in
+                let name: String = String(format: "%@", product["name"] as! CVarArg)
+                return name.lowercased().contains(txtbx.text!.lowercased())
+            })
+        }
+        HeadquarterTable.reloadData()
+    }
+    
     
     @IBAction func closeWin(_ sender: Any) {
         veselwindow.isHidden=true

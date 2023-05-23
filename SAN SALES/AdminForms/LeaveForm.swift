@@ -128,10 +128,17 @@ class LeaveForm: IViewController, UITableViewDelegate,
     }
     
     @objc private func selDOT() {
-        isDate = true
-        
-        openWin(Mode: "DOT")
-        lblSelTitle.text="Select the leave to date"
+        if lblFDate.text == "Select Date" {
+            Toast.show(message: "Select From Date", controller: self)
+            
+            
+        } else {
+            isDate = true
+            
+            openWin(Mode: "DOT")
+            lblSelTitle.text="Select the leave to date"
+            //minimumDate(for: )
+        }
     }
     //
    
@@ -147,47 +154,34 @@ class LeaveForm: IViewController, UITableViewDelegate,
             calendar.setCurrentPage(date, animated: true)
         }
         if SelMode == "DOF"{
-            //lblFDate.text = selectedDates.first
+            
             lblFDate.text = selectedDates[0]
             formatter.dateFormat = "yyyy/MM/dd"
             sDOF = formatter.string(from: date)
             FDate=date
             datediff()
-//            minimumDate(for: FDate)
             
         }
-//        if TDate>FDate{
-//                   Toast.show(message: "To date must be grater or equal")
-//               }
         
         if SelMode == "DOT" {
-            //lblTDate.text = selectedDates.first
+
             lblTDate.text = selectedDates[0]
            formatter.dateFormat = "yyyy/MM/dd"
             sDOT = formatter.string(from: date)
             TDate = date
+
             datediff()
-            
-          
+   
         }
-        var maximumDate: Date? { date }
+       // minimumDate(for: <#T##FSCalendar#>): Date? { selectedDates }
         closeWin(self)
     }
-    
-//    func maximumDate(for calendar: FSCalendar) -> Date {
-//          return date
-//     }
-    
+
+
     func minimumDate(for calendar: FSCalendar) -> Date {
         return Date()
     }
-    
-//    func maximumDate(for calendar: FSCalendar) -> Date {
-//          let dateFormatter = DateFormatter()
-//          dateFormatter.dateFormat = "YYYY-MM-dd"
-//          return dateFormatter.date(from: "2050-01-01") ?? Date()
-//    }
-   
+
     
     func openWin(Mode:String){
         self.view.endEditing(true)
@@ -253,6 +247,7 @@ class LeaveForm: IViewController, UITableViewDelegate,
             return false
         }
         return true
+        
     }
     
     //[{"LeaveForm":{"Leave_Type":"'174'","From_Date":"2021-11-01",

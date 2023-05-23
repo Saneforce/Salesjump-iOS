@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		386A438D2A1CB25000CE1833 /* Submittedcalls.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 386A438C2A1CB25000CE1833 /* Submittedcalls.storyboard */; };
+		386A438F2A1CB81400CE1833 /* Submittedcalls.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 386A438E2A1CB81400CE1833 /* Submittedcalls.storyboard */; };
 		3883A09C2A176B6300B858CF /* SubmittedCalls.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3883A09B2A176B6300B858CF /* SubmittedCalls.swift */; };
 		38A2E9B22A0E1B940061B854 /* Brand Availability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38A2E9B12A0E1B940061B854 /* Brand Availability.swift */; };
 		38D0F76829BB2447003EEB03 /* BrandReviewVisit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38D0F76729BB2447003EEB03 /* BrandReviewVisit.swift */; };
@@ -85,6 +87,8 @@
 
 /* Begin PBXFileReference section */
 		3453EBBCA5603BC17DBC6D2A /* Pods-SAN SALES.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SAN SALES.release.xcconfig"; path = "Target Support Files/Pods-SAN SALES/Pods-SAN SALES.release.xcconfig"; sourceTree = "<group>"; };
+		386A438C2A1CB25000CE1833 /* Submittedcalls.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Submittedcalls.storyboard; sourceTree = "<group>"; };
+		386A438E2A1CB81400CE1833 /* Submittedcalls.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Submittedcalls.storyboard; sourceTree = "<group>"; };
 		3883A09B2A176B6300B858CF /* SubmittedCalls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmittedCalls.swift; sourceTree = "<group>"; };
 		38A2E9B12A0E1B940061B854 /* Brand Availability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Brand Availability.swift"; sourceTree = "<group>"; };
 		38D0F76729BB2447003EEB03 /* BrandReviewVisit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrandReviewVisit.swift; sourceTree = "<group>"; };
@@ -178,6 +182,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		386A43872A1B223400CE1833 /* SubmittedCalls */ = {
+			isa = PBXGroup;
+			children = (
+				3883A09B2A176B6300B858CF /* SubmittedCalls.swift */,
+				386A438E2A1CB81400CE1833 /* Submittedcalls.storyboard */,
+			);
+			name = SubmittedCalls;
+			sourceTree = "<group>";
+		};
 		3F063528283A8C720027842E /* Style */ = {
 			isa = PBXGroup;
 			children = (
@@ -294,6 +307,7 @@
 		3F2F810927CEB30C0015E1CA /* SAN SALES */ = {
 			isa = PBXGroup;
 			children = (
+				386A43872A1B223400CE1833 /* SubmittedCalls */,
 				3F0822BB29000842009C33EA /* AdminForms */,
 				3F9F379628593C73002CC408 /* Reports */,
 				3F0635332841710F0027842E /* Model */,
@@ -322,7 +336,7 @@
 				3F9F379428593C5A002CC408 /* Reports.storyboard */,
 				3F5B297728891D5C002D226C /* CheckPermissions.swift */,
 				3F0822B928FE721A009C33EA /* AdminForms.storyboard */,
-				3883A09B2A176B6300B858CF /* SubmittedCalls.swift */,
+				386A438C2A1CB25000CE1833 /* Submittedcalls.storyboard */,
 			);
 			path = "SAN SALES";
 			sourceTree = "<group>";
@@ -458,6 +472,8 @@
 				3F28CBFF27D3927E00B95964 /* Poppins-SemiBoldItalic.ttf in Resources */,
 				3F28CC0027D3927E00B95964 /* Poppins-ExtraBoldItalic.ttf in Resources */,
 				3F28CC0327D3927E00B95964 /* Poppins-Regular.ttf in Resources */,
+				386A438F2A1CB81400CE1833 /* Submittedcalls.storyboard in Resources */,
+				386A438D2A1CB25000CE1833 /* Submittedcalls.storyboard in Resources */,
 				3F28CBFA27D3927E00B95964 /* Poppins-ThinItalic.ttf in Resources */,
 				3F28CBFE27D3927E00B95964 /* Poppins-Medium.ttf in Resources */,
 				3F2F811427CEB30D0015E1CA /* Assets.xcassets in Resources */,

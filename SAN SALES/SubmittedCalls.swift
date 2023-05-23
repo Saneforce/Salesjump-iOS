@@ -11,13 +11,15 @@ import Alamofire
 class SubmittedCalls: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     @IBOutlet weak var BackButton: UIImageView!
-    
     @IBOutlet weak var SubmittedcallsTB: UITableView!
+    
     
     let axn="table/list"
     
     var Order:[String] = ["Secondary Order","Primary Order"]
     
+    var isDate: Bool = false
+    var lObjSel: [AnyObject] = []
     var eKey: String = ""
     
     var SFCode: String = "", StateCode: String = "", DivCode: String = "",StrRptDt: String="",StrMode: String=""
@@ -43,7 +45,6 @@ class SubmittedCalls: UIViewController, UITableViewDelegate, UITableViewDataSour
         SubmittedcallsTB.delegate=self
         SubmittedcallsTB.dataSource=self
         
-        BackButton.addTarget(target: self, action: #selector(closeMenuWin))
         // Do any additional setup after loading the view.
     }
     
@@ -117,11 +118,5 @@ class SubmittedCalls: UIViewController, UITableViewDelegate, UITableViewDataSour
         selectorder()
         
     }
-    
-    
-    
-    @objc func closeMenuWin(){
-        GlobalFunc.movetoHomePage()
-        
-    }
+
 }

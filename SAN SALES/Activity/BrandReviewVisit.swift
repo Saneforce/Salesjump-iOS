@@ -185,7 +185,6 @@ class BrandReviewVisit: IViewController, UITableViewDataSource, UITableViewDeleg
         
         self.updateData()
         
-        
         // Do any additional setup after loading the view.
     }
     
