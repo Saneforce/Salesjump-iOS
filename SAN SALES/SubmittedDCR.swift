@@ -6,17 +6,178 @@
 //
 
 import UIKit
+import Alamofire
 
-class SubmittedDCR: UIViewController {
-
+class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource {
+    
+    let product:[String] = ["Start Time","Customer Channel","Address","GST"]
     @IBOutlet weak var BackButton: UIImageView!
+    
+    @IBOutlet weak var submittedDCRTB: UITableView!
+    let axn="table/list"
+    let axnsec = "get/SecCallDets"
+    let axnview = "get/SecOrderDets"
+    var SFCode: String = "", StateCode: String = "", DivCode: String = "",Desig: String=""
+    let LocalStoreage = UserDefaults.standard
+    var objcalls: [AnyObject]=[]
     override func viewDidLoad() {
         super.viewDidLoad()
+        getUserDetails()
+        SelectSecondaryorder()
+        SelectSecondaryorder2()
+        submittedDCRTB.delegate=self
+        submittedDCRTB.dataSource=self
         BackButton.addTarget(target: self, action: #selector(closeMenuWin))
         // Do any additional setup after loading the view.
     }
     @objc func closeMenuWin(){
+        
+        
         GlobalFunc.movetoHomePage()
         
     }
-}
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if submittedDCRTB == tableView { return 190}
+        return 42
+    }
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return objcalls.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell:cellListItem = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
+        let item: [String: Any] = objcalls[indexPath.row] as! [String : Any]
+        cell.RetailerName?.text = item["ClstrName"] as? String
+        cell.DistributerName?.text = item["FWFlg"] as? String
+        cell.Rou?.text = item["Adayer"] as? String
+        cell.MeetTime?.text = item["plnDate"] as? String
+        cell.OrderTime?.text = item["worktype"] as? String
+        return cell
+    }
+    func getUserDetails(){
+        let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
+        let data = Data(prettyPrintedJson!.utf8)
+        guard let prettyJsonData = try? JSONSerialization.jsonObject(with: data, options:[]) as? [String: Any] else {
+            print("Error: Cannot convert JSON object to Pretty JSON data")
+            return
+        }
+        SFCode = prettyJsonData["sfCode"] as? String ?? ""
+        StateCode = prettyJsonData["State_Code"] as? String ?? ""
+        DivCode = prettyJsonData["divisionCode"] as? String ?? ""
+        Desig=prettyJsonData["desigCode"] as? String ?? ""
+    }
+    
+    func SelectSecondaryorder(){
+        //let apiKey: String = "\(axn)&State_Code=12&desig=MR&divisionCode=\(DivCode)&rSF=MR3533&sfCode=\(SFCode)&stateCode=12"
+        let apiKey: String = "\(axn)&divisionCode=\(DivCode)&desig=\(Desig)&rSF=\(SFCode)&sfCode=\(SFCode)&State_Code=\(StateCode)"
+        let aFormData: [String: Any] = [
+            \"tableName\":\"vwactivity_report\",\"coloumns\":\"[\\\"*\\\"]\",\"today\",\"wt\",\"orderBy\":\"[\\\"activity_date asc\\\"]\,"desig":"mgr"
+        ]
+//        let aFormData: [String: Any] = "[\"tableName\":\"vwactivity_report\",\"coloumns\":\"[\\\"*\\\"]\",\"today\",\"wt\",\"orderBy\":\"[\\\"activity_date asc\\\"]\"]"
+        print(aFormData)
+        let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
+        let jsonString = String(data: jsonData!, encoding: .utf8)!
+        let params: Parameters = [
+            "data": jsonString
+        ]
+        
+        
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+            AFdata in
+            switch AFdata.result
+            {
+                
+            case .success(let value):
+                print(value)
+                if let json = value as? [AnyObject] {
+                    guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
+                        print("Error: Cannot convert JSON object to Pretty JSON data")
+                        return
+                    }
+                    guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+                        print("Error: Could print JSON in String")
+                        return
+                    }
+                    print(prettyPrintedJson)
+                    self.objcalls = json
+                    self.submittedDCRTB.reloadData()
+                    
+                }
+            case .failure(let error):
+                Toast.show(message: error.errorDescription!)  //, controller: self
+            }
+        }
+    }
+    func SelectSecondaryorder2(){
+        //let apiKey: String = "\(axn)&State_Code=12&desig=MR&divisionCode=\(DivCode)&rSF=MR3533&sfCode=\(SFCode)&stateCode=12"
+        let apiKey: String = "\(axnsec)&divisionCode=\(DivCode)&desig=\(Desig)&rSF=\(SFCode)&sfCode=\(SFCode)&State_Code=\(StateCode)&trans_SlNo=SAN204-344"
+        let aFormData: [String: Any] = [
+            "tableName":"vwactivity_report","coloumns":"[\"*\"]","today":1,"wt":1,"orderBy":"[\"activity_date asc\"]","desig":"mgr"
+        ]
+        print(aFormData)
+        let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
+        let jsonString = String(data: jsonData!, encoding: .utf8)!
+        let params: Parameters = [
+            "data": jsonString
+        ]
+        
+        
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+            AFdata in
+            switch AFdata.result
+            {
+                
+            case .success(let value):
+                print(value)
+                if let json = value as? [AnyObject] {
+                    guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
+                        print("Error: Cannot convert JSON object to Pretty JSON data")
+                        return
+                    }
+                    guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+                        print("Error: Could print JSON in String")
+                        return
+                    }
+                    print(prettyPrintedJson)
+                    self.objcalls = json
+                    self.submittedDCRTB.reloadData()
+                    
+                }
+            case .failure(let error):
+                Toast.show(message: error.errorDescription!)  //, controller: self
+            }
+        }
+    }
+    
+    @IBAction func ViewBT(_ sender: Any) {
+        let apiKey: String = "\(axnview)&State_Code=12&divisionCode=4%2C&rSF=MR3533&sfCode=MR3533&Order_No=MR3533-23-24-SO-756"
+        
+        
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+            AFdata in
+            switch AFdata.result
+            {
+                
+            case .success(let value):
+                print(value)
+                if let json = value as? [AnyObject] {
+                    guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
+                        print("Error: Cannot convert JSON object to Pretty JSON data")
+                        return
+                    }
+                    guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+                        print("Error: Could print JSON in String")
+                        return
+                    }
+                    print(prettyPrintedJson)
+                    self.objcalls = json
+                    self.submittedDCRTB.reloadData()
+                    
+                }
+            case .failure(let error):
+                Toast.show(message: error.errorDescription!)  //, controller: self
+            }
+        }
+    }
+    }
+

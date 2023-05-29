@@ -13,8 +13,8 @@ class SubmittedCalls: UIViewController, UITableViewDelegate, UITableViewDataSour
     @IBOutlet weak var BackButton: UIImageView!
     @IBOutlet weak var SubmittedcallsTB: UITableView!
     
-    
-    let axn="table/list"
+    let axn="entry/count"
+
     
     var Order:[String] = [""]
     
@@ -22,6 +22,7 @@ class SubmittedCalls: UIViewController, UITableViewDelegate, UITableViewDataSour
         let MasId: Int
         let MasName: String
         let MasImage: String
+        let BTC: String
     }
     
     var strMasList:[mnuItem]=[]
@@ -29,15 +30,14 @@ class SubmittedCalls: UIViewController, UITableViewDelegate, UITableViewDataSour
     var isDate: Bool = false
     var lObjSel: [AnyObject] = []
     var eKey: String = ""
-    
-    //var SFCode: String = "",  DivCode: String = "",StrRptDt: String="",desig: String="",rSF: String=""
-    
-    var StateCode: String = "",desig: String="",DivCode: String = "",rSF: String="",SFCode: String = "",stateCode: String = ""
+
+   var SFCode: String = "", StateCode: String = "", DivCode: String = ""
     let LocalStoreage = UserDefaults.standard
-    
+    var objcalls: [AnyObject]=[]
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        getUserDetails()
+        SelectSecondaryorder()
         let LocalStoreage = UserDefaults.standard
         let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
         let data = Data(prettyPrintedJson!.utf8)
@@ -50,15 +50,17 @@ class SubmittedCalls: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         SFCode = prettyJsonData["sfCode"] as? String ?? ""
         DivCode = prettyJsonData["divisionCode"] as? String ?? ""
+        let Desig: String=prettyJsonData["desigCode"] as? String ?? ""
+       // lblDesig.text = Desig
         eKey = String(format: "EK%@-%i", SFCode,Int(Date().timeIntervalSince1970))
         
         SubmittedcallsTB.delegate=self
         SubmittedcallsTB.dataSource=self
         
         BackButton.addTarget(target: self, action: #selector(closeMenuWin))
-        
-        strMasList.append(mnuItem.init(MasId: 1, MasName: "Secondary Order", MasImage: "SwitchRoute"))
-        strMasList.append(mnuItem.init(MasId: 2, MasName: "Primary Order", MasImage: "SwitchRoute"))
+
+        strMasList.append(mnuItem.init(MasId: 1, MasName: "Secondary Order", MasImage: "SwitchRoute",BTC: ""))
+        strMasList.append(mnuItem.init(MasId: 2, MasName: "Primary Order", MasImage: "SwitchRoute",BTC: ""))
         // Do any additional setup after loading the view.
     }
     
@@ -86,7 +88,6 @@ class SubmittedCalls: UIViewController, UITableViewDelegate, UITableViewDataSour
         let storyboard = UIStoryboard(name: "Submittedcalls", bundle: nil)
         let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
         if lItm.MasId == 1 {
-            SelectSecondaryorder()
            // let SubCalls = storyboard.instantiateViewController(withIdentifier: "SubmittedCalls") as! SubmittedCalls
             let SUBDCR = storyboard.instantiateViewController(withIdentifier: "SubmittedDCR") as! SubmittedDCR
             viewController.setViewControllers([SUBDCR], animated: false)
@@ -116,35 +117,17 @@ class SubmittedCalls: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     func SelectSecondaryorder(){
-        let apiKey: String = "\(axn)&State_Code=12&desig=MR&divisionCode=\(DivCode)&rSF=MR3533&sfCode=\(SFCode)&stateCode=12"
-        
-//    data:{"tableName":"vwactivity_report","coloumns":"[\"*\"]","today":1,"wt":1,"orderBy":"[\"activity_date asc\"]","desig":"mgr"}
-        
-        let aFormData: [String: Any] = [
-            "tableName":"vwactivity_report","coloumns":"[\"today\",\"wt\",\"orderBy\":\"[\"activity_date asc\"]\"]","desig":"mgr"]
-            
-//            let aFormData: [String: Any] = [
-//               "tableName":"vwMyDayPlan","coloumns":"[\"worktype\",\"FWFlg\",\"sf_member_code as subordinateid\",\"cluster as clusterid\",\"ClstrName\",\"remarks\",\"stockist as stockistid\",\"worked_with_code\",\"worked_with_name\",\"dcrtype\",\"location\",\"name\",\"Sprstk\",\"Place_Inv\",\"WType_SName\",\"convert(varchar,Pln_date,20) plnDate\"]","desig":"mgr"
-//            ]
-
-        
-//        let aFormData: [String: Any] = [
-//           "tableName":"vwMyDayPlan","coloumns":"[\"today\",\"wt\",\"orderBy\"]","desig":"mgr"]
-        print(aFormData)
-        let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
-        let jsonString = String(data: jsonData!, encoding: .utf8)!
-        let params: Parameters = [
-            "data": jsonString
-        ]
-
-        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+        //let apiKey: String = "\(axn)&State_Code=12&desig=MR&divisionCode=\(DivCode)&rSF=MR3533&sfCode=\(SFCode)&stateCode=12"
+        let apiKey: String = "\(axn)&divisionCode=\(DivCode)&rSF=\(SFCode)&sfCode=\(SFCode)&State_Code=\(StateCode)"
+    
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
             AFdata in
             switch AFdata.result
             {
-               
-                case .success(let value):
+                
+            case .success(let value):
                 print(value)
-                if let json = value as? [String:AnyObject] {
+                if let json = value as? [AnyObject] {
                     guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
                         print("Error: Cannot convert JSON object to Pretty JSON data")
                         return
@@ -154,15 +137,15 @@ class SubmittedCalls: UIViewController, UITableViewDelegate, UITableViewDataSour
                         return
                     }
                     print(prettyPrintedJson)
-                    }
-
-               case .failure(let error):
+                    self.objcalls = json
+                    self.SubmittedcallsTB.reloadData()
+                    
+                }
+            case .failure(let error):
                 Toast.show(message: error.errorDescription!)  //, controller: self
             }
         }
     }
-   
- 
     
     @objc func closeMenuWin(){
         GlobalFunc.movetoHomePage()
