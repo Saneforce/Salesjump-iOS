@@ -42,6 +42,9 @@ class cellListItem:UITableViewCell{
     @IBOutlet weak var DistributerName: UILabel!
     @IBOutlet weak var RetailerName: UILabel!
     @IBOutlet weak var BTC: UILabel!
+    @IBOutlet weak var OrderValue: UILabel!
+    @IBOutlet weak var Product: UILabel!
+    @IBOutlet weak var Slno: UILabel!
     var ischeck = false
 
 }

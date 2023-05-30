@@ -12,8 +12,9 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
     
     let product:[String] = ["Start Time","Customer Channel","Address","GST"]
     @IBOutlet weak var BackButton: UIImageView!
-    
+    @IBOutlet weak var EditTB: UITableView!
     @IBOutlet weak var submittedDCRTB: UITableView!
+    @IBOutlet weak var veselwindow: UIView!
     let axn="table/list"
     let axnsec = "get/SecCallDets"
     let axnview = "get/SecOrderDets"
@@ -27,6 +28,8 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
         SelectSecondaryorder2()
         submittedDCRTB.delegate=self
         submittedDCRTB.dataSource=self
+        EditTB.dataSource=self
+        EditTB.delegate=self
         BackButton.addTarget(target: self, action: #selector(closeMenuWin))
         // Do any additional setup after loading the view.
     }
@@ -41,17 +44,27 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
         return 42
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+       if let tableView = EditTB {return objcalls.count}
         return objcalls.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell:cellListItem = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
+        if tableView == submittedDCRTB {
         let item: [String: Any] = objcalls[indexPath.row] as! [String : Any]
-        cell.RetailerName?.text = item["ClstrName"] as? String
-        cell.DistributerName?.text = item["FWFlg"] as? String
-        cell.Rou?.text = item["Adayer"] as? String
-        cell.MeetTime?.text = item["plnDate"] as? String
-        cell.OrderTime?.text = item["worktype"] as? String
+        cell.RetailerName?.text = item["Trans_Detail_Name"] as? String
+        cell.DistributerName?.text = item["Trans_Detail_Slno"] as? String
+        cell.Rou?.text = item["SDP_Name"] as? String
+        cell.MeetTime?.text = item["Order_In_Time"] as? String
+        cell.OrderTime?.text = item["Order_Out_Time"] as? String
+            
+        }
+        if tableView == EditTB {
+        let item: [String: Any] = objcalls[indexPath.row] as! [String : Any]
+        cell.Slno?.text = item["Trans_Detail_Name"] as? String
+        cell.Product?.text = item["Trans_Detail_Name"] as? String
+            cell.OrderValue
+        }
         return cell
     }
     func getUserDetails(){
@@ -68,19 +81,16 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
     }
     
     func SelectSecondaryorder(){
-        //let apiKey: String = "\(axn)&State_Code=12&desig=MR&divisionCode=\(DivCode)&rSF=MR3533&sfCode=\(SFCode)&stateCode=12"
         let apiKey: String = "\(axn)&divisionCode=\(DivCode)&desig=\(Desig)&rSF=\(SFCode)&sfCode=\(SFCode)&State_Code=\(StateCode)"
         let aFormData: [String: Any] = [
-            \"tableName\":\"vwactivity_report\",\"coloumns\":\"[\\\"*\\\"]\",\"today\",\"wt\",\"orderBy\":\"[\\\"activity_date asc\\\"]\,"desig":"mgr"
+            "tableName":"vwactivity_report","coloumns":"[\"*\"]","today":1,"wt":1,"orderBy":"[\"activity_date asc\"]","desig":"mgr"
         ]
-//        let aFormData: [String: Any] = "[\"tableName\":\"vwactivity_report\",\"coloumns\":\"[\\\"*\\\"]\",\"today\",\"wt\",\"orderBy\":\"[\\\"activity_date asc\\\"]\"]"
         print(aFormData)
         let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
         let jsonString = String(data: jsonData!, encoding: .utf8)!
         let params: Parameters = [
             "data": jsonString
         ]
-        
         
         AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
             AFdata in
@@ -99,8 +109,6 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
                         return
                     }
                     print(prettyPrintedJson)
-                    self.objcalls = json
-                    self.submittedDCRTB.reloadData()
                     
                 }
             case .failure(let error):
@@ -109,8 +117,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
         }
     }
     func SelectSecondaryorder2(){
-        //let apiKey: String = "\(axn)&State_Code=12&desig=MR&divisionCode=\(DivCode)&rSF=MR3533&sfCode=\(SFCode)&stateCode=12"
-        let apiKey: String = "\(axnsec)&divisionCode=\(DivCode)&desig=\(Desig)&rSF=\(SFCode)&sfCode=\(SFCode)&State_Code=\(StateCode)&trans_SlNo=SAN204-344"
+        let apiKey: String = "\(axnsec)&divisionCode=\(DivCode)&desig=\(Desig)&rSF=\(SFCode)&sfCode=\(SFCode)&State_Code=\(StateCode)&trans_SlNo=SEF3-307"
         let aFormData: [String: Any] = [
             "tableName":"vwactivity_report","coloumns":"[\"*\"]","today":1,"wt":1,"orderBy":"[\"activity_date asc\"]","desig":"mgr"
         ]
@@ -141,6 +148,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
                     print(prettyPrintedJson)
                     self.objcalls = json
                     self.submittedDCRTB.reloadData()
+                    self.EditTB.reloadData()
                     
                 }
             case .failure(let error):
@@ -175,9 +183,17 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
                     
                 }
             case .failure(let error):
-                Toast.show(message: error.errorDescription!)  //, controller: self
+                Toast.show(message: error.errorDescription!)
             }
         }
     }
+    @IBAction func Edit(_ sender: Any) {
+        veselwindow.isHidden=false
+    }
+    
+    @IBAction func clswindow(_ sender: Any) {
+        veselwindow.isHidden=true
+    }
+    
     }
 
