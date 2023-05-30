@@ -15,9 +15,14 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
     @IBOutlet weak var EditTB: UITableView!
     @IBOutlet weak var submittedDCRTB: UITableView!
     @IBOutlet weak var veselwindow: UIView!
+    @IBOutlet weak var Slno: UILabel!
+    @IBOutlet weak var Ordervalue: UILabel!
+    @IBOutlet weak var Product: UILabel!
     let axn="table/list"
     let axnsec = "get/SecCallDets"
     let axnview = "get/SecOrderDets"
+    let axnvw = "get/vwOrderDetails"
+    let axnproducts="dcr/updateProducts"
     var SFCode: String = "", StateCode: String = "", DivCode: String = "",Desig: String=""
     let LocalStoreage = UserDefaults.standard
     var objcalls: [AnyObject]=[]
@@ -28,8 +33,6 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
         SelectSecondaryorder2()
         submittedDCRTB.delegate=self
         submittedDCRTB.dataSource=self
-        EditTB.dataSource=self
-        EditTB.delegate=self
         BackButton.addTarget(target: self, action: #selector(closeMenuWin))
         // Do any additional setup after loading the view.
     }
@@ -41,6 +44,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if submittedDCRTB == tableView { return 190}
+        if EditTB == tableView {return 100}
         return 42
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -50,7 +54,6 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell:cellListItem = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
-        if tableView == submittedDCRTB {
         let item: [String: Any] = objcalls[indexPath.row] as! [String : Any]
         cell.RetailerName?.text = item["Trans_Detail_Name"] as? String
         cell.DistributerName?.text = item["Trans_Detail_Slno"] as? String
@@ -58,13 +61,6 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
         cell.MeetTime?.text = item["Order_In_Time"] as? String
         cell.OrderTime?.text = item["Order_Out_Time"] as? String
             
-        }
-        if tableView == EditTB {
-        let item: [String: Any] = objcalls[indexPath.row] as! [String : Any]
-        cell.Slno?.text = item["Trans_Detail_Name"] as? String
-        cell.Product?.text = item["Trans_Detail_Name"] as? String
-            cell.OrderValue
-        }
         return cell
     }
     func getUserDetails(){
@@ -147,8 +143,10 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
                     }
                     print(prettyPrintedJson)
                     self.objcalls = json
+                    self.Slno.text=String(format: "%@", json[0]["Trans_SlNo"] as! String)
+                    self.Product.text=String(format: "%@", json[0]["Trans_Detail_Name"] as! String)
+                    self.Ordervalue.text=String(format: "%@", json[0]["finalNetAmnt"] as! String)
                     self.submittedDCRTB.reloadData()
-                    self.EditTB.reloadData()
                     
                 }
             case .failure(let error):
@@ -158,10 +156,19 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
     }
     
     @IBAction func ViewBT(_ sender: Any) {
-        let apiKey: String = "\(axnview)&State_Code=12&divisionCode=4%2C&rSF=MR3533&sfCode=MR3533&Order_No=MR3533-23-24-SO-756"
+        let apiKey: String = "\(axnvw)&State_Code=\(StateCode)&divisionCode=\(DivCode)&sfCode=\(SFCode)&DCR_Code=SEF3-1261"
         
-        
-        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+        let aFormData: [String: Any] = [
+            "orderBy":"[\"name asc\"]","desig":"mgr"
+        ]
+        //DCR_Code=SEF3-1264    &State_Code=12&desig=MR&divisionCode=4%2C&rSF=MR3533&axn=get%2FvwOrderDetails&sfCode=MR3533&stateCode=12
+        print(aFormData)
+        let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
+        let jsonString = String(data: jsonData!, encoding: .utf8)!
+        let params: Parameters = [
+            "data": jsonString
+        ]
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
             AFdata in
             switch AFdata.result
             {
@@ -188,7 +195,77 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
         }
     }
     @IBAction func Edit(_ sender: Any) {
+        let apiKey: String = "\(axnview)&divisionCode=\(DivCode)&desig=\(Desig)&rSF=\(SFCode)&sfCode=\(SFCode)&State_Code=\(StateCode)&DCR_Code=SEF3-1268 "
+       
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+            AFdata in
+            switch AFdata.result
+            {
+                
+            case .success(let value):
+                print(value)
+                if let json = value as? [AnyObject] {
+                    guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
+                        print("Error: Cannot convert JSON object to Pretty JSON data")
+                        return
+                    }
+                    guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+                        print("Error: Could print JSON in String")
+                        return
+                    }
+                    print(prettyPrintedJson)
+//                    self.objcalls = json
+//                    self.Slno.text=String(format: "%@", json[0]["Trans_SlNo"] as! String)
+//                    self.Product.text=String(format: "%@", json[0]["Trans_Detail_Name"] as! String)
+//                    self.Ordervalue.text=String(format: "%@", json[0]["finalNetAmnt"] as! String)
+//                    self.submittedDCRTB.reloadData()
+//                    self.EditTB.reloadData()
+//
+                }
+            case .failure(let error):
+                Toast.show(message: error.errorDescription!)  //, controller: self
+            }
+        }
+        
         veselwindow.isHidden=false
+    }
+    
+    @IBAction func EditSecondaryordervalue(_ sender: Any) {
+        let apiKey: String = "\(axnproducts)&divisionCode=\(DivCode)&sfCode=\(SFCode)&desig=\(Desig)"
+        
+        let aFormData: [String: Any] = [
+            "orderBy":"[\"name asc\"]","desig":"mgr"
+        ]
+        //DCR_Code=SEF3-1264    &State_Code=12&desig=MR&divisionCode=4%2C&rSF=MR3533&axn=get%2FvwOrderDetails&sfCode=MR3533&stateCode=12
+        print(aFormData)
+        let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
+        let jsonString = String(data: jsonData!, encoding: .utf8)!
+        let params: Parameters = [
+            "data": jsonString
+        ]
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+            AFdata in
+            switch AFdata.result
+            {
+                
+            case .success(let value):
+                print(value)
+                if let json = value as? [AnyObject] {
+                    guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
+                        print("Error: Cannot convert JSON object to Pretty JSON data")
+                        return
+                    }
+                    guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+                        print("Error: Could print JSON in String")
+                        return
+                    }
+                    print(prettyPrintedJson)
+                }
+            case .failure(let error):
+                Toast.show(message: error.errorDescription!)
+            }
+        }
+
     }
     
     @IBAction func clswindow(_ sender: Any) {
