@@ -58,7 +58,7 @@ class SubmittedCalls: UIViewController, UITableViewDelegate, UITableViewDataSour
         SubmittedcallsTB.dataSource=self
         
         BackButton.addTarget(target: self, action: #selector(closeMenuWin))
-
+        
         strMasList.append(mnuItem.init(MasId: 1, MasName: "Secondary Order", MasImage: "SwitchRoute",BTC: ""))
         strMasList.append(mnuItem.init(MasId: 2, MasName: "Primary Order", MasImage: "SwitchRoute",BTC: ""))
         // Do any additional setup after loading the view.

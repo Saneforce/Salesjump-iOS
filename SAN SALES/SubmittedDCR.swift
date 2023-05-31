@@ -18,6 +18,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
     @IBOutlet weak var Slno: UILabel!
     @IBOutlet weak var Ordervalue: UILabel!
     @IBOutlet weak var Product: UILabel!
+    @IBOutlet weak var Viewwindow: UIView!
     let axn="table/list"
     let axnsec = "get/SecCallDets"
     let axnview = "get/SecOrderDets"
@@ -113,7 +114,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
         }
     }
     func SelectSecondaryorder2(){
-        let apiKey: String = "\(axnsec)&divisionCode=\(DivCode)&desig=\(Desig)&rSF=\(SFCode)&sfCode=\(SFCode)&State_Code=\(StateCode)&trans_SlNo=SEF3-307"
+        let apiKey: String = "\(axnsec)&divisionCode=\(DivCode)&desig=\(Desig)&rSF=\(SFCode)&sfCode=\(SFCode)&State_Code=\(StateCode)&trans_SlNo=SEF3-308"
         let aFormData: [String: Any] = [
             "tableName":"vwactivity_report","coloumns":"[\"*\"]","today":1,"wt":1,"orderBy":"[\"activity_date asc\"]","desig":"mgr"
         ]
@@ -193,6 +194,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
                 Toast.show(message: error.errorDescription!)
             }
         }
+        Viewwindow.isHidden=false
     }
     @IBAction func Edit(_ sender: Any) {
         let apiKey: String = "\(axnview)&divisionCode=\(DivCode)&desig=\(Desig)&rSF=\(SFCode)&sfCode=\(SFCode)&State_Code=\(StateCode)&DCR_Code=SEF3-1268 "
@@ -230,12 +232,12 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
         veselwindow.isHidden=false
     }
     
-    @IBAction func EditSecondaryordervalue(_ sender: Any) {
-        let apiKey: String = "\(axnproducts)&divisionCode=\(DivCode)&sfCode=\(SFCode)&desig=\(Desig)"
+    @IBAction func EditSecondaryordervalue(_ sender: Any){
+        let apiKey: String = "\(axnproducts)&divisionCode=\(DivCode)&sfCode=\(SFCode)&desig=\(Desig)&product=SAN11733"
         
-        let aFormData: [String: Any] = [
-            "orderBy":"[\"name asc\"]","desig":"mgr"
+        let aFormData: [String: Any] = ["Products":[{"product\",\"UnitId\",\"UnitName\",\"product_Nm\",\"OrdConv\",\"free\",\"HSN\",\"Rate\",\"imageUri\",\"Schmval\",\"rx_qty\",\"recv_qty\",\"product_netwt\",\netweightvalue\",\"conversionQty\",\"cateid\",\"UcQty\",\"rx_Conqty\",\"id\",\"name\",\"rx_remarks\",\"rx_remarks_Id\",\"sample_qty\",\"FreeP_Code\",\"Fname\",\"PromoVal\",\"discount\",\"discount_price\",\"tax\",\"tax_price\",\"selectedScheme\",\"selectedOffProCode\",\"selectedOffProName\",\"selectedOffProUnit\"}],\"Activity_Event_Captures\",\"POB\",\"Value\",\"disPercnt\",\"disValue\",\"finalNetAmt\",\"taxTotalValue\",\"discTotalValue\",\"subTotal\",\"No_Of_items\",\"Cust_Code\",\"DCR_Code\",\"Trans_Sl_No\",\"Route\",\"net_weight_value\",\"Discountpercent\",\"discount_price\",\"target\",\"rateMode\",\"Stockist\",\"RateEditable\",\"PhoneOrderTypes\"
         ]
+            ]
         //DCR_Code=SEF3-1264    &State_Code=12&desig=MR&divisionCode=4%2C&rSF=MR3533&axn=get%2FvwOrderDetails&sfCode=MR3533&stateCode=12
         print(aFormData)
         let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
@@ -270,6 +272,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
     
     @IBAction func clswindow(_ sender: Any) {
         veselwindow.isHidden=true
+        Viewwindow.isHidden=true
     }
     
     }

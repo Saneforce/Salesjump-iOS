@@ -252,13 +252,40 @@
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </view>
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IZo-ZV-7LL">
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hlm-iQ-aFF">
+                                        <rect key="frame" x="343" y="52" width="25" height="25"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                        <color key="tintColor" red="1" green="0.1137254902" blue="0.1450980392" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <state key="normal" image="multiply.circle.fill" catalog="system"/>
+                                        <connections>
+                                            <action selector="clswindow:" destination="XbH-qR-uj0" eventType="touchUpInside" id="CmZ-ao-Wue"/>
+                                        </connections>
+                                    </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" fixedFrame="YES" text="Submitted DCR" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="W28-y9-1yL">
+                                        <rect key="frame" x="19" y="52" width="184" height="23"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" name="Poppins-Bold" family="Poppins" pointSize="20"/>
+                                        <color key="textColor" red="0.21176470589999999" green="0.20784313730000001" blue="0.20784313730000001" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="RL8-ss-b18"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="3gd-ZL-gUw" firstAttribute="trailing" secondItem="RL8-ss-b18" secondAttribute="trailing" id="Bc3-5z-qdr"/>
+                            <constraint firstItem="IZo-ZV-7LL" firstAttribute="leading" secondItem="RL8-ss-b18" secondAttribute="leading" id="Ev6-Et-vXd"/>
+                            <constraint firstItem="IZo-ZV-7LL" firstAttribute="trailing" secondItem="RL8-ss-b18" secondAttribute="trailing" id="IBv-jT-ykf"/>
                             <constraint firstItem="3gd-ZL-gUw" firstAttribute="top" secondItem="Jdt-fh-iTa" secondAttribute="top" id="RoB-ET-RXl"/>
                             <constraint firstAttribute="bottom" secondItem="3gd-ZL-gUw" secondAttribute="bottom" id="aiN-6w-5Wa"/>
+                            <constraint firstAttribute="bottom" secondItem="IZo-ZV-7LL" secondAttribute="bottom" id="eSX-Jy-Rib"/>
+                            <constraint firstItem="IZo-ZV-7LL" firstAttribute="top" secondItem="Jdt-fh-iTa" secondAttribute="top" id="jRi-WI-Z72"/>
                             <constraint firstItem="3gd-ZL-gUw" firstAttribute="leading" secondItem="RL8-ss-b18" secondAttribute="leading" id="lK7-l8-2DL"/>
                         </constraints>
                     </view>
@@ -267,6 +294,7 @@
                         <outlet property="Ordervalue" destination="2Xl-wm-ujH" id="rsM-vs-CAm"/>
                         <outlet property="Product" destination="B3r-6q-jms" id="i0x-RP-6kc"/>
                         <outlet property="Slno" destination="fvP-zY-jMo" id="nJr-Nx-1Vi"/>
+                        <outlet property="Viewwindow" destination="IZo-ZV-7LL" id="oOz-0E-Vz1"/>
                         <outlet property="submittedDCRTB" destination="0ir-fM-aWz" id="bjh-qn-8bq"/>
                         <outlet property="veselwindow" destination="3gd-ZL-gUw" id="b7M-ol-8BQ"/>
                     </connections>
