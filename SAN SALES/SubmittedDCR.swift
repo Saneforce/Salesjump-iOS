@@ -7,6 +7,7 @@
 
 import UIKit
 import Alamofire
+import SwiftUI
 
 class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
@@ -19,12 +20,15 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
     @IBOutlet weak var Ordervalue: UILabel!
     @IBOutlet weak var Product: UILabel!
     @IBOutlet weak var Viewwindow: UIView!
+    
     let axn="table/list"
     let axnsec = "get/SecCallDets"
     let axnview = "get/SecOrderDets"
     let axnvw = "get/vwOrderDetails"
-    let axnproducts="dcr/updateProducts"
+    let axnproducts = "dcr/updateProducts"
+    let axndelet1 = "deleteEntry"
     var SFCode: String = "", StateCode: String = "", DivCode: String = "",Desig: String=""
+    
     let LocalStoreage = UserDefaults.standard
     var objcalls: [AnyObject]=[]
     override func viewDidLoad() {
@@ -114,7 +118,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
         }
     }
     func SelectSecondaryorder2(){
-        let apiKey: String = "\(axnsec)&divisionCode=\(DivCode)&desig=\(Desig)&rSF=\(SFCode)&sfCode=\(SFCode)&State_Code=\(StateCode)&trans_SlNo=SEF3-308"
+        let apiKey: String = "\(axnsec)&divisionCode=\(DivCode)&desig=\(Desig)&rSF=\(SFCode)&sfCode=\(SFCode)&State_Code=\(StateCode)&trans_SlNo=SEF3-309"
         let aFormData: [String: Any] = [
             "tableName":"vwactivity_report","coloumns":"[\"*\"]","today":1,"wt":1,"orderBy":"[\"activity_date asc\"]","desig":"mgr"
         ]
@@ -216,13 +220,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
                         return
                     }
                     print(prettyPrintedJson)
-//                    self.objcalls = json
-//                    self.Slno.text=String(format: "%@", json[0]["Trans_SlNo"] as! String)
-//                    self.Product.text=String(format: "%@", json[0]["Trans_Detail_Name"] as! String)
-//                    self.Ordervalue.text=String(format: "%@", json[0]["finalNetAmnt"] as! String)
-//                    self.submittedDCRTB.reloadData()
-//                    self.EditTB.reloadData()
-//
+
                 }
             case .failure(let error):
                 Toast.show(message: error.errorDescription!)  //, controller: self
@@ -233,12 +231,19 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
     }
     
     @IBAction func EditSecondaryordervalue(_ sender: Any){
-        let apiKey: String = "\(axnproducts)&divisionCode=\(DivCode)&sfCode=\(SFCode)&desig=\(Desig)&product=SAN11733"
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let viewController = storyboard.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
+        let myDyPln = storyboard.instantiateViewController(withIdentifier: "sbSecondaryOrder") as! SecondaryOrder
+        viewController.setViewControllers([myDyPln], animated: false)
+        UIApplication.shared.windows.first?.rootViewController = viewController
+    }
+    
+    @IBAction func DeleteBT(_ sender: Any) {
+        let apiKey: String = "\(axndelet1)&desig=\(Desig)&divisionCode=\(DivCode)&rSF=\(SFCode)&sfCode=\(SFCode)&stateCod=\(StateCode)"
         
-        let aFormData: [String: Any] = ["Products":[{"product\",\"UnitId\",\"UnitName\",\"product_Nm\",\"OrdConv\",\"free\",\"HSN\",\"Rate\",\"imageUri\",\"Schmval\",\"rx_qty\",\"recv_qty\",\"product_netwt\",\netweightvalue\",\"conversionQty\",\"cateid\",\"UcQty\",\"rx_Conqty\",\"id\",\"name\",\"rx_remarks\",\"rx_remarks_Id\",\"sample_qty\",\"FreeP_Code\",\"Fname\",\"PromoVal\",\"discount\",\"discount_price\",\"tax\",\"tax_price\",\"selectedScheme\",\"selectedOffProCode\",\"selectedOffProName\",\"selectedOffProUnit\"}],\"Activity_Event_Captures\",\"POB\",\"Value\",\"disPercnt\",\"disValue\",\"finalNetAmt\",\"taxTotalValue\",\"discTotalValue\",\"subTotal\",\"No_Of_items\",\"Cust_Code\",\"DCR_Code\",\"Trans_Sl_No\",\"Route\",\"net_weight_value\",\"Discountpercent\",\"discount_price\",\"target\",\"rateMode\",\"Stockist\",\"RateEditable\",\"PhoneOrderTypes\"
+        let aFormData: [String: Any] = [
+            "arc":"SEF3-309","amc":"MR4126-23-24-SO-857","sec":1,"custId":"114728"
         ]
-            ]
-        //DCR_Code=SEF3-1264    &State_Code=12&desig=MR&divisionCode=4%2C&rSF=MR3533&axn=get%2FvwOrderDetails&sfCode=MR3533&stateCode=12
         print(aFormData)
         let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
         let jsonString = String(data: jsonData!, encoding: .utf8)!
@@ -252,7 +257,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
                 
             case .success(let value):
                 print(value)
-                if let json = value as? [AnyObject] {
+                if let json = value as? [String: Any] {
                     guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
                         print("Error: Cannot convert JSON object to Pretty JSON data")
                         return
@@ -262,12 +267,12 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
                         return
                     }
                     print(prettyPrintedJson)
+                    
                 }
             case .failure(let error):
                 Toast.show(message: error.errorDescription!)
             }
         }
-
     }
     
     @IBAction func clswindow(_ sender: Any) {
@@ -276,4 +281,5 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
     }
     
     }
+
 

@@ -177,10 +177,14 @@
                                                         <fontDescription key="titleFontDescription" type="boldSystem" pointSize="17"/>
                                                         <color key="baseForegroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </buttonConfiguration>
+                                                    <connections>
+                                                        <action selector="DeleteBT:" destination="XbH-qR-uj0" eventType="touchUpInside" id="5yG-bW-oUC"/>
+                                                    </connections>
                                                 </button>
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
+                                            <outlet property="DeleteBUTTON" destination="giK-Um-dWX" id="XLa-N6-HQH"/>
                                             <outlet property="DistributerName" destination="hB2-Cz-xgM" id="82S-mQ-OMA"/>
                                             <outlet property="MeetTime" destination="ySI-0i-rcZ" id="uGa-au-utA"/>
                                             <outlet property="OrderTime" destination="Uqg-Fx-Z5j" id="ZWU-xt-J9l"/>

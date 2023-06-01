@@ -46,6 +46,8 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
     @IBOutlet weak var vwBtnOrder: RoundedCornerView!
     @IBOutlet weak var vwBtnCam: RoundedCornerView!
     
+    let axn="dcr/updateProducts"
+    
     struct lItem: Any {
         let id: String
         let name: String
@@ -78,10 +80,15 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
     var SFCode: String = ""
     var DataSF: String = ""
     var DivCode: String = ""
+    var Desig: String = ""
+    var StateCode: String = ""
     var eKey: String = ""
     var pCatIndexPath = IndexPath()
+    let LocalStoreage = UserDefaults.standard
     override func viewDidLoad() {
         loadViewIfNeeded()
+        getUserDetails()
+        EditSecondaryordervalue()
         let LocalStoreage = UserDefaults.standard
         let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
         let data = Data(prettyPrintedJson!.utf8)
@@ -93,6 +100,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         
         SFCode = prettyJsonData["sfCode"] as? String ?? ""
         DivCode = prettyJsonData["divisionCode"] as? String ?? ""
+        Desig=prettyJsonData["desigCode"] as? String ?? ""
         eKey = String(format: "EK%@-%i", SFCode,Int(Date().timeIntervalSince1970))
         
         let lstCatData: String=LocalStoreage.string(forKey: "Brand_Master")!
@@ -1097,7 +1105,54 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
             }
         }
     }
-    
+    func getUserDetails(){
+        let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
+        let data = Data(prettyPrintedJson!.utf8)
+        guard let prettyJsonData = try? JSONSerialization.jsonObject(with: data, options:[]) as? [String: Any] else {
+            print("Error: Cannot convert JSON object to Pretty JSON data")
+            return
+        }
+        SFCode = prettyJsonData["sfCode"] as? String ?? ""
+        StateCode = prettyJsonData["State_Code"] as? String ?? ""
+        DivCode = prettyJsonData["divisionCode"] as? String ?? ""
+        Desig=prettyJsonData["desigCode"] as? String ?? ""
+    }
+    func EditSecondaryordervalue() {
+        let apiKey: String = "\(axn)&divisionCode=\(DivCode)&sfCode=\(SFCode)&desig=\(Desig)"
+        
+        let aFormData: [String: Any] = [
+            "tableName":"vwMyDayPlan","coloumns":"[\"worktype\",\"FWFlg\",\"sf_member_code as subordinateid\",\"cluster as clusterid\",\"ClstrName\",\"remarks\",\"stockist as stockistid\",\"worked_with_code\",\"worked_with_name\",\"dcrtype\",\"location\",\"name\",\"Sprstk\",\"Place_Inv\",\"WType_SName\",\"convert(varchar,Pln_date,20) plnDate\"]","desig":"mgr"
+        ]
+        print(aFormData)
+        let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
+        let jsonString = String(data: jsonData!, encoding: .utf8)!
+        let params: Parameters = [
+            "data": jsonString
+        ]
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+            AFdata in
+            switch AFdata.result
+            {
+                
+            case .success(let value):
+                print(value)
+                if let json = value as? [AnyObject] {
+                    guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
+                        print("Error: Cannot convert JSON object to Pretty JSON data")
+                        return
+                    }
+                    guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+                        print("Error: Could print JSON in String")
+                        return
+                    }
+                    print(prettyPrintedJson)
+                }
+            case .failure(let error):
+                Toast.show(message: error.errorDescription!)
+            }
+        }
+    }
+     
     @objc private func GotoHome() {
         self.resignFirstResponder()
         //let vc=self.storyboard?.instantiateViewController(withIdentifier: "sbSecondaryVisit") as!  SecondaryVisit
