@@ -46,6 +46,9 @@ class cellListItem:UITableViewCell{
     @IBOutlet weak var Product: UILabel!
     @IBOutlet weak var Slno: UILabel!
     @IBOutlet weak var DeleteBUTTON: UIButton!
+    @IBOutlet weak var Value: UILabel!
+    @IBOutlet weak var Qty: UILabel!
+    @IBOutlet weak var ProductValue: UILabel!
     var ischeck = false
 
 }

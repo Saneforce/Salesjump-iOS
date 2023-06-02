@@ -61,7 +61,7 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
         calendar.dataSource=self
         calendar.delegate=self
     
-        //Brandavailability ()
+        Brandavailability ()
         getUserDetails()
         
         BTback.addTarget(target: self, action: #selector(GotoHome))

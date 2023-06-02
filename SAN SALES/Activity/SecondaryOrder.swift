@@ -889,7 +889,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
                 return false
             })
             {
-                
+
                 let itm: [String: Any]=["id": id,"Qty": sQty,"UOM": sUom, "UOMNm": sUomNm, "UOMConv": sUomConv, "SalQty": TotQty,"NetWt": sNetUnt,"Scheme": Scheme,"FQ": FQ,"OffQty": OffQty,"OffProd":OffProd,"OffProdNm":OffProdNm,"Rate": Rate,"Value": (TotQty*Rate), "Disc": Disc, "DisVal": Schmval, "NetVal": ItmValue];
                 let jitm: AnyObject = itm as AnyObject
                 VisitData.shared.ProductCart[i] = jitm
@@ -1120,9 +1120,40 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
     func EditSecondaryordervalue() {
         let apiKey: String = "\(axn)&divisionCode=\(DivCode)&sfCode=\(SFCode)&desig=\(Desig)"
         
-        let aFormData: [String: Any] = [
-            "tableName":"vwMyDayPlan","coloumns":"[\"worktype\",\"FWFlg\",\"sf_member_code as subordinateid\",\"cluster as clusterid\",\"ClstrName\",\"remarks\",\"stockist as stockistid\",\"worked_with_code\",\"worked_with_name\",\"dcrtype\",\"location\",\"name\",\"Sprstk\",\"Place_Inv\",\"WType_SName\",\"convert(varchar,Pln_date,20) plnDate\"]","desig":"mgr"
+//        let aFormData: [String: Any] = [
+//            "Products":[],"Activity_Event_Captures":[],"POB":"","Value":"","disPercnt":"","disValue":"","finalNetAmt":"","taxTotalValue":"","discTotalValue":"","subTotal":"","No_Of_items":"","Cust_Code":"","DCR_Code":"","Trans_Sl_No":"","Route":"","net_weight_value":"","Discountpercent":"","discount_price":"","target":"","rateMode":"","Stockist":"","RateEditable":"","PhoneOrderTypes":""
+//        ]
+        let aFormData3: [String: Any] = [
+           "tableName":"vwMyDayPlan","coloumns":"[\"worktype\",\"FWFlg\",\"sf_member_code as subordinateid\",\"cluster as clusterid\",\"ClstrName\",\"remarks\",\"stockist as stockistid\",\"worked_with_code\",\"worked_with_name\",\"dcrtype\",\"location\",\"name\",\"Sprstk\",\"Place_Inv\",\"WType_SName\",\"convert(varchar,Pln_date,20) plnDate\"]","desig":"mgr"
         ]
+        let aFormData: [String: Any] = [
+            "Products": ["product":"SAN11733"],
+            "Activity_Event_Captures": [],
+            "POB": "",
+            "Value": "",
+            "disPercnt": "",
+            "disValue": "",
+            "finalNetAmt": "",
+            "taxTotalValue": "",
+            "discTotalValue": "",
+            "subTotal": "",
+            "No_Of_items": "",
+            "Cust_Code": "",
+            "DCR_Code": "",
+            "Trans_Sl_No": "",
+            "Route": "",
+            "net_weight_value": "",
+            "Discountpercent": "",
+            "discount_price": "",
+            "target": "",
+            "rateMode": "",
+            "Stockist": "",
+            "RateEditable": "",
+            "PhoneOrderTypes": ""
+        ]
+        
+        
+//        let aFormData: [String : Any] =
         print(aFormData)
         let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
         let jsonString = String(data: jsonData!, encoding: .utf8)!

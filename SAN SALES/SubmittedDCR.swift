@@ -20,7 +20,22 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
     @IBOutlet weak var Ordervalue: UILabel!
     @IBOutlet weak var Product: UILabel!
     @IBOutlet weak var Viewwindow: UIView!
+    @IBOutlet weak var OrderView: UITableView!
+    @IBOutlet weak var OrderView2: UITableView!
+    struct mnuItem: Any {
+        let MasId: Int
+        let MasName: String
+        let MasLbl : String
+    }
     
+    struct OrderViewTB2: Any {
+        let id : Int
+        let Product: String
+        let Qty: String
+        let values: String
+    }
+    var orderViewTable2:[OrderViewTB2] = []
+    var OrdeView:[mnuItem]=[]
     let axn="table/list"
     let axnsec = "get/SecCallDets"
     let axnview = "get/SecOrderDets"
@@ -38,6 +53,10 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
         SelectSecondaryorder2()
         submittedDCRTB.delegate=self
         submittedDCRTB.dataSource=self
+        OrderView.delegate=self
+        OrderView.dataSource=self
+        OrderView2.delegate=self
+        OrderView2.dataSource=self
         BackButton.addTarget(target: self, action: #selector(closeMenuWin))
         // Do any additional setup after loading the view.
     }
@@ -53,18 +72,32 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
         return 42
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-       if let tableView = EditTB {return objcalls.count}
+       if  tableView == EditTB {return objcalls.count}
+        if tableView == OrderView{return OrdeView.count}
+        if tableView == OrderView2{return orderViewTable2.count}
         return objcalls.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell:cellListItem = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
-        let item: [String: Any] = objcalls[indexPath.row] as! [String : Any]
-        cell.RetailerName?.text = item["Trans_Detail_Name"] as? String
-        cell.DistributerName?.text = item["Trans_Detail_Slno"] as? String
-        cell.Rou?.text = item["SDP_Name"] as? String
-        cell.MeetTime?.text = item["Order_In_Time"] as? String
-        cell.OrderTime?.text = item["Order_Out_Time"] as? String
+       
+        if tableView == submittedDCRTB {
+            let item: [String: Any] = objcalls[indexPath.row] as! [String : Any]
+            cell.RetailerName?.text = item["Trans_Detail_Name"] as? String
+            cell.DistributerName?.text = item["Trans_Detail_Slno"] as? String
+            cell.Rou?.text = item["SDP_Name"] as? String
+            cell.MeetTime?.text = item["Order_In_Time"] as? String
+            cell.OrderTime?.text = item["Order_Out_Time"] as? String
+        }
+        if tableView == OrderView {
+            cell.lblText.text = OrdeView[indexPath.row].MasName
+            cell.OrderValue.text = OrdeView[indexPath.row].MasLbl
+        }
+        if tableView == OrderView2 {
+            cell.ProductValue.text = orderViewTable2[indexPath.row].Product
+            cell.Qty.text = orderViewTable2[indexPath.row].Qty
+            cell.Value.text = orderViewTable2[indexPath.row].values
+        }
             
         return cell
     }
@@ -118,7 +151,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
         }
     }
     func SelectSecondaryorder2(){
-        let apiKey: String = "\(axnsec)&divisionCode=\(DivCode)&desig=\(Desig)&rSF=\(SFCode)&sfCode=\(SFCode)&State_Code=\(StateCode)&trans_SlNo=SEF3-309"
+        let apiKey: String = "\(axnsec)&divisionCode=\(DivCode)&desig=\(Desig)&rSF=\(SFCode)&sfCode=\(SFCode)&State_Code=\(StateCode)&trans_SlNo=SEF3-310"
         let aFormData: [String: Any] = [
             "tableName":"vwactivity_report","coloumns":"[\"*\"]","today":1,"wt":1,"orderBy":"[\"activity_date asc\"]","desig":"mgr"
         ]
@@ -191,8 +224,16 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
                     }
                     print(prettyPrintedJson)
                     self.objcalls = json
-                    self.submittedDCRTB.reloadData()
-                    
+                    OrdeView=[]
+                    OrdeView.append(mnuItem(MasId: 1, MasName: "Retailer Name :", MasLbl:json[0]["Additional_Prod_Dtls"] as! String))
+                    OrdeView.append(mnuItem(MasId: 2, MasName: "Distributors Name :", MasLbl:json[0]["OrderType"] as! String))
+                    OrdeView.append(mnuItem(MasId: 3, MasName: "Route :", MasLbl:json[0]["Route"] as! String))
+                    OrdeView.append(mnuItem(MasId: 4, MasName: "Joint Wpork :", MasLbl:json[0]["taxValue"] as! String))
+                    //rdeView.append(mnuItem(MasId: 5, MasName: "Product", MasLbl: ""))
+                    //orderViewTable2.append(OrderViewTB2(Product: "Product", Qty:"Qty", values:"Value"))
+                    self.OrderView.reloadData()
+                    orderViewTable2.append(OrderViewTB2(id: 1, Product: "Product", Qty: "Qty", values: "hfgdhf"))
+                    self.OrderView2.reloadData()
                 }
             case .failure(let error):
                 Toast.show(message: error.errorDescription!)
