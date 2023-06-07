@@ -46,11 +46,11 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
     
     let LocalStoreage = UserDefaults.standard
     var objcalls: [AnyObject]=[]
+    var trans_SlNo: [AnyObject]=[]
     override func viewDidLoad() {
         super.viewDidLoad()
         getUserDetails()
         SelectSecondaryorder()
-        SelectSecondaryorder2()
         submittedDCRTB.delegate=self
         submittedDCRTB.dataSource=self
         OrderView.delegate=self
@@ -61,10 +61,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
         // Do any additional setup after loading the view.
     }
     @objc func closeMenuWin(){
-        
-        
         GlobalFunc.movetoHomePage()
-        
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if submittedDCRTB == tableView { return 190}
@@ -143,7 +140,8 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
                         return
                     }
                     print(prettyPrintedJson)
-                    
+                    self.trans_SlNo = json
+                    SelectSecondaryorder2()
                 }
             case .failure(let error):
                 Toast.show(message: error.errorDescription!)  //, controller: self
@@ -151,7 +149,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
         }
     }
     func SelectSecondaryorder2(){
-        let apiKey: String = "\(axnsec)&divisionCode=\(DivCode)&desig=\(Desig)&rSF=\(SFCode)&sfCode=\(SFCode)&State_Code=\(StateCode)&trans_SlNo=SEF3-310"
+        let apiKey: String = "\(axnsec)&divisionCode=\(DivCode)&desig=\(Desig)&rSF=\(SFCode)&sfCode=\(SFCode)&State_Code=\(StateCode)&trans_SlNo=SEF3-313"
         let aFormData: [String: Any] = [
             "tableName":"vwactivity_report","coloumns":"[\"*\"]","today":1,"wt":1,"orderBy":"[\"activity_date asc\"]","desig":"mgr"
         ]
@@ -193,62 +191,66 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
         }
     }
     
-    @IBAction func ViewBT(_ sender: Any) {
-        let apiKey: String = "\(axnvw)&State_Code=\(StateCode)&divisionCode=\(DivCode)&sfCode=\(SFCode)&DCR_Code=SEF3-1261"
-        
-        let aFormData: [String: Any] = [
-            "orderBy":"[\"name asc\"]","desig":"mgr"
-        ]
-        //DCR_Code=SEF3-1264    &State_Code=12&desig=MR&divisionCode=4%2C&rSF=MR3533&axn=get%2FvwOrderDetails&sfCode=MR3533&stateCode=12
-        print(aFormData)
-        let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
-        let jsonString = String(data: jsonData!, encoding: .utf8)!
-        let params: Parameters = [
-            "data": jsonString
-        ]
-        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
-            AFdata in
-            switch AFdata.result
-            {
-                
-            case .success(let value):
-                print(value)
-                if let json = value as? [AnyObject] {
-                    guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
-                        print("Error: Cannot convert JSON object to Pretty JSON data")
-                        return
-                    }
-                    guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
-                        print("Error: Could print JSON in String")
-                        return
-                    }
-                    print(prettyPrintedJson)
-                    self.objcalls = json
-                    OrdeView=[]
-                    OrdeView.append(mnuItem(MasId: 1, MasName: "Retailer Name :", MasLbl:json[0]["Additional_Prod_Dtls"] as! String))
-                    OrdeView.append(mnuItem(MasId: 2, MasName: "Distributors Name :", MasLbl:json[0]["OrderType"] as! String))
-                    OrdeView.append(mnuItem(MasId: 3, MasName: "Route :", MasLbl:json[0]["Route"] as! String))
-                    OrdeView.append(mnuItem(MasId: 4, MasName: "Joint Wpork :", MasLbl:json[0]["taxValue"] as! String))
-                    //rdeView.append(mnuItem(MasId: 5, MasName: "Product", MasLbl: ""))
-                    //orderViewTable2.append(OrderViewTB2(Product: "Product", Qty:"Qty", values:"Value"))
-                    self.OrderView.reloadData()
-                    orderViewTable2.append(OrderViewTB2(id: 1, Product: "Product", Qty: "Qty", values: "hfgdhf"))
-                    self.OrderView2.reloadData()
-                }
-            case .failure(let error):
-                Toast.show(message: error.errorDescription!)
-            }
-        }
-        Viewwindow.isHidden=false
-    }
+//    @IBAction func ViewBT(_ sender: Any) {
+//        let apiKey: String = "\(axnvw)&State_Code=\(StateCode)&divisionCode=\(DivCode)&sfCode=\(SFCode)&DCR_Code=SEF3-1326"
+//
+//        let aFormData: [String: Any] = [
+//            "orderBy":"[\"name asc\"]","desig":"mgr"
+//        ]
+//        //DCR_Code=SEF3-1264    &State_Code=12&desig=MR&divisionCode=4%2C&rSF=MR3533&axn=get%2FvwOrderDetails&sfCode=MR3533&stateCode=12
+//        print(aFormData)
+//        let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
+//        let jsonString = String(data: jsonData!, encoding: .utf8)!
+//        let params: Parameters = [
+//            "data": jsonString
+//        ]
+//        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+//            AFdata in
+//            switch AFdata.result
+//            {
+//
+//            case .success(let value):
+//                print(value)
+//                if let json = value as? [AnyObject] {
+//                    guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
+//                        print("Error: Cannot convert JSON object to Pretty JSON data")
+//                        return
+//                    }
+//                    guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+//                        print("Error: Could print JSON in String")
+//                        return
+//                    }
+//                    print(prettyPrintedJson)
+//                    self.objcalls = json
+//                    OrdeView=[]
+//                    OrdeView.append(mnuItem(MasId: 1, MasName: "Retailer Name :", MasLbl:json[0]["Additional_Prod_Dtls"] as! String))
+//                    OrdeView.append(mnuItem(MasId: 2, MasName: "Distributors Name :", MasLbl:json[0]["OrderType"] as! String))
+//                    OrdeView.append(mnuItem(MasId: 3, MasName: "Route :", MasLbl:json[0]["Route"] as! String))
+//                    OrdeView.append(mnuItem(MasId: 4, MasName: "Joint Wpork :", MasLbl:json[0]["taxValue"] as! String))
+//                    //rdeView.append(mnuItem(MasId: 5, MasName: "Product", MasLbl: ""))
+//                    //orderViewTable2.append(OrderViewTB2(Product: "Product", Qty:"Qty", values:"Value"))
+//                    self.OrderView.reloadData()
+//                    orderViewTable2=[]
+//                    orderViewTable2.append(OrderViewTB2(id: 1, Product: "Product", Qty: "Qty", values: "values"))
+//                    orderViewTable2.append(OrderViewTB2(id: 2, Product:json[0]["Products"] as! String, Qty:String(json[0]["net_weight_value"] as! Int), values:json[0]["taxValue"] as! String))
+//                    self.OrderView2.reloadData()
+//                }
+//            case .failure(let error):
+//                Toast.show(message: error.errorDescription!)
+//            }
+//        }
+//        Viewwindow.isHidden=false
+//    }
     @IBAction func Edit(_ sender: Any) {
-        let apiKey: String = "\(axnview)&divisionCode=\(DivCode)&desig=\(Desig)&rSF=\(SFCode)&sfCode=\(SFCode)&State_Code=\(StateCode)&DCR_Code=SEF3-1268 "
-       
+        let apiKey: String = "\(axnview)&divisionCode=\(DivCode)&desig=\(Desig)&rSF=\(SFCode)&sfCode=\(SFCode)&State_Code=\(StateCode)&Order_No=MR4126-23-24-SO-881 "
+        
+        //State_Code=12&divisionCode=4%2C&rSF=MR3533&axn=get%2FSecOrderDets&sfCode=MR3533&Order_No=MR3533-23-24-SO-756
+
         AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
             AFdata in
             switch AFdata.result
             {
-                
+
             case .success(let value):
                 print(value)
                 if let json = value as? [AnyObject] {
@@ -267,7 +269,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
                 Toast.show(message: error.errorDescription!)  //, controller: self
             }
         }
-        
+
         veselwindow.isHidden=false
     }
     
@@ -283,8 +285,9 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
         let apiKey: String = "\(axndelet1)&desig=\(Desig)&divisionCode=\(DivCode)&rSF=\(SFCode)&sfCode=\(SFCode)&stateCod=\(StateCode)"
         
         let aFormData: [String: Any] = [
-            "arc":"SEF3-309","amc":"MR4126-23-24-SO-857","sec":1,"custId":"114728"
+            "arc":"SEF3-313","amc":"MR4126-23-24-SO-879","sec":1,"custId":"2284918"
         ]
+        
         print(aFormData)
         let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
         let jsonString = String(data: jsonData!, encoding: .utf8)!

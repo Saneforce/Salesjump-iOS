@@ -46,7 +46,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
     @IBOutlet weak var vwBtnOrder: RoundedCornerView!
     @IBOutlet weak var vwBtnCam: RoundedCornerView!
     
-    let axn="dcr/updateProducts"
+    let axn="get/vwOrderDetails"
     
     struct lItem: Any {
         let id: String
@@ -138,12 +138,16 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
             }
         }
         DataSF = self.lstPlnDetail[0]["subordinateid"] as! String
-        let lstDistData: String = LocalStoreage.string(forKey: "Distributors_Master_"+DataSF)!
         
-        if let list = GlobalFunc.convertToDictionary(text: lstDistData) as? [AnyObject] {
-            lstDistList = list;
-        }
-        
+            if let lstDistData = LocalStoreage.string(forKey: "Distributors_Master_"+DataSF),
+               let list = GlobalFunc.convertToDictionary(text:  lstDistData) as? [AnyObject] {
+                lstDistList = list
+            }
+            
+//        if let list = GlobalFunc.convertToDictionary(text: lstDistData) as? [AnyObject] {
+//            lstDistList = list;
+//        }
+//
         if(lstPlnDetail.count > 0){
             let id=String(format: "%@", lstPlnDetail[0]["stockistid"] as! CVarArg)
             if let indexToDelete = lstDistList.firstIndex(where: { String(format: "%@", $0["id"] as! CVarArg) == id }) {
@@ -1118,42 +1122,10 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         Desig=prettyJsonData["desigCode"] as? String ?? ""
     }
     func EditSecondaryordervalue() {
-        let apiKey: String = "\(axn)&divisionCode=\(DivCode)&sfCode=\(SFCode)&desig=\(Desig)"
-        
-//        let aFormData: [String: Any] = [
-//            "Products":[],"Activity_Event_Captures":[],"POB":"","Value":"","disPercnt":"","disValue":"","finalNetAmt":"","taxTotalValue":"","discTotalValue":"","subTotal":"","No_Of_items":"","Cust_Code":"","DCR_Code":"","Trans_Sl_No":"","Route":"","net_weight_value":"","Discountpercent":"","discount_price":"","target":"","rateMode":"","Stockist":"","RateEditable":"","PhoneOrderTypes":""
-//        ]
-        let aFormData3: [String: Any] = [
-           "tableName":"vwMyDayPlan","coloumns":"[\"worktype\",\"FWFlg\",\"sf_member_code as subordinateid\",\"cluster as clusterid\",\"ClstrName\",\"remarks\",\"stockist as stockistid\",\"worked_with_code\",\"worked_with_name\",\"dcrtype\",\"location\",\"name\",\"Sprstk\",\"Place_Inv\",\"WType_SName\",\"convert(varchar,Pln_date,20) plnDate\"]","desig":"mgr"
-        ]
+        let apiKey: String = "\(axn)&State_Code=\(StateCode)&divisionCode=\(DivCode)&sfCode=\(SFCode)&DCR_Code=SEF3-1326"
         let aFormData: [String: Any] = [
-            "Products": ["product":"SAN11733"],
-            "Activity_Event_Captures": [],
-            "POB": "",
-            "Value": "",
-            "disPercnt": "",
-            "disValue": "",
-            "finalNetAmt": "",
-            "taxTotalValue": "",
-            "discTotalValue": "",
-            "subTotal": "",
-            "No_Of_items": "",
-            "Cust_Code": "",
-            "DCR_Code": "",
-            "Trans_Sl_No": "",
-            "Route": "",
-            "net_weight_value": "",
-            "Discountpercent": "",
-            "discount_price": "",
-            "target": "",
-            "rateMode": "",
-            "Stockist": "",
-            "RateEditable": "",
-            "PhoneOrderTypes": ""
+            "orderBy":"[\"name asc\"]","desig":"mgr"
         ]
-        
-        
-//        let aFormData: [String : Any] =
         print(aFormData)
         let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
         let jsonString = String(data: jsonData!, encoding: .utf8)!

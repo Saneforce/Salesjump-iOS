@@ -13,6 +13,7 @@ import CoreLocation
 
 class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource,UICollectionViewDelegateFlowLayout {
 
+    var axnEdit = "get/pmOrderDetails"
     @IBOutlet weak var lcLastvistHeight: NSLayoutConstraint!
     @IBOutlet weak var lcContentHeight: NSLayoutConstraint!
     
@@ -79,9 +80,13 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
     var isMulti: Bool = false
     var eKey: String = ""
     
-    var SFCode: String = ""
-    var DivCode: String = ""
+//    var SFCode: String = ""
+//    var DivCode: String = ""
+    var SFCode: String = "", StateCode: String = "", DivCode: String = "",Desig: String="", rSF: String = ""
+    let LocalStoreage = UserDefaults.standard
     override func viewDidLoad() {
+        getUserDetails()
+        updateEditOrderValues()
         let LocalStoreage = UserDefaults.standard
         let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
         let data = Data(prettyPrintedJson!.utf8)
@@ -995,8 +1000,7 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
             if DisVal == "" { DisVal="0" }
             
             sPItems = sPItems + "{\"product_code\":\""+id+"\",\"product_Name\":\""+(ProdItems[0]["name"] as! String)+"\",\"rx_Conqty\":" + (item["Qty"] as! String) + ",\"Qty\":" + (String(format: "%.0f", item["SalQty"] as! Double)) + ",\"PQty\":0,\"cb_qty\":0,\"free\":" + (String(format: "%i", item["OffQty"] as! Int)) + ",\"Pfree\":0,\"Rate\":" + (String(format: "%.2f", item["Rate"] as! Double)) + ",\"PieseRate\":" + (String(format: "%.2f", item["Rate"] as! Double)) + ",\"discount\":" + Disc + ",\"FreeP_Code\":\"" + (item["OffProd"] as! String) + "\",\"Fname\":\"" + (item["OffProdNm"] as! String) + "\",\"discount_price\":" +  DisVal + ",\"tax\":0.0,\"tax_price\":0.0,\"OrdConv\":\"" + (item["UOMConv"] as! String) + "\",\"selectedScheme\":" + (String(format: "%.0f", item["Scheme"] as! Double)) + ",\"product_unit_Code\":\"" + (item["UOM"] as! String) + "\",\"product_unit_name\":\"" + (item["UOMNm"] as! String) + "\",\"selectedOffProCode\":\"" + (item["UOM"] as! String) + "\",\"selectedOffProName\":\"" + (item["UOMNm"] as! String) + "\",\"selectedOffProUnit\":\"" + (item["UOMConv"] as! String) + "\",\"f_key\":{\"activity_stockist_code\":\"Activity_Stockist_Report\"}}"
-            
-            
+    
         }
         
         let DataSF: String = self.lstPlnDetail[0]["subordinateid"] as! String
@@ -1062,6 +1066,46 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
     }
     @IBAction func closeWin(_ sender:Any){
         vwSelWindow.isHidden=true
+    }
+    func getUserDetails(){
+        let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
+        let data = Data(prettyPrintedJson!.utf8)
+        guard let prettyJsonData = try? JSONSerialization.jsonObject(with: data, options:[]) as? [String: Any] else {
+            print("Error: Cannot convert JSON object to Pretty JSON data")
+            return
+        }
+        SFCode = prettyJsonData["sfCode"] as? String ?? ""
+        StateCode = prettyJsonData["State_Code"] as? String ?? ""
+        DivCode = prettyJsonData["divisionCode"] as? String ?? ""
+        Desig=prettyJsonData["desigCode"] as? String ?? ""
+    }
+    func updateEditOrderValues(){
+        let apiKey: String = "\(axnEdit)&State_Code=\(StateCode)&Trans_Detail_SlNo=SEF3-1324&&Order_No=SEF3-424"
+
+       
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+            AFdata in
+            switch AFdata.result
+            {
+                
+            case .success(let value):
+                print(value)
+                if let json = value as? [AnyObject] {
+                    guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
+                        print("Error: Cannot convert JSON object to Pretty JSON data")
+                        return
+                    }
+                    guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+                        print("Error: Could print JSON in String")
+                        return
+                    }
+                    print(prettyPrintedJson)
+                    
+                }
+            case .failure(let error):
+                Toast.show(message: error.errorDescription!)  //, controller: self
+            }
+        }
     }
 }
 
