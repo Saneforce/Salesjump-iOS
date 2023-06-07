@@ -22,6 +22,16 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
     @IBOutlet weak var Viewwindow: UIView!
     @IBOutlet weak var OrderView: UITableView!
     @IBOutlet weak var OrderView2: UITableView!
+    
+    @IBOutlet weak var Jointlbl: UILabel!
+    @IBOutlet weak var Rotlbl: UILabel!
+    @IBOutlet weak var Dislbl: UILabel!
+    @IBOutlet weak var Retlbl: UILabel!
+    @IBOutlet weak var Remark: UILabel!
+    @IBOutlet weak var OrderValue: UILabel!
+    @IBOutlet weak var OrderTime: UILabel!
+    @IBOutlet weak var MeetTime: UILabel!
+    
     struct mnuItem: Any {
         let MasId: Int
         let MasName: String
@@ -47,14 +57,14 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
     let LocalStoreage = UserDefaults.standard
     var objcalls: [AnyObject]=[]
     var trans_SlNo: [AnyObject]=[]
+    
+    var Submittedclickdata = [SubmittedDCRselect]()
     override func viewDidLoad() {
         super.viewDidLoad()
         getUserDetails()
         SelectSecondaryorder()
         submittedDCRTB.delegate=self
         submittedDCRTB.dataSource=self
-        OrderView.delegate=self
-        OrderView.dataSource=self
         OrderView2.delegate=self
         OrderView2.dataSource=self
         BackButton.addTarget(target: self, action: #selector(closeMenuWin))
@@ -68,11 +78,22 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
         if EditTB == tableView {return 100}
         return 42
     }
+    func updateData () {
+        
+        for brand in objcalls {
+            
+            self.Submittedclickdata.append(SubmittedDCRselect(isSelectedAvail:false, isSelectedEC: false,SubmittedData: brand))
+        }
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
        if  tableView == EditTB {return objcalls.count}
         if tableView == OrderView{return OrdeView.count}
-        if tableView == OrderView2{return orderViewTable2.count}
-        return objcalls.count
+        if tableView == OrderView2{return objcalls.count}
+        if tableView == submittedDCRTB {
+            return objcalls.count
+        }
+        return 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -91,9 +112,10 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
             cell.OrderValue.text = OrdeView[indexPath.row].MasLbl
         }
         if tableView == OrderView2 {
-            cell.ProductValue.text = orderViewTable2[indexPath.row].Product
-            cell.Qty.text = orderViewTable2[indexPath.row].Qty
-            cell.Value.text = orderViewTable2[indexPath.row].values
+            let item: [String: Any] = objcalls[indexPath.row] as! [String : Any]
+            cell.ProductValue?.text = item["Product_Name"] as? String
+            cell.Qty?.text = String(item["Quantity"] as! Int)
+            cell.Value?.text = String(item["value"] as! Int)
         }
             
         return cell
@@ -149,7 +171,9 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
         }
     }
     func SelectSecondaryorder2(){
-        let apiKey: String = "\(axnsec)&divisionCode=\(DivCode)&desig=\(Desig)&rSF=\(SFCode)&sfCode=\(SFCode)&State_Code=\(StateCode)&trans_SlNo=SEF3-313"
+        
+        
+        let apiKey: String = "\(axnsec)&divisionCode=\(DivCode)&desig=\(Desig)&rSF=\(SFCode)&sfCode=\(SFCode)&State_Code=\(StateCode)&trans_SlNo=SEF3-315"
         let aFormData: [String: Any] = [
             "tableName":"vwactivity_report","coloumns":"[\"*\"]","today":1,"wt":1,"orderBy":"[\"activity_date asc\"]","desig":"mgr"
         ]
@@ -183,6 +207,15 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
                     self.Product.text=String(format: "%@", json[0]["Trans_Detail_Name"] as! String)
                     self.Ordervalue.text=String(format: "%@", json[0]["finalNetAmnt"] as! String)
                     self.submittedDCRTB.reloadData()
+                    if !json.isEmpty {
+                        self.Retlbl.text=String(format: "%@", json[0]["Trans_Detail_Name"] as! String)
+                        self.Dislbl.text=String(format: "%@", json[0]["Trans_Detail_Slno"] as! String)
+                        self.Rotlbl.text=String(format: "%@", json[0]["SDP_Name"] as! String)
+                        self.MeetTime.text=String(format: "%@", json[0]["StartOrder_Time"] as! String)
+                        self.OrderTime.text=String(format: "%@", json[0]["Order_Out_Time"] as! String)
+                       // self.Ordervalue.text=String(format: "%@", json[0]["finalNetAmnt"] as! String)
+                        self.Remark.text=String(format: "%@", json[0]["Activity_Remarks"] as! String)
+                    }
                     
                 }
             case .failure(let error):
@@ -242,9 +275,9 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
 //        Viewwindow.isHidden=false
 //    }
     @IBAction func Edit(_ sender: Any) {
-        let apiKey: String = "\(axnview)&divisionCode=\(DivCode)&desig=\(Desig)&rSF=\(SFCode)&sfCode=\(SFCode)&State_Code=\(StateCode)&Order_No=MR4126-23-24-SO-881 "
         
-        //State_Code=12&divisionCode=4%2C&rSF=MR3533&axn=get%2FSecOrderDets&sfCode=MR3533&Order_No=MR3533-23-24-SO-756
+        let apiKey: String = "\(axnview)&divisionCode=\(DivCode)&desig=\(Desig)&rSF=\(SFCode)&sfCode=\(SFCode)&State_Code=\(StateCode)&Order_No=MR4126-23-24-SO-888"
+        
 
         AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
             AFdata in
@@ -263,6 +296,8 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
                         return
                     }
                     print(prettyPrintedJson)
+                    self.objcalls = json
+                    self.OrderView2.reloadData()
 
                 }
             case .failure(let error):
@@ -270,7 +305,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
             }
         }
 
-        veselwindow.isHidden=false
+        Viewwindow.isHidden=false
     }
     
     @IBAction func EditSecondaryordervalue(_ sender: Any){
@@ -325,5 +360,11 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
     }
     
     }
+
+struct SubmittedDCRselect {
+    var isSelectedAvail : Bool
+    var isSelectedEC : Bool
+    var SubmittedData : AnyObject
+}
 
 

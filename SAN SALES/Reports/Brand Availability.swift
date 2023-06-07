@@ -52,6 +52,10 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        getUserDetails()
+        Brandavailability ()
+        
+        
         BrandAV.delegate=self
         BrandAV.dataSource=self
         
@@ -61,9 +65,6 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
         calendar.dataSource=self
         calendar.delegate=self
     
-        Brandavailability ()
-        getUserDetails()
-        
         BTback.addTarget(target: self, action: #selector(GotoHome))
         lblRptDt.addTarget(target: self, action: #selector(selDORpt))
         
@@ -320,16 +321,16 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
     func Brandavailability (){
         let apiKey: String = "\(axn)&divisionCode=\(DivCode)&activityDate=\(StrRptDt)&sfCode=\(SFCode)"
 
-        let aFormData: [String: Any] = [
-           "tableName":"vwMyDayPlan","coloumns":"[\"worktype\",\"FWFlg\",\"sf_member_code as subordinateid\",\"cluster as clusterid\",\"ClstrName\",\"remarks\",\"stockist as stockistid\",\"worked_with_code\",\"worked_with_name\",\"dcrtype\",\"location\",\"name\",\"Sprstk\",\"Place_Inv\",\"WType_SName\",\"convert(varchar,Pln_date,20) plnDate\"]","desig":"mgr"]
-        print(aFormData)
-        let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
-        let jsonString = String(data: jsonData!, encoding: .utf8)!
-        let params: Parameters = [
-            "data": jsonString
-        ]
+//        let aFormData: [String: Any] = [
+//           "tableName":"vwMyDayPlan","coloumns":"[\"worktype\",\"FWFlg\",\"sf_member_code as subordinateid\",\"cluster as clusterid\",\"ClstrName\",\"remarks\",\"stockist as stockistid\",\"worked_with_code\",\"worked_with_name\",\"dcrtype\",\"location\",\"name\",\"Sprstk\",\"Place_Inv\",\"WType_SName\",\"convert(varchar,Pln_date,20) plnDate\"]","desig":"mgr"]
+//        print(aFormData)
+//        let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
+//        let jsonString = String(data: jsonData!, encoding: .utf8)!
+//        let params: Parameters = [
+//            "data": jsonString
+//        ]
         
-        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
             AFdata in
             switch AFdata.result
             {

@@ -1122,7 +1122,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         Desig=prettyJsonData["desigCode"] as? String ?? ""
     }
     func EditSecondaryordervalue() {
-        let apiKey: String = "\(axn)&State_Code=\(StateCode)&divisionCode=\(DivCode)&sfCode=\(SFCode)&DCR_Code=SEF3-1326"
+        let apiKey: String = "\(axn)&State_Code=\(StateCode)&divisionCode=\(DivCode)&sfCode=\(SFCode)&DCR_Code=SEF3-1332"
         let aFormData: [String: Any] = [
             "orderBy":"[\"name asc\"]","desig":"mgr"
         ]

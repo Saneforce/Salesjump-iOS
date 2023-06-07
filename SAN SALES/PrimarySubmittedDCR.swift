@@ -23,7 +23,9 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
     @IBOutlet weak var Route: UILabel!
     @IBOutlet weak var Disbutorsname: UILabel!
     @IBOutlet weak var OrderTB: UITableView!
-    
+    @IBOutlet weak var Remark: UILabel!
+    @IBOutlet weak var OrderTime: UILabel!
+    @IBOutlet weak var MeetTime: UILabel!
     
     var SFCode: String = "", StateCode: String = "", DivCode: String = "",Desig: String="", rSF: String = ""
     let LocalStoreage = UserDefaults.standard
@@ -137,7 +139,7 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
     func SelectPrimary2order(){
         let apiKey: String = "\(axn)&divisionCode=\(DivCode)&desig=\(Desig)&rSF=\(SFCode)&sfCode=\(SFCode)&State_Code=\(StateCode)"
         let aFormData: [String: Any] = [
-            "tableName":"vwActivity_CSH_Detail","coloumns":"[\"*\"]","where":"[\"Trans_SlNo='SEF3-312'\"]","or":3,"orderBy":"[\"stk_meet_time\"]","desig":"mgr"
+            "tableName":"vwActivity_CSH_Detail","coloumns":"[\"*\"]","where":"[\"Trans_SlNo='SEF1-80'\"]","or":3,"orderBy":"[\"stk_meet_time\"]","desig":"mgr"
         ]
         print(aFormData)
         let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
@@ -167,6 +169,9 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
                     self.Disbutorsname.text = json[0]["Trans_Detail_Name"] as? String
                     self.Route.text = json[0]["SDP"] as? String
                     self.Joint_Work.text = json[0]["jgch"] as? String
+                    self.MeetTime.text = json[0]["StartOrder_Time"] as? String
+                    self.OrderTime.text = json[0]["EndOrder_Time"] as? String
+                    self.Remark.text = json[0]["Activity_Remarks"] as? String
                                                
                     self.objcalls = json
                     self.PrimayOrderViewTB.reloadData()
@@ -227,6 +232,8 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     @IBAction func ViewBT(_ sender: Any) {
+    
+        
         veselwindow.isHidden=false
     }
     
