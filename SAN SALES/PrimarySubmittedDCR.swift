@@ -36,7 +36,7 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
         
         getUserDetails()
         SelectPrimaryorder()
-        SelectPrimary2order()
+        //SelectPrimary2order()
         PrimayOrderViewTB.delegate=self
         PrimayOrderViewTB.dataSource=self
         OrderTB.dataSource=self
@@ -117,7 +117,7 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
             {
                 
             case .success(let value):
-                print(value)
+                //print(value)
                 if let json = value as? [AnyObject] {
                     guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
                         print("Error: Cannot convert JSON object to Pretty JSON data")
@@ -128,7 +128,8 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
                         return
                     }
                     print(prettyPrintedJson)
-                    
+                    self.objcalls=json
+                    SelectPrimary2order()
                 }
             case .failure(let error):
                 Toast.show(message: error.errorDescription!)  //, controller: self
@@ -137,11 +138,15 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func SelectPrimary2order(){
+        if let transid = objcalls[0]["Trans_SlNo"] as? String {
+            // Use the unwrapped value of 'transid' here
+            print(transid)
+       
         let apiKey: String = "\(axn)&divisionCode=\(DivCode)&desig=\(Desig)&rSF=\(SFCode)&sfCode=\(SFCode)&State_Code=\(StateCode)"
         let aFormData: [String: Any] = [
-            "tableName":"vwActivity_CSH_Detail","coloumns":"[\"*\"]","where":"[\"Trans_SlNo='SEF1-80'\"]","or":3,"orderBy":"[\"stk_meet_time\"]","desig":"mgr"
+            "tableName":"vwActivity_CSH_Detail","coloumns":"[\"*\"]","where":"[\"Trans_SlNo='\(transid)'\"]","or":3,"orderBy":"[\"stk_meet_time\"]","desig":"mgr"
         ]
-        print(aFormData)
+       // print(aFormData)
         let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
         let jsonString = String(data: jsonData!, encoding: .utf8)!
         let params: Parameters = [
@@ -182,6 +187,10 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
                 Toast.show(message: error.errorDescription!)  //, controller: self
             }
         }
+        } else {
+            // The value was nil or couldn't be cast to a String
+            print("Value is nil or not a String")
+        }
     }
     
     @IBAction func EditButton(_ sender: Any) {
@@ -195,10 +204,19 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
     
     @IBAction func DeleteButton(_ sender: Any) {
         let apiKey: String = "\(axnDelete)&divisionCode=\(DivCode)%2C&desig=\(Desig)&rSF=\(SFCode)&sfCode=\(SFCode)&State_Code=\(StateCode)"
+//        let aFormData: [String: Any] = [
+//            "arc":"\(objcalls[0]["Trans_SlNo"])","amc":"\(objcalls[0]["Trans_Detail_Slno"])","sec":1
+//        ]
+        
+        if let transid = objcalls[0]["Trans_SlNo"] as? String,let transid2 = objcalls[0]["Trans_Detail_Slno"] as? String{
+            // Use the unwrapped value of 'transid' here
+            print(transid)
+            print(transid2)
+      
         let aFormData: [String: Any] = [
-            "arc":"\(objcalls[0]["Trans_SlNo"])","amc":"\(objcalls[0]["Trans_Detail_Slno"])","sec":1
+            "arc":"\(transid)","amc":"\(transid2)","sec":2
         ]
-       
+        
         print(aFormData)
         let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
         let jsonString = String(data: jsonData!, encoding: .utf8)!
@@ -227,6 +245,10 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
             case .failure(let error):
                 Toast.show(message: error.errorDescription!)  //, controller: self
             }
+        }
+        } else {
+            // The value was nil or couldn't be cast to a String
+            print("Value is nil or not a String")
         }
 
     }

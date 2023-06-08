@@ -8,6 +8,7 @@
 import UIKit
 import Alamofire
 import SwiftUI
+import AVFoundation
 
 class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
@@ -57,7 +58,8 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
     
     let LocalStoreage = UserDefaults.standard
     var objcalls: [AnyObject]=[]
-    var trans_SlNo: [AnyObject]=[]
+    var objcallsSINO: [AnyObject]=[]
+    var objcalls_SelectSecondaryorder2: [AnyObject] = []
     
     var Submittedclickdata = [SubmittedDCRselect]()
     override func viewDidLoad() {
@@ -92,7 +94,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
         if tableView == OrderView{return OrdeView.count}
         if tableView == OrderView2{return objcalls.count}
         if tableView == submittedDCRTB {
-            return objcalls.count
+            return objcalls_SelectSecondaryorder2.count
         }
         return 0
     }
@@ -101,7 +103,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
         let cell:cellListItem = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
        
         if tableView == submittedDCRTB {
-            let item: [String: Any] = objcalls[indexPath.row] as! [String : Any]
+            let item: [String: Any] = objcalls_SelectSecondaryorder2[indexPath.row] as! [String : Any]
             cell.RetailerName?.text = item["Trans_Detail_Name"] as? String
             cell.DistributerName?.text = item["Trans_Detail_Slno"] as? String
             cell.Rou?.text = item["SDP_Name"] as? String
@@ -116,7 +118,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
             let item: [String: Any] = objcalls[indexPath.row] as! [String : Any]
             cell.ProductValue?.text = item["Product_Name"] as? String
             cell.Qty?.text = String(item["Quantity"] as! Int)
-            cell.Value?.text = String(item["value"] as! Int)
+            cell.Value?.text = String(item["value"] as! Double)
         }
             
         return cell
@@ -139,7 +141,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
         let aFormData: [String: Any] = [
             "tableName":"vwactivity_report","coloumns":"[\"*\"]","today":1,"wt":1,"orderBy":"[\"activity_date asc\"]","desig":"mgr"
         ]
-        print(aFormData)
+       // print(aFormData)
         let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
         let jsonString = String(data: jsonData!, encoding: .utf8)!
         let params: Parameters = [
@@ -182,7 +184,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
             let aFormData: [String: Any] = [
                 "tableName":"vwactivity_report","coloumns":"[\"*\"]","today":1,"wt":1,"orderBy":"[\"activity_date asc\"]","desig":"mgr"
             ]
-            print(aFormData)
+            //print(aFormData)
             let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
             let jsonString = String(data: jsonData!, encoding: .utf8)!
             let params: Parameters = [
@@ -196,7 +198,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
                 {
                     
                 case .success(let value):
-                    print(value)
+//                    print(value)
                     if let json = value as? [AnyObject] {
                         guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
                             print("Error: Cannot convert JSON object to Pretty JSON data")
@@ -207,7 +209,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
                             return
                         }
                         print(prettyPrintedJson)
-                        self.objcalls = json
+                        self.objcalls_SelectSecondaryorder2 = json
                         if !json.isEmpty {
                         self.Slno.text=String(format: "%@", json[0]["Trans_SlNo"] as! String)
                         self.Product.text=String(format: "%@", json[0]["Trans_Detail_Name"] as! String)
@@ -218,8 +220,8 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
                             self.Dislbl.text=String(format: "%@", json[0]["Trans_Detail_Slno"] as! String)
                             self.Rotlbl.text=String(format: "%@", json[0]["SDP_Name"] as! String)
                             self.MeetTime.text=String(format: "%@", json[0]["StartOrder_Time"] as! String)
-                            self.OrderTime.text=String(format: "%@", json[0]["Order_Out_Time"] as! String)
-                            // self.Ordervalue.text=String(format: "%@", json[0]["finalNetAmnt"] as! String)
+                           // self.OrderTime.text=String(format: "%@", json[0]["Order_Out_Time"] as! String)
+                            self.Ordervalue.text=String(format: "%@", json[0]["finalNetAmnt"] as! String)
                             self.Remark.text=String(format: "%@", json[0]["Activity_Remarks"] as! String)
                         }
                         
@@ -285,34 +287,47 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
 //        }
 //        Viewwindow.isHidden=false
 //    }
+    
     @IBAction func Edit(_ sender: Any) {
+        let buttonPosition:CGPoint = (sender as AnyObject).convert(CGPoint.zero, to: self.submittedDCRTB)
+        guard let indexPath = self.submittedDCRTB.indexPathForRow(at: buttonPosition) else{
+            return
+        }
         
-        let apiKey: String = "\(axnview)&divisionCode=\(DivCode)&desig=\(Desig)&rSF=\(SFCode)&sfCode=\(SFCode)&State_Code=\(StateCode)&Order_No=MR4126-23-24-SO-888"
-        
-
-        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
-            AFdata in
-            switch AFdata.result
-            {
-
-            case .success(let value):
-                print(value)
-                if let json = value as? [AnyObject] {
-                    guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
-                        print("Error: Cannot convert JSON object to Pretty JSON data")
-                        return
+        for item in 0..<self.objcalls_SelectSecondaryorder2.count {
+            let product = self.objcalls_SelectSecondaryorder2[indexPath.row]
+            let item = product["Trans_Sl_No"] as! String
+            
+            
+            
+            let apiKey: String = "\(axnview)&divisionCode=\(DivCode)&desig=\(Desig)&rSF=\(SFCode)&sfCode=\(SFCode)&State_Code=\(StateCode)&Order_No=\(item)"
+            
+            
+            AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+                AFdata in
+                switch AFdata.result
+                {
+                    
+                case .success(let value):
+                    print(value)
+                    if let json = value as? [AnyObject] {
+                        guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
+                            print("Error: Cannot convert JSON object to Pretty JSON data")
+                            return
+                        }
+                        guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+                            print("Error: Could print JSON in String")
+                            return
+                        }
+                        print(prettyPrintedJson)
+                        self.objcalls = json
+                        //                    self.objcallsSINO = Position(json[0][""])
+                        self.OrderView2.reloadData()
+                        
                     }
-                    guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
-                        print("Error: Could print JSON in String")
-                        return
-                    }
-                    print(prettyPrintedJson)
-                    self.objcalls = json
-                    self.OrderView2.reloadData()
-
+                case .failure(let error):
+                    Toast.show(message: error.errorDescription!)  //, controller: self
                 }
-            case .failure(let error):
-                Toast.show(message: error.errorDescription!)  //, controller: self
             }
         }
 
@@ -328,39 +343,61 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
     }
     
     @IBAction func DeleteBT(_ sender: Any) {
-        let apiKey: String = "\(axndelet1)&desig=\(Desig)&divisionCode=\(DivCode)&rSF=\(SFCode)&sfCode=\(SFCode)&stateCod=\(StateCode)"
         
-        let aFormData: [String: Any] = [
-            "arc":"SEF3-313","amc":"MR4126-23-24-SO-879","sec":1,"custId":"2284918"
-        ]
-        
-        print(aFormData)
-        let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
-        let jsonString = String(data: jsonData!, encoding: .utf8)!
-        let params: Parameters = [
-            "data": jsonString
-        ]
-        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
-            AFdata in
-            switch AFdata.result
-            {
+        let buttonPosition:CGPoint = (sender as AnyObject).convert(CGPoint.zero, to: self.submittedDCRTB)
+        guard let indexPath = self.submittedDCRTB.indexPathForRow(at: buttonPosition) else{
+            return
+        }
+        for item in 0..<self.objcalls_SelectSecondaryorder2.count {
+            let product = self.objcalls_SelectSecondaryorder2[indexPath.row]
+            let item = product["Trans_Sl_No"] as! String
+            
+            
+            
+            let apiKey: String = "\(axndelet1)&desig=\(Desig)&divisionCode=\(DivCode)&rSF=\(SFCode)&sfCode=\(SFCode)&stateCod=\(StateCode)"
+            
+            if let transid = product["Trans_SlNo"] as? String,let transid2 = product["Trans_Detail_Slno"] as? String{
+                // Use the unwrapped value of 'transid' here
+                print(transid)//SEF1-81
+                print(transid2)//SEF1-167
                 
-            case .success(let value):
-                print(value)
-                if let json = value as? [String: Any] {
-                    guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
-                        print("Error: Cannot convert JSON object to Pretty JSON data")
-                        return
+                
+                let aFormData: [String: Any] = [
+                    "arc":"\(transid)","amc":"\(transid2)","sec":2,"custId":"2049231"
+                ]
+                
+                print(aFormData)
+                let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
+                let jsonString = String(data: jsonData!, encoding: .utf8)!
+                let params: Parameters = [
+                    "data": jsonString
+                ]
+                AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+                    AFdata in
+                    switch AFdata.result
+                    {
+                        
+                    case .success(let value):
+                        print(value)
+                        if let json = value as? [String: Any] {
+                            guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
+                                print("Error: Cannot convert JSON object to Pretty JSON data")
+                                return
+                            }
+                            guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+                                print("Error: Could print JSON in String")
+                                return
+                            }
+                            print(prettyPrintedJson)
+                            
+                        }
+                    case .failure(let error):
+                        Toast.show(message: error.errorDescription!)
                     }
-                    guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
-                        print("Error: Could print JSON in String")
-                        return
-                    }
-                    print(prettyPrintedJson)
-                    
                 }
-            case .failure(let error):
-                Toast.show(message: error.errorDescription!)
+            } else {
+                // The value was nil or couldn't be cast to a String
+                print("Value is nil or not a String")
             }
         }
     }

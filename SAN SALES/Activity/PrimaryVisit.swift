@@ -102,10 +102,17 @@ class PrimaryVisit: IViewController, UITableViewDelegate, UITableViewDataSource,
         if let list = GlobalFunc.convertToDictionary(text: RmkDatas) as? [AnyObject] {
             lstRmksTmpl = list;
         }
-        let lstCustData: String = LocalStoreage.string(forKey: "Distributors_Master_"+DataSF)!
-        if let list = GlobalFunc.convertToDictionary(text: lstCustData) as? [AnyObject] {
-            lstCustomers = list;
+//        let lstCustData: String = LocalStoreage.string(forKey: "Distributors_Master_"+DataSF)!
+//        if let list = GlobalFunc.convertToDictionary(text: lstCustData) as? [AnyObject] {
+//            lstCustomers = list;
+//        }
+        //
+        if let lstCustData = LocalStoreage.string(forKey: "Distributors_Master_"+DataSF),
+           let list = GlobalFunc.convertToDictionary(text:  lstCustData) as? [AnyObject] {
+            lstCustomers = list
         }
+        //
+        
         if let list = GlobalFunc.convertToDictionary(text: JointWData) as? [AnyObject] {
             lstJoint = list;
         }
