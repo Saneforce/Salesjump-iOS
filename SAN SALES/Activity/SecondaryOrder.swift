@@ -48,6 +48,8 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
     
     let axn="get/vwOrderDetails"
     
+   
+    
     struct lItem: Any {
         let id: String
         let name: String
@@ -84,6 +86,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
     var StateCode: String = ""
     var eKey: String = ""
     var pCatIndexPath = IndexPath()
+   // var product: Product?
     let LocalStoreage = UserDefaults.standard
     override func viewDidLoad() {
         loadViewIfNeeded()
@@ -312,6 +315,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
             //let itm: [String: Any]=["id": id,"Qty": sQty,"UOM": sUom, "UOMNm": sUomNm, "UOMConv": sUomConv, "SalQty": TotQty,"Scheme": Scheme,"FQ": FQ,"OffQty": OffQty,"OffProd":OffProd,"OffProdNm":OffProdNm, "Value": (TotQty*Rate)];
             cell.lblUOM.text = item["UOMNm"] as? String
             cell.txtQty.text = item["Qty"] as? String
+           // cell.txtQty.text = 
             cell.lblDisc.text = ""
             cell.lblDisc.layer.cornerRadius = 10
             cell.lblDisc.isHidden = true
@@ -1122,7 +1126,10 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         Desig=prettyJsonData["desigCode"] as? String ?? ""
     }
     func EditSecondaryordervalue() {
-        let apiKey: String = "\(axn)&State_Code=\(StateCode)&divisionCode=\(DivCode)&sfCode=\(SFCode)&DCR_Code=SEF3-1332"
+       
+      // let item = product
+            
+        let apiKey: String = "\(axn)&State_Code=\(StateCode)&divisionCode=\(DivCode)&sfCode=\(SFCode)&DCR_Code=SEF1-171"
         let aFormData: [String: Any] = [
             "orderBy":"[\"name asc\"]","desig":"mgr"
         ]
@@ -1149,11 +1156,14 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
                         return
                     }
                     print(prettyPrintedJson)
+                    //self. lblTotAmt.text = json[0][""]
+                    self.lblTotAmt.text = String(json[0]["POB_Value"] as! Double)
                 }
             case .failure(let error):
                 Toast.show(message: error.errorDescription!)
             }
         }
+        
     }
      
     @objc private func GotoHome() {
@@ -1175,6 +1185,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
             })
             self.present(alert, animated: true)
         }
+        
     }
     
     @IBAction func closeWin(_ sender:Any){

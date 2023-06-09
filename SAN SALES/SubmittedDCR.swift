@@ -59,7 +59,11 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
     let LocalStoreage = UserDefaults.standard
     var objcalls: [AnyObject]=[]
     var objcallsSINO: [AnyObject]=[]
-    var objcalls_SelectSecondaryorder2: [AnyObject] = []
+    public static var objcalls_SelectSecondaryorder2: [AnyObject] = []
+    
+    public static var secondaryOrderData: [AnyObject] = []
+    
+    
     
     var Submittedclickdata = [SubmittedDCRselect]()
     override func viewDidLoad() {
@@ -94,7 +98,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
         if tableView == OrderView{return OrdeView.count}
         if tableView == OrderView2{return objcalls.count}
         if tableView == submittedDCRTB {
-            return objcalls_SelectSecondaryorder2.count
+            return SubmittedDCR.objcalls_SelectSecondaryorder2.count
         }
         return 0
     }
@@ -103,7 +107,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
         let cell:cellListItem = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
        
         if tableView == submittedDCRTB {
-            let item: [String: Any] = objcalls_SelectSecondaryorder2[indexPath.row] as! [String : Any]
+            let item: [String: Any] = SubmittedDCR.objcalls_SelectSecondaryorder2[indexPath.row] as! [String : Any]
             cell.RetailerName?.text = item["Trans_Detail_Name"] as? String
             cell.DistributerName?.text = item["Trans_Detail_Slno"] as? String
             cell.Rou?.text = item["SDP_Name"] as? String
@@ -209,20 +213,16 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
                             return
                         }
                         print(prettyPrintedJson)
-                        self.objcalls_SelectSecondaryorder2 = json
+                        SubmittedDCR.objcalls_SelectSecondaryorder2 = json
+                        
+                        
                         if !json.isEmpty {
                         self.Slno.text=String(format: "%@", json[0]["Trans_SlNo"] as! String)
                         self.Product.text=String(format: "%@", json[0]["Trans_Detail_Name"] as! String)
                         self.Ordervalue.text=String(format: "%@", json[0]["finalNetAmnt"] as! String)
                         self.submittedDCRTB.reloadData()
                        
-                            self.Retlbl.text=String(format: "%@", json[0]["Trans_Detail_Name"] as! String)
-                            self.Dislbl.text=String(format: "%@", json[0]["Trans_Detail_Slno"] as! String)
-                            self.Rotlbl.text=String(format: "%@", json[0]["SDP_Name"] as! String)
-                            self.MeetTime.text=String(format: "%@", json[0]["StartOrder_Time"] as! String)
-                           // self.OrderTime.text=String(format: "%@", json[0]["Order_Out_Time"] as! String)
-                            self.Ordervalue.text=String(format: "%@", json[0]["finalNetAmnt"] as! String)
-                            self.Remark.text=String(format: "%@", json[0]["Activity_Remarks"] as! String)
+                           
                         }
                         
                     }
@@ -293,10 +293,25 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
         guard let indexPath = self.submittedDCRTB.indexPathForRow(at: buttonPosition) else{
             return
         }
+       // let secondaryorder = SubmittedDCR.secondaryOrderData[indexPath.row]
         
-        for item in 0..<self.objcalls_SelectSecondaryorder2.count {
-            let product = self.objcalls_SelectSecondaryorder2[indexPath.row]
+        for item in 0..<SubmittedDCR.objcalls_SelectSecondaryorder2.count {
+            let product = SubmittedDCR.objcalls_SelectSecondaryorder2[indexPath.row]
             let item = product["Trans_Sl_No"] as! String
+            let item2 = product["DCR_Code"] as! String
+        
+               
+           // let item1: [String: Any] = objcalls[indexPath.row] as! [String : Any]
+       
+            //DCR_Code
+            
+            self.Retlbl.text=String(format: "%@", product["Trans_Detail_Name"] as! String)
+            self.Dislbl.text=String(format: "%@", product["Trans_Detail_Slno"] as! String)
+            self.Rotlbl.text=String(format: "%@", product["SDP_Name"] as! String)
+            self.MeetTime.text=String(format: "%@", product["StartOrder_Time"] as! String)
+           // self.OrderTime.text=String(format: "%@", json[0]["Order_Out_Time"] as! String)
+            self.Ordervalue.text=String(format: "%@", product["finalNetAmnt"] as! String)
+            self.Remark.text=String(format: "%@", product["Activity_Remarks"] as! String)
             
             
             
@@ -334,12 +349,32 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
         Viewwindow.isHidden=false
     }
     
+//
+//    public static func secondaryoreder (_ sender: Any) {
+//        let buttonPosition:CGPoint = (sender as AnyObject).convert(CGPoint.zero, to: self.submittedDCRTB)
+//        guard let indexPath = self.submittedDCRTB.indexPathForRow(at: buttonPosition) else{
+//            return
+//        }
+//
+//    }
+    
+    
     @IBAction func EditSecondaryordervalue(_ sender: Any){
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let viewController = storyboard.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
-        let myDyPln = storyboard.instantiateViewController(withIdentifier: "sbSecondaryOrder") as! SecondaryOrder
-        viewController.setViewControllers([myDyPln], animated: false)
-        UIApplication.shared.windows.first?.rootViewController = viewController
+        let buttonPosition: CGPoint = (sender as AnyObject).convert(CGPoint.zero, to: self.submittedDCRTB)
+            guard let indexPath = self.submittedDCRTB.indexPathForRow(at: buttonPosition) else {
+                return
+            }
+            let product = SubmittedDCR.objcalls_SelectSecondaryorder2[indexPath.row]
+            
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let viewController = storyboard.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
+            let myDyPln = storyboard.instantiateViewController(withIdentifier: "sbSecondaryOrder") as! SecondaryOrder
+            
+            // Pass the product data to the SecondaryOrder screen
+           //myDyPln.product = product
+            
+            viewController.setViewControllers([myDyPln], animated: false)
+            UIApplication.shared.windows.first?.rootViewController = viewController
     }
     
     @IBAction func DeleteBT(_ sender: Any) {
@@ -348,8 +383,8 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
         guard let indexPath = self.submittedDCRTB.indexPathForRow(at: buttonPosition) else{
             return
         }
-        for item in 0..<self.objcalls_SelectSecondaryorder2.count {
-            let product = self.objcalls_SelectSecondaryorder2[indexPath.row]
+        for item in 0..<SubmittedDCR.objcalls_SelectSecondaryorder2.count {
+            let product = SubmittedDCR.objcalls_SelectSecondaryorder2[indexPath.row]
             let item = product["Trans_Sl_No"] as! String
             
             
@@ -389,7 +424,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
                                 return
                             }
                             print(prettyPrintedJson)
-                            
+                          
                         }
                     case .failure(let error):
                         Toast.show(message: error.errorDescription!)
@@ -416,3 +451,17 @@ struct SubmittedDCRselect {
 }
 
 
+class SourceViewController: UIViewController {
+    // ...
+    func navigateToDestination() {
+        let destinationViewController = DestinationViewController()
+        destinationViewController.data = "Hello, World!"
+        navigationController?.pushViewController(destinationViewController, animated: true)
+    }
+    // ...
+}
+
+class DestinationViewController: UIViewController {
+    var data: String?
+    // ...
+}

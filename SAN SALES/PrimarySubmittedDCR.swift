@@ -30,6 +30,7 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
     var SFCode: String = "", StateCode: String = "", DivCode: String = "",Desig: String="", rSF: String = ""
     let LocalStoreage = UserDefaults.standard
     var objcalls: [AnyObject]=[]
+    var objcalls_SelectPrimaryorder2: [AnyObject]=[]
     override func viewDidLoad() {
         super.viewDidLoad()
       
@@ -57,10 +58,10 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView == PrimayOrderViewTB {
-            return objcalls.count
+            return objcalls_SelectPrimaryorder2.count
         }
         if tableView == OrderTB {
-            return objcalls.count
+            return objcalls_SelectPrimaryorder2.count
         }
         return 0
     }
@@ -68,7 +69,7 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell:cellListItem = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
         if tableView == PrimayOrderViewTB {
-            let item: [String: Any] = objcalls[indexPath.row] as! [String : Any]
+            let item: [String: Any] = objcalls_SelectPrimaryorder2[indexPath.row] as! [String : Any]
             cell.Disbutor?.text = item["Trans_Detail_Name"] as? String
             cell.rout?.text = item["SDP"] as? String
             cell.meettime.text = item["StartOrder_Time"] as? String
@@ -79,7 +80,7 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
             cell.DeleteButton.layer.cornerRadius = 12
         }
         if tableView == OrderTB {
-            let item: [String: Any] = objcalls[indexPath.row] as! [String : Any]
+            let item: [String: Any] = objcalls_SelectPrimaryorder2[indexPath.row] as! [String : Any]
             cell.ProductValue?.text = item["Additional_Prod_Dtls"] as? String
             cell.Qty?.text = item[""] as? String
             cell.Value?.text = item ["POB_Value"] as? String
@@ -171,14 +172,9 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
                     }
                     print(prettyPrintedJson)
                   //  self.lblWorkTyp.text=String(format: "%@", todayData["wtype"] as! String)
-                    self.Disbutorsname.text = json[0]["Trans_Detail_Name"] as? String
-                    self.Route.text = json[0]["SDP"] as? String
-                    self.Joint_Work.text = json[0]["jgch"] as? String
-                    self.MeetTime.text = json[0]["StartOrder_Time"] as? String
-                    self.OrderTime.text = json[0]["EndOrder_Time"] as? String
-                    self.Remark.text = json[0]["Activity_Remarks"] as? String
+                 
                                                
-                    self.objcalls = json
+                    self.objcalls_SelectPrimaryorder2 = json
                     self.PrimayOrderViewTB.reloadData()
                     self.OrderTB.reloadData()
                     
@@ -203,58 +199,80 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
     
     
     @IBAction func DeleteButton(_ sender: Any) {
-        let apiKey: String = "\(axnDelete)&divisionCode=\(DivCode)%2C&desig=\(Desig)&rSF=\(SFCode)&sfCode=\(SFCode)&State_Code=\(StateCode)"
-//        let aFormData: [String: Any] = [
-//            "arc":"\(objcalls[0]["Trans_SlNo"])","amc":"\(objcalls[0]["Trans_Detail_Slno"])","sec":1
-//        ]
         
-        if let transid = objcalls[0]["Trans_SlNo"] as? String,let transid2 = objcalls[0]["Trans_Detail_Slno"] as? String{
-            // Use the unwrapped value of 'transid' here
-            print(transid)
-            print(transid2)
-      
-        let aFormData: [String: Any] = [
-            "arc":"\(transid)","amc":"\(transid2)","sec":2
-        ]
-        
-        print(aFormData)
-        let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
-        let jsonString = String(data: jsonData!, encoding: .utf8)!
-        let params: Parameters = [
-            "data": jsonString]
-        
-        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
-            AFdata in
-            switch AFdata.result
-            {
-                
-            case .success(let value):
-                print(value)
-                if let json = value as? [AnyObject] {
-                    guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
-                        print("Error: Cannot convert JSON object to Pretty JSON data")
-                        return
-                    }
-                    guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
-                        print("Error: Could print JSON in String")
-                        return
-                    }
-                    print(prettyPrintedJson)
-                    
-                }
-            case .failure(let error):
-                Toast.show(message: error.errorDescription!)  //, controller: self
-            }
+        let buttonPosition:CGPoint = (sender as AnyObject).convert(CGPoint.zero, to: self.PrimayOrderViewTB)
+        guard let indexPath = self.PrimayOrderViewTB.indexPathForRow(at: buttonPosition) else{
+            return
         }
-        } else {
-            // The value was nil or couldn't be cast to a String
-            print("Value is nil or not a String")
+            let product = self.objcalls_SelectPrimaryorder2[indexPath.row]
+            //let item = product["Trans_Sl_No"] as! String
+            
+            
+            
+            let apiKey: String = "\(axnDelete)&divisionCode=\(DivCode)%2C&desig=\(Desig)&rSF=\(SFCode)&sfCode=\(SFCode)&State_Code=\(StateCode)"
+            
+            if let transid = product["Trans_SlNo"] as? String,let transid2 = product["Trans_Detail_Slno"] as? String{
+                // Use the unwrapped value of 'transid' here
+                print(transid)//SEF1-81
+                print(transid2)//SEF1-167
+                
+                
+                let aFormData: [String: Any] = [
+                           "arc":"\(transid)","amc":"\(transid2)","sec":2
+                       ]
+                
+                print(aFormData)
+                let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
+                let jsonString = String(data: jsonData!, encoding: .utf8)!
+                let params: Parameters = [
+                    "data": jsonString
+                ]
+                AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+                    AFdata in
+                    switch AFdata.result
+                    {
+                        
+                    case .success(let value):
+                        print(value)
+                        if let json = value as? [String: Any] {
+                            guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
+                                print("Error: Cannot convert JSON object to Pretty JSON data")
+                                return
+                            }
+                            guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+                                print("Error: Could print JSON in String")
+                                return
+                            }
+                            print(prettyPrintedJson)
+                            
+                        }
+                    case .failure(let error):
+                        Toast.show(message: error.errorDescription!)
+                    }
+                }
         }
 
     }
     
     @IBAction func ViewBT(_ sender: Any) {
     
+        let buttonPosition:CGPoint = (sender as AnyObject).convert(CGPoint.zero, to: self.PrimayOrderViewTB)
+        guard let indexPath = self.PrimayOrderViewTB.indexPathForRow(at: buttonPosition) else{
+            return
+        }
+        print(buttonPosition)
+        print(indexPath)
+        
+        for item in 0..<self.objcalls_SelectPrimaryorder2.count {
+            let product = self.objcalls_SelectPrimaryorder2[indexPath.row]
+            self.Disbutorsname.text = product["Trans_Detail_Name"] as? String
+            self.Route.text = product["SDP"] as? String
+            self.Joint_Work.text = product["jgch"] as? String
+            self.MeetTime.text = product["StartOrder_Time"] as? String
+            self.OrderTime.text = product["EndOrder_Time"] as? String
+            self.Remark.text = product["Activity_Remarks"] as? String
+            
+        }
         
         veselwindow.isHidden=false
     }
