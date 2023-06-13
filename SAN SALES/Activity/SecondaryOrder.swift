@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 import Alamofire
 import CoreLocation
-
+//import YourModuleName
 class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource,UICollectionViewDelegateFlowLayout {
 
     @IBOutlet weak var lcLastvistHeight: NSLayoutConstraint!
@@ -47,7 +47,8 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
     @IBOutlet weak var vwBtnCam: RoundedCornerView!
     
     let axn="get/vwOrderDetails"
-    
+    var dataToPass: AnyObject?
+   // var productData: Product?
    
     
     struct lItem: Any {
@@ -86,10 +87,17 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
     var StateCode: String = ""
     var eKey: String = ""
     var pCatIndexPath = IndexPath()
+    var Editobjcalls: [AnyObject]=[]
    // var product: Product?
     let LocalStoreage = UserDefaults.standard
     override func viewDidLoad() {
         loadViewIfNeeded()
+        
+        if let data = dataToPass {
+                  // Use the data here
+                  print(data)
+              }
+        
         getUserDetails()
         EditSecondaryordervalue()
         let LocalStoreage = UserDefaults.standard
@@ -291,6 +299,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView==tbProduct { return lstProducts.count }
         if tableView==tbPrvOrderProduct { return lstPrvOrder.count }
+        if tableView == tbPrvOrderProduct {return Editobjcalls.count}
         return lObjSel.count
     }
     
@@ -315,7 +324,6 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
             //let itm: [String: Any]=["id": id,"Qty": sQty,"UOM": sUom, "UOMNm": sUomNm, "UOMConv": sUomConv, "SalQty": TotQty,"Scheme": Scheme,"FQ": FQ,"OffQty": OffQty,"OffProd":OffProd,"OffProdNm":OffProdNm, "Value": (TotQty*Rate)];
             cell.lblUOM.text = item["UOMNm"] as? String
             cell.txtQty.text = item["Qty"] as? String
-           // cell.txtQty.text = 
             cell.lblDisc.text = ""
             cell.lblDisc.layer.cornerRadius = 10
             cell.lblDisc.isHidden = true
@@ -1126,45 +1134,79 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         Desig=prettyJsonData["desigCode"] as? String ?? ""
     }
     func EditSecondaryordervalue() {
-       
-      // let item = product
-            
-        let apiKey: String = "\(axn)&State_Code=\(StateCode)&divisionCode=\(DivCode)&sfCode=\(SFCode)&DCR_Code=SEF1-171"
-        let aFormData: [String: Any] = [
-            "orderBy":"[\"name asc\"]","desig":"mgr"
-        ]
-        print(aFormData)
-        let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
-        let jsonString = String(data: jsonData!, encoding: .utf8)!
-        let params: Parameters = [
-            "data": jsonString
-        ]
-        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
-            AFdata in
-            switch AFdata.result
-            {
-                
-            case .success(let value):
-                print(value)
-                if let json = value as? [AnyObject] {
-                    guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
-                        print("Error: Cannot convert JSON object to Pretty JSON data")
-                        return
-                    }
-                    guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
-                        print("Error: Could print JSON in String")
-                        return
-                    }
-                    print(prettyPrintedJson)
-                    //self. lblTotAmt.text = json[0][""]
-                    self.lblTotAmt.text = String(json[0]["POB_Value"] as! Double)
-                }
-            case .failure(let error):
-                Toast.show(message: error.errorDescription!)
+        let product = SubmittedDCR.objcalls_SelectSecondaryorder2
+        
+        var item = ""
+        if !product.isEmpty {
+           
+            let targetValue = product[0]["DCR_Code"] as! String
+            if targetValue == nil {
+                item = "0"
+            } else  {item = targetValue
             }
         }
+       
+            
+//            let item = product[0]["DCR_Code"] as! String
+      
+    
+            let apiKey: String = "\(axn)&State_Code=\(StateCode)&divisionCode=\(DivCode)&sfCode=\(SFCode)&DCR_Code=\(item)"
         
-    }
+            let aFormData: [String: Any] = [
+                "orderBy":"[\"name asc\"]","desig":"mgr"
+            ]
+            print(aFormData)
+            let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
+            let jsonString = String(data: jsonData!, encoding: .utf8)!
+            let params: Parameters = [
+                "data": jsonString
+            ]
+            AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+                AFdata in
+                switch AFdata.result
+                {
+                    
+                case .success(let value):
+                    //print(value)
+                    if let json = value as? [AnyObject] {
+                        guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
+                            print("Error: Cannot convert JSON object to Pretty JSON data")
+                            return
+                        }
+                        guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+                            print("Error: Could print JSON in String")
+                            return
+                        }
+                        print(prettyPrintedJson)
+                        self.lblTotAmt.text = String(json[0]["POB_Value"] as! Double)
+                        
+                        
+                        let Additional_Prod_Dtls = json[0]["Additional_Prod_Dtls1"] as? String
+                        let productArray = Additional_Prod_Dtls?.components(separatedBy: "#")
+                        if let products = productArray {
+                            for product in products {
+                               
+                                  
+                                    let productData = product.components(separatedBy: "~")
+                                    print(productData[0])
+                                
+                                    let price = productData[1].components(separatedBy: "$")[0]
+                                    let price1 = productData[1].components(separatedBy: "$")[1]
+                                    print(price)
+                                    print(price1)
+                          
+                            }
+                        }
+                        self.Editobjcalls = json
+                    
+                    }
+                case .failure(let error):
+                    Toast.show(message: error.errorDescription!)
+                }
+            }
+            
+        }
+    
      
     @objc private func GotoHome() {
         self.resignFirstResponder()

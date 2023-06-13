@@ -299,12 +299,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
             let product = SubmittedDCR.objcalls_SelectSecondaryorder2[indexPath.row]
             let item = product["Trans_Sl_No"] as! String
             let item2 = product["DCR_Code"] as! String
-        
-               
-           // let item1: [String: Any] = objcalls[indexPath.row] as! [String : Any]
-       
-            //DCR_Code
-            
+   
             self.Retlbl.text=String(format: "%@", product["Trans_Detail_Name"] as! String)
             self.Dislbl.text=String(format: "%@", product["Trans_Detail_Slno"] as! String)
             self.Rotlbl.text=String(format: "%@", product["SDP_Name"] as! String)
@@ -369,9 +364,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let viewController = storyboard.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
             let myDyPln = storyboard.instantiateViewController(withIdentifier: "sbSecondaryOrder") as! SecondaryOrder
-            
-            // Pass the product data to the SecondaryOrder screen
-           //myDyPln.product = product
+              //myDyPln.productData = product
             
             viewController.setViewControllers([myDyPln], animated: false)
             UIApplication.shared.windows.first?.rootViewController = viewController
