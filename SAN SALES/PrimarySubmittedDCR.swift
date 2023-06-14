@@ -30,7 +30,8 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
     var SFCode: String = "", StateCode: String = "", DivCode: String = "",Desig: String="", rSF: String = ""
     let LocalStoreage = UserDefaults.standard
     var objcalls: [AnyObject]=[]
-    var objcalls_SelectPrimaryorder2: [AnyObject]=[]
+     
+   public static var objcalls_SelectPrimaryorder2: [AnyObject]=[]
     override func viewDidLoad() {
         super.viewDidLoad()
       
@@ -58,10 +59,10 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView == PrimayOrderViewTB {
-            return objcalls_SelectPrimaryorder2.count
+            return PrimarySubmittedDCR.objcalls_SelectPrimaryorder2.count
         }
         if tableView == OrderTB {
-            return objcalls_SelectPrimaryorder2.count
+            return PrimarySubmittedDCR.objcalls_SelectPrimaryorder2.count
         }
         return 0
     }
@@ -69,7 +70,7 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell:cellListItem = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
         if tableView == PrimayOrderViewTB {
-            let item: [String: Any] = objcalls_SelectPrimaryorder2[indexPath.row] as! [String : Any]
+            let item: [String: Any] = PrimarySubmittedDCR.objcalls_SelectPrimaryorder2[indexPath.row] as! [String : Any]
             cell.Disbutor?.text = item["Trans_Detail_Name"] as? String
             cell.rout?.text = item["SDP"] as? String
             cell.meettime.text = item["StartOrder_Time"] as? String
@@ -80,7 +81,7 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
             cell.DeleteButton.layer.cornerRadius = 12
         }
         if tableView == OrderTB {
-            let item: [String: Any] = objcalls_SelectPrimaryorder2[indexPath.row] as! [String : Any]
+            let item: [String: Any] = PrimarySubmittedDCR.objcalls_SelectPrimaryorder2[indexPath.row] as! [String : Any]
             cell.ProductValue?.text = item["Additional_Prod_Dtls"] as? String
             cell.Qty?.text = item[""] as? String
             cell.Value?.text = item ["POB_Value"] as? String
@@ -174,7 +175,7 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
                   //  self.lblWorkTyp.text=String(format: "%@", todayData["wtype"] as! String)
                  
                                                
-                    self.objcalls_SelectPrimaryorder2 = json
+                    PrimarySubmittedDCR.objcalls_SelectPrimaryorder2 = json
                     self.PrimayOrderViewTB.reloadData()
                     self.OrderTB.reloadData()
                     
@@ -190,10 +191,23 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     @IBAction func EditButton(_ sender: Any) {
+        //Trans_Detail_SlNo=SEF3-1324&&Order_No=SEF3-424"
+        
+        let buttonPosition: CGPoint = (sender as AnyObject).convert(CGPoint.zero, to: self.PrimayOrderViewTB)
+            guard let indexPath = self.PrimayOrderViewTB.indexPathForRow(at: buttonPosition) else {
+                return
+            }
+        let product = PrimarySubmittedDCR.objcalls_SelectPrimaryorder2[indexPath.row]
+        
+            let item1 = product["Trans_Detail_Slno"] as! String
+        print(item1)
+            let item2 = product["Order_No"] as! String
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let viewController = storyboard.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
         let myDyPln = storyboard.instantiateViewController(withIdentifier: "sbPrimaryOrder") as! PrimaryOrder
-        viewController.setViewControllers([myDyPln], animated: false)
+        myDyPln.productData1 = item1
+        myDyPln.productData2 = item2
+        viewController.setViewControllers([myDyPln], animated: true)
         UIApplication.shared.windows.first?.rootViewController = viewController
     }
     
@@ -204,7 +218,7 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
         guard let indexPath = self.PrimayOrderViewTB.indexPathForRow(at: buttonPosition) else{
             return
         }
-            let product = self.objcalls_SelectPrimaryorder2[indexPath.row]
+        let product = PrimarySubmittedDCR.objcalls_SelectPrimaryorder2[indexPath.row]
             //let item = product["Trans_Sl_No"] as! String
             
             
@@ -263,8 +277,8 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
         print(buttonPosition)
         print(indexPath)
         
-        for item in 0..<self.objcalls_SelectPrimaryorder2.count {
-            let product = self.objcalls_SelectPrimaryorder2[indexPath.row]
+        for item in 0..<PrimarySubmittedDCR.objcalls_SelectPrimaryorder2.count {
+            let product = PrimarySubmittedDCR.objcalls_SelectPrimaryorder2[indexPath.row]
             self.Disbutorsname.text = product["Trans_Detail_Name"] as? String
             self.Route.text = product["SDP"] as? String
             self.Joint_Work.text = product["jgch"] as? String

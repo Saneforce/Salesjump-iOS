@@ -72,6 +72,7 @@ class PrimaryVisit: IViewController, UITableViewDelegate, UITableViewDataSource,
     var DataSF: String = ""
     var DivCode: String = ""
     var eKey: String = ""
+    var productData1 : String?
     
     override func viewDidLoad() {
         

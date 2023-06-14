@@ -344,29 +344,18 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
         Viewwindow.isHidden=false
     }
     
-//
-//    public static func secondaryoreder (_ sender: Any) {
-//        let buttonPosition:CGPoint = (sender as AnyObject).convert(CGPoint.zero, to: self.submittedDCRTB)
-//        guard let indexPath = self.submittedDCRTB.indexPathForRow(at: buttonPosition) else{
-//            return
-//        }
-//
-//    }
-    
-    
     @IBAction func EditSecondaryordervalue(_ sender: Any){
         let buttonPosition: CGPoint = (sender as AnyObject).convert(CGPoint.zero, to: self.submittedDCRTB)
             guard let indexPath = self.submittedDCRTB.indexPathForRow(at: buttonPosition) else {
                 return
             }
-            let product = SubmittedDCR.objcalls_SelectSecondaryorder2[indexPath.row]
-            
+        let product = SubmittedDCR.objcalls_SelectSecondaryorder2[indexPath.row]
+            let item1 = product["DCR_Code"] as! String
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let viewController = storyboard.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
             let myDyPln = storyboard.instantiateViewController(withIdentifier: "sbSecondaryOrder") as! SecondaryOrder
-              //myDyPln.productData = product
-            
-            viewController.setViewControllers([myDyPln], animated: false)
+               myDyPln.productData = item1
+            viewController.setViewControllers([myDyPln], animated: true)
             UIApplication.shared.windows.first?.rootViewController = viewController
     }
     
@@ -385,15 +374,11 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
             let apiKey: String = "\(axndelet1)&desig=\(Desig)&divisionCode=\(DivCode)&rSF=\(SFCode)&sfCode=\(SFCode)&stateCod=\(StateCode)"
             
             if let transid = product["Trans_SlNo"] as? String,let transid2 = product["Trans_Detail_Slno"] as? String{
-                // Use the unwrapped value of 'transid' here
                 print(transid)//SEF1-81
                 print(transid2)//SEF1-167
-                
-                
                 let aFormData: [String: Any] = [
                     "arc":"\(transid)","amc":"\(transid2)","sec":2,"custId":"2049231"
                 ]
-                
                 print(aFormData)
                 let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
                 let jsonString = String(data: jsonData!, encoding: .utf8)!
@@ -404,7 +389,6 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
                     AFdata in
                     switch AFdata.result
                     {
-                        
                     case .success(let value):
                         print(value)
                         if let json = value as? [String: Any] {
@@ -417,14 +401,12 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
                                 return
                             }
                             print(prettyPrintedJson)
-                          
                         }
                     case .failure(let error):
                         Toast.show(message: error.errorDescription!)
                     }
                 }
             } else {
-                // The value was nil or couldn't be cast to a String
                 print("Value is nil or not a String")
             }
         }
@@ -434,27 +416,10 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
         veselwindow.isHidden=true
         Viewwindow.isHidden=true
     }
-    
     }
 
 struct SubmittedDCRselect {
     var isSelectedAvail : Bool
     var isSelectedEC : Bool
     var SubmittedData : AnyObject
-}
-
-
-class SourceViewController: UIViewController {
-    // ...
-    func navigateToDestination() {
-        let destinationViewController = DestinationViewController()
-        destinationViewController.data = "Hello, World!"
-        navigationController?.pushViewController(destinationViewController, animated: true)
-    }
-    // ...
-}
-
-class DestinationViewController: UIViewController {
-    var data: String?
-    // ...
 }

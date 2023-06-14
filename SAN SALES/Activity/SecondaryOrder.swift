@@ -10,6 +10,7 @@ import UIKit
 import Alamofire
 import CoreLocation
 //import YourModuleName
+//import YourModuleName
 class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource,UICollectionViewDelegateFlowLayout {
 
     @IBOutlet weak var lcLastvistHeight: NSLayoutConstraint!
@@ -47,8 +48,8 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
     @IBOutlet weak var vwBtnCam: RoundedCornerView!
     
     let axn="get/vwOrderDetails"
-    var dataToPass: AnyObject?
-   // var productData: Product?
+    
+   // var productData: ProductData?
    
     
     struct lItem: Any {
@@ -88,16 +89,11 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
     var eKey: String = ""
     var pCatIndexPath = IndexPath()
     var Editobjcalls: [AnyObject]=[]
-   // var product: Product?
+    var productData : String?
     let LocalStoreage = UserDefaults.standard
     override func viewDidLoad() {
         loadViewIfNeeded()
-        
-        if let data = dataToPass {
-                  // Use the data here
-                  print(data)
-              }
-        
+       
         getUserDetails()
         EditSecondaryordervalue()
         let LocalStoreage = UserDefaults.standard
@@ -609,6 +605,8 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
                 {
                     sQty = Int((items[0]["Qty"] as! NSString).intValue)
                 }
+              
+                //mani
                 updateQty(id: selectProd, sUom: id, sUomNm: name, sUomConv: ConvQty,sNetUnt: selNetWt, sQty: String(sQty),ProdItem: lProdItem,refresh: 1)
             }
             closeWin(self)
@@ -1134,23 +1132,27 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         Desig=prettyJsonData["desigCode"] as? String ?? ""
     }
     func EditSecondaryordervalue() {
-        let product = SubmittedDCR.objcalls_SelectSecondaryorder2
-        
-        var item = ""
-        if !product.isEmpty {
-           
-            let targetValue = product[0]["DCR_Code"] as! String
-            if targetValue == nil {
-                item = "0"
-            } else  {item = targetValue
-            }
-        }
+        let product = productData
+        print(product)
+    
+        //let product = SubmittedDCR.objcalls_SelectSecondaryorder2
+       
+//        var item = ""
+//        if !product?.isEmpty {
+//
+//            let targetValue = product[0]["DCR_Code"] as! String
+//            if targetValue == nil {
+//                item = "0"
+//            } else  {item = targetValue
+//            }
+//        }
        
             
 //            let item = product[0]["DCR_Code"] as! String
-      
+        if let unwrappedProduct = product {
     
-            let apiKey: String = "\(axn)&State_Code=\(StateCode)&divisionCode=\(DivCode)&sfCode=\(SFCode)&DCR_Code=\(item)"
+        let apiKey: String = "\(axn)&State_Code=\(StateCode)&divisionCode=\(DivCode)&sfCode=\(SFCode)&DCR_Code=\(String(describing: unwrappedProduct))"
+            print (apiKey)
         
             let aFormData: [String: Any] = [
                 "orderBy":"[\"name asc\"]","desig":"mgr"
@@ -1204,6 +1206,10 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
                     Toast.show(message: error.errorDescription!)
                 }
             }
+    } else {
+        // The optional value is nil
+        print("Product is nil")
+    }
             
         }
     

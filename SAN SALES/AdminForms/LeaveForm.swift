@@ -144,17 +144,17 @@ class LeaveForm: IViewController, UITableViewDelegate,
    
     
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
-    
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd/MM/yyyy"
+        print("did select date \(formatter.string(from: date))")
+       // let selectedDates = calendar.selectedDates.sorted(by: {formatter.string(from: $0)})
+        let selectedDates = calendar.selectedDates.map({formatter.string(from: $0)})
+        print("selected dates is \(selectedDates)")
+        if monthPosition == .next || monthPosition == .previous {
+            calendar.setCurrentPage(date, animated: true)
+        }
         if SelMode == "DOF"{
-            let formatter = DateFormatter()
-            formatter.dateFormat = "dd/MM/yyyy"
-            print("did select date \(formatter.string(from: date))")
-           // let selectedDates = calendar.selectedDates.sorted(by: {formatter.string(from: $0)})
-            let selectedDates = calendar.selectedDates.map({formatter.string(from: $0)})
-            print("selected dates is \(selectedDates)")
-            if monthPosition == .next || monthPosition == .previous {
-                calendar.setCurrentPage(date, animated: true)
-            }
+            
             
             lblFDate.text = selectedDates[0]
             formatter.dateFormat = "yyyy/MM/dd"
@@ -165,16 +165,6 @@ class LeaveForm: IViewController, UITableViewDelegate,
         }
         
         if SelMode == "DOT" {
-            let formatter = DateFormatter()
-            formatter.dateFormat = "dd/MM/yyyy"
-            print("did select date \(formatter.string(from: date))")
-           // let selectedDates = calendar.selectedDates.sorted(by: {formatter.string(from: $0)})
-            let selectedDates = calendar.selectedDates.map({formatter.string(from: $0)})
-            print("selected dates is \(selectedDates)")
-            if monthPosition == .next || monthPosition == .previous {
-                calendar.setCurrentPage(date, animated: true)
-            }
-
             lblTDate.text = selectedDates[0]
            formatter.dateFormat = "yyyy/MM/dd"
             sDOT = formatter.string(from: date)

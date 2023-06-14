@@ -79,7 +79,9 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
     var selUOMNm: String = ""
     var isMulti: Bool = false
     var eKey: String = ""
-    
+    var productData1 : String?
+    var productData2 : String?
+    var objcallsprimary :[AnyObject] = []
 //    var SFCode: String = ""
 //    var DivCode: String = ""
     var SFCode: String = "", StateCode: String = "", DivCode: String = "",Desig: String="", rSF: String = ""
@@ -1080,7 +1082,12 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
         Desig=prettyJsonData["desigCode"] as? String ?? ""
     }
     func updateEditOrderValues(){
-        let apiKey: String = "\(axnEdit)&State_Code=\(StateCode)&Trans_Detail_SlNo=SEF3-1324&&Order_No=SEF3-424"
+        let item = productData1
+        let item2 = productData2
+       
+        if let unwrappedProduct = item,let unwrappedProduct2 = item2 {
+            
+        let apiKey: String = "\(axnEdit)&State_Code=\(StateCode)&Trans_Detail_SlNo=\(unwrappedProduct)&&Order_No=\(unwrappedProduct2)"
 
        
         AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
@@ -1089,7 +1096,7 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
             {
                 
             case .success(let value):
-                print(value)
+                //print(value)
                 if let json = value as? [AnyObject] {
                     guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
                         print("Error: Cannot convert JSON object to Pretty JSON data")
@@ -1100,13 +1107,20 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
                         return
                     }
                     print(prettyPrintedJson)
+                    self.objcallsprimary = json
                     
                 }
             case .failure(let error):
                 Toast.show(message: error.errorDescription!)  //, controller: self
             }
         }
+            
+        } else {
+            // The optional value is nil
+            print("Product is nil")
+        }
     }
+        
 }
 
     
