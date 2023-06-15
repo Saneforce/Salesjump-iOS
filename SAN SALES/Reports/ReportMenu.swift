@@ -39,7 +39,9 @@ class ReportMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
         }
         
         strMasList.append(mnuItem.init(MasId: 1, MasName: "Day Report", MasImage: "SwitchRoute"))
-        strMasList.append(mnuItem.init(MasId: 2, MasName: "Brand Availability", MasImage: "SwitchRoute"))
+        if UserSetup.shared.BrndRvwNd > 0{
+            strMasList.append(mnuItem.init(MasId: 2, MasName: "Brand Availability", MasImage: "SwitchRoute"))
+        }
         //strMasList.append(mnuItem.init(MasId: 2, MasName: "Add New Retailer", MasImage: "NewRetailer"))
         //strMasList.append(mnuItem.init(MasId: 11, MasName: "Master Sync", MasImage: "MasterSync"))
         
