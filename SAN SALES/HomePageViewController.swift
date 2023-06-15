@@ -19,6 +19,7 @@ class HomePageViewController: IViewController{
     @IBOutlet weak var mMainMnu: UIImageView!
     
     var lstMyplnList: [AnyObject] = []
+    var axn = "get/allcalls"
     
     struct mnuItem: Codable {
         let MnuId: Int
@@ -122,6 +123,7 @@ class HomePageViewController: IViewController{
             makeMenuView()
             Dashboard()
         }
+        DashboardNew()
     }
     func getUserDetails(){
         let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
@@ -148,7 +150,40 @@ class HomePageViewController: IViewController{
         let someDateTime = formatter.string(from: Date())
         lblTimer.text = "eTime: "+someDateTime
     }
-    func Dashboard(){
+    
+    
+    func DashboardNew(){
+        
+        //http://www.fmcg.sanfmcg.com/server/native_Db_V13.php?axn=get/allcalls&divisionCode=29,&rSF=MR4126&sfCode=MR4126&vanWorkFlag=&State_Code=24
+      
+        let apiKey: String = "\(axn)&divisionCode=\(DivCode)&rSF=\(SFCode)&vanWorkFlag=\("")&State_Code=\(StateCode)"
+    
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+            AFdata in
+            switch AFdata.result
+            {
+                
+            case .success(let value):
+                print(value)
+
+                if let json = value as? [AnyObject] {
+                    guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
+                        print("Error: Cannot convert JSON object to Pretty JSON data")
+                        return
+                    }
+                    guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+                        print("Error: Could print JSON in String")
+                        return
+                    }
+                    print(prettyPrintedJson)
+                }
+            case .failure(let error):
+                Toast.show(message: error.errorDescription!)  //, controller: self
+            }
+        }
+        }
+    
+        func Dashboard(){
         let aFormData: [String: Any] = ["orderBy":"[\"name asc\"]","desig":"mgr"]
         let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
         let jsonString = String(data: jsonData!, encoding: .utf8)!
@@ -163,6 +198,7 @@ class HomePageViewController: IViewController{
             {
                
                 case .success(let value):
+                print(value)
                 if let json = value as? [String: Any] {
                     let todayData:[String:Any] = json["today"] as! [String: Any]
                     print(json)

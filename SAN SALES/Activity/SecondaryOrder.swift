@@ -295,11 +295,31 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView==tbProduct { return lstProducts.count }
         if tableView==tbPrvOrderProduct { return lstPrvOrder.count }
-        if tableView == tbPrvOrderProduct {return Editobjcalls.count}
+        if tableView == tbProduct {return Editobjcalls.count}
         return lObjSel.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell:cellListItem = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
+        let item1: [String: Any]=Editobjcalls[indexPath.row]as! [String : Any]
+        let Additional_Prod_Dtls = item1["Additional_Prod_Dtls1"] as? String
+        let productArray = Additional_Prod_Dtls?.components(separatedBy: "#")
+        if let products = productArray {
+            for product in products {
+               
+                  
+                    let productData = product.components(separatedBy: "~")
+                    print(productData[0])
+                
+                    let price = productData[1].components(separatedBy: "$")[0]
+                    let price1 = productData[1].components(separatedBy: "$")[1]
+                    print(price)
+                    print(price1)
+                cell.txtQty.text = price1
+          
+            }
+        }
+        return cell
         autoreleasepool {
         let cell:cellListItem = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
         if tbDataSelect == tableView {
@@ -400,9 +420,10 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
             }
             
         }else{
-            
-            
+
+           
             let item: [String: Any]=lstProducts[indexPath.row] as! [String : Any]
+            
             
             let id=String(format: "%@", item["id"] as! CVarArg)
             cell.lblText?.text = item["name"] as? String

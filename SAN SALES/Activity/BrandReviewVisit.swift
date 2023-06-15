@@ -481,7 +481,7 @@ class BrandReviewVisit: IViewController, UITableViewDataSource, UITableViewDeleg
             }
             else
             {
-                cell.ischeck = true
+                cell.ischeck = false
                 cell.imgSelect.image = UIImage(named:"uncheckbox")
                 strSelAvl=strSelAvl.replacingOccurrences(of: sid+";", with: "")
                 
