@@ -8,7 +8,8 @@ import Foundation
 import UIKit
 import Alamofire
 
-class HomePageViewController: IViewController{
+class HomePageViewController: IViewController, UITableViewDelegate, UITableViewDataSource{
+   
     
     @IBOutlet weak var lblTimer: UILabel!
     @IBOutlet weak var lblHeadCap: UILabel!
@@ -17,9 +18,12 @@ class HomePageViewController: IViewController{
     @IBOutlet weak var vwMnthDash: UIView!
     @IBOutlet weak var vwMainScroll: UIScrollView!
     @IBOutlet weak var mMainMnu: UIImageView!
+    @IBOutlet weak var DashBoradTB: UITableView!
     
     var lstMyplnList: [AnyObject] = []
-    var axn = "get/allcalls"
+    var TodayDate: [String:AnyObject] = [:]
+    var routeNames = [String]()
+    var routeNames1 = [String]()
     
     struct mnuItem: Codable {
         let MnuId: Int
@@ -27,12 +31,17 @@ class HomePageViewController: IViewController{
         let MenuImage: String
     }
     
+    var axn="get/allcalls"
+    
     var strMenuList:[mnuItem]=[]
     var SFCode: String = "", StateCode: String = "", DivCode: String = ""
     
     let LocalStoreage = UserDefaults.standard
     
     override func viewDidLoad() {
+        DashBoradTB.delegate=self
+        DashBoradTB.dataSource=self
+        
        // LocalStoreage.removeObject(forKey: "Mydayplan")
         
         //lblHeadCap.font=UIFont.init(name: "Poppins-Bold", size: 20)
@@ -150,23 +159,18 @@ class HomePageViewController: IViewController{
         let someDateTime = formatter.string(from: Date())
         lblTimer.text = "eTime: "+someDateTime
     }
-    
-    
     func DashboardNew(){
+        let apiKey: String = "\(axn)&divisionCode=\(DivCode)&rSF=\(SFCode)&sfCode=\(SFCode)&vanWorkFlag=&State_Code=\(StateCode)"
         
-        //http://www.fmcg.sanfmcg.com/server/native_Db_V13.php?axn=get/allcalls&divisionCode=29,&rSF=MR4126&sfCode=MR4126&vanWorkFlag=&State_Code=24
-      
-        let apiKey: String = "\(axn)&divisionCode=\(DivCode)&rSF=\(SFCode)&vanWorkFlag=\("")&State_Code=\(StateCode)"
-    
+        
         AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
             AFdata in
             switch AFdata.result
             {
                 
             case .success(let value):
-                print(value)
-
-                if let json = value as? [AnyObject] {
+                //print(value)
+                if let json = value as? [String:AnyObject] {
                     guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
                         print("Error: Cannot convert JSON object to Pretty JSON data")
                         return
@@ -176,14 +180,67 @@ class HomePageViewController: IViewController{
                         return
                     }
                     print(prettyPrintedJson)
+                    self.TodayDate=json
+                   
+                    
+                       
+                        
+                    
+                 
+                            
+                    self.DashBoradTB.reloadData()
+                   
                 }
             case .failure(let error):
                 Toast.show(message: error.errorDescription!)  //, controller: self
             }
         }
-        }
+    }
     
-        func Dashboard(){
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if tableView == DashBoradTB
+        {
+            return TodayDate.count
+        }
+        if tableView == DashBoradTB {
+            return routeNames1.count
+        }
+        return routeNames.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell: cellListItem = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
+        
+        if tableView == DashBoradTB {
+            let todayData = TodayDate["today"] as? [String: Any]
+            if let callsArray = todayData?["calls"] as? [[String: Any]] {
+                for item in callsArray {
+                    if let routeName = item["RouteName"] as? String {
+                        routeNames.append(routeName)
+                        cell.RouteLb?.text = routeNames[indexPath.row]
+                    }
+                }
+            }
+        }
+        if tableView == DashBoradTB {
+            let todayData = TodayDate["today"] as? [String: Any]
+            if let callsArray = todayData?["calls"] as? [[String: Any]] {
+                for item in callsArray {
+                    if let routeName = item["RCCOUNT"] as? String {
+                        routeNames1.append(routeName)
+                        cell.AvlaCalls?.text = routeNames1[indexPath.row]
+                        
+                    }
+                }
+            }
+            
+        }
+        
+        return cell
+    }
+    
+    
+    func Dashboard(){
         let aFormData: [String: Any] = ["orderBy":"[\"name asc\"]","desig":"mgr"]
         let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
         let jsonString = String(data: jsonData!, encoding: .utf8)!
@@ -198,7 +255,6 @@ class HomePageViewController: IViewController{
             {
                
                 case .success(let value):
-                print(value)
                 if let json = value as? [String: Any] {
                     let todayData:[String:Any] = json["today"] as! [String: Any]
                     print(json)
