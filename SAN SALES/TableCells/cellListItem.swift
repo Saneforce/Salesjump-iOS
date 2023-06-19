@@ -61,7 +61,8 @@ class cellListItem:UITableViewCell{
     @IBOutlet weak var PcCalls: UILabel!
     @IBOutlet weak var TotalCalls: UILabel!
     @IBOutlet weak var AvlaCalls: UILabel!
-    
+    @IBOutlet weak var BAC: UILabel!
+    @IBOutlet weak var Toalvalue: UILabel!
     var ischeck = false
 
 }

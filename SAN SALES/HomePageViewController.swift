@@ -19,7 +19,7 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
     @IBOutlet weak var vwMainScroll: UIScrollView!
     @IBOutlet weak var mMainMnu: UIImageView!
     @IBOutlet weak var DashBoradTB: UITableView!
-    
+    @IBOutlet weak var currentdate: UILabel!
     var lstMyplnList: [AnyObject] = []
     var TodayDate: [String:AnyObject] = [:]
     var routeNames = [String]()
@@ -31,8 +31,21 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         let MenuImage: String
     }
     
+    struct Todaydate: Any {
+        let id : Int
+        let Route: String
+        let AC: String
+        let ACvalue: Int
+        let TC: String
+        let TCvalue : Int
+        let PC : String
+        let PCvalue : Int
+        let BAC : String
+        let BACvalue : Int
+        let valuesTotal: String
+    }
     var axn="get/allcalls"
-    
+    var TodayDetls:[Todaydate] = []
     var strMenuList:[mnuItem]=[]
     var SFCode: String = "", StateCode: String = "", DivCode: String = ""
     
@@ -180,13 +193,17 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
                         return
                     }
                     print(prettyPrintedJson)
-                    self.TodayDate=json
-                   
-                    
-                       
-                        
-                    
-                 
+                    //self.TodayDate=json
+                    let todayData = json["today"] as? [String: Any]
+                    if let callsArray = todayData?["calls"] as? [[String: Any]] {
+                        for item in callsArray {
+                           // TodayDate.append(TodayDate(MasId: 1, MasName: "Retailer Name :", MasLbl:json[0]["Additional_Prod_Dtls"] as! String))
+                            TodayDetls.append(Todaydate(id: 1, Route: item["RouteName"] as! String, AC: "AC", ACvalue: item["RCCOUNT"] as! Int, TC: "TC", TCvalue: item["calls"] as! Int, PC: "PC", PCvalue: item["order"] as! Int, BAC: "BAC", BACvalue: item["RCCOUNT"] as! Int, valuesTotal: item["orderVal"] as! String))
+                            
+                            self.currentdate.text = item["Adate"] as? String
+                        }
+                    }
+
                             
                     self.DashBoradTB.reloadData()
                    
@@ -196,46 +213,30 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
             }
         }
     }
-    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if DashBoradTB  == tableView { return 60}
+        return 48
+    }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if tableView == DashBoradTB
-        {
-            return TodayDate.count
-        }
+     
         if tableView == DashBoradTB {
-            return routeNames1.count
+            return TodayDetls.count
         }
-        return routeNames.count
+        return 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: cellListItem = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
         
         if tableView == DashBoradTB {
-            let todayData = TodayDate["today"] as? [String: Any]
-            if let callsArray = todayData?["calls"] as? [[String: Any]] {
-                for item in callsArray {
-                    if let routeName = item["RouteName"] as? String {
-                        routeNames.append(routeName)
-                        cell.RouteLb?.text = routeNames[indexPath.row]
-                    }
-                }
-            }
+            //TodayDetls.append(Todaydate(id: 1, Route: item["RouteName"] as! String, AC: "AC", ACvalue: item["RCCOUNT"] as! Int, TC: "TC", TCvalue: item["calls"] as! Int, PC: "PC", PCvalue: item["order"] as! Int, BAC: "BAC", BACvalue: item["RCCOUNT"] as! Int, valuesTotal: item["orderVal"] as! String))
+            cell.RouteLb.text = TodayDetls[indexPath.row].Route
+            cell.AvlaCalls.text = String(TodayDetls[indexPath.row].ACvalue)
+            cell.TotalCalls.text = String(TodayDetls[indexPath.row].TCvalue)
+            cell.PcCalls.text = String(TodayDetls[indexPath.row].PCvalue)
+            cell.BAC.text = String(TodayDetls[indexPath.row].BACvalue)
+            cell.Toalvalue.text = String(TodayDetls[indexPath.row].valuesTotal)
         }
-        if tableView == DashBoradTB {
-            let todayData = TodayDate["today"] as? [String: Any]
-            if let callsArray = todayData?["calls"] as? [[String: Any]] {
-                for item in callsArray {
-                    if let routeName = item["RCCOUNT"] as? String {
-                        routeNames1.append(routeName)
-                        cell.AvlaCalls?.text = routeNames1[indexPath.row]
-                        
-                    }
-                }
-            }
-            
-        }
-        
         return cell
     }
     
@@ -297,6 +298,7 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
                     x = self.addMonthVstDetControl(aY: x, h: 20, Caption: "Order Value", text: String(format: "%.02f", OAmt),textAlign: .right)
                     x = self.addMonthVstDetControl(aY: x, h: 20, Caption: "Target", text: String(TAmt),textAlign: .right)
                     x = self.addMonthVstDetControl(aY: x, h: 20, Caption: "Achieve", text: String(format: "%.02f", AAmt),textAlign: .right)
+                    
                 }
                case .failure(let error):
                    print(error.errorDescription!)
