@@ -297,8 +297,8 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
         
         for item in 0..<SubmittedDCR.objcalls_SelectSecondaryorder2.count {
             let product = SubmittedDCR.objcalls_SelectSecondaryorder2[indexPath.row]
-            let item = product["Trans_Sl_No"] as! String
-            let item2 = product["DCR_Code"] as! String
+//            let item = product["Trans_Sl_No"] as! String
+//            let item2 = product["DCR_Code"] as! String
    
             self.Retlbl.text=String(format: "%@", product["Trans_Detail_Name"] as! String)
             self.Dislbl.text=String(format: "%@", product["Trans_Detail_Slno"] as! String)
@@ -350,7 +350,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
                 return
             }
         let product = SubmittedDCR.objcalls_SelectSecondaryorder2[indexPath.row]
-            let item1 = product["DCR_Code"] as! String
+            let item1 = product["Trans_Detail_Slno"] as! String
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let viewController = storyboard.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
             let myDyPln = storyboard.instantiateViewController(withIdentifier: "sbSecondaryOrder") as! SecondaryOrder
@@ -410,6 +410,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
                 print("Value is nil or not a String")
             }
         }
+        //SelectSecondaryorder2()
     }
     
     @IBAction func clswindow(_ sender: Any) {

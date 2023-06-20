@@ -56,13 +56,14 @@ class cellListItem:UITableViewCell{
     @IBOutlet weak var DeleteButton: UIButton!
     @IBOutlet weak var EditButton: UIButton!
     @IBOutlet weak var ViewButton: UIButton!
-    
     @IBOutlet weak var RouteLb: UILabel!
     @IBOutlet weak var PcCalls: UILabel!
     @IBOutlet weak var TotalCalls: UILabel!
     @IBOutlet weak var AvlaCalls: UILabel!
     @IBOutlet weak var BAC: UILabel!
     @IBOutlet weak var Toalvalue: UILabel!
+    @IBOutlet weak var Countlbl: UILabel!
+    
     var ischeck = false
 
 }

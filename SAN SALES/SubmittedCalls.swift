@@ -59,8 +59,7 @@ class SubmittedCalls: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         BackButton.addTarget(target: self, action: #selector(closeMenuWin))
         
-        strMasList.append(mnuItem.init(MasId: 1, MasName: "Secondary Order", MasImage: "SwitchRoute",BTC: ""))
-        strMasList.append(mnuItem.init(MasId: 2, MasName: "Primary Order", MasImage: "SwitchRoute",BTC: ""))
+      
         // Do any additional setup after loading the view.
     }
     
@@ -127,7 +126,7 @@ class SubmittedCalls: UIViewController, UITableViewDelegate, UITableViewDataSour
                 
             case .success(let value):
                 print(value)
-                if let json = value as? [AnyObject] {
+                if let json = value as? [String:AnyObject] {
                     guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
                         print("Error: Cannot convert JSON object to Pretty JSON data")
                         return
@@ -137,7 +136,9 @@ class SubmittedCalls: UIViewController, UITableViewDelegate, UITableViewDataSour
                         return
                     }
                     print(prettyPrintedJson)
-                    self.objcalls = json
+                    strMasList.append(mnuItem.init(MasId: 1, MasName: "Secondary Order", MasImage: "SwitchRoute",BTC: ""))
+                    strMasList.append(mnuItem.init(MasId: 2, MasName: "Primary Order", MasImage: "SwitchRoute",BTC: ""))
+                  //  self.objcalls = json
                     self.SubmittedcallsTB.reloadData()
                     
                 }
