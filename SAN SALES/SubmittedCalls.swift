@@ -76,6 +76,7 @@ class SubmittedCalls: UIViewController, UITableViewDelegate, UITableViewDataSour
         let cell:cellListItem = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
         cell.lblText.text = strMasList[indexPath.row].MasName
         cell.imgSelect.image = UIImage(named: strMasList[indexPath.row].MasImage)
+        cell.Countlbl.text = strMasList[indexPath.row].BTC
         cell.vwContainer.layer.cornerRadius = 5
         return cell
     }
@@ -136,8 +137,26 @@ class SubmittedCalls: UIViewController, UITableViewDelegate, UITableViewDataSour
                         return
                     }
                     print(prettyPrintedJson)
-                    strMasList.append(mnuItem.init(MasId: 1, MasName: "Secondary Order", MasImage: "SwitchRoute",BTC: ""))
-                    strMasList.append(mnuItem.init(MasId: 2, MasName: "Primary Order", MasImage: "SwitchRoute",BTC: ""))
+                    
+                            let secondary = json["data"] as? [[String: Any]]
+                 
+                    
+                    
+               
+                    if let  doctorCount = secondary?[0]["doctor_count"] as? Int,let doctorCount1 = secondary?[2]["stockist_count"] as? Int{
+                                 
+                        print(doctorCount)
+                        print(doctorCount1)
+                        strMasList.append(mnuItem.init(MasId: 1, MasName: "Secondary Order", MasImage: "SwitchRoute",BTC: "\(String(describing: doctorCount))"))
+                        strMasList.append(mnuItem.init(MasId: 2, MasName: "Primary Order", MasImage: "SwitchRoute",BTC: "\(String(describing: doctorCount1))"))
+                   } else {
+                                  // The value was nil or couldn't be cast to a String
+                                  print("Value is nil or not a String")
+                              }
+                    
+                    
+                   
+                 
                   //  self.objcalls = json
                     self.SubmittedcallsTB.reloadData()
                     

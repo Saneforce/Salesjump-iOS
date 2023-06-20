@@ -11,6 +11,11 @@ import Alamofire
 class HomePageViewController: IViewController, UITableViewDelegate, UITableViewDataSource{
    
     
+   // @IBOutlet weak var mnulistHeight: NSLayoutConstraint!
+    
+    @IBOutlet weak var mnulist: NSLayoutConstraint!
+    @IBOutlet weak var Titleview: UIView!
+    @IBOutlet weak var vstHeight: NSLayoutConstraint!
     @IBOutlet weak var lblTimer: UILabel!
     @IBOutlet weak var lblHeadCap: UILabel!
     @IBOutlet weak var vwMnuList: UIView!
@@ -81,6 +86,8 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         if UserSetup.shared.BrndRvwNd > 0{
             strMenuList.append(mnuItem.init(MnuId: 3, MenuName: UserSetup.shared.BrandReviewVisit, MenuImage: "mnuPrimary"))
         }
+        mnulist.constant = CGFloat(87*self.strMenuList.count)
+                         self.view.layoutIfNeeded()
         var moveMyPln: Bool=false
         if LocalStoreage.string(forKey: "Mydayplan") == nil {
             moveMyPln=true
@@ -204,8 +211,11 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
                         }
                     }
 
-                            
+//                    mnulistHeight.constant = CGFloat(70*self.strMenuList.count)
+//                    self.view.layoutIfNeeded()
                     self.DashBoradTB.reloadData()
+                    vstHeight.constant = CGFloat(60*self.TodayDetls.count)
+                    self.view.layoutIfNeeded()
                    
                 }
             case .failure(let error):
@@ -352,6 +362,7 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         vwMnuList.frame = newFrame
         //vwMnuList.backgroundColor=UIColor.gray
         
+          
         var xfrm = vwTdyDash.frame
         xfrm.origin.y = mnuy+15
         vwTdyDash.frame = xfrm
@@ -363,6 +374,7 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         mnuy+=xfrm.height+15
         
         vwMainScroll.contentSize = CGSize(width:view.frame.width, height: mnuy)
+        
     }
     
     func addVstDetControl(aY: Double, h: Double, Caption: String, text: String,textAlign: NSTextAlignment = .left) -> Double {

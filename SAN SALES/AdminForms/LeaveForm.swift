@@ -134,7 +134,7 @@ class LeaveForm: IViewController, UITableViewDelegate,
             
         } else {
             isDate = true
-            
+            minimumDate(for: calendar)
             openWin(Mode: "DOT")
             lblSelTitle.text="Select the leave to date"
             //minimumDate(for: )
@@ -179,6 +179,7 @@ class LeaveForm: IViewController, UITableViewDelegate,
 
 
     func minimumDate(for calendar: FSCalendar) -> Date {
+        
         return Date()
     }
 
