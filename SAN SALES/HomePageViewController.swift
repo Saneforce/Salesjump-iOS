@@ -13,6 +13,8 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
     
    // @IBOutlet weak var mnulistHeight: NSLayoutConstraint!
     
+    @IBOutlet weak var ScrolHight: NSLayoutConstraint!
+    @IBOutlet weak var hightMnth: NSLayoutConstraint!
     @IBOutlet weak var mnulist: NSLayoutConstraint!
     @IBOutlet weak var Titleview: UIView!
     @IBOutlet weak var vstHeight: NSLayoutConstraint!
@@ -154,6 +156,7 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         }
         DashboardNew()
     }
+  
     func getUserDetails(){
         let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
         let data = Data(prettyPrintedJson!.utf8)
@@ -204,7 +207,6 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
                     let todayData = json["today"] as? [String: Any]
                     if let callsArray = todayData?["calls"] as? [[String: Any]] {
                         for item in callsArray {
-                           // TodayDate.append(TodayDate(MasId: 1, MasName: "Retailer Name :", MasLbl:json[0]["Additional_Prod_Dtls"] as! String))
                             TodayDetls.append(Todaydate(id: 1, Route: item["RouteName"] as! String, AC: "AC", ACvalue: item["RCCOUNT"] as! Int, TC: "TC", TCvalue: item["calls"] as! Int, PC: "PC", PCvalue: item["order"] as! Int, BAC: "BAC", BACvalue: item["RCCOUNT"] as! Int, valuesTotal: item["orderVal"] as! String))
                             
                             self.currentdate.text = item["Adate"] as? String
@@ -216,6 +218,7 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
                     self.DashBoradTB.reloadData()
                     vstHeight.constant = CGFloat(60*self.TodayDetls.count)
                     self.view.layoutIfNeeded()
+                    
                    
                 }
             case .failure(let error):
@@ -308,7 +311,6 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
                     x = self.addMonthVstDetControl(aY: x, h: 20, Caption: "Order Value", text: String(format: "%.02f", OAmt),textAlign: .right)
                     x = self.addMonthVstDetControl(aY: x, h: 20, Caption: "Target", text: String(TAmt),textAlign: .right)
                     x = self.addMonthVstDetControl(aY: x, h: 20, Caption: "Achieve", text: String(format: "%.02f", AAmt),textAlign: .right)
-                    
                 }
                case .failure(let error):
                    print(error.errorDescription!)

@@ -134,14 +134,13 @@ class LeaveForm: IViewController, UITableViewDelegate,
             
         } else {
             isDate = true
-            minimumDate(for: calendar)
             openWin(Mode: "DOT")
             lblSelTitle.text="Select the leave to date"
             //minimumDate(for: )
         }
     }
     //
-   
+    
     
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
         let formatter = DateFormatter()
@@ -162,6 +161,8 @@ class LeaveForm: IViewController, UITableViewDelegate,
             FDate=date
             datediff()
             
+            calendar.reloadData()
+            
         }
         
         if SelMode == "DOT" {
@@ -171,16 +172,24 @@ class LeaveForm: IViewController, UITableViewDelegate,
             TDate = date
 
             datediff()
-   
         }
-       // minimumDate(for: <#T##FSCalendar#>): Date? { selectedDates }
+
         closeWin(self)
     }
 
-
+    
     func minimumDate(for calendar: FSCalendar) -> Date {
-        
-        return Date()
+        let formatter = DateFormatter()
+                formatter.dateFormat = "yyyy/MM/dd"
+        if SelMode == "DOF" {
+                    if let selectedDate = calendar.selectedDates.first {
+                        return selectedDate
+                    }
+                   
+                    return formatter.date(from: "1900/01/01")!
+                }
+
+       return Date()
     }
 
     
@@ -198,7 +207,6 @@ class LeaveForm: IViewController, UITableViewDelegate,
             txSearchSel.isHidden = true
         }
         vwSelWindow.isHidden=false
-        
     }
 // crrection by mani closewin 17/03/23
     @IBAction func closeWin(_ sender:Any){
@@ -344,9 +352,16 @@ class LeaveForm: IViewController, UITableViewDelegate,
         let date2 = calendar.startOfDay(for: TDate)
         let flags = NSCalendar.Unit.day
         let components = calendar.components(flags, from: date1, to: date2)
+        
         var sdys = ("\(String(describing: components.day!+1)) Day")
         if(components.day!>0){ sdys += "s" }
+        print(components.day!<0)
+       
         lblNoDays.text = sdys
+        if FDate > TDate{
+            lblNoDays.text = "0 Day"
+        }
+        
         
         return components.day!;
     }

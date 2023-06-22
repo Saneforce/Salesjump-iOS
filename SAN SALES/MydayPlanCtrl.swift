@@ -283,18 +283,32 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                         }
                     }
                     return
-                }else{
-                    DistData = LocalStoreage.string(forKey: "Distributors_Master_"+id)!
-                    
-                    let RouteData: String=LocalStoreage.string(forKey: "Route_Master_"+id)!
-                    if let list = GlobalFunc.convertToDictionary(text: DistData) as? [AnyObject] {
-                        lstDist = list;
-                    }
-                    if let list = GlobalFunc.convertToDictionary(text: RouteData) as? [AnyObject] {
-                        lstAllRoutes = list
-                        lstRoutes = list
+                }else {
+                    if let DistData = LocalStoreage.string(forKey: "Distributors_Master_" + id) {
+                        if let RouteData = LocalStoreage.string(forKey: "Route_Master_" + id) {
+                            if let list = GlobalFunc.convertToDictionary(text: DistData) as? [AnyObject] {
+                                lstDist = list
+                            }
+                            
+                            if let list = GlobalFunc.convertToDictionary(text: RouteData) as? [AnyObject] {
+                                lstAllRoutes = list
+                                lstRoutes = list
+                            }
+                        }
                     }
                 }
+//                else{
+//                    DistData = LocalStoreage.string(forKey: "Distributors_Master_"+id)!
+//
+//                    let RouteData: String=LocalStoreage.string(forKey: "Route_Master_"+id)!
+//                    if let list = GlobalFunc.convertToDictionary(text: DistData) as? [AnyObject] {
+//                        lstDist = list;
+//                    }
+//                    if let list = GlobalFunc.convertToDictionary(text: RouteData) as? [AnyObject] {
+//                        lstAllRoutes = list
+//                        lstRoutes = list
+//                    }
+//                }
                 if(UserSetup.shared.DistBased == 1){
                     
                 }

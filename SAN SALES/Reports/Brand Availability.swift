@@ -319,16 +319,14 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
     }
     
     func Brandavailability (){
-        let apiKey: String = "\(axn)&divisionCode=\(DivCode)&activityDate=\(StrRptDt)&sfCode=\(SFCode)"
+        let Date  = StrRptDt
+print(Date)
+        let productArray = Date.components(separatedBy: "%")
+        print(productArray)
+        let StrDATE = productArray[0]
+        let apiKey: String = "\(axn)&activityDate=\(StrDATE)&sfCode=\(SFCode)"
 
-//        let aFormData: [String: Any] = [
-//           "tableName":"vwMyDayPlan","coloumns":"[\"worktype\",\"FWFlg\",\"sf_member_code as subordinateid\",\"cluster as clusterid\",\"ClstrName\",\"remarks\",\"stockist as stockistid\",\"worked_with_code\",\"worked_with_name\",\"dcrtype\",\"location\",\"name\",\"Sprstk\",\"Place_Inv\",\"WType_SName\",\"convert(varchar,Pln_date,20) plnDate\"]","desig":"mgr"]
-//        print(aFormData)
-//        let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
-//        let jsonString = String(data: jsonData!, encoding: .utf8)!
-//        let params: Parameters = [
-//            "data": jsonString
-//        ]
+
         
         AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
             AFdata in
@@ -336,7 +334,7 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
             {
                
                 case .success(let value):
-                print(value)
+               // print(value)
                 if let json = value as? [AnyObject] {
                     guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
                         print("Error: Cannot convert JSON object to Pretty JSON data")
