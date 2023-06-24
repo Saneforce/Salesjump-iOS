@@ -176,18 +176,20 @@ class LeaveForm: IViewController, UITableViewDelegate,
 
         closeWin(self)
     }
-
     
+
     func minimumDate(for calendar: FSCalendar) -> Date {
         let formatter = DateFormatter()
                 formatter.dateFormat = "yyyy/MM/dd"
-        if SelMode == "DOF" {
+       
+                if SelMode == "DOF" {
                     if let selectedDate = calendar.selectedDates.first {
                         return selectedDate
                     }
                    
                     return formatter.date(from: "1900/01/01")!
                 }
+       
 
        return Date()
     }

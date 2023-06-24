@@ -90,6 +90,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
     var pCatIndexPath = IndexPath()
     var Editobjcalls: [AnyObject]=[]
     var productData : String?
+    var disbuttername : String?
     let LocalStoreage = UserDefaults.standard
     override func viewDidLoad() {
         loadViewIfNeeded()
@@ -159,9 +160,11 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
             let id=String(format: "%@", lstPlnDetail[0]["stockistid"] as! CVarArg)
             if let indexToDelete = lstDistList.firstIndex(where: { String(format: "%@", $0["id"] as! CVarArg) == id }) {
                 let name: String = lstDistList[indexToDelete]["name"] as! String
+                print(name)
                 lblDistNm.text = name
                 lblPrvDistNm.text = name
                 VisitData.shared.Dist.name = name
+                disbuttername =  VisitData.shared.Dist.name
                 VisitData.shared.Dist.id = id
             }
         }
@@ -1028,6 +1031,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         
     }
     func OrderSubmit(sLocation: String,sAddress: String){
+    
         var sPItems:String = ""
         self.ShowLoading(Message: "Data Submitting Please wait...")
         for i in 0...self.lstPrvOrder.count-1{
@@ -1051,7 +1055,9 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
             sPItems = sPItems + " \"rx_Conqty\":" + (item["Qty"] as! String) + ","
             sPItems = sPItems + " \"Product_Rx_NQty\": 0,"
             sPItems = sPItems + " \"Product_Sample_Qty\": \"" + (String(format: "%.2f", item["NetVal"] as! Double)) + "\","
-            sPItems = sPItems + " \"net_weight\": " + (item["NetWt"] as! String) + ","
+            sPItems = sPItems + " \"vanSalesOrder\":0,"
+            //sPItems = sPItems + " \"net_weight\": " + (item["NetWt"] as! String) + ","
+            sPItems = sPItems + " \"net_weight\": 0.0,"
             sPItems = sPItems + " \"free\": " + (String(format: "%i", item["OffQty"] as! Int)) + ","
             sPItems = sPItems + " \"FreePQty\": " + (String(format: "%i", item["FQ"] as! Int32)) + ","
             sPItems = sPItems + " \"FreeP_Code\": \"" + (item["OffProd"] as! String) + "\","
@@ -1066,14 +1072,21 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
             sPItems = sPItems + " \"RcpaId\": \"\","
             sPItems = sPItems + " \"Ccb_qty\": 0,"
             sPItems = sPItems + " \"PromoVal\": 0,"
-            sPItems = sPItems + " \"rx_remarks\": 0,"
-            sPItems = sPItems + " \"rx_remarks_Id\": 0,"
+            //sPItems = sPItems + " \"rx_remarks\": 0,"
+           // sPItems = sPItems + " \"rx_remarks_Id\": 0,"
+            sPItems = sPItems + " \"rx_remarks\":\"\","
+            sPItems = sPItems + " \"rx_remarks_Id\": \"\","
             sPItems = sPItems + " \"OrdConv\":" + (item["UOMConv"] as! String) + ","
             sPItems = sPItems + " \"selectedScheme\":" + (String(format: "%.0f", item["Scheme"] as! Double)) + ","
-            sPItems = sPItems + " \"selectedOffProCode\": \"" + (item["OffProd"] as! String) + "\","
+           // sPItems = sPItems + " \"selectedOffProCode\": \"" + (item["OffProd"] as! String) + "\","
+            sPItems = sPItems + " \"selectedOffProCode\": \"241\","
             sPItems = sPItems + " \"selectedOffProName\":\"PIECE\","
             sPItems = sPItems + " \"selectedOffProUnit\": \"1\","
             sPItems = sPItems + " \"f_key\": {\"Activity_MSL_Code\": \"Activity_Doctor_Report\"}}"
+            
+            
+            
+
             
         }
         var sImgItems:String = ""
@@ -1085,8 +1098,11 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
             }
         }
         
+
+//        let jsonString = "[{\"Activity_Report_APP\":{\"dcr_activity_date\":\"\'" + VisitData.shared.cInTime + "\'\",\"rx\":\"\'1\'\",\"rx_t\":\"\'\'\",\"Daywise_Remarks\":\"\'" + VisitData.shared.VstRemarks.name + "\'\",\"RateEditable\":\"\'\'\",\"Worktype_code\":\"\'" + (self.lstPlnDetail[0]["worktype"] as! String) + "\'\",\"Town_code\":\"\'" + (self.lstPlnDetail[0]["clusterid"] as! String) + "\'\",\"DataSF\":\"\'" + DataSF + "\'\",\"eKey\":\"" + self.eKey + "\"}},{\"Activity_Doctor_Report\":{\"modified_time\":\"\'" + VisitData.shared.cInTime + "\'\",\"CheckinTime\":\"" + VisitData.shared.cInTime + "\",\"rateMode\":\"Nil\",\"CheckoutTime\":\"" + VisitData.shared.cOutTime + "\",\"Order_No\":\"\'0\'\",\"Doc_Meet_Time\":\"\'" + VisitData.shared.cInTime + "\'\",\"Worked_With\":\"\'\'\",\"discount_price\":\"0\",\"Discountpercent\":\"0\",\"PhoneOrderTypes\":\"" + VisitData.shared.OrderMode.id + "\",\"net_weight_value\":\"0\",\"stockist_name\":\"\'\'\",\"location\":\"\'" + sLocation + "\'\",\"stockist_code\":\"\'" + (VisitData.shared.Dist.id ) + "\'\",\"Order_Stk\":\"\'\'\",\"superstockistid\":\"\'\'\",\"geoaddress\":\"" + sAddress + "\",\"f_key\":{\"Activity_Report_Code\":\"\'Activity_Report_APP\'\"},\"doctor_name\":\"\'" + VisitData.shared.CustName + "\'\",\"rootTarget\":\"\'0\'\",\"disPercnt\":\"\'0\'\",\"orderValue\":\"\'0\'\",\"disValue\":\"\'0\'\",\"finalNetAmt\":\"\'0\'\",\"taxTotalValue\":\"\'0\'\",\"discTotalValue\":\"\'0\'\",\"subTota\":\"\'0\'\",\"No_Of_items\":\"\'0\'\",\"Doctor_POB\":\"0\",\"doctor_code\":\"\'" + VisitData.shared.CustID + "\'\"}},{\"Activity_Sample_Report\":[" + sPItems +  "]},{\"Trans_Order_Details\":[]},{\"Activity_Event_Captures\":[" + sImgItems +  "]},{\"Activity_Input_Report\":[]},{\"Compititor_Product\":[]},{\"PENDING_Bills\":[]}]"
+
         
-        let jsonString = "[{\"Activity_Report_APP\":{\"dcr_activity_date\":\"\'" + VisitData.shared.cInTime + "\'\",\"rx\":\"\'1\'\",\"rx_t\":\"\'\'\",\"Daywise_Remarks\":\"\'" + VisitData.shared.VstRemarks.name + "\'\",\"RateEditable\":\"\'\'\",\"Worktype_code\":\"\'" + (self.lstPlnDetail[0]["worktype"] as! String) + "\'\",\"Town_code\":\"\'" + (self.lstPlnDetail[0]["clusterid"] as! String) + "\'\",\"DataSF\":\"\'" + DataSF + "\'\",\"eKey\":\"" + self.eKey + "\"}},{\"Activity_Doctor_Report\":{\"modified_time\":\"\'" + VisitData.shared.cInTime + "\'\",\"CheckinTime\":\"" + VisitData.shared.cInTime + "\",\"rateMode\":\"Nil\",\"visit_name\":\"\'\'\",\"CheckoutTime\":\"" + VisitData.shared.cOutTime + "\",\"Order_No\":\"\'0\'\",\"Doc_Meet_Time\":\"\'" + VisitData.shared.cInTime + "\'\",\"Worked_With\":\"\'\'\",\"discount_price\":\"0\",\"Discountpercent\":\"0\",\"PhoneOrderTypes\":\"" + VisitData.shared.OrderMode.id + "\",\"net_weight_value\":\"0\",\"stockist_name\":\"\'\'\",\"location\":\"\'" + sLocation + "\'\",\"stockist_code\":\"\'" + (VisitData.shared.Dist.id as! String) + "\'\",\"Order_Stk\":\"\'\'\",\"superstockistid\":\"\'\'\",\"geoaddress\":\"" + sAddress + "\",\"f_key\":{\"Activity_Report_Code\":\"\'Activity_Report_APP\'\"},\"doctor_name\":\"\'" + VisitData.shared.CustName + "\'\",\"visit_id\":\"\'\'\",\"Doctor_POB\":\"0\",\"doctor_code\":\"\'" + VisitData.shared.CustID + "\'\"}},{\"Activity_Sample_Report\":[" + sPItems +  "]},{\"Trans_Order_Details\":[]},{\"Activity_Event_Captures\":[" + sImgItems +  "]},{\"Activity_Input_Report\":[]},{\"Compititor_Product\":[]},{\"PENDING_Bills\":[]}]"
+        let jsonString = "[{\"Activity_Report_APP\":{\"Worktype_code\":\"\'" + (self.lstPlnDetail[0]["worktype"] as! String) + "\'\",\"Town_code\":\"\'" + (self.lstPlnDetail[0]["clusterid"] as! String) + "\'\",\"RateEditable\":\"''\",\"dcr_activity_date\":\"\'" + VisitData.shared.cInTime + "\'\",\"Daywise_Remarks\":\"" + VisitData.shared.VstRemarks.name + "\",\"eKey\":\"" + self.eKey + "\",\"rx\":\"'1'\",\"rx_t\":\"''\",\"DataSF\":\"\'" + DataSF + "\'\"}},{\"Activity_Doctor_Report\":{\"Doctor_POB\":0,\"Worked_With\":\"''\",\"Doc_Meet_Time\":\"\'" + VisitData.shared.cInTime + "\'\",\"modified_time\":\"\'" + VisitData.shared.cInTime + "\'\",\"net_weight_value\":\"0.00\",\"stockist_code\":\"\'" + (VisitData.shared.Dist.id ) + "\'\",\"stockist_name\":\"'BUTTERFLY APPLIANCES'\",\"superstockistid\":\"''\",\"Discountpercent\":0,\"CheckinTime\":\"" + VisitData.shared.cInTime + "\",\"CheckoutTime\":\"" + VisitData.shared.cOutTime + "\",\"location\":\"\'" + sLocation + "\'\",\"geoaddress\":\"" + sAddress + "\",\"PhoneOrderTypes\":\"" + VisitData.shared.OrderMode.id + "\",\"Order_Stk\":\"'15560'\",\"Order_No\":\"''\",\"rootTarget\":\"0\",\"orderValue\":340.4,\"disPercnt\":0.0,\"disValue\":0.0,\"finalNetAmt\":340.4,\"taxTotalValue\":0.4,\"discTotalValue\":0.0,\"subTotal\":340.0,\"No_Of_items\":4,\"rateMode\":\"free\",\"discount_price\":0,\"doctor_code\":\"\'" + VisitData.shared.CustID + "\'\",\"doctor_name\":\"\'" + VisitData.shared.CustName + "\'\",\"doctor_route\":\"'mylapore'\",\"f_key\":{\"Activity_Report_Code\":\"'Activity_Report_APP'\"}}},{\"Activity_Sample_Report\":[" + sPItems +  "]},{\"Trans_Order_Details\":[]},{\"Activity_Input_Report\":[]},{\"Activity_Event_Captures\":[]},{\"PENDING_Bills\":[]},{\"Compititor_Product\":[]},{\"Activity_Event_Captures_Call\":[]}]"
         
         let params: Parameters = [
             "data": jsonString //"["+jsonString+"]"//
@@ -1241,3 +1257,4 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         vwSelWindow.isHidden=true
     }
 }
+//php7632

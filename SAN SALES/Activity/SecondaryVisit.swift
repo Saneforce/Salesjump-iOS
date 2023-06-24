@@ -327,6 +327,7 @@ class SecondaryVisit: IViewController, UITableViewDelegate, UITableViewDataSourc
                     {
                        
                     case .success(let value):
+                        print(value)
                         if let json = value as? [String: Any] {
                             PhotosCollection.shared.PhotoList = []
                             VisitData.shared.clear()

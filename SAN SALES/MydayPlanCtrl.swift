@@ -111,28 +111,38 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         DivCode = prettyJsonData["divisionCode"] as? String ?? ""
         let SFName: String=prettyJsonData["sfName"] as? String ?? ""
         
-        let WorkTypeData: String=LocalStoreage.string(forKey: "Worktype_Master")!
-        let HQData: String=LocalStoreage.string(forKey: "HQ_Master")!
-        let DistData: String=LocalStoreage.string(forKey: "Distributors_Master_"+SFCode)!
-        let RouteData: String=LocalStoreage.string(forKey: "Route_Master_"+SFCode)!
-        let JointWData: String=LocalStoreage.string(forKey: "Jointwork_Master")!
+      //  let WorkTypeData: String=LocalStoreage.string(forKey: "Worktype_Master")!
+       // let HQData: String=LocalStoreage.string(forKey: "HQ_Master")!
+        //let DistData: String=LocalStoreage.string(forKey: "Distributors_Master_"+SFCode)!
+      // let RouteData: String=LocalStoreage.string(forKey: "Route_Master_"+SFCode)!
+       // let JointWData: String=LocalStoreage.string(forKey: "Jointwork_Master")!
         
-        if let list = GlobalFunc.convertToDictionary(text: WorkTypeData) as? [AnyObject] {
-            lstWType = list;
+        //new
+        if let WorkTypeData = LocalStoreage.string(forKey: "Worktype_Master"),
+           let list = GlobalFunc.convertToDictionary(text:  WorkTypeData) as? [AnyObject] {
+            lstWType = list
         }
-        if let list = GlobalFunc.convertToDictionary(text: DistData) as? [AnyObject] {
+        
+        if let DistData = LocalStoreage.string(forKey: "Distributors_Master_"+SFCode),
+           let list = GlobalFunc.convertToDictionary(text:  DistData) as? [AnyObject] {
             lstDist = list;
         }
-        if let list = GlobalFunc.convertToDictionary(text: RouteData) as? [AnyObject] {
-            lstAllRoutes = list;
-            if UserSetup.shared.DistBased == 0 {
-                lstRoutes = list
-            }
+        
+        if let RouteData = LocalStoreage.string(forKey: "Route_Master_"+SFCode),
+           let list = GlobalFunc.convertToDictionary(text:  RouteData) as? [AnyObject] {
+            lstAllRoutes = list
+            lstRoutes = list
         }
-        if let list = GlobalFunc.convertToDictionary(text: JointWData) as? [AnyObject] {
+        
+        if let JointWData = LocalStoreage.string(forKey: "Jointwork_Master"),
+           let list = GlobalFunc.convertToDictionary(text:  JointWData) as? [AnyObject] {
             lstJoint = list;
         }
-        if let list = GlobalFunc.convertToDictionary(text: HQData) as? [AnyObject] {
+        
+        
+        
+        if let HQData = LocalStoreage.string(forKey: "HQ_Master"),
+           let list = GlobalFunc.convertToDictionary(text:  HQData) as? [AnyObject] {
             lstHQs = list;
             var id: String = SFCode
             var name: String = SFName
@@ -159,6 +169,53 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
             }
         }
         
+        
+        //new
+        
+        
+        
+//        if let list = GlobalFunc.convertToDictionary(text: WorkTypeData) as? [AnyObject] {
+//            lstWType = list;
+//        }
+//        if let list = GlobalFunc.convertToDictionary(text: DistData) as? [AnyObject] {
+//            lstDist = list;
+//        }
+//        if let list = GlobalFunc.convertToDictionary(text: RouteData) as? [AnyObject] {
+//            lstAllRoutes = list;
+//            if UserSetup.shared.DistBased == 0 {
+//                lstRoutes = list
+//            }
+//        }
+//        if let list = GlobalFunc.convertToDictionary(text: JointWData) as? [AnyObject] {
+//            lstJoint = list;
+//        }
+//        if let list = GlobalFunc.convertToDictionary(text: HQData) as? [AnyObject] {
+//            lstHQs = list;
+//            var id: String = SFCode
+//            var name: String = SFName
+//            if lstHQs.count > 0 {
+//                let item: [String: Any]=lstHQs[0] as! [String : Any]
+//                name = item["name"] as! String
+//                id=String(format: "%@", item["id"] as! CVarArg)
+//            }
+//            if(lstHQs.count < 2){
+//                lblHQ.text = name
+//                let DistData: String=LocalStoreage.string(forKey: "Distributors_Master_"+id)!
+//                let RouteData: String=LocalStoreage.string(forKey: "Route_Master_"+id)!
+//                if let list = GlobalFunc.convertToDictionary(text: DistData) as? [AnyObject] {
+//                    lstDist = list;
+//                }
+//                if let list = GlobalFunc.convertToDictionary(text: RouteData) as? [AnyObject] {
+//                    lstAllRoutes = list
+//                    lstRoutes = list
+//                }
+//            }
+//            else
+//            {
+//                lblHQ.addTarget(target: self, action: #selector(selHeadquaters))
+//            }
+//        }
+//
         //MARK:- Remove the Slashes
       //  let text = stringJson.replacingOccurrences(of: "\\", with: "")
         

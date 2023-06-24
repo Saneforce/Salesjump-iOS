@@ -307,10 +307,9 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
            // self.OrderTime.text=String(format: "%@", json[0]["Order_Out_Time"] as! String)
             self.Ordervalue.text=String(format: "%@", product["finalNetAmnt"] as! String)
             self.Remark.text=String(format: "%@", product["Activity_Remarks"] as! String)
-            
-            
-            
-            let apiKey: String = "\(axnview)&divisionCode=\(DivCode)&desig=\(Desig)&rSF=\(SFCode)&sfCode=\(SFCode)&State_Code=\(StateCode)&Order_No=\(item)"
+            let item2 = product["Trans_Sl_No"] as! String
+           
+            let apiKey: String = "\(axnview)&divisionCode=\(DivCode)&desig=\(Desig)&rSF=\(SFCode)&sfCode=\(SFCode)&State_Code=\(StateCode)&Order_No=\(item2)"
             
             
             AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
@@ -385,6 +384,8 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
                 let params: Parameters = [
                     "data": jsonString
                 ]
+                let alert = UIAlertController(title: "Confirmation", message: "Do you want Delete this Order ?", preferredStyle: .alert)
+                
                 AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
                     AFdata in
                     switch AFdata.result

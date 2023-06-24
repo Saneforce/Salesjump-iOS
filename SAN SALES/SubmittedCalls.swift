@@ -143,16 +143,16 @@ class SubmittedCalls: UIViewController, UITableViewDelegate, UITableViewDataSour
                     
                     
                
-                    if let  doctorCount = secondary?[0]["doctor_count"] as? Int,let doctorCount1 = secondary?[2]["stockist_count"] as? Int{
+//                    if let  doctorCount = secondary?[0]["doctor_count"] as? Int,let doctorCount1 = secondary?[2]["stockist_count"] as? Int{
                                  
-                        print(doctorCount)
-                        print(doctorCount1)
-                        strMasList.append(mnuItem.init(MasId: 1, MasName: "Secondary Order", MasImage: "SwitchRoute",BTC: "\(String(describing: doctorCount))"))
-                        strMasList.append(mnuItem.init(MasId: 2, MasName: "Primary Order", MasImage: "SwitchRoute",BTC: "\(String(describing: doctorCount1))"))
-                   } else {
-                                  // The value was nil or couldn't be cast to a String
-                                  print("Value is nil or not a String")
-                              }
+//                        print(doctorCount)
+//                        print(doctorCount1)
+                        strMasList.append(mnuItem.init(MasId: 1, MasName: "Secondary Order", MasImage: "SwitchRoute",BTC: ""))
+                        strMasList.append(mnuItem.init(MasId: 2, MasName: "Primary Order", MasImage: "SwitchRoute",BTC: ""))
+//                   } else {
+//                                  // The value was nil or couldn't be cast to a String
+//                                  print("Value is nil or not a String")
+//                              }
                     
                     
                    
