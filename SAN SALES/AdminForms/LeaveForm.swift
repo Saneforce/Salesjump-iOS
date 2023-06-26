@@ -21,24 +21,43 @@ class LeaveForm: IViewController, UITableViewDelegate,
     @IBOutlet weak var lblNoDays: UILabel!
     @IBOutlet weak var lblLvlTyp: UILabel!
     @IBOutlet weak var calendar: FSCalendar!
+    @IBOutlet weak var calendar2: FSCalendar!
     @IBOutlet weak var txSearchSel: UITextField!
     @IBOutlet weak var txReason: UITextView!
     @IBOutlet weak var btnBack: UIImageView!
     @IBOutlet weak var menuClose: UIImageView!
     
+    @IBOutlet weak var LeaveAvailability: UITableView!
     @IBOutlet weak var tbDataSelect: UITableView!
+    
+    struct mnuItem: Any {
+        let levtype: String
+        let Eligibility : Int
+        let Taken : Int
+        let Available : Int
+    }
+    var LeveDet:[mnuItem]=[]
+    
+    let axn="get/LeaveAvailabilityCheck"
+    
+    var SFCode: String = "", StateCode: String = "", DivCode: String = "",Desig: String=""
+    
     var SelMode: String = ""
     var isDate: Bool = false
-    var SFCode: String = ""
-    var DivCode: String = ""
+//    var SFCode: String = ""
+//    var DivCode: String = ""
     var lstLvlTypes: [AnyObject] = []
     var lObjSel: [AnyObject] = []
     var lAllObjSel: [AnyObject] = []
-    
+    var LeaveAvailabilitydata: [AnyObject] = []
     var sLvlType: String = "",sDOF = "",sDOT = ""
     var FDate: Date = Date(),TDate: Date = Date()
     var eKey: String = ""
+    let LocalStoreage = UserDefaults.standard
     override func viewDidLoad() {
+        
+        getUserDetails()
+        LeaveAvailabilityCheck()
         let LocalStoreage = UserDefaults.standard
         
         let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
@@ -67,8 +86,13 @@ class LeaveForm: IViewController, UITableViewDelegate,
         
         tbDataSelect.delegate=self
         tbDataSelect.dataSource=self
+        
+        LeaveAvailability.delegate=self
+        LeaveAvailability.dataSource=self
         calendar.delegate=self
         calendar.dataSource=self
+        calendar2.delegate=self
+        calendar2.dataSource=self
         let formatter = DateFormatter()
         //formatter.dateFormat = "dd/MM/yyyy"
 //        lblFDate.text = formatter.string(from: Date())
@@ -89,14 +113,27 @@ class LeaveForm: IViewController, UITableViewDelegate,
         datediff()
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if tableView == LeaveAvailability {
+            return LeveDet.count
+        }
         return lObjSel.count
+        
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
             let cell:cellListItem = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
+        if tableView == tbDataSelect {
             let item: [String: Any] = lObjSel[indexPath.row] as! [String : Any]
             cell.lblText?.text = item["name"] as? String
+        }
+        if tableView == LeaveAvailability {
+          //  let item: [String: Any] = LeveDet[indexPath.row] as! [String : Any]
+            cell.Levtype?.text = LeveDet[indexPath.row].levtype
+            cell.Leveligibility?.text = String(LeveDet[indexPath.row].Eligibility)
+            cell.Levtaken?.text = String(LeveDet[indexPath.row].Taken)
+            cell.Levavailable?.text = String(LeveDet[indexPath.row].Available)
+        }
          
             return cell
     }
@@ -125,6 +162,7 @@ class LeaveForm: IViewController, UITableViewDelegate,
         isDate = true
         openWin(Mode: "DOF")
         lblSelTitle.text="Select the leave from date"
+        calendar.reloadData()
     }
     
     @objc private func selDOT() {
@@ -136,6 +174,7 @@ class LeaveForm: IViewController, UITableViewDelegate,
             isDate = true
             openWin(Mode: "DOT")
             lblSelTitle.text="Select the leave to date"
+         
             //minimumDate(for: )
         }
     }
@@ -170,6 +209,7 @@ class LeaveForm: IViewController, UITableViewDelegate,
            formatter.dateFormat = "yyyy/MM/dd"
             sDOT = formatter.string(from: date)
             TDate = date
+            
 
             datediff()
         }
@@ -186,6 +226,7 @@ class LeaveForm: IViewController, UITableViewDelegate,
                     if let selectedDate = calendar.selectedDates.first {
                         return selectedDate
                     }
+                   
                    
                     return formatter.date(from: "1900/01/01")!
                 }
@@ -347,6 +388,62 @@ class LeaveForm: IViewController, UITableViewDelegate,
         })
         self.present(alert, animated: true)
     }
+    func getUserDetails(){
+        let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
+        let data = Data(prettyPrintedJson!.utf8)
+        guard let prettyJsonData = try? JSONSerialization.jsonObject(with: data, options:[]) as? [String: Any] else {
+            print("Error: Cannot convert JSON object to Pretty JSON data")
+            return
+        }
+        SFCode = prettyJsonData["sfCode"] as? String ?? ""
+        StateCode = prettyJsonData["State_Code"] as? String ?? ""
+        DivCode = prettyJsonData["divisionCode"] as? String ?? ""
+        Desig=prettyJsonData["desigCode"] as? String ?? ""
+    }
+    
+    func LeaveAvailabilityCheck(){
+       let apiKey: String = "\(axn)&divisionCode=\(DivCode)&desig=\(Desig)&rSF=\(SFCode)&sfCode=\(SFCode)&State_Code=\(StateCode)&Year=2023&stateCode=\(StateCode)&rSF=\(SFCode)"
+        
+        let aFormData: [String: Any] = [
+            "tableName":"vwactivity_report","coloumns":"[\"*\"]","today":1,"wt":1,"orderBy":"[\"activity_date asc\"]","desig":"mgr"
+        ]
+       // print(aFormData)
+        let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
+        let jsonString = String(data: jsonData!, encoding: .utf8)!
+        let params: Parameters = [
+            "data": jsonString
+        ]
+        
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+            AFdata in
+            switch AFdata.result
+            {
+                
+            case .success(let value):
+                print(value)
+                if let json = value as? [AnyObject] {
+                    guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
+                        print("Error: Cannot convert JSON object to Pretty JSON data")
+                        return
+                    }
+                    guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+                        print("Error: Could print JSON in String")
+                        return
+                    }
+                    print(prettyPrintedJson)
+                    self.LeaveAvailabilitydata = json
+                    //strMasList.append(mnuItem.init(MasId: 1, MasName: "Start Time", MasLbl:VisitData.shared.cInTime))
+                    for item in json {
+                        LeveDet.append(mnuItem(levtype: item["Leave_Name"] as! String, Eligibility:item["LeaveValue"] as! Int, Taken: item["LeaveTaken"] as! Int, Available: item["LeaveAvailability"] as! Int))
+                    }
+                    LeaveAvailability.reloadData()
+                }
+            case .failure(let error):
+                Toast.show(message: error.errorDescription!)  //, controller: self
+            }
+        }
+    }
+    
     func datediff() -> Int {
         let calendar = NSCalendar.current as NSCalendar
         

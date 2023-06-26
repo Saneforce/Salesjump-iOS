@@ -29,7 +29,14 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
         let name: String
         let FWFlg: String
     }
+    struct BrandAvil: Any {
+        let BrandName: String
+        let TC: Int
+        let AC: Int
+        let EC: Int
+    }
     var myDyTp: [String: lItem] = [:]
+    var BrandList : [BrandAvil] = []
     var SelMode: String = ""
     var lAllObjSel: [AnyObject] = []
     var lObjSel: [AnyObject] = []
@@ -144,7 +151,7 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
         return 42
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if tableView==BrandAV { return objcalls.count }
+        if tableView==BrandAV { return BrandList.count }
         if tableView==HeadquarterTable {return lObjSel.count}
         return 0
     }
@@ -152,16 +159,23 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
             let cell:cellListItem = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
             if BrandAV == tableView{
-                let item: [String: Any] = objcalls[indexPath.row] as! [String : Any]
-                let value = item["value"] as! [[String : Any]]
-              
-                if !value.isEmpty {
-                    cell.lblText?.text = value[0]["BName"] as? String
-                    cell.TC?.text = String( value[0]["tc"] as! Int)
-                   
-                    cell.ACC?.text =  String( value[0]["Avail"] as! Int)
-                    cell.ECC?.text = String(value[0]["EC"] as! Int)
-                }
+//                let item: [String: Any] = objcalls[indexPath.row] as! [String : Any]
+//                let value = item["value"] as! [[String : Any]]
+//
+//                if !value.isEmpty {
+//                    cell.lblText?.text = value[0]["BName"] as? String
+//                    cell.TC?.text = String( value[0]["tc"] as! Int)
+//
+//                    cell.ACC?.text =  String( value[0]["Avail"] as! Int)
+//                    cell.ECC?.text = String(value[0]["EC"] as! Int)
+//                }
+
+                
+                //New
+                cell.lblText?.text = BrandList[indexPath.row].BrandName
+                cell.TC?.text = String(BrandList[indexPath.row].TC)
+                cell.ACC?.text = String(BrandList[indexPath.row].AC)
+                cell.ECC?.text = String(BrandList[indexPath.row].EC)
                 
                
             }else{
@@ -346,7 +360,24 @@ print(Date)
                     }
                     print(prettyPrintedJson)
                   // let Brand:[String: Any] = json["value"] as! [String: Any]
-                    self.objcalls = json
+                   // self.objcalls = json
+                    
+//                    let value = json["value"] as? [[String : Any]]
+//                    print(value)
+                    
+                    //var BrandList = [Brand_Availability.BrandAvil]()
+
+                     let jsonArray = json as? [[String: Any]]
+                    var branddata = jsonArray?[0]["value"] as! [[String : Any]]
+                        print(branddata)
+                        for item in branddata {
+
+                                BrandList.append(BrandAvil(BrandName: item["BName"] as! String , TC: item["tc"] as! Int, AC: item["Avail"] as! Int, EC: item["EC"] as! Int))
+                        }
+                    
+                    
+                    
+                    
                     self.BrandAV.reloadData()
 //                    vstHeight.constant = CGFloat(55*self.objcalls.count)
 //                    self.view.layoutIfNeeded()
