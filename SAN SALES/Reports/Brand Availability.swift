@@ -368,11 +368,19 @@ print(Date)
                     //var BrandList = [Brand_Availability.BrandAvil]()
 
                      let jsonArray = json as? [[String: Any]]
-                    var branddata = jsonArray?[0]["value"] as! [[String : Any]]
+                    let branddata = jsonArray?[0]["value"] as! [[String : Any]]
                         print(branddata)
                         for item in branddata {
+                            
+                            var Bname = ""
+                            if let targetValue = item["BName"] as? String {
 
-                                BrandList.append(BrandAvil(BrandName: item["BName"] as! String , TC: item["tc"] as! Int, AC: item["Avail"] as! Int, EC: item["EC"] as! Int))
+                                Bname = targetValue
+                            } else {
+                                Bname = "No Bname"
+                            }
+
+                                BrandList.append(BrandAvil(BrandName: Bname, TC: item["tc"] as! Int, AC: item["Avail"] as! Int, EC: item["EC"] as! Int))
                         }
                     
                     

@@ -478,7 +478,7 @@ class AddNewCustomer: IViewController, UITableViewDelegate, UITableViewDataSourc
                
             case .success(let value):
                 print(value)
-                if let json = value as? [String: Any] {
+                if value is [String: Any] {
                     Toast.show(message: "Customer Added submitted successfully", controller: self)
                     NewOutlet.shared.Clear()
                     self.MasSync(apiKey:  "table/list&divisionCode=" + self.DivCode +  "&rSF="+self.SFCode+"&sfCode="+self.SFCode, aFormData: [
