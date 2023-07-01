@@ -209,7 +209,7 @@
                                         <subviews>
                                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Pnp-hj-lVq">
                                                 <rect key="frame" x="5" y="8" width="380" height="70"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="From date" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vZt-wM-26b">
                                                         <rect key="frame" x="8" y="8" width="67" height="19"/>
@@ -253,7 +253,7 @@
                                             </view>
                                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="W0n-gI-pqs">
                                                 <rect key="frame" x="5" y="87" width="380" height="74"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Leave Type" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oAd-8b-8PJ">
                                                         <rect key="frame" x="8" y="8" width="73" height="19"/>
@@ -275,7 +275,7 @@
                                             </view>
                                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NXE-a5-CrA">
                                                 <rect key="frame" x="5" y="171" width="380" height="120"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Reason for leave" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="imo-Wr-qBW">
                                                         <rect key="frame" x="8" y="8" width="108" height="19"/>
@@ -297,7 +297,7 @@
                                             </view>
                                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Avn-Rl-a7h">
                                                 <rect key="frame" x="5" y="299" width="380" height="267"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Leave Availability Status" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gDZ-Yy-Oo6">
                                                         <rect key="frame" x="8" y="8" width="181" height="21"/>
@@ -517,11 +517,6 @@
                                             <constraint firstAttribute="height" constant="450" id="57G-6Z-TDd"/>
                                         </constraints>
                                     </view>
-                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Kpg-wn-6s4" customClass="FSCalendar">
-                                        <rect key="frame" x="8" y="80" width="374" height="450"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                    </view>
                                 </subviews>
                                 <viewLayoutGuide key="safeArea" id="KU8-t5-PKL"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -569,7 +564,6 @@
                         <outlet property="LeaveAvailability" destination="vXw-sQ-1HA" id="Wvm-05-ZEG"/>
                         <outlet property="btnBack" destination="oCZ-Uz-qFW" id="Pnv-Iz-GWK"/>
                         <outlet property="calendar" destination="wAr-1D-8VR" id="hcF-rF-t6i"/>
-                        <outlet property="calendar2" destination="Kpg-wn-6s4" id="T30-sT-wir"/>
                         <outlet property="lblFDate" destination="ZdZ-op-9rJ" id="9vC-dn-Csv"/>
                         <outlet property="lblLvlTyp" destination="I0p-ue-2rR" id="hz8-nm-eIR"/>
                         <outlet property="lblNoDays" destination="365-0B-9dq" id="mgG-75-8RE"/>

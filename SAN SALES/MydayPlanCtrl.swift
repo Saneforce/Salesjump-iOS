@@ -220,7 +220,6 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
       //  let text = stringJson.replacingOccurrences(of: "\\", with: "")
         
         btnBack.addTarget(target: self, action: #selector(GotoHome))
-        
         lblWorktype.addTarget(target: self, action: #selector(selWorktype))
         lblDist.addTarget(target: self, action: #selector(selDistributor))
         lblRoute.addTarget(target: self, action: #selector(selRoutes))
@@ -452,11 +451,15 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                     if let DistData = LocalStoreage.string(forKey: "Distributors_Master_"+sfid),
                        let list = GlobalFunc.convertToDictionary(text:  DistData) as? [AnyObject] {
                         lstDist = list
+                        print(DistData)
                     }
+                    
+                    
                     if let RouteData = LocalStoreage.string(forKey: "Route_Master_"+sfid),
                        let list = GlobalFunc.convertToDictionary(text:  RouteData) as? [AnyObject] {
                         lstAllRoutes = list
                         lstRoutes = list
+                        print(RouteData)
                     }
                     //new
         
@@ -488,8 +491,8 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                 if let indexToDelete = lstRoutes.firstIndex(where: { String(format: "%@", $0["id"] as! CVarArg) == rtid }) {
                     lblRoute.text = lstRoutes[indexToDelete]["name"] as? String
                     let rtname: String = lstRoutes[indexToDelete]["name"] as! String
-                    
-                    myDyTp.updateValue(lItem(id: rtid, name: rtname,FWFlg: ""), forKey: "RUT")
+                    print(rtname)
+                   myDyTp.updateValue(lItem(id: rtid, name: rtname,FWFlg: ""), forKey: "RUT")
                 }
                 let jwids=(String(format: "%@", lstPlnDetail[0]["worked_with_code"] as! CVarArg)).replacingOccurrences(of: ",", with: ";")
                     .components(separatedBy: ";")

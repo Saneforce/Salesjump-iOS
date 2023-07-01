@@ -155,8 +155,12 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
             self.lblToMob.text=String(format: "%@", todayData["StkMob"] as! CVarArg)
             self.objOrderDetail = todayData["Items"] as! [AnyObject]
             var totAmt: Double = 0
-            for i in 0...objOrderDetail.count-1 {
-                let item: [String: Any] = objOrderDetail[i] as! [String : Any]
+//            for i in 0...objOrderDetail.count-1 {
+//                let item: [String: Any] = objOrderDetail[i] as! [String : Any]
+//                totAmt = totAmt + (item["value"] as! Double)
+//            }
+            for i in 0..<objOrderDetail.count {
+                let item: [String: Any] = objOrderDetail[i] as! [String: Any]
                 totAmt = totAmt + (item["value"] as! Double)
             }
             self.lblTotAmt.text=String(format: "Rs. %.02f", totAmt)

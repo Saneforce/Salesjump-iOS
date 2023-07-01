@@ -73,7 +73,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
     var lstUnitList: [AnyObject] = []
     var lstSchemList: [AnyObject] = []
     var lstRateList: [AnyObject] = []
-    
+    var indexToDeletesecond: String = ""
     var lstDistList: [AnyObject] = []
     var ProdImages:[String: Any] = [:]
     var BrandImages:[String: Any] = [:]
@@ -190,6 +190,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         tbPrvOrderProduct.dataSource=self
         tbDataSelect.delegate=self
         tbDataSelect.dataSource=self
+   
 
     }
     override func viewDidAppear(_ animated: Bool) {
@@ -403,9 +404,13 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
             }
             
         }else{
+            
+            
 
            
             let item: [String: Any]=lstProducts[indexPath.row] as! [String : Any]
+            print(lstProducts)
+            print(item)
             
             
             let id=String(format: "%@", item["id"] as! CVarArg)
@@ -616,6 +621,45 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
             closeWin(self)
         }
     }
+    
+    func setSecEditeOrder(){
+      var  cell: cellListItem
+         var secondPrd = ""
+        var matchingIDs = [String]()
+        print(lstProducts)
+      //  print(lstAllProducts)
+        let Additional_Prod_Dtls = Editobjcalls[0]["Additional_Prod_Code1"] as? String
+        let productArray = Additional_Prod_Dtls?.components(separatedBy: "#")
+        if let products = productArray {
+            for product in products {
+               
+                  
+                    let productData = product.components(separatedBy: "~")
+                    print(productData[0])
+                let price = productData[1].components(separatedBy: "$")[0]
+                let price1 = productData[1].components(separatedBy: "$")[1]
+                print(price)
+                print(price1)
+                secondPrd = productData[0].trimmingCharacters(in: .whitespacesAndNewlines)
+                print(secondPrd)
+           
+                if let indexToDelete = lstAllProducts.firstIndex(where: { String(format: "%@", $0["id"] as! CVarArg) == "\(secondPrd)" }) {
+                     indexToDeletesecond = "\(indexToDelete)"
+                    
+                    let idmatch: () =  matchingIDs.append(indexToDeletesecond)
+                    let secprice = (indexToDelete)
+                    print(idmatch)
+                    print(indexToDelete)
+                
+                } else {
+                    print("No Data")
+                }
+         
+            }
+        }
+ 
+    }
+    
     
     @IBAction func searchBytext(_ sender: Any) {
         
@@ -842,13 +886,19 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
     
     func updateQty(id: String,sUom: String,sUomNm: String,sUomConv: String,sNetUnt: String,sQty: String,ProdItem:[String: Any],refresh: Int){
         
-        let items: [AnyObject] = VisitData.shared.ProductCart.filter ({ (item) in
+        let items: [AnyObject] = VisitData.shared.ProductCart.filter ({(item) in
             if item["id"] as! String == id {
                 return true
             }
             return false
         })
-        
+        print(id)
+        print(sUom)
+        print(sUomNm)
+        print(sUomConv)
+        print(sNetUnt)
+        print(sQty)
+        print(refresh)
         print(ProdItem)
         
         let TotQty: Double = Double((sQty as! NSString).intValue * (sUomConv as! NSString).intValue)
@@ -1217,7 +1267,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
                             }
                         }
                         self.Editobjcalls = json
-                    
+                        setSecEditeOrder()
                     }
                 case .failure(let error):
                     Toast.show(message: error.errorDescription!)
@@ -1227,7 +1277,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         // The optional value is nil
         print("Product is nil")
     }
-            
+       
         }
     
      

@@ -21,7 +21,6 @@ class LeaveForm: IViewController, UITableViewDelegate,
     @IBOutlet weak var lblNoDays: UILabel!
     @IBOutlet weak var lblLvlTyp: UILabel!
     @IBOutlet weak var calendar: FSCalendar!
-    @IBOutlet weak var calendar2: FSCalendar!
     @IBOutlet weak var txSearchSel: UITextField!
     @IBOutlet weak var txReason: UITextView!
     @IBOutlet weak var btnBack: UIImageView!
@@ -91,8 +90,7 @@ class LeaveForm: IViewController, UITableViewDelegate,
         LeaveAvailability.dataSource=self
         calendar.delegate=self
         calendar.dataSource=self
-        calendar2.delegate=self
-        calendar2.dataSource=self
+      
         let formatter = DateFormatter()
         //formatter.dateFormat = "dd/MM/yyyy"
 //        lblFDate.text = formatter.string(from: Date())
@@ -209,7 +207,7 @@ class LeaveForm: IViewController, UITableViewDelegate,
            formatter.dateFormat = "yyyy/MM/dd"
             sDOT = formatter.string(from: date)
             TDate = date
-            
+            //calendar.reloadData()
 
             datediff()
         }
@@ -228,11 +226,11 @@ class LeaveForm: IViewController, UITableViewDelegate,
                     }
                    
                    
-                    return formatter.date(from: "1900/01/01")!
+                   
                 }
        
-
-       return Date()
+        return formatter.date(from: "1900/01/01")!
+       //return Date()
     }
 
     
@@ -344,13 +342,13 @@ class LeaveForm: IViewController, UITableViewDelegate,
                                 return
                             }
                         }
-                        let jsonString = "[{\"LeaveForm\":{\"Leave_Type\":\"'" + self.sLvlType + "'\",\"From_Date\":\"'" + self.sDOF + "'\",\"To_Date\":\"'" + self.sDOT + "'\",\"Reason\":\"'" + self.txReason.text! + "'\",\"eKey\":\"" + self.eKey + "\",\"address\":\"''\",\"No_of_Days\":\"''\",\"halfday\":\"''\"}}]"
+                        let jsonString = "[{\"LeaveForm_New\":{\"Leave_Type\":\"'" + self.sLvlType + "'\",\"From_Date\":\"'" + self.sDOF + "'\",\"To_Date\":\"'" + self.sDOT + "'\",\"Reason\":\"'" + self.txReason.text! + "'\",\"address\":\"''\",\"No_of_Days\":1,\"halfday\":\"''\"}}]"
                         let params: Parameters = [
                                             "data": jsonString //"["+jsonString+"]"//
                                         ]
                         print(params)
                 
-                        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+"dcr/save&divisionCode="+self.DivCode+"&rSF="+self.SFCode+"&sfCode="+self.SFCode, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
+                        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"dcr/save&divisionCode="+self.DivCode+"&rSF="+self.SFCode+"&sfCode="+self.SFCode, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
                             AFdata in
                             self.LoadingDismiss()
                             switch AFdata.result
@@ -404,17 +402,8 @@ class LeaveForm: IViewController, UITableViewDelegate,
     func LeaveAvailabilityCheck(){
        let apiKey: String = "\(axn)&divisionCode=\(DivCode)&desig=\(Desig)&rSF=\(SFCode)&sfCode=\(SFCode)&State_Code=\(StateCode)&Year=2023&stateCode=\(StateCode)&rSF=\(SFCode)"
         
-        let aFormData: [String: Any] = [
-            "tableName":"vwactivity_report","coloumns":"[\"*\"]","today":1,"wt":1,"orderBy":"[\"activity_date asc\"]","desig":"mgr"
-        ]
-       // print(aFormData)
-        let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
-        let jsonString = String(data: jsonData!, encoding: .utf8)!
-        let params: Parameters = [
-            "data": jsonString
-        ]
-        
-        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+       
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
             AFdata in
             switch AFdata.result
             {

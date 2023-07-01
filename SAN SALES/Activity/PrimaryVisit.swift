@@ -73,6 +73,9 @@ class PrimaryVisit: IViewController, UITableViewDelegate, UITableViewDataSource,
     var DivCode: String = ""
     var eKey: String = ""
     var productData1 : String?
+    var Location : String = ""
+    var sImgItems:String = ""
+    var sAddress: String = ""
     
     override func viewDidLoad() {
         
@@ -300,6 +303,7 @@ class PrimaryVisit: IViewController, UITableViewDelegate, UITableViewDataSource,
             VisitData.shared.PayValue = self.txCollectAmt.text as! String
             LocationService.sharedInstance.getNewLocation(location: { location in
                 let sLocation: String = location.coordinate.latitude.description + ":" + location.coordinate.longitude.description
+                self.Location = sLocation
                 lazy var geocoder = CLGeocoder()
                 var sAddress: String = ""
                 geocoder.reverseGeocodeLocation(location) { (placemarks, error) in
@@ -315,11 +319,11 @@ class PrimaryVisit: IViewController, UITableViewDelegate, UITableViewDataSource,
                                 }
                             }
                             /*let placemark = placemarks?[0]
-                            let Addess=placemark?.debugDescription.components(separatedBy:"@")
+                             let Addess=placemark?.debugDescription.components(separatedBy:"@")
+                             
+                             
+                             sAddress = "\(placemark?.subThoroughfare ?? ""), \(placemark?.thoroughfare ?? ""), \(placemark?.locality ?? ""), \(placemark?.subLocality ?? ""), \(placemark?.administrativeArea ?? ""), \(placemark?.postalCode ?? ""), \(placemark?.country ?? "")"*/
                             
-                            
-                            sAddress = "\(placemark?.subThoroughfare ?? ""), \(placemark?.thoroughfare ?? ""), \(placemark?.locality ?? ""), \(placemark?.subLocality ?? ""), \(placemark?.administrativeArea ?? ""), \(placemark?.postalCode ?? ""), \(placemark?.country ?? "")"*/
-                                            
                         }
                     }
                     self.ShowLoading(Message: "Data Submitting Please wait...")
@@ -332,34 +336,7 @@ class PrimaryVisit: IViewController, UITableViewDelegate, UITableViewDataSource,
                             sImgItems = sImgItems + "{\"imgurl\":\"'" + (item["FileName"]  as! String) + "'\",\"title\":\"''\",\"remarks\":\"''\",\"f_key\":{\"Activity_Report_Code\":\"Activity_Report_APP\"}}"
                         }
                     }
-                    let jsonString = "[{\"Activity_Report_APP\":{\"Worktype_code\":\"'" + (self.lstPlnDetail[0]["worktype"] as! String) + "'\",\"Town_code\":\"'" + (self.lstPlnDetail[0]["clusterid"] as! String) + "'\",\"RateEditable\":\"''\",\"dcr_activity_date\":\"'" + VisitData.shared.cInTime + "'\",\"Daywise_Remarks\":\"" + VisitData.shared.VstRemarks.name + "\",\"eKey\":\"" + self.eKey + "\",\"rx\":\"'1'\",\"rx_t\":\"''\",\"DataSF\":\"'" + self.DataSF + "'\"}},{\"Activity_Stockist_Report\":{\"Stockist_POB\":\"" + VisitData.shared.PayValue + "\",\"Worked_With\":\"''\",\"location\":\"'" + sLocation + "'\",\"geoaddress\":\"" + sAddress + "\",\"stockist_code\":\"'" + VisitData.shared.CustID + "'\",\"superstockistid\":\"''\",\"Stk_Meet_Time\":\"'" + VisitData.shared.cInTime + "'\",\"modified_time\":\"'" + VisitData.shared.cInTime + "'\",\"date_of_intrument\":\"" + VisitData.shared.DOP.id + "\",\"intrumenttype\":\"" + VisitData.shared.PayType.id + "\",\"orderValue\":\"0\",\"Aob\":0,\"CheckinTime\":\"" + VisitData.shared.cInTime + "\",\"CheckoutTime\":\"" + VisitData.shared.cOutTime + "\",\"f_key\":{\"Activity_Report_Code\":\"'Activity_Report_APP'\"},\"PhoneOrderTypes\":" + VisitData.shared.OrderMode.id + "}},{\"Activity_Stk_POB_Report\":[]},{\"Activity_Stk_Sample_Report\":[]},{\"Activity_Event_Captures\":[" + sImgItems +  "]},{\"PENDING_Bills\":[]},{\"Compititor_Product\":[]}]"
-                    
-                    let params: Parameters = [
-                        "data": jsonString //"["+jsonString+"]"//
-                    ]
-                    print(params)
-                    AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+"dcr/save&divisionCode="+self.DivCode+"&rSF="+self.SFCode+"&sfCode="+self.SFCode, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
-                        AFdata in
-                        self.LoadingDismiss()
-                        switch AFdata.result
-                        {
-                           
-                        case .success(let value):
-                            if let json = value as? [String: Any] {
-                                VisitData.shared.clear()
-                                Toast.show(message: "Call Visit has been submitted successfully", controller: self)
-                                let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
-                                UIApplication.shared.windows.first?.rootViewController = viewController
-                                UIApplication.shared.windows.first?.makeKeyAndVisible()
-                            }
-                        case .failure(let error):
-                            let alert = UIAlertController(title: "Information", message: error.errorDescription, preferredStyle: .alert)
-                            alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
-                                return
-                            })
-                            self.present(alert, animated: true)
-                        }
-                    }
+               
                 }
             }, error:{ errMsg in
                 self.LoadingDismiss()
@@ -376,6 +353,47 @@ class PrimaryVisit: IViewController, UITableViewDelegate, UITableViewDataSource,
             return
         })
         self.present(alert, animated: true)
+        subcall()
+    }
+    func subcall() {
+        let sLocation = Location
+        
+        let jsonString = "[{\"Activity_Report_APP\":{\"Worktype_code\":\"'" + (self.lstPlnDetail[0]["worktype"] as! String) + "'\",\"Town_code\":\"'" + (self.lstPlnDetail[0]["clusterid"] as! String) + "'\",\"RateEditable\":\"''\",\"dcr_activity_date\":\"'" + VisitData.shared.cInTime + "'\",\"Daywise_Remarks\":\"" + VisitData.shared.VstRemarks.name + "\",\"eKey\":\"" + self.eKey + "\",\"rx\":\"'1'\",\"rx_t\":\"''\",\"DataSF\":\"'" + self.DataSF + "'\"}},{\"Activity_Stockist_Report\":{\"Stockist_POB\":\"" + VisitData.shared.PayValue + "\",\"Worked_With\":\"''\",\"location\":\"'" + sLocation + "'\",\"geoaddress\":\"" + sAddress + "\",\"stockist_code\":\"'" + VisitData.shared.CustID + "'\",\"superstockistid\":\"''\",\"Stk_Meet_Time\":\"'" + VisitData.shared.cInTime + "'\",\"modified_time\":\"'" + VisitData.shared.cInTime + "'\",\"date_of_intrument\":\"" + VisitData.shared.DOP.id + "\",\"intrumenttype\":\"" + VisitData.shared.PayType.id + "\",\"orderValue\":\"0\",\"Aob\":0,\"CheckinTime\":\"" + VisitData.shared.cInTime + "\",\"CheckoutTime\":\"" + VisitData.shared.cOutTime + "\",\"f_key\":{\"Activity_Report_Code\":\"'Activity_Report_APP'\"},\"PhoneOrderTypes\":" + VisitData.shared.OrderMode.id + "}},{\"Activity_Stk_POB_Report\":[]},{\"Activity_Stk_Sample_Report\":[]},{\"Activity_Event_Captures\":[" + sImgItems +  "]},{\"PENDING_Bills\":[]},{\"Compititor_Product\":[]}]"
+        
+        let params: Parameters = [
+            "data": jsonString //"["+jsonString+"]"//
+        ]
+        print(params)
+        
+       
+            let sessionManager = Session(configuration: URLSessionConfiguration.default)
+
+            sessionManager.session.configuration.httpMaximumConnectionsPerHost = 1
+            
+        
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+"dcr/save&divisionCode="+self.DivCode+"&rSF="+self.SFCode+"&sfCode="+self.SFCode, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
+            AFdata in
+            self.LoadingDismiss()
+            switch AFdata.result
+            {
+                
+            case .success(let value):
+                if let json = value as? [String: Any] {
+                    VisitData.shared.clear()
+                    Toast.show(message: "Call Visit has been submitted successfully", controller: self)
+                    let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
+                    UIApplication.shared.windows.first?.rootViewController = viewController
+                    UIApplication.shared.windows.first?.makeKeyAndVisible()
+                }
+            case .failure(let error):
+                let alert = UIAlertController(title: "Information", message: error.errorDescription, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
+                    return
+                })
+                self.present(alert, animated: true)
+            }
+        }
+        
     }
     
     @IBAction func setSelValues(_ sender: Any) {
