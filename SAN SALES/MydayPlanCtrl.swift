@@ -37,8 +37,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
     @IBOutlet weak var btnSave: UIButton!
     @IBOutlet weak var btnBack: UIImageView!
     @IBOutlet weak var txRem: UITextView!
-    
-    
+    @IBOutlet weak var Applylev: UIImageView!
     @IBOutlet weak var vwWTCtrl: UIView!
     @IBOutlet weak var vwHQCtrl: UIView!
     @IBOutlet weak var vwDistCtrl: UIView!
@@ -123,6 +122,8 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
             lstWType = list
         }
         
+        
+        
         if let DistData = LocalStoreage.string(forKey: "Distributors_Master_"+SFCode),
            let list = GlobalFunc.convertToDictionary(text:  DistData) as? [AnyObject] {
             lstDist = list;
@@ -137,8 +138,8 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         if let JointWData = LocalStoreage.string(forKey: "Jointwork_Master"),
            let list = GlobalFunc.convertToDictionary(text:  JointWData) as? [AnyObject] {
             lstJoint = list;
+            print("JointWData  ___________________________")
         }
-        
         
         
         if let HQData = LocalStoreage.string(forKey: "HQ_Master"),
@@ -150,18 +151,22 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                 let item: [String: Any]=lstHQs[0] as! [String : Any]
                 name = item["name"] as! String
                 id=String(format: "%@", item["id"] as! CVarArg)
+          
             }
             if(lstHQs.count < 2){
                 lblHQ.text = name
-                let DistData: String=LocalStoreage.string(forKey: "Distributors_Master_"+id)!
-                let RouteData: String=LocalStoreage.string(forKey: "Route_Master_"+id)!
-                if let list = GlobalFunc.convertToDictionary(text: DistData) as? [AnyObject] {
+                
+              
+                if let DistData = LocalStoreage.string(forKey: "Distributors_Master_"+id),
+                   let list = GlobalFunc.convertToDictionary(text:  DistData) as? [AnyObject] {
                     lstDist = list;
+                    print("DistData  ___________________________")
                 }
-                if let list = GlobalFunc.convertToDictionary(text: RouteData) as? [AnyObject] {
+                if let RouteData: String=LocalStoreage.string(forKey: "Route_Master_"+id),
+                 let list = GlobalFunc.convertToDictionary(text: RouteData) as? [AnyObject] {
                     lstAllRoutes = list
                     lstRoutes = list
-                }
+                    print("RouteData  ___________________________")                }
             }
             else
             {
@@ -230,8 +235,16 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         
         tbJWKSelect.delegate=self
         tbJWKSelect.dataSource=self
+        Applylev.addTarget(target: self, action: #selector(levedata))
         
         setTodayPlan()
+    }
+    @objc func levedata () {
+        let storyboard = UIStoryboard(name: "AdminForms", bundle: nil)
+        let viewController = storyboard.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
+        let myDyPln = storyboard.instantiateViewController(withIdentifier: "sbLeaveFrm") as! LeaveForm
+        viewController.setViewControllers([myDyPln], animated: true)
+        UIApplication.shared.windows.first?.rootViewController = viewController
     }
     
     @objc func TimeDisplay()

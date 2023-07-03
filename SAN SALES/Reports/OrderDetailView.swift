@@ -123,6 +123,7 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
             {
                
                 case .success(let value):
+                print(value)
                 guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
                     print("Error: Cannot convert JSON object to Pretty JSON data")
                     return

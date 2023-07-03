@@ -52,6 +52,8 @@ class LeaveForm: IViewController, UITableViewDelegate,
     var sLvlType: String = "",sDOF = "",sDOT = ""
     var FDate: Date = Date(),TDate: Date = Date()
     var eKey: String = ""
+    var NoofDays : String = ""
+    var NoLeaveAvil : String = ""
     let LocalStoreage = UserDefaults.standard
     override func viewDidLoad() {
         
@@ -140,9 +142,20 @@ class LeaveForm: IViewController, UITableViewDelegate,
         let item: [String: Any]=lObjSel[indexPath.row] as! [String : Any]
         let name=item["name"] as! String
         let id=String(format: "%@", item["id"] as! CVarArg)
+        
+        
         if SelMode == "LTYP" {
-            lblLvlTyp.text = name
-            sLvlType = id
+          let NodayLv = NoofDays
+            let avil = NoLeaveAvil
+            
+            print(NodayLv)
+            print(avil)
+            if avil > NodayLv {
+                Toast.show(message: "CL Leave count Exceeded,Available \(avil)", controller: self)
+            }else{
+                lblLvlTyp.text = name
+                sLvlType = id
+            }
         }
         //outletData.updateValue(lItem(id: id, name: name), forKey: SelMode)
         closeWin(self)
@@ -379,7 +392,7 @@ class LeaveForm: IViewController, UITableViewDelegate,
             },error: {_ in
                 
             })
-                                                          
+
         })
         alert.addAction(UIAlertAction(title: "Cancel", style: .destructive) { _ in
             return
@@ -421,6 +434,9 @@ class LeaveForm: IViewController, UITableViewDelegate,
                     }
                     print(prettyPrintedJson)
                     self.LeaveAvailabilitydata = json
+                    var LeaveAvil = json[0]["LeaveValue"]
+                    print(LeaveAvil!!)
+                    self.NoLeaveAvil =  String(LeaveAvil as! Int)
                     //strMasList.append(mnuItem.init(MasId: 1, MasName: "Start Time", MasLbl:VisitData.shared.cInTime))
                     for item in json {
                         LeveDet.append(mnuItem(levtype: item["Leave_Name"] as! String, Eligibility:item["LeaveValue"] as! Int, Taken: item["LeaveTaken"] as! Int, Available: item["LeaveAvailability"] as! Int))
@@ -446,6 +462,8 @@ class LeaveForm: IViewController, UITableViewDelegate,
         print(components.day!<0)
        
         lblNoDays.text = sdys
+        NoofDays = String(describing: components.day!+1)
+        print(String(describing: components.day!+1))
         if FDate > TDate{
             lblNoDays.text = "0 Day"
         }
@@ -465,3 +483,4 @@ class LeaveForm: IViewController, UITableViewDelegate,
     
    
 }
+//ticket No = 0028008
