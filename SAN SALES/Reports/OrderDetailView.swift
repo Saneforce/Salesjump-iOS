@@ -39,8 +39,9 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
     var CusCount: String = ""
     
     let axn="get/vwOrderDet"
+    let axbDet = "get/vwVstDetNative"
     
-    var SFCode: String = "", StateCode: String = "", DivCode: String = "",StrRptDt: String="",CusCd: String = "",StrMode: String="",OrdTotal: Float = 0
+    var SFCode: String = "", StateCode: String = "", DivCode: String = "",StrRptDt: String="",CusCd: String = "",StrMode: String="",OrdTotal: Float = 0,Desig: String=""
     
     var objOrderDetails: [AnyObject]=[]
     var objOrderDetail: [AnyObject]=[]
@@ -73,6 +74,7 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
             let cell:cellListItem = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
             if tbOrderDetail == tableView {
                 let item: [String: Any] = objOrderDetail[indexPath.row] as! [String : Any]
+                print(item)
                 cell.lblText?.text = item["PName"] as? String
                 cell.lblActRate?.text = String(format: "%.02f", item["Rate"] as! Double)
                 cell.lblUOM?.text = String(format: "%@",item["Unit_Name"] as! String)
@@ -105,6 +107,7 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
         SFCode = prettyJsonData["sfCode"] as? String ?? ""
         StateCode = prettyJsonData["State_Code"] as? String ?? ""
         DivCode = prettyJsonData["divisionCode"] as? String ?? ""
+        Desig=prettyJsonData["desigCode"] as? String ?? ""
     }
     func getOrderDetail(){
         let apiKey: String = "\(axn)&divisionCode=\(DivCode)&rSF=\(SFCode)&rptDt=\(StrRptDt)&CusCd=\(CusCd)&sfCode=\(SFCode)&State_Code=\(StateCode)&Mode=\(StrMode)"
@@ -134,12 +137,14 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                 }
                 if let list = GlobalFunc.convertToDictionary(text: prettyPrintedJson) as? [AnyObject] {
                     self.objOrderDetails = list;
+                print(list)
                     RefreshData(indx: 0)
                 }
                case .failure(let error):
                 Toast.show(message: error.errorDescription!, controller: self)
             }
         }
+        ViewOrder()
     }
     func RefreshData(indx: Int){
         if self.objOrderDetails.count < 1 { return }
@@ -178,6 +183,45 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
             ContentHeight.constant = CGFloat(800+(60 * self.objOrderDetail.count
                                          )+(30 * self.objOfferDetail.count
                                            ))
+        }
+    }
+    
+    func ViewOrder(){
+        let apiKey: String = "\(axbDet)&desig=\(Desig)&divisionCode=\(DivCode)&ACd=SEF3-357&rSF=\(SFCode)&typ=1&sfCode=\(SFCode)&State_Code=\(StateCode)"
+
+        
+        let aFormData: [String: Any] = [
+            "orderBy":"[\"name asc\"]","desig":"mgr"
+        ]
+       // print(aFormData)
+        let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
+        let jsonString = String(data: jsonData!, encoding: .utf8)!
+        let params: Parameters = [
+            "data": jsonString
+        ]
+        
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+            AFdata in
+            switch AFdata.result
+            {
+                
+            case .success(let value):
+                print(value)
+                if let json = value as? [AnyObject] {
+                    guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
+                        print("Error: Cannot convert JSON object to Pretty JSON data")
+                        return
+                    }
+                    guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+                        print("Error: Could print JSON in String")
+                        return
+                    }
+                    print(prettyPrintedJson)
+                    print(json)
+                }
+            case .failure(let error):
+                Toast.show(message: error.errorDescription!)  //, controller: self
+            }
         }
     }
     @objc private func GotoHome() {

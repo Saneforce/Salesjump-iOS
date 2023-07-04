@@ -403,7 +403,39 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
                 cell.lblSellRate.text = String(format: "Rs. %.02f", rate)
             }
             
-        }else{
+        }
+            else{
+            
+            var secondPrd = ""
+           var matchingIDs = [String]()
+           print(lstProducts)
+         //  print(lstAllProducts)
+           let Additional_Prod_Dtls = Editobjcalls[0]["Additional_Prod_Code1"] as? String
+           let productArray = Additional_Prod_Dtls?.components(separatedBy: "#")
+           if let products = productArray {
+               for product in products {
+                  
+                     
+                       let productData = product.components(separatedBy: "~")
+                       print(productData[0])
+                   let price = productData[1].components(separatedBy: "$")[0]
+                   let price1 = productData[1].components(separatedBy: "$")[1]
+                   print(price)
+                   print(price1)
+                   secondPrd = productData[0].trimmingCharacters(in: .whitespacesAndNewlines)
+                   print(secondPrd)
+              
+                   if (lstAllProducts.firstIndex(where: { String(format: "%@", $0["id"] as! CVarArg) == "\(secondPrd)" }) != nil) {
+                       cell.txtQty.text = String(price1)
+                       cell.lblMRP.text = String(price)
+
+                      
+                   } else {
+                       print("No Data")
+                   }
+            
+               }
+           }
             
             
 
@@ -622,43 +654,43 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         }
     }
     
-    func setSecEditeOrder(){
-      var  cell: cellListItem
-         var secondPrd = ""
-        var matchingIDs = [String]()
-        print(lstProducts)
-      //  print(lstAllProducts)
-        let Additional_Prod_Dtls = Editobjcalls[0]["Additional_Prod_Code1"] as? String
-        let productArray = Additional_Prod_Dtls?.components(separatedBy: "#")
-        if let products = productArray {
-            for product in products {
-               
-                  
-                    let productData = product.components(separatedBy: "~")
-                    print(productData[0])
-                let price = productData[1].components(separatedBy: "$")[0]
-                let price1 = productData[1].components(separatedBy: "$")[1]
-                print(price)
-                print(price1)
-                secondPrd = productData[0].trimmingCharacters(in: .whitespacesAndNewlines)
-                print(secondPrd)
-           
-                if let indexToDelete = lstAllProducts.firstIndex(where: { String(format: "%@", $0["id"] as! CVarArg) == "\(secondPrd)" }) {
-                     indexToDeletesecond = "\(indexToDelete)"
-                    
-                    let idmatch: () =  matchingIDs.append(indexToDeletesecond)
-                    let secprice = (indexToDelete)
-                    print(idmatch)
-                    print(indexToDelete)
-                
-                } else {
-                    print("No Data")
-                }
-         
-            }
-        }
- 
-    }
+//    func setSecEditeOrder(){
+//      var  cell: cellListItem
+//         var secondPrd = ""
+//        var matchingIDs = [String]()
+//        print(lstProducts)
+//      //  print(lstAllProducts)
+//        let Additional_Prod_Dtls = Editobjcalls[0]["Additional_Prod_Code1"] as? String
+//        let productArray = Additional_Prod_Dtls?.components(separatedBy: "#")
+//        if let products = productArray {
+//            for product in products {
+//
+//
+//                    let productData = product.components(separatedBy: "~")
+//                    print(productData[0])
+//                let price = productData[1].components(separatedBy: "$")[0]
+//                let price1 = productData[1].components(separatedBy: "$")[1]
+//                print(price)
+//                print(price1)
+//                secondPrd = productData[0].trimmingCharacters(in: .whitespacesAndNewlines)
+//                print(secondPrd)
+//
+//                if let indexToDelete = lstAllProducts.firstIndex(where: { String(format: "%@", $0["id"] as! CVarArg) == "\(secondPrd)" }) {
+//                    //cell.lblQty.text = price1
+//
+//                    let idmatch: () =  matchingIDs.append(indexToDeletesecond)
+//                    let secprice = (indexToDelete)
+//                    print(idmatch)
+//                    print(indexToDelete)
+//
+//                } else {
+//                    print("No Data")
+//                }
+//
+//            }
+//        }
+//
+//    }
     
     
     @IBAction func searchBytext(_ sender: Any) {
@@ -1267,7 +1299,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
                             }
                         }
                         self.Editobjcalls = json
-                        setSecEditeOrder()
+                       // setSecEditeOrder()
                     }
                 case .failure(let error):
                     Toast.show(message: error.errorDescription!)

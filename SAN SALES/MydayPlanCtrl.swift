@@ -240,11 +240,11 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         setTodayPlan()
     }
     @objc func levedata () {
-        let storyboard = UIStoryboard(name: "AdminForms", bundle: nil)
-        let viewController = storyboard.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
-        let myDyPln = storyboard.instantiateViewController(withIdentifier: "sbLeaveFrm") as! LeaveForm
-        viewController.setViewControllers([myDyPln], animated: true)
-        UIApplication.shared.windows.first?.rootViewController = viewController
+        let vc=self.storyboard?.instantiateViewController(withIdentifier: "sbMainmnu") as!  MainMenu
+        vc.modalPresentationStyle = .overCurrentContext
+        vc.modalTransitionStyle = .crossDissolve //.crossDissolve
+        
+        self.present(vc, animated: true, completion: nil)
     }
     
     @objc func TimeDisplay()
