@@ -29,8 +29,8 @@ class RptVisitDetail: IViewController, UITableViewDelegate, UITableViewDataSourc
     var SFCode: String = "", StateCode: String = "", DivCode: String = "",StrRptDt: String="",StrMode: String=""
     let LocalStoreage = UserDefaults.standard
     
-    var objVstDetail: [AnyObject]=[]
-    var objItmSmryDetail: [AnyObject]=[]
+    public static var objVstDetail: [AnyObject]=[]
+    public static var objItmSmryDetail: [AnyObject]=[]
     
     override func viewDidLoad() {
         lblDate.text = RptDate
@@ -50,8 +50,8 @@ class RptVisitDetail: IViewController, UITableViewDelegate, UITableViewDataSourc
         return 42
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if tableView==tbVstDetail { return objVstDetail.count }
-        if tableView==tbItemSumry { return objItmSmryDetail.count }
+        if tableView==tbVstDetail { return RptVisitDetail.objVstDetail.count }
+        if tableView==tbItemSumry { return RptVisitDetail.objItmSmryDetail.count }
         return 0
     }
     
@@ -59,7 +59,7 @@ class RptVisitDetail: IViewController, UITableViewDelegate, UITableViewDataSourc
         autoreleasepool {
         let cell:cellListItem = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
         if tbVstDetail == tableView {
-            let item: [String: Any] = objVstDetail[indexPath.row] as! [String : Any]
+            let item: [String: Any] = RptVisitDetail.objVstDetail[indexPath.row] as! [String : Any]
             cell.lblText?.text = item["OutletName"] as? String
             cell.lblTime?.text = item["VstTime"] as? String
             cell.lblActRate?.text = String(format: "Rs. %.02f", item["OrdVal"] as! Double)
@@ -70,7 +70,7 @@ class RptVisitDetail: IViewController, UITableViewDelegate, UITableViewDataSourc
             cell.btnViewDet.addTarget(target: self, action: #selector(ShowOrderDet(_:)))
         }
         if tbItemSumry == tableView {
-            let item: [String: Any] = objItmSmryDetail[indexPath.row] as! [String : Any]
+            let item: [String: Any] = RptVisitDetail.objItmSmryDetail[indexPath.row] as! [String : Any]
             cell.lblText?.text = item["PName"] as? String
             cell.lblQty?.text = String(format: "%i", item["Qty"] as! Int)
             cell.lblActRate?.text = String(format: "Rs. %.02f", item["Val"] as! Double)
@@ -120,16 +120,17 @@ class RptVisitDetail: IViewController, UITableViewDelegate, UITableViewDataSourc
                  
                     print(prettyPrintedJson)
                     if(StrMode == "VstPRet" || StrMode == "VstPDis"){
-                        self.objVstDetail = json.filter({(fitem) in
+                        RptVisitDetail.objVstDetail = json.filter({(fitem) in
                             return Bool(fitem["OrdVal"] as! Double > 0)
+                            
                         })
                     }else{
-                        self.objVstDetail = json
+                        RptVisitDetail.objVstDetail = json
                     }
                     tbVstDetail.reloadData()
-                    vstHeight.constant = CGFloat(70*self.objVstDetail.count)
+                    vstHeight.constant = CGFloat(70*RptVisitDetail.objVstDetail.count)
                     self.view.layoutIfNeeded()
-                    ContentHeight.constant = 100+CGFloat(55*self.objVstDetail.count)+CGFloat(42*self.objItmSmryDetail.count)
+                    ContentHeight.constant = 100+CGFloat(55*RptVisitDetail.objVstDetail.count)+CGFloat(42*RptVisitDetail.objItmSmryDetail.count)
                     self.view.layoutIfNeeded()
                 }
                case .failure(let error):
@@ -137,6 +138,7 @@ class RptVisitDetail: IViewController, UITableViewDelegate, UITableViewDataSourc
             }
         }
     }
+    
     func getItemSummary(){
         let apiKey: String = "\(axnsumry)&divisionCode=\(DivCode)&rSF=\(SFCode)&rptDt=\(StrRptDt)&sfCode=\(SFCode)&State_Code=\(StateCode)&Mode=\(StrMode)"
         let aFormData: [String: Any] = [
@@ -168,11 +170,11 @@ class RptVisitDetail: IViewController, UITableViewDelegate, UITableViewDataSourc
                  
                     print(prettyPrintedJson)
                     
-                    self.objItmSmryDetail = json
+                    RptVisitDetail.objItmSmryDetail = json
                     tbItemSumry.reloadData()
-                    itmSmryHeight.constant = CGFloat(42*self.objItmSmryDetail.count)
+                    itmSmryHeight.constant = CGFloat(42*RptVisitDetail.objItmSmryDetail.count)
                     self.view.layoutIfNeeded()
-                    ContentHeight.constant = 100+CGFloat(55*self.objVstDetail.count)+CGFloat(42*self.objItmSmryDetail.count)
+                    ContentHeight.constant = 100+CGFloat(55*RptVisitDetail.objVstDetail.count)+CGFloat(42*RptVisitDetail.objItmSmryDetail.count)
                     self.view.layoutIfNeeded()
                     print(ContentHeight.constant)
                     print(tbItemSumry)
@@ -190,7 +192,7 @@ class RptVisitDetail: IViewController, UITableViewDelegate, UITableViewDataSourc
         openOrderDetail(Mode: StrMode,indx: indx.row)
     }
     func openOrderDetail(Mode: String,indx: Int){
-        let item: [String: Any] = objVstDetail[indx] as! [String : Any]
+        let item: [String: Any] = RptVisitDetail.objVstDetail[indx] as! [String : Any]
         let vc=self.storyboard?.instantiateViewController(withIdentifier: "OrderDetailView") as!  OrderDetailView
         vc.RptDate = lblDate.text!
         vc.StrRptDt = StrRptDt

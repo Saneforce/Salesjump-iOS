@@ -406,36 +406,36 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         }
             else{
             
-            var secondPrd = ""
-           var matchingIDs = [String]()
-           print(lstProducts)
-         //  print(lstAllProducts)
-           let Additional_Prod_Dtls = Editobjcalls[0]["Additional_Prod_Code1"] as? String
-           let productArray = Additional_Prod_Dtls?.components(separatedBy: "#")
-           if let products = productArray {
-               for product in products {
-                  
-                     
-                       let productData = product.components(separatedBy: "~")
-                       print(productData[0])
-                   let price = productData[1].components(separatedBy: "$")[0]
-                   let price1 = productData[1].components(separatedBy: "$")[1]
-                   print(price)
-                   print(price1)
-                   secondPrd = productData[0].trimmingCharacters(in: .whitespacesAndNewlines)
-                   print(secondPrd)
-              
-                   if (lstAllProducts.firstIndex(where: { String(format: "%@", $0["id"] as! CVarArg) == "\(secondPrd)" }) != nil) {
-                       cell.txtQty.text = String(price1)
-                       cell.lblMRP.text = String(price)
-
-                      
-                   } else {
-                       print("No Data")
-                   }
-            
-               }
-           }
+//            var secondPrd = ""
+//           var matchingIDs = [String]()
+//           print(lstProducts)
+//         //  print(lstAllProducts)
+//           let Additional_Prod_Dtls = Editobjcalls[0]["Additional_Prod_Code1"] as? String
+//           let productArray = Additional_Prod_Dtls?.components(separatedBy: "#")
+//           if let products = productArray {
+//               for product in products {
+//                  
+//                     
+//                       let productData = product.components(separatedBy: "~")
+//                       print(productData[0])
+//                   let price = productData[1].components(separatedBy: "$")[0]
+//                   let price1 = productData[1].components(separatedBy: "$")[1]
+//                   print(price)
+//                   print(price1)
+//                   secondPrd = productData[0].trimmingCharacters(in: .whitespacesAndNewlines)
+//                   print(secondPrd)
+//              
+//                   if (lstAllProducts.firstIndex(where: { String(format: "%@", $0["id"] as! CVarArg) == "\(secondPrd)" }) != nil) {
+//                       cell.txtQty.text = String(price1)
+//                       cell.lblMRP.text = String(price)
+//
+//                      
+//                   } else {
+//                       print("No Data")
+//                   }
+//            
+//               }
+//           }
             
             
 

@@ -34,18 +34,37 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
     @IBOutlet weak var OfferHeight: NSLayoutConstraint!
     @IBOutlet weak var ContentHeight: NSLayoutConstraint!
     
+    struct viewDet: Codable {
+           let Prname: String
+           let rate: Int
+        let Cl : Int
+        let Free : Int
+        let Disc : Int
+        let Tax : Int
+        
+           let qty: Int
+           let value: Int
+       }
+       
+       var detail: [viewDet] = []
+
+    
     var RptDate: String = ""
     var RptCode: String = ""
     var CusCount: String = ""
     
     let axn="get/vwOrderDet"
     let axbDet = "get/vwVstDetNative"
+    let axn_Acd_code = "get/DayReport"
     
     var SFCode: String = "", StateCode: String = "", DivCode: String = "",StrRptDt: String="",CusCd: String = "",StrMode: String="",OrdTotal: Float = 0,Desig: String=""
     
     var objOrderDetails: [AnyObject]=[]
     var objOrderDetail: [AnyObject]=[]
     var objOfferDetail: [AnyObject]=[]
+    var dayrepDict: [AnyObject]=[]
+    var Acodes: String = ""
+    var Order_Det:[String: Any] = [:]
     let LocalStoreage = UserDefaults.standard
     
     override func viewDidLoad() {
@@ -57,6 +76,7 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
         tbOrderDetail.dataSource=self
         tbZeroOrd.delegate=self
         tbZeroOrd.dataSource=self
+        
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if tbOrderDetail == tableView { return 55}
@@ -127,24 +147,26 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                
                 case .success(let value):
                 print(value)
-                guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
-                    print("Error: Cannot convert JSON object to Pretty JSON data")
-                    return
-                }
-                guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
-                    print("Error: Could print JSON in String")
-                    return
-                }
-                if let list = GlobalFunc.convertToDictionary(text: prettyPrintedJson) as? [AnyObject] {
-                    self.objOrderDetails = list;
-                print(list)
-                    RefreshData(indx: 0)
-                }
+                    guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
+                        print("Error: Cannot convert JSON object to Pretty JSON data")
+                        return
+                    }
+                    guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+                        print("Error: Could print JSON in String")
+                        return
+                    }
+                    if let list = GlobalFunc.convertToDictionary(text: prettyPrintedJson) as? [AnyObject] {
+                        self.objOrderDetails = list;
+                        print(list)
+                    print(list)
+                        RefreshData(indx: 0)
+                    }
+             
                case .failure(let error):
                 Toast.show(message: error.errorDescription!, controller: self)
             }
         }
-        ViewOrder()
+        ViewOrder((Any).self)
     }
     func RefreshData(indx: Int){
         if self.objOrderDetails.count < 1 { return }
@@ -186,45 +208,117 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
         }
     }
     
-    func ViewOrder(){
-        let apiKey: String = "\(axbDet)&desig=\(Desig)&divisionCode=\(DivCode)&ACd=SEF3-357&rSF=\(SFCode)&typ=1&sfCode=\(SFCode)&State_Code=\(StateCode)"
+    
+//    func ViewOrder(){
+//        let apiKey: String = "\(axn_Acd_code)&rptDt=\(StrRptDt)&divisionCode=\(DivCode)&rSF=\(SFCode)&sfCode=\(SFCode)&State_Code=\(StateCode)"
+//
+//
+//        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+//            AFdata in
+//            switch AFdata.result
+//            {
+//
+//            case .success(let value):
+//                print(value)
+//                if let json = value as? [String:AnyObject] {
+//                    guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
+//                        print("Error: Cannot convert JSON object to Pretty JSON data")
+//                        return
+//                    }
+//                    guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+//                        print("Error: Could print JSON in String")
+//                        return
+//                    }
+//                    print(prettyPrintedJson)
+//                    dayrepDict = json["dayrep"] as! [AnyObject]
+//                    var item = dayrepDict
+//                    print(item)
+//                    for item2 in item {
+//                      var Acod = item2["ACode"]
+//                        Acodes = Acod as! String
+//                        print(Acodes)
+//                        if let Acod = item2["ACode"]{
+//                            print(Acod as Any)
+//                            if let Acod1 = Acod {
+//                                print(Acod1)
+//
+//                        } else {
+//                                       print("No Data")
+//                                   }
+//
+//                    } else {
+//                                   print("Value is nil or not a String")
+//                               }
+//
+//                    }
+//
+//
+//
+//                }
+//            case .failure(let error):
+//                Toast.show(message: error.errorDescription!)  //, controller: self
+//            }
+//        }
+//    }
+    
+    func ViewOrder(_ sender: Any){
+        
+        var item = RptVisitDetail.objVstDetail
+        print(item)
 
         
-        let aFormData: [String: Any] = [
-            "orderBy":"[\"name asc\"]","desig":"mgr"
-        ]
-       // print(aFormData)
-        let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
-        let jsonString = String(data: jsonData!, encoding: .utf8)!
-        let params: Parameters = [
-            "data": jsonString
-        ]
-        
-        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
-            AFdata in
-            switch AFdata.result
-            {
-                
-            case .success(let value):
-                print(value)
-                if let json = value as? [AnyObject] {
-                    guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
-                        print("Error: Cannot convert JSON object to Pretty JSON data")
-                        return
+                let apiKey: String = "\(axbDet)&desig=\(Desig)&divisionCode=\(DivCode)&ACd=SEF1-101&rSF=\(SFCode)&typ=1&sfCode=\(SFCode)&State_Code=\(StateCode)"
+
+            
+            let aFormData: [String: Any] = [
+                "orderBy":"[\"name asc\"]","desig":"mgr"
+            ]
+           // print(aFormData)
+            let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
+            let jsonString = String(data: jsonData!, encoding: .utf8)!
+            let params: Parameters = [
+                "data": jsonString
+            ]
+            
+            AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+                AFdata in
+                switch AFdata.result
+                {
+                    
+                case .success(let value):
+                    print(value)
+                    if let json = value as? [AnyObject] {
+                        guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
+                            print("Error: Cannot convert JSON object to Pretty JSON data")
+                            return
+                        }
+                        guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+                            print("Error: Could print JSON in String")
+                            return
+                        }
+                        print(prettyPrintedJson)
+                        print(json)
+                        let Additional_Prod_Dtls = json[0]["productList"] as! [AnyObject]
+                        //dayrepDict = json["dayrep"] as! [AnyObject]
+                        print(Additional_Prod_Dtls)
+                        for Item2 in Additional_Prod_Dtls {
+                                  print(Item2)
+//                                 detail.append(viewDet(Prname: Item2["Product_Name"] as! String, rate: Item2["Rate"] as! Int, Cl: Item2[""], Free: <#T##Int#>, Disc: <#T##Int#>, Tax: <#T##Int#>, qty: <#T##Int#>, value: <#T##Int#>))
+                              }
+                        
                     }
-                    guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
-                        print("Error: Could print JSON in String")
-                        return
-                    }
-                    print(prettyPrintedJson)
-                    print(json)
+                case .failure(let error):
+                    Toast.show(message: error.errorDescription!)  //, controller: self
                 }
-            case .failure(let error):
-                Toast.show(message: error.errorDescription!)  //, controller: self
             }
-        }
     }
+    
+    
+   
     @objc private func GotoHome() {
         navigationController?.popViewController(animated: true)
     }
 }
+
+
+
