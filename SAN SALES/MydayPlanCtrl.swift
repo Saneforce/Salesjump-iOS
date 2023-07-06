@@ -133,6 +133,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
            let list = GlobalFunc.convertToDictionary(text:  RouteData) as? [AnyObject] {
             lstAllRoutes = list
             lstRoutes = list
+            print(list)
         }
         
         if let JointWData = LocalStoreage.string(forKey: "Jointwork_Master"),
@@ -435,6 +436,8 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         if(lstPlnDetail.count < 1){ return }
         let wtid=String(format: "%@", lstPlnDetail[0]["worktype"] as! CVarArg)
         if let indexToDelete = lstWType.firstIndex(where: { String(format: "%@", $0["id"] as! CVarArg) == wtid }) {
+            print(indexToDelete)
+            print(lstWType)
 
             let typ: String = lstWType[indexToDelete]["FWFlg"] as! String
             lblWorktype.text = lstWType[indexToDelete]["name"] as? String

@@ -84,25 +84,36 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
         return 42
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if tableView==tbOrderDetail { return objOrderDetail.count }
+        //if tableView==tbOrderDetail { return objOrderDetail.count }
+        if tableView==tbOrderDetail {return detail.count}
         if tableView==tbZeroOrd { return objOfferDetail.count }
         return 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
         autoreleasepool {
             let cell:cellListItem = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
             if tbOrderDetail == tableView {
-                let item: [String: Any] = objOrderDetail[indexPath.row] as! [String : Any]
-                print(item)
-                cell.lblText?.text = item["PName"] as? String
-                cell.lblActRate?.text = String(format: "%.02f", item["Rate"] as! Double)
-                cell.lblUOM?.text = String(format: "%@",item["Unit_Name"] as! String)
-                cell.lblQty?.text = String(format: "%i", item["Qty"] as! Int)
-                cell.lblValue?.text = String(format: "%.02f", (item["Qty"] as! Double) * (item["Rate"] as! Double) as! Double)
-                cell.lblDisc?.text = String(format: "%.02f", item["Disc"] as! Double)
-                cell.lblTax?.text = String(format: "%.02f", item["Tax"] as! Double)
-                cell.lblAmt?.text = String(format: "%.02f", item["value"] as! Double)
+                //                let item: [String: Any] = objOrderDetail[indexPath.row] as! [String : Any]
+                //                print(item)
+                //                cell.lblText?.text = item["PName"] as? String
+                //                cell.lblActRate?.text = String(format: "%.02f", item["Rate"] as! Double)
+                //                cell.lblUOM?.text = String(format: "%@",item["Unit_Name"] as! String)
+                //                cell.lblQty?.text = String(format: "%i", item["Qty"] as! Int)
+                //                cell.lblValue?.text = String(format: "%.02f", (item["Qty"] as! Double) * (item["Rate"] as! Double) as! Double)
+                //                cell.lblDisc?.text = String(format: "%.02f", item["Disc"] as! Double)
+                //                cell.lblTax?.text = String(format: "%.02f", item["Tax"] as! Double)
+                //                cell.lblAmt?.text = String(format: "%.02f", item["value"] as! Double)
+                cell.lblText.text = String(detail[indexPath.row].Prname)
+                cell.lblActRate.text = String(detail[indexPath.row].rate)
+                cell.lblQty.text = String(detail[indexPath.row].qty)
+                cell.lblUOM.text =  String(detail[indexPath.row].Cl)
+                cell.lblDisc.text = String(detail[indexPath.row].Disc)
+                cell.lblTax.text = String(detail[indexPath.row].Tax)
+                cell.lblAmt.text =  String(detail[indexPath.row].value)
+                cell.lblValue.text = "0.00"
+                
             }
             if tbZeroOrd == tableView {
                 let item: [String: Any] = objOfferDetail[indexPath.row] as! [String : Any]
@@ -159,7 +170,16 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                         self.objOrderDetails = list;
                         print(list)
                     print(list)
-                        RefreshData(indx: 0)
+                        self.lblOrderNo.text=String(format: "%@", list[0]["Trans_Sl_No"] as! String)
+                        self.lblOrderType.text=String(format: "%@", list[0]["OrderTypeNm"] as! String)
+                        self.lblFrmCus.text=String(format: "%@", list[0]["CusName"] as! String)
+                        self.lblFrmAdd.text=String(format: "%@", list[0]["CusAddr"] as! String)
+                        self.lblFrmMob.text=String(format: "%@", list[0]["CusMobile"] as! CVarArg)
+                        
+                        self.lblToCus.text=String(format: "%@", list[0]["StkName"] as! CVarArg)
+                        self.lblToAdd.text=String(format: "%@", list[0]["StkAddr"] as! CVarArg)
+                        self.lblToMob.text=String(format: "%@", list[0]["StkMob"] as! CVarArg)
+                       // RefreshData(indx: 0)
                     }
              
                case .failure(let error):
@@ -168,45 +188,45 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
         }
         ViewOrder((Any).self)
     }
-    func RefreshData(indx: Int){
-        if self.objOrderDetails.count < 1 { return }
-        let todayData:[String: Any] = self.objOrderDetails[indx] as! [String: Any]
-        if(todayData.count>0){
-            self.lblOrderNo.text=String(format: "%@", todayData["Trans_Sl_No"] as! String)
-            self.lblOrderType.text=String(format: "%@", todayData["OrderTypeNm"] as! String)
-            self.lblFrmCus.text=String(format: "%@", todayData["CusName"] as! String)
-            self.lblFrmAdd.text=String(format: "%@", todayData["CusAddr"] as! String)
-            self.lblFrmMob.text=String(format: "%@", todayData["CusMobile"] as! CVarArg)
-            
-            self.lblToCus.text=String(format: "%@", todayData["StkName"] as! CVarArg)
-            self.lblToAdd.text=String(format: "%@", todayData["StkAddr"] as! CVarArg)
-            self.lblToMob.text=String(format: "%@", todayData["StkMob"] as! CVarArg)
-            self.objOrderDetail = todayData["Items"] as! [AnyObject]
-            var totAmt: Double = 0
-//            for i in 0...objOrderDetail.count-1 {
-//                let item: [String: Any] = objOrderDetail[i] as! [String : Any]
+//    func RefreshData(indx: Int){
+//        if self.objOrderDetails.count < 1 { return }
+//        let todayData:[String: Any] = self.objOrderDetails[indx] as! [String: Any]
+//        if(todayData.count>0){
+//            self.lblOrderNo.text=String(format: "%@", todayData["Trans_Sl_No"] as! String)
+//            self.lblOrderType.text=String(format: "%@", todayData["OrderTypeNm"] as! String)
+//            self.lblFrmCus.text=String(format: "%@", todayData["CusName"] as! String)
+//            self.lblFrmAdd.text=String(format: "%@", todayData["CusAddr"] as! String)
+//            self.lblFrmMob.text=String(format: "%@", todayData["CusMobile"] as! CVarArg)
+//
+//            self.lblToCus.text=String(format: "%@", todayData["StkName"] as! CVarArg)
+//            self.lblToAdd.text=String(format: "%@", todayData["StkAddr"] as! CVarArg)
+//            self.lblToMob.text=String(format: "%@", todayData["StkMob"] as! CVarArg)
+//            self.objOrderDetail = todayData["Items"] as! [AnyObject]
+//            var totAmt: Double = 0
+////            for i in 0...objOrderDetail.count-1 {
+////                let item: [String: Any] = objOrderDetail[i] as! [String : Any]
+////                totAmt = totAmt + (item["value"] as! Double)
+////            }
+//            for i in 0..<objOrderDetail.count {
+//                let item: [String: Any] = objOrderDetail[i] as! [String: Any]
 //                totAmt = totAmt + (item["value"] as! Double)
 //            }
-            for i in 0..<objOrderDetail.count {
-                let item: [String: Any] = objOrderDetail[i] as! [String: Any]
-                totAmt = totAmt + (item["value"] as! Double)
-            }
-            self.lblTotAmt.text=String(format: "Rs. %.02f", totAmt)
-            
-            tbOrderDetail.reloadData()
-            OrdHeight.constant = CGFloat(55 * self.objOrderDetail.count)
-            
-            
-            objOfferDetail = objOrderDetail.filter({(fitem) in
-                return Bool(fitem["offQty"] as! Int > 0)
-            })
-            tbZeroOrd.reloadData()
-            OfferHeight.constant = CGFloat(24 * self.objOrderDetail.count)
-            ContentHeight.constant = CGFloat(800+(60 * self.objOrderDetail.count
-                                         )+(30 * self.objOfferDetail.count
-                                           ))
-        }
-    }
+//            self.lblTotAmt.text=String(format: "Rs. %.02f", totAmt)
+//
+//           // tbOrderDetail.reloadData()
+//            OrdHeight.constant = CGFloat(55 * self.objOrderDetail.count)
+//
+//
+//            objOfferDetail = objOrderDetail.filter({(fitem) in
+//                return Bool(fitem["offQty"] as! Int > 0)
+//            })
+//            tbZeroOrd.reloadData()
+////            OfferHeight.constant = CGFloat(24 * self.objOrderDetail.count)
+////            ContentHeight.constant = CGFloat(800+(60 * self.objOrderDetail.count
+////                                         )+(30 * self.objOfferDetail.count
+////                                           ))
+//        }
+//    }
     
     
 //    func ViewOrder(){
@@ -299,12 +319,19 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                         print(prettyPrintedJson)
                         print(json)
                         let Additional_Prod_Dtls = json[0]["productList"] as! [AnyObject]
+                       // self.lblTotAmt.text = String(detail[IndexPath].OrderVal as! Int)
                         //dayrepDict = json["dayrep"] as! [AnyObject]
                         print(Additional_Prod_Dtls)
                         for Item2 in Additional_Prod_Dtls {
                                   print(Item2)
-//                                 detail.append(viewDet(Prname: Item2["Product_Name"] as! String, rate: Item2["Rate"] as! Int, Cl: Item2[""], Free: <#T##Int#>, Disc: <#T##Int#>, Tax: <#T##Int#>, qty: <#T##Int#>, value: <#T##Int#>))
+                            detail.append(viewDet(Prname: Item2["Product_Name"] as! String, rate: Item2["Rate"] as! Int, Cl: Item2["cl_value"] as! Int, Free:Item2["discount"] as! Int, Disc: Item2["discount"] as! Int, Tax: Item2["taxval"] as! Int, qty: Item2["Quantity"] as! Int, value: Item2["sub_total"] as! Int))
+                            
+                            self.lblTotAmt.text = String(Item2["OrderVal"] as! Double)
+                            
+                            tbOrderDetail.reloadData()
                               }
+                        
+                        
                         
                     }
                 case .failure(let error):
