@@ -405,7 +405,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
             
         }
             else{
-            
+//
 //            var secondPrd = ""
 //           var matchingIDs = [String]()
 //           print(lstProducts)
@@ -414,8 +414,8 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
 //           let productArray = Additional_Prod_Dtls?.components(separatedBy: "#")
 //           if let products = productArray {
 //               for product in products {
-//                  
-//                     
+//
+//
 //                       let productData = product.components(separatedBy: "~")
 //                       print(productData[0])
 //                   let price = productData[1].components(separatedBy: "$")[0]
@@ -424,16 +424,16 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
 //                   print(price1)
 //                   secondPrd = productData[0].trimmingCharacters(in: .whitespacesAndNewlines)
 //                   print(secondPrd)
-//              
+//
 //                   if (lstAllProducts.firstIndex(where: { String(format: "%@", $0["id"] as! CVarArg) == "\(secondPrd)" }) != nil) {
 //                       cell.txtQty.text = String(price1)
 //                       cell.lblMRP.text = String(price)
 //
-//                      
+//
 //                   } else {
 //                       print("No Data")
 //                   }
-//            
+//
 //               }
 //           }
             
@@ -982,6 +982,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
             ItmValue = ItmValue - dis;
         }
         if items.count>0 {
+            print(VisitData.shared.ProductCart)
             if let i = VisitData.shared.ProductCart.firstIndex(where: { (item) in
                 if item["id"] as! String == id {
                     return true
@@ -998,6 +999,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         }else{
             let itm: [String: Any]=["id": id,"Qty": sQty,"UOM": sUom, "UOMNm": sUomNm, "UOMConv": sUomConv, "SalQty": TotQty,"NetWt": sNetUnt,"Scheme": Scheme,"FQ": FQ,"OffQty": OffQty,"OffProd":OffProd,"OffProdNm":OffProdNm, "Rate": Rate, "Value": (TotQty*Rate), "Disc": Disc, "DisVal": Schmval, "NetVal": ItmValue];
             let jitm: AnyObject = itm as AnyObject
+            print(itm)
             VisitData.shared.ProductCart.append(jitm)
             
         }

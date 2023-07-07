@@ -473,7 +473,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                     
                     if let RouteData = LocalStoreage.string(forKey: "Route_Master_"+sfid),
                        let list = GlobalFunc.convertToDictionary(text:  RouteData) as? [AnyObject] {
-                        lstAllRoutes = list
+                         lstAllRoutes = list
                         lstRoutes = list
                         print(RouteData)
                     }
