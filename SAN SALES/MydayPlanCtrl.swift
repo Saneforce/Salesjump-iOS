@@ -80,6 +80,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
     
     var SFCode: String=""
     var DivCode: String=""
+    public static var SfidString: String=""
     let LocalStoreage = UserDefaults.standard
     
     override func viewDidLoad() {
@@ -127,6 +128,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         if let DistData = LocalStoreage.string(forKey: "Distributors_Master_"+SFCode),
            let list = GlobalFunc.convertToDictionary(text:  DistData) as? [AnyObject] {
             lstDist = list;
+            print(SFCode)
         }
         
         if let RouteData = LocalStoreage.string(forKey: "Route_Master_"+SFCode),
@@ -148,13 +150,15 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
             lstHQs = list;
             var id: String = SFCode
             var name: String = SFName
-            if lstHQs.count > 0 {
+            if (lstHQs.count > 0) {
                 let item: [String: Any]=lstHQs[0] as! [String : Any]
                 name = item["name"] as! String
                 id=String(format: "%@", item["id"] as! CVarArg)
+                
+                
           
             }
-            if(lstHQs.count < 2){
+            if lstHQs.count < 2{
                 lblHQ.text = name
                 
               
@@ -219,7 +223,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
 //            else
 //            {
 //                lblHQ.addTarget(target: self, action: #selector(selHeadquaters))
-//            }
+//            }34251350977
 //        }
 //
         //MARK:- Remove the Slashes
@@ -239,7 +243,13 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         Applylev.addTarget(target: self, action: #selector(levedata))
         
         setTodayPlan()
+       // selectedid()
+        
+        
     }
+    
+    
+    
     @objc func levedata () {
         let vc=self.storyboard?.instantiateViewController(withIdentifier: "sbMainmnu") as!  MainMenu
         vc.modalPresentationStyle = .overCurrentContext
@@ -460,6 +470,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
             }else{
                 
                 let sfid=String(format: "%@", lstPlnDetail[0]["subordinateid"] as! CVarArg)
+                MydayPlanCtrl.SfidString = sfid
                 if let indexToDelete = lstHQs.firstIndex(where: { String(format: "%@", $0["id"] as! CVarArg) == sfid }) {
                     lblHQ.text = lstHQs[indexToDelete]["name"] as? String
                     let sfname: String = lstHQs[indexToDelete]["name"] as! String

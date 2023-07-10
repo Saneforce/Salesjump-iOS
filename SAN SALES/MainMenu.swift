@@ -28,6 +28,10 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
     
     var strMasList:[mnuItem]=[]
     var downloadCount: Int = 0
+    var lstDist: [AnyObject] = []
+    var lstAllRoutes: [AnyObject] = []
+    var lstRoutes: [AnyObject] = []
+    let LocalStoreage = UserDefaults.standard
     
     override func viewDidLoad() {
         let LocalStoreage = UserDefaults.standard
@@ -63,7 +67,9 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
         tbMenuDetail.delegate=self
         tbMenuDetail.dataSource=self
         NotificationCenter.default.addObserver(self, selector: #selector(onDidRegistered(_:)), name: .didRegistered, object: nil)
+    
 
+        selectedid()
     }
     @IBAction func userLogout(_ sender: Any) {
         //dismissedAllAlert()
@@ -164,6 +170,58 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
         dismiss(animated: false)
         
     }
+    
+    
+    func selectedid(){
+        
+        var lstPlnDetail: [AnyObject] = []
+        if self.LocalStoreage.string(forKey: "Mydayplan") == nil { return }
+        let PlnDets: String=LocalStoreage.string(forKey: "Mydayplan")!
+        if let list = GlobalFunc.convertToDictionary(text: PlnDets) as? [AnyObject] {
+            lstPlnDetail = list;
+        }
+        
+        let sfid=String(format: "%@", lstPlnDetail[0]["subordinateid"] as! CVarArg)
+        //MydayPlanCtrl.SfidString = sfid
+        print(sfid)
+        
+       // print(MydayPlanCtrl.SfidString)
+        var DistData: String=""
+        if(LocalStoreage.string(forKey: "Distributors_Master_"+sfid)==nil){
+           // Toast.show(message: "No Distributors found. Please will try to sync", controller: self)
+            GlobalFunc.FieldMasterSync(SFCode: sfid){
+                DistData = self.LocalStoreage.string(forKey: "Distributors_Master_"+sfid)!
+                let RouteData: String=self.LocalStoreage.string(forKey: "Route_Master_"+sfid)!
+                if let list = GlobalFunc.convertToDictionary(text: DistData) as? [AnyObject] {
+                    self.lstDist = list;
+                }
+                if let list = GlobalFunc.convertToDictionary(text: RouteData) as? [AnyObject] {
+                    self.lstAllRoutes = list
+                    self.lstRoutes = list
+                }
+            }
+            return
+        }else {
+            if let DistData = LocalStoreage.string(forKey: "Distributors_Master_" + sfid) {
+                if let RouteData = LocalStoreage.string(forKey: "Route_Master_" + sfid) {
+                    if let list = GlobalFunc.convertToDictionary(text: DistData) as? [AnyObject] {
+                        lstDist = list
+                    }
+                    
+                    if let list = GlobalFunc.convertToDictionary(text: RouteData) as? [AnyObject] {
+                        lstAllRoutes = list
+                        lstRoutes = list
+                    }
+                }
+            }
+        }
+
+        if(UserSetup.shared.DistBased == 1){
+            
+        }
+    }
+    
+    
 }
 
   
