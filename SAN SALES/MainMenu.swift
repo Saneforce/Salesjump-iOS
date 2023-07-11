@@ -181,6 +181,7 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
             lstPlnDetail = list;
         }
         
+        
         let sfid=String(format: "%@", lstPlnDetail[0]["subordinateid"] as! CVarArg)
         //MydayPlanCtrl.SfidString = sfid
         print(sfid)
@@ -194,10 +195,13 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
                 let RouteData: String=self.LocalStoreage.string(forKey: "Route_Master_"+sfid)!
                 if let list = GlobalFunc.convertToDictionary(text: DistData) as? [AnyObject] {
                     self.lstDist = list;
+                    
+                    print(list)
                 }
                 if let list = GlobalFunc.convertToDictionary(text: RouteData) as? [AnyObject] {
                     self.lstAllRoutes = list
                     self.lstRoutes = list
+                    print(list)
                 }
             }
             return
@@ -206,11 +210,13 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
                 if let RouteData = LocalStoreage.string(forKey: "Route_Master_" + sfid) {
                     if let list = GlobalFunc.convertToDictionary(text: DistData) as? [AnyObject] {
                         lstDist = list
+                        print(list)
                     }
                     
                     if let list = GlobalFunc.convertToDictionary(text: RouteData) as? [AnyObject] {
                         lstAllRoutes = list
                         lstRoutes = list
+                        print(list)
                     }
                 }
             }

@@ -54,8 +54,14 @@ class LeaveForm: IViewController, UITableViewDelegate,
     var eKey: String = ""
     var NoofDays : String = ""
     var NoLeaveAvil : String = ""
+    var NoLevSl: String = ""
+    var NoLevPl: String = ""
+    var NolevPat: String = ""
+    var printvalue : String = ""
     let LocalStoreage = UserDefaults.standard
     override func viewDidLoad() {
+        
+        
         
         getUserDetails()
         LeaveAvailabilityCheck()
@@ -79,6 +85,7 @@ class LeaveForm: IViewController, UITableViewDelegate,
         if let list = GlobalFunc.convertToDictionary(text: LvlTypData) as? [AnyObject] {
             lstLvlTypes = list;
         }
+   
         lblLvlTyp.addTarget(target: self, action: #selector(selLvlTypes))
         lblFDate.addTarget(target: self, action: #selector(selDOF))
         lblTDate.addTarget(target: self, action: #selector(selDOT))
@@ -128,6 +135,8 @@ class LeaveForm: IViewController, UITableViewDelegate,
             cell.lblText?.text = item["name"] as? String
         }
         if tableView == LeaveAvailability {
+            
+            print(LeveDet)
           //  let item: [String: Any] = LeveDet[indexPath.row] as! [String : Any]
             cell.Levtype?.text = LeveDet[indexPath.row].levtype
             cell.Leveligibility?.text = String(LeveDet[indexPath.row].Eligibility)
@@ -142,31 +151,67 @@ class LeaveForm: IViewController, UITableViewDelegate,
         let item: [String: Any]=lObjSel[indexPath.row] as! [String : Any]
         let name=item["name"] as! String
         let id=String(format: "%@", item["id"] as! CVarArg)
-        
+        print(id)
         
         if SelMode == "LTYP" {
-          let NodayLv = NoofDays
-            let avil = NoLeaveAvil
+//            if valu() == false {
+//                return
+//            }
             
-            print(NodayLv)
-            print(avil)
-            if avil > NodayLv {
-                Toast.show(message: "CL Leave count Exceeded,Available \(avil)", controller: self)
-            }else{
-                lblLvlTyp.text = name
-                sLvlType = id
-            }
+            if let indexToDelete = LeaveAvailabilitydata.firstIndex(where: { String(format: "%@", $0["LeaveCode"] as! CVarArg) == id }){
+                print(indexToDelete)
+               // var Levid = LeaveAvailabilitydata[indexToDelete]["LeaveCode"] as? String
+                //print(Levid)
+                let Levname = LeaveAvailabilitydata[indexToDelete]["Leave_SName"] as? String
+                let LeaveValue = LeaveAvailabilitydata[indexToDelete]["LeaveValue"] as? Int
+                print(LeaveValue!)
+                
+                let NodayLv = Int(NoofDays)
+                //let avil = NoLeaveAvil
+                print(NodayLv!)
+               
+                    if (NodayLv! > LeaveValue!) {
+                        Toast.show(message: "\(String(describing: Levname)) Leave count Exceeded, Available \(LeaveValue!)")
+                        lblLvlTyp.text = "Select the Leave Type"
+                        closeWin(self)
+                    }else {
+                        lblLvlTyp.text = name
+                        sLvlType = id
+                    }
+                
+                }
+            
+            
+//            let NodayLv = NoofDays
+//            let avil = NoLeaveAvil
+//
+//            print(NodayLv)
+//            print(avil)
+          
+               
+        
         }
+        print(printvalue)
+        
+        if printvalue == "" {
+            lblLvlTyp.text = name
+            sLvlType = id
+        }
+        
         //outletData.updateValue(lItem(id: id, name: name), forKey: SelMode)
         closeWin(self)
     }
     
     @objc private func selLvlTypes() {
-        isDate = false
-        lObjSel=lstLvlTypes
-        tbDataSelect.reloadData()
-        lblSelTitle.text="Select the Leave Type"
-        openWin(Mode: "LTYP")
+        if lblFDate.text == "Select Date" || lblTDate.text == "Select Date" {
+            Toast.show(message: "Select Date First", controller: self)
+        } else {
+            isDate = false
+            lObjSel = lstLvlTypes
+            tbDataSelect.reloadData()
+            lblSelTitle.text = "Select the Leave Type"
+            openWin(Mode: "LTYP")
+        }
     }
     
     @objc private func selDOF() {
@@ -210,7 +255,7 @@ class LeaveForm: IViewController, UITableViewDelegate,
             sDOF = formatter.string(from: date)
             FDate=date
             datediff()
-            
+            lblLvlTyp.text = "Select the Leave Type"
             calendar.reloadData()
             
         }
@@ -221,7 +266,7 @@ class LeaveForm: IViewController, UITableViewDelegate,
             sDOT = formatter.string(from: date)
             TDate = date
             //calendar.reloadData()
-
+            lblLvlTyp.text = "Select the Leave Type"
             datediff()
         }
 
@@ -284,7 +329,7 @@ class LeaveForm: IViewController, UITableViewDelegate,
     }
     
     func validateForm() -> Bool {
-        
+       
         if sLvlType == "" {
             Toast.show(message: "Select the Leave Type") //, controller: self
             return false
@@ -309,9 +354,27 @@ class LeaveForm: IViewController, UITableViewDelegate,
             Toast.show(message: "Select the Reason", controller: self)
             return false
         }
+       
         return true
         
     }
+//    func valu() -> Bool {
+//
+//        if NoLevSl < NodayLv {
+//             Toast.show(message: "SL Leave count Exceeded, Available \(NoLevSl)")
+//            return false
+//         }
+//        if NoLevPl < NodayLv {
+//             Toast.show(message: "PL Leave count Exceeded, Available \(NoLevPl)")
+//            return false
+//         }
+//
+//       if NolevPat < NodayLv {
+//            Toast.show(message: "PAT L Leave count Exceeded, Available \(NolevPat)")
+//           return false
+//        }
+//        return true
+//    }
     
     //[{"LeaveForm":{"Leave_Type":"'174'","From_Date":"2021-11-01",
     //        "To_Date":"'2021-11-03'","Reason":"'test'","address":"''","No_of_Days":3,"halfday":"''"}}]
@@ -423,6 +486,7 @@ class LeaveForm: IViewController, UITableViewDelegate,
                 
             case .success(let value):
                 print(value)
+                let values = value
                 if let json = value as? [AnyObject] {
                     guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
                         print("Error: Cannot convert JSON object to Pretty JSON data")
@@ -434,15 +498,23 @@ class LeaveForm: IViewController, UITableViewDelegate,
                     }
                     print(prettyPrintedJson)
                     self.LeaveAvailabilitydata = json
-                    var LeaveAvil = json[0]["LeaveValue"]
+                    let LeaveAvil = json[0]["LeaveValue"]
+                    let SlAvil = json[1]["LeaveValue"]
+                    let PlAvil = json[2]["LeaveValue"]
+                    let PatAvil = json[3]["LeaveValue"]
                     print(LeaveAvil!!)
                     self.NoLeaveAvil =  String(LeaveAvil as! Int)
+                    self.NoLevPl = String(SlAvil as! Int)
+                    self.NoLevPl = String(PlAvil as! Int)
+                    self.NolevPat = String(PatAvil as! Int)
                     //strMasList.append(mnuItem.init(MasId: 1, MasName: "Start Time", MasLbl:VisitData.shared.cInTime))
                     for item in json {
                         LeveDet.append(mnuItem(levtype: item["Leave_Name"] as! String, Eligibility:item["LeaveValue"] as! Int, Taken: item["LeaveTaken"] as! Int, Available: item["LeaveAvailability"] as! Int))
                     }
                     LeaveAvailability.reloadData()
                 }
+                printvalue = values as? String ?? ""
+
             case .failure(let error):
                 Toast.show(message: error.errorDescription!)  //, controller: self
             }
