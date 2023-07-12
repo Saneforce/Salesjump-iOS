@@ -33,6 +33,8 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
     @IBOutlet weak var OrdHeight: NSLayoutConstraint!
     @IBOutlet weak var OfferHeight: NSLayoutConstraint!
     @IBOutlet weak var ContentHeight: NSLayoutConstraint!
+    @IBOutlet weak var ScrollViewsize: UIScrollView!
+    
     
     struct viewDet: Codable {
            let Prname: String
@@ -65,6 +67,7 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
     var dayrepDict: [AnyObject]=[]
     var Acodes: String = ""
     var Order_Det:[String: Any] = [:]
+    var Trans_Sl_No: String = ""
     let LocalStoreage = UserDefaults.standard
     
     override func viewDidLoad() {
@@ -77,7 +80,11 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
         tbZeroOrd.delegate=self
         tbZeroOrd.dataSource=self
         
+        super.viewDidLayoutSubviews()
+       // adjustScrollViewContentSize()
     }
+  
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if tbOrderDetail == tableView { return 55}
         if tbZeroOrd == tableView { return 24 }
@@ -180,6 +187,7 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                         self.lblToAdd.text=String(format: "%@", list[0]["StkAddr"] as! CVarArg)
                         self.lblToMob.text=String(format: "%@", list[0]["StkMob"] as! CVarArg)
                        // RefreshData(indx: 0)
+                        Trans_Sl_No = String(format: "%@", list[0]["Trans_Sl_No"] as! String)
                     }
              
                case .failure(let error):
@@ -283,11 +291,22 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
     
     func ViewOrder(_ sender: Any){
         
-        var item = RptVisitDetail.objVstDetail
+        let item = RptVisitDetail.objVstDetail
         print(item)
+        
+        var items = ""
+   
+        if let Acdid = item[0]["ACD"] {
+
+            items = Acdid as! String
+        } else {
+            items = "0"
+        }
+        //print(Acdid as Any)
+        print(items)
 
         
-                let apiKey: String = "\(axbDet)&desig=\(Desig)&divisionCode=\(DivCode)&ACd=SEF1-101&rSF=\(SFCode)&typ=1&sfCode=\(SFCode)&State_Code=\(StateCode)"
+                let apiKey: String = "\(axbDet)&desig=\(Desig)&divisionCode=\(DivCode)&ACd=\(items)&rSF=\(SFCode)&typ=1&sfCode=\(SFCode)&State_Code=\(StateCode)"
 
             
             let aFormData: [String: Any] = [
@@ -318,18 +337,30 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                         }
                         print(prettyPrintedJson)
                         print(json)
-                        let Additional_Prod_Dtls = json[0]["productList"] as! [AnyObject]
-                       // self.lblTotAmt.text = String(detail[IndexPath].OrderVal as! Int)
-                        //dayrepDict = json["dayrep"] as! [AnyObject]
-                        print(Additional_Prod_Dtls)
-                        for Item2 in Additional_Prod_Dtls {
-                                  print(Item2)
-                            detail.append(viewDet(Prname: Item2["Product_Name"] as! String, rate: Item2["Rate"] as! Int, Cl: Item2["cl_value"] as! Int, Free:Item2["discount"] as! Int, Disc: Item2["discount"] as! Int, Tax: Item2["taxval"] as! Int, qty: Item2["Quantity"] as! Int, value: Item2["sub_total"] as! Int))
+                        print(Trans_Sl_No)
+                        if let indexToDelete = json.firstIndex(where: { String(format: "%@", $0["Order_No"] as! CVarArg) == Trans_Sl_No }) {
+                            print(indexToDelete)
+//                            let ihi =  json[indexToDelete]["productList"] as? String
+//                            print(ihi as Any)
                             
-                            self.lblTotAmt.text = String(Item2["OrderVal"] as! Double)
-                            
-                            tbOrderDetail.reloadData()
-                              }
+                            let Additional_Prod_Dtls = json[indexToDelete]["productList"] as! [AnyObject]
+                            // self.lblTotAmt.text = String(detail[IndexPath].OrderVal as! Int)
+                            //dayrepDict = json["dayrep"] as! [AnyObject]
+                            print(Additional_Prod_Dtls)
+                            for Item2 in Additional_Prod_Dtls {
+                                print(Item2)
+                                detail.append(viewDet(Prname: Item2["Product_Name"] as! String, rate: Int(Item2["Rate"] as! Double), Cl: Item2["cl_value"] as! Int, Free:Item2["discount"] as! Int, Disc: Item2["discount"] as! Int, Tax: Int(Item2["taxval"] as! Double), qty: Item2["Quantity"] as! Int, value: Int(Item2["sub_total"] as! Double)))
+                                
+                                self.lblTotAmt.text = String(Item2["OrderVal"] as! Double)
+                                
+                                tbOrderDetail.reloadData()
+                                //                            let contentSize = CGSize(width: ScrollViewsize.bounds.width, height: ScrollViewsize.bounds.height)
+                                //                            ScrollViewsize.contentSize = contentSize
+                            }
+                        }
+                        
+//                        OrdHeight.constant = CGFloat(60*self.detail.count)
+//                        self.view.layoutIfNeeded()
                         
                         
                         

@@ -562,6 +562,7 @@
                     </view>
                     <connections>
                         <outlet property="LeaveAvailability" destination="vXw-sQ-1HA" id="Wvm-05-ZEG"/>
+                        <outlet property="Leave_Avaailability_View" destination="Avn-Rl-a7h" id="Ws1-we-8Vb"/>
                         <outlet property="btnBack" destination="oCZ-Uz-qFW" id="Pnv-Iz-GWK"/>
                         <outlet property="calendar" destination="wAr-1D-8VR" id="hcF-rF-t6i"/>
                         <outlet property="lblFDate" destination="ZdZ-op-9rJ" id="9vC-dn-Csv"/>

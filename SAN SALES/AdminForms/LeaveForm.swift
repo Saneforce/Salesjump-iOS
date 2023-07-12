@@ -29,6 +29,9 @@ class LeaveForm: IViewController, UITableViewDelegate,
     @IBOutlet weak var LeaveAvailability: UITableView!
     @IBOutlet weak var tbDataSelect: UITableView!
     
+    @IBOutlet weak var Leave_Avaailability_View: UIView!
+    
+    
     struct mnuItem: Any {
         let levtype: String
         let Eligibility : Int
@@ -117,7 +120,9 @@ class LeaveForm: IViewController, UITableViewDelegate,
         sDOT = formatter.string(from: Date())
         FDate=Date()
         TDate=Date()
-        datediff()
+       // datediff()
+        lblNoDays.text = "0 Days"
+        Leave_Avaailability_View.isHidden = true
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView == LeaveAvailability {
@@ -152,7 +157,13 @@ class LeaveForm: IViewController, UITableViewDelegate,
         let name=item["name"] as! String
         let id=String(format: "%@", item["id"] as! CVarArg)
         print(id)
+        print(printvalue)
         
+        if printvalue == "" {
+            lblLvlTyp.text = name
+            sLvlType = id
+            
+        }
         if SelMode == "LTYP" {
 //            if valu() == false {
 //                return
@@ -191,12 +202,7 @@ class LeaveForm: IViewController, UITableViewDelegate,
                
         
         }
-        print(printvalue)
-        
-        if printvalue == "" {
-            lblLvlTyp.text = name
-            sLvlType = id
-        }
+       
         
         //outletData.updateValue(lItem(id: id, name: name), forKey: SelMode)
         closeWin(self)
@@ -512,8 +518,9 @@ class LeaveForm: IViewController, UITableViewDelegate,
                         LeveDet.append(mnuItem(levtype: item["Leave_Name"] as! String, Eligibility:item["LeaveValue"] as! Int, Taken: item["LeaveTaken"] as! Int, Available: item["LeaveAvailability"] as! Int))
                     }
                     LeaveAvailability.reloadData()
+                    Leave_Avaailability_View.isHidden = false
                 }
-                printvalue = values as? String ?? ""
+                
 
             case .failure(let error):
                 Toast.show(message: error.errorDescription!)  //, controller: self

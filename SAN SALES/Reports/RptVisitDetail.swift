@@ -126,6 +126,7 @@ class RptVisitDetail: IViewController, UITableViewDelegate, UITableViewDataSourc
                         })
                     }else{
                         RptVisitDetail.objVstDetail = json
+                        print(RptVisitDetail.objVstDetail)
                     }
                     tbVstDetail.reloadData()
                     vstHeight.constant = CGFloat(70*RptVisitDetail.objVstDetail.count)

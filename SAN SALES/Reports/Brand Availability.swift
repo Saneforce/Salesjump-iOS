@@ -124,7 +124,7 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
             }
             else
             {
-                lblHQ.addTarget(target: self, action: #selector(selHeadquaters))
+                //lblHQ.addTarget(target: self, action: #selector(selHeadquaters))
             }
         }
         // Do any additional setup after loading the view.

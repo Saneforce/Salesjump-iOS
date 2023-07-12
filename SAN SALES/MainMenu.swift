@@ -68,8 +68,9 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
         tbMenuDetail.dataSource=self
         NotificationCenter.default.addObserver(self, selector: #selector(onDidRegistered(_:)), name: .didRegistered, object: nil)
     
-
-        selectedid()
+        if UserSetup.shared.BrndRvwNd > 0{
+            selectedid()
+        }
     }
     @IBAction func userLogout(_ sender: Any) {
         //dismissedAllAlert()
@@ -174,11 +175,15 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
     
     func selectedid(){
         
+        
         var lstPlnDetail: [AnyObject] = []
         if self.LocalStoreage.string(forKey: "Mydayplan") == nil { return }
         let PlnDets: String=LocalStoreage.string(forKey: "Mydayplan")!
         if let list = GlobalFunc.convertToDictionary(text: PlnDets) as? [AnyObject] {
+            
+             
             lstPlnDetail = list;
+            print(list)
         }
         
         
