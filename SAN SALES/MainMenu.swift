@@ -68,9 +68,9 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
         tbMenuDetail.dataSource=self
         NotificationCenter.default.addObserver(self, selector: #selector(onDidRegistered(_:)), name: .didRegistered, object: nil)
     
-        if UserSetup.shared.BrndRvwNd > 0{
-            selectedid()
-        }
+//        if UserSetup.shared.BrndRvwNd > 0{
+//            selectedid()
+//        }
     }
     @IBAction func userLogout(_ sender: Any) {
         //dismissedAllAlert()

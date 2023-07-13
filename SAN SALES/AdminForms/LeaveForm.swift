@@ -202,6 +202,9 @@ class LeaveForm: IViewController, UITableViewDelegate,
                
         
         }
+        
+        print(LeaveAvailabilitydata)
+        
        
         
         //outletData.updateValue(lItem(id: id, name: name), forKey: SelMode)
@@ -504,15 +507,15 @@ class LeaveForm: IViewController, UITableViewDelegate,
                     }
                     print(prettyPrintedJson)
                     self.LeaveAvailabilitydata = json
-                    let LeaveAvil = json[0]["LeaveValue"]
-                    let SlAvil = json[1]["LeaveValue"]
-                    let PlAvil = json[2]["LeaveValue"]
-                    let PatAvil = json[3]["LeaveValue"]
-                    print(LeaveAvil!!)
-                    self.NoLeaveAvil =  String(LeaveAvil as! Int)
-                    self.NoLevPl = String(SlAvil as! Int)
-                    self.NoLevPl = String(PlAvil as! Int)
-                    self.NolevPat = String(PatAvil as! Int)
+//                    let LeaveAvil = json[0]["LeaveValue"]
+//                    let SlAvil = json[1]["LeaveValue"]
+//                    let PlAvil = json[2]["LeaveValue"]
+//                    let PatAvil = json[3]["LeaveValue"]
+//                    print(LeaveAvil!!)
+//                    self.NoLeaveAvil =  String(LeaveAvil as! Int)
+//                    self.NoLevPl = String(SlAvil as! Int)
+//                    self.NoLevPl = String(PlAvil as! Int)
+//                    self.NolevPat = String(PatAvil as! Int)
                     //strMasList.append(mnuItem.init(MasId: 1, MasName: "Start Time", MasLbl:VisitData.shared.cInTime))
                     for item in json {
                         LeveDet.append(mnuItem(levtype: item["Leave_Name"] as! String, Eligibility:item["LeaveValue"] as! Int, Taken: item["LeaveTaken"] as! Int, Available: item["LeaveAvailability"] as! Int))

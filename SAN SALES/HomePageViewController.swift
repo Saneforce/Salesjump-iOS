@@ -207,7 +207,10 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
                     let todayData = json["today"] as? [String: Any]
                     if let callsArray = todayData?["calls"] as? [[String: Any]] {
                         for item in callsArray {
-                            TodayDetls.append(Todaydate(id: 1, Route: item["RouteName"] as! String, AC: "AC", ACvalue: item["RCCOUNT"] as! Int, TC: "TC", TCvalue: item["calls"] as! Int, PC: "PC", PCvalue: item["order"] as! Int, BAC: "BAC", BACvalue: item["RCCOUNT"] as! Int, valuesTotal: item["orderVal"] as! String))
+                            var totalcalls = (item["RCCOUNT"] as! Int) - (item["calls"] as! Int)
+                            print(totalcalls)
+                            
+                            TodayDetls.append(Todaydate(id: 1, Route: item["RouteName"] as! String, AC: "AC", ACvalue: item["RCCOUNT"] as! Int, TC: "TC", TCvalue: item["calls"] as! Int, PC: "PC", PCvalue: item["order"] as! Int, BAC: "BAC", BACvalue: totalcalls, valuesTotal: item["orderVal"] as! String))
                             
                             self.currentdate.text = item["Adate"] as? String
                         }

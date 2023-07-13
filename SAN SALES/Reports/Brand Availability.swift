@@ -66,8 +66,8 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
         BrandAV.delegate=self
         BrandAV.dataSource=self
         
-        HeadquarterTable.delegate=self
-        HeadquarterTable.dataSource=self
+//        HeadquarterTable.delegate=self
+//        HeadquarterTable.dataSource=self
         
         calendar.dataSource=self
         calendar.delegate=self
@@ -338,7 +338,7 @@ print(Date)
         let productArray = Date.components(separatedBy: "%")
         print(productArray)
         let StrDATE = productArray[0]
-        let apiKey: String = "\(axn)&activityDate=\(StrDATE)&sfCode=\(SFCode)"
+        let apiKey: String = "\(axn)&divisionCode=\(DivCode)&activityDate=\(StrDATE)&sfCode=\(SFCode)"
 
 
         
@@ -366,24 +366,26 @@ print(Date)
 //                    print(value)
                     
                     //var BrandList = [Brand_Availability.BrandAvil]()
-
-                     let jsonArray = json as? [[String: Any]]
-                    let branddata = jsonArray?[0]["value"] as! [[String : Any]]
-                        print(branddata)
-                        for item in branddata {
-                            
-                            var Bname = ""
-                            if let targetValue = item["BName"] as? String {
-
-                                Bname = targetValue
-                            } else {
-                                Bname = "No Bname"
-                            }
-
-                                BrandList.append(BrandAvil(BrandName: Bname, TC: item["tc"] as! Int, AC: item["Avail"] as! Int, EC: item["EC"] as! Int))
-                        }
                     
                     
+                        
+//                        let jsonArray = json as? [[String: Any]]
+//                        let branddata = jsonArray?[0]["value"] as! [[String : Any]]
+//                        print(branddata)
+//                        for item in branddata {
+//
+//                            var Bname = ""
+//                            if let targetValue = item["BName"] as? String {
+//
+//                                Bname = targetValue
+//                            } else {
+//                                Bname = "No Bname"
+//                            }
+//
+//                            BrandList.append(BrandAvil(BrandName: Bname, TC: item["tc"] as! Int, AC: item["Avail"] as! Int, EC: item["EC"] as! Int))
+//                        }
+//
+            
                     
                     
                     self.BrandAV.reloadData()
@@ -401,7 +403,7 @@ print(Date)
     }
     @objc private func selDORpt() {
         calendar.isHidden = false
-        HeadquarterTable.isHidden = true
+        //HeadquarterTable.isHidden = true
         isDate = true
         openWin(Mode: "DOP")
         lblSelTitle.text="Select the Date"
