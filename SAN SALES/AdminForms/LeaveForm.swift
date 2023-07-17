@@ -174,7 +174,7 @@ class LeaveForm: IViewController, UITableViewDelegate,
                // var Levid = LeaveAvailabilitydata[indexToDelete]["LeaveCode"] as? String
                 //print(Levid)
                 let Levname = LeaveAvailabilitydata[indexToDelete]["Leave_SName"] as? String
-                let LeaveValue = LeaveAvailabilitydata[indexToDelete]["LeaveValue"] as? Int
+                let LeaveValue = LeaveAvailabilitydata[indexToDelete]["LeaveAvailability"] as? Int
                 print(LeaveValue!)
                 
                 let NodayLv = Int(NoofDays)
@@ -239,8 +239,8 @@ class LeaveForm: IViewController, UITableViewDelegate,
             isDate = true
             openWin(Mode: "DOT")
             lblSelTitle.text="Select the leave to date"
-         
-            //minimumDate(for: )
+            calendar.reloadData()
+        
         }
     }
     //
@@ -287,11 +287,12 @@ class LeaveForm: IViewController, UITableViewDelegate,
         let formatter = DateFormatter()
                 formatter.dateFormat = "yyyy/MM/dd"
        
-                if SelMode == "DOF" {
-                    if let selectedDate = calendar.selectedDates.first {
-                        return selectedDate
-                    }
-                   
+//                if SelMode == "DOF" {
+//                    if let selectedDate = calendar.selectedDates.first {
+//                        return selectedDate
+//                    }
+        if SelMode == "DOT"{
+            return FDate
                    
                    
                 }
@@ -360,7 +361,7 @@ class LeaveForm: IViewController, UITableViewDelegate,
 //            return false
 //        }
         if txReason.text == "" {
-            Toast.show(message: "Select the Reason", controller: self)
+            Toast.show(message: "Enter the Reason", controller: self)
             return false
         }
        

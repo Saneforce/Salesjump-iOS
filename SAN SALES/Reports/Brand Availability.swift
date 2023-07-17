@@ -338,11 +338,11 @@ print(Date)
         let productArray = Date.components(separatedBy: "%")
         print(productArray)
         let StrDATE = productArray[0]
-        let apiKey: String = "\(axn)&divisionCode=\(DivCode)&activityDate=\(StrDATE)&sfCode=\(SFCode)"
+        let apiKey: String = "\(axn)&activityDate=\(StrDATE)&sfCode=\(SFCode)"
 
 
         
-        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
             AFdata in
             switch AFdata.result
             {

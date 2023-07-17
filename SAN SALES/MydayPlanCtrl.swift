@@ -80,7 +80,9 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
     
     var SFCode: String=""
     var DivCode: String=""
+    var Leaveid: String = ""
     public static var SfidString: String=""
+    var leavWorktype: String = ""
     let LocalStoreage = UserDefaults.standard
     
     override func viewDidLoad() {
@@ -350,6 +352,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         let name=item["name"] as! String
         let id=String(format: "%@", item["id"] as! CVarArg)
         print(id)
+        Leaveid = id
         var typ: String = ""
         if isMulti==true {
             if SelMode == "JWK" {
@@ -502,6 +505,8 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
 
             let typ: String = lstWType[indexToDelete]["FWFlg"] as! String
             lblWorktype.text = lstWType[indexToDelete]["name"] as? String
+            leavWorktype = lstWType[indexToDelete]["name"] as! String
+            print(leavWorktype)
             let id=String(format: "%@", lstWType[indexToDelete]["id"] as! CVarArg)
             let name: String = lstWType[indexToDelete]["name"] as! String
             
@@ -735,31 +740,43 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
     }
     
     @IBAction func SaveMyDayPlan(_ sender: Any) {
-        if validateForm() == false {
-            return
-        }
-        if(NetworkMonitor.Shared.isConnected != true){
-            let alert = UIAlertController(title: "Information", message: "Check the Internet Connection", preferredStyle: .alert)
-                 alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
-                     return
-                 })
-                 self.present(alert, animated: true)
+        var Leavtyp = leavWorktype
+        print(Leavtyp)
+ 
+        if Leaveid != "9999"{
+            if validateForm() == false {
                 return
-        }
-        self.ShowLoading(Message: "Getting Device Location...")
-        LocationService.sharedInstance.getNewLocation(location: { location in 
-            print ("New  : "+location.coordinate.latitude.description + ":" + location.coordinate.longitude.description)
-            self.ShowLoading(Message: "Submitting Please wait...")
-            self.saveDayTP(location: location)
-        }, error:{ errMsg in
-            self.LoadingDismiss()
-            print (errMsg)
-            let alert = UIAlertController(title: "Information", message: errMsg, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
+            }
+            if(NetworkMonitor.Shared.isConnected != true){
+                let alert = UIAlertController(title: "Information", message: "Check the Internet Connection", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
+                    return
+                })
+                self.present(alert, animated: true)
                 return
+            }
+            self.ShowLoading(Message: "Getting Device Location...")
+            LocationService.sharedInstance.getNewLocation(location: { location in
+                print ("New  : "+location.coordinate.latitude.description + ":" + location.coordinate.longitude.description)
+                self.ShowLoading(Message: "Submitting Please wait...")
+                self.saveDayTP(location: location)
+            }, error:{ errMsg in
+                self.LoadingDismiss()
+                print (errMsg)
+                let alert = UIAlertController(title: "Information", message: errMsg, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
+                    return
+                })
+                
             })
-            
-        })
+        }else{
+            let storyboard = UIStoryboard(name: "AdminForms", bundle: nil)
+            let viewController = storyboard.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
+            let myDyPln = storyboard.instantiateViewController(withIdentifier: "sbLeaveFrm") as! LeaveForm
+            viewController.setViewControllers([myDyPln], animated: true)
+            UIApplication.shared.windows.first?.rootViewController = viewController
+        }
+        
         
        /* */
     }

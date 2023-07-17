@@ -205,9 +205,11 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
                     print(prettyPrintedJson)
                     //self.TodayDate=json
                     let todayData = json["today"] as? [String: Any]
+                    print(todayData)
+                
                     if let callsArray = todayData?["calls"] as? [[String: Any]] {
                         for item in callsArray {
-                            var totalcalls = (item["RCCOUNT"] as! Int) - (item["calls"] as! Int)
+                            let totalcalls = (item["RCCOUNT"] as! Int) - (item["calls"] as! Int)
                             print(totalcalls)
                             
                             TodayDetls.append(Todaydate(id: 1, Route: item["RouteName"] as! String, AC: "AC", ACvalue: item["RCCOUNT"] as! Int, TC: "TC", TCvalue: item["calls"] as! Int, PC: "PC", PCvalue: item["order"] as! Int, BAC: "BAC", BACvalue: totalcalls, valuesTotal: item["orderVal"] as! String))
@@ -230,8 +232,18 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         }
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if DashBoradTB  == tableView { return 60}
-        return 48
+        if tableView == DashBoradTB {
+               let todayDetail = TodayDetls[indexPath.row]
+               
+               // Check if ACvalue is 0
+               if todayDetail.ACvalue == 0 {
+                   // Return the desired height for the empty cell
+                   return 0.0 // Set to 0 to hide the cell
+               }
+           }
+           
+           // Return the default height for other cells
+           return 60 // Modify this value based on your cell's height
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
      
@@ -245,14 +257,22 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         let cell: cellListItem = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
         
         if tableView == DashBoradTB {
-            //TodayDetls.append(Todaydate(id: 1, Route: item["RouteName"] as! String, AC: "AC", ACvalue: item["RCCOUNT"] as! Int, TC: "TC", TCvalue: item["calls"] as! Int, PC: "PC", PCvalue: item["order"] as! Int, BAC: "BAC", BACvalue: item["RCCOUNT"] as! Int, valuesTotal: item["orderVal"] as! String))
-            cell.RouteLb.text = TodayDetls[indexPath.row].Route
-            cell.AvlaCalls.text = String(TodayDetls[indexPath.row].ACvalue)
-            cell.TotalCalls.text = String(TodayDetls[indexPath.row].TCvalue)
-            cell.PcCalls.text = String(TodayDetls[indexPath.row].PCvalue)
-            cell.BAC.text = String(TodayDetls[indexPath.row].BACvalue)
-            cell.Toalvalue.text = String(TodayDetls[indexPath.row].valuesTotal)
+            let todayDetail = TodayDetls[indexPath.row]
+            
+            // Check if ACvalue is 0
+            if todayDetail.ACvalue == 0 {
+                // Return an empty cell
+                return UITableViewCell()
+            }
+            
+            cell.RouteLb.text = todayDetail.Route
+            cell.AvlaCalls.text = String(todayDetail.ACvalue)
+            cell.TotalCalls.text = String(todayDetail.TCvalue)
+            cell.PcCalls.text = String(todayDetail.PCvalue)
+            cell.BAC.text = String(todayDetail.BACvalue)
+            cell.Toalvalue.text = String(todayDetail.valuesTotal)
         }
+        
         return cell
     }
     
@@ -489,6 +509,11 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
 }
 //Username: Sankafo2,aachi-testso2
 //Paswoord :123,123
+
+//AWS-SQL
+//IP: 13.200.61.175,10433
+//Username : sa
+//Password: SanMedia#123
 
 
 
