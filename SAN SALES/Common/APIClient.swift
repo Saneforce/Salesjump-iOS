@@ -13,5 +13,6 @@ class APIClient{
     //var DBURL="/server/db_v13.php?axn="
     var DBURL="/server/native_Db_V13-Mani.php?axn="
     var DBURL1="/server/native_Db_V13.php?axn="
+    var imgurl="http://fmcg.sanfmcg.com/Photos/"
     
 }

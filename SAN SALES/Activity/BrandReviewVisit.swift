@@ -340,6 +340,8 @@ class BrandReviewVisit: IViewController, UITableViewDataSource, UITableViewDeleg
                 if(PhotosCollection.shared.PhotoList.count>0){
                     for i in 0...PhotosCollection.shared.PhotoList.count-1{
                         let item: [String: Any] = PhotosCollection.shared.PhotoList[i] as! [String : Any]
+                        print(item["FileName"]  as! String)
+                     
                         if i > 0 { sImgItems = sImgItems + "," }
                         sImgItems = sImgItems + "{\"imgurl\":\"'" + (item["FileName"]  as! String) + "'\",\"title\":\"''\",\"remarks\":\"''\",\"f_key\":{\"Activity_Report_Code\":\"Activity_Report_APP\"}}"
                     }

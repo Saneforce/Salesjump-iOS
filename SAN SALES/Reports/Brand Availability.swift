@@ -9,6 +9,7 @@ import UIKit
 import Alamofire
 import FSCalendar
 
+
 class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataSource, FSCalendarDataSource, FSCalendarDelegate {
   
     @IBOutlet weak var BrandAV: UITableView!
@@ -21,6 +22,10 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
     @IBOutlet weak var lblSelTitle: UILabel!
     @IBOutlet weak var calendar: FSCalendar!
     @IBOutlet weak var lblHQ: LabelSelect!
+    @IBOutlet weak var ImageSc: UIView!
+    @IBOutlet weak var ImgViewtb: UITableView!
+    @IBOutlet weak var Retimg: UIImageView!
+    @IBOutlet weak var BackBT: UIImageView!
     
     let axn="get/brandavail"
     
@@ -35,6 +40,12 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
         let AC: Int
         let EC: Int
     }
+    
+    struct imgcp: Any {
+        let Ret: String
+        let Img: UIImage
+    }
+    var imagevw: [imgcp] = []
     var myDyTp: [String: lItem] = [:]
     var BrandList : [BrandAvil] = []
     var SelMode: String = ""
@@ -47,6 +58,7 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
     var lstHQs: [AnyObject] = []
     var lstJoint: [AnyObject] = []
     var lstJWNms: [AnyObject] = []
+    var event: [AnyObject] = []
     var strJWCd: String = ""
     var strJWNm: String = ""
     var strSelJWCd: String = ""
@@ -56,6 +68,7 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
     let LocalStoreage = UserDefaults.standard
     var SFCode: String = "", StateCode: String = "", DivCode: String = "",StrRptDt: String="",StrMode: String=""
     var objcalls: [AnyObject]=[]
+    var urlImages: URL?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -65,7 +78,8 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
         
         BrandAV.delegate=self
         BrandAV.dataSource=self
-        
+        ImgViewtb.delegate=self
+        ImgViewtb.dataSource=self
 //        HeadquarterTable.delegate=self
 //        HeadquarterTable.dataSource=self
         
@@ -73,6 +87,7 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
         calendar.delegate=self
     
         BTback.addTarget(target: self, action: #selector(GotoHome))
+        BackBT.addTarget(target: self, action: #selector(GotoHome))
         lblRptDt.addTarget(target: self, action: #selector(selDORpt))
         
         let formatter = DateFormatter()
@@ -153,6 +168,8 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView==BrandAV { return BrandList.count }
         if tableView==HeadquarterTable {return lObjSel.count}
+        if tableView==ImgViewtb{return imagevw.count}
+       
         return 0
     }
     
@@ -172,13 +189,28 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
 
                 
                 //New
+                let img = urlImages
+                print(img)
+                
                 cell.lblText?.text = BrandList[indexPath.row].BrandName
                 cell.TC?.text = String(BrandList[indexPath.row].TC)
                 cell.ACC?.text = String(BrandList[indexPath.row].AC)
                 cell.ECC?.text = String(BrandList[indexPath.row].EC)
+//                let imageData = try? Data(contentsOf: urlImages!)
+//                        // Create a UIImage from the downloaded data
+//                let image = UIImage(data: imageData!)
+//
+//                cell.retimg.image = image
                 
                
-            }else{
+            }else if tableView == ImgViewtb {
+                cell.ImgRet.text = imagevw[indexPath.row].Ret
+                cell.retimg.image = imagevw[indexPath.row].Img
+                //cell.imgBtnDel.addTarget(target: self, action: #selector(self.delJWK(_:)))
+                cell.retimg.addTarget(target: self, action:#selector(imgwind))
+            }
+        
+        else{
                 let item: [String: Any]=lObjSel[indexPath.row] as! [String : Any]
                 cell.lblText?.text = item["name"] as? String
             }
@@ -367,28 +399,30 @@ print(Date)
                     
                     //var BrandList = [Brand_Availability.BrandAvil]()
                     
+                    event = json[0]["event"] as! [AnyObject]
+                     
                     
-                        
-//                        let jsonArray = json as? [[String: Any]]
-//                        let branddata = jsonArray?[0]["value"] as! [[String : Any]]
-//                        print(branddata)
-//                        for item in branddata {
-//
-//                            var Bname = ""
-//                            if let targetValue = item["BName"] as? String {
-//
-//                                Bname = targetValue
-//                            } else {
-//                                Bname = "No Bname"
-//                            }
-//
-//                            BrandList.append(BrandAvil(BrandName: Bname, TC: item["tc"] as! Int, AC: item["Avail"] as! Int, EC: item["EC"] as! Int))
-//                        }
-//
+                        let jsonArray = json as? [[String: Any]]
+                        let branddata = jsonArray?[0]["value"] as! [[String : Any]]
+                        print(branddata)
+                        for item in branddata {
+
+                            var Bname = ""
+                            if let targetValue = item["BName"] as? String {
+
+                                Bname = targetValue
+                            } else {
+                                Bname = "No Bname"
+                            }
+
+                            BrandList.append(BrandAvil(BrandName: Bname, TC: item["tc"] as! Int, AC: item["Avail"] as! Int, EC: item["EC"] as! Int))
+                        }
+
             
                     
                     
                     self.BrandAV.reloadData()
+                    EvenCap((Any).self)
 //                    vstHeight.constant = CGFloat(55*self.objcalls.count)
 //                    self.view.layoutIfNeeded()
                     
@@ -398,6 +432,93 @@ print(Date)
             }
         }
     }
+    @objc func imgwind(_ sender: Any){
+//        (sender as AnyObject).convert(CGPoint.zero, to: self.ImgViewtb)
+//        guard let indexPath = self.ImgViewtb.indexPathForRow(at: buttonPosition) else{
+//            return
+//        }
+//            let product = SubmittedDCR.objcalls_SelectSecondaryorder2[indexPath.row]
+//        print(product)
+        
+        ImageSc.isHidden = false
+        let imageData = try? Data(contentsOf: urlImages!)
+                // Create a UIImage from the downloaded data
+        let image = UIImage(data: imageData!)
+        self.Retimg.image = image
+        
+    }
+    func EvenCap(_ sender: Any){
+        let imgevent = event
+        print(imgevent)
+        for img in imgevent {
+            let imgurl = img["imgurl"] as! String
+            let ListedDr_Name = img["ListedDr_Name"]
+            
+            let apiKey: String = "\(SFCode)_\(imgurl)"
+            
+            let url = URL(string:APIClient.shared.imgurl+apiKey)
+            urlImages = url
+          
+            
+            let imageData = try? Data(contentsOf: url!)
+                    // Create a UIImage from the downloaded data
+            let image = UIImage(data: imageData!)
+            
+            
+            imagevw.append(imgcp(Ret:img["ListedDr_Name"] as! String , Img: image!))
+            
+            
+            ImgViewtb.reloadData()
+            
+            
+            
+            
+           
+            
+            
+            
+            
+//            AF.request(APIClient.shared.imgurl+apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+//                AFdata in
+//                switch AFdata.result
+//                {
+//
+//                case .success(let value):
+//                    print(value)
+//                    if let json = value as? [String: Any] {
+//                        guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
+//                            print("Error: Cannot convert JSON object to Pretty JSON data")
+//                            return
+//                        }
+//                        guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+//                            print("Error: Could print JSON in String")
+//                            return
+//                        }
+//
+//                        print(prettyPrintedJson)
+//                        for item in json {
+//                            imagevw.append(imgcp(Ret:ListedDr_Name as! String , Img: String))
+//                        }
+//
+//                    }
+//                case .failure(let error):
+//                    Toast.show(message: error.errorDescription!)  //, controller: self
+//                }
+//            }
+        }
+       
+    }
+    func btpress(_ sender: Any){
+        let buttonPosition:CGPoint = (sender as AnyObject).convert(CGPoint.zero, to: self.ImgViewtb)
+        guard let indexPath = self.ImgViewtb.indexPathForRow(at: buttonPosition) else{
+            return
+        }
+            let product = SubmittedDCR.objcalls_SelectSecondaryorder2[indexPath.row]
+        print(product)
+    }
+    
+    
+    
     @objc private func GotoHome() {
         navigationController?.popViewController(animated: true)
     }
