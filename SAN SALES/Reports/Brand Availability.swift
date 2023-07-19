@@ -87,7 +87,7 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
         calendar.delegate=self
     
         BTback.addTarget(target: self, action: #selector(GotoHome))
-        BackBT.addTarget(target: self, action: #selector(GotoHome))
+        BackBT.addTarget(target: self, action: #selector(closebt))
         lblRptDt.addTarget(target: self, action: #selector(selDORpt))
         
         let formatter = DateFormatter()
@@ -163,6 +163,9 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if BrandAV == tableView { return 55}
+        if ImgViewtb==tableView {
+            return 60
+        }
         return 42
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -268,6 +271,7 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
             lblHQ.text = name
     
         }
+        
         lblHQ.text = name
         closeWin(self)
 
@@ -433,16 +437,9 @@ print(Date)
         }
     }
     @objc func imgwind(_ sender: Any){
-//        (sender as AnyObject).convert(CGPoint.zero, to: self.ImgViewtb)
-//        guard let indexPath = self.ImgViewtb.indexPathForRow(at: buttonPosition) else{
-//            return
-//        }
-//            let product = SubmittedDCR.objcalls_SelectSecondaryorder2[indexPath.row]
-//        print(product)
-        
+
         ImageSc.isHidden = false
         let imageData = try? Data(contentsOf: urlImages!)
-                // Create a UIImage from the downloaded data
         let image = UIImage(data: imageData!)
         self.Retimg.image = image
         
@@ -452,7 +449,7 @@ print(Date)
         print(imgevent)
         for img in imgevent {
             let imgurl = img["imgurl"] as! String
-            let ListedDr_Name = img["ListedDr_Name"]
+            //let ListedDr_Name = img["ListedDr_Name"]
             
             let apiKey: String = "\(SFCode)_\(imgurl)"
             
@@ -521,6 +518,9 @@ print(Date)
     
     @objc private func GotoHome() {
         navigationController?.popViewController(animated: true)
+    }
+    @objc func closebt(){
+        ImageSc.isHidden = true
     }
     @objc private func selDORpt() {
         calendar.isHidden = false

@@ -165,8 +165,11 @@ class CameraService: IViewController , AVCapturePhotoCaptureDelegate{
             btRetry.isHidden = false
             btnTakePic.isHidden=true
             imgCamImage.isHidden=false
-            let fileName: String = String(format: "Img%@_%i.jpg", SFCode,Int(Date().timeIntervalSince1970))
-            callback?(photo,fileName)
+           // let fileName: String = String(format: "Img%@_%i.jpg", SFCode,Int(Date().timeIntervalSince1970))
+            let fileName: String = String(Int(Date().timeIntervalSince1970))
+            let filenameno = "_\(fileName).jpg"
+            print(filenameno)
+            callback?(photo,filenameno)
             dismiss(animated: true)
         }
     }
