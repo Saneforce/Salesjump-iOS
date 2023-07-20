@@ -177,15 +177,31 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                         self.objOrderDetails = list;
                         print(list)
                     print(list)
+                                        
+                        
                         self.lblOrderNo.text=String(format: "%@", list[0]["Trans_Sl_No"] as! String)
                         self.lblOrderType.text=String(format: "%@", list[0]["OrderTypeNm"] as! String)
                         self.lblFrmCus.text=String(format: "%@", list[0]["CusName"] as! String)
                         self.lblFrmAdd.text=String(format: "%@", list[0]["CusAddr"] as! String)
-                        self.lblFrmMob.text=String(format: "%@", list[0]["CusMobile"] as! CVarArg)
+                        
+                        
+                        if let cusMobile = list[0]["CusMobile"] as? String {
+                            self.lblFrmMob.text = cusMobile
+                        } else {
+                            self.lblFrmMob.text = ""
+                        }
+                        
+                    
                         
                         self.lblToCus.text=String(format: "%@", list[0]["StkName"] as! CVarArg)
                         self.lblToAdd.text=String(format: "%@", list[0]["StkAddr"] as! CVarArg)
-                        self.lblToMob.text=String(format: "%@", list[0]["StkMob"] as! CVarArg)
+                        
+        
+                        if let StkMob = list[0]["StkMob"] as? String{
+                            self.lblToMob.text=StkMob
+                        }else{
+                            self.lblToMob.text=""
+                        }
                        // RefreshData(indx: 0)
                         Trans_Sl_No = String(format: "%@", list[0]["Trans_Sl_No"] as! String)
                     }

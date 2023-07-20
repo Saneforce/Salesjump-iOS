@@ -160,6 +160,7 @@ class CameraService: IViewController , AVCapturePhotoCaptureDelegate{
     @IBAction func savePic(_ sender: Any) {
         autoreleasepool{
             let photo: UIImage = imgCamImage.image!
+            print(photo)
             CamPrevHolder.isHidden = true
             btOk.isHidden = false
             btRetry.isHidden = false
@@ -167,8 +168,9 @@ class CameraService: IViewController , AVCapturePhotoCaptureDelegate{
             imgCamImage.isHidden=false
            // let fileName: String = String(format: "Img%@_%i.jpg", SFCode,Int(Date().timeIntervalSince1970))
             let fileName: String = String(Int(Date().timeIntervalSince1970))
-            let filenameno = "_\(fileName).jpg"
+            let filenameno="\(SFCode)__\(fileName).jpg"
             print(filenameno)
+            
             callback?(photo,filenameno)
             dismiss(animated: true)
         }

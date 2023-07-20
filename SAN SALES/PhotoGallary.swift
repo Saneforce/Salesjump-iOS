@@ -68,12 +68,13 @@ class PhotoGallary: IViewController, UICollectionViewDelegate, UICollectionViewD
     @objc private func takePhoto() {
         let vc=self.storyboard?.instantiateViewController(withIdentifier: "CameraVwCtrl") as!  CameraService
         vc.modalPresentationStyle = .overCurrentContext
-        vc.callback = { (photo, fileName) -> Void in
+        vc.callback = { (photo,fileName) -> Void in
             print("callback")
             let item: [String: Any] = [
                 "Image" : photo,
-                "FileName": fileName
+                "FileName":fileName
             ]
+            print(item)
             PhotosCollection.shared.PhotoList.append(item as AnyObject)
             ImageUploader().uploadImage(SFCode: self.SFCode, image: photo, fileName: fileName)
             self.clvwPhotoList.reloadData()

@@ -455,6 +455,7 @@ print(Date)
             
             let url = URL(string:APIClient.shared.imgurl+apiKey)
             urlImages = url
+            print(url as Any)
           
             
             let imageData = try? Data(contentsOf: url!)

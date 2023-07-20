@@ -345,6 +345,7 @@ class BrandReviewVisit: IViewController, UITableViewDataSource, UITableViewDeleg
                 return
             })
             self.present(alert, animated: true)
+        subcall()
     }
     func subcall(){
         self.ShowLoading(Message: "Data Submitting Please wait...")
@@ -354,9 +355,15 @@ class BrandReviewVisit: IViewController, UITableViewDataSource, UITableViewDeleg
             for i in 0...PhotosCollection.shared.PhotoList.count-1{
                 let item: [String: Any] = PhotosCollection.shared.PhotoList[i] as! [String : Any]
                 print(item["FileName"]  as! String)
+                let sep = item["FileName"]  as! String
+                let fullNameArr = sep.components(separatedBy: "_")
+                
+                let phono = fullNameArr[2]
+                var fullid = "_\(phono)"
+                print(fullid)
              
                 if i > 0 { sImgItems = sImgItems + "," }
-                sImgItems = sImgItems + "{\\\"imgurl\\\":\\\"'" + (item["FileName"]  as! String) + "'\\\",\\\"title\\\":\\\"''\\\",\\\"remarks\\\":\\\"''\\\"}"
+                sImgItems = sImgItems + "{\\\"imgurl\\\":\\\"'" + (fullid) + "'\\\",\\\"title\\\":\\\"''\\\",\\\"remarks\\\":\\\"''\\\"}"
             }
         }
 //             \"photosList\":\"[{\\\"imgurl\\\":\\\"'_1689760957.jpg'\\\",\\\"title\\\":\\\"''\\\",\\\"remarks\\\":\\\"''\\\"}]\"
