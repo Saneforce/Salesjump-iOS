@@ -307,6 +307,7 @@ class BrandReviewVisit: IViewController, UITableViewDataSource, UITableViewDeleg
         if(NetworkMonitor.Shared.isConnected != true){
             let alert = UIAlertController(title: "Information", message: "Check the Internet Connection", preferredStyle: .alert)
                  alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
+                     
                      return
                  })
                  self.present(alert, animated: true)
@@ -316,36 +317,92 @@ class BrandReviewVisit: IViewController, UITableViewDataSource, UITableViewDeleg
             alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
         self.ShowLoading(Message: "Getting Device Location...")
         VisitData.shared.cOutTime = GlobalFunc.getCurrDateAsString()
-        LocationService.sharedInstance.getNewLocation(location: { location in
-            let sLocation: String = location.coordinate.latitude.description + ":" + location.coordinate.longitude.description
-            lazy var geocoder = CLGeocoder()
-            var sAddress: String = ""
-            geocoder.reverseGeocodeLocation(location) { [self] (placemarks, error) in
-                if(placemarks != nil){
-                    if(placemarks!.count>0){
-                        let jAddress:[String] = placemarks![0].addressDictionary!["FormattedAddressLines"] as! [String]
-                        for i in 0...jAddress.count-1 {
-                            print(jAddress[i])
-                            if i==0{
-                                sAddress = String(format: "%@", jAddress[i])
-                            }else{
-                                sAddress = String(format: "%@, %@", sAddress,jAddress[i])
-                            }
-                        }
+                self.ShowLoading(Message: "Data Submitting Please wait...")
+                //let DataSF: String = self.lstPlnDetail[0]["subordinateid"] as! String
+                var sImgItems:String = ""
+                if(PhotosCollection.shared.PhotoList.count>0){
+                    for i in 0...PhotosCollection.shared.PhotoList.count-1{
+                        let item: [String: Any] = PhotosCollection.shared.PhotoList[i] as! [String : Any]
+                        print(item["FileName"]  as! String)
+                        let sep = item["FileName"]  as! String
+                        let fullNameArr = sep.components(separatedBy: "_")
+                        
+                        let phono = fullNameArr[2]
+                        var fullid = "_\(phono)"
+                        print(fullid)
+                     
+                        if i > 0 { sImgItems = sImgItems + "," }
+                        sImgItems = sImgItems + "{\\\"imgurl\\\":\\\"'" + (fullid) + "'\\\",\\\"title\\\":\\\"''\\\",\\\"remarks\\\":\\\"''\\\"}"
                     }
                 }
-            }
-        }, error:{ errMsg in
-            self.LoadingDismiss()
-            Toast.show(message: errMsg, controller: self)
-        })
+        //             \"photosList\":\"[{\\\"imgurl\\\":\\\"'_1689760957.jpg'\\\",\\\"title\\\":\\\"''\\\",\\\"remarks\\\":\\\"''\\\"}]\"
+                    
+                var brndlst: String = ""
+        //                for brand in lstBrands {
+        //                    let id = brand["id"] as? String ?? ""
+        //                    let name = brand["name"] as? String ?? ""
+        //                    let strSelAcl = brand["Avai"] as? Bool ?? false
+        //                    let strSelEc = brand["EC"] as? Bool ?? false
+        //
+        //                    brndlst = brndlst + "{\"id\":\"\(id)\",\"name\":\"\(name)\",\"Avai\":\(strSelAcl),\"EC\":\(strSelEc)},"
+        //                }
+                
+                let brands = self.brandListData.filter{$0.isSelectedEC || $0.isSelectedAvail}
+                
+               for i in 0..<brands.count {
+                   let id = brands[i].brandData["id"] as? Int ?? 0
+                    let name = brands[i].brandData["name"] as? String ?? ""
+                    let strSelAcl = brands[i].isSelectedAvail
+                   let strSelEc = brands[i].isSelectedEC
+                   print(id)
+
+                    brndlst = brndlst + "{\\\"id\\\":\\\"\(id)\\\",\\\"name\\\":\\\"\(name)\\\",\\\"Avai\\\":\(strSelAcl),\\\"EC\\\":\(strSelEc)},"
+                   
+               }
+                
+                brndlst = String(brndlst.dropLast())
+                
+                let jsonString = "[{\"svCallRevw\":{\"worktype\":\"" + (self.lstPlnDetail[0]["worktype"] as! String) + "\",\"entryDate\":\"" + VisitData.shared.cInTime + "\",\"eDt\":\"" + VisitData.shared.cInTime + "\",\"subordinate\":\"MR4126\",\"stockist\":\"32539\",\"cluster\":\"114727\",\"clusterNm\":\"SAIDAPET\",\"doctorid\":\"" + VisitData.shared.CustID + "\",\"remarks\":\"" + VisitData.shared.VstRemarks.name + "\",\"BrandList\":\"[" + brndlst + "]\",\"photosList\":\"[" + sImgItems + "]\"}}]";
+                
+        //                print("____________")
+        //                let jsonString = "[{\"svCallRevw\":{\"worktype\":\"1386\",\"entryDate\":\"2023-07-19 16:32:47\",\"eDt\":\"2023-07-19 00:00:00\",\"subordinate\":\"MR4126\",\"stockist\":\"32538\",\"cluster\":\"114726\",\"clusterNm\":\"SAIDAPET\",\"doctorid\":\"2372978\",\"remarks\":\"NOT INTERESTED\",\"BrandList\":\"[{\\\"id\\\":\\\"1698\\\",\\\"name\\\":\\\"Palkova\\\",\\\"Avai\\\":true,\\\"EC\\\":false},{\\\"id\\\":\\\"1649\\\",\\\"name\\\":\\\"Prestige Cooker\\\",\\\"Avai\\\":false,\\\"EC\\\":true}]\",\"photosList\":\"[{\\\"imgurl\\\":\\\"'_1689760957.jpg'\\\",\\\"title\\\":\\\"''\\\",\\\"remarks\\\":\\\"''\\\"}]\"}}]"
+                
+                
+        //                let jsonString = "[{\"svCallRevw\":{\"worktype\":\"1386\",\"entryDate\":\"2023-04-27 10:48:21\",\"eDt\":\"2023-04-27 00:00:00\",\"subordinate\":\"mgr1018\",\"stockist\":\"32538\",\"cluster\":\"114726\",\"clusterNm\":\"SAIDAPET\",\"doctorid\":\"2051498\",\"remarks\":\"OWNER NOT AVAILABLE\",\"BrandList\":\"[{\\\"id\\\":\\\"1658\\\",\\\"name\\\":\\\"Brittania\\\",\\\"Avai\\\":false,\\\"EC\\\":true},{\\\"id\\\":\\\"909\\\",\\\"name\\\":\\\"BUTTERFLY FAN\\\",\\\"Avai\\\":true,\\\"EC\\\":false}]\",\"photosList\":\"[]\"}}]";
+        //                print(jsonString)
+            
+                let params: Parameters = [
+                    "data": jsonString
+                ]
+                print(params)
+                AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"dcr/save&divisionCode=" + self.DivCode + "&rSF="+self.SFCode+"&sfCode="+self.SFCode, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
+                    
+                    AFdata in
+                    print(AFdata)
+                    self.LoadingDismiss()
+                    switch AFdata.result
+                    {
+                    case .success(let value):
+                        if let json = value as? [String: Any] {
+                            PhotosCollection.shared.PhotoList = []
+                            VisitData.shared.clear()
+                            Toast.show(message: "Call Visit has been submitted successfully", controller: self)
+                            let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
+                            UIApplication.shared.windows.first?.rootViewController = viewController
+                            UIApplication.shared.windows.first?.makeKeyAndVisible()
+                        }
+                    case .failure(let error):
+                        Toast.show(message: error.errorDescription ?? "", controller: self)
+                    }
+                }
+     
                 return
             })
             alert.addAction(UIAlertAction(title: "Cancel", style: .destructive) { _ in
                 return
             })
             self.present(alert, animated: true)
-        subcall()
+        //subcall()
     }
     func subcall(){
         self.ShowLoading(Message: "Data Submitting Please wait...")

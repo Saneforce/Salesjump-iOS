@@ -26,6 +26,7 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
     @IBOutlet weak var ImgViewtb: UITableView!
     @IBOutlet weak var Retimg: UIImageView!
     @IBOutlet weak var BackBT: UIImageView!
+    @IBOutlet weak var Ret_and_img_Hed: UIView!
     
     let axn="get/brandavail"
     
@@ -69,11 +70,12 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
     var SFCode: String = "", StateCode: String = "", DivCode: String = "",StrRptDt: String="",StrMode: String=""
     var objcalls: [AnyObject]=[]
     var urlImages: URL?
+    var data : [AnyObject] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         getUserDetails()
-        Brandavailability ()
+        Brandavailability()
         
         
         BrandAV.delegate=self
@@ -143,6 +145,7 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
             }
         }
         // Do any additional setup after loading the view.
+        Ret_and_img_Hed.isHidden = true
     }
 
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
@@ -157,7 +160,10 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
         lblRptDt.text = selectedDates[0]
         formatter.dateFormat = "yyyy-MM-dd"
         StrRptDt = formatter.string(from: date)
-       Brandavailability ()
+        BrandList.removeAll()
+        imagevw.removeAll()
+        Brandavailability()
+        
         closeWin(self)
     }
     
@@ -172,6 +178,7 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
         if tableView==BrandAV { return BrandList.count }
         if tableView==HeadquarterTable {return lObjSel.count}
         if tableView==ImgViewtb{return imagevw.count}
+      
        
         return 0
     }
@@ -192,25 +199,18 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
 
                 
                 //New
-                let img = urlImages
-                print(img)
-                
+                print(BrandList)
+                print(ImgViewtb)
                 cell.lblText?.text = BrandList[indexPath.row].BrandName
                 cell.TC?.text = String(BrandList[indexPath.row].TC)
                 cell.ACC?.text = String(BrandList[indexPath.row].AC)
                 cell.ECC?.text = String(BrandList[indexPath.row].EC)
-//                let imageData = try? Data(contentsOf: urlImages!)
-//                        // Create a UIImage from the downloaded data
-//                let image = UIImage(data: imageData!)
-//
-//                cell.retimg.image = image
-                
                
             }else if tableView == ImgViewtb {
                 cell.ImgRet.text = imagevw[indexPath.row].Ret
                 cell.retimg.image = imagevw[indexPath.row].Img
                 //cell.imgBtnDel.addTarget(target: self, action: #selector(self.delJWK(_:)))
-                cell.retimg.addTarget(target: self, action:#selector(imgwind))
+                //cell.retimg.addTarget(target: self, action:#selector(imgwind))
             }
         
         else{
@@ -221,61 +221,22 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
             return cell
             
         }
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
-        let item: [String: Any]=lObjSel[indexPath.row] as! [String : Any]
-        let name=item["name"] as! String
-        let id=String(format: "%@", item["id"] as! CVarArg)
-        print(id)
-        Brandavailability ()
-        var typ: String = ""
-        if SelMode=="WT" {
-            typ=item["FWFlg"] as! String
-            vwHQCtrl.isHidden=false
-            if typ != "F" {
-                vwHQCtrl.isHidden=true
-                
-            }
-//            else if SelMode == "HQ" {
-//                lblHQ.text = name  //+(item["id"] as! String)
-//                var DistData: String=""
-//                if(LocalStoreage.string(forKey: "Distributors_Master_"+id)==nil){
-//                    Toast.show(message: "No Distributors found. Please will try to sync", controller: self)
-//                    GlobalFunc.FieldMasterSync(SFCode: id){
-//                        DistData = self.LocalStoreage.string(forKey: "Distributors_Master_"+id)!
-//                        let RouteData: String=self.LocalStoreage.string(forKey: "Route_Master_"+id)!
-//                        if let list = GlobalFunc.convertToDictionary(text: DistData) as? [AnyObject] {
-//                            self.lstDist = list;
-//                        }
-//                        if let list = GlobalFunc.convertToDictionary(text: RouteData) as? [AnyObject] {
-//                            self.lstAllRoutes = list
-//                            self.lstRoutes = list
-//                        }
-//                    }
-//                    return
-//                }else{
-//                    DistData = LocalStoreage.string(forKey: "Distributors_Master_"+id)!
-//
-//                    let RouteData: String=LocalStoreage.string(forKey: "Route_Master_"+id)!
-//                    if let list = GlobalFunc.convertToDictionary(text: DistData) as? [AnyObject] {
-//                        lstDist = list;
-//                    }
-//                    if let list = GlobalFunc.convertToDictionary(text: RouteData) as? [AnyObject] {
-//                        lstAllRoutes = list
-//                        lstRoutes = list
-//                    }
-//                }
-//                if(UserSetup.shared.DistBased == 1){
-//
-//                }
-//            }
-            lblHQ.text = name
-    
-        }
-        
-        lblHQ.text = name
-        closeWin(self)
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+         if tableView == ImgViewtb {
+             print("You selected cell #\(indexPath.row)!")
+             let product = event[indexPath.row]["imgurl"] as! String
+             print(product)
+             let apiKey: String = "\(SFCode)_\(product)"
+             let url = URL(string:APIClient.shared.imgurl+apiKey)
+             print(url as Any)
+             ImageSc.isHidden = false
+             let imageData = try? Data(contentsOf: url!)
+             let image = UIImage(data: imageData!)
+             self.Retimg.image = image
+             
+         }
+     }
 
-    }
     func setTodayPlan(){
         var lstPlnDetail: [AnyObject] = []
         if self.LocalStoreage.string(forKey: "Mydayplan") == nil { return }
@@ -368,7 +329,7 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
         StrRptDt=GlobalFunc.getCurrDateAsString().replacingOccurrences(of: " ", with: "%20")
     }
     
-    func Brandavailability (){
+    func Brandavailability(){
         let Date  = StrRptDt
 print(Date)
         let productArray = Date.components(separatedBy: "%")
@@ -395,37 +356,50 @@ print(Date)
                         return
                     }
                     print(prettyPrintedJson)
-                  // let Brand:[String: Any] = json["value"] as! [String: Any]
-                   // self.objcalls = json
+                    // let Brand:[String: Any] = json["value"] as! [String: Any]
+                    // self.objcalls = json
                     
-//                    let value = json["value"] as? [[String : Any]]
-//                    print(value)
+                    //                    let value = json["value"] as? [[String : Any]]
+                    //                    print(value)
                     
                     //var BrandList = [Brand_Availability.BrandAvil]()
+                    // if let imgevent = event as? [AnyObject], !imgevent.isEmpty {
+                    
+                    if !json.isEmpty{
                     
                     event = json[0]["event"] as! [AnyObject]
-                     
                     
-                        let jsonArray = json as? [[String: Any]]
-                        let branddata = jsonArray?[0]["value"] as! [[String : Any]]
-                        print(branddata)
-                        for item in branddata {
-
-                            var Bname = ""
-                            if let targetValue = item["BName"] as? String {
-
-                                Bname = targetValue
-                            } else {
-                                Bname = "No Bname"
-                            }
-
-                            BrandList.append(BrandAvil(BrandName: Bname, TC: item["tc"] as! Int, AC: item["Avail"] as! Int, EC: item["EC"] as! Int))
+                    
+                    
+                    let jsonArray = json as? [[String: Any]]
+                    let branddata = jsonArray?[0]["value"] as! [[String : Any]]
+                    print(branddata)
+                    for item in branddata {
+                        
+                        var Bname = ""
+                        if let targetValue = item["BName"] as? String {
+                            
+                            Bname = targetValue
+                        } else {
+                            Bname = "No Bname"
                         }
+                        
+                        BrandList.append(BrandAvil(BrandName: Bname, TC: item["tc"] as! Int, AC: item["Avail"] as! Int, EC: item["EC"] as! Int))
+                        self.BrandAV.reloadData()
+                    }
+                    }else{
+                        BrandList.removeAll()
+                        BrandAV.reloadData()
+
+                        Toast.show(message: "No calls on this date.")
+                    }
+                
+                    
 
             
                     
                     
-                    self.BrandAV.reloadData()
+                    
                     EvenCap((Any).self)
 //                    vstHeight.constant = CGFloat(55*self.objcalls.count)
 //                    self.view.layoutIfNeeded()
@@ -436,73 +410,51 @@ print(Date)
             }
         }
     }
-    @objc func imgwind(_ sender: Any){
-
-        ImageSc.isHidden = false
-        let imageData = try? Data(contentsOf: urlImages!)
-        let image = UIImage(data: imageData!)
-        self.Retimg.image = image
-        
-    }
+//    @objc func imgwind(_ sender: Any){
+//
+//        ImageSc.isHidden = false
+//        let imageData = try? Data(contentsOf: urlImages!)
+//        let image = UIImage(data: imageData!)
+//        self.Retimg.image = image
+//
+//    }
     func EvenCap(_ sender: Any){
-        let imgevent = event
-        print(imgevent)
-        for img in imgevent {
-            let imgurl = img["imgurl"] as! String
-            //let ListedDr_Name = img["ListedDr_Name"]
-            
-            let apiKey: String = "\(SFCode)_\(imgurl)"
-            
-            let url = URL(string:APIClient.shared.imgurl+apiKey)
-            urlImages = url
-            print(url as Any)
-          
-            
-            let imageData = try? Data(contentsOf: url!)
-                    // Create a UIImage from the downloaded data
-            let image = UIImage(data: imageData!)
-            
-            
-            imagevw.append(imgcp(Ret:img["ListedDr_Name"] as! String , Img: image!))
-            
-            
-            ImgViewtb.reloadData()
-            
-            
-            
-            
-           
-            
-            
-            
-            
-//            AF.request(APIClient.shared.imgurl+apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
-//                AFdata in
-//                switch AFdata.result
-//                {
-//
-//                case .success(let value):
-//                    print(value)
-//                    if let json = value as? [String: Any] {
-//                        guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
-//                            print("Error: Cannot convert JSON object to Pretty JSON data")
-//                            return
-//                        }
-//                        guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
-//                            print("Error: Could print JSON in String")
-//                            return
-//                        }
-//
-//                        print(prettyPrintedJson)
-//                        for item in json {
-//                            imagevw.append(imgcp(Ret:ListedDr_Name as! String , Img: String))
-//                        }
-//
-//                    }
-//                case .failure(let error):
-//                    Toast.show(message: error.errorDescription!)  //, controller: self
-//                }
-//            }
+        //let imgevent = event
+        //print(imgevent)
+        
+//        if let cusMobile = list[0]["CusMobile"] as? String {
+//            self.lblFrmMob.text = cusMobile
+//        } else {
+//            self.lblFrmMob.text = ""
+//        }
+
+        if let imgevent = event as? [AnyObject], !imgevent.isEmpty {
+            for img in imgevent {
+                let imgurl = img["imgurl"] as! String
+                //let ListedDr_Name = img["ListedDr_Name"]
+                
+                
+                let apiKey: String = "\(SFCode)_\(imgurl)"
+                
+                let url = URL(string:APIClient.shared.imgurl+apiKey)
+                urlImages = url
+                print(url as Any)
+                
+                
+                let imageData = try? Data(contentsOf: url!)
+                // Create a UIImage from the downloaded data
+                let image = UIImage(data: imageData!)
+                Ret_and_img_Hed.isHidden = false
+                ImgViewtb.isHidden=false
+                imagevw.append(imgcp(Ret:img["ListedDr_Name"] as! String , Img: image!))
+                
+                
+                ImgViewtb.reloadData()
+                
+            }
+        }else {
+            ImgViewtb.isHidden = true
+            Ret_and_img_Hed.isHidden=true
         }
        
     }
