@@ -57,6 +57,7 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
     
     let axn="get/vwOrderDet"
     let axbDet = "get/vwVstDetNative"
+    let axnprimary = "get/vwVstDetNative"
     let axn_Acd_code = "get/DayReport"
     
     var SFCode: String = "", StateCode: String = "", DivCode: String = "",StrRptDt: String="",CusCd: String = "",StrMode: String="",OrdTotal: Float = 0,Desig: String=""
@@ -211,6 +212,7 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
             }
         }
         ViewOrder((Any).self)
+        viewprimary()
     }
 //    func RefreshData(indx: Int){
 //        if self.objOrderDetails.count < 1 { return }
@@ -367,6 +369,100 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                                 print(Item2)
                                 detail.append(viewDet(Prname: Item2["Product_Name"] as! String, rate: Int(Item2["Rate"] as! Double), Cl: Item2["cl_value"] as! Int, Free:Item2["discount"] as! Int, Disc: Item2["discount"] as! Int, Tax: Int(Item2["taxval"] as! Double), qty: Item2["Quantity"] as! Int, value: Int(Item2["sub_total"] as! Double)))
                                 
+                                self.lblTotAmt.text = String(Item2["OrderVal"] as! Double)
+                                
+                                tbOrderDetail.reloadData()
+                                //                            let contentSize = CGSize(width: ScrollViewsize.bounds.width, height: ScrollViewsize.bounds.height)
+                                //                            ScrollViewsize.contentSize = contentSize
+                            }
+                        }
+                        
+//                        OrdHeight.constant = CGFloat(60*self.detail.count)
+//                        self.view.layoutIfNeeded()
+                        
+                        
+                        
+                    }
+                case .failure(let error):
+                    Toast.show(message: error.errorDescription!)  //, controller: self
+                }
+            }
+    }
+    
+    func viewprimary(){
+        let item = RptVisitDetail.objVstDetail
+        print(item)
+        
+        var items = ""
+   
+        if let Acdid = item[0]["ACD"] {
+
+            items = Acdid as! String
+        } else {
+            items = "0"
+        }
+        //print(Acdid as Any)
+        print(items)
+
+        
+               // let apiKey: String = "\(axbDet)&desig=\(Desig)&divisionCode=\(DivCode)&ACd=\(items)&rSF=\(SFCode)&typ=1&sfCode=\(SFCode)&State_Code=\(StateCode)"
+
+        let apiKey: String = "\(axnprimary)&desig=\(Desig)&divisionCode=\(DivCode)&ACd=\(items)&rSF=\(SFCode)&typ=3&sfCode=\(SFCode)&State_Code=\(StateCode)"
+   // http://www.fmcg.sanfmcg.com/server/native_Db_V13_1.php?desig=MR&divisionCode=29%2C&ACd=SEF3-357&rSF=MR4126&axn=get%2FvwVstDetNative&typ=3&sfCode=MR4126&stateCode=24
+            
+            let aFormData: [String: Any] = [
+                "orderBy":"[\"name asc\"]","desig":"mgr"
+            ]
+           // print(aFormData)
+            let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
+            let jsonString = String(data: jsonData!, encoding: .utf8)!
+            let params: Parameters = [
+                "data": jsonString
+            ]
+            
+            AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+                AFdata in
+                switch AFdata.result
+                {
+                    
+                case .success(let value):
+                    print(value)
+                    if let json = value as? [AnyObject] {
+                        guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
+                            print("Error: Cannot convert JSON object to Pretty JSON data")
+                            return
+                        }
+                        guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+                            print("Error: Could print JSON in String")
+                            return
+                        }
+                        print(prettyPrintedJson)
+                        print(json)
+                        print(Trans_Sl_No)
+                        if let indexToDelete = json.firstIndex(where: { String(format: "%@", $0["Order_No"] as! CVarArg) == Trans_Sl_No }) {
+                            print(indexToDelete)
+//                            let ihi =  json[indexToDelete]["productList"] as? String
+//                            print(ihi as Any)
+                            
+                            let Additional_Prod_Dtls = json[indexToDelete]["productList"] as! [AnyObject]
+                            // self.lblTotAmt.text = String(detail[IndexPath].OrderVal as! Int)
+                            //dayrepDict = json["dayrep"] as! [AnyObject]
+                            print(Additional_Prod_Dtls)
+                            for Item2 in Additional_Prod_Dtls {
+                                print(Item2)
+                                
+                                if let clBalString = Item2["Cl_bal"] as? String {
+                                    if let items = Int(clBalString) {
+                                        // Now 'items' contains the integer value of "Cl_bal" if it was a valid integer in the dictionary
+                                        print("Cl_bal value:", items)
+                                   
+                                detail.append(viewDet(Prname: Item2["Product_Name"] as! String, rate: Int(Item2["Rate"] as! Double), Cl:items, Free:Item2["discount"] as! Int, Disc: Item2["discount"] as! Int, Tax: Int(Item2["taxval"] as! Double), qty: Item2["Quantity"] as! Int, value: Int(Item2["sub_total"] as! Double)))
+                                    } else {
+                                        print("Error: 'Cl_bal' is not a valid integer.")
+                                    }
+                                } else {
+                                    print("Error: 'Cl_bal' key not found in the dictionary.")
+                                }
                                 self.lblTotAmt.text = String(Item2["OrderVal"] as! Double)
                                 
                                 tbOrderDetail.reloadData()
