@@ -33,7 +33,7 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
     @IBOutlet weak var OrdHeight: NSLayoutConstraint!
     @IBOutlet weak var OfferHeight: NSLayoutConstraint!
     @IBOutlet weak var ContentHeight: NSLayoutConstraint!
-    @IBOutlet weak var ScrollViewsize: UIScrollView!
+    
     
     
     struct viewDet: Codable {
@@ -81,8 +81,9 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
         tbZeroOrd.delegate=self
         tbZeroOrd.dataSource=self
         
-        super.viewDidLayoutSubviews()
+       // super.viewDidLayoutSubviews()
        // adjustScrollViewContentSize()
+       
     }
   
     
@@ -122,12 +123,17 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                 cell.lblAmt.text =  String(detail[indexPath.row].value)
                 cell.lblValue.text = "0.00"
                 
+                
             }
             if tbZeroOrd == tableView {
                 let item: [String: Any] = objOfferDetail[indexPath.row] as! [String : Any]
                 cell.lblText?.text = item["OffPName"] as? String
                 cell.lblUOM?.text = String(format: "%@",item["OffUntName"] as! String)
                 cell.lblQty?.text = String(format: "%i", item["offQty"] as! Int)
+                
+                let newHeight = 100 + CGFloat(55 * objOfferDetail.count)
+                ContentHeight.constant = newHeight
+                print(newHeight)
             }
             //ContentHeight.constant = tbZeroOrd.frame.height + tbZeroOrd.frame.origin.y + 10
             print(ContentHeight.constant)
@@ -375,8 +381,15 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                                 //                            let contentSize = CGSize(width: ScrollViewsize.bounds.width, height: ScrollViewsize.bounds.height)
                                 //                            ScrollViewsize.contentSize = contentSize
                             }
+                            OrdHeight.constant = 40+CGFloat(55*detail.count)
+                            self.view.layoutIfNeeded()
+                            let newHeight = 100 + CGFloat(75 * detail.count) + CGFloat(2 * detail.count)
+                            ContentHeight.constant = newHeight
+                            print(newHeight)
+                            self.view.layoutIfNeeded()
                         }
-                        
+//                        OrdHeight.constant = 100+CGFloat(55*detail.count)
+//                        self.view.layoutIfNeeded()
 //                        OrdHeight.constant = CGFloat(60*self.detail.count)
 //                        self.view.layoutIfNeeded()
                         
@@ -388,6 +401,9 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                 }
             }
     }
+//    func updateContentView() {
+//        ContentHeight.height = subviews.sorted(by: { $0.frame.maxY < $1.frame.maxY }).last?.frame.maxY ?? detail.height
+//        }
     
     func viewprimary(){
         let item = RptVisitDetail.objVstDetail
@@ -457,6 +473,9 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                                         print("Cl_bal value:", items)
                                    
                                 detail.append(viewDet(Prname: Item2["Product_Name"] as! String, rate: Int(Item2["Rate"] as! Double), Cl:items, Free:Item2["discount"] as! Int, Disc: Item2["discount"] as! Int, Tax: Int(Item2["taxval"] as! Double), qty: Item2["Quantity"] as! Int, value: Int(Item2["sub_total"] as! Double)))
+                                        
+                                       
+                                        print(ContentHeight as Any)
                                     } else {
                                         print("Error: 'Cl_bal' is not a valid integer.")
                                     }
@@ -464,11 +483,16 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                                     print("Error: 'Cl_bal' key not found in the dictionary.")
                                 }
                                 self.lblTotAmt.text = String(Item2["OrderVal"] as! Double)
-                                
-                                tbOrderDetail.reloadData()
-                                //                            let contentSize = CGSize(width: ScrollViewsize.bounds.width, height: ScrollViewsize.bounds.height)
-                                //                            ScrollViewsize.contentSize = contentSize
                             }
+                           
+                            OrdHeight.constant = 40+CGFloat(55*detail.count)
+                            self.view.layoutIfNeeded()
+                            let newHeight = 100 + CGFloat(75 * detail.count) + CGFloat(7 * detail.count)
+                            ContentHeight.constant = newHeight
+                            print(newHeight)
+                            self.view.layoutIfNeeded()
+                            tbOrderDetail.reloadData()
+                          
                         }
                         
 //                        OrdHeight.constant = CGFloat(60*self.detail.count)
@@ -488,6 +512,7 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
     @objc private func GotoHome() {
         navigationController?.popViewController(animated: true)
     }
+    
 }
 
 
