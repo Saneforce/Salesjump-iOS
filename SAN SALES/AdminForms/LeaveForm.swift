@@ -403,7 +403,7 @@ class LeaveForm: IViewController, UITableViewDelegate,
                 return
         }
         
-        let alert = UIAlertController(title: "Confirmation", message: "Do you want to submit this Visit Without Order ?", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Confirmation", message: "Do you want to submit Leave ?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
             
             self.ShowLoading(Message: "Locating Device...")
