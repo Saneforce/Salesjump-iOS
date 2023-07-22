@@ -313,7 +313,7 @@ class BrandReviewVisit: IViewController, UITableViewDataSource, UITableViewDeleg
                  self.present(alert, animated: true)
                 return
         }
-            let alert = UIAlertController(title: "Confirmation", message: "Do you want to submit this Visit Without Order ?", preferredStyle: .alert)
+            let alert = UIAlertController(title: "Confirmation", message: "Do you want to submit ?", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
         self.ShowLoading(Message: "Getting Device Location...")
         VisitData.shared.cOutTime = GlobalFunc.getCurrDateAsString()

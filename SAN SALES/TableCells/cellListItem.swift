@@ -69,6 +69,7 @@ class cellListItem:UITableViewCell{
     @IBOutlet weak var Levavailable: UILabel!
     @IBOutlet weak var retimg: UIImageView!
     @IBOutlet weak var ImgRet: UILabel!
+    @IBOutlet weak var Rmks: UILabel!
     var ischeck = false
 
 }

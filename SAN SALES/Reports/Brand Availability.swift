@@ -49,6 +49,7 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
     struct imgcp: Any {
         let Ret: String
         let Img: UIImage
+        let Rmks: String
     }
     var imagevw: [imgcp] = []
     var myDyTp: [String: lItem] = [:]
@@ -175,7 +176,7 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if BrandAV == tableView { return 55}
         if ImgViewtb==tableView {
-            return 60
+            return 100
         }
         return 42
     }
@@ -215,6 +216,7 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
             }else if tableView == ImgViewtb {
                 cell.ImgRet.text = imagevw[indexPath.row].Ret
                 cell.retimg.image = imagevw[indexPath.row].Img
+                cell.Rmks.text = imagevw[indexPath.row].Rmks
                 //cell.imgBtnDel.addTarget(target: self, action: #selector(self.delJWK(_:)))
                 //cell.retimg.addTarget(target: self, action:#selector(imgwind))
             }
@@ -464,8 +466,10 @@ print(Date)
 //            self.lblFrmMob.text = ""
 //        }
         self.ShowLoading(Message: "    Loading...")
+        print(event)
         if let imgevent = event as? [AnyObject], !imgevent.isEmpty {
             for img in imgevent {
+                print(img)
                 let imgurl = img["imgurl"] as! String
                 //let ListedDr_Name = img["ListedDr_Name"]
                 
@@ -482,7 +486,7 @@ print(Date)
                 let image = UIImage(data: imageData!)
                 Ret_and_img_Hed.isHidden = false
                 ImgViewtb.isHidden=false
-                imagevw.append(imgcp(Ret:img["ListedDr_Name"] as! String , Img: image!))
+                imagevw.append(imgcp(Ret:img["ListedDr_Name"] as! String , Img: image!, Rmks: img["Rmks"] as! String))
                 
                
                 ImgViewtb.reloadData()
@@ -493,9 +497,9 @@ print(Date)
             Ret_and_img_Hed.isHidden=true
         }
         self.LoadingDismiss()
-        imgtbhig.constant = 100 + CGFloat(55*self.imagevw.count)
+        imgtbhig.constant = 100 + CGFloat(97*self.imagevw.count)
             self.view.layoutIfNeeded()
-        Scroolviehig.constant = 100 + CGFloat(55*self.BrandList.count) + CGFloat(90*self.imagevw.count)
+        Scroolviehig.constant = 100 + CGFloat(55*self.BrandList.count) + CGFloat(120*self.imagevw.count)
             self.view.layoutIfNeeded()
         print(Scroolviehig.constant)
         print(imgtbhig.constant)
