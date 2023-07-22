@@ -338,6 +338,7 @@ print(Date)
         let productArray = Date.components(separatedBy: "%")
         print(productArray)
         let StrDATE = productArray[0]
+        self.ShowLoading(Message: "    Loading...")
         let apiKey: String = "\(axn)&activityDate=\(StrDATE)&sfCode=\(SFCode)"
 
 
@@ -359,6 +360,7 @@ print(Date)
                         return
                     }
                     print(prettyPrintedJson)
+                    self.LoadingDismiss()
                     // let Brand:[String: Any] = json["value"] as! [String: Any]
                     // self.objcalls = json
                     
@@ -458,7 +460,7 @@ print(Date)
 //        } else {
 //            self.lblFrmMob.text = ""
 //        }
-
+        self.ShowLoading(Message: "    Loading...")
         if let imgevent = event as? [AnyObject], !imgevent.isEmpty {
             for img in imgevent {
                 let imgurl = img["imgurl"] as! String
@@ -487,6 +489,7 @@ print(Date)
             ImgViewtb.isHidden = true
             Ret_and_img_Hed.isHidden=true
         }
+        self.LoadingDismiss()
         imgtbhig.constant = 100 + CGFloat(55*self.imagevw.count)
             self.view.layoutIfNeeded()
         Scroolviehig.constant = 100 + CGFloat(55*self.BrandList.count) + CGFloat(90*self.imagevw.count)

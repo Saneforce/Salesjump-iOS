@@ -404,8 +404,9 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                 lblHQ.text = name  //+(item["id"] as! String)
                 var DistData: String=""
                 if(LocalStoreage.string(forKey: "Distributors_Master_"+id)==nil){
-                    Toast.show(message: "No Distributors found. Please will try to sync", controller: self)
-                    GlobalFunc.FieldMasterSync(SFCode: id){
+                    //Toast.show(message: "No Distributors found. Please will try to sync", controller: self)
+                    self.ShowLoading(Message: "       Sync Data Please wait...")
+                    GlobalFunc.FieldMasterSync(SFCode: id){ [self] in
                         DistData = self.LocalStoreage.string(forKey: "Distributors_Master_"+id)!
                         let RouteData: String=self.LocalStoreage.string(forKey: "Route_Master_"+id)!
                         if let list = GlobalFunc.convertToDictionary(text: DistData) as? [AnyObject] {
@@ -415,7 +416,11 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                             self.lstAllRoutes = list
                             self.lstRoutes = list
                         }
+                        lblDist.text = "Select the Distributor"
+                        lblRoute.text = "Select the Route"
+                        self.LoadingDismiss()
                     }
+                    
                     return
                 }else {
                     if let DistData = LocalStoreage.string(forKey: "Distributors_Master_" + id) {
