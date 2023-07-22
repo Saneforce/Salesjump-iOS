@@ -27,6 +27,8 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
     @IBOutlet weak var Retimg: UIImageView!
     @IBOutlet weak var BackBT: UIImageView!
     @IBOutlet weak var Ret_and_img_Hed: UIView!
+    @IBOutlet weak var CallesTbHig: NSLayoutConstraint!
+    
     
     let axn="get/brandavail"
     
@@ -393,7 +395,9 @@ print(Date)
 
                         Toast.show(message: "No calls on this date.")
                     }
-                
+                    CallesTbHig.constant = 100+CGFloat(200*BrandList.count)
+                    self.view.layoutIfNeeded()
+                    print(CallesTbHig.constant)
                     
 
             
