@@ -493,6 +493,8 @@ print(Date)
                 
             }
         }else {
+            
+            
             ImgViewtb.isHidden = true
             Ret_and_img_Hed.isHidden=true
         }
