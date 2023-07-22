@@ -30,6 +30,7 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
     @IBOutlet weak var CallesTbHig: NSLayoutConstraint!
     @IBOutlet weak var imgtbhig: NSLayoutConstraint!
     @IBOutlet weak var Scroolviehig: NSLayoutConstraint!
+    @IBOutlet weak var TCLbl: UILabel!
     
     let axn="get/brandavail"
     
@@ -77,6 +78,7 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        TCLbl.isHidden = true
         getUserDetails()
         Brandavailability()
         
@@ -208,6 +210,7 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
                 cell.TC?.text = String(BrandList[indexPath.row].TC)
                 cell.ACC?.text = String(BrandList[indexPath.row].AC)
                 cell.ECC?.text = String(BrandList[indexPath.row].EC)
+                cell.TC.isHidden = true
                
             }else if tableView == ImgViewtb {
                 cell.ImgRet.text = imagevw[indexPath.row].Ret
