@@ -28,7 +28,8 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
     @IBOutlet weak var BackBT: UIImageView!
     @IBOutlet weak var Ret_and_img_Hed: UIView!
     @IBOutlet weak var CallesTbHig: NSLayoutConstraint!
-    
+    @IBOutlet weak var imgtbhig: NSLayoutConstraint!
+    @IBOutlet weak var Scroolviehig: NSLayoutConstraint!
     
     let axn="get/brandavail"
     
@@ -395,9 +396,10 @@ print(Date)
 
                         Toast.show(message: "No calls on this date.")
                     }
-                    CallesTbHig.constant = 100+CGFloat(200*BrandList.count)
-                    self.view.layoutIfNeeded()
-                    print(CallesTbHig.constant)
+//                    CallesTbHig.constant = 100+CGFloat(200*BrandList.count)
+//                    self.view.layoutIfNeeded()
+//                    print(CallesTbHig.constant)
+                    updateTableViewAndSubview()
                     
 
             
@@ -414,14 +416,39 @@ print(Date)
             }
         }
     }
-//    @objc func imgwind(_ sender: Any){
-//
-//        ImageSc.isHidden = false
-//        let imageData = try? Data(contentsOf: urlImages!)
-//        let image = UIImage(data: imageData!)
-//        self.Retimg.image = image
-//
-//    }
+    func updateTableViewAndSubview() {
+        // Step 1: Calculate the new height for the tableView
+        let tableViewHeight = 100 + CGFloat(45 * BrandList.count)
+
+        // Assuming you have a reference to your tableView and viewBelowTableView
+        // Replace 'YourTableView' and 'YourViewBelowTableView' with the appropriate class names.
+        guard let tableView = BrandAV,
+              let viewBelowTableView = Ret_and_img_Hed else {
+            return
+        }
+
+        // Step 2: Calculate the new frame for the view below the tableView
+        let viewBelowTableViewY = tableView.frame.origin.y + tableViewHeight
+        let viewBelowTableViewNewFrame = CGRect(x: viewBelowTableView.frame.origin.x,
+                                                y: viewBelowTableViewY,
+                                                width: viewBelowTableView.frame.size.width,
+                                                height: viewBelowTableView.frame.size.height)
+
+        // Step 3: Update the tableView height and view's frame
+        UIView.animate(withDuration: 0.3) {
+            // Update tableView height
+            tableView.frame = CGRect(x: tableView.frame.origin.x,
+                                     y: tableView.frame.origin.y,
+                                     width: tableView.frame.size.width,
+                                     height: tableViewHeight)
+
+            // Update the view below tableView's frame
+            viewBelowTableView.frame = viewBelowTableViewNewFrame
+
+            // Make sure other UI elements are updated correctly
+            self.view.layoutIfNeeded()
+        }
+    }
     func EvenCap(_ sender: Any){
         //let imgevent = event
         //print(imgevent)
@@ -452,7 +479,7 @@ print(Date)
                 ImgViewtb.isHidden=false
                 imagevw.append(imgcp(Ret:img["ListedDr_Name"] as! String , Img: image!))
                 
-                
+               
                 ImgViewtb.reloadData()
                 
             }
@@ -460,7 +487,12 @@ print(Date)
             ImgViewtb.isHidden = true
             Ret_and_img_Hed.isHidden=true
         }
-       
+        imgtbhig.constant = 100 + CGFloat(55*self.imagevw.count)
+            self.view.layoutIfNeeded()
+        Scroolviehig.constant = 100 + CGFloat(55*self.BrandList.count) + CGFloat(90*self.imagevw.count)
+            self.view.layoutIfNeeded()
+        print(Scroolviehig.constant)
+        print(imgtbhig.constant)
     }
     func btpress(_ sender: Any){
         let buttonPosition:CGPoint = (sender as AnyObject).convert(CGPoint.zero, to: self.ImgViewtb)
