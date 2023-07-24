@@ -406,10 +406,10 @@ class LeaveForm: IViewController, UITableViewDelegate,
         let alert = UIAlertController(title: "Confirmation", message: "Do you want to submit Leave ?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
             
-            self.ShowLoading(Message: "Locating Device...")
-            VisitData.shared.cOutTime = GlobalFunc.getCurrDateAsString()
-            LocationService.sharedInstance.getNewLocation(location: { location in
-                let sLocation: String = location.coordinate.latitude.description + ":" + location.coordinate.longitude.description
+//            self.ShowLoading(Message: "Locating Device...")
+//            VisitData.shared.cOutTime = GlobalFunc.getCurrDateAsString()
+//            LocationService.sharedInstance.getNewLocation(location: { location in
+//                let sLocation: String = location.coordinate.latitude.description + ":" + location.coordinate.longitude.description
                 self.ShowLoading(Message: "Data Submitting Please wait...")
                 let jsonString = "[{\"LeaveFormValidate\":{\"Leave_Type\":\"'" + self.sLvlType + "'\",\"From_Date\":\"'" + self.sDOF + "'\",\"To_Date\":\"'" + self.sDOT + "'\",\"Reason\":\"'" + self.txReason.text! + "'\",\"eKey\":\"" + self.eKey + "\",\"address\":\"''\",\"No_of_Days\":\"''\",\"halfday\":\"''\"}}]"
                 let params: Parameters = ["data": jsonString]
@@ -462,9 +462,9 @@ class LeaveForm: IViewController, UITableViewDelegate,
                         self.present(resErr, animated: true)
                     }
                 }
-            },error: {_ in
-                
-            })
+//            },error: {_ in
+//
+//            })
 
         })
         alert.addAction(UIAlertAction(title: "Cancel", style: .destructive) { _ in
