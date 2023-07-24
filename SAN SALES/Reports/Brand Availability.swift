@@ -233,14 +233,19 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
          if tableView == ImgViewtb {
              print("You selected cell #\(indexPath.row)!")
              let product = event[indexPath.row]["imgurl"] as! String
-             print(product)
-             let apiKey: String = "\(SFCode)_\(product)"
-             let url = URL(string:APIClient.shared.imgurl+apiKey)
-             print(url as Any)
-             ImageSc.isHidden = false
-             let imageData = try? Data(contentsOf: url!)
-             let image = UIImage(data: imageData!)
-             self.Retimg.image = image
+             if product != "" {
+                 print(product)
+                 let apiKey: String = "\(SFCode)_\(product)"
+                 let url = URL(string:APIClient.shared.imgurl+apiKey)
+                 print(url as Any)
+                 ImageSc.isHidden = false
+                 let imageData = try? Data(contentsOf: url!)
+                 let image = UIImage(data: imageData!)
+                 self.Retimg.image = image
+             }else{
+                 ImageSc.isHidden = false
+                 self.Retimg.image = UIImage(named:"no-image-available")!
+             }
              
          }
      }
@@ -348,7 +353,7 @@ print(Date)
 
 
         
-        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
             AFdata in
             switch AFdata.result
             {
@@ -471,25 +476,31 @@ print(Date)
             for img in imgevent {
                 print(img)
                 let imgurl = img["imgurl"] as! String
+                
                 //let ListedDr_Name = img["ListedDr_Name"]
-                
-                
-                let apiKey: String = "\(SFCode)_\(imgurl)"
-                
-                let url = URL(string:APIClient.shared.imgurl+apiKey)
-                urlImages = url
-                print(url as Any)
-                
-                
-                let imageData = try? Data(contentsOf: url!)
-                // Create a UIImage from the downloaded data
-                let image = UIImage(data: imageData!)
-                Ret_and_img_Hed.isHidden = false
-                ImgViewtb.isHidden=false
-                imagevw.append(imgcp(Ret:img["ListedDr_Name"] as! String , Img: image!, Rmks: img["Rmks"] as! String))
-                
-               
-                ImgViewtb.reloadData()
+                if imgurl != "" {
+                    
+                    
+                    let apiKey: String = "\(SFCode)_\(imgurl)"
+                    
+                    let url = URL(string:APIClient.shared.imgurl+apiKey)
+                    urlImages = url
+                    print(url as Any)
+                    
+                    
+                    let imageData = try? Data(contentsOf: url!)
+                    // Create a UIImage from the downloaded data
+                    let image = UIImage(data: imageData!)
+                    Ret_and_img_Hed.isHidden = false
+                    ImgViewtb.isHidden=false
+                    imagevw.append(imgcp(Ret:img["ListedDr_Name"] as! String , Img: image!, Rmks: img["Rmks"] as! String))
+                    
+                    
+                    ImgViewtb.reloadData()
+                }else{
+                    imagevw.append(imgcp(Ret:img["ListedDr_Name"] as! String , Img: UIImage(named:"no-image-available")!, Rmks: img["Rmks"] as! String))
+                    ImgViewtb.reloadData()
+                }
                 
             }
         }else {
