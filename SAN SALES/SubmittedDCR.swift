@@ -370,9 +370,12 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
                             View.append(Viewval(Product: item["Product_Name"] as! String, qty: item["Quantity"] as! Int, value: item["value"] as! Int))
                             
                         }
-//                        OrederTBHight.constant = 100 + CGFloat(55*self.View.count)
+//                        OrederTBHight.constant = 100 + CGFloat(40*self.View.count)
 //                        print(OrederTBHight.constant)
 //                            self.view.layoutIfNeeded()
+//                        ScroolHight.constant = 100 + CGFloat(40*self.View.count) + CGFloat(40*self.Input.count)
+//                        print(ScroolHight.constant)
+//                        self.view.layoutIfNeeded()
                         self.OrderView2.reloadData()
                         
                     }
