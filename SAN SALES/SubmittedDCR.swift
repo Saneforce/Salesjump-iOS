@@ -32,12 +32,28 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
     @IBOutlet weak var OrderValue: UILabel!
     @IBOutlet weak var OrderTime: UILabel!
     @IBOutlet weak var MeetTime: UILabel!
+    @IBOutlet weak var InputTB: UITableView!
+    @IBOutlet weak var ScroolHight: NSLayoutConstraint!
+    @IBOutlet weak var OrederTBHight: NSLayoutConstraint!
+    @IBOutlet weak var InputTBhight: NSLayoutConstraint!
+    
     
     struct mnuItem: Any {
         let MasId: Int
         let MasName: String
         let MasLbl : String
     }
+    struct inputval: Any {
+        let Key: String
+        let Value: String
+      
+    }
+    struct Viewval: Any {
+        let Product : String
+        let qty : Int
+        let value : Int
+    }
+    var View:[Viewval]=[]
     
     struct OrderViewTB2: Any {
         let id : Int
@@ -46,6 +62,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
         let values: String
     }
     var orderViewTable2:[OrderViewTB2] = []
+    var Input:[inputval]=[]
     var OrdeView:[mnuItem]=[]
     let axn="table/list"
     let axnsec = "get/SecCallDets"
@@ -74,6 +91,8 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
         submittedDCRTB.dataSource=self
         OrderView2.delegate=self
         OrderView2.dataSource=self
+        InputTB.delegate=self
+        InputTB.dataSource=self
         BackButton.addTarget(target: self, action: #selector(closeMenuWin))
         // Do any additional setup after loading the view.
     }
@@ -94,11 +113,14 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-       if  tableView == EditTB {return objcalls.count}
+      // if  tableView == EditTB {return objcalls.count}
         if tableView == OrderView{return OrdeView.count}
-        if tableView == OrderView2{return objcalls.count}
+        if tableView == OrderView2{return View.count}
         if tableView == submittedDCRTB {
             return SubmittedDCR.objcalls_SelectSecondaryorder2.count
+        }
+        if tableView == InputTB{
+            return Input.count
         }
         return 0
     }
@@ -119,10 +141,15 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
             cell.OrderValue.text = OrdeView[indexPath.row].MasLbl
         }
         if tableView == OrderView2 {
-            let item: [String: Any] = objcalls[indexPath.row] as! [String : Any]
-            cell.ProductValue?.text = item["Product_Name"] as? String
-            cell.Qty?.text = String(item["Quantity"] as! Int)
-            cell.Value?.text = String(item["value"] as! Double)
+          
+            cell.ProductValue?.text = View[indexPath.row].Product
+            cell.Qty?.text = String(View[indexPath.row].qty)
+            cell.Value?.text = String(View[indexPath.row].value)
+          
+        }
+        if tableView == InputTB {
+            cell.InpuKey.text = Input[indexPath.row].Key
+            cell.inputvalu.text = Input[indexPath.row].Value
         }
             
         return cell
@@ -170,6 +197,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
                     }
                     print(prettyPrintedJson)
                     self.objcalls = json
+                
                     SelectSecondaryorder2()
                 }
             case .failure(let error):
@@ -293,22 +321,27 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
         guard let indexPath = self.submittedDCRTB.indexPathForRow(at: buttonPosition) else{
             return
         }
-       // let secondaryorder = SubmittedDCR.secondaryOrderData[indexPath.row]
         
-        for item in 0..<SubmittedDCR.objcalls_SelectSecondaryorder2.count {
+   
             let product = SubmittedDCR.objcalls_SelectSecondaryorder2[indexPath.row]
-//            let item = product["Trans_Sl_No"] as! String
-//            let item2 = product["DCR_Code"] as! String
+            print(product)
+
    
             self.Retlbl.text=String(format: "%@", product["Trans_Detail_Name"] as! String)
             self.Dislbl.text=String(format: "%@", product["Trans_Detail_Slno"] as! String)
             self.Rotlbl.text=String(format: "%@", product["SDP_Name"] as! String)
-            self.MeetTime.text=String(format: "%@", product["StartOrder_Time"] as! String)
-           // self.OrderTime.text=String(format: "%@", json[0]["Order_Out_Time"] as! String)
-            self.Ordervalue.text=String(format: "%@", product["finalNetAmnt"] as! String)
-            self.Remark.text=String(format: "%@", product["Activity_Remarks"] as! String)
+           // self.MeetTime.text=String(format: "%@", product["StartOrder_Time"] as! String)
+           // self.OrderTime.text=String(format: "%@", product["Order_Out_Time"] as! String)
+            //self.Ordervalue.text=String(format: "%@", product["finalNetAmnt"] as! String)
+           // self.Remark.text=String(format: "%@", product["Activity_Remarks"] as! String)
             let item2 = product["Trans_Sl_No"] as! String
-           
+            
+            Input.append(inputval(Key: "Meet Time", Value: product["StartOrder_Time"] as! String))
+            Input.append(inputval(Key: "Order Time", Value: product["Order_Out_Time"] as! String))
+            Input.append(inputval(Key: "Order Value", Value: product["finalNetAmnt"] as! String))
+            Input.append(inputval(Key: "Remarks", Value: product["Activity_Remarks"] as! String))
+            InputTB.reloadData()
+            
             let apiKey: String = "\(axnview)&divisionCode=\(DivCode)&desig=\(Desig)&rSF=\(SFCode)&sfCode=\(SFCode)&State_Code=\(StateCode)&Order_No=\(item2)"
             
             
@@ -330,7 +363,16 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
                         }
                         print(prettyPrintedJson)
                         self.objcalls = json
-                        //                    self.objcallsSINO = Position(json[0][""])
+                        var item = objcalls[0]
+                        print(item)
+                        for item in json {
+                            
+                            View.append(Viewval(Product: item["Product_Name"] as! String, qty: item["Quantity"] as! Int, value: item["value"] as! Int))
+                            
+                        }
+//                        OrederTBHight.constant = 100 + CGFloat(55*self.View.count)
+//                        print(OrederTBHight.constant)
+//                            self.view.layoutIfNeeded()
                         self.OrderView2.reloadData()
                         
                     }
@@ -338,7 +380,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
                     Toast.show(message: error.errorDescription!)  //, controller: self
                 }
             }
-        }
+        
 
         Viewwindow.isHidden=false
     }
@@ -384,7 +426,6 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
                 let params: Parameters = [
                     "data": jsonString
                 ]
-                let alert = UIAlertController(title: "Confirmation", message: "Do you want Delete this Order ?", preferredStyle: .alert)
                 
                 AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
                     AFdata in
@@ -392,7 +433,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
                     {
                     case .success(let value):
                         print(value)
-                        if let json = value as? [String: Any] {
+                        if value is [String: Any] {
                             guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
                                 print("Error: Cannot convert JSON object to Pretty JSON data")
                                 return

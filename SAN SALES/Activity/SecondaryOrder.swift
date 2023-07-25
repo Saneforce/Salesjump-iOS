@@ -142,8 +142,11 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
             autoreleasepool{
             lstProducts = lstAllProducts.filter({(product) in
                 let CatId: String = String(format: "%@", product["cateid"] as! CVarArg)
+                print(CatId)
+                print(selBrand)
                 return Bool(CatId == selBrand)
             })
+                print(lstProducts.count)
             }
         }
         DataSF = self.lstPlnDetail[0]["subordinateid"] as! String
@@ -299,6 +302,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView==tbProduct { return lstProducts.count }
+        print(lstProducts)
         if tableView==tbPrvOrderProduct { return lstPrvOrder.count }
         if tableView == tbProduct {return Editobjcalls.count}
         return lObjSel.count
@@ -829,18 +833,25 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         let cell:cellListItem = GlobalFunc.getTableViewCell(view: sender.view!) as! cellListItem
         let tbView:UITableView = GlobalFunc.getTableView(view: sender.view!) as! UITableView
         let indxPath: IndexPath = tbView.indexPath(for: cell)!
+        print(indxPath)
         var sQty: Int =  integer(from: cell.txtQty)
         sQty = sQty+1
         let id: String
         let lProdItem:[String: Any]
+        print(tbPrvOrderProduct as Any)
         if(tbView==tbPrvOrderProduct)
         {
             lProdItem = lstPrvOrder[indxPath.row] as! [String : Any]
+            print(lProdItem)
             id=String(format: "%@", lstPrvOrder[indxPath.row]["id"] as! CVarArg)
+            print(id)
         }else{
             lProdItem = lstProducts[indxPath.row] as! [String : Any]
+            print(lProdItem)
             id=String(format: "%@", lstProducts[indxPath.row]["id"] as! CVarArg)
+            print(id)
         }
+        print(VisitData.shared.ProductCart)
         let items: [AnyObject] = VisitData.shared.ProductCart.filter ({ (Cart) in
             
             if Cart["id"] as! String == id {
@@ -853,14 +864,22 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         if(items.count>0)
         {
             selUOM=String(format: "%@", items[0]["UOM"] as! CVarArg)
+            print(selUOM)
             selUOMNm=String(format: "%@", items[0]["UOMNm"] as! CVarArg)
+            print(selUOMNm)
             selUOMConv=String(format: "%@", items[0]["UOMConv"] as! CVarArg)
+            print(selUOMConv)
             selNetWt=String(format: "%@", items[0]["NetWt"] as! CVarArg)
+            print(selNetWt)
         }else{
             selUOM=String(format: "%@", lstProducts[indxPath.row]["Base_Unit_code"] as! CVarArg)
+            print(selUOM)
             selUOMNm=String(format: "%@", lstProducts[indxPath.row]["Product_Sale_Unit"] as! CVarArg)
+            print(selUOMNm)
             selUOMConv=String(format: "%@", lstProducts[indxPath.row]["OrdConvSec"] as! CVarArg)
+            print(selUOMConv)
             selNetWt=String(format: "%@", lstProducts[indxPath.row]["product_netwt"] as! CVarArg)
+            print(selNetWt)
         }
         cell.txtQty.text = String(sQty)
         updateQty(id: id, sUom: selUOM, sUomNm: selUOMNm, sUomConv: selUOMConv,sNetUnt: selNetWt, sQty: String(sQty),ProdItem: lProdItem,refresh: 1)
@@ -1306,6 +1325,8 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
                             }
                         }
                         self.Editobjcalls = json
+//                        print(Editobjcalls)
+                        Editoredr(sender: button)
                        // setSecEditeOrder()
                     }
                 case .failure(let error):
@@ -1318,6 +1339,116 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
     }
        
         }
+    
+    let button = UIButton()
+    func Editoredr(sender: AnyObject) {
+        let cell:cellListItem
+                print(Editobjcalls)
+                print(lstAllProducts)
+                print(lstAllProducts.count)
+        //      let cell:cellListItem = GlobalFunc.getTableViewCell(view: sender.view!) as! cellListItem
+        //        let tbView:UITableView = GlobalFunc.getTableView(view: sender.view!)
+             let indxPath = lstAllProducts
+               print(indxPath)
+
+                let Additional_Prod_Dtls = Editobjcalls[0]["Additional_Prod_Code1"] as? String
+                let productArray = Additional_Prod_Dtls?.components(separatedBy: "#")
+                if let products = productArray {
+                    for product in products {
+
+
+                            let productData = product.components(separatedBy: "~")
+                           
+                        let trimmedString = productData[0].trimmingCharacters(in: .whitespacesAndNewlines)
+                        print(trimmedString)
+
+                            let price = productData[1].components(separatedBy: "$")[0]
+                            let price1 = Int(productData[1].components(separatedBy: "$")[1])
+                            print(price)
+                           // print(price1)
+                       // lstAllProducts
+                        print(lstProducts)
+                        
+                        let sQty : Int = price1!
+                let id: String
+                let lProdItem:[String: Any]
+                        var BasUnitCode: Int = 0
+                        //var BasUnitCode2: Int = 0
+                        if let indexToDelete = lstAllProducts.firstIndex(where: { String(format: "%@", $0["id"] as! CVarArg) == "\(String(describing: trimmedString))" }) {
+                                           let stkname = lstAllProducts[indexToDelete]
+                                           print(indexToDelete)
+                                           print(stkname)
+
+                                           // Safely unwrap Base_Unit_code and convert it to Int
+                                           if let baseUnitCodeStr = lstAllProducts[indexToDelete]["Base_Unit_code"] as? String,
+                                              let baseUnitCodeInt = Int(baseUnitCodeStr) {
+                                               BasUnitCode = baseUnitCodeInt
+                                               print(BasUnitCode)
+                                           } else {
+                                               print("Base_Unit_code is nil or not convertible to Int.")
+                                               let baseUnitCodeInt = lstAllProducts[indexToDelete]["Base_Unit_code"]
+                                               print(baseUnitCodeInt as Any)
+                                               if let transid = baseUnitCodeInt {
+
+                                                   if let transid2 = transid{
+                                                       print(transid2)
+                                                       BasUnitCode = transid2 as! Int
+                                                       print(BasUnitCode)
+                                                 } else {
+                                                                 print("Value is nil or not a String")
+                                                             }
+                                             } else {
+                                                             print("Value is nil or not a String")
+                                                         }
+
+                                           }
+                                       
+                        
+                        lProdItem = stkname as! [String : Any]
+                        print(indexToDelete as Any)
+                            id=String(format: "%@", lstAllProducts[indexToDelete]["id"] as! CVarArg)
+                        print(id)
+
+                let items: [AnyObject] = VisitData.shared.ProductCart.filter ({ (Cart) in
+
+                    if Cart["id"] as! String == productData[0] {
+                        return true
+                    }
+                    return false
+                })
+                var selUOMConv: String = "1"
+                var selNetWt: String = ""
+                        if(items.count>0)
+                        {
+                            selUOM=String(format: "%@", items[0]["UOM"] as! CVarArg)
+                            print(selUOM)
+                            selUOMNm=String(format: "%@", items[0]["UOMNm"] as! CVarArg)
+                            print(selUOMNm)
+                            selUOMConv=String(format: "%@", items[0]["UOMConv"] as! CVarArg)
+                            print(selUOMConv)
+                            selNetWt=String(format: "%@", items[0]["NetWt"] as! CVarArg)
+                            print(selNetWt)
+                        }else{
+                            selUOM=String(BasUnitCode)
+                            print(selUOM)
+                            selUOMNm=String(stkname["Product_Sale_Unit"] as! String)
+                            print(selUOMNm)
+                            selUOMConv=String(stkname["conversionQty"] as! Int)
+                            print(selUOMConv)
+                            selNetWt=String("")
+                            print(selNetWt)
+                        }
+
+                
+                updateQty(id: id, sUom: selUOM, sUomNm: selUOMNm, sUomConv: selUOMConv,sNetUnt: selNetWt, sQty: String(sQty),ProdItem: lProdItem,refresh: 1)
+                        tbProduct.reloadData()
+
+                        } else {
+                            print("Item not found in lstAllProducts.")
+                        }
+                    }
+                }
+    }
     
      
     @objc private func GotoHome() {

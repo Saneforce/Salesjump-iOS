@@ -70,6 +70,8 @@ class cellListItem:UITableViewCell{
     @IBOutlet weak var retimg: UIImageView!
     @IBOutlet weak var ImgRet: UILabel!
     @IBOutlet weak var Rmks: UILabel!
+    @IBOutlet weak var InpuKey: UILabel!
+    @IBOutlet weak var inputvalu: UILabel!
     var ischeck = false
 
 }
