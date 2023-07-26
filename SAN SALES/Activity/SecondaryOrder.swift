@@ -90,12 +90,21 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
     var pCatIndexPath = IndexPath()
     var Editobjcalls: [AnyObject]=[]
     var productData : String?
+    var Order_Out: String?
     var disbuttername : String?
     var lbltotalamunt: Int = 0
     let LocalStoreage = UserDefaults.standard
+    
+    var net_weight_value: Int = 0
+    var Cust_Code: String = ""
+    var DCR_Code: String = ""
+    var Trans_Sl_No: String = ""
+    var Route: String = ""
+    
     override func viewDidLoad() {
         loadViewIfNeeded()
        
+        
         getUserDetails()
         EditSecondaryordervalue()
         let LocalStoreage = UserDefaults.standard
@@ -1087,6 +1096,9 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
     }
     
     @IBAction func SubmitCall(_ sender: Any) {
+        
+        print(SubmittedDCR.Order_Out_Time)
+        
         if validateForm() == false {
             return
         }
@@ -1136,7 +1148,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         
     }
     func OrderSubmit(sLocation: String,sAddress: String){
-    
+        
         var sPItems:String = ""
         self.ShowLoading(Message: "Data Submitting Please wait...")
         for i in 0...self.lstPrvOrder.count-1{
@@ -1178,22 +1190,71 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
             sPItems = sPItems + " \"Ccb_qty\": 0,"
             sPItems = sPItems + " \"PromoVal\": 0,"
             //sPItems = sPItems + " \"rx_remarks\": 0,"
-           // sPItems = sPItems + " \"rx_remarks_Id\": 0,"
+            // sPItems = sPItems + " \"rx_remarks_Id\": 0,"
             sPItems = sPItems + " \"rx_remarks\":\"\","
             sPItems = sPItems + " \"rx_remarks_Id\": \"\","
             sPItems = sPItems + " \"OrdConv\":" + (item["UOMConv"] as! String) + ","
             sPItems = sPItems + " \"selectedScheme\":" + (String(format: "%.0f", item["Scheme"] as! Double)) + ","
-           // sPItems = sPItems + " \"selectedOffProCode\": \"" + (item["OffProd"] as! String) + "\","
+            // sPItems = sPItems + " \"selectedOffProCode\": \"" + (item["OffProd"] as! String) + "\","
             sPItems = sPItems + " \"selectedOffProCode\": \"241\","
             sPItems = sPItems + " \"selectedOffProName\":\"PIECE\","
             sPItems = sPItems + " \"selectedOffProUnit\": \"1\","
             sPItems = sPItems + " \"f_key\": {\"Activity_MSL_Code\": \"Activity_Doctor_Report\"}}"
-            
-            
-            
-
-            
+          
         }
+        
+        var sPItems2:String = ""
+        
+        for i in 0...self.lstPrvOrder.count-1{
+            let item: [String: Any]=self.lstPrvOrder[i] as! [String : Any]
+            let id=String(format: "%@", item["id"] as! CVarArg)
+            let ProdItems = self.lstAllProducts.filter({(product) in
+                let ProdId: String = String(format: "%@", product["id"] as! CVarArg)
+                return Bool(ProdId == id)
+            })
+            //let itm: [String: Any]=["id": id,"Qty": sQty,"UOM": sUom, "UOMNm": sUomNm, "UOMConv": sUomConv, "SalQty": TotQty,"Scheme": Scheme,"FQ": FQ,"OffQty": OffQty,"OffProd":OffProd,"OffProdNm":OffProdNm, "Value": (TotQty*Rate)];
+            if i>0 { sPItems2 = sPItems2 + "," }
+            var Disc: String = item["Disc"] as! String
+            if Disc == "" { Disc = "0"}
+            var DisVal: String = item["DisVal"] as! String
+            if DisVal == "" { DisVal="0" }
+            
+            sPItems2 = sPItems2 + "{\"product\":\""+id+"\", \"product_Nm\":\""+(ProdItems[0]["name"] as! String)+"\","
+            sPItems2 = sPItems2 + " \"UnitId\": \"" + (item["UOM"] as! String) + "\","
+            sPItems2 = sPItems2 + " \"UnitName\": \"" + (item["UOMNm"] as! String) + "\","
+            sPItems2 = sPItems2 + " \"OrdConv\":" + (item["UOMConv"] as! String) + ","
+            sPItems2 = sPItems2 + " \"free\": " + (String(format: "%i", item["OffQty"] as! Int)) + ","
+            sPItems2 = sPItems2 + " \"HSN\": \"\","
+            sPItems2 = sPItems2 + " \"Rate\": " + (String(format: "%.2f", item["Rate"] as! Double)) + ","
+            sPItems2 = sPItems2 + " \"imageUri\": \"\","
+            sPItems2 = sPItems2 + " \"Schmval\": 0,"
+            sPItems2 = sPItems2 + " \"rx_qty\": 1,"
+            sPItems2 = sPItems2 + " \"recv_qty\": 0,"
+            sPItems2 = sPItems2 + " \"product_netwt\": 0,"
+            sPItems2 = sPItems2 + " \"netweightvalue\": 0,"
+            sPItems2 = sPItems2 + " \"conversionQty\": 1,"
+            sPItems2 = sPItems2 + " \"cateid\": 1011,"
+            sPItems2 = sPItems2 + " \"UcQty\": 1,"
+            sPItems2 = sPItems2 + " \"rx_Conqty\":" + (item["Qty"] as! String) + ","
+            sPItems2 = sPItems2 + "{\"id\":\""+id+"\", \"name\":\""+(ProdItems[0]["name"] as! String)+"\","
+            sPItems2 = sPItems2 + " \"rx_remarks\":\"\","
+            sPItems2 = sPItems2 + " \"rx_remarks_Id\": \"\","
+            sPItems2 = sPItems2 + " \"sample_qty\": \"10.0\","
+            sPItems2 = sPItems2 + " \"FreeP_Code\": \"" + (item["OffProd"] as! String) + "\","
+            sPItems2 = sPItems2 + " \"Fname\": \"" + (item["OffProdNm"] as! String) + "\","
+            sPItems2 = sPItems2 + " \"PromoVal\": 0,"
+            sPItems2 = sPItems2 + " \"discount\": " + Disc + ","
+            sPItems2 = sPItems2 + " \"discount_price\": " +  DisVal + ","
+            sPItems2 = sPItems2 + " \"tax\": 0,"
+            sPItems2 = sPItems2 + " \"tax_price\": 0,"
+            sPItems2 = sPItems2 + " \"selectedScheme\":" + (String(format: "%.0f", item["Scheme"] as! Double)) + ","
+            sPItems2 = sPItems2 + " \"selectedOffProCode\": \"241\","
+            sPItems2 = sPItems2 + " \"selectedOffProName\":\"PIECE\","
+            sPItems2 = sPItems2 + " \"selectedOffProUnit\": \"1\","
+   
+        }
+   
+        
         var sImgItems:String = ""
         if(PhotosCollection.shared.PhotoList.count>0){
             for i in 0...PhotosCollection.shared.PhotoList.count-1{
@@ -1203,10 +1264,10 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
             }
         }
         
-
-//        let jsonString = "[{\"Activity_Report_APP\":{\"dcr_activity_date\":\"\'" + VisitData.shared.cInTime + "\'\",\"rx\":\"\'1\'\",\"rx_t\":\"\'\'\",\"Daywise_Remarks\":\"\'" + VisitData.shared.VstRemarks.name + "\'\",\"RateEditable\":\"\'\'\",\"Worktype_code\":\"\'" + (self.lstPlnDetail[0]["worktype"] as! String) + "\'\",\"Town_code\":\"\'" + (self.lstPlnDetail[0]["clusterid"] as! String) + "\'\",\"DataSF\":\"\'" + DataSF + "\'\",\"eKey\":\"" + self.eKey + "\"}},{\"Activity_Doctor_Report\":{\"modified_time\":\"\'" + VisitData.shared.cInTime + "\'\",\"CheckinTime\":\"" + VisitData.shared.cInTime + "\",\"rateMode\":\"Nil\",\"CheckoutTime\":\"" + VisitData.shared.cOutTime + "\",\"Order_No\":\"\'0\'\",\"Doc_Meet_Time\":\"\'" + VisitData.shared.cInTime + "\'\",\"Worked_With\":\"\'\'\",\"discount_price\":\"0\",\"Discountpercent\":\"0\",\"PhoneOrderTypes\":\"" + VisitData.shared.OrderMode.id + "\",\"net_weight_value\":\"0\",\"stockist_name\":\"\'\'\",\"location\":\"\'" + sLocation + "\'\",\"stockist_code\":\"\'" + (VisitData.shared.Dist.id ) + "\'\",\"Order_Stk\":\"\'\'\",\"superstockistid\":\"\'\'\",\"geoaddress\":\"" + sAddress + "\",\"f_key\":{\"Activity_Report_Code\":\"\'Activity_Report_APP\'\"},\"doctor_name\":\"\'" + VisitData.shared.CustName + "\'\",\"rootTarget\":\"\'0\'\",\"disPercnt\":\"\'0\'\",\"orderValue\":\"\'0\'\",\"disValue\":\"\'0\'\",\"finalNetAmt\":\"\'0\'\",\"taxTotalValue\":\"\'0\'\",\"discTotalValue\":\"\'0\'\",\"subTota\":\"\'0\'\",\"No_Of_items\":\"\'0\'\",\"Doctor_POB\":\"0\",\"doctor_code\":\"\'" + VisitData.shared.CustID + "\'\"}},{\"Activity_Sample_Report\":[" + sPItems +  "]},{\"Trans_Order_Details\":[]},{\"Activity_Event_Captures\":[" + sImgItems +  "]},{\"Activity_Input_Report\":[]},{\"Compititor_Product\":[]},{\"PENDING_Bills\":[]}]"
-
-        var Subtotal = lbltotalamunt
+        
+        //        let jsonString = "[{\"Activity_Report_APP\":{\"dcr_activity_date\":\"\'" + VisitData.shared.cInTime + "\'\",\"rx\":\"\'1\'\",\"rx_t\":\"\'\'\",\"Daywise_Remarks\":\"\'" + VisitData.shared.VstRemarks.name + "\'\",\"RateEditable\":\"\'\'\",\"Worktype_code\":\"\'" + (self.lstPlnDetail[0]["worktype"] as! String) + "\'\",\"Town_code\":\"\'" + (self.lstPlnDetail[0]["clusterid"] as! String) + "\'\",\"DataSF\":\"\'" + DataSF + "\'\",\"eKey\":\"" + self.eKey + "\"}},{\"Activity_Doctor_Report\":{\"modified_time\":\"\'" + VisitData.shared.cInTime + "\'\",\"CheckinTime\":\"" + VisitData.shared.cInTime + "\",\"rateMode\":\"Nil\",\"CheckoutTime\":\"" + VisitData.shared.cOutTime + "\",\"Order_No\":\"\'0\'\",\"Doc_Meet_Time\":\"\'" + VisitData.shared.cInTime + "\'\",\"Worked_With\":\"\'\'\",\"discount_price\":\"0\",\"Discountpercent\":\"0\",\"PhoneOrderTypes\":\"" + VisitData.shared.OrderMode.id + "\",\"net_weight_value\":\"0\",\"stockist_name\":\"\'\'\",\"location\":\"\'" + sLocation + "\'\",\"stockist_code\":\"\'" + (VisitData.shared.Dist.id ) + "\'\",\"Order_Stk\":\"\'\'\",\"superstockistid\":\"\'\'\",\"geoaddress\":\"" + sAddress + "\",\"f_key\":{\"Activity_Report_Code\":\"\'Activity_Report_APP\'\"},\"doctor_name\":\"\'" + VisitData.shared.CustName + "\'\",\"rootTarget\":\"\'0\'\",\"disPercnt\":\"\'0\'\",\"orderValue\":\"\'0\'\",\"disValue\":\"\'0\'\",\"finalNetAmt\":\"\'0\'\",\"taxTotalValue\":\"\'0\'\",\"discTotalValue\":\"\'0\'\",\"subTota\":\"\'0\'\",\"No_Of_items\":\"\'0\'\",\"Doctor_POB\":\"0\",\"doctor_code\":\"\'" + VisitData.shared.CustID + "\'\"}},{\"Activity_Sample_Report\":[" + sPItems +  "]},{\"Trans_Order_Details\":[]},{\"Activity_Event_Captures\":[" + sImgItems +  "]},{\"Activity_Input_Report\":[]},{\"Compititor_Product\":[]},{\"PENDING_Bills\":[]}]"
+        
+        let Subtotal = lbltotalamunt
         print(Subtotal)
         
         let jsonString = "[{\"Activity_Report_APP\":{\"Worktype_code\":\"\'" + (self.lstPlnDetail[0]["worktype"] as! String) + "\'\",\"Town_code\":\"\'" + (self.lstPlnDetail[0]["clusterid"] as! String) + "\'\",\"RateEditable\":\"''\",\"dcr_activity_date\":\"\'" + VisitData.shared.cInTime + "\'\",\"Daywise_Remarks\":\"" + VisitData.shared.VstRemarks.name + "\",\"eKey\":\"" + self.eKey + "\",\"rx\":\"'1'\",\"rx_t\":\"''\",\"DataSF\":\"\'" + DataSF + "\'\"}},{\"Activity_Doctor_Report\":{\"Doctor_POB\":0,\"Worked_With\":\"''\",\"Doc_Meet_Time\":\"\'" + VisitData.shared.cInTime + "\'\",\"modified_time\":\"\'" + VisitData.shared.cInTime + "\'\",\"net_weight_value\":\"0.00\",\"stockist_code\":\"\'" + (VisitData.shared.Dist.id ) + "\'\",\"stockist_name\":\"'BUTTERFLY APPLIANCES'\",\"superstockistid\":\"''\",\"Discountpercent\":0,\"CheckinTime\":\"" + VisitData.shared.cInTime + "\",\"CheckoutTime\":\"" + VisitData.shared.cOutTime + "\",\"location\":\"\'" + sLocation + "\'\",\"geoaddress\":\"" + sAddress + "\",\"PhoneOrderTypes\":\"" + VisitData.shared.OrderMode.id + "\",\"Order_Stk\":\"'15560'\",\"Order_No\":\"''\",\"rootTarget\":\"0\",\"orderValue\":\(Subtotal),\"disPercnt\":0.0,\"disValue\":0.0,\"finalNetAmt\":340.4,\"taxTotalValue\":0.4,\"discTotalValue\":0.0,\"subTotal\":340.0,\"No_Of_items\":4,\"rateMode\":\"free\",\"discount_price\":0,\"doctor_code\":\"\'" + VisitData.shared.CustID + "\'\",\"doctor_name\":\"\'" + VisitData.shared.CustName + "\'\",\"doctor_route\":\"'mylapore'\",\"f_key\":{\"Activity_Report_Code\":\"'Activity_Report_APP'\"}}},{\"Activity_Sample_Report\":[" + sPItems +  "]},{\"Trans_Order_Details\":[]},{\"Activity_Input_Report\":[]},{\"Activity_Event_Captures\":[]},{\"PENDING_Bills\":[]},{\"Compititor_Product\":[]},{\"Activity_Event_Captures_Call\":[]}]"
@@ -1215,32 +1276,78 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
             "data": jsonString //"["+jsonString+"]"//
         ]
         print(params)
-        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+"dcr/save&divisionCode=" + self.DivCode + "&rSF=" + self.SFCode + "&sfCode=" + self.SFCode, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
+        print(VisitData.shared.cInTime)
+        print(SubmittedDCR.Order_Out_Time)
+        
+        if VisitData.shared.cInTime != SubmittedDCR.Order_Out_Time{
+            
+            AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+"dcr/save&divisionCode=" + self.DivCode + "&rSF=" + self.SFCode + "&sfCode=" + self.SFCode, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
             AFdata in
             self.LoadingDismiss()
             PhotosCollection.shared.PhotoList = []
             switch AFdata.result
             {
-               
+                
             case .success(let value):
                 print(value)
                 if let json = value as? [String: Any] {
                     
                     Toast.show(message: "Order has been submitted successfully", controller: self)
-                     let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
-                     UIApplication.shared.windows.first?.rootViewController = viewController
-                     UIApplication.shared.windows.first?.makeKeyAndVisible()
+                    let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
+                    UIApplication.shared.windows.first?.rootViewController = viewController
+                    UIApplication.shared.windows.first?.makeKeyAndVisible()
                     
-                     VisitData.shared.clear()
+                    VisitData.shared.clear()
                 }
                 
             case .failure(let error):
                 let alert = UIAlertController(title: "Information", message: error.errorDescription, preferredStyle: .alert)
-                     alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
-                         return
-                     })
-                     self.present(alert, animated: true)
+                alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
+                    return
+                })
+                self.present(alert, animated: true)
             }
+        }
+    }
+     else{
+         
+           print("No data")
+         let jsonString2 = "[\"Products\":[" + sPItems2 +  "],\"Activity_Event_Captures\":[],\"POB\":\"0\",\"Value\":\"\(Subtotal)\",\"disPercnt\":0.0,\"disValue\":0.0,\"finalNetAmt\":\(Subtotal),\"taxTotalValue\":\"0.88\",\"discTotalValue\":\"0.0\",\"subTotal\":\"\(Subtotal)\",\"No_Of_items\":\"3\",\"Cust_Code\":\"'\(Cust_Code)'\",\"DCR_Code\":\"\(DCR_Code)\",\"Trans_Sl_No\":\"\(Trans_Sl_No)\",\"Route\":\"\(Route)\",\"net_weight_value\":\"0\",\"Discountpercent\":0.0,\"discount_price\":0.0,\"target\":\"0\",\"rateMode\":\"free\",\"Stockist\":\"32538\",\"RateEditable\":\"\"]"
+         
+         
+         let params: Parameters = [
+             "data": jsonString2 //"["+jsonString+"]"//
+         ]
+         
+         AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+"dcr/updateProducts" + "&divisionCode=" + self.DivCode + "&sfCode=" + self.SFCode + "&desig=" + self.Desig, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
+         AFdata in
+         self.LoadingDismiss()
+         PhotosCollection.shared.PhotoList = []
+         switch AFdata.result
+         {
+             
+         case .success(let value):
+             print(value)
+             if let json = value as? [String: Any] {
+                 
+                 Toast.show(message: "Order has been submitted successfully", controller: self)
+                 let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
+                 UIApplication.shared.windows.first?.rootViewController = viewController
+                 UIApplication.shared.windows.first?.makeKeyAndVisible()
+                 
+                 VisitData.shared.clear()
+             }
+             
+         case .failure(let error):
+             let alert = UIAlertController(title: "Information", message: error.errorDescription, preferredStyle: .alert)
+             alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
+                 return
+             })
+             self.present(alert, animated: true)
+         }
+     }
+         
+         self.LoadingDismiss()
         }
     }
     func getUserDetails(){
@@ -1304,8 +1411,17 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
                             return
                         }
                         print(prettyPrintedJson)
-                        self.lblTotAmt.text = String(json[0]["POB_Value"] as! Double)
+//                        self.lblTotAmt.text = String(json[0]["POB_Value"] as! Double)
+//                        var amount = String(json[0]["POB_Value"] as! Double)
+//                        print(amount)
+//                        \"No_Of_items\":\"3\",\"Cust_Code\":\"'2149655'\",\"DCR_Code\":\"SEF1-279\",\"Trans_Sl_No\":\"MGR1018-23-24-SO-126\",\"Route\":\"114726\",\"net_weight_value\":\"0\"
                         
+                        
+                         net_weight_value = json[0]["net_weight_value"] as! Int
+                         Cust_Code = json[0]["Cust_Code"] as! String
+                         DCR_Code = json[0]["DCR_Code"] as! String
+                         Trans_Sl_No = json[0]["Trans_Sl_No"] as! String
+                         Route = json[0]["Route"] as! String
                         
                         
                         let Additional_Prod_Dtls = json[0]["Additional_Prod_Dtls1"] as? String
@@ -1364,12 +1480,13 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
 
                             let price = productData[1].components(separatedBy: "$")[0]
                             let price1 = Int(productData[1].components(separatedBy: "$")[1])
-                            print(price)
+                        print(price1 as Any)
                            // print(price1)
                        // lstAllProducts
                         print(lstProducts)
                         
                         let sQty : Int = price1!
+                        print(sQty)
                 let id: String
                 let lProdItem:[String: Any]
                         var BasUnitCode: Int = 0
@@ -1477,4 +1594,3 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         vwSelWindow.isHidden=true
     }
 }
-//php7632
