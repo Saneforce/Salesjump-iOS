@@ -1121,7 +1121,7 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
                     }
                     print(prettyPrintedJson)
                     self.objcallsprimary = json
-                    
+                    Editoredr()
                 }
             case .failure(let error):
                 Toast.show(message: error.errorDescription!)  //, controller: self
@@ -1132,6 +1132,53 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
             // The optional value is nil
             print("Product is nil")
         }
+    }
+    
+    
+     func Editoredr(){
+        print(objcallsprimary)
+         print(lstAllProducts)
+         print(lstAllProducts.count)
+        
+         let indxPath = lstAllProducts
+           print(indxPath)
+         
+         let Additional_Prod_Dtls = objcallsprimary[0]["Additional_Prod_Code1"] as? String
+         
+//        sQty = sQty+1
+//        let id: String
+//        let lProdItem:[String: Any]
+//        if(tbView==tbPrvOrderProduct)
+//        {
+//            lProdItem = lstPrvOrder[indxPath.row] as! [String : Any]
+//            id=String(format: "%@", lstPrvOrder[indxPath.row]["id"] as! CVarArg)
+//        }else{
+//            lProdItem = lstProducts[indxPath.row] as! [String : Any]
+//            id=String(format: "%@", lstProducts[indxPath.row]["id"] as! CVarArg)
+//        }
+//        let items: [AnyObject] = VisitData.shared.ProductCart.filter ({ (Cart) in
+//
+//            if Cart["id"] as! String == id {
+//                return true
+//            }
+//            return false
+//        })
+//        var selUOMConv: String = "1"
+//        var selNetWt: String = ""
+//        if(items.count>0)
+//        {
+//            selUOM=String(format: "%@", items[0]["UOM"] as! CVarArg)
+//            selUOMNm=String(format: "%@", items[0]["UOMNm"] as! CVarArg)
+//            selUOMConv=String(format: "%@", items[0]["UOMConv"] as! CVarArg)
+//            selNetWt=String(format: "%@", items[0]["NetWt"] as! CVarArg)
+//        }else{
+//            selUOM=String(format: "%@", lstProducts[indxPath.row]["Base_Unit_code"] as! CVarArg)
+//            selUOMNm=String(format: "%@", lstProducts[indxPath.row]["Product_Sale_Unit"] as! CVarArg)
+//            selUOMConv=String(format: "%@", lstProducts[indxPath.row]["OrdConvSec"] as! CVarArg)
+//            selNetWt=String(format: "%@", lstProducts[indxPath.row]["product_netwt"] as! CVarArg)
+//        }
+//        cell.txtQty.text = String(sQty)
+//        updateQty(id: id, sUom: selUOM, sUomNm: selUOMNm, sUomConv: selUOMConv,sNetUnt: selNetWt, sQty: String(sQty),ProdItem: lProdItem,refresh: 1)
     }
         
 }

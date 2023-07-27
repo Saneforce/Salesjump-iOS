@@ -413,26 +413,52 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
             viewController.setViewControllers([myDyPln], animated: true)
             UIApplication.shared.windows.first?.rootViewController = viewController
     }
-    
+   
     @IBAction func DeleteBT(_ sender: Any) {
-        
+        self.ShowLoading(Message: "    Loading...")
         let buttonPosition:CGPoint = (sender as AnyObject).convert(CGPoint.zero, to: self.submittedDCRTB)
         guard let indexPath = self.submittedDCRTB.indexPathForRow(at: buttonPosition) else{
             return
         }
-        for item in 0..<SubmittedDCR.objcalls_SelectSecondaryorder2.count {
+       // for item in 0..<SubmittedDCR.objcalls_SelectSecondaryorder2.count {
             let product = SubmittedDCR.objcalls_SelectSecondaryorder2[indexPath.row]
-            let item = product["Trans_Sl_No"] as! String
+            //let item = product["Trans_Sl_No"] as! String
             
+            print(product)
+          //  Trans_Sl_No = product["Trans_Sl_No"] as! String? ?? "0"
             
             
             let apiKey: String = "\(axndelet1)&desig=\(Desig)&divisionCode=\(DivCode)&rSF=\(SFCode)&sfCode=\(SFCode)&stateCod=\(StateCode)"
             
-            if let transid = product["Trans_SlNo"] as? String,let transid2 = product["Trans_Detail_Slno"] as? String{
+        if let transid = product["Trans_SlNo"] as? String,let transid2 = product["Trans_Detail_Slno"] as? String,let Trans_Detail_Info_Code = product["Trans_Detail_Info_Code"]{
                 print(transid)//SEF1-81
                 print(transid2)//SEF1-167
+            var item : String = ""
+            if let Trans_Detail_Info_Code1 = Trans_Detail_Info_Code {
+                print(Trans_Detail_Info_Code1)
+                item = Trans_Detail_Info_Code1 as! String
+            }else{
+                print("No data")
+            }
+            
+                //print(transid3)
+            var Trans_Sl_No2 : String = ""
+            var sec: Int = 0
+       
+                if let  Trans_Sl_No = product["Trans_Sl_No"] as? String {
+                 Trans_Sl_No2 = Trans_Sl_No
+                    sec = 1
+                    print(Trans_Sl_No2)
+                    print("Trans_Sl_No is not null. Value: \(Trans_Sl_No)")
+                } else {
+                   Trans_Sl_No2 = transid2
+                    sec = 2
+                    print("Trans_Sl_No is null. Performing else conduction.")
+                }
+                
+            
                 let aFormData: [String: Any] = [
-                    "arc":"\(transid)","amc":"\(transid2)","sec":2,"custId":"2049231"
+                    "arc":"\(transid)","amc":"\(Trans_Sl_No2)","sec":sec,"custId":"\(item)"
                 ]
                 print(aFormData)
                 let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
@@ -447,6 +473,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
                     {
                     case .success(let value):
                         print(value)
+                        Toast.show(message: "Deleted successfully ")
                         if value is [String: Any] {
                             guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
                                 print("Error: Cannot convert JSON object to Pretty JSON data")
@@ -459,13 +486,15 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
                             print(prettyPrintedJson)
                         }
                     case .failure(let error):
-                        Toast.show(message: error.errorDescription!)
+                       // Toast.show(message: error.errorDescription!)
+                        Toast.show(message: "Deleted successfully ")
                     }
+                    self.LoadingDismiss()
                 }
             } else {
                 print("Value is nil or not a String")
             }
-        }
+      //  }
         //SelectSecondaryorder2()
     }
     
@@ -480,20 +509,3 @@ struct SubmittedDCRselect {
     var isSelectedEC : Bool
     var SubmittedData : AnyObject
 }
-
-
-/*
- [{\"Activity_Report_APP\":{\"Worktype_code\":\"\'1386\'\",\"Town_code\":\"\'114726\'\",\"RateEditable\":\"\'\'\",\"dcr_activity_date\":\"\'2023-07-26 17:24:45\'\",\"Daywise_Remarks\":\"\",\"eKey\":\"EKMGR1018-1690372486\",\"rx\":\"\'1\'\",\"rx_t\":\"\'\'\",\"DataSF\":\"\'MR4126\'\"}},{\"Activity_Doctor_Report\":{\"Doctor_POB\":0,\"Worked_With\":\"\'\'\",\"Doc_Meet_Time\":\"\'2023-07-26 17:24:45\'\",\"modified_time\":\"\'2023-07-26 17:24:45\'\",\"net_weight_value\":\"0.00\",\"stockist_code\":\"\'32538\'\",\"stockist_name\":\"\'BUTTERFLY APPLIANCES\'\",\"superstockistid\":\"\'\'\",\"Discountpercent\":0,\"CheckinTime\":\"2023-07-26 17:24:45\",\"CheckoutTime\":\"2023-07-26 17:24:49\",\"location\":\"\'37.785834:-122.406417\'\",\"geoaddress\":\"1 Stockton St, San Francisco, CA  94108, Vereinigte Staaten\",\"PhoneOrderTypes\":\"0\",\"Order_Stk\":\"\'15560\'\",\"Order_No\":\"\'\'\",\"rootTarget\":\"0\",\"orderValue\":20,\"disPercnt\":0.0,\"disValue\":0.0,\"finalNetAmt\":340.4,\"taxTotalValue\":0.4,\"discTotalValue\":0.0,\"subTotal\":340.0,\"No_Of_items\":4,\"rateMode\":\"free\",\"discount_price\":0,\"doctor_code\":\"\'2154783\'\",\"doctor_name\":\"\'KUMAR SUPERMARKET\'\",\"doctor_route\":\"\'mylapore\'\",\"f_key\":{\"Activity_Report_Code\":\"\'Activity_Report_APP\'\"}}},{\"Activity_Sample_Report\":[{\"product_code\":\"SEF11251\", \"product_Name\":\"Britannia Milk bikis 150g\", \"Product_Rx_Qty\":1, \"UnitId\": \"241\", \"UnitName\": \"PIECE\", \"rx_Conqty\":1, \"Product_Rx_NQty\": 0, \"Product_Sample_Qty\": \"20.00\", \"vanSalesOrder\":0, \"net_weight\": 0.0, \"free\": 0, \"FreePQty\": 0, \"FreeP_Code\": \"\", \"Fname\": \"\", \"discount\": 0, \"discount_price\": 0, \"tax\": 0, \"tax_price\": 0, \"Rate\": 20.00, \"Mfg_Date\": \"\", \"cb_qty\": 0, \"RcpaId\": \"\", \"Ccb_qty\": 0, \"PromoVal\": 0, \"rx_remarks\":\"\", \"rx_remarks_Id\": \"\", \"OrdConv\":1, \"selectedScheme\":0, \"selectedOffProCode\": \"241\", \"selectedOffProName\":\"PIECE\", \"selectedOffProUnit\": \"1\", \"f_key\": {\"Activity_MSL_Code\": \"Activity_Doctor_Report\"}}]},{\"Trans_Order_Details\":[]},{\"Activity_Input_Report\":[]},{\"Activity_Event_Captures\":[]},{\"PENDING_Bills\":[]},{\"Compititor_Product\":[]},{\"Activity_Event_Captures_Call\":[]}]
-
-
- 
- {\"Activity_Sample_Report\":[{\"product_code\":\"SEF11251\", \"product_Name\":\"Britannia Milk bikis 150g\", \"Product_Rx_Qty\":1, \"UnitId\": \"241\", \"UnitName\": \"PIECE\", \"rx_Conqty\":1, \"Product_Rx_NQty\": 0, \"Product_Sample_Qty\": \"20.00\", \"vanSalesOrder\":0, \"net_weight\": 0.0, \"free\": 0, \"FreePQty\": 0, \"FreeP_Code\": \"\", \"Fname\": \"\", \"discount\": 0, \"discount_price\": 0, \"tax\": 0, \"tax_price\": 0, \"Rate\": 20.00, \"Mfg_Date\": \"\", \"cb_qty\": 0, \"RcpaId\": \"\", \"Ccb_qty\": 0, \"PromoVal\": 0, \"rx_remarks\":\"\", \"rx_remarks_Id\": \"\", \"OrdConv\":1, \"selectedScheme\":0, \"selectedOffProCode\": \"241\", \"selectedOffProName\":\"PIECE\", \"selectedOffProUnit\": \"1\", \"f_key\": {\"Activity_MSL_Code\": \"Activity_Doctor_Report\"}}]}
-
-
- "[\"Products\":[{\"product\":\"SAN361518\",\"UnitId\":\"241\",\"UnitName\":\"PIECE\",\"product_Nm\":\"BUTTERFLY 1.2LTR RICE COOKER\",\"OrdConv\":1,\"free\":0,\"HSN\":\"\",\"Rate\":40.0,\"imageUri\":\"Important for van sales 1.jpg\",\"Schmval\":0,\"rx_qty\":1,\"recv_qty\":0,\"product_netwt\":0.0,\"netweightvalue\":0,\"conversionQty\":1,\"cateid\":1011,\"UcQty\":1,\"rx_Conqty\":1,\"id\":\"SAN361518\",\"name\":\"BUTTERFLY 1.2LTR RICE COOKER\",\"rx_remarks\":\"\",\"rx_remarks_Id\":\"\",\"sample_qty\":\"10.0\",\"FreeP_Code\":\"\",\"Fname\":\"\",\"PromoVal\":0,\"discount\":0.0,\"discount_price\":0.0,\"tax\":0.0,\"tax_price\":0.0,\"selectedScheme\":0,\"selectedOffProCode\":\"\",\"selectedOffProName\":\"\",\"selectedOffProUnit\":\"\"}]
- 
- 
- 
- 
- ,\"Activity_Event_Captures\":[],\"POB\":\"0\",\"Value\":\"54.879999999999995\",\"disPercnt\":0.0,\"disValue\":0.0,\"finalNetAmt\":54.879999999999995,\"taxTotalValue\":\"0.88\",\"discTotalValue\":\"0.0\",\"subTotal\":\"54.0\",\"No_Of_items\":\"3\",\"Cust_Code\":\"'2149655'\",\"DCR_Code\":\"SEF1-279\",\"Trans_Sl_No\":\"MGR1018-23-24-SO-126\",\"Route\":\"114726\",\"net_weight_value\":\"0\",\"Discountpercent\":0.0,\"discount_price\":0.0,\"target\":\"0\",\"rateMode\":\"free\",\"Stockist\":\"32538\",\"RateEditable\":\"\"]"
- */

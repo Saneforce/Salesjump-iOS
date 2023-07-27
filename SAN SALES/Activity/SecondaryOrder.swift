@@ -1310,16 +1310,17 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         }
     }
      else{
+        
          
            print("No data")
-         let jsonString2 = "[\"Products\":[" + sPItems2 +  "],\"Activity_Event_Captures\":[],\"POB\":\"0\",\"Value\":\"\(Subtotal)\",\"disPercnt\":0.0,\"disValue\":0.0,\"finalNetAmt\":\(Subtotal),\"taxTotalValue\":\"0.88\",\"discTotalValue\":\"0.0\",\"subTotal\":\"\(Subtotal)\",\"No_Of_items\":\"3\",\"Cust_Code\":\"'\(Cust_Code)'\",\"DCR_Code\":\"\(DCR_Code)\",\"Trans_Sl_No\":\"\(Trans_Sl_No)\",\"Route\":\"\(Route)\",\"net_weight_value\":\"0\",\"Discountpercent\":0.0,\"discount_price\":0.0,\"target\":\"0\",\"rateMode\":\"free\",\"Stockist\":\"32538\",\"RateEditable\":\"\"]"
+         let jsonString2 = "{\"Products\":[" + sPItems2 +  "],\"Activity_Event_Captures\":[],\"POB\":\"0\",\"Value\":\"\(Subtotal)\",\"disPercnt\":0.0,\"disValue\":0.0,\"finalNetAmt\":\(Subtotal),\"taxTotalValue\":\"0.88\",\"discTotalValue\":\"0.0\",\"subTotal\":\"\(Subtotal)\",\"No_Of_items\":\"3\",\"Cust_Code\":\"'\(Cust_Code)'\",\"DCR_Code\":\"\(DCR_Code)\",\"Trans_Sl_No\":\"\(Trans_Sl_No)\",\"Route\":\"\(Route)\",\"net_weight_value\":\"0\",\"Discountpercent\":0.0,\"discount_price\":0.0,\"target\":\"0\",\"rateMode\":\"free\",\"Stockist\":\"32538\",\"RateEditable\":\"\"}"
          
          
          let params: Parameters = [
              "data": jsonString2 //"["+jsonString+"]"//
          ]
          
-         AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+"dcr/updateProducts" + "&divisionCode=" + self.DivCode + "&sfCode=" + self.SFCode + "&desig=" + self.Desig, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
+         AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"dcr/updateProducts" + "&divisionCode=" + self.DivCode + "&sfCode=" + self.SFCode + "&desig=" + self.Desig, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
          AFdata in
          self.LoadingDismiss()
          PhotosCollection.shared.PhotoList = []
@@ -1458,12 +1459,9 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
     
     let button = UIButton()
     func Editoredr(sender: AnyObject) {
-        let cell:cellListItem
                 print(Editobjcalls)
                 print(lstAllProducts)
                 print(lstAllProducts.count)
-        //      let cell:cellListItem = GlobalFunc.getTableViewCell(view: sender.view!) as! cellListItem
-        //        let tbView:UITableView = GlobalFunc.getTableView(view: sender.view!)
              let indxPath = lstAllProducts
                print(indxPath)
 

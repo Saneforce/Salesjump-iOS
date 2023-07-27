@@ -15,9 +15,10 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
     var axn = "table/list"
     var axnDelete = "deleteEntry"
     var axnEdit = "get/pmOrderDetails"
-//http://www.fmcg.sanfmcg.com/server/native_Db_V13.php?State_Code=24&Trans_Detail_SlNo=SEF3-1258&axn=get%2FpmOrderDetails&Order_No=SEF3-415
+
     @IBOutlet weak var BackButton: UIImageView!
     @IBOutlet weak var PrimayOrderViewTB: UITableView!
+    @IBOutlet weak var InputTB: UITableView!
     @IBOutlet weak var veselwindow: UIView!
     @IBOutlet weak var Joint_Work: UILabel!
     @IBOutlet weak var Route: UILabel!
@@ -26,6 +27,27 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
     @IBOutlet weak var Remark: UILabel!
     @IBOutlet weak var OrderTime: UILabel!
     @IBOutlet weak var MeetTime: UILabel!
+    @IBOutlet weak var Viwinput: UIView!
+    @IBOutlet weak var inputTB_Hed: UIView!
+    @IBOutlet weak var ScHig: NSLayoutConstraint!
+    @IBOutlet weak var OrderHig: NSLayoutConstraint!
+    @IBOutlet weak var InputHig: NSLayoutConstraint!
+    
+    
+    struct Viewval: Any {
+        let Product : String
+        let qty : Int
+        let value : Int
+    }
+    var View:[Viewval]=[]
+    
+    struct inputval: Any {
+        let Key: String
+        let Value: String
+      
+    }
+    
+    var Input:[inputval]=[]
     
     var SFCode: String = "", StateCode: String = "", DivCode: String = "",Desig: String="", rSF: String = ""
     let LocalStoreage = UserDefaults.standard
@@ -43,6 +65,8 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
         PrimayOrderViewTB.dataSource=self
         OrderTB.dataSource=self
         OrderTB.delegate=self
+        InputTB.dataSource=self
+        InputTB.delegate=self
         BackButton.addTarget(target: self, action: #selector(closeMenuWin))
         // Do any additional setup after loading the view.
     }
@@ -62,7 +86,10 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
             return PrimarySubmittedDCR.objcalls_SelectPrimaryorder2.count
         }
         if tableView == OrderTB {
-            return PrimarySubmittedDCR.objcalls_SelectPrimaryorder2.count
+            return View.count
+        }
+        if tableView == InputTB {
+            return View.count
         }
         return 0
     }
@@ -81,10 +108,13 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
             cell.DeleteButton.layer.cornerRadius = 12
         }
         if tableView == OrderTB {
-            let item: [String: Any] = PrimarySubmittedDCR.objcalls_SelectPrimaryorder2[indexPath.row] as! [String : Any]
-            cell.ProductValue?.text = item["Additional_Prod_Dtls"] as? String
-            cell.Qty?.text = item[""] as? String
-            cell.Value?.text = item ["POB_Value"] as? String
+            cell.ProductValue?.text = View[indexPath.row].Product
+            cell.Qty?.text = String(View[indexPath.row].qty)
+            cell.Value?.text = String(View[indexPath.row].value)
+        }
+        if tableView == InputTB {
+            cell.InpuKey.text = Input[indexPath.row].Key
+            cell.inputvalu.text = Input[indexPath.row].Value
         }
         
         return cell
@@ -277,16 +307,45 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
         print(buttonPosition)
         print(indexPath)
         
-        for item in 0..<PrimarySubmittedDCR.objcalls_SelectPrimaryorder2.count {
             let product = PrimarySubmittedDCR.objcalls_SelectPrimaryorder2[indexPath.row]
+            print(product)
             self.Disbutorsname.text = product["Trans_Detail_Name"] as? String
             self.Route.text = product["SDP"] as? String
             self.Joint_Work.text = product["jgch"] as? String
-            self.MeetTime.text = product["StartOrder_Time"] as? String
-            self.OrderTime.text = product["EndOrder_Time"] as? String
-            self.Remark.text = product["Activity_Remarks"] as? String
-            
-        }
+        
+        Input.append(inputval(Key: "Meet Time", Value: product["StartOrder_Time"] as! String))
+        Input.append(inputval(Key: "Order Time", Value: product["Order_date"] as! String))
+        Input.append(inputval(Key: "Order Value", Value: String(product["POB_Value"] as! Int)))
+        Input.append(inputval(Key: "Remarks", Value: product["Activity_Remarks"] as! String))
+        InputTB.reloadData()
+        
+            let Additional_Prod_Dtls = product["Additional_Prod_Dtls"] as! String
+            let productArray = Additional_Prod_Dtls.components(separatedBy: "#")
+        print(productArray)
+        View.removeAll()
+            for product in productArray {
+                let productData = product.components(separatedBy: "@")
+                print(productData[0])
+                let productData2 = productData[0]
+                print(productData2)
+                   
+                    let productDatas = productData2.components(separatedBy: "~")
+                    print(productDatas[0])
+                    let price = productDatas[1].components(separatedBy: "$")[0]
+                    let price1 = productDatas[1].components(separatedBy: "$")[1]
+                    print(price)
+                    print(price1)
+
+                    View.append(Viewval(Product:productDatas[0] , qty: Int(price1)!, value: Int(price)!))
+                OrderTB.reloadData()
+                
+            }
+        OrderHig.constant = 100 + CGFloat(40*self.View.count)
+        print(OrderHig.constant)
+            self.view.layoutIfNeeded()
+        ScHig.constant = 100 + CGFloat(60*self.View.count)
+        self.view.layoutIfNeeded()
+        
         
         veselwindow.isHidden=false
     }
