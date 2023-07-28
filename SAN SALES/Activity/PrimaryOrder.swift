@@ -12,7 +12,7 @@ import Alamofire
 import CoreLocation
 
 class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource,UICollectionViewDelegateFlowLayout {
-
+    
     var axnEdit = "get/pmOrderDetails"
     @IBOutlet weak var lcLastvistHeight: NSLayoutConstraint!
     @IBOutlet weak var lcContentHeight: NSLayoutConstraint!
@@ -82,8 +82,8 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
     var productData1 : String?
     var productData2 : String?
     var objcallsprimary :[AnyObject] = []
-//    var SFCode: String = ""
-//    var DivCode: String = ""
+    //    var SFCode: String = ""
+    //    var DivCode: String = ""
     var SFCode: String = "", StateCode: String = "", DivCode: String = "",Desig: String="", rSF: String = ""
     let LocalStoreage = UserDefaults.standard
     override func viewDidLoad() {
@@ -132,10 +132,10 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
             let item: [String: Any]=lstBrands[0] as! [String : Any]
             selBrand=String(format: "%@", item["id"] as! CVarArg)
             autoreleasepool{
-            lstProducts = lstAllProducts.filter({(product) in
-                let CatId: String = String(format: "%@", product["cateid"] as! CVarArg)
-                return Bool(CatId == selBrand)
-            })
+                lstProducts = lstAllProducts.filter({(product) in
+                    let CatId: String = String(format: "%@", product["cateid"] as! CVarArg)
+                    return Bool(CatId == selBrand)
+                })
             }
         }
         let lstDistData: String = LocalStoreage.string(forKey: "Supplier_Master_"+SFCode)!
@@ -179,72 +179,72 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-            autoreleasepool {
-        let cell:CollectionCell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! CollectionCell
-        let item: [String: Any]=lstBrands[indexPath.row] as! [String : Any]
-        cell.vwContent.layer.cornerRadius = 10
-        cell.vwContent.clipsToBounds = true
-        cell.vwContent.layer.cornerRadius = 10
-        cell.vwContent.backgroundColor = UIColor(red: 239/255, green: 243/255, blue: 251/255, alpha: 1)
-        let id=String(format: "%@", item["id"] as! CVarArg)
-
-        if selBrand == id {
-            cell.vwContent.backgroundColor = UIColor(red: 16/255, green: 173/255, blue: 194/255, alpha: 1)
-        }
-        cell.lblText?.text = item["name"] as? String
-                
-        if self.BrandImages[id] != nil{
-            cell.imgProduct.image = self.BrandImages[id] as? UIImage
-        }else{
-            if item["Cat_Image"] != nil{
-                let imageUrlString=(item["Cat_Image"] as? String)!
-                let imageUrl:NSURL = NSURL(string: imageUrlString)!
-                
-                DispatchQueue.global(qos: .userInitiated).async {
-                    autoreleasepool{
-                        var imageData: NSData? = nil
-                        do {
-                             imageData = try NSData(contentsOf: imageUrl as! URL)
-                        }catch let err{
-                            print(err.localizedDescription)
-                        }
-                        DispatchQueue.main.async {
-                            autoreleasepool{
-                                if(imageData != nil){
-                                    var image = UIImage(data: imageData! as Data)
-                                    cell.imgProduct.image = image
-                                    self.BrandImages.updateValue(image, forKey: id)
-                                
-                                    image = nil
+        autoreleasepool {
+            let cell:CollectionCell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! CollectionCell
+            let item: [String: Any]=lstBrands[indexPath.row] as! [String : Any]
+            cell.vwContent.layer.cornerRadius = 10
+            cell.vwContent.clipsToBounds = true
+            cell.vwContent.layer.cornerRadius = 10
+            cell.vwContent.backgroundColor = UIColor(red: 239/255, green: 243/255, blue: 251/255, alpha: 1)
+            let id=String(format: "%@", item["id"] as! CVarArg)
+            
+            if selBrand == id {
+                cell.vwContent.backgroundColor = UIColor(red: 16/255, green: 173/255, blue: 194/255, alpha: 1)
+            }
+            cell.lblText?.text = item["name"] as? String
+            
+            if self.BrandImages[id] != nil{
+                cell.imgProduct.image = self.BrandImages[id] as? UIImage
+            }else{
+                if item["Cat_Image"] != nil{
+                    let imageUrlString=(item["Cat_Image"] as? String)!
+                    let imageUrl:NSURL = NSURL(string: imageUrlString)!
+                    
+                    DispatchQueue.global(qos: .userInitiated).async {
+                        autoreleasepool{
+                            var imageData: NSData? = nil
+                            do {
+                                imageData = try NSData(contentsOf: imageUrl as! URL)
+                            }catch let err{
+                                print(err.localizedDescription)
+                            }
+                            DispatchQueue.main.async {
+                                autoreleasepool{
+                                    if(imageData != nil){
+                                        var image = UIImage(data: imageData! as Data)
+                                        cell.imgProduct.image = image
+                                        self.BrandImages.updateValue(image, forKey: id)
+                                        
+                                        image = nil
+                                    }
+                                    imageData=nil
+                                    //cell.imgProduct.contentMode = UIView.ContentMode.scaleAspectFit
                                 }
-                                imageData=nil
-                                //cell.imgProduct.contentMode = UIView.ContentMode.scaleAspectFit
                             }
                         }
                     }
                 }
             }
-        }
-        //cell.imgBtnDel.addTarget(target: self, action: #selector(self.delJWK(_:)))
+            //cell.imgBtnDel.addTarget(target: self, action: #selector(self.delJWK(_:)))
             
-        return cell
+            return cell
         }
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         autoreleasepool{
-        let cell:CollectionCell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! CollectionCell
-        let item: [String: Any]=lstBrands[indexPath.row] as! [String : Any]
-        selBrand=String(format: "%@", item["id"] as! CVarArg)
-        cell.vwContent.backgroundColor = UIColor(red: 16/255, green: 173/255, blue: 194/255, alpha: 1)
-        lstProducts = lstAllProducts.filter({(product) in
-            let CatId: String = String(format: "%@", product["cateid"] as! CVarArg)
-            return Bool(CatId == selBrand)
-        })
-    
-        tbProduct.reloadData()
-        collectionView.reloadData()
-        
-    }
+            let cell:CollectionCell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! CollectionCell
+            let item: [String: Any]=lstBrands[indexPath.row] as! [String : Any]
+            selBrand=String(format: "%@", item["id"] as! CVarArg)
+            cell.vwContent.backgroundColor = UIColor(red: 16/255, green: 173/255, blue: 194/255, alpha: 1)
+            lstProducts = lstAllProducts.filter({(product) in
+                let CatId: String = String(format: "%@", product["cateid"] as! CVarArg)
+                return Bool(CatId == selBrand)
+            })
+            
+            tbProduct.reloadData()
+            collectionView.reloadData()
+            
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize
@@ -274,229 +274,229 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         autoreleasepool {
-        let cell:cellListItem = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
-        if tbDataSelect == tableView {
-            let item: [String: Any] = lObjSel[indexPath.row] as! [String : Any]
-            cell.lblText?.text = item["name"] as? String
-            cell.lblUOM?.text = ""
-            if SelMode=="UOM" {
-                cell.lblUOM?.text = String(format: "1 x  %@", item["ConQty"] as! CVarArg)
-            }
-            cell.imgSelect?.image = nil
-        } else if tbPrvOrderProduct == tableView {
-            let item: [String: Any]=lstPrvOrder[indexPath.row] as! [String : Any]
-            let id=String(format: "%@", item["id"] as! CVarArg)
-            let ProdItems = lstAllProducts.filter({(product) in
-                let ProdId: String = String(format: "%@", product["id"] as! CVarArg)
-                return Bool(ProdId == id)
-            })
-            //let itm: [String: Any]=["id": id,"Qty": sQty,"UOM": sUom, "UOMNm": sUomNm, "UOMConv": sUomConv, "SalQty": TotQty,"Scheme": Scheme,"FQ": FQ,"OffQty": OffQty,"OffProd":OffProd,"OffProdNm":OffProdNm, "Value": (TotQty*Rate)];
-            cell.lblUOM.text = item["UOMNm"] as? String
-            cell.txtQty.text = item["Qty"] as? String
-            cell.lblDisc.text = ""
-            cell.lblDisc.layer.cornerRadius = 10
-            cell.lblDisc.isHidden = true
-            cell.lblActRate.isHidden = true
-            cell.imgSelect.image = nil
-            cell.lblFreeQty.isUserInteractionEnabled=false
-            if self.ProdImages[id] != nil{
-                cell.imgSelect.image = self.ProdImages[id] as? UIImage
-            }
-            if(ProdItems.count>0){
-                cell.lblText?.text = ProdItems[0]["name"] as? String
-            }
-            cell.lblMRP.text="MRP Rs. 0.00"
-            cell.lblSellRate.text="Rs. 0.00"
-            let attrRedStrikethroughStyle = [
-                        NSAttributedString.Key.strikethroughStyle: NSNumber(value: NSUnderlineStyle.single.rawValue)
-                    ]
-            let text = NSAttributedString(string: "Rs. 0.00",
-                                                      attributes: attrRedStrikethroughStyle)
-            cell.lblActRate.attributedText = text
-            let RateItems: [AnyObject] = lstRateList.filter ({ (Rate) in
-                
-                if Rate["Product_Detail_Code"] as! String == id {
-                    return true
+            let cell:cellListItem = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
+            if tbDataSelect == tableView {
+                let item: [String: Any] = lObjSel[indexPath.row] as! [String : Any]
+                cell.lblText?.text = item["name"] as? String
+                cell.lblUOM?.text = ""
+                if SelMode=="UOM" {
+                    cell.lblUOM?.text = String(format: "1 x  %@", item["ConQty"] as! CVarArg)
                 }
-                return false
-            })
-            var rate: Double = 0
-            
-            if(RateItems.count>0){
-                cell.lblMRP.text = String(format: "MRP Rs. %.02f",(RateItems[0]["Retailor_Price"] as! NSString).doubleValue)
-                rate = (RateItems[0]["Retailor_Price"] as! NSString).doubleValue
-                cell.lblSellRate.text = String(format: "Rs. %.02f", rate)
-                let text = NSAttributedString(string: String(format: "Rs. %.02f", rate),
-                                                          attributes: attrRedStrikethroughStyle)
+                cell.imgSelect?.image = nil
+            } else if tbPrvOrderProduct == tableView {
+                let item: [String: Any]=lstPrvOrder[indexPath.row] as! [String : Any]
+                let id=String(format: "%@", item["id"] as! CVarArg)
+                let ProdItems = lstAllProducts.filter({(product) in
+                    let ProdId: String = String(format: "%@", product["id"] as! CVarArg)
+                    return Bool(ProdId == id)
+                })
+                //let itm: [String: Any]=["id": id,"Qty": sQty,"UOM": sUom, "UOMNm": sUomNm, "UOMConv": sUomConv, "SalQty": TotQty,"Scheme": Scheme,"FQ": FQ,"OffQty": OffQty,"OffProd":OffProd,"OffProdNm":OffProdNm, "Value": (TotQty*Rate)];
+                cell.lblUOM.text = item["UOMNm"] as? String
+                cell.txtQty.text = item["Qty"] as? String
+                cell.lblDisc.text = ""
+                cell.lblDisc.layer.cornerRadius = 10
+                cell.lblDisc.isHidden = true
+                cell.lblActRate.isHidden = true
+                cell.imgSelect.image = nil
+                cell.lblFreeQty.isUserInteractionEnabled=false
+                if self.ProdImages[id] != nil{
+                    cell.imgSelect.image = self.ProdImages[id] as? UIImage
+                }
+                if(ProdItems.count>0){
+                    cell.lblText?.text = ProdItems[0]["name"] as? String
+                }
+                cell.lblMRP.text="MRP Rs. 0.00"
+                cell.lblSellRate.text="Rs. 0.00"
+                let attrRedStrikethroughStyle = [
+                    NSAttributedString.Key.strikethroughStyle: NSNumber(value: NSUnderlineStyle.single.rawValue)
+                ]
+                let text = NSAttributedString(string: "Rs. 0.00",
+                                              attributes: attrRedStrikethroughStyle)
                 cell.lblActRate.attributedText = text
-            }
-            cell.lblFreeQty.text = "0"
-            cell.lblFreeProd.text = ""
-            cell.lblUOM.addTarget(target: self, action: #selector(self.openUnit(_:)))
-            cell.btnPlus.addTarget(target: self, action: #selector(self.addQty(_:)))
-            cell.btnMinus.addTarget(target: self, action: #selector(self.minusQty(_:)))
-            cell.imgBtnDel.addTarget(target: self, action: #selector(self.deleteItem(_:)))
-            cell.txtQty.addTarget(self, action: #selector(self.changeQty(_:)), for: .editingChanged)
-            
-            
-            let items: [AnyObject] = VisitData.shared.ProductCart.filter ({ (Cart) in
+                let RateItems: [AnyObject] = lstRateList.filter ({ (Rate) in
+                    
+                    if Rate["Product_Detail_Code"] as! String == id {
+                        return true
+                    }
+                    return false
+                })
+                var rate: Double = 0
                 
-                if Cart["id"] as! String == id {
-                    return true
+                if(RateItems.count>0){
+                    cell.lblMRP.text = String(format: "MRP Rs. %.02f",(RateItems[0]["Retailor_Price"] as! NSString).doubleValue)
+                    rate = (RateItems[0]["Retailor_Price"] as! NSString).doubleValue
+                    cell.lblSellRate.text = String(format: "Rs. %.02f", rate)
+                    let text = NSAttributedString(string: String(format: "Rs. %.02f", rate),
+                                                  attributes: attrRedStrikethroughStyle)
+                    cell.lblActRate.attributedText = text
                 }
-                return false
-            })
-            cell.lblFreeCap.isHidden = true
-            cell.lblFreeQty.isHidden = true
-            cell.lblFreeProd.isHidden = true
-            if items.count>0 {
-                let FQ: Int = items[0]["OffQty"] as! Int
-                cell.lblFreeQty?.text = String(format: "%i", FQ)
-                if FQ>0 {
-                    cell.lblFreeCap.isHidden = false
-                    cell.lblFreeQty.isHidden = false
-                    cell.lblFreeProd.isHidden = false
-                }
-                //cell.lblUOM?.text = items[0]["OffProd"] as? String
-                cell.lblFreeProd?.text = items[0]["OffProdNm"] as? String
-                var Disc: String = items[0]["Disc"] as! String
-                var dis: Double = 0;
-                if (Disc != "" && Disc != "0") {
-                    dis = rate * (Double(Disc)! / 100);
-                    cell.lblActRate.isHidden = false
-                    cell.lblDisc.isHidden = false
-                }
-                rate = rate - dis;
-                if(Disc != "" && Disc != "0") { Disc=String(format: "%@%% OFF",Disc) } else { Disc = "" }
-                cell.lblDisc?.text = Disc
-                cell.lblSellRate.text = String(format: "Rs. %.02f", rate)
-            }
-            
-        }else{
-            
-            
-            let item: [String: Any]=lstProducts[indexPath.row] as! [String : Any]
-            
-            let id=String(format: "%@", item["id"] as! CVarArg)
-            cell.lblText?.text = item["name"] as? String
-            cell.lblUOM.text = item["Product_Sale_Unit"] as? String
-            cell.btnPlus.layer.cornerRadius = 17
-            cell.btnMinus.layer.cornerRadius = 17
-            cell.lblMRP.text="MRP Rs. 0.00"
-            cell.lblSellRate.text="Rs. 0.00"
-            cell.lblDisc.text = ""
-            cell.lblDisc.layer.cornerRadius = 10
-            cell.lblDisc.isHidden = true
-            cell.lblActRate.isHidden = true
-            cell.lblFreeQty.isUserInteractionEnabled=false
-            let attrRedStrikethroughStyle = [
-                        NSAttributedString.Key.strikethroughStyle: NSNumber(value: NSUnderlineStyle.single.rawValue)
-                    ]
-            let text = NSAttributedString(string: "Rs. 0.00",
-                                                      attributes: attrRedStrikethroughStyle)
-            cell.lblActRate.attributedText = text
-            let RateItems: [AnyObject] = lstRateList.filter ({ (Rate) in
+                cell.lblFreeQty.text = "0"
+                cell.lblFreeProd.text = ""
+                cell.lblUOM.addTarget(target: self, action: #selector(self.openUnit(_:)))
+                cell.btnPlus.addTarget(target: self, action: #selector(self.addQty(_:)))
+                cell.btnMinus.addTarget(target: self, action: #selector(self.minusQty(_:)))
+                cell.imgBtnDel.addTarget(target: self, action: #selector(self.deleteItem(_:)))
+                cell.txtQty.addTarget(self, action: #selector(self.changeQty(_:)), for: .editingChanged)
                 
-                if Rate["Product_Detail_Code"] as! String == id {
-                    return true
+                
+                let items: [AnyObject] = VisitData.shared.ProductCart.filter ({ (Cart) in
+                    
+                    if Cart["id"] as! String == id {
+                        return true
+                    }
+                    return false
+                })
+                cell.lblFreeCap.isHidden = true
+                cell.lblFreeQty.isHidden = true
+                cell.lblFreeProd.isHidden = true
+                if items.count>0 {
+                    let FQ: Int = items[0]["OffQty"] as! Int
+                    cell.lblFreeQty?.text = String(format: "%i", FQ)
+                    if FQ>0 {
+                        cell.lblFreeCap.isHidden = false
+                        cell.lblFreeQty.isHidden = false
+                        cell.lblFreeProd.isHidden = false
+                    }
+                    //cell.lblUOM?.text = items[0]["OffProd"] as? String
+                    cell.lblFreeProd?.text = items[0]["OffProdNm"] as? String
+                    var Disc: String = items[0]["Disc"] as! String
+                    var dis: Double = 0;
+                    if (Disc != "" && Disc != "0") {
+                        dis = rate * (Double(Disc)! / 100);
+                        cell.lblActRate.isHidden = false
+                        cell.lblDisc.isHidden = false
+                    }
+                    rate = rate - dis;
+                    if(Disc != "" && Disc != "0") { Disc=String(format: "%@%% OFF",Disc) } else { Disc = "" }
+                    cell.lblDisc?.text = Disc
+                    cell.lblSellRate.text = String(format: "Rs. %.02f", rate)
                 }
-                return false
-            })
-            var rate: Double = 0
-            if(RateItems.count>0){
-                cell.lblMRP.text = String(format: "MRP Rs. %.02f",(RateItems[0]["Retailor_Price"] as! NSString).doubleValue)
-                rate = (RateItems[0]["Retailor_Price"] as! NSString).doubleValue
-                cell.lblSellRate.text = String(format: "Rs. %.02f", rate)
-                let text = NSAttributedString(string: String(format: "Rs. %.02f", rate),
-                                                          attributes: attrRedStrikethroughStyle)
-                cell.lblActRate.attributedText = text
-            }
-            cell.lblFreeQty.text = "0"
-            cell.lblFreeProd.text = ""
-            cell.lblUOM.addTarget(target: self, action: #selector(self.openUnit(_:)))
-            cell.btnPlus.addTarget(target: self, action: #selector(self.addQty(_:)))
-            cell.btnMinus.addTarget(target: self, action: #selector(self.minusQty(_:)))
-            cell.txtQty.addTarget(self, action: #selector(self.changeQty(_:)), for: .editingChanged)
-            cell.imgSelect.image = nil
-            if self.ProdImages[id] != nil{
-                cell.imgSelect.image = self.ProdImages[id] as? UIImage
+                
             }else{
-                if item["Product_Image"] != nil {
-                    if let imgurl = item["Product_Image"] as? String {
-                        if imgurl != "" {
-                            let imageUrlString=String(format: "%@%@", APIClient.shared.ProdImgURL,(item["Product_Image"] as! String).addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!)
-                           // if(NSURL(string: imageUrlString) != nil){
-                            let imageUrl:NSURL = NSURL(string: imageUrlString)!
+                
+                
+                let item: [String: Any]=lstProducts[indexPath.row] as! [String : Any]
+                
+                let id=String(format: "%@", item["id"] as! CVarArg)
+                cell.lblText?.text = item["name"] as? String
+                cell.lblUOM.text = item["Product_Sale_Unit"] as? String
+                cell.btnPlus.layer.cornerRadius = 17
+                cell.btnMinus.layer.cornerRadius = 17
+                cell.lblMRP.text="MRP Rs. 0.00"
+                cell.lblSellRate.text="Rs. 0.00"
+                cell.lblDisc.text = ""
+                cell.lblDisc.layer.cornerRadius = 10
+                cell.lblDisc.isHidden = true
+                cell.lblActRate.isHidden = true
+                cell.lblFreeQty.isUserInteractionEnabled=false
+                let attrRedStrikethroughStyle = [
+                    NSAttributedString.Key.strikethroughStyle: NSNumber(value: NSUnderlineStyle.single.rawValue)
+                ]
+                let text = NSAttributedString(string: "Rs. 0.00",
+                                              attributes: attrRedStrikethroughStyle)
+                cell.lblActRate.attributedText = text
+                let RateItems: [AnyObject] = lstRateList.filter ({ (Rate) in
+                    
+                    if Rate["Product_Detail_Code"] as! String == id {
+                        return true
+                    }
+                    return false
+                })
+                var rate: Double = 0
+                if(RateItems.count>0){
+                    cell.lblMRP.text = String(format: "MRP Rs. %.02f",(RateItems[0]["Retailor_Price"] as! NSString).doubleValue)
+                    rate = (RateItems[0]["Retailor_Price"] as! NSString).doubleValue
+                    cell.lblSellRate.text = String(format: "Rs. %.02f", rate)
+                    let text = NSAttributedString(string: String(format: "Rs. %.02f", rate),
+                                                  attributes: attrRedStrikethroughStyle)
+                    cell.lblActRate.attributedText = text
+                }
+                cell.lblFreeQty.text = "0"
+                cell.lblFreeProd.text = ""
+                cell.lblUOM.addTarget(target: self, action: #selector(self.openUnit(_:)))
+                cell.btnPlus.addTarget(target: self, action: #selector(self.addQty(_:)))
+                cell.btnMinus.addTarget(target: self, action: #selector(self.minusQty(_:)))
+                cell.txtQty.addTarget(self, action: #selector(self.changeQty(_:)), for: .editingChanged)
+                cell.imgSelect.image = nil
+                if self.ProdImages[id] != nil{
+                    cell.imgSelect.image = self.ProdImages[id] as? UIImage
+                }else{
+                    if item["Product_Image"] != nil {
+                        if let imgurl = item["Product_Image"] as? String {
+                            if imgurl != "" {
+                                let imageUrlString=String(format: "%@%@", APIClient.shared.ProdImgURL,(item["Product_Image"] as! String).addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!)
+                                // if(NSURL(string: imageUrlString) != nil){
+                                let imageUrl:NSURL = NSURL(string: imageUrlString)!
                                 
                                 DispatchQueue.global(qos: .userInitiated).async {
                                     autoreleasepool{
                                         var imageData: NSData? = nil
                                         do {
-                                             imageData = try NSData(contentsOf: imageUrl as! URL)
+                                            imageData = try NSData(contentsOf: imageUrl as! URL)
                                         }catch let err{
                                             print(err.localizedDescription)
                                         }
                                         DispatchQueue.main.async {
                                             autoreleasepool{
-                                            if(imageData != nil){
-                                                var image = UIImage(data: imageData! as Data)
-                                                cell.imgSelect.image = image
-                                                self.ProdImages.updateValue(image, forKey: id)
-                                                image = nil
+                                                if(imageData != nil){
+                                                    var image = UIImage(data: imageData! as Data)
+                                                    cell.imgSelect.image = image
+                                                    self.ProdImages.updateValue(image, forKey: id)
+                                                    image = nil
+                                                }
+                                                imageData=nil
                                             }
-                                            imageData=nil
-                                            }
-                                        //cell.imgProduct.contentMode = UIView.ContentMode.scaleAspectFit
-                                    }
+                                            //cell.imgProduct.contentMode = UIView.ContentMode.scaleAspectFit
+                                        }
                                     }
                                 }
-                           // }
+                                // }
+                            }
                         }
                     }
                 }
-            }
-            
-            let items: [AnyObject] = VisitData.shared.ProductCart.filter ({ (Cart) in
                 
-                if Cart["id"] as! String == id {
-                    return true
+                let items: [AnyObject] = VisitData.shared.ProductCart.filter ({ (Cart) in
+                    
+                    if Cart["id"] as! String == id {
+                        return true
+                    }
+                    return false
+                })
+                cell.txtQty?.text = "0"
+                cell.lblFreeCap.isHidden = true
+                cell.lblFreeQty.isHidden = true
+                cell.lblFreeProd.isHidden = true
+                if items.count>0 {
+                    cell.txtQty?.text = items[0]["Qty"] as? String
+                    cell.lblUOM?.text = items[0]["UOMNm"] as? String
+                    let FQ: Int = items[0]["OffQty"] as! Int
+                    cell.lblFreeQty?.text = String(format: "%i", FQ)
+                    if FQ>0 {
+                        cell.lblFreeCap.isHidden = false
+                        cell.lblFreeQty.isHidden = false
+                        cell.lblFreeProd.isHidden = false
+                    }
+                    //cell.lblUOM?.text = items[0]["OffProd"] as? String
+                    cell.lblFreeProd?.text = items[0]["OffProdNm"] as? String
+                    
+                    var Disc: String = items[0]["Disc"] as! String
+                    var dis: Double = 0;
+                    if (Disc != "" && Disc != "0") {
+                        dis = rate * (Double(Disc)! / 100);
+                        cell.lblActRate.isHidden = false
+                        cell.lblDisc.isHidden = false
+                    }
+                    rate = rate - dis;
+                    if(Disc != "" && Disc != "0") { Disc=String(format: "%@%% OFF",Disc) } else { Disc = "" }
+                    cell.lblDisc?.text = Disc
+                    cell.lblSellRate.text = String(format: "Rs. %.02f", rate)
                 }
-                return false
-            })
-            cell.txtQty?.text = "0"
-            cell.lblFreeCap.isHidden = true
-            cell.lblFreeQty.isHidden = true
-            cell.lblFreeProd.isHidden = true
-            if items.count>0 {
-                cell.txtQty?.text = items[0]["Qty"] as? String
-                cell.lblUOM?.text = items[0]["UOMNm"] as? String
-                let FQ: Int = items[0]["OffQty"] as! Int
-                cell.lblFreeQty?.text = String(format: "%i", FQ)
-                if FQ>0 {
-                    cell.lblFreeCap.isHidden = false
-                    cell.lblFreeQty.isHidden = false
-                    cell.lblFreeProd.isHidden = false
-                }
-                //cell.lblUOM?.text = items[0]["OffProd"] as? String
-                cell.lblFreeProd?.text = items[0]["OffProdNm"] as? String
                 
-                var Disc: String = items[0]["Disc"] as! String
-                var dis: Double = 0;
-                if (Disc != "" && Disc != "0") {
-                    dis = rate * (Double(Disc)! / 100);
-                    cell.lblActRate.isHidden = false
-                    cell.lblDisc.isHidden = false
-                }
-                rate = rate - dis;
-                if(Disc != "" && Disc != "0") { Disc=String(format: "%@%% OFF",Disc) } else { Disc = "" }
-                cell.lblDisc?.text = Disc
-                cell.lblSellRate.text = String(format: "Rs. %.02f", rate)
+                //cell.imgBtnDel.addTarget(target: self, action: #selector(self.delJWK(_:)))
             }
-            
-            //cell.imgBtnDel.addTarget(target: self, action: #selector(self.delJWK(_:)))
+            return cell
         }
-        return cell
-    }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -986,6 +986,7 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
     }
     func OrderSubmit(sLocation: String,sAddress: String){
         var sPItems:String = ""
+        var sPItems2:String = ""
         self.ShowLoading(Message: "Data Submitting Please wait...")
         for i in 0...self.lstPrvOrder.count-1{
             let item: [String: Any]=self.lstPrvOrder[i] as! [String : Any]
@@ -1003,13 +1004,21 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
             
             //Thise Old
             
-//            sPItems = sPItems + "{\"product_code\":\""+id+"\",\"product_Name\":\""+(ProdItems[0]["name"] as! String)+"\",\"rx_Conqty\":" + (item["Qty"] as! String) + ",\"Qty\":" + (String(format: "%.0f", item["SalQty"] as! Double)) + ",\"PQty\":0,\"cb_qty\":0,\"free\":" + (String(format: "%i", item["OffQty"] as! Int)) + ",\"Pfree\":0,\"Rate\":" + (String(format: "%.2f", item["Rate"] as! Double)) + ",\"PieseRate\":" + (String(format: "%.2f", item["Rate"] as! Double)) + ",\"discount\":" + Disc + ",\"FreeP_Code\":\"" + (item["OffProd"] as! String) + "\",\"Fname\":\"" + (item["OffProdNm"] as! String) + "\",\"discount_price\":" +  DisVal + ",\"tax\":0.0,\"tax_price\":0.0,\"OrdConv\":\"" + (item["UOMConv"] as! String) + "\",\"selectedScheme\":" + (String(format: "%.0f", item["Scheme"] as! Double)) + ",\"product_unit_Code\":\"" + (item["UOM"] as! String) + "\",\"product_unit_name\":\"" + (item["UOMNm"] as! String) + "\",\"selectedOffProCode\":\"" + (item["UOM"] as! String) + "\",\"selectedOffProName\":\"" + (item["UOMNm"] as! String) + "\",\"selectedOffProUnit\":\"" + (item["UOMConv"] as! String) + "\",\"f_key\":{\"activity_stockist_code\":\"Activity_Stockist_Report\"}}"
+            //            sPItems = sPItems + "{\"product_code\":\""+id+"\",\"product_Name\":\""+(ProdItems[0]["name"] as! String)+"\",\"rx_Conqty\":" + (item["Qty"] as! String) + ",\"Qty\":" + (String(format: "%.0f", item["SalQty"] as! Double)) + ",\"PQty\":0,\"cb_qty\":0,\"free\":" + (String(format: "%i", item["OffQty"] as! Int)) + ",\"Pfree\":0,\"Rate\":" + (String(format: "%.2f", item["Rate"] as! Double)) + ",\"PieseRate\":" + (String(format: "%.2f", item["Rate"] as! Double)) + ",\"discount\":" + Disc + ",\"FreeP_Code\":\"" + (item["OffProd"] as! String) + "\",\"Fname\":\"" + (item["OffProdNm"] as! String) + "\",\"discount_price\":" +  DisVal + ",\"tax\":0.0,\"tax_price\":0.0,\"OrdConv\":\"" + (item["UOMConv"] as! String) + "\",\"selectedScheme\":" + (String(format: "%.0f", item["Scheme"] as! Double)) + ",\"product_unit_Code\":\"" + (item["UOM"] as! String) + "\",\"product_unit_name\":\"" + (item["UOMNm"] as! String) + "\",\"selectedOffProCode\":\"" + (item["UOM"] as! String) + "\",\"selectedOffProName\":\"" + (item["UOMNm"] as! String) + "\",\"selectedOffProUnit\":\"" + (item["UOMConv"] as! String) + "\",\"f_key\":{\"activity_stockist_code\":\"Activity_Stockist_Report\"}}"
             
             // Thise New
             
             sPItems = sPItems + "{\"product_code\":\""+id+"\",\"product_Name\":\""+(ProdItems[0]["name"] as! String)+"\",\"rx_Conqty\":" + (item["Qty"] as! String) + ",\"Qty\":" + (String(format: "%.0f", item["SalQty"] as! Double)) + ",\"PQty\":0,\"cb_qty\":0,\"free\":" + (String(format: "%i", item["OffQty"] as! Int)) + ",\"Pfree\":0,\"Rate\":" + (String(format: "%.2f", item["Rate"] as! Double)) + ",\"PieseRate\":" + (String(format: "%.2f", item["Rate"] as! Double)) + ",\"discount\":" + Disc + ",\"FreeP_Code\":\"" + (item["OffProd"] as! String) + "\",\"Fname\":\"" + (item["OffProdNm"] as! String) + "\",\"discount_price\":" +  DisVal + ",\"tax\":0.0,\"tax_price\":0.0,\"OrdConv\":\"" + (item["UOMConv"] as! String) + "\",\"product_unit_name\":\"" + (item["UOMNm"] as! String) + "\",\"selectedScheme\":" + (String(format: "%.0f", item["Scheme"] as! Double)) + ",\"selectedOffProCode\":\"" + (item["UOM"] as! String) + "\",\"selectedOffProName\":\"" + (item["UOMNm"] as! String) + "\",\"selectedOffProUnit\":\"" + (item["UOMConv"] as! String) + "\",\"f_key\":{\"activity_stockist_code\":\"Activity_Stockist_Report\"}}"
-    
+            
+            
+            sPItems2 = sPItems2 +  "{\"product_code\":\""+id+"\",\"product_Name\":\""+(ProdItems[0]["name"] as! String)+"\",\"rx_Conqty\":" + (item["Qty"] as! String) + ",\"Qty\":" + (String(format: "%.0f", item["SalQty"] as! Double)) + ",\"PQty\":0,\"cb_qty\":0,\"free\":" + (String(format: "%i", item["OffQty"] as! Int)) + ",\"Pfree\":0,\"Pfree\":0,\"PieseRate\":" + (String(format: "%.2f", item["Rate"] as! Double)) + ",\"discount\":" + Disc + ",\"FreeP_Code\":\"" + (item["OffProd"] as! String) + "\",\"Fname\":\"" + (item["OffProdNm"] as! String) + "\",\"discount_price\":" +  DisVal + ",\"tax\":0.0,\"tax_price\":0.0,\"OrdConv\":\"" + (item["UOMConv"] as! String) + "\",\"product_unit_name\":\"" + (item["UOMNm"] as! String) + "\",\"Trans_POrd_No\":\"1328115\",\"Order_Flag\":0,\"Division_code\":29,\"selectedScheme\":" + (String(format: "%.0f", item["Scheme"] as! Double)) + ",\"selectedOffProCode\":\"" + (item["UOM"] as! String) + "\",\"selectedOffProName\":\"" + (item["UOMNm"] as! String) + "\",\"selectedOffProUnit\":\"" + (item["UOMConv"] as! String) + "\",\"sample_qty\":\"204.0\"}"
+            
         }
+        
+        
+        
+        
+
         
         
         let DataSF: String = self.lstPlnDetail[0]["subordinateid"] as! String
@@ -1024,42 +1033,91 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
         }
         // Thise Old
         
-//        let jsonString = "[{\"Activity_Report_APP\":{\"Worktype_code\":\"'" + (self.lstPlnDetail[0]["worktype"] as! String) + "'\",\"Town_code\":\"'" + (self.lstPlnDetail[0]["clusterid"] as! String) + "'\",\"RateEditable\":\"''\",\"dcr_activity_date\":\"'" + VisitData.shared.cInTime + "'\",\"Daywise_Remarks\":\"'" + VisitData.shared.VstRemarks.name + "'\",\"eKey\":\"" + self.eKey + "\",\"rx\":\"'1'\",\"rx_t\":\"''\",\"DataSF\":\"'" + DataSF + "'\"}},{\"Activity_Stockist_Report\":{\"Stockist_POB\":\"" + VisitData.shared.PayValue + "\",\"Worked_With\":\"''\",\"location\":\"'" + sLocation + "'\",\"geoaddress\":\"" + sAddress + "\",\"stockist_code\":\"'" + VisitData.shared.CustID + "'\",\"superstockistid\":\"''\",\"Stk_Meet_Time\":\"'" + VisitData.shared.cInTime + "'\",\"modified_time\":\"'" + VisitData.shared.cInTime + "'\",\"date_of_intrument\":\"" + VisitData.shared.DOP.id + "\",\"intrumenttype\":\""+VisitData.shared.PayType.id+"\",\"orderValue\":\"" + (lblTotAmt.text!).replacingOccurrences(of: "Rs. ", with: "") + "\",\"Aob\":0,\"CheckinTime\":\"" + VisitData.shared.cInTime + "\",\"CheckoutTime\":\"" + VisitData.shared.cOutTime + "\",\"f_key\":{\"Activity_Report_Code\":\"'Activity_Report_APP'\"},\"PhoneOrderTypes\":" + VisitData.shared.OrderMode.id + "}},{\"Activity_Stk_POB_Report\":[" + sPItems +  "]},{\"Activity_Stk_Sample_Report\":[]},{\"Activity_Event_Captures\":[" + sImgItems +  "]},{\"PENDING_Bills\":[]},{\"Compititor_Product\":[]}]"
-//
+        //        let jsonString = "[{\"Activity_Report_APP\":{\"Worktype_code\":\"'" + (self.lstPlnDetail[0]["worktype"] as! String) + "'\",\"Town_code\":\"'" + (self.lstPlnDetail[0]["clusterid"] as! String) + "'\",\"RateEditable\":\"''\",\"dcr_activity_date\":\"'" + VisitData.shared.cInTime + "'\",\"Daywise_Remarks\":\"'" + VisitData.shared.VstRemarks.name + "'\",\"eKey\":\"" + self.eKey + "\",\"rx\":\"'1'\",\"rx_t\":\"''\",\"DataSF\":\"'" + DataSF + "'\"}},{\"Activity_Stockist_Report\":{\"Stockist_POB\":\"" + VisitData.shared.PayValue + "\",\"Worked_With\":\"''\",\"location\":\"'" + sLocation + "'\",\"geoaddress\":\"" + sAddress + "\",\"stockist_code\":\"'" + VisitData.shared.CustID + "'\",\"superstockistid\":\"''\",\"Stk_Meet_Time\":\"'" + VisitData.shared.cInTime + "'\",\"modified_time\":\"'" + VisitData.shared.cInTime + "'\",\"date_of_intrument\":\"" + VisitData.shared.DOP.id + "\",\"intrumenttype\":\""+VisitData.shared.PayType.id+"\",\"orderValue\":\"" + (lblTotAmt.text!).replacingOccurrences(of: "Rs. ", with: "") + "\",\"Aob\":0,\"CheckinTime\":\"" + VisitData.shared.cInTime + "\",\"CheckoutTime\":\"" + VisitData.shared.cOutTime + "\",\"f_key\":{\"Activity_Report_Code\":\"'Activity_Report_APP'\"},\"PhoneOrderTypes\":" + VisitData.shared.OrderMode.id + "}},{\"Activity_Stk_POB_Report\":[" + sPItems +  "]},{\"Activity_Stk_Sample_Report\":[]},{\"Activity_Event_Captures\":[" + sImgItems +  "]},{\"PENDING_Bills\":[]},{\"Compititor_Product\":[]}]"
+        //
         // Thise New
         let jsonString =  "[{\"Activity_Report_APP\":{\"Worktype_code\":\"'" + (self.lstPlnDetail[0]["worktype"] as! String) + "'\",\"Town_code\":\"'" + (self.lstPlnDetail[0]["clusterid"] as! String) + "'\",\"RateEditable\":\"''\",\"dcr_activity_date\":\"'" + VisitData.shared.cInTime + "'\",\"Daywise_Remarks\":\"" + VisitData.shared.VstRemarks.name + "\",\"eKey\":\"" + self.eKey + "\",\"rx\":\"'1'\",\"rx_t\":\"''\",\"DataSF\":\"'" + DataSF + "'\"}},{\"Activity_Stockist_Report\":{\"Stockist_POB\":\"" + VisitData.shared.PayValue + "\",\"Worked_With\":\"''\",\"location\":\"'" + sLocation + "'\",\"geoaddress\":\"" + sAddress + "\",\"superstockistid\":\"''\",\"Stk_Meet_Time\":\"'" + VisitData.shared.cInTime + "'\",\"modified_time\":\"'" + VisitData.shared.cInTime + "'\",\"date_of_intrument\":\"" + VisitData.shared.DOP.id + "\",\"intrumenttype\":\""+VisitData.shared.PayType.id+"\",\"orderValue\":\"" + (lblTotAmt.text!).replacingOccurrences(of: "Rs. ", with: "") + "\",\"Aob\":0,\"CheckinTime\":\"" + VisitData.shared.cInTime + "\",\"CheckoutTime\":\"" + VisitData.shared.cOutTime + "\",\"PhoneOrderTypes\":" + VisitData.shared.OrderMode.id + ",\"Super_Stck_code\":\"'SS458'\",\"stockist_code\":\"'" + VisitData.shared.CustID + "'\",\"stockist_name\":\"''\",\"f_key\":{\"Activity_Report_Code\":\"'Activity_Report_APP'\"}}},{\"Activity_Stk_POB_Report\":[" + sPItems +  "]},{\"Activity_Stk_Sample_Report\":[]},{\"Activity_Event_Captures\":[]},{\"PENDING_Bills\":[]},{\"Compititor_Product\":[]},{\"Activity_Event_Captures_Call\":[]}]"
-
+        
+        
+        print(objcallsprimary)
+        
+        let jsonString2 = "{\"Products\":[" + sPItems2 +  "],\"Activity_Event_Captures\":[],\"POB\":\"\(objcallsprimary[0]["POB"] as! Int)\",\"Value\":\"\(objcallsprimary[0]["Order_Value"] as! Int)\",\"order_No\":\"\(objcallsprimary[0]["Order_No"] as! String)\",\"DCR_Code\":\"\(objcallsprimary[0]["DCR_Code"] as! String)\",\"Trans_Sl_No\":\"\(objcallsprimary[0]["Trans_Sl_No"] as! String)\",\"Trans_Detail_slNo\":\"\(objcallsprimary[0]["Trans_Detail_SlNo"] as! String)\",\"Route\":\"\",\"net_weight_value\":\"\",\"target\":\"\",\"rateMode\":null,\"Stockist\":\"\(objcallsprimary[0]["stockist_code"] as! String)\",\"RateEditable\":\"\",\"orderValue\":\"" + (lblTotAmt.text!).replacingOccurrences(of: "Rs. ", with: "") + "\",\"Stockist_POB\":\"" + VisitData.shared.PayValue + "\",\"Stk_Meet_Time\":\"'" + VisitData.shared.cInTime + "'\",\"modified_time\":\"'" + VisitData.shared.cInTime + "'\",\"CheckoutTime\":\"" + VisitData.shared.cOutTime + "\",\"PhoneOrderTypes\":" + VisitData.shared.OrderMode.id + ",\"dcr_activity_date\":\"'" + VisitData.shared.cInTime + "'\"}"
+        
+        let params2: Parameters = [
+            "data": jsonString2 //"["+jsonString+"]"//
+        ]
+        
         
         let params: Parameters = [
             "data": jsonString //"["+jsonString+"]"//
         ]
         print(params)
-        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+"dcr/save&divisionCode=" + self.DivCode + "&rSF=" + self.SFCode + "&sfCode=" + self.SFCode, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
+        if VisitData.shared.cInTime != PrimarySubmittedDCR.EndOrder_Time{
+            
+            print(params)
+            
+            AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+"dcr/save&divisionCode=" + self.DivCode + "&rSF=" + self.SFCode + "&sfCode=" + self.SFCode, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
             AFdata in
             self.LoadingDismiss()
             switch AFdata.result
             {
-               
+                
             case .success(let value):
                 print(value)
                 if let json = value as? [String: Any] {
                     
                     Toast.show(message: "Order has been submitted successfully") //, controller: self
-                     let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
-                     UIApplication.shared.windows.first?.rootViewController = viewController
-                     UIApplication.shared.windows.first?.makeKeyAndVisible()
+                    let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
+                    UIApplication.shared.windows.first?.rootViewController = viewController
+                    UIApplication.shared.windows.first?.makeKeyAndVisible()
                     
-                     VisitData.shared.clear()
+                    VisitData.shared.clear()
                 }
                 
             case .failure(let error):
                 let alert = UIAlertController(title: "Information", message: error.errorDescription, preferredStyle: .alert)
-                     alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
-                         return
-                     })
-                     self.present(alert, animated: true)
+                alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
+                    return
+                })
+                self.present(alert, animated: true)
             }
         }
+    }
+        else{
+            print("No data")
+                       
+            print(objcallsprimary)
+            
+            print(params2)
+            
+            AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+"dcr/updatePrimaryProducts" + "&divisionCode=" + self.DivCode + "&sfCode=" + self.SFCode + "&desig=" + self.Desig, method: .post, parameters: params2, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
+            AFdata in
+            self.LoadingDismiss()
+            switch AFdata.result
+            {
+                
+            case .success(let value):
+                print(value)
+                if let json = value as? [String: Any] {
+                    
+                    Toast.show(message: "Order has been submitted successfully") //, controller: self
+                    let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
+                    UIApplication.shared.windows.first?.rootViewController = viewController
+                    UIApplication.shared.windows.first?.makeKeyAndVisible()
+                    
+                    VisitData.shared.clear()
+                }
+                
+            case .failure(let error):
+                let alert = UIAlertController(title: "Information", message: error.errorDescription, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
+                    return
+                })
+                self.present(alert, animated: true)
+            }
+        }
+        }
+        
     }
     @objc private func GotoHome() {
         self.resignFirstResponder()
@@ -1097,36 +1155,36 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
     func updateEditOrderValues(){
         let item = productData1
         let item2 = productData2
-       
+        
         if let unwrappedProduct = item,let unwrappedProduct2 = item2 {
             
-        let apiKey: String = "\(axnEdit)&State_Code=\(StateCode)&Trans_Detail_SlNo=\(unwrappedProduct)&&Order_No=\(unwrappedProduct2)"
-
-       
-        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
-            AFdata in
-            switch AFdata.result
-            {
-                
-            case .success(let value):
-                //print(value)
-                if let json = value as? [AnyObject] {
-                    guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
-                        print("Error: Cannot convert JSON object to Pretty JSON data")
-                        return
+            let apiKey: String = "\(axnEdit)&State_Code=\(StateCode)&Trans_Detail_SlNo=\(unwrappedProduct)&&Order_No=\(unwrappedProduct2)"
+            
+            
+            AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+                AFdata in
+                switch AFdata.result
+                {
+                    
+                case .success(let value):
+                    //print(value)
+                    if let json = value as? [AnyObject] {
+                        guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
+                            print("Error: Cannot convert JSON object to Pretty JSON data")
+                            return
+                        }
+                        guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+                            print("Error: Could print JSON in String")
+                            return
+                        }
+                        print(prettyPrintedJson)
+                        self.objcallsprimary = json
+                        Editoredr()
                     }
-                    guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
-                        print("Error: Could print JSON in String")
-                        return
-                    }
-                    print(prettyPrintedJson)
-                    self.objcallsprimary = json
-                    Editoredr()
+                case .failure(let error):
+                    Toast.show(message: error.errorDescription!)  //, controller: self
                 }
-            case .failure(let error):
-                Toast.show(message: error.errorDescription!)  //, controller: self
             }
-        }
             
         } else {
             // The optional value is nil
@@ -1135,53 +1193,106 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
     }
     
     
-     func Editoredr(){
+    func Editoredr(){
         print(objcallsprimary)
-         print(lstAllProducts)
-         print(lstAllProducts.count)
+        print(lstAllProducts)
+        print(lstAllProducts.count)
         
-         let indxPath = lstAllProducts
-           print(indxPath)
-         
-         let Additional_Prod_Dtls = objcallsprimary[0]["Additional_Prod_Code1"] as? String
-         
-//        sQty = sQty+1
-//        let id: String
-//        let lProdItem:[String: Any]
-//        if(tbView==tbPrvOrderProduct)
-//        {
-//            lProdItem = lstPrvOrder[indxPath.row] as! [String : Any]
-//            id=String(format: "%@", lstPrvOrder[indxPath.row]["id"] as! CVarArg)
-//        }else{
-//            lProdItem = lstProducts[indxPath.row] as! [String : Any]
-//            id=String(format: "%@", lstProducts[indxPath.row]["id"] as! CVarArg)
-//        }
-//        let items: [AnyObject] = VisitData.shared.ProductCart.filter ({ (Cart) in
-//
-//            if Cart["id"] as! String == id {
-//                return true
-//            }
-//            return false
-//        })
-//        var selUOMConv: String = "1"
-//        var selNetWt: String = ""
-//        if(items.count>0)
-//        {
-//            selUOM=String(format: "%@", items[0]["UOM"] as! CVarArg)
-//            selUOMNm=String(format: "%@", items[0]["UOMNm"] as! CVarArg)
-//            selUOMConv=String(format: "%@", items[0]["UOMConv"] as! CVarArg)
-//            selNetWt=String(format: "%@", items[0]["NetWt"] as! CVarArg)
-//        }else{
-//            selUOM=String(format: "%@", lstProducts[indxPath.row]["Base_Unit_code"] as! CVarArg)
-//            selUOMNm=String(format: "%@", lstProducts[indxPath.row]["Product_Sale_Unit"] as! CVarArg)
-//            selUOMConv=String(format: "%@", lstProducts[indxPath.row]["OrdConvSec"] as! CVarArg)
-//            selNetWt=String(format: "%@", lstProducts[indxPath.row]["product_netwt"] as! CVarArg)
-//        }
-//        cell.txtQty.text = String(sQty)
-//        updateQty(id: id, sUom: selUOM, sUomNm: selUOMNm, sUomConv: selUOMConv,sNetUnt: selNetWt, sQty: String(sQty),ProdItem: lProdItem,refresh: 1)
+        let indxPath = lstAllProducts
+        print(indxPath)
+        
+        let Additional_Prod_Dtls = objcallsprimary[0]["Additional_Prod_Code"] as? String
+        let productArray = Additional_Prod_Dtls?.components(separatedBy: "#")
+        let filteredArray = productArray?.filter { !$0.isEmpty }
+        print(filteredArray as Any)
+        print(productArray as Any)
+        if let products = filteredArray {
+            for product in products {
+                let productData = product.components(separatedBy: "~")
+                
+                let trimmedString = productData[0].trimmingCharacters(in: .whitespacesAndNewlines)
+                print(trimmedString)
+                let price = productData[1].components(separatedBy: "$")[0]
+                print(price)
+                
+                
+                let sQty : Int = Int(price)!
+                print(sQty)
+                let id: String
+                let lProdItem:[String: Any]
+                var BasUnitCode: Int = 0
+                if let indexToDelete = lstAllProducts.firstIndex(where: { String(format: "%@", $0["id"] as! CVarArg) == "\(String(describing: trimmedString))" }) {
+                    let stkname = lstAllProducts[indexToDelete]
+                    print(indexToDelete)
+                    print(stkname)
+                    
+                    // Safely unwrap Base_Unit_code and convert it to Int
+                    if let baseUnitCodeStr = lstAllProducts[indexToDelete]["Base_Unit_code"] as? String,
+                       let baseUnitCodeInt = Int(baseUnitCodeStr) {
+                        BasUnitCode = baseUnitCodeInt
+                        print(BasUnitCode)
+                    } else {
+                        print("Base_Unit_code is nil or not convertible to Int.")
+                        let baseUnitCodeInt = lstAllProducts[indexToDelete]["Base_Unit_code"]
+                        print(baseUnitCodeInt as Any)
+                        if let transid = baseUnitCodeInt {
+                            
+                            if let transid2 = transid{
+                                print(transid2)
+                                BasUnitCode = transid2 as! Int
+                                print(BasUnitCode)
+                            } else {
+                                print("Value is nil or not a String")
+                            }
+                        } else {
+                            print("Value is nil or not a String")
+                        }
+                        
+                    }
+                    
+                    lProdItem = stkname as! [String : Any]
+                    print(indexToDelete as Any)
+                        id=String(format: "%@", lstAllProducts[indexToDelete]["id"] as! CVarArg)
+                    print(id)
+                    let items: [AnyObject] = VisitData.shared.ProductCart.filter ({ (Cart) in
+
+                        if Cart["id"] as! String == productData[0] {
+                            return true
+                        }
+                        return false
+                    })
+                    var selUOMConv: String = "1"
+                    var selNetWt: String = ""
+                 
+                            if(items.count>0)
+                            {
+                                selUOM=String(format: "%@", items[0]["UOM"] as! CVarArg)
+                                selUOMNm=String(format: "%@", items[0]["UOMNm"] as! CVarArg)
+                                selUOMConv=String(format: "%@", items[0]["UOMConv"] as! CVarArg)
+                                selNetWt=String(format: "%@", items[0]["NetWt"] as! CVarArg)
+                            }else{
+                                selUOM=String(BasUnitCode)
+                                print(selUOM)
+                                selUOMNm=String(stkname["Product_Sale_Unit"] as! String)
+                                print(selUOMNm)
+                                selUOMConv=String(stkname["conversionQty"] as! Int)
+                                print(selUOMConv)
+                                selNetWt=String("")
+                                print(selNetWt)
+                            }
+                            updateQty(id: id, sUom: selUOM, sUomNm: selUOMNm, sUomConv: selUOMConv,sNetUnt: selNetWt, sQty: String(sQty),ProdItem: lProdItem,refresh: 1)
+                }
+                else {
+                    print("Item not found in lstAllProducts.")
+                }
+                
+                
+            }
+        }
+        
     }
-        
+    
 }
-
-
-//"PhoneOrderTypes":0,"Super_Stck_code":"'SS458'","stockist_code":"'31800'","stockist_name":"'Aravind Enterprises'"
+/*
+ "Products":[{"product_code":"SEF11251","product_Name":"Britannia Milk bikis 150g","rx_Conqty":2,"Qty":20,"PQty":0,"cb_qty":0,"free":0,"Pfree":0,"Rate":10.0,"PieseRate":10.0,"discount":0.0,"FreeP_Code":0,"Fname":0,"discount_price":0.0,"tax":2.0,"tax_price":4.0,"OrdConv":10,"product_unit_name":"BOX","Trans_POrd_No":"1328115","Order_Flag":0,"Division_code":29,"selectedScheme":0,"selectedOffProCode":"441","selectedOffProName":"BOX","selectedOffProUnit":"10","sample_qty":"204.0"},{"product_code":"SEF11254","product_Name":"Parle-G","rx_Conqty":3,"Qty":60,"PQty":0,"cb_qty":0,"free":0,"Pfree":0,"Rate":6.0,"PieseRate":6.0,"discount":0.0,"FreeP_Code":0,"Fname":0,"discount_price":0.0,"tax":2.0,"tax_price":7.2,"OrdConv":20,"product_unit_name":"BOX","Trans_POrd_No":"1328116","Order_Flag":0,"Division_code":29,"selectedScheme":0,"selectedOffProCode":"441","selectedOffProName":"BOX","selectedOffProUnit":"20","sample_qty":"367.2"},{"product_code":"SEF11426","product_Name":"Oreo","rx_Conqty":1,"Qty":10,"PQty":0,"cb_qty":0,"free":0,"Pfree":0,"Rate":6.0,"PieseRate":6.0,"discount":0.0,"FreeP_Code":0,"Fname":0,"discount_price":0.0,"tax":3.0,"tax_price":1.7999999999999998,"OrdConv":10,"product_unit_name":"BOX","Trans_POrd_No":"","Order_Flag":0,"Division_code":0,"selectedScheme":0,"selectedOffProCode":"441","selectedOffProName":"BOX","selectedOffProUnit":"10","sample_qty":"61.8"}],"Activity_Event_Captures":[],"POB":"0","Value":"633.0","order_No":"SEF3-415","DCR_Code":"SEF3-306","Trans_Sl_No":"SEF3-306","Trans_Detail_slNo":"SEF3-1258","Route":"","net_weight_value":"","target":"","rateMode":null,"Stockist":"32469","RateEditable":"","orderValue":633.0,"Stockist_POB":"","Stk_Meet_Time":"'2023-05-29 15:15:29'","modified_time":"'2023-05-29 15:15:29'","CheckoutTime":"2023-05-29 15:15:29","PhoneOrderTypes":0,"dcr_activity_date":"'2023-05-29 00:00:00'"}
+ */

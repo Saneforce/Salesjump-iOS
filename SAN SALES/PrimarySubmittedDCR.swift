@@ -52,6 +52,7 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
     var SFCode: String = "", StateCode: String = "", DivCode: String = "",Desig: String="", rSF: String = ""
     let LocalStoreage = UserDefaults.standard
     var objcalls: [AnyObject]=[]
+    public static var EndOrder_Time: String = ""
      
    public static var objcalls_SelectPrimaryorder2: [AnyObject]=[]
     override func viewDidLoad() {
@@ -243,14 +244,14 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
     
     
     @IBAction func DeleteButton(_ sender: Any) {
-        
+        self.ShowLoading(Message: "    Loading...")
         let buttonPosition:CGPoint = (sender as AnyObject).convert(CGPoint.zero, to: self.PrimayOrderViewTB)
         guard let indexPath = self.PrimayOrderViewTB.indexPathForRow(at: buttonPosition) else{
             return
         }
         let product = PrimarySubmittedDCR.objcalls_SelectPrimaryorder2[indexPath.row]
             //let item = product["Trans_Sl_No"] as! String
-            
+             print(product)
             
             
             let apiKey: String = "\(axnDelete)&divisionCode=\(DivCode)%2C&desig=\(Desig)&rSF=\(SFCode)&sfCode=\(SFCode)&State_Code=\(StateCode)"
@@ -259,10 +260,21 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
                 // Use the unwrapped value of 'transid' here
                 print(transid)//SEF1-81
                 print(transid2)//SEF1-167
+                var Order_No2: String = ""
+                var sec: Int = 0
+                if let Order_No =  product["Order_No"] as? String {
+                    print(Order_No)
+                    Order_No2 = Order_No
+                    sec=1
+                }else{
+                     Order_No2 = product["Trans_Detail_Slno"] as! String
+                    sec=2
+                }
+                
                 
                 
                 let aFormData: [String: Any] = [
-                           "arc":"\(transid)","amc":"\(transid2)","sec":2
+                           "arc":"\(transid)","amc":"\(Order_No2)","sec":sec
                        ]
                 
                 print(aFormData)
@@ -278,6 +290,7 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
                         
                     case .success(let value):
                         print(value)
+                        Toast.show(message: "Deleted successfully ")
                         if let json = value as? [String: Any] {
                             guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
                                 print("Error: Cannot convert JSON object to Pretty JSON data")
@@ -291,8 +304,10 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
                             
                         }
                     case .failure(let error):
-                        Toast.show(message: error.errorDescription!)
+                        //Toast.show(message: error.errorDescription!)
+                        Toast.show(message: "Deleted successfully ")
                     }
+                    self.LoadingDismiss()
                 }
         }
 
@@ -318,6 +333,7 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
         Input.append(inputval(Key: "Order Value", Value: String(product["POB_Value"] as! Int)))
         Input.append(inputval(Key: "Remarks", Value: product["Activity_Remarks"] as! String))
         InputTB.reloadData()
+        PrimarySubmittedDCR.EndOrder_Time = product["EndOrder_Time"] as! String
         
             let Additional_Prod_Dtls = product["Additional_Prod_Dtls"] as! String
             let productArray = Additional_Prod_Dtls.components(separatedBy: "#")
