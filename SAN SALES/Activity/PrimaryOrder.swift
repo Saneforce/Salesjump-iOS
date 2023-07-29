@@ -1040,12 +1040,7 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
         
         
         print(objcallsprimary)
-        
-        let jsonString2 = "{\"Products\":[" + sPItems2 +  "],\"Activity_Event_Captures\":[],\"POB\":\"\(objcallsprimary[0]["POB"] as! Int)\",\"Value\":\"\(objcallsprimary[0]["Order_Value"] as! Int)\",\"order_No\":\"\(objcallsprimary[0]["Order_No"] as! String)\",\"DCR_Code\":\"\(objcallsprimary[0]["DCR_Code"] as! String)\",\"Trans_Sl_No\":\"\(objcallsprimary[0]["Trans_Sl_No"] as! String)\",\"Trans_Detail_slNo\":\"\(objcallsprimary[0]["Trans_Detail_SlNo"] as! String)\",\"Route\":\"\",\"net_weight_value\":\"\",\"target\":\"\",\"rateMode\":null,\"Stockist\":\"\(objcallsprimary[0]["stockist_code"] as! String)\",\"RateEditable\":\"\",\"orderValue\":\"" + (lblTotAmt.text!).replacingOccurrences(of: "Rs. ", with: "") + "\",\"Stockist_POB\":\"" + VisitData.shared.PayValue + "\",\"Stk_Meet_Time\":\"'" + VisitData.shared.cInTime + "'\",\"modified_time\":\"'" + VisitData.shared.cInTime + "'\",\"CheckoutTime\":\"" + VisitData.shared.cOutTime + "\",\"PhoneOrderTypes\":" + VisitData.shared.OrderMode.id + ",\"dcr_activity_date\":\"'" + VisitData.shared.cInTime + "'\"}"
-        
-        let params2: Parameters = [
-            "data": jsonString2 //"["+jsonString+"]"//
-        ]
+   
         
         
         let params: Parameters = [
@@ -1088,9 +1083,18 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
                        
             print(objcallsprimary)
             
-            print(params2)
             
-            AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+"dcr/updatePrimaryProducts" + "&divisionCode=" + self.DivCode + "&sfCode=" + self.SFCode + "&desig=" + self.Desig, method: .post, parameters: params2, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
+            let jsonString2 = "{\"Products\":[" + sPItems2 +  "],\"Activity_Event_Captures\":[],\"POB\":\"\(objcallsprimary[0]["POB"] as! Int)\",\"Value\":\"50\",\"order_No\":\"\(objcallsprimary[0]["Order_No"] as! String)\",\"DCR_Code\":\"\(objcallsprimary[0]["DCR_Code"] as! String)\",\"Trans_Sl_No\":\"\(objcallsprimary[0]["Trans_Sl_No"] as! String)\",\"Trans_Detail_slNo\":\"\(objcallsprimary[0]["Trans_Detail_SlNo"] as! String)\",\"Route\":\"\",\"net_weight_value\":\"\",\"target\":\"\",\"rateMode\":null,\"Stockist\":\"\(objcallsprimary[0]["stockist_code"] as! String)\",\"RateEditable\":\"\",\"orderValue\":\"" + (lblTotAmt.text!).replacingOccurrences(of: "Rs. ", with: "") + "\",\"Stockist_POB\":\"" + VisitData.shared.PayValue + "\",\"Stk_Meet_Time\":\"2023-07-28 14:39:09\",\"modified_time\":\"2023-07-28 14:39:09\",\"CheckoutTime\":\"" + VisitData.shared.cOutTime + "\",\"PhoneOrderTypes\":0,\"dcr_activity_date\":\"2023-07-28 14:39:09\"}"
+            
+            let params2: Parameters = [
+                "data": jsonString2 //"["+jsonString+"]"//
+            ]
+            print(params2)
+            var axn = "dcr/updatePrimaryProducts"
+            let apiKeys: String = "\(axn)&divisionCode=\(DivCode)&sfCode=\(SFCode)&desig=\(Desig)"
+            print(apiKeys)
+        
+            AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKeys, method: .post, parameters: params2, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
             AFdata in
             self.LoadingDismiss()
             switch AFdata.result
