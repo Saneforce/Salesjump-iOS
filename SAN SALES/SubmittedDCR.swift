@@ -286,6 +286,8 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
             self.Rotlbl.text=String(format: "%@", product["SDP_Name"] as! String)
             let item2 = product["Trans_Sl_No"] as! String
             
+             Input.removeAll()
+        
             Input.append(inputval(Key: "Meet Time", Value: product["StartOrder_Time"] as! String))
             Input.append(inputval(Key: "Order Time", Value: product["Order_Out_Time"] as! String))
             Input.append(inputval(Key: "Order Value", Value: product["finalNetAmnt"] as! String))
@@ -404,12 +406,15 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
             guard let indexPath = self.submittedDCRTB.indexPathForRow(at: buttonPosition) else {
                 return
             }
+         let arey = indexPath.row
         let product = SubmittedDCR.objcalls_SelectSecondaryorder2[indexPath.row]
             let item1 = product["Trans_Detail_Slno"] as! String
+        print(item1)
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let viewController = storyboard.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
             let myDyPln = storyboard.instantiateViewController(withIdentifier: "sbSecondaryOrder") as! SecondaryOrder
                myDyPln.productData = item1
+               myDyPln.areypostion = arey
             viewController.setViewControllers([myDyPln], animated: true)
             UIApplication.shared.windows.first?.rootViewController = viewController
     }
@@ -512,11 +517,5 @@ struct SubmittedDCRselect {
 /*
 
 My
-
-
- {\"Products\":[{\"product\":\"SEF13362\", \"product_Nm\":\"testfor_sap_code\", \"UnitId\": \"241\", \"UnitName\": \"PIECE\", \"OrdConv\":1, \"free\": 0, \"HSN\": \"\", \"Rate\": 100.00, \"imageUri\": \"\", \"Schmval\": 0, \"rx_qty\": 1, \"recv_qty\": 0, \"product_netwt\": 0, \"netweightvalue\": 0, \"conversionQty\": 1, \"cateid\": 1011, \"UcQty\": 1, \"rx_Conqty\":5, \"id\":\"SEF13362\", \"name\":\"testfor_sap_code\", \"rx_remarks\":\"\", \"rx_remarks_Id\": \"\", \"sample_qty\": \"10.0\", \"FreeP_Code\": \"\", \"Fname\": \"\", \"PromoVal\": 0, \"discount\": 0, \"discount_price\": 0, \"tax\": 0, \"tax_price\": 0, \"selectedScheme\":0, \"selectedOffProCode\": \"241\", \"selectedOffProName\":\"PIECE\", \"selectedOffProUnit\": \"1\"}],\"Activity_Event_Captures\":[],\"POB\":\"0\",\"Value\":\"500\",\"disPercnt\":0.0,\"disValue\":0.0,\"finalNetAmt\":500,\"taxTotalValue\":\"0\",\"discTotalValue\":\"0.0\",\"subTotal\":\"500\",\"No_Of_items\":\"1\",\"Cust_Code\":\"\'2372682\'\",\"DCR_Code\":\"SEF19640-66\",\"Trans_Sl_No\":\"SEFMR0040-23-24-SO-63\",\"Route\":\"139726\",\"net_weight_value\":\"0\",\"Discountpercent\":0.0,\"discount_price\":0.0,\"target\":\"0\",\"rateMode\":\"free\",\"Stockist\":\"15560\",\"RateEditable\":\"\",\"PhoneOrderTypes\":0}
- 
- 
- 
- {\"Products\":[{\"product\":\"SEF13362\",\"UnitId\":\"241\",\"UnitName\":\"PIECE\",\"product_Nm\":\"testfor_sap_code\",\"OrdConv\":5,\"free\":0,\"HSN\":\"\",\"Rate\":500,\"imageUri\":\"null\",\"Schmval\":0,\"rx_qty\":5,\"recv_qty\":0,\"product_netwt\":0.2,\"netweightvalue\":0,\"conversionQty\":5,\"cateid\":1193,\"UcQty\":5,\"rx_Conqty\":5,\"id\":\"SAN31813256\",\"name\":\"testfor_sap_code\",\"rx_remarks\":\"\",\"rx_remarks_Id\":\"\",\"sample_qty\":\"56.0\",\"FreeP_Code\":\"\",\"Fname\":\"\",\"PromoVal\":0,\"discount\":0.0,\"discount_price\":0.0,\"tax\":0.0,\"tax_price\":0.0,\"selectedScheme\":0,\"selectedOffProCode\":\"10\",\"selectedOffProName\":\"PIECE\",\"selectedOffProUnit\":\"1\"}],\"Activity_Event_Captures\":[],\"POB\":\"0\",\"Value\":\"500\",\"disPercnt\":0.0,\"disValue\":0.0,\"finalNetAmt\":3390.0,\"taxTotalValue\":\"0.0\",\"discTotalValue\":\"0.0\",\"subTotal\":\"500.0\",\"No_Of_items\":\"5\",\"Cust_Code\":\"'2372682'\",\"DCR_Code\":\"SEF19640-66\",\"Trans_Sl_No\":\"SEFMR0040-23-24-SO-63\",\"Route\":\"139726\",\"net_weight_value\":\"0.6\",\"Discountpercent\":0.0,\"discount_price\":0.0,\"target\":\"0\",\"rateMode\":\"free\",\"Stockist\":\"15560\",\"RateEditable\":\"\",\"PhoneOrderTypes\":3}
+ data:{"Products":[{"product_code":"SEF11251","product_Name":"Britannia Milk bikis 150g","rx_Conqty":2,"Qty":20,"PQty":0,"cb_qty":0,"free":0,"Pfree":0,"Rate":10.0,"PieseRate":10.0,"discount":0.0,"FreeP_Code":0,"Fname":0,"discount_price":0.0,"tax":2.0,"tax_price":4.0,"OrdConv":10,"product_unit_name":"BOX","Trans_POrd_No":"1328115","Order_Flag":0,"Division_code":29,"selectedScheme":0,"selectedOffProCode":"441","selectedOffProName":"BOX","selectedOffProUnit":"10","sample_qty":"204.0"},{"product_code":"SEF11254","product_Name":"Parle-G","rx_Conqty":3,"Qty":60,"PQty":0,"cb_qty":0,"free":0,"Pfree":0,"Rate":6.0,"PieseRate":6.0,"discount":0.0,"FreeP_Code":0,"Fname":0,"discount_price":0.0,"tax":2.0,"tax_price":7.2,"OrdConv":20,"product_unit_name":"BOX","Trans_POrd_No":"1328116","Order_Flag":0,"Division_code":29,"selectedScheme":0,"selectedOffProCode":"441","selectedOffProName":"BOX","selectedOffProUnit":"20","sample_qty":"367.2"},{"product_code":"SEF11426","product_Name":"Oreo","rx_Conqty":1,"Qty":10,"PQty":0,"cb_qty":0,"free":0,"Pfree":0,"Rate":6.0,"PieseRate":6.0,"discount":0.0,"FreeP_Code":0,"Fname":0,"discount_price":0.0,"tax":3.0,"tax_price":1.7999999999999998,"OrdConv":10,"product_unit_name":"BOX","Trans_POrd_No":"","Order_Flag":0,"Division_code":0,"selectedScheme":0,"selectedOffProCode":"441","selectedOffProName":"BOX","selectedOffProUnit":"10","sample_qty":"61.8"}],"Activity_Event_Captures":[],"POB":"0","Value":"633.0","order_No":"SEF3-415","DCR_Code":"SEF3-306","Trans_Sl_No":"SEF3-306","Trans_Detail_slNo":"SEF3-1258","Route":"","net_weight_value":"","target":"","rateMode":null,"Stockist":"32469","RateEditable":"","orderValue":633.0,"Stockist_POB":"","Stk_Meet_Time":"'2023-05-29 15:15:29'","modified_time":"'2023-05-29 15:15:29'","CheckoutTime":"2023-05-29 15:15:29","PhoneOrderTypes":0,"dcr_activity_date":"'2023-05-29 00:00:00'"}
 */

@@ -229,6 +229,7 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
                 return
             }
         let product = PrimarySubmittedDCR.objcalls_SelectPrimaryorder2[indexPath.row]
+        let arey = indexPath.row
         
             let item1 = product["Trans_Detail_Slno"] as! String
         print(item1)
@@ -238,6 +239,7 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
         let myDyPln = storyboard.instantiateViewController(withIdentifier: "sbPrimaryOrder") as! PrimaryOrder
         myDyPln.productData1 = item1
         myDyPln.productData2 = item2
+        myDyPln.areypostion = arey
         viewController.setViewControllers([myDyPln], animated: true)
         UIApplication.shared.windows.first?.rootViewController = viewController
     }
@@ -371,3 +373,7 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
 }
+
+/*
+ 
+ */

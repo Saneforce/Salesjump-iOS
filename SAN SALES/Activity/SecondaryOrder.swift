@@ -90,6 +90,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
     var pCatIndexPath = IndexPath()
     var Editobjcalls: [AnyObject]=[]
     var productData : String?
+    var areypostion: Int?
     var Order_Out: String?
     var disbuttername : String?
     var lbltotalamunt: Int = 0
@@ -1220,9 +1221,9 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
             sPItems2 = sPItems2 + " \"recv_qty\": 0,"
             sPItems2 = sPItems2 + " \"product_netwt\": 0,"
             sPItems2 = sPItems2 + " \"netweightvalue\": 0,"
-            sPItems2 = sPItems2 + " \"conversionQty\": 1,"
+            sPItems2 = sPItems2 + " \"conversionQty\": 3,"
             sPItems2 = sPItems2 + " \"cateid\": 1011,"
-            sPItems2 = sPItems2 + " \"UcQty\": 1,"
+            sPItems2 = sPItems2 + " \"UcQty\": 3,"
             sPItems2 = sPItems2 + " \"rx_Conqty\":" + (item["Qty"] as! String) + ","
             sPItems2 = sPItems2 + " \"id\":\""+id+"\", \"name\":\""+(ProdItems[0]["name"] as! String)+"\","
             sPItems2 = sPItems2 + " \"rx_remarks\":\"\","
@@ -1238,10 +1239,8 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
             sPItems2 = sPItems2 + " \"selectedScheme\":" + (String(format: "%.0f", item["Scheme"] as! Double)) + ","
             sPItems2 = sPItems2 + " \"selectedOffProCode\": \"" + (item["UOM"] as! String) + "\","
             sPItems2 = sPItems2 + " \"selectedOffProName\":\"" + (item["UOMNm"] as! String) + "\","
-            sPItems2 = sPItems2 + " \"selectedOffProUnit\": \"1\"}"
+            sPItems2 = sPItems2 + " \"selectedOffProUnit\": \"3\"},"
             
-            
-            let jsonformate1 = "{\"Products\":[{\"product\":\"SEF13362\",\"UnitId\":\"241\",\"UnitName\":\"PIECE\",\"product_Nm\":\"testfor_sap_code\",\"OrdConv\":5,\"free\":0,\"HSN\":\"\",\"Rate\":500,\"imageUri\":\"null\",\"Schmval\":0,\"rx_qty\":5,\"recv_qty\":0,\"product_netwt\":0.2,\"netweightvalue\":0,\"conversionQty\":5,\"cateid\":1193,\"UcQty\":5,\"rx_Conqty\":5,\"id\":\"SAN31813256\",\"name\":\"testfor_sap_code\",\"rx_remarks\":\"\",\"rx_remarks_Id\":\"\",\"sample_qty\":\"56.0\",\"FreeP_Code\":\"\",\"Fname\":\"\",\"PromoVal\":0,\"discount\":0.0,\"discount_price\":0.0,\"tax\":0.0,\"tax_price\":0.0,\"selectedScheme\":0,\"selectedOffProCode\":\"10\",\"selectedOffProName\":\"PIECE\",\"selectedOffProUnit\":\"1\"}],\"Activity_Event_Captures\":[],\"POB\":\"0\",\"Value\":\"500\",\"disPercnt\":0.0,\"disValue\":0.0,\"finalNetAmt\":3390.0,\"taxTotalValue\":\"0.0\",\"discTotalValue\":\"0.0\",\"subTotal\":\"500.0\",\"No_Of_items\":\"5\",\"Cust_Code\":\"'2372682'\",\"DCR_Code\":\"SEF19640-66\",\"Trans_Sl_No\":\"SEFMR0040-23-24-SO-63\",\"Route\":\"139726\",\"net_weight_value\":\"0.6\",\"Discountpercent\":0.0,\"discount_price\":0.0,\"target\":\"0\",\"rateMode\":\"free\",\"Stockist\":\"15560\",\"RateEditable\":\"\",\"PhoneOrderTypes\":3}"
           
         }
         
@@ -1294,12 +1293,17 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         
         if VisitData.shared.cInTime.isEmpty {
             
-            
+            var sPItems3: String = ""
+            if sPItems2.hasSuffix(",") {
+                // Remove the last comma from sPItems2
+                sPItems2.removeLast()
+                sPItems3 = sPItems2
+            }
             
             print("No data")
-          let jsonString2 = "{\"Products\":[" + sPItems2 +  "],\"Activity_Event_Captures\":[],\"POB\":\"0\",\"Value\":\"\(Subtotal)\",\"disPercnt\":0.0,\"disValue\":0.0,\"finalNetAmt\":\(Subtotal),\"taxTotalValue\":\"0\",\"discTotalValue\":\"0.0\",\"subTotal\":\"\(Subtotal)\",\"No_Of_items\":\"\(lstPrvOrder.count)\",\"Cust_Code\":\"'\(Cust_Code)'\",\"DCR_Code\":\"\(DCR_Code)\",\"Trans_Sl_No\":\"\(Trans_Sl_No)\",\"Route\":\"\(Route)\",\"net_weight_value\":\"0\",\"Discountpercent\":0.0,\"discount_price\":0.0,\"target\":\"0\",\"rateMode\":\"free\",\"Stockist\":\"\(Stockist_Code)\",\"RateEditable\":\"\",\"PhoneOrderTypes\":0}"
+          let jsonString2 = "{\"Products\":[" + sPItems3 +  "],\"Activity_Event_Captures\":[],\"POB\":\"0\",\"Value\":\"\(Subtotal)\",\"disPercnt\":0.0,\"disValue\":0.0,\"finalNetAmt\":\(Subtotal),\"taxTotalValue\":\"0\",\"discTotalValue\":\"0.0\",\"subTotal\":\"\(Subtotal)\",\"No_Of_items\":\"\(lstPrvOrder.count)\",\"Cust_Code\":\"'\(Cust_Code)'\",\"DCR_Code\":\"\(DCR_Code)\",\"Trans_Sl_No\":\"\(Trans_Sl_No)\",\"Route\":\"\(Route)\",\"net_weight_value\":\"0\",\"Discountpercent\":0.0,\"discount_price\":0.0,\"target\":\"0\",\"rateMode\":\"free\",\"Stockist\":\"\(Stockist_Code)\",\"RateEditable\":\"\",\"PhoneOrderTypes\":0}"
           
-          let jsonformate = "{\"Products\":[{\"product\":\"SEF13362\",\"UnitId\":\"241\",\"UnitName\":\"PIECE\",\"product_Nm\":\"testfor_sap_code\",\"OrdConv\":5,\"free\":0,\"HSN\":\"\",\"Rate\":500,\"imageUri\":\"null\",\"Schmval\":0,\"rx_qty\":5,\"recv_qty\":0,\"product_netwt\":0.2,\"netweightvalue\":0,\"conversionQty\":5,\"cateid\":1193,\"UcQty\":5,\"rx_Conqty\":5,\"id\":\"SAN31813256\",\"name\":\"testfor_sap_code\",\"rx_remarks\":\"\",\"rx_remarks_Id\":\"\",\"sample_qty\":\"56.0\",\"FreeP_Code\":\"\",\"Fname\":\"\",\"PromoVal\":0,\"discount\":0.0,\"discount_price\":0.0,\"tax\":0.0,\"tax_price\":0.0,\"selectedScheme\":0,\"selectedOffProCode\":\"10\",\"selectedOffProName\":\"PIECE\",\"selectedOffProUnit\":\"1\"}],\"Activity_Event_Captures\":[],\"POB\":\"0\",\"Value\":\"500\",\"disPercnt\":0.0,\"disValue\":0.0,\"finalNetAmt\":3390.0,\"taxTotalValue\":\"0.0\",\"discTotalValue\":\"0.0\",\"subTotal\":\"500.0\",\"No_Of_items\":\"5\",\"Cust_Code\":\"'2372682'\",\"DCR_Code\":\"SEF19640-66\",\"Trans_Sl_No\":\"SEFMR0040-23-24-SO-63\",\"Route\":\"139726\",\"net_weight_value\":\"0.6\",\"Discountpercent\":0.0,\"discount_price\":0.0,\"target\":\"0\",\"rateMode\":\"free\",\"Stockist\":\"15560\",\"RateEditable\":\"\",\"PhoneOrderTypes\":3}"
+        
          
 
           let params2: Parameters = [
@@ -1307,7 +1311,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
           ]
           
           print(params2)
-          
+          print("_________________________________________________________________________________________")
           AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"dcr/updateProducts" + "&divisionCode=" + self.DivCode + "&sfCode=" + self.SFCode + "&desig=" + self.Desig, method: .post, parameters: params2, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
           AFdata in
           self.LoadingDismiss()
@@ -1328,6 +1332,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
               }
               
           case .failure(let error):
+              
               let alert = UIAlertController(title: "Information", message: error.errorDescription, preferredStyle: .alert)
               alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
                   return
@@ -1385,7 +1390,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
     }
     func EditSecondaryordervalue() {
         let product = productData
-        print(product)
+        print(product as Any)
     
         //let product = SubmittedDCR.objcalls_SelectSecondaryorder2
        
@@ -1403,9 +1408,9 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
 //            let item = product[0]["DCR_Code"] as! String
         if let unwrappedProduct = product {
     
-        let apiKey: String = "\(axn)&State_Code=\(StateCode)&divisionCode=\(DivCode)&sfCode=\(SFCode)&DCR_Code=\(String(describing: unwrappedProduct))"
+        let apiKey: String = "\(axn)&State_Code=\(StateCode)&desig=\(self.Desig)&divisionCode=\(DivCode)&sfCode=\(SFCode)&DCR_Code=\(String(describing: unwrappedProduct))"
             print (apiKey)
-        
+      //  
             let aFormData: [String: Any] = [
                 "orderBy":"[\"name asc\"]","desig":"mgr"
             ]
@@ -1485,8 +1490,18 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
                 print(lstAllProducts.count)
              let indxPath = lstAllProducts
                print(indxPath)
-
-                let Additional_Prod_Dtls = Editobjcalls[0]["Additional_Prod_Code1"] as? String
+        print(areypostion as Any)
+        var ary: Int = 0
+        if let unwrappedProduct = areypostion {
+            print(unwrappedProduct)
+            ary = unwrappedProduct
+        } else {
+            // The optional value is nil
+            print("Product is nil")
+        }
+        let product = Editobjcalls[ary]
+        print(product)
+                let Additional_Prod_Dtls = product["Additional_Prod_Code1"] as? String
                 let productArray = Additional_Prod_Dtls?.components(separatedBy: "#")
                 if let products = productArray {
                     for product in products {
