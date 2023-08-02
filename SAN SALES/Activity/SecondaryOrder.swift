@@ -1205,8 +1205,21 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
             sPItems = sPItems + " \"selectedOffProUnit\": \"1\","
             sPItems = sPItems + " \"f_key\": {\"Activity_MSL_Code\": \"Activity_Doctor_Report\"}}"
             
-            
-            
+        }
+            for i in 0...self.lstPrvOrder.count-1{
+                let item: [String: Any]=self.lstPrvOrder[i] as! [String : Any]
+                print(item)
+                let id=String(format: "%@", item["id"] as! CVarArg)
+                let ProdItems = self.lstAllProducts.filter({(product) in
+                    let ProdId: String = String(format: "%@", product["id"] as! CVarArg)
+                    return Bool(ProdId == id)
+                })
+                //let itm: [String: Any]=["id": id,"Qty": sQty,"UOM": sUom, "UOMNm": sUomNm, "UOMConv": sUomConv, "SalQty": TotQty,"Scheme": Scheme,"FQ": FQ,"OffQty": OffQty,"OffProd":OffProd,"OffProdNm":OffProdNm, "Value": (TotQty*Rate)];
+                if i>0 { sPItems = sPItems + "," }
+                var Disc: String = item["Disc"] as! String
+                if Disc == "" { Disc = "0"}
+                var DisVal: String = item["DisVal"] as! String
+                if DisVal == "" { DisVal="0" }
             
             sPItems2 = sPItems2 + "{\"product\":\""+id+"\", \"product_Nm\":\""+(ProdItems[0]["name"] as! String)+"\","
             sPItems2 = sPItems2 + " \"UnitId\": \"" + (item["UOM"] as! String) + "\","
@@ -1243,6 +1256,10 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
             
           
         }
+        
+        
+        
+        
         
         
         
@@ -1341,7 +1358,6 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
           }
       }
           
-          self.LoadingDismiss()
             
        
     }

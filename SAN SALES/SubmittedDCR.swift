@@ -140,6 +140,18 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
             cell.Rou?.text = item["SDP_Name"] as? String
             cell.MeetTime?.text = item["Order_In_Time"] as? String
             cell.OrderTime?.text = item["Order_Out_Time"] as? String
+            
+            if let transSlNo = item["Order_Out_Time"] as? String {
+                cell.OrderTime?.text = transSlNo
+                
+            } else {
+                cell.EditBton.isHidden = true
+                cell.Viewbt.isHidden = true
+            }
+            cell.vwContainer.layer.cornerRadius = 20
+            cell.Viewbt.layer.cornerRadius = 12
+            cell.EditBton.layer.cornerRadius = 12
+            cell.DeleteButton.layer.cornerRadius = 12
         }
         if tableView == OrderView {
             cell.lblText.text = OrdeView[indexPath.row].MasName
@@ -247,7 +259,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
                         }
                         print(prettyPrintedJson)
                         SubmittedDCR.objcalls_SelectSecondaryorder2 = json
-                        
+                   
                         
                         if !json.isEmpty {
                         self.Slno.text=String(format: "%@", json[0]["Trans_SlNo"] as! String)

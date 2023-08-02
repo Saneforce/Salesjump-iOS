@@ -102,7 +102,13 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
             cell.Disbutor?.text = item["Trans_Detail_Name"] as? String
             cell.rout?.text = item["SDP"] as? String
             cell.meettime.text = item["StartOrder_Time"] as? String
-            cell.ordertime.text = item["Order_date"] as? String
+           
+            if let order = item["Order_date"] as? String {
+                cell.ordertime.text = order
+            }else{
+                cell.EditButton.isHidden = true
+                cell.ViewButton.isHidden = true
+            }
             cell.vwContainer.layer.cornerRadius = 20
             cell.ViewButton.layer.cornerRadius = 12
             cell.EditButton.layer.cornerRadius = 12

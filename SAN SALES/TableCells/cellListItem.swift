@@ -72,6 +72,10 @@ class cellListItem:UITableViewCell{
     @IBOutlet weak var Rmks: UILabel!
     @IBOutlet weak var InpuKey: UILabel!
     @IBOutlet weak var inputvalu: UILabel!
+    
+    @IBOutlet weak var EditBton: UIButton!
+    @IBOutlet weak var Viewbt: UIButton!
+    
     var ischeck = false
 
 }
