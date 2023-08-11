@@ -516,6 +516,11 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
 //Password: SanMedia#123
 
 
+//Server username
+//username =
+//Password = 
+
+
 
 
 
