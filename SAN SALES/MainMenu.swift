@@ -28,6 +28,10 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
     
     var strMasList:[mnuItem]=[]
     var downloadCount: Int = 0
+    var lstDist: [AnyObject] = []
+    var lstAllRoutes: [AnyObject] = []
+    var lstRoutes: [AnyObject] = []
+    let LocalStoreage = UserDefaults.standard
     
     override func viewDidLoad() {
         let LocalStoreage = UserDefaults.standard
@@ -57,12 +61,16 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
         strMasList.append(mnuItem.init(MasId: 9, MasName: "GEO Tagging", MasImage: "GEOTag"))/*
         strMasList.append(mnuItem.init(MasId: 10, MasName: "Closing Stock Entry", MasImage: "ClosingStock"))*/
         strMasList.append(mnuItem.init(MasId: 11, MasName: "Master Sync", MasImage: "MasterSync"))
+        strMasList.append(mnuItem(MasId:12, MasName: "Submitted Calls", MasImage: "SubmittedCalls"))
         
         menuClose.addTarget(target: self, action: #selector(closeMenuWin))
         tbMenuDetail.delegate=self
         tbMenuDetail.dataSource=self
         NotificationCenter.default.addObserver(self, selector: #selector(onDidRegistered(_:)), name: .didRegistered, object: nil)
-
+    
+//        if UserSetup.shared.BrndRvwNd > 0{
+//            selectedid()
+//        }
     }
     @IBAction func userLogout(_ sender: Any) {
         //dismissedAllAlert()
@@ -147,6 +155,14 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
             viewController.setViewControllers([MasSync], animated: false)
             //viewController.navigationController?.pushViewController(myDyPln, animated: true)
         }
+        else if lItm.MasId == 12 {
+           // let rptstoryboard = UIStoryboard(name: "Submittedcalls", bundle: nil)
+//            let Homevc = storyboard.instantiateViewController(withIdentifier: "HomePageVwControl") as! HomePageViewController
+            let SBCalls = storyboard.instantiateViewController(withIdentifier: "SubmittedCalls") as! SubmittedCalls
+            viewController.setViewControllers([SBCalls], animated: false)
+            
+            //viewController.navigationController?.pushViewController(myDyPln, animated: true)
+        }
         (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
         print(strMasList[indexPath.row].MasName)
     }
@@ -155,6 +171,68 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
         dismiss(animated: false)
         
     }
+    
+    
+    func selectedid(){
+        
+        
+        var lstPlnDetail: [AnyObject] = []
+        if self.LocalStoreage.string(forKey: "Mydayplan") == nil { return }
+        let PlnDets: String=LocalStoreage.string(forKey: "Mydayplan")!
+        if let list = GlobalFunc.convertToDictionary(text: PlnDets) as? [AnyObject] {
+            
+             
+            lstPlnDetail = list;
+            print(list)
+        }
+        
+        
+        let sfid=String(format: "%@", lstPlnDetail[0]["subordinateid"] as! CVarArg)
+        //MydayPlanCtrl.SfidString = sfid
+        print(sfid)
+        
+       // print(MydayPlanCtrl.SfidString)
+        var DistData: String=""
+        if(LocalStoreage.string(forKey: "Distributors_Master_"+sfid)==nil){
+           // Toast.show(message: "No Distributors found. Please will try to sync", controller: self)
+            GlobalFunc.FieldMasterSync(SFCode: sfid){
+                DistData = self.LocalStoreage.string(forKey: "Distributors_Master_"+sfid)!
+                let RouteData: String=self.LocalStoreage.string(forKey: "Route_Master_"+sfid)!
+                if let list = GlobalFunc.convertToDictionary(text: DistData) as? [AnyObject] {
+                    self.lstDist = list;
+                    
+                    print(list)
+                }
+                if let list = GlobalFunc.convertToDictionary(text: RouteData) as? [AnyObject] {
+                    self.lstAllRoutes = list
+                    self.lstRoutes = list
+                    print(list)
+                }
+            }
+            return
+        }else {
+            if let DistData = LocalStoreage.string(forKey: "Distributors_Master_" + sfid) {
+                if let RouteData = LocalStoreage.string(forKey: "Route_Master_" + sfid) {
+                    if let list = GlobalFunc.convertToDictionary(text: DistData) as? [AnyObject] {
+                        lstDist = list
+                        print(list)
+                    }
+                    
+                    if let list = GlobalFunc.convertToDictionary(text: RouteData) as? [AnyObject] {
+                        lstAllRoutes = list
+                        lstRoutes = list
+                        print(list)
+                    }
+                }
+            }
+        }
+
+        if(UserSetup.shared.DistBased == 1){
+            
+        }
+    }
+    
+    
 }
 
   

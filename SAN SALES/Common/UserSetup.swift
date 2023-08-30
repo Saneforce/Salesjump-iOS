@@ -29,6 +29,7 @@ class UserSetup{
             lstSetups = list;
         }
         
+        
         SecondaryCaption = lstSetups[0]["EDrCap"] as? String ?? "Secondary Order"
         PrimaryCaption = lstSetups[0]["EStkCap"] as? String ?? "Primary Order"
         BrandReviewVisit = "Brand Review Visit"

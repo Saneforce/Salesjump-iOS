@@ -10,7 +10,7 @@ import UIKit
 import Alamofire
 import CoreLocation
 
-class BrandReviewVisit: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class BrandReviewVisit: IViewController, UITableViewDataSource, UITableViewDelegate {
     @IBOutlet weak var btrmktp: UIButton!
     @IBOutlet weak var txvRmks: UITextView!
     @IBOutlet weak var lblSelTitle: UILabel!
@@ -19,13 +19,16 @@ class BrandReviewVisit: UIViewController, UITableViewDataSource, UITableViewDele
     @IBOutlet weak var veselwindow: UIView!
     @IBOutlet weak var lblselectcustomer: LabelSelect!
     @IBOutlet weak var ActionTable: UITableView!
-    @IBOutlet weak var ActioTable2: UITableView!
+    @IBOutlet weak var ActionTable2: UITableView!
     @IBOutlet weak var Checkboxtable: UITableView!
     @IBOutlet weak var BTback: UIImageView!
     @IBOutlet weak var BTcam: UIView!
     @IBOutlet weak var itmSmryHeight: NSLayoutConstraint!
+    @IBOutlet weak var BrandTit: UIView!
+    @IBOutlet weak var textField: UITextField!
     
-    let product:[String] = ["Start Time","Customer Channal","Address","GST"]
+    
+    let product:[String] = ["Start Time","Customer Channel","Address","GST"]
     
     struct SVCallRevw: Codable {
         let svCallRevw: SVCallRevwDetails
@@ -157,6 +160,8 @@ class BrandReviewVisit: UIViewController, UITableViewDataSource, UITableViewDele
         //            objgetprecall = list;
         //        }
         
+      //  BrandTit.layer.cornerRadius=10.0
+       // BrandTit.layer.borderWidth=1.0
         
         getUserDetails()
         Checkboxtable.delegate=self
@@ -165,8 +170,8 @@ class BrandReviewVisit: UIViewController, UITableViewDataSource, UITableViewDele
         ActionTable.delegate=self
         ActionTable.dataSource=self
         
-        ActioTable2.delegate=self
-        ActioTable2.dataSource=self
+        ActionTable2.delegate=self
+        ActionTable2.dataSource=self
         
         tbDataSelect.delegate=self
         tbDataSelect.dataSource=self
@@ -182,6 +187,8 @@ class BrandReviewVisit: UIViewController, UITableViewDataSource, UITableViewDele
         
         // Do any additional setup after loading the view.
     }
+    
+
     @objc private func selRmksTemp() {
         //isDate = false
         isMulti=false
@@ -189,6 +196,7 @@ class BrandReviewVisit: UIViewController, UITableViewDataSource, UITableViewDele
         tbDataSelect.reloadData()
         lblSelTitle.text="Select the Reason"
         openWin(Mode: "RMK")
+        
     }
     
     func updateData () {
@@ -199,12 +207,12 @@ class BrandReviewVisit: UIViewController, UITableViewDataSource, UITableViewDele
         }
     }
     
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if Checkboxtable == tableView { return brandListData.count }
         if ActionTable == tableView {return strMasList.count }
-        if ActioTable2 == tableView {return product.count}
-        //if tableView == ActionTable(product.count)
         if tbDataSelect == tableView {return lObjSel.count}
+        if ActionTable2 == tableView {return product.count}
         
         return 0
     }
@@ -229,12 +237,19 @@ class BrandReviewVisit: UIViewController, UITableViewDataSource, UITableViewDele
             //cell.lblText.text = self.product [indexPath.row]
             cell.lblText.text = strMasList[indexPath.row].MasName
             cell.ActionTB.text = strMasList[indexPath.row].MasLbl
+            cell.ActionTB.numberOfLines = 0
+            cell.ActionTB.lineBreakMode = .byWordWrapping
+            
+            ActionTable.isHidden = false
+            ActionTable2.isHidden = true
+            
+
         }
-        else if ActioTable2 == tableView {
-            cell = tableView.dequeueReusableCell(withIdentifier: "Cell" ) as! cellListItem
+        else if ActionTable2 == tableView {
+            cell = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
             cell.lblText.text = product[indexPath.row]
+            ActionTable2.isHidden = false
         }
-       
         
         else{
             cell = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
@@ -251,6 +266,7 @@ class BrandReviewVisit: UIViewController, UITableViewDataSource, UITableViewDele
         }
         return cell
     }
+     
     
     func getUserDetails(){
         let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
@@ -291,77 +307,75 @@ class BrandReviewVisit: UIViewController, UITableViewDataSource, UITableViewDele
         if(NetworkMonitor.Shared.isConnected != true){
             let alert = UIAlertController(title: "Information", message: "Check the Internet Connection", preferredStyle: .alert)
                  alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
+                     
                      return
                  })
                  self.present(alert, animated: true)
                 return
         }
-            let alert = UIAlertController(title: "Confirmation", message: "Do you want to submit this Visit Without Order ?", preferredStyle: .alert)
+            let alert = UIAlertController(title: "Confirmation", message: "Do you want to submit ?", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
         self.ShowLoading(Message: "Getting Device Location...")
         VisitData.shared.cOutTime = GlobalFunc.getCurrDateAsString()
-        LocationService.sharedInstance.getNewLocation(location: { location in
-            let sLocation: String = location.coordinate.latitude.description + ":" + location.coordinate.longitude.description
-            lazy var geocoder = CLGeocoder()
-            var sAddress: String = ""
-            geocoder.reverseGeocodeLocation(location) { [self] (placemarks, error) in
-                if(placemarks != nil){
-                    if(placemarks!.count>0){
-                        let jAddress:[String] = placemarks![0].addressDictionary!["FormattedAddressLines"] as! [String]
-                        for i in 0...jAddress.count-1 {
-                            print(jAddress[i])
-                            if i==0{
-                                sAddress = String(format: "%@", jAddress[i])
-                            }else{
-                                sAddress = String(format: "%@, %@", sAddress,jAddress[i])
-                            }
-                        }
-                    }
-                }
                 self.ShowLoading(Message: "Data Submitting Please wait...")
                 //let DataSF: String = self.lstPlnDetail[0]["subordinateid"] as! String
                 var sImgItems:String = ""
                 if(PhotosCollection.shared.PhotoList.count>0){
                     for i in 0...PhotosCollection.shared.PhotoList.count-1{
                         let item: [String: Any] = PhotosCollection.shared.PhotoList[i] as! [String : Any]
+                        print(item["FileName"]  as! String)
+                        let sep = item["FileName"]  as! String
+                        let fullNameArr = sep.components(separatedBy: "_")
+                        
+                        let phono = fullNameArr[2]
+                        var fullid = "_\(phono)"
+                        print(fullid)
+                     
                         if i > 0 { sImgItems = sImgItems + "," }
-                        sImgItems = sImgItems + "{\"imgurl\":\"'" + (item["FileName"]  as! String) + "'\",\"title\":\"''\",\"remarks\":\"''\",\"f_key\":{\"Activity_Report_Code\":\"Activity_Report_APP\"}}"
+                        sImgItems = sImgItems + "{\\\"imgurl\\\":\\\"'" + (fullid) + "'\\\",\\\"title\\\":\\\"''\\\",\\\"remarks\\\":\\\"''\\\"}"
                     }
                 }
+        //             \"photosList\":\"[{\\\"imgurl\\\":\\\"'_1689760957.jpg'\\\",\\\"title\\\":\\\"''\\\",\\\"remarks\\\":\\\"''\\\"}]\"
                     
                 var brndlst: String = ""
-//                for brand in lstBrands {
-//                    let id = brand["id"] as? String ?? ""
-//                    let name = brand["name"] as? String ?? ""
-//                    let strSelAcl = brand["Avai"] as? Bool ?? false
-//                    let strSelEc = brand["EC"] as? Bool ?? false
-//
-//                    brndlst = brndlst + "{\"id\":\"\(id)\",\"name\":\"\(name)\",\"Avai\":\(strSelAcl),\"EC\":\(strSelEc)},"
-//                }
+        //                for brand in lstBrands {
+        //                    let id = brand["id"] as? String ?? ""
+        //                    let name = brand["name"] as? String ?? ""
+        //                    let strSelAcl = brand["Avai"] as? Bool ?? false
+        //                    let strSelEc = brand["EC"] as? Bool ?? false
+        //
+        //                    brndlst = brndlst + "{\"id\":\"\(id)\",\"name\":\"\(name)\",\"Avai\":\(strSelAcl),\"EC\":\(strSelEc)},"
+        //                }
                 
                 let brands = self.brandListData.filter{$0.isSelectedEC || $0.isSelectedAvail}
                 
                for i in 0..<brands.count {
-                   let id = brands[i].brandData["id"] as? String ?? ""
+                   let id = brands[i].brandData["id"] as? Int ?? 0
                     let name = brands[i].brandData["name"] as? String ?? ""
                     let strSelAcl = brands[i].isSelectedAvail
                    let strSelEc = brands[i].isSelectedEC
+                   print(id)
 
-                    brndlst = brndlst + "{\\\"id\\\":\\\"\(909)\\\",\\\"name\\\":\\\"\(name)\\\",\\\"Avai\\\":\(strSelAcl),\\\"EC\\\":\(strSelEc)},"
+                    brndlst = brndlst + "{\\\"id\\\":\\\"\(id)\\\",\\\"name\\\":\\\"\(name)\\\",\\\"Avai\\\":\(strSelAcl),\\\"EC\\\":\(strSelEc)},"
                    
                }
                 
                 brndlst = String(brndlst.dropLast())
                 
-                let jsonString = "[{\"svCallRevw\":{\"worktype\":\"" + (self.lstPlnDetail[0]["worktype"] as! String) + "\",\"entryDate\":\"" + VisitData.shared.cInTime + "\",\"eDt\":\"" + VisitData.shared.cInTime + "\",\"subordinate\":\"'" + (vstDets["HQ"]?.id ?? SFCode) + "'\",\"stockist\":\"'" + (vstDets["DIS"]?.id ?? "") + "'\",\"cluster\":\"'" + (vstDets["RUT"]?.id ?? "") + "'\",\"clusterNm\":\"'" + (vstDets["RUT"]?.name ?? "") + "'\",\"doctorid\":\"" + VisitData.shared.CustID + "\",\"remarks\":\"" + VisitData.shared.VstRemarks.name + "\",\"BrandList\":\"[" + brndlst + "]\",\"photosList\":[" + sImgItems + "]}}]";
-//                let jsonString = "[{\"svCallRevw\":{\"worktype\":\"1386\",\"entryDate\":\"2023-04-27 10:48:21\",\"eDt\":\"2023-04-27 00:00:00\",\"subordinate\":\"mgr1018\",\"stockist\":\"32538\",\"cluster\":\"114726\",\"clusterNm\":\"SAIDAPET\",\"doctorid\":\"2051498\",\"remarks\":\"OWNER NOT AVAILABLE\",\"BrandList\":\"[{\\\"id\\\":\\\"1658\\\",\\\"name\\\":\\\"Brittania\\\",\\\"Avai\\\":false,\\\"EC\\\":true},{\\\"id\\\":\\\"909\\\",\\\"name\\\":\\\"BUTTERFLY FAN\\\",\\\"Avai\\\":true,\\\"EC\\\":false}]\",\"photosList\":\"[]\"}}]";
-//                print(jsonString)
+                let jsonString = "[{\"svCallRevw\":{\"worktype\":\"" + (self.lstPlnDetail[0]["worktype"] as! String) + "\",\"entryDate\":\"" + VisitData.shared.cInTime + "\",\"eDt\":\"" + VisitData.shared.cInTime + "\",\"subordinate\":\"MR4126\",\"stockist\":\"32539\",\"cluster\":\"114727\",\"clusterNm\":\"SAIDAPET\",\"doctorid\":\"" + VisitData.shared.CustID + "\",\"remarks\":\"" + VisitData.shared.VstRemarks.name + "\",\"BrandList\":\"[" + brndlst + "]\",\"photosList\":\"[" + sImgItems + "]\"}}]";
                 
+        //                print("____________")
+        //                let jsonString = "[{\"svCallRevw\":{\"worktype\":\"1386\",\"entryDate\":\"2023-07-19 16:32:47\",\"eDt\":\"2023-07-19 00:00:00\",\"subordinate\":\"MR4126\",\"stockist\":\"32538\",\"cluster\":\"114726\",\"clusterNm\":\"SAIDAPET\",\"doctorid\":\"2372978\",\"remarks\":\"NOT INTERESTED\",\"BrandList\":\"[{\\\"id\\\":\\\"1698\\\",\\\"name\\\":\\\"Palkova\\\",\\\"Avai\\\":true,\\\"EC\\\":false},{\\\"id\\\":\\\"1649\\\",\\\"name\\\":\\\"Prestige Cooker\\\",\\\"Avai\\\":false,\\\"EC\\\":true}]\",\"photosList\":\"[{\\\"imgurl\\\":\\\"'_1689760957.jpg'\\\",\\\"title\\\":\\\"''\\\",\\\"remarks\\\":\\\"''\\\"}]\"}}]"
+                
+                
+        //                let jsonString = "[{\"svCallRevw\":{\"worktype\":\"1386\",\"entryDate\":\"2023-04-27 10:48:21\",\"eDt\":\"2023-04-27 00:00:00\",\"subordinate\":\"mgr1018\",\"stockist\":\"32538\",\"cluster\":\"114726\",\"clusterNm\":\"SAIDAPET\",\"doctorid\":\"2051498\",\"remarks\":\"OWNER NOT AVAILABLE\",\"BrandList\":\"[{\\\"id\\\":\\\"1658\\\",\\\"name\\\":\\\"Brittania\\\",\\\"Avai\\\":false,\\\"EC\\\":true},{\\\"id\\\":\\\"909\\\",\\\"name\\\":\\\"BUTTERFLY FAN\\\",\\\"Avai\\\":true,\\\"EC\\\":false}]\",\"photosList\":\"[]\"}}]";
+        //                print(jsonString)
+            
                 let params: Parameters = [
                     "data": jsonString
                 ]
                 print(params)
-                AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+"dcr/save&divisionCode=" + self.DivCode + "&rSF="+self.SFCode+"&sfCode="+self.SFCode, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
+                AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"dcr/save&divisionCode=" + self.DivCode + "&rSF="+self.SFCode+"&sfCode="+self.SFCode, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
                     
                     AFdata in
                     print(AFdata)
@@ -381,21 +395,98 @@ class BrandReviewVisit: UIViewController, UITableViewDataSource, UITableViewDele
                         Toast.show(message: error.errorDescription ?? "", controller: self)
                     }
                 }
-            }
-        }, error:{ errMsg in
-            self.LoadingDismiss()
-            Toast.show(message: errMsg, controller: self)
-        })
+     
                 return
             })
             alert.addAction(UIAlertAction(title: "Cancel", style: .destructive) { _ in
                 return
             })
             self.present(alert, animated: true)
+        //subcall()
+    }
+    func subcall(){
+        self.ShowLoading(Message: "Data Submitting Please wait...")
+        //let DataSF: String = self.lstPlnDetail[0]["subordinateid"] as! String
+        var sImgItems:String = ""
+        if(PhotosCollection.shared.PhotoList.count>0){
+            for i in 0...PhotosCollection.shared.PhotoList.count-1{
+                let item: [String: Any] = PhotosCollection.shared.PhotoList[i] as! [String : Any]
+                print(item["FileName"]  as! String)
+                let sep = item["FileName"]  as! String
+                let fullNameArr = sep.components(separatedBy: "_")
+                
+                let phono = fullNameArr[2]
+                var fullid = "_\(phono)"
+                print(fullid)
+             
+                if i > 0 { sImgItems = sImgItems + "," }
+                sImgItems = sImgItems + "{\\\"imgurl\\\":\\\"'" + (fullid) + "'\\\",\\\"title\\\":\\\"''\\\",\\\"remarks\\\":\\\"''\\\"}"
+            }
+        }
+//             \"photosList\":\"[{\\\"imgurl\\\":\\\"'_1689760957.jpg'\\\",\\\"title\\\":\\\"''\\\",\\\"remarks\\\":\\\"''\\\"}]\"
+            
+        var brndlst: String = ""
+//                for brand in lstBrands {
+//                    let id = brand["id"] as? String ?? ""
+//                    let name = brand["name"] as? String ?? ""
+//                    let strSelAcl = brand["Avai"] as? Bool ?? false
+//                    let strSelEc = brand["EC"] as? Bool ?? false
+//
+//                    brndlst = brndlst + "{\"id\":\"\(id)\",\"name\":\"\(name)\",\"Avai\":\(strSelAcl),\"EC\":\(strSelEc)},"
+//                }
+        
+        let brands = self.brandListData.filter{$0.isSelectedEC || $0.isSelectedAvail}
+        
+       for i in 0..<brands.count {
+           let id = brands[i].brandData["id"] as? Int ?? 0
+            let name = brands[i].brandData["name"] as? String ?? ""
+            let strSelAcl = brands[i].isSelectedAvail
+           let strSelEc = brands[i].isSelectedEC
+           print(id)
+
+            brndlst = brndlst + "{\\\"id\\\":\\\"\(id)\\\",\\\"name\\\":\\\"\(name)\\\",\\\"Avai\\\":\(strSelAcl),\\\"EC\\\":\(strSelEc)},"
+           
+       }
+        
+        brndlst = String(brndlst.dropLast())
+        
+        let jsonString = "[{\"svCallRevw\":{\"worktype\":\"" + (self.lstPlnDetail[0]["worktype"] as! String) + "\",\"entryDate\":\"" + VisitData.shared.cInTime + "\",\"eDt\":\"" + VisitData.shared.cInTime + "\",\"subordinate\":\"MR4126\",\"stockist\":\"32539\",\"cluster\":\"114727\",\"clusterNm\":\"SAIDAPET\",\"doctorid\":\"" + VisitData.shared.CustID + "\",\"remarks\":\"" + VisitData.shared.VstRemarks.name + "\",\"BrandList\":\"[" + brndlst + "]\",\"photosList\":\"[" + sImgItems + "]\"}}]";
+        
+//                print("____________")
+//                let jsonString = "[{\"svCallRevw\":{\"worktype\":\"1386\",\"entryDate\":\"2023-07-19 16:32:47\",\"eDt\":\"2023-07-19 00:00:00\",\"subordinate\":\"MR4126\",\"stockist\":\"32538\",\"cluster\":\"114726\",\"clusterNm\":\"SAIDAPET\",\"doctorid\":\"2372978\",\"remarks\":\"NOT INTERESTED\",\"BrandList\":\"[{\\\"id\\\":\\\"1698\\\",\\\"name\\\":\\\"Palkova\\\",\\\"Avai\\\":true,\\\"EC\\\":false},{\\\"id\\\":\\\"1649\\\",\\\"name\\\":\\\"Prestige Cooker\\\",\\\"Avai\\\":false,\\\"EC\\\":true}]\",\"photosList\":\"[{\\\"imgurl\\\":\\\"'_1689760957.jpg'\\\",\\\"title\\\":\\\"''\\\",\\\"remarks\\\":\\\"''\\\"}]\"}}]"
+        
+        
+//                let jsonString = "[{\"svCallRevw\":{\"worktype\":\"1386\",\"entryDate\":\"2023-04-27 10:48:21\",\"eDt\":\"2023-04-27 00:00:00\",\"subordinate\":\"mgr1018\",\"stockist\":\"32538\",\"cluster\":\"114726\",\"clusterNm\":\"SAIDAPET\",\"doctorid\":\"2051498\",\"remarks\":\"OWNER NOT AVAILABLE\",\"BrandList\":\"[{\\\"id\\\":\\\"1658\\\",\\\"name\\\":\\\"Brittania\\\",\\\"Avai\\\":false,\\\"EC\\\":true},{\\\"id\\\":\\\"909\\\",\\\"name\\\":\\\"BUTTERFLY FAN\\\",\\\"Avai\\\":true,\\\"EC\\\":false}]\",\"photosList\":\"[]\"}}]";
+//                print(jsonString)
+    
+        let params: Parameters = [
+            "data": jsonString
+        ]
+        print(params)
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"dcr/save&divisionCode=" + self.DivCode + "&rSF="+self.SFCode+"&sfCode="+self.SFCode, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
+            
+            AFdata in
+            print(AFdata)
+            self.LoadingDismiss()
+            switch AFdata.result
+            {
+            case .success(let value):
+                if let json = value as? [String: Any] {
+                    PhotosCollection.shared.PhotoList = []
+                    VisitData.shared.clear()
+                    Toast.show(message: "Call Visit has been submitted successfully", controller: self)
+                    let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
+                    UIApplication.shared.windows.first?.rootViewController = viewController
+                    UIApplication.shared.windows.first?.makeKeyAndVisible()
+                }
+            case .failure(let error):
+                Toast.show(message: error.errorDescription ?? "", controller: self)
+            }
+        }
     }
     
     
-    func selectcustomer(mslno : String ){
+    func selectcustomer(mslno : String , sfcode : String ){
         let apiKey: String = "\(axn)&divisionCode=\(DivCode)&Msl_No=\(mslno)&sfCode=\(SFCode)&Mode=\(StrMode)"
 
         AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
@@ -417,9 +508,10 @@ class BrandReviewVisit: UIViewController, UITableViewDataSource, UITableViewDele
                       strMasList=[]
                     if(json.count>1){
                         strMasList.append(mnuItem.init(MasId: 1, MasName: "Start Time", MasLbl:VisitData.shared.cInTime))
-                        strMasList.append(mnuItem.init(MasId: 2, MasName: "Customer Channal", MasLbl:json["DrSpl"] as! String))//Doc_Spec_ShortName
+                        strMasList.append(mnuItem.init(MasId: 2, MasName: "Customer Channel", MasLbl:json["DrSpl"] as! String))//Doc_Spec_ShortName
                         strMasList.append(mnuItem.init(MasId: 3, MasName: "Address", MasLbl:json["Address"] as! String))
                         strMasList.append(mnuItem.init(MasId: 4, MasName: "GST", MasLbl:json["GST"] as! String))
+                        strMasList.append(mnuItem(MasId:5, MasName: "Last Order Date", MasLbl: json["Last_Order_Date"] as! String))
                         // strMasList.append(mnuItem.init(MasId: 5, MasName: "Potential", MasLbl:"-"))
                         //trMasList.append(mnuItem.init(MasId: 6, MasName: "Monthly Order Value", MasLbl:"-"))
                         //strMasList.append(mnuItem.init(MasId: 7, MasName: "Last Order Amount", MasLbl:"-"))
@@ -427,13 +519,16 @@ class BrandReviewVisit: UIViewController, UITableViewDataSource, UITableViewDele
                         //strMasList.append(mnuItem.init(MasId: 9, MasName: "Last Visted", MasLbl:"-"))
                         //strMasList.append(mnuItem.init(MasId: 10, MasName: "Remark", MasLbl:"-"))
                         //strMasList.append(mnuItem.init(MasId: 11, MasName: "Mobile Number", MasLbl:"-")) //Mobile_Number
+                        
 
                     }
 
                     print(prettyPrintedJson)
                    // self.objgetprecall = json
                  self.ActionTable.reloadData()
+                    ActionTable.isHidden = false
                     
+                                        
                 }
                case .failure(let error):
                 Toast.show(message: error.errorDescription!)  //, controller: self
@@ -461,7 +556,7 @@ class BrandReviewVisit: UIViewController, UITableViewDataSource, UITableViewDele
             }
             else
             {
-                cell.ischeck = true
+                cell.ischeck = false
                 cell.imgSelect.image = UIImage(named:"uncheckbox")
                 strSelAvl=strSelAvl.replacingOccurrences(of: sid+";", with: "")
                 
@@ -506,8 +601,9 @@ class BrandReviewVisit: UIViewController, UITableViewDataSource, UITableViewDele
         
         //lblselectcustomer.text = name
        // txvRmks.text = name
-        selectcustomer(mslno: id)
+       
         if SelMode == "RET"{
+            selectcustomer(mslno: id , sfcode: SFCode)
             VisitData.shared.CustID = id
             VisitData.shared.CustName = name
             VisitData.shared.cInTime = GlobalFunc.getCurrDateAsString()
@@ -554,6 +650,7 @@ class BrandReviewVisit: UIViewController, UITableViewDataSource, UITableViewDele
             txvRmks.text = name
             VisitData.shared.VstRemarks.name = name
             VisitData.shared.VstRemarks.id = id
+            
         }
     clswindow(self)
     }
@@ -569,6 +666,7 @@ class BrandReviewVisit: UIViewController, UITableViewDataSource, UITableViewDele
           }
           tbDataSelect.reloadData()
       }
+    
     func openWin(Mode:String){
         SelMode=Mode
         lAllObjSel = lObjSel
@@ -645,3 +743,4 @@ struct brandReviewDataList {
     var isSelectedEC : Bool
     var brandData : AnyObject
 }
+

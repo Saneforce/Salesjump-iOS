@@ -16,6 +16,7 @@ class cellListItem:UITableViewCell{
     @IBOutlet weak var lblFreeCap: UILabel!
     @IBOutlet weak var lblFreeProd: UILabel!
     @IBOutlet weak var lblActRate: UILabel!
+    @IBOutlet weak var lblremark: UILabel!
     @IBOutlet weak var lblDisc: UILabel!
     @IBOutlet weak var lblSellRate: UILabel!
     @IBOutlet weak var lblTax: UILabel!
@@ -32,12 +33,49 @@ class cellListItem:UITableViewCell{
     @IBOutlet weak var btnMinus: UIView!
     @IBOutlet weak var btnViewDet: UIButton!
     @IBOutlet weak var ActionTB: UILabel!
-    @IBOutlet weak var ActionTB1: UILabel!
-    @IBOutlet weak var ActionTB2: UILabel!
-    @IBOutlet weak var ActionTB3: UILabel!
-    @IBOutlet weak var ActionTB4: UILabel!
-    @IBOutlet weak var ActionTB5: UILabel!
+    @IBOutlet weak var TC: UILabel!
+    @IBOutlet weak var ACC: UILabel!
+    @IBOutlet weak var ECC: UILabel!
+    @IBOutlet weak var OrderTime: UILabel!
+    @IBOutlet weak var MeetTime: UILabel!
+    @IBOutlet weak var Rou: UILabel!
+    @IBOutlet weak var DistributerName: UILabel!
+    @IBOutlet weak var RetailerName: UILabel!
+    @IBOutlet weak var BTC: UILabel!
+    @IBOutlet weak var OrderValue: UILabel!
+    @IBOutlet weak var Product: UILabel!
+    @IBOutlet weak var Slno: UILabel!
+    @IBOutlet weak var DeleteBUTTON: UIButton!
+    @IBOutlet weak var Value: UILabel!
+    @IBOutlet weak var Qty: UILabel!
+    @IBOutlet weak var ProductValue: UILabel!
+    @IBOutlet weak var Disbutor: UILabel!
+    @IBOutlet weak var rout: UILabel!
+    @IBOutlet weak var ordertime: UILabel!
+    @IBOutlet weak var meettime: UILabel!
+    @IBOutlet weak var DeleteButton: UIButton!
+    @IBOutlet weak var EditButton: UIButton!
+    @IBOutlet weak var ViewButton: UIButton!
+    @IBOutlet weak var RouteLb: UILabel!
+    @IBOutlet weak var PcCalls: UILabel!
+    @IBOutlet weak var TotalCalls: UILabel!
+    @IBOutlet weak var AvlaCalls: UILabel!
+    @IBOutlet weak var BAC: UILabel!
+    @IBOutlet weak var Toalvalue: UILabel!
+    @IBOutlet weak var Countlbl: UILabel!
+    @IBOutlet weak var Levtype: UILabel!
+    @IBOutlet weak var Leveligibility: UILabel!
+    @IBOutlet weak var Levtaken: UILabel!
+    @IBOutlet weak var Levavailable: UILabel!
+    @IBOutlet weak var retimg: UIImageView!
+    @IBOutlet weak var ImgRet: UILabel!
+    @IBOutlet weak var Rmks: UILabel!
+    @IBOutlet weak var InpuKey: UILabel!
+    @IBOutlet weak var inputvalu: UILabel!
+    
+    @IBOutlet weak var EditBton: UIButton!
+    @IBOutlet weak var Viewbt: UIButton!
+    
     var ischeck = false
 
 }
-

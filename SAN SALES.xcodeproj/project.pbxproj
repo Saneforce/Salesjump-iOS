@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		386A43912A1CBB0200CE1833 /* SubmittedDCR.swift in Sources */ = {isa = PBXBuildFile; fileRef = 386A43902A1CBB0200CE1833 /* SubmittedDCR.swift */; };
+		386A43932A1CC3E000CE1833 /* Submittedcalls.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 386A43922A1CC3E000CE1833 /* Submittedcalls.storyboard */; };
+		386A43952A1CC63100CE1833 /* PrimarySubmittedDCR.swift in Sources */ = {isa = PBXBuildFile; fileRef = 386A43942A1CC63100CE1833 /* PrimarySubmittedDCR.swift */; };
+		3883A09C2A176B6300B858CF /* SubmittedCalls.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3883A09B2A176B6300B858CF /* SubmittedCalls.swift */; };
+		38A2E9B22A0E1B940061B854 /* Brand Availability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38A2E9B12A0E1B940061B854 /* Brand Availability.swift */; };
 		38D0F76829BB2447003EEB03 /* BrandReviewVisit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38D0F76729BB2447003EEB03 /* BrandReviewVisit.swift */; };
 		3F063527283A8C070027842E /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F063526283A8C070027842E /* CardView.swift */; };
 		3F06352A283A8C920027842E /* ColorTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F063529283A8C920027842E /* ColorTheme.swift */; };
@@ -83,6 +88,11 @@
 
 /* Begin PBXFileReference section */
 		3453EBBCA5603BC17DBC6D2A /* Pods-SAN SALES.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SAN SALES.release.xcconfig"; path = "Target Support Files/Pods-SAN SALES/Pods-SAN SALES.release.xcconfig"; sourceTree = "<group>"; };
+		386A43902A1CBB0200CE1833 /* SubmittedDCR.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmittedDCR.swift; sourceTree = "<group>"; };
+		386A43922A1CC3E000CE1833 /* Submittedcalls.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Submittedcalls.storyboard; sourceTree = "<group>"; };
+		386A43942A1CC63100CE1833 /* PrimarySubmittedDCR.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimarySubmittedDCR.swift; sourceTree = "<group>"; };
+		3883A09B2A176B6300B858CF /* SubmittedCalls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmittedCalls.swift; sourceTree = "<group>"; };
+		38A2E9B12A0E1B940061B854 /* Brand Availability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Brand Availability.swift"; sourceTree = "<group>"; };
 		38D0F76729BB2447003EEB03 /* BrandReviewVisit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrandReviewVisit.swift; sourceTree = "<group>"; };
 		3C05F882C905DE5237A46D02 /* Pods_SAN_SALES.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SAN_SALES.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F063526283A8C070027842E /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
@@ -174,6 +184,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		386A43872A1B223400CE1833 /* SubmittedCalls */ = {
+			isa = PBXGroup;
+			children = (
+				3883A09B2A176B6300B858CF /* SubmittedCalls.swift */,
+				386A43902A1CBB0200CE1833 /* SubmittedDCR.swift */,
+				386A43942A1CC63100CE1833 /* PrimarySubmittedDCR.swift */,
+			);
+			name = SubmittedCalls;
+			sourceTree = "<group>";
+		};
 		3F063528283A8C720027842E /* Style */ = {
 			isa = PBXGroup;
 			children = (
@@ -290,6 +310,7 @@
 		3F2F810927CEB30C0015E1CA /* SAN SALES */ = {
 			isa = PBXGroup;
 			children = (
+				386A43872A1B223400CE1833 /* SubmittedCalls */,
 				3F0822BB29000842009C33EA /* AdminForms */,
 				3F9F379628593C73002CC408 /* Reports */,
 				3F0635332841710F0027842E /* Model */,
@@ -305,19 +326,20 @@
 				3F2F810C27CEB30C0015E1CA /* SceneDelegate.swift */,
 				3F2F810E27CEB30C0015E1CA /* ViewController.swift */,
 				3F2F811027CEB30C0015E1CA /* Main.storyboard */,
-				3F2F811327CEB30D0015E1CA /* Assets.xcassets */,
 				3F2F811527CEB30D0015E1CA /* LaunchScreen.storyboard */,
 				3F2F811827CEB30D0015E1CA /* Info.plist */,
 				3F2F811E27D0E7430015E1CA /* HomePageViewController.swift */,
 				3F2F812027D0E9670015E1CA /* RootViewController.swift */,
 				3F28CC0B27D5302100B95964 /* MydayPlanCtrl.swift */,
+				3F2F811327CEB30D0015E1CA /* Assets.xcassets */,
+				3F06352B283BC9790027842E /* PhotoGallary.swift */,
 				3F28CC1027DC856400B95964 /* MasterSync.swift */,
 				3F8BF29C27E99CCA00E1C41B /* CameraService.swift */,
 				3F5816EF281172C400659510 /* MainMenu.swift */,
-				3F06352B283BC9790027842E /* PhotoGallary.swift */,
 				3F9F379428593C5A002CC408 /* Reports.storyboard */,
 				3F5B297728891D5C002D226C /* CheckPermissions.swift */,
 				3F0822B928FE721A009C33EA /* AdminForms.storyboard */,
+				386A43922A1CC3E000CE1833 /* Submittedcalls.storyboard */,
 			);
 			path = "SAN SALES";
 			sourceTree = "<group>";
@@ -348,6 +370,7 @@
 				3F9F379728593C99002CC408 /* DayReport.swift */,
 				3F9F3799285B5FBA002CC408 /* ReportMenu.swift */,
 				3FF57C1C286C4A76009E3FE5 /* RptVisitDetail.swift */,
+				38A2E9B12A0E1B940061B854 /* Brand Availability.swift */,
 				3F0ED6BD2872F61A00FF4460 /* OrderDetailView.swift */,
 			);
 			path = Reports;
@@ -452,6 +475,7 @@
 				3F28CBFF27D3927E00B95964 /* Poppins-SemiBoldItalic.ttf in Resources */,
 				3F28CC0027D3927E00B95964 /* Poppins-ExtraBoldItalic.ttf in Resources */,
 				3F28CC0327D3927E00B95964 /* Poppins-Regular.ttf in Resources */,
+				386A43932A1CC3E000CE1833 /* Submittedcalls.storyboard in Resources */,
 				3F28CBFA27D3927E00B95964 /* Poppins-ThinItalic.ttf in Resources */,
 				3F28CBFE27D3927E00B95964 /* Poppins-Medium.ttf in Resources */,
 				3F2F811427CEB30D0015E1CA /* Assets.xcassets in Resources */,
@@ -515,6 +539,7 @@
 				3F619F3C27EAEDC000F3D05F /* LocationService.swift in Sources */,
 				3F2F812127D0E9670015E1CA /* RootViewController.swift in Sources */,
 				3F2F811F27D0E7430015E1CA /* HomePageViewController.swift in Sources */,
+				38A2E9B22A0E1B940061B854 /* Brand Availability.swift in Sources */,
 				3F0861BF2801D589006A30FB /* CollectionCell.swift in Sources */,
 				3F06352E283BF36A0027842E /* FlowLayout.swift in Sources */,
 				3F06352A283A8C920027842E /* ColorTheme.swift in Sources */,
@@ -541,6 +566,7 @@
 				3FF57C1D286C4A76009E3FE5 /* RptVisitDetail.swift in Sources */,
 				3F5B297828891D5C002D226C /* CheckPermissions.swift in Sources */,
 				3F28CC1127DC856400B95964 /* MasterSync.swift in Sources */,
+				3883A09C2A176B6300B858CF /* SubmittedCalls.swift in Sources */,
 				3F28CC1427DC97F000B95964 /* cellListItem.swift in Sources */,
 				3F06352C283BC9790027842E /* PhotoGallary.swift in Sources */,
 				3F9F379828593C99002CC408 /* DayReport.swift in Sources */,
@@ -551,6 +577,8 @@
 				3FBF387727E4AA8300900007 /* Toast.swift in Sources */,
 				3F0822BD29000872009C33EA /* AdminMenus.swift in Sources */,
 				3F063535284171800027842E /* NewOutlet.swift in Sources */,
+				386A43952A1CC63100CE1833 /* PrimarySubmittedDCR.swift in Sources */,
+				386A43912A1CBB0200CE1833 /* SubmittedDCR.swift in Sources */,
 				3F7CCF0328F14CA3002A7C03 /* GEOTagging.swift in Sources */,
 				3F0861C328053B3A006A30FB /* UserSetup.swift in Sources */,
 				3F2F810B27CEB30C0015E1CA /* AppDelegate.swift in Sources */,
@@ -718,9 +746,8 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UIRequiresFullScreen = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -756,9 +783,8 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UIRequiresFullScreen = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

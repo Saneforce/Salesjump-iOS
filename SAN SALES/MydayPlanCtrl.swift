@@ -37,8 +37,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
     @IBOutlet weak var btnSave: UIButton!
     @IBOutlet weak var btnBack: UIImageView!
     @IBOutlet weak var txRem: UITextView!
-    
-    
+    @IBOutlet weak var Applylev: UIImageView!
     @IBOutlet weak var vwWTCtrl: UIView!
     @IBOutlet weak var vwHQCtrl: UIView!
     @IBOutlet weak var vwDistCtrl: UIView!
@@ -81,6 +80,9 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
     
     var SFCode: String=""
     var DivCode: String=""
+    var Leaveid: String = ""
+    public static var SfidString: String=""
+    var leavWorktype: String = ""
     let LocalStoreage = UserDefaults.standard
     
     override func viewDidLoad() {
@@ -111,47 +113,67 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         DivCode = prettyJsonData["divisionCode"] as? String ?? ""
         let SFName: String=prettyJsonData["sfName"] as? String ?? ""
         
-        let WorkTypeData: String=LocalStoreage.string(forKey: "Worktype_Master")!
-        let HQData: String=LocalStoreage.string(forKey: "HQ_Master")!
-        let DistData: String=LocalStoreage.string(forKey: "Distributors_Master_"+SFCode)!
-        let RouteData: String=LocalStoreage.string(forKey: "Route_Master_"+SFCode)!
-        let JointWData: String=LocalStoreage.string(forKey: "Jointwork_Master")!
+      //  let WorkTypeData: String=LocalStoreage.string(forKey: "Worktype_Master")!
+       // let HQData: String=LocalStoreage.string(forKey: "HQ_Master")!
+        //let DistData: String=LocalStoreage.string(forKey: "Distributors_Master_"+SFCode)!
+      // let RouteData: String=LocalStoreage.string(forKey: "Route_Master_"+SFCode)!
+       // let JointWData: String=LocalStoreage.string(forKey: "Jointwork_Master")!
         
-        if let list = GlobalFunc.convertToDictionary(text: WorkTypeData) as? [AnyObject] {
-            lstWType = list;
+        //new
+        if let WorkTypeData = LocalStoreage.string(forKey: "Worktype_Master"),
+           let list = GlobalFunc.convertToDictionary(text:  WorkTypeData) as? [AnyObject] {
+            lstWType = list
         }
-        if let list = GlobalFunc.convertToDictionary(text: DistData) as? [AnyObject] {
+        
+        
+        
+        if let DistData = LocalStoreage.string(forKey: "Distributors_Master_"+SFCode),
+           let list = GlobalFunc.convertToDictionary(text:  DistData) as? [AnyObject] {
             lstDist = list;
+            print(SFCode)
         }
-        if let list = GlobalFunc.convertToDictionary(text: RouteData) as? [AnyObject] {
-            lstAllRoutes = list;
-            if UserSetup.shared.DistBased == 0 {
-                lstRoutes = list
-            }
+        
+        if let RouteData = LocalStoreage.string(forKey: "Route_Master_"+SFCode),
+           let list = GlobalFunc.convertToDictionary(text:  RouteData) as? [AnyObject] {
+            lstAllRoutes = list
+            lstRoutes = list
+            print(list)
         }
-        if let list = GlobalFunc.convertToDictionary(text: JointWData) as? [AnyObject] {
+        
+        if let JointWData = LocalStoreage.string(forKey: "Jointwork_Master"),
+           let list = GlobalFunc.convertToDictionary(text:  JointWData) as? [AnyObject] {
             lstJoint = list;
+            print("JointWData  ___________________________")
         }
-        if let list = GlobalFunc.convertToDictionary(text: HQData) as? [AnyObject] {
+        
+        
+        if let HQData = LocalStoreage.string(forKey: "HQ_Master"),
+           let list = GlobalFunc.convertToDictionary(text:  HQData) as? [AnyObject] {
             lstHQs = list;
             var id: String = SFCode
             var name: String = SFName
-            if lstHQs.count > 0 {
+            if (lstHQs.count > 0) {
                 let item: [String: Any]=lstHQs[0] as! [String : Any]
                 name = item["name"] as! String
                 id=String(format: "%@", item["id"] as! CVarArg)
+                
+                lblHQ.addTarget(target: self, action: #selector(selHeadquaters))
+          
             }
-            if(lstHQs.count < 2){
+            if lstHQs.count < 2{
                 lblHQ.text = name
-                let DistData: String=LocalStoreage.string(forKey: "Distributors_Master_"+id)!
-                let RouteData: String=LocalStoreage.string(forKey: "Route_Master_"+id)!
-                if let list = GlobalFunc.convertToDictionary(text: DistData) as? [AnyObject] {
+                
+              
+                if let DistData = LocalStoreage.string(forKey: "Distributors_Master_"+id),
+                   let list = GlobalFunc.convertToDictionary(text:  DistData) as? [AnyObject] {
                     lstDist = list;
+                    print("DistData  ___________________________")
                 }
-                if let list = GlobalFunc.convertToDictionary(text: RouteData) as? [AnyObject] {
+                if let RouteData: String=LocalStoreage.string(forKey: "Route_Master_"+id),
+                 let list = GlobalFunc.convertToDictionary(text: RouteData) as? [AnyObject] {
                     lstAllRoutes = list
                     lstRoutes = list
-                }
+                    print("RouteData  ___________________________")                }
             }
             else
             {
@@ -159,11 +181,57 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
             }
         }
         
+        
+        //new
+        
+        
+        
+//        if let list = GlobalFunc.convertToDictionary(text: WorkTypeData) as? [AnyObject] {
+//            lstWType = list;
+//        }
+//        if let list = GlobalFunc.convertToDictionary(text: DistData) as? [AnyObject] {
+//            lstDist = list;
+//        }
+//        if let list = GlobalFunc.convertToDictionary(text: RouteData) as? [AnyObject] {
+//            lstAllRoutes = list;
+//            if UserSetup.shared.DistBased == 0 {
+//                lstRoutes = list
+//            }
+//        }
+//        if let list = GlobalFunc.convertToDictionary(text: JointWData) as? [AnyObject] {
+//            lstJoint = list;
+//        }
+//        if let list = GlobalFunc.convertToDictionary(text: HQData) as? [AnyObject] {
+//            lstHQs = list;
+//            var id: String = SFCode
+//            var name: String = SFName
+//            if lstHQs.count > 0 {
+//                let item: [String: Any]=lstHQs[0] as! [String : Any]
+//                name = item["name"] as! String
+//                id=String(format: "%@", item["id"] as! CVarArg)
+//            }
+//            if(lstHQs.count < 2){
+//                lblHQ.text = name
+//                let DistData: String=LocalStoreage.string(forKey: "Distributors_Master_"+id)!
+//                let RouteData: String=LocalStoreage.string(forKey: "Route_Master_"+id)!
+//                if let list = GlobalFunc.convertToDictionary(text: DistData) as? [AnyObject] {
+//                    lstDist = list;
+//                }
+//                if let list = GlobalFunc.convertToDictionary(text: RouteData) as? [AnyObject] {
+//                    lstAllRoutes = list
+//                    lstRoutes = list
+//                }
+//            }
+//            else
+//            {
+//                lblHQ.addTarget(target: self, action: #selector(selHeadquaters))
+//            }34251350977
+//        }
+//
         //MARK:- Remove the Slashes
       //  let text = stringJson.replacingOccurrences(of: "\\", with: "")
         
         btnBack.addTarget(target: self, action: #selector(GotoHome))
-        
         lblWorktype.addTarget(target: self, action: #selector(selWorktype))
         lblDist.addTarget(target: self, action: #selector(selDistributor))
         lblRoute.addTarget(target: self, action: #selector(selRoutes))
@@ -174,8 +242,73 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         
         tbJWKSelect.delegate=self
         tbJWKSelect.dataSource=self
+        Applylev.addTarget(target: self, action: #selector(levedata))
         
         setTodayPlan()
+       //selectedid()
+        
+        
+    }
+    
+//
+    func selectedid(){
+
+        var lstPlnDetail: [AnyObject] = []
+        if self.LocalStoreage.string(forKey: "Mydayplan") == nil { return }
+        let PlnDets: String=LocalStoreage.string(forKey: "Mydayplan")!
+        if let list = GlobalFunc.convertToDictionary(text: PlnDets) as? [AnyObject] {
+            lstPlnDetail = list;
+        }
+
+
+        let sfid=String(format: "%@", lstPlnDetail[0]["subordinateid"] as! CVarArg)
+        //MydayPlanCtrl.SfidString = sfid
+        print(sfid)
+
+       // print(MydayPlanCtrl.SfidString)
+        var DistData: String=""
+        if(LocalStoreage.string(forKey: "Distributors_Master_"+sfid)==nil){
+           // Toast.show(message: "No Distributors found. Please will try to sync", controller: self)
+            GlobalFunc.FieldMasterSync(SFCode: sfid){
+                DistData = self.LocalStoreage.string(forKey: "Distributors_Master_"+sfid)!
+                let RouteData: String=self.LocalStoreage.string(forKey: "Route_Master_"+sfid)!
+                if let list = GlobalFunc.convertToDictionary(text: DistData) as? [AnyObject] {
+                    self.lstDist = list;
+                }
+                if let list = GlobalFunc.convertToDictionary(text: RouteData) as? [AnyObject] {
+                    self.lstAllRoutes = list
+                    self.lstRoutes = list
+                }
+            }
+            return
+        }else {
+            if let DistData = LocalStoreage.string(forKey: "Distributors_Master_" + sfid) {
+                if let RouteData = LocalStoreage.string(forKey: "Route_Master_" + sfid) {
+                    if let list = GlobalFunc.convertToDictionary(text: DistData) as? [AnyObject] {
+                        lstDist = list
+                    }
+
+                    if let list = GlobalFunc.convertToDictionary(text: RouteData) as? [AnyObject] {
+                        lstAllRoutes = list
+                        lstRoutes = list
+                    }
+                }
+            }
+        }
+
+        if(UserSetup.shared.DistBased == 1){
+
+        }
+    }
+    
+    
+    
+    @objc func levedata () {
+        let vc=self.storyboard?.instantiateViewController(withIdentifier: "sbMainmnu") as!  MainMenu
+        vc.modalPresentationStyle = .overCurrentContext
+        vc.modalTransitionStyle = .crossDissolve //.crossDissolve
+        
+        self.present(vc, animated: true, completion: nil)
     }
     
     @objc func TimeDisplay()
@@ -219,6 +352,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         let name=item["name"] as! String
         let id=String(format: "%@", item["id"] as! CVarArg)
         print(id)
+        Leaveid = id
         var typ: String = ""
         if isMulti==true {
             if SelMode == "JWK" {
@@ -270,8 +404,9 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                 lblHQ.text = name  //+(item["id"] as! String)
                 var DistData: String=""
                 if(LocalStoreage.string(forKey: "Distributors_Master_"+id)==nil){
-                    Toast.show(message: "No Distributors found. Please will try to sync", controller: self)
-                    GlobalFunc.FieldMasterSync(SFCode: id){
+                    //Toast.show(message: "No Distributors found. Please will try to sync", controller: self)
+                    self.ShowLoading(Message: "       Sync Data Please wait...")
+                    GlobalFunc.FieldMasterSync(SFCode: id){ [self] in
                         DistData = self.LocalStoreage.string(forKey: "Distributors_Master_"+id)!
                         let RouteData: String=self.LocalStoreage.string(forKey: "Route_Master_"+id)!
                         if let list = GlobalFunc.convertToDictionary(text: DistData) as? [AnyObject] {
@@ -281,20 +416,38 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                             self.lstAllRoutes = list
                             self.lstRoutes = list
                         }
+                        lblDist.text = "Select the Distributor"
+                        lblRoute.text = "Select the Route"
+                        self.LoadingDismiss()
                     }
-                    return
-                }else{
-                    DistData = LocalStoreage.string(forKey: "Distributors_Master_"+id)!
                     
-                    let RouteData: String=LocalStoreage.string(forKey: "Route_Master_"+id)!
-                    if let list = GlobalFunc.convertToDictionary(text: DistData) as? [AnyObject] {
-                        lstDist = list;
-                    }
-                    if let list = GlobalFunc.convertToDictionary(text: RouteData) as? [AnyObject] {
-                        lstAllRoutes = list
-                        lstRoutes = list
+                    return
+                }else {
+                    if let DistData = LocalStoreage.string(forKey: "Distributors_Master_" + id) {
+                        if let RouteData = LocalStoreage.string(forKey: "Route_Master_" + id) {
+                            if let list = GlobalFunc.convertToDictionary(text: DistData) as? [AnyObject] {
+                                lstDist = list
+                            }
+                            
+                            if let list = GlobalFunc.convertToDictionary(text: RouteData) as? [AnyObject] {
+                                lstAllRoutes = list
+                                lstRoutes = list
+                            }
+                        }
                     }
                 }
+//                else{
+//                    DistData = LocalStoreage.string(forKey: "Distributors_Master_"+id)!
+//
+//                    let RouteData: String=LocalStoreage.string(forKey: "Route_Master_"+id)!
+//                    if let list = GlobalFunc.convertToDictionary(text: DistData) as? [AnyObject] {
+//                        lstDist = list;
+//                    }
+//                    if let list = GlobalFunc.convertToDictionary(text: RouteData) as? [AnyObject] {
+//                        lstAllRoutes = list
+//                        lstRoutes = list
+//                    }
+//                }
                 if(UserSetup.shared.DistBased == 1){
                     
                 }
@@ -352,9 +505,13 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         if(lstPlnDetail.count < 1){ return }
         let wtid=String(format: "%@", lstPlnDetail[0]["worktype"] as! CVarArg)
         if let indexToDelete = lstWType.firstIndex(where: { String(format: "%@", $0["id"] as! CVarArg) == wtid }) {
+            print(indexToDelete)
+            print(lstWType)
 
             let typ: String = lstWType[indexToDelete]["FWFlg"] as! String
             lblWorktype.text = lstWType[indexToDelete]["name"] as? String
+            leavWorktype = lstWType[indexToDelete]["name"] as! String
+            print(leavWorktype)
             let id=String(format: "%@", lstWType[indexToDelete]["id"] as! CVarArg)
             let name: String = lstWType[indexToDelete]["name"] as! String
             
@@ -374,6 +531,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
             }else{
                 
                 let sfid=String(format: "%@", lstPlnDetail[0]["subordinateid"] as! CVarArg)
+                MydayPlanCtrl.SfidString = sfid
                 if let indexToDelete = lstHQs.firstIndex(where: { String(format: "%@", $0["id"] as! CVarArg) == sfid }) {
                     lblHQ.text = lstHQs[indexToDelete]["name"] as? String
                     let sfname: String = lstHQs[indexToDelete]["name"] as! String
@@ -381,11 +539,15 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                     if let DistData = LocalStoreage.string(forKey: "Distributors_Master_"+sfid),
                        let list = GlobalFunc.convertToDictionary(text:  DistData) as? [AnyObject] {
                         lstDist = list
+                        print(DistData)
                     }
+                    
+                    
                     if let RouteData = LocalStoreage.string(forKey: "Route_Master_"+sfid),
                        let list = GlobalFunc.convertToDictionary(text:  RouteData) as? [AnyObject] {
-                        lstAllRoutes = list
+                         lstAllRoutes = list
                         lstRoutes = list
+                        print(RouteData)
                     }
                     //new
         
@@ -417,8 +579,8 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                 if let indexToDelete = lstRoutes.firstIndex(where: { String(format: "%@", $0["id"] as! CVarArg) == rtid }) {
                     lblRoute.text = lstRoutes[indexToDelete]["name"] as? String
                     let rtname: String = lstRoutes[indexToDelete]["name"] as! String
-                    
-                    myDyTp.updateValue(lItem(id: rtid, name: rtname,FWFlg: ""), forKey: "RUT")
+                    print(rtname)
+                   myDyTp.updateValue(lItem(id: rtid, name: rtname,FWFlg: ""), forKey: "RUT")
                 }
                 let jwids=(String(format: "%@", lstPlnDetail[0]["worked_with_code"] as! CVarArg)).replacingOccurrences(of: ",", with: ";")
                     .components(separatedBy: ";")
@@ -583,31 +745,43 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
     }
     
     @IBAction func SaveMyDayPlan(_ sender: Any) {
-        if validateForm() == false {
-            return
-        }
-        if(NetworkMonitor.Shared.isConnected != true){
-            let alert = UIAlertController(title: "Information", message: "Check the Internet Connection", preferredStyle: .alert)
-                 alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
-                     return
-                 })
-                 self.present(alert, animated: true)
+        var Leavtyp = leavWorktype
+        print(Leavtyp)
+ 
+        if Leaveid != "9999"{
+            if validateForm() == false {
                 return
-        }
-        self.ShowLoading(Message: "Getting Device Location...")
-        LocationService.sharedInstance.getNewLocation(location: { location in 
-            print ("New  : "+location.coordinate.latitude.description + ":" + location.coordinate.longitude.description)
-            self.ShowLoading(Message: "Submitting Please wait...")
-            self.saveDayTP(location: location)
-        }, error:{ errMsg in
-            self.LoadingDismiss()
-            print (errMsg)
-            let alert = UIAlertController(title: "Information", message: errMsg, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
+            }
+            if(NetworkMonitor.Shared.isConnected != true){
+                let alert = UIAlertController(title: "Information", message: "Check the Internet Connection", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
+                    return
+                })
+                self.present(alert, animated: true)
                 return
+            }
+            self.ShowLoading(Message: "Getting Device Location...")
+            LocationService.sharedInstance.getNewLocation(location: { location in
+                print ("New  : "+location.coordinate.latitude.description + ":" + location.coordinate.longitude.description)
+                self.ShowLoading(Message: "Submitting Please wait...")
+                self.saveDayTP(location: location)
+            }, error:{ errMsg in
+                self.LoadingDismiss()
+                print (errMsg)
+                let alert = UIAlertController(title: "Information", message: errMsg, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
+                    return
+                })
+                
             })
-            
-        })
+        }else{
+            let storyboard = UIStoryboard(name: "AdminForms", bundle: nil)
+            let viewController = storyboard.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
+            let myDyPln = storyboard.instantiateViewController(withIdentifier: "sbLeaveFrm") as! LeaveForm
+            viewController.setViewControllers([myDyPln], animated: true)
+            UIApplication.shared.windows.first?.rootViewController = viewController
+        }
+        
         
        /* */
     }

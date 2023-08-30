@@ -8,8 +8,16 @@ import Foundation
 import UIKit
 import Alamofire
 
-class HomePageViewController: IViewController{
+class HomePageViewController: IViewController, UITableViewDelegate, UITableViewDataSource{
+   
     
+   // @IBOutlet weak var mnulistHeight: NSLayoutConstraint!
+    
+    @IBOutlet weak var ScrolHight: NSLayoutConstraint!
+    @IBOutlet weak var hightMnth: NSLayoutConstraint!
+    @IBOutlet weak var mnulist: NSLayoutConstraint!
+    @IBOutlet weak var Titleview: UIView!
+    @IBOutlet weak var vstHeight: NSLayoutConstraint!
     @IBOutlet weak var lblTimer: UILabel!
     @IBOutlet weak var lblHeadCap: UILabel!
     @IBOutlet weak var vwMnuList: UIView!
@@ -17,8 +25,12 @@ class HomePageViewController: IViewController{
     @IBOutlet weak var vwMnthDash: UIView!
     @IBOutlet weak var vwMainScroll: UIScrollView!
     @IBOutlet weak var mMainMnu: UIImageView!
-    
+    @IBOutlet weak var DashBoradTB: UITableView!
+    @IBOutlet weak var currentdate: UILabel!
     var lstMyplnList: [AnyObject] = []
+    var TodayDate: [String:AnyObject] = [:]
+    var routeNames = [String]()
+    var routeNames1 = [String]()
     
     struct mnuItem: Codable {
         let MnuId: Int
@@ -26,12 +38,30 @@ class HomePageViewController: IViewController{
         let MenuImage: String
     }
     
+    struct Todaydate: Any {
+        let id : Int
+        let Route: String
+        let AC: String
+        let ACvalue: Int
+        let TC: String
+        let TCvalue : Int
+        let PC : String
+        let PCvalue : Int
+        let BAC : String
+        let BACvalue : Int
+        let valuesTotal: String
+    }
+    var axn="get/allcalls"
+    var TodayDetls:[Todaydate] = []
     var strMenuList:[mnuItem]=[]
     var SFCode: String = "", StateCode: String = "", DivCode: String = ""
     
     let LocalStoreage = UserDefaults.standard
     
     override func viewDidLoad() {
+        DashBoradTB.delegate=self
+        DashBoradTB.dataSource=self
+        
        // LocalStoreage.removeObject(forKey: "Mydayplan")
         
         //lblHeadCap.font=UIFont.init(name: "Poppins-Bold", size: 20)
@@ -58,6 +88,8 @@ class HomePageViewController: IViewController{
         if UserSetup.shared.BrndRvwNd > 0{
             strMenuList.append(mnuItem.init(MnuId: 3, MenuName: UserSetup.shared.BrandReviewVisit, MenuImage: "mnuPrimary"))
         }
+        mnulist.constant = CGFloat(87*self.strMenuList.count)
+                         self.view.layoutIfNeeded()
         var moveMyPln: Bool=false
         if LocalStoreage.string(forKey: "Mydayplan") == nil {
             moveMyPln=true
@@ -122,7 +154,9 @@ class HomePageViewController: IViewController{
             makeMenuView()
             Dashboard()
         }
+        DashboardNew()
     }
+  
     func getUserDetails(){
         let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
         let data = Data(prettyPrintedJson!.utf8)
@@ -148,6 +182,101 @@ class HomePageViewController: IViewController{
         let someDateTime = formatter.string(from: Date())
         lblTimer.text = "eTime: "+someDateTime
     }
+    func DashboardNew(){
+        let apiKey: String = "\(axn)&divisionCode=\(DivCode)&rSF=\(SFCode)&sfCode=\(SFCode)&vanWorkFlag=&State_Code=\(StateCode)"
+        
+        
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+            AFdata in
+            switch AFdata.result
+            {
+                
+            case .success(let value):
+                //print(value)
+                if let json = value as? [String:AnyObject] {
+                    guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
+                        print("Error: Cannot convert JSON object to Pretty JSON data")
+                        return
+                    }
+                    guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+                        print("Error: Could print JSON in String")
+                        return
+                    }
+                    print(prettyPrintedJson)
+                    //self.TodayDate=json
+                    let todayData = json["today"] as? [String: Any]
+                    print(todayData)
+                
+                    if let callsArray = todayData?["calls"] as? [[String: Any]] {
+                        for item in callsArray {
+                            let totalcalls = (item["RCCOUNT"] as! Int) - (item["calls"] as! Int)
+                            print(totalcalls)
+                            
+                            TodayDetls.append(Todaydate(id: 1, Route: item["RouteName"] as! String, AC: "AC", ACvalue: item["RCCOUNT"] as! Int, TC: "TC", TCvalue: item["calls"] as! Int, PC: "PC", PCvalue: item["order"] as! Int, BAC: "BAC", BACvalue: totalcalls, valuesTotal: item["orderVal"] as! String))
+                            
+                            self.currentdate.text = item["Adate"] as? String
+                        }
+                    }
+
+//                    mnulistHeight.constant = CGFloat(70*self.strMenuList.count)
+//                    self.view.layoutIfNeeded()
+                    self.DashBoradTB.reloadData()
+                    vstHeight.constant = CGFloat(60*self.TodayDetls.count)
+                    self.view.layoutIfNeeded()
+                    
+                   
+                }
+            case .failure(let error):
+                Toast.show(message: error.errorDescription!)  //, controller: self
+            }
+        }
+    }
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if tableView == DashBoradTB {
+               let todayDetail = TodayDetls[indexPath.row]
+               
+               // Check if ACvalue is 0
+               if todayDetail.ACvalue == 0 {
+                   // Return the desired height for the empty cell
+                   return 0.0 // Set to 0 to hide the cell
+               }
+           }
+           
+           // Return the default height for other cells
+           return 60 // Modify this value based on your cell's height
+    }
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+     
+        if tableView == DashBoradTB {
+            return TodayDetls.count
+        }
+        return 0
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell: cellListItem = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
+        
+        if tableView == DashBoradTB {
+            let todayDetail = TodayDetls[indexPath.row]
+            
+            // Check if ACvalue is 0
+            if todayDetail.ACvalue == 0 {
+                // Return an empty cell
+                return UITableViewCell()
+            }
+            
+            cell.RouteLb.text = todayDetail.Route
+            cell.AvlaCalls.text = String(todayDetail.ACvalue)
+            cell.TotalCalls.text = String(todayDetail.TCvalue)
+            cell.PcCalls.text = String(todayDetail.PCvalue)
+            cell.BAC.text = String(todayDetail.BACvalue)
+            cell.Toalvalue.text = String(todayDetail.valuesTotal)
+        }
+        
+        return cell
+    }
+    
+    
     func Dashboard(){
         let aFormData: [String: Any] = ["orderBy":"[\"name asc\"]","desig":"mgr"]
         let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
@@ -192,12 +321,18 @@ class HomePageViewController: IViewController{
                         mOrdVal = MonthData["orderVal"] as! Double
                     }
                     let OAmt = mOrdVal
-                    let TAmt = MonthData["TAmt"] as! Double
+                    var TAmt = ""
+                    if let targetValue = MonthData["target_val"] as? String {
+
+                        TAmt = targetValue
+                    } else {
+                        TAmt = "0"
+                    }
                     let AAmt = MonthData["AAmt"] as! Double
                     x = self.addMonthVstDetControl(aY: x, h: 20, Caption: "Visited", text: String(format: "%i", Mcalls),textAlign: .right)
                     x = self.addMonthVstDetControl(aY: x, h: 20, Caption: "Ordered", text: String(format: "%i", PMcalls),textAlign: .right)
                     x = self.addMonthVstDetControl(aY: x, h: 20, Caption: "Order Value", text: String(format: "%.02f", OAmt),textAlign: .right)
-                    x = self.addMonthVstDetControl(aY: x, h: 20, Caption: "Target", text: String(format: "%.02f", TAmt),textAlign: .right)
+                    x = self.addMonthVstDetControl(aY: x, h: 20, Caption: "Target", text: String(TAmt),textAlign: .right)
                     x = self.addMonthVstDetControl(aY: x, h: 20, Caption: "Achieve", text: String(format: "%.02f", AAmt),textAlign: .right)
                 }
                case .failure(let error):
@@ -252,6 +387,7 @@ class HomePageViewController: IViewController{
         vwMnuList.frame = newFrame
         //vwMnuList.backgroundColor=UIColor.gray
         
+          
         var xfrm = vwTdyDash.frame
         xfrm.origin.y = mnuy+15
         vwTdyDash.frame = xfrm
@@ -263,6 +399,7 @@ class HomePageViewController: IViewController{
         mnuy+=xfrm.height+15
         
         vwMainScroll.contentSize = CGSize(width:view.frame.width, height: mnuy)
+        
     }
     
     func addVstDetControl(aY: Double, h: Double, Caption: String, text: String,textAlign: NSTextAlignment = .left) -> Double {
@@ -370,6 +507,20 @@ class HomePageViewController: IViewController{
         self.present(vc, animated: true, completion: nil)
     }
 }
-//Username: Sankafo2
-//Paswoord :123
+//Username: Sankafo2,aachi-testso2
+//Paswoord :123,123
+
+//AWS-SQL
+//IP: 13.200.61.175,10433
+//Username : sa
+//Password: SanMedia#123
+
+
+//Server username
+//username =
+//Password = 
+
+
+
+
 

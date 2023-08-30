@@ -77,6 +77,7 @@
             "tableName":"vwTown_Master_APP","coloumns":"[\"town_code as id\", \"town_name as name\",\"target\",\"min_prod\",\"field_code\",\"stockist_code\",\"Allowance_Type\"]","where":"[\"isnull(Town_Activation_Flag,0)=0\"]","orderBy":"[\"name asc\"]","desig":"mgr"
          ]))
          
+         
          strMasList.append(mnuItem.init(MasId: 9, MasName: "Retailers List", MasImage: "mnuPrimary",StoreKey: "Retail_Master_"+SFCode, ApiKey: "table/list&divisionCode="+(prettyJsonData["divisionCode"] as? String ?? "")+"&rSF="+SFCode+"&sfCode="+SFCode,fromData: [
          "tableName":"vwDoctor_Master_APP","coloumns":"[\"doctor_code as id\", \"doctor_name as name\",\"town_code\",\"town_name\",\"lat\",\"long\",\"addrs\",\"ListedDr_Address1\",\"ListedDr_Sl_No\",\"Mobile_Number\",\"Doc_cat_code\",\"ContactPersion\",\"Doc_Special_Code\"]","where":"[\"isnull(Doctor_Active_flag,0)=0\"]","orderBy":"[\"name asc\"]","desig":"mgr"
          ]))
@@ -248,7 +249,7 @@
          self.SyncKeys = self.SyncKeys.replacingOccurrences(of: ";e:" + aStoreKey + ";", with: "")
          SyncKeys = SyncKeys + ";" + aStoreKey + ";"
          tbMasLists.reloadData()
-         AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
+         AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+apiKey, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
              AFdata in
              switch AFdata.result
              {

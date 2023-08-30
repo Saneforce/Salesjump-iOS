@@ -176,7 +176,7 @@ class ViewController: IViewController {
             "data": jsonString
         ]
         
-        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+"login", method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"login", method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
             AFdata in
             switch AFdata.result
             {

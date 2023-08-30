@@ -14,7 +14,7 @@ class ImageUploader {
          let imgData = image.jpegData(compressionQuality: 0.80)
 
         AF.upload(multipartFormData: { multipartFormData in
-            multipartFormData.append(imgData!, withName: "imgfile", fileName: fileName, mimeType: "image/jpg")
+            multipartFormData.append(imgData!, withName:"imgfile", fileName:fileName, mimeType:"image/jpg")
         }, to: APIClient.shared.BaseURL+APIClient.shared.DBURL + "imgupload&sf_code=" + SFCode)
         .uploadProgress { progress in
             print(progress)

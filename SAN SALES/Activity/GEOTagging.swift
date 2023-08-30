@@ -135,12 +135,19 @@ class GEOTagging: IViewController, UITableViewDelegate, UITableViewDataSource, M
         if(LocalStoreage.string(forKey: "Distributors_Master_"+DataSF)==nil){
             GlobalFunc.FieldMasterSync(SFCode: DataSF) {
                 
-                let lstRetailData: String = self.LocalStoreage.string(forKey: "Retail_Master_"+self.DataSF)!
-                let lstDistData: String = self.LocalStoreage.string(forKey: "Distributors_Master_"+self.DataSF)!
-                    
-                if let list = GlobalFunc.convertToDictionary(text: lstRetailData) as? [AnyObject] {
+                //new
+                if let lstRetailData = self.LocalStoreage.string(forKey: "Retail_Master_"+self.DataSF),
+                   let list = GlobalFunc.convertToDictionary(text:  lstRetailData) as? [AnyObject] {
                     self.lstRetails = list;
                 }
+                //new
+                
+                //let lstRetailData: String = self.LocalStoreage.string(forKey: "Retail_Master_"+self.DataSF)!
+                let lstDistData: String = self.LocalStoreage.string(forKey: "Distributors_Master_"+self.DataSF)!
+                    
+//                if let list = GlobalFunc.convertToDictionary(text: lstRetailData) as? [AnyObject] {
+//                    self.lstRetails = list;
+//                }
                 if let list = GlobalFunc.convertToDictionary(text: lstDistData) as? [AnyObject] {
                     self.lstDists = list;
                 }
@@ -149,12 +156,18 @@ class GEOTagging: IViewController, UITableViewDelegate, UITableViewDataSource, M
             }
             return
         }else{
-            let lstRetailData: String = LocalStoreage.string(forKey: "Retail_Master_"+DataSF)!
+            //let lstRetailData: String = LocalStoreage.string(forKey: "Retail_Master_"+DataSF)!
+            
+            if let lstRetailData = LocalStoreage.string(forKey: "Retail_Master_"+DataSF),
+               let list = GlobalFunc.convertToDictionary(text:  lstRetailData) as? [AnyObject] {
+                lstRetails = list
+            }
+            
             let lstDistData: String = LocalStoreage.string(forKey: "Distributors_Master_"+DataSF)!
             
-            if let list = GlobalFunc.convertToDictionary(text: lstRetailData) as? [AnyObject] {
-                lstRetails = list;
-            }
+//            if let list = GlobalFunc.convertToDictionary(text: lstRetailData) as? [AnyObject] {
+//                lstRetails = list;
+//            }
             if let list = GlobalFunc.convertToDictionary(text: lstDistData) as? [AnyObject] {
                 lstDists = list;
             }
@@ -304,6 +317,7 @@ class GEOTagging: IViewController, UITableViewDelegate, UITableViewDataSource, M
                         self.mapView.isHidden = false
                         self.btntag.isHidden = true
                     }
+                print(value)
                 case .failure(let error):
                     Toast.show(message: error.errorDescription ?? "", controller: self)
                 }
@@ -469,3 +483,4 @@ class GEOTagging: IViewController, UITableViewDelegate, UITableViewDataSource, M
         }
     }
 }
+//west@saneforce.com
