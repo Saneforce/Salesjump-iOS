@@ -150,6 +150,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
             if SubmittedDCR.objcalls_SelectSecondaryorder2.isEmpty  {
                 print(Countdata)
                 Nodatalbl.isHidden = false
+                submittedDCRTB.isHidden = true
                 Nodatalbl.text = "No data available"
                 submittedDCRTB.isHidden = true
             }else{
@@ -453,6 +454,8 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
     }
    
     @IBAction func DeleteBT(_ sender: Any) {
+        let alert = UIAlertController(title: "Confirmation", message: "Do you want to Delete order?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
         self.ShowLoading(Message: "    Loading...")
         let buttonPosition:CGPoint = (sender as AnyObject).convert(CGPoint.zero, to: self.submittedDCRTB)
         guard let indexPath = self.submittedDCRTB.indexPathForRow(at: buttonPosition) else{
@@ -466,7 +469,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
           //  Trans_Sl_No = product["Trans_Sl_No"] as! String? ?? "0"
             
             
-            let apiKey: String = "\(axndelet1)&desig=\(Desig)&divisionCode=\(DivCode)&rSF=\(SFCode)&sfCode=\(SFCode)&stateCod=\(StateCode)"
+            let apiKey: String = "\(self.axndelet1)&desig=\(self.Desig)&divisionCode=\(self.DivCode)&rSF=\(self.SFCode)&sfCode=\(self.SFCode)&stateCod=\(self.StateCode)"
             
         if let transid = product["Trans_SlNo"] as? String,let transid2 = product["Trans_Detail_Slno"] as? String,let Trans_Detail_Info_Code = product["Trans_Detail_Info_Code"]{
                 print(transid)//SEF1-81
@@ -512,6 +515,14 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
                     case .success(let value):
                         print(value)
                         Toast.show(message: "Deleted successfully ")
+                        let storyboard = UIStoryboard(name: "Submittedcalls", bundle: nil)
+                        let viewController = storyboard.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
+                        let myDyPln = storyboard.instantiateViewController(withIdentifier: "SubmittedDCR") as! SubmittedDCR
+                        viewController.setViewControllers([myDyPln], animated: true)
+                        UIApplication.shared.windows.first?.rootViewController = viewController
+                        self.updateOrderValues(refresh: 1)
+                        
+                        
                         if value is [String: Any] {
                             guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
                                 print("Error: Cannot convert JSON object to Pretty JSON data")
@@ -521,10 +532,16 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
                                 print("Error: Could print JSON in String")
                                 return
                             }
+                            
                             print(prettyPrintedJson)
                         }
                     case .failure(let error):
                        // Toast.show(message: error.errorDescription!)
+                        let storyboard = UIStoryboard(name: "Submittedcalls", bundle: nil)
+                        let viewController = storyboard.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
+                        let myDyPln = storyboard.instantiateViewController(withIdentifier: "SubmittedDCR") as! SubmittedDCR
+                        viewController.setViewControllers([myDyPln], animated: true)
+                        UIApplication.shared.windows.first?.rootViewController = viewController
                         Toast.show(message: "Deleted successfully ")
                     }
                     self.LoadingDismiss()
@@ -534,8 +551,12 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
             }
       //  }
         //SelectSecondaryorder2()
-        updateOrderValues(refresh: 1)
-        
+            self.updateOrderValues(refresh: 1)
+        })
+        alert.addAction(UIAlertAction(title: "Cancel", style: .destructive) { _ in
+            return
+        })
+        self.present(alert, animated: true)
     }
     
     func updateOrderValues(refresh: Int){

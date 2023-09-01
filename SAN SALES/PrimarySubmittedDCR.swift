@@ -263,6 +263,8 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
     
     
     @IBAction func DeleteButton(_ sender: Any) {
+        let alert = UIAlertController(title: "Confirmation", message: "Do you want to Delete order?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
         self.ShowLoading(Message: "    Loading...")
         let buttonPosition:CGPoint = (sender as AnyObject).convert(CGPoint.zero, to: self.PrimayOrderViewTB)
         guard let indexPath = self.PrimayOrderViewTB.indexPathForRow(at: buttonPosition) else{
@@ -273,7 +275,7 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
              print(product)
             
             
-            let apiKey: String = "\(axnDelete)&divisionCode=\(DivCode)%2C&desig=\(Desig)&rSF=\(SFCode)&sfCode=\(SFCode)&State_Code=\(StateCode)"
+            let apiKey: String = "\(self.axnDelete)&divisionCode=\(self.DivCode)%2C&desig=\(self.Desig)&rSF=\(self.SFCode)&sfCode=\(self.SFCode)&State_Code=\(self.StateCode)"
             
             if let transid = product["Trans_SlNo"] as? String,let transid2 = product["Trans_Detail_Slno"] as? String{
                 // Use the unwrapped value of 'transid' here
@@ -329,6 +331,11 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
                     self.LoadingDismiss()
                 }
         }
+        })
+        alert.addAction(UIAlertAction(title: "Cancel", style: .destructive) { _ in
+            return
+        })
+        self.present(alert, animated: true)
 
     }
     
