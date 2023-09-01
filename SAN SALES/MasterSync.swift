@@ -9,6 +9,8 @@
  import Foundation
  import UIKit
  import Alamofire
+import UserNotifications
+import BackgroundTasks
  class MasterSync: IViewController, UITableViewDelegate, UITableViewDataSource  {
      @IBOutlet weak var tbMasLists: UITableView!
      @IBOutlet weak var btnClearData: UIImageView!
@@ -29,6 +31,7 @@
      var AutoSync: Bool = true
      var SyncKeys: String = ""
      var SyncImgs = [UIImage]()
+     let backgroundTaskIdentifier = "com.yourapp.clearData"
      override func viewDidLoad() {
          let LocalStoreage = UserDefaults.standard
          let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
@@ -289,6 +292,68 @@
              
          }
      }
- }
+     
+     //Triger Night 12:Am
+     
+     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+            requestNotificationAuthorization()
+            scheduleDailyNotification()
+            scheduleBackgroundTask()
+            return true
+        }
+
+        func requestNotificationAuthorization() {
+            let center = UNUserNotificationCenter.current()
+            center.requestAuthorization(options: [.alert, .sound]) { granted, error in
+                if granted {
+                } else {
+                }
+            }
+        }
+
+        func scheduleDailyNotification() {
+            let content = UNMutableNotificationContent()
+            content.title = "Clear Data"
+            content.body = "It's midnight. Time to clear data."
+
+            var dateComponents = DateComponents()
+            dateComponents.hour = 0 // Midnight
+            dateComponents.minute = 0
+
+            let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
+
+            let request = UNNotificationRequest(identifier: "midnightClearData", content: content, trigger: trigger)
+
+            let center = UNUserNotificationCenter.current()
+            center.add(request) { error in
+                if let error = error {
+                }
+            }
+        }
+
+        func scheduleBackgroundTask() {
+            let request = BGAppRefreshTaskRequest(identifier: backgroundTaskIdentifier)
+            request.earliestBeginDate = Calendar.current.date(bySettingHour: 0, minute: 0, second: 0, of: Date())
+
+            do {
+                try BGTaskScheduler.shared.submit(request)
+            } catch {
+            }
+        }
+
+        func applicationDidEnterBackground(_ application: UIApplication) {
+            scheduleBackgroundTask()
+        }
+
+        func application(_ application: UIApplication, handleEventsForBackgroundURLSession identifier: String, completionHandler: @escaping () -> Void) {
+        }
+
+        func performBackgroundTask(_ task: BGTask) {
+            if task.identifier == backgroundTaskIdentifier {
+                clearData()
+                
+                task.setTaskCompleted(success: true)
+            }
+        } }
 
    
