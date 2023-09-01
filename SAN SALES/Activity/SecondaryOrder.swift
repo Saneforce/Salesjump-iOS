@@ -1633,6 +1633,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
      
     @objc private func GotoHome() {
         self.resignFirstResponder()
+        print(self.resignFirstResponder())
 //        let vc=self.storyboard?.instantiateViewController(withIdentifier: "sbSecondaryVisit") as!  SecondaryVisit
 //        self.navigationController?.pushViewController(vc, animated: true)
         if(vwPrvOrderCtrl.isHidden==false){

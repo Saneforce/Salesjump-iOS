@@ -54,6 +54,7 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
     let LocalStoreage = UserDefaults.standard
     var objcalls: [AnyObject]=[]
     public static var EndOrder_Time: String = ""
+    var refreshControl = UIRefreshControl()
      
    public static var objcalls_SelectPrimaryorder2: [AnyObject]=[]
     override func viewDidLoad() {
@@ -70,8 +71,23 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
         InputTB.dataSource=self
         InputTB.delegate=self
         BackButton.addTarget(target: self, action: #selector(closeMenuWin))
+        PrimayOrderViewTB.addSubview(refreshControl)
+        refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
         // Do any additional setup after loading the view.
     }
+    @objc func refreshData() {
+         
+           fetchDataFromServer()
+       }
+    func fetchDataFromServer() {
+        
+        DispatchQueue.main.async {
+            self.PrimayOrderViewTB.reloadData()
+            self.refreshControl.endRefreshing()
+        }
+    }
+    
+    
     @objc func closeMenuWin(){
         GlobalFunc.movetoHomePage()
     }
@@ -257,8 +273,8 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
         myDyPln.productData1 = item1
         myDyPln.productData2 = item2
         myDyPln.areypostion = arey
-        viewController.setViewControllers([myDyPln], animated: true)
-        UIApplication.shared.windows.first?.rootViewController = viewController
+        self.navigationController?.pushViewController(myDyPln, animated: true)
+         UIApplication.shared.windows.first?.rootViewController = navigationController
     }
     
     
@@ -311,6 +327,12 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
                         
                     case .success(let value):
                         print(value)
+                        let storyboard = UIStoryboard(name: "Submittedcalls", bundle: nil)
+                        let viewController = storyboard.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
+                        let myDyPln = storyboard.instantiateViewController(withIdentifier: "PrimarySubmittedDCR") as! PrimarySubmittedDCR
+                        viewController.setViewControllers([myDyPln], animated: true)
+                        UIApplication.shared.windows.first?.rootViewController = viewController
+                        refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
                         Toast.show(message: "Deleted successfully ")
                         if let json = value as? [String: Any] {
                             guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
@@ -326,6 +348,12 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
                         }
                     case .failure(let error):
                         //Toast.show(message: error.errorDescription!)
+                        let storyboard = UIStoryboard(name: "Submittedcalls", bundle: nil)
+                        let viewController = storyboard.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
+                        let myDyPln = storyboard.instantiateViewController(withIdentifier: "PrimarySubmittedDCR") as! PrimarySubmittedDCR
+                        viewController.setViewControllers([myDyPln], animated: true)
+                        UIApplication.shared.windows.first?.rootViewController = viewController
+                        refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
                         Toast.show(message: "Deleted successfully ")
                     }
                     self.LoadingDismiss()

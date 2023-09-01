@@ -80,13 +80,12 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
     let LocalStoreage = UserDefaults.standard
     var objcalls: [AnyObject]=[]
     var objcallsSINO: [AnyObject]=[]
-    var Countdata:Int = 0
     public static var objcalls_SelectSecondaryorder2: [AnyObject] = []
     
     public static var secondaryOrderData: [AnyObject] = []
     public static var Order_Out_Time: String = ""
     
-    
+    var refreshControl = UIRefreshControl()
     
     var Submittedclickdata = [SubmittedDCRselect]()
     override func viewDidLoad() {
@@ -102,7 +101,22 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
         InputTB.dataSource=self
         BackButton.addTarget(target: self, action: #selector(closeMenuWin))
         // Do any additional setup after loading the view.
+        submittedDCRTB.addSubview(refreshControl)
+        refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
     }
+    @objc func refreshData() {
+         
+           fetchDataFromServer()
+       }
+    func fetchDataFromServer() {
+        
+        DispatchQueue.main.async {
+            self.submittedDCRTB.reloadData()
+            self.refreshControl.endRefreshing()
+        }
+    }
+
+    
     @objc func closeMenuWin(){
         GlobalFunc.movetoHomePage()
     }
@@ -126,14 +140,14 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
         if tableView == submittedDCRTB {
             
             if SubmittedDCR.objcalls_SelectSecondaryorder2.isEmpty{
-                Countdata = 1
-                Nodatalbl.isHidden = true
+                submittedDCRTB.isHidden = true
+                Nodatalbl.isHidden = false
+                Nodatalbl.text = "No data available"
                
             }else{
-              Countdata =   SubmittedDCR.objcalls_SelectSecondaryorder2.count
+              return SubmittedDCR.objcalls_SelectSecondaryorder2.count
             }
-            print(Countdata)
-            return Countdata
+           
           
         }
         if tableView == InputTB{
@@ -147,13 +161,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
            
         
         if tableView == submittedDCRTB {
-            if SubmittedDCR.objcalls_SelectSecondaryorder2.isEmpty  {
-                print(Countdata)
-                Nodatalbl.isHidden = false
-                submittedDCRTB.isHidden = true
-                Nodatalbl.text = "No data available"
-                submittedDCRTB.isHidden = true
-            }else{
+            submittedDCRTB.isHidden = false
                 print(SubmittedDCR.objcalls_SelectSecondaryorder2)
                 let item: [String: Any] = SubmittedDCR.objcalls_SelectSecondaryorder2[indexPath.row] as! [String : Any]
                 cell.RetailerName?.text = item["Trans_Detail_Name"] as? String
@@ -173,7 +181,6 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
                 cell.Viewbt.layer.cornerRadius = 12
                 cell.EditBton.layer.cornerRadius = 12
                 cell.DeleteButton.layer.cornerRadius = 12
-            }
         }
         if tableView == OrderView {
             cell.lblText.text = OrdeView[indexPath.row].MasName
@@ -217,7 +224,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
         let params: Parameters = [
             "data": jsonString
         ]
-        
+        Nodatalbl.isHidden = true
         AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
             AFdata in
             switch AFdata.result
@@ -262,7 +269,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
                 "data": jsonString
             ]
             
-            
+                Nodatalbl.isHidden = true
             AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
                 AFdata in
                 switch AFdata.result
@@ -444,13 +451,18 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
         let product = SubmittedDCR.objcalls_SelectSecondaryorder2[indexPath.row]
             let item1 = product["Trans_Detail_Slno"] as! String
         print(item1)
+       // let =self.storyboard?.instantiateViewController(withIdentifier: "sbSecondaryOrder") as!  SecondaryOrder
+        
+       // self.navigationController?.pushViewController(vc, animated: true)
+        
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let viewController = storyboard.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
-            let myDyPln = storyboard.instantiateViewController(withIdentifier: "sbSecondaryOrder") as! SecondaryOrder
+        let myDyPln = storyboard.instantiateViewController(withIdentifier: "sbSecondaryOrder") as! SecondaryOrder
                myDyPln.productData = item1
                myDyPln.areypostion = arey
-            viewController.setViewControllers([myDyPln], animated: true)
-            UIApplication.shared.windows.first?.rootViewController = viewController
+           // viewController.setViewControllers([myDyPln], animated: true)
+           self.navigationController?.pushViewController(myDyPln, animated: true)
+            UIApplication.shared.windows.first?.rootViewController = navigationController
     }
    
     @IBAction func DeleteBT(_ sender: Any) {
@@ -520,6 +532,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
                         let myDyPln = storyboard.instantiateViewController(withIdentifier: "SubmittedDCR") as! SubmittedDCR
                         viewController.setViewControllers([myDyPln], animated: true)
                         UIApplication.shared.windows.first?.rootViewController = viewController
+                        refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
                         self.updateOrderValues(refresh: 1)
                         
                         
@@ -542,6 +555,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
                         let myDyPln = storyboard.instantiateViewController(withIdentifier: "SubmittedDCR") as! SubmittedDCR
                         viewController.setViewControllers([myDyPln], animated: true)
                         UIApplication.shared.windows.first?.rootViewController = viewController
+                        refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
                         Toast.show(message: "Deleted successfully ")
                     }
                     self.LoadingDismiss()
