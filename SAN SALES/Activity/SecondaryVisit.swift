@@ -221,10 +221,11 @@ class SecondaryVisit: IViewController, UITableViewDelegate, UITableViewDataSourc
             }
             if SelMode=="RMK" {
                 txvRmks.text = name
+                print(name)
                 VisitData.shared.VstRemarks.name = name
                 VisitData.shared.VstRemarks.id = id
             }
-            
+            print(name)
             vstDets.updateValue(lItem(id: id, name: name), forKey: SelMode)
             closeWin(self)
         }
@@ -377,7 +378,6 @@ class SecondaryVisit: IViewController, UITableViewDelegate, UITableViewDataSourc
     }
     func subcall() {
         let sLocation = Location
-        
         let jsonString = "[{\"Activity_Report_APP\":{\"dcr_activity_date\":\"\'" + VisitData.shared.cInTime + "\'\",\"rx\":\"\'1\'\",\"rx_t\":\"\'\'\",\"Daywise_Remarks\":\"" + VisitData.shared.VstRemarks.name + "\",\"RateEditable\":\"\'\'\",\"Worktype_code\":\"\'" + (self.lstPlnDetail[0]["worktype"] as! String) + "\'\",\"Town_code\":\"\'" + (self.lstPlnDetail[0]["clusterid"] as! String) + "\'\",\"DataSF\":\"\'" + self.DataSF + "\'\",\"eKey\":\"" + self.eKey + "\"}},{\"Activity_Doctor_Report\":{\"modified_time\":\"\'" + VisitData.shared.cInTime + "\'\",\"CheckinTime\":\"" + VisitData.shared.cInTime + "\",\"rateMode\":\"Nil\",\"visit_name\":\"\'\'\",\"CheckoutTime\":\"" + VisitData.shared.cOutTime + "\",\"Order_No\":\"\'0\'\",\"Doc_Meet_Time\":\"\'" + VisitData.shared.cInTime + "\'\",\"Worked_With\":\"\'\'\",\"discount_price\":\"0\",\"Discountpercent\":\"0\",\"PhoneOrderTypes\":\"" + VisitData.shared.OrderMode.id + "\",\"net_weight_value\":\"0\",\"stockist_name\":\"\'\'\",\"location\":\"\'" + sLocation + "\'\",\"stockist_code\":\"\'\'\",\"Order_Stk\":\"\'\'\",\"superstockistid\":\"\'\'\",\"geoaddress\":\"" + sAddress + "\",\"f_key\":{\"Activity_Report_Code\":\"\'Activity_Report_APP\'\"},\"doctor_name\":\"\'" + self.vstDets["RET"]!.name + "\'\",\"visit_id\":\"\'\'\",\"Doctor_POB\":\"0\",\"doctor_code\":\"\'" + self.vstDets["RET"]!.id + "\'\"}},{\"Activity_Sample_Report\":[]},{\"Trans_Order_Details\":[]},{\"Activity_Event_Captures\":[" + sImgItems +  "]},{\"Activity_Input_Report\":[]},{\"Compititor_Product\":[]},{\"PENDING_Bills\":[]}]"
         
       
