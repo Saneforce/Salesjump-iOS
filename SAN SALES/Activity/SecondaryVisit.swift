@@ -335,7 +335,7 @@ class SecondaryVisit: IViewController, UITableViewDelegate, UITableViewDataSourc
 
                 sessionManager.session.configuration.httpMaximumConnectionsPerHost = 1
                 
-                
+                self.subcall()
                    
             }
        
@@ -374,7 +374,7 @@ class SecondaryVisit: IViewController, UITableViewDelegate, UITableViewDataSourc
                 "DataSF": "'MR2408'"
             ]
         ]*/
-        subcall()
+        
     }
     func subcall() {
         let sLocation = Location

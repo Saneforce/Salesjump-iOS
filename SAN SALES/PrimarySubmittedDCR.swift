@@ -32,6 +32,7 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
     @IBOutlet weak var ScHig: NSLayoutConstraint!
     @IBOutlet weak var OrderHig: NSLayoutConstraint!
     @IBOutlet weak var InputHig: NSLayoutConstraint!
+    @IBOutlet weak var lblnodata: UILabel!
     
     
     struct Viewval: Any {
@@ -58,7 +59,7 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
     override func viewDidLoad() {
         super.viewDidLoad()
       
-        
+        lblnodata.isHidden = true
         getUserDetails()
         SelectPrimaryorder()
         //SelectPrimary2order()
@@ -84,7 +85,14 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView == PrimayOrderViewTB {
-            return PrimarySubmittedDCR.objcalls_SelectPrimaryorder2.count
+            
+            if PrimarySubmittedDCR.objcalls_SelectPrimaryorder2.isEmpty {
+                PrimayOrderViewTB.isHidden=true
+                lblnodata.isHidden=false
+                lblnodata.text="No data available"
+            }else{
+                return PrimarySubmittedDCR.objcalls_SelectPrimaryorder2.count
+            }
         }
         if tableView == OrderTB {
             return View.count
@@ -98,6 +106,8 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell:cellListItem = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
         if tableView == PrimayOrderViewTB {
+            lblnodata.isHidden=true
+            PrimayOrderViewTB.isHidden=false
             let item: [String: Any] = PrimarySubmittedDCR.objcalls_SelectPrimaryorder2[indexPath.row] as! [String : Any]
             cell.Disbutor?.text = item["Trans_Detail_Name"] as? String
             cell.rout?.text = item["SDP"] as? String
@@ -149,7 +159,7 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
         let params: Parameters = [
             "data": jsonString
         ]
-        
+        lblnodata.isHidden=true
         AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
             AFdata in
             switch AFdata.result
@@ -191,9 +201,10 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
         let params: Parameters = [
             "data": jsonString
         ]
-        
+            lblnodata.isHidden=true
         AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
             AFdata in
+            lblnodata.isHidden=false
             switch AFdata.result
             {
                 

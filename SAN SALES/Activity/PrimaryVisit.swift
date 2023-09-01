@@ -337,7 +337,7 @@ class PrimaryVisit: IViewController, UITableViewDelegate, UITableViewDataSource,
                             sImgItems = sImgItems + "{\"imgurl\":\"'" + (item["FileName"]  as! String) + "'\",\"title\":\"''\",\"remarks\":\"''\",\"f_key\":{\"Activity_Report_Code\":\"Activity_Report_APP\"}}"
                         }
                     }
-               
+                        self.subcall()
                 }
             }, error:{ errMsg in
                 self.LoadingDismiss()
@@ -354,7 +354,7 @@ class PrimaryVisit: IViewController, UITableViewDelegate, UITableViewDataSource,
             return
         })
         self.present(alert, animated: true)
-        subcall()
+        
     }
     func subcall() {
         let sLocation = Location

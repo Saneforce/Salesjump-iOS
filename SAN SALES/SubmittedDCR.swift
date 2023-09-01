@@ -23,7 +23,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
     @IBOutlet weak var Viewwindow: UIView!
     @IBOutlet weak var OrderView: UITableView!
     @IBOutlet weak var OrderView2: UITableView!
-    
+    @IBOutlet weak var Nodatalbl: UILabel!
     @IBOutlet weak var Jointlbl: UILabel!
     @IBOutlet weak var Rotlbl: UILabel!
     @IBOutlet weak var Dislbl: UILabel!
@@ -80,6 +80,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
     let LocalStoreage = UserDefaults.standard
     var objcalls: [AnyObject]=[]
     var objcallsSINO: [AnyObject]=[]
+    var Countdata:Int = 0
     public static var objcalls_SelectSecondaryorder2: [AnyObject] = []
     
     public static var secondaryOrderData: [AnyObject] = []
@@ -90,6 +91,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
     var Submittedclickdata = [SubmittedDCRselect]()
     override func viewDidLoad() {
         super.viewDidLoad()
+        Nodatalbl.isHidden = true
         getUserDetails()
         SelectSecondaryorder()
         submittedDCRTB.delegate=self
@@ -122,7 +124,17 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
         if tableView == OrderView{return OrdeView.count}
         if tableView == OrderView2{return View.count}
         if tableView == submittedDCRTB {
-            return SubmittedDCR.objcalls_SelectSecondaryorder2.count
+            
+            if SubmittedDCR.objcalls_SelectSecondaryorder2.isEmpty{
+                Countdata = 1
+                Nodatalbl.isHidden = true
+               
+            }else{
+              Countdata =   SubmittedDCR.objcalls_SelectSecondaryorder2.count
+            }
+            print(Countdata)
+            return Countdata
+          
         }
         if tableView == InputTB{
             return Input.count
@@ -132,26 +144,35 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell:cellListItem = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
-       
+           
+        
         if tableView == submittedDCRTB {
-            let item: [String: Any] = SubmittedDCR.objcalls_SelectSecondaryorder2[indexPath.row] as! [String : Any]
-            cell.RetailerName?.text = item["Trans_Detail_Name"] as? String
-            cell.DistributerName?.text = item["Trans_Detail_Slno"] as? String
-            cell.Rou?.text = item["SDP_Name"] as? String
-            cell.MeetTime?.text = item["Order_In_Time"] as? String
-            cell.OrderTime?.text = item["Order_Out_Time"] as? String
-            
-            if let transSlNo = item["Order_Out_Time"] as? String {
-                cell.OrderTime?.text = transSlNo
+            if SubmittedDCR.objcalls_SelectSecondaryorder2.isEmpty  {
+                print(Countdata)
+                Nodatalbl.isHidden = false
+                Nodatalbl.text = "No data available"
+                submittedDCRTB.isHidden = true
+            }else{
+                print(SubmittedDCR.objcalls_SelectSecondaryorder2)
+                let item: [String: Any] = SubmittedDCR.objcalls_SelectSecondaryorder2[indexPath.row] as! [String : Any]
+                cell.RetailerName?.text = item["Trans_Detail_Name"] as? String
+                cell.DistributerName?.text = item["Trans_Detail_Slno"] as? String
+                cell.Rou?.text = item["SDP_Name"] as? String
+                cell.MeetTime?.text = item["Order_In_Time"] as? String
+                cell.OrderTime?.text = item["Order_Out_Time"] as? String
                 
-            } else {
-                cell.EditBton.isHidden = true
-                cell.Viewbt.isHidden = true
+                if let transSlNo = item["Order_Out_Time"] as? String {
+                    cell.OrderTime?.text = transSlNo
+                    
+                } else {
+                    cell.EditBton.isHidden = true
+                    cell.Viewbt.isHidden = true
+                }
+                cell.vwContainer.layer.cornerRadius = 20
+                cell.Viewbt.layer.cornerRadius = 12
+                cell.EditBton.layer.cornerRadius = 12
+                cell.DeleteButton.layer.cornerRadius = 12
             }
-            cell.vwContainer.layer.cornerRadius = 20
-            cell.Viewbt.layer.cornerRadius = 12
-            cell.EditBton.layer.cornerRadius = 12
-            cell.DeleteButton.layer.cornerRadius = 12
         }
         if tableView == OrderView {
             cell.lblText.text = OrdeView[indexPath.row].MasName
@@ -513,6 +534,15 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
             }
       //  }
         //SelectSecondaryorder2()
+        updateOrderValues(refresh: 1)
+        
+    }
+    
+    func updateOrderValues(refresh: Int){
+        if(refresh == 1){
+            submittedDCRTB.reloadData()
+            //tbProduct.reloadData()
+        }
     }
     
     @IBAction func clswindow(_ sender: Any) {
@@ -526,8 +556,3 @@ struct SubmittedDCRselect {
     var isSelectedEC : Bool
     var SubmittedData : AnyObject
 }
-/*
-
-My
- data:{"Products":[{"product_code":"SEF11251","product_Name":"Britannia Milk bikis 150g","rx_Conqty":2,"Qty":20,"PQty":0,"cb_qty":0,"free":0,"Pfree":0,"Rate":10.0,"PieseRate":10.0,"discount":0.0,"FreeP_Code":0,"Fname":0,"discount_price":0.0,"tax":2.0,"tax_price":4.0,"OrdConv":10,"product_unit_name":"BOX","Trans_POrd_No":"1328115","Order_Flag":0,"Division_code":29,"selectedScheme":0,"selectedOffProCode":"441","selectedOffProName":"BOX","selectedOffProUnit":"10","sample_qty":"204.0"},{"product_code":"SEF11254","product_Name":"Parle-G","rx_Conqty":3,"Qty":60,"PQty":0,"cb_qty":0,"free":0,"Pfree":0,"Rate":6.0,"PieseRate":6.0,"discount":0.0,"FreeP_Code":0,"Fname":0,"discount_price":0.0,"tax":2.0,"tax_price":7.2,"OrdConv":20,"product_unit_name":"BOX","Trans_POrd_No":"1328116","Order_Flag":0,"Division_code":29,"selectedScheme":0,"selectedOffProCode":"441","selectedOffProName":"BOX","selectedOffProUnit":"20","sample_qty":"367.2"},{"product_code":"SEF11426","product_Name":"Oreo","rx_Conqty":1,"Qty":10,"PQty":0,"cb_qty":0,"free":0,"Pfree":0,"Rate":6.0,"PieseRate":6.0,"discount":0.0,"FreeP_Code":0,"Fname":0,"discount_price":0.0,"tax":3.0,"tax_price":1.7999999999999998,"OrdConv":10,"product_unit_name":"BOX","Trans_POrd_No":"","Order_Flag":0,"Division_code":0,"selectedScheme":0,"selectedOffProCode":"441","selectedOffProName":"BOX","selectedOffProUnit":"10","sample_qty":"61.8"}],"Activity_Event_Captures":[],"POB":"0","Value":"633.0","order_No":"SEF3-415","DCR_Code":"SEF3-306","Trans_Sl_No":"SEF3-306","Trans_Detail_slNo":"SEF3-1258","Route":"","net_weight_value":"","target":"","rateMode":null,"Stockist":"32469","RateEditable":"","orderValue":633.0,"Stockist_POB":"","Stk_Meet_Time":"'2023-05-29 15:15:29'","modified_time":"'2023-05-29 15:15:29'","CheckoutTime":"2023-05-29 15:15:29","PhoneOrderTypes":0,"dcr_activity_date":"'2023-05-29 00:00:00'"}
-*/
