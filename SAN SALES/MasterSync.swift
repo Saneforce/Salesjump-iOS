@@ -293,7 +293,7 @@ import BackgroundTasks
          }
      }
      
-     //Triger Night 12:Am
+     //Trigger Night 12:Am
      
      func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
             requestNotificationAuthorization()
