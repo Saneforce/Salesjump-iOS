@@ -121,7 +121,7 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                 cell.lblDisc.text = String(detail[indexPath.row].Disc)
                 cell.lblTax.text = String(detail[indexPath.row].Tax)
                 cell.lblAmt.text =  String(detail[indexPath.row].value)
-                cell.lblValue.text = "0.00"
+                cell.lblValue.text = "\(String(detail[indexPath.row].value)).00"
                 
                 
             }

@@ -1598,13 +1598,14 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
                 })
                 var selUOMConv: String = "1"
                 var selNetWt: String = ""
+                            print(items)
                         if(items.count>0)
                         {
                             selUOM=String(format: "%@", items[0]["UOM"] as! CVarArg)
                             print(selUOM)
                             selUOMNm=String(format: "%@", items[0]["UOMNm"] as! CVarArg)
                             print(selUOMNm)
-                            selUOMConv=String(format: "%@", items[0]["UOMConv"] as! CVarArg)
+                           // selUOMConv=String(format: "%@", items[0]["UOMConv"] as! CVarArg)
                             print(selUOMConv)
                             selNetWt=String(format: "%@", items[0]["NetWt"] as! CVarArg)
                             print(selNetWt)
@@ -1613,7 +1614,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
                             print(selUOM)
                             selUOMNm=String(stkname["Product_Sale_Unit"] as! String)
                             print(selUOMNm)
-                            selUOMConv=String(stkname["conversionQty"] as! Int)
+                            //selUOMConv=String(stkname["conversionQty"] as! Int)
                             print(selUOMConv)
                             selNetWt=String("")
                             print(selNetWt)
@@ -1633,6 +1634,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
      
     @objc private func GotoHome() {
         self.resignFirstResponder()
+        print(self.resignFirstResponder())
 //        let vc=self.storyboard?.instantiateViewController(withIdentifier: "sbSecondaryVisit") as!  SecondaryVisit
 //        self.navigationController?.pushViewController(vc, animated: true)
         if(vwPrvOrderCtrl.isHidden==false){

@@ -23,7 +23,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
     @IBOutlet weak var Viewwindow: UIView!
     @IBOutlet weak var OrderView: UITableView!
     @IBOutlet weak var OrderView2: UITableView!
-    
+    @IBOutlet weak var Nodatalbl: UILabel!
     @IBOutlet weak var Jointlbl: UILabel!
     @IBOutlet weak var Rotlbl: UILabel!
     @IBOutlet weak var Dislbl: UILabel!
@@ -85,11 +85,12 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
     public static var secondaryOrderData: [AnyObject] = []
     public static var Order_Out_Time: String = ""
     
-    
+    var refreshControl = UIRefreshControl()
     
     var Submittedclickdata = [SubmittedDCRselect]()
     override func viewDidLoad() {
         super.viewDidLoad()
+        Nodatalbl.isHidden = true
         getUserDetails()
         SelectSecondaryorder()
         submittedDCRTB.delegate=self
@@ -100,7 +101,22 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
         InputTB.dataSource=self
         BackButton.addTarget(target: self, action: #selector(closeMenuWin))
         // Do any additional setup after loading the view.
+        submittedDCRTB.addSubview(refreshControl)
+        refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
     }
+    @objc func refreshData() {
+         
+           fetchDataFromServer()
+       }
+    func fetchDataFromServer() {
+        
+        DispatchQueue.main.async {
+            self.submittedDCRTB.reloadData()
+            self.refreshControl.endRefreshing()
+        }
+    }
+
+    
     @objc func closeMenuWin(){
         GlobalFunc.movetoHomePage()
     }
@@ -122,7 +138,17 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
         if tableView == OrderView{return OrdeView.count}
         if tableView == OrderView2{return View.count}
         if tableView == submittedDCRTB {
-            return SubmittedDCR.objcalls_SelectSecondaryorder2.count
+            
+            if SubmittedDCR.objcalls_SelectSecondaryorder2.isEmpty{
+                submittedDCRTB.isHidden = true
+                Nodatalbl.isHidden = false
+                Nodatalbl.text = "No data available"
+               
+            }else{
+              return SubmittedDCR.objcalls_SelectSecondaryorder2.count
+            }
+           
+          
         }
         if tableView == InputTB{
             return Input.count
@@ -132,26 +158,29 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell:cellListItem = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
-       
+           
+        
         if tableView == submittedDCRTB {
-            let item: [String: Any] = SubmittedDCR.objcalls_SelectSecondaryorder2[indexPath.row] as! [String : Any]
-            cell.RetailerName?.text = item["Trans_Detail_Name"] as? String
-            cell.DistributerName?.text = item["Trans_Detail_Slno"] as? String
-            cell.Rou?.text = item["SDP_Name"] as? String
-            cell.MeetTime?.text = item["Order_In_Time"] as? String
-            cell.OrderTime?.text = item["Order_Out_Time"] as? String
-            
-            if let transSlNo = item["Order_Out_Time"] as? String {
-                cell.OrderTime?.text = transSlNo
+            submittedDCRTB.isHidden = false
+                print(SubmittedDCR.objcalls_SelectSecondaryorder2)
+                let item: [String: Any] = SubmittedDCR.objcalls_SelectSecondaryorder2[indexPath.row] as! [String : Any]
+                cell.RetailerName?.text = item["Trans_Detail_Name"] as? String
+                cell.DistributerName?.text = item["Trans_Detail_Slno"] as? String
+                cell.Rou?.text = item["SDP_Name"] as? String
+                cell.MeetTime?.text = item["Order_In_Time"] as? String
+                cell.OrderTime?.text = item["Order_Out_Time"] as? String
                 
-            } else {
-                cell.EditBton.isHidden = true
-                cell.Viewbt.isHidden = true
-            }
-            cell.vwContainer.layer.cornerRadius = 20
-            cell.Viewbt.layer.cornerRadius = 12
-            cell.EditBton.layer.cornerRadius = 12
-            cell.DeleteButton.layer.cornerRadius = 12
+                if let transSlNo = item["Order_Out_Time"] as? String {
+                    cell.OrderTime?.text = transSlNo
+                    
+                } else {
+                    cell.EditBton.isHidden = true
+                    cell.Viewbt.isHidden = true
+                }
+                cell.vwContainer.layer.cornerRadius = 20
+                cell.Viewbt.layer.cornerRadius = 12
+                cell.EditBton.layer.cornerRadius = 12
+                cell.DeleteButton.layer.cornerRadius = 12
         }
         if tableView == OrderView {
             cell.lblText.text = OrdeView[indexPath.row].MasName
@@ -195,7 +224,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
         let params: Parameters = [
             "data": jsonString
         ]
-        
+        Nodatalbl.isHidden = true
         AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
             AFdata in
             switch AFdata.result
@@ -240,7 +269,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
                 "data": jsonString
             ]
             
-            
+                Nodatalbl.isHidden = true
             AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
                 AFdata in
                 switch AFdata.result
@@ -422,16 +451,23 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
         let product = SubmittedDCR.objcalls_SelectSecondaryorder2[indexPath.row]
             let item1 = product["Trans_Detail_Slno"] as! String
         print(item1)
+       // let =self.storyboard?.instantiateViewController(withIdentifier: "sbSecondaryOrder") as!  SecondaryOrder
+        
+       // self.navigationController?.pushViewController(vc, animated: true)
+        
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let viewController = storyboard.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
-            let myDyPln = storyboard.instantiateViewController(withIdentifier: "sbSecondaryOrder") as! SecondaryOrder
+        let myDyPln = storyboard.instantiateViewController(withIdentifier: "sbSecondaryOrder") as! SecondaryOrder
                myDyPln.productData = item1
                myDyPln.areypostion = arey
-            viewController.setViewControllers([myDyPln], animated: true)
-            UIApplication.shared.windows.first?.rootViewController = viewController
+           // viewController.setViewControllers([myDyPln], animated: true)
+           self.navigationController?.pushViewController(myDyPln, animated: true)
+            UIApplication.shared.windows.first?.rootViewController = navigationController
     }
    
     @IBAction func DeleteBT(_ sender: Any) {
+        let alert = UIAlertController(title: "Confirmation", message: "Do you want to Delete order?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
         self.ShowLoading(Message: "    Loading...")
         let buttonPosition:CGPoint = (sender as AnyObject).convert(CGPoint.zero, to: self.submittedDCRTB)
         guard let indexPath = self.submittedDCRTB.indexPathForRow(at: buttonPosition) else{
@@ -445,7 +481,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
           //  Trans_Sl_No = product["Trans_Sl_No"] as! String? ?? "0"
             
             
-            let apiKey: String = "\(axndelet1)&desig=\(Desig)&divisionCode=\(DivCode)&rSF=\(SFCode)&sfCode=\(SFCode)&stateCod=\(StateCode)"
+            let apiKey: String = "\(self.axndelet1)&desig=\(self.Desig)&divisionCode=\(self.DivCode)&rSF=\(self.SFCode)&sfCode=\(self.SFCode)&stateCod=\(self.StateCode)"
             
         if let transid = product["Trans_SlNo"] as? String,let transid2 = product["Trans_Detail_Slno"] as? String,let Trans_Detail_Info_Code = product["Trans_Detail_Info_Code"]{
                 print(transid)//SEF1-81
@@ -491,6 +527,15 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
                     case .success(let value):
                         print(value)
                         Toast.show(message: "Deleted successfully ")
+                        let storyboard = UIStoryboard(name: "Submittedcalls", bundle: nil)
+                        let viewController = storyboard.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
+                        let myDyPln = storyboard.instantiateViewController(withIdentifier: "SubmittedDCR") as! SubmittedDCR
+                        viewController.setViewControllers([myDyPln], animated: true)
+                        UIApplication.shared.windows.first?.rootViewController = viewController
+                        refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
+                        self.updateOrderValues(refresh: 1)
+                        
+                        
                         if value is [String: Any] {
                             guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
                                 print("Error: Cannot convert JSON object to Pretty JSON data")
@@ -500,10 +545,17 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
                                 print("Error: Could print JSON in String")
                                 return
                             }
+                            
                             print(prettyPrintedJson)
                         }
                     case .failure(let error):
                        // Toast.show(message: error.errorDescription!)
+                        let storyboard = UIStoryboard(name: "Submittedcalls", bundle: nil)
+                        let viewController = storyboard.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
+                        let myDyPln = storyboard.instantiateViewController(withIdentifier: "SubmittedDCR") as! SubmittedDCR
+                        viewController.setViewControllers([myDyPln], animated: true)
+                        UIApplication.shared.windows.first?.rootViewController = viewController
+                        refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
                         Toast.show(message: "Deleted successfully ")
                     }
                     self.LoadingDismiss()
@@ -513,6 +565,19 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
             }
       //  }
         //SelectSecondaryorder2()
+            self.updateOrderValues(refresh: 1)
+        })
+        alert.addAction(UIAlertAction(title: "Cancel", style: .destructive) { _ in
+            return
+        })
+        self.present(alert, animated: true)
+    }
+    
+    func updateOrderValues(refresh: Int){
+        if(refresh == 1){
+            submittedDCRTB.reloadData()
+            //tbProduct.reloadData()
+        }
     }
     
     @IBAction func clswindow(_ sender: Any) {
@@ -526,8 +591,3 @@ struct SubmittedDCRselect {
     var isSelectedEC : Bool
     var SubmittedData : AnyObject
 }
-/*
-
-My
- data:{"Products":[{"product_code":"SEF11251","product_Name":"Britannia Milk bikis 150g","rx_Conqty":2,"Qty":20,"PQty":0,"cb_qty":0,"free":0,"Pfree":0,"Rate":10.0,"PieseRate":10.0,"discount":0.0,"FreeP_Code":0,"Fname":0,"discount_price":0.0,"tax":2.0,"tax_price":4.0,"OrdConv":10,"product_unit_name":"BOX","Trans_POrd_No":"1328115","Order_Flag":0,"Division_code":29,"selectedScheme":0,"selectedOffProCode":"441","selectedOffProName":"BOX","selectedOffProUnit":"10","sample_qty":"204.0"},{"product_code":"SEF11254","product_Name":"Parle-G","rx_Conqty":3,"Qty":60,"PQty":0,"cb_qty":0,"free":0,"Pfree":0,"Rate":6.0,"PieseRate":6.0,"discount":0.0,"FreeP_Code":0,"Fname":0,"discount_price":0.0,"tax":2.0,"tax_price":7.2,"OrdConv":20,"product_unit_name":"BOX","Trans_POrd_No":"1328116","Order_Flag":0,"Division_code":29,"selectedScheme":0,"selectedOffProCode":"441","selectedOffProName":"BOX","selectedOffProUnit":"20","sample_qty":"367.2"},{"product_code":"SEF11426","product_Name":"Oreo","rx_Conqty":1,"Qty":10,"PQty":0,"cb_qty":0,"free":0,"Pfree":0,"Rate":6.0,"PieseRate":6.0,"discount":0.0,"FreeP_Code":0,"Fname":0,"discount_price":0.0,"tax":3.0,"tax_price":1.7999999999999998,"OrdConv":10,"product_unit_name":"BOX","Trans_POrd_No":"","Order_Flag":0,"Division_code":0,"selectedScheme":0,"selectedOffProCode":"441","selectedOffProName":"BOX","selectedOffProUnit":"10","sample_qty":"61.8"}],"Activity_Event_Captures":[],"POB":"0","Value":"633.0","order_No":"SEF3-415","DCR_Code":"SEF3-306","Trans_Sl_No":"SEF3-306","Trans_Detail_slNo":"SEF3-1258","Route":"","net_weight_value":"","target":"","rateMode":null,"Stockist":"32469","RateEditable":"","orderValue":633.0,"Stockist_POB":"","Stk_Meet_Time":"'2023-05-29 15:15:29'","modified_time":"'2023-05-29 15:15:29'","CheckoutTime":"2023-05-29 15:15:29","PhoneOrderTypes":0,"dcr_activity_date":"'2023-05-29 00:00:00'"}
-*/

@@ -32,6 +32,7 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
     @IBOutlet weak var ScHig: NSLayoutConstraint!
     @IBOutlet weak var OrderHig: NSLayoutConstraint!
     @IBOutlet weak var InputHig: NSLayoutConstraint!
+    @IBOutlet weak var lblnodata: UILabel!
     
     
     struct Viewval: Any {
@@ -53,12 +54,13 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
     let LocalStoreage = UserDefaults.standard
     var objcalls: [AnyObject]=[]
     public static var EndOrder_Time: String = ""
+    var refreshControl = UIRefreshControl()
      
    public static var objcalls_SelectPrimaryorder2: [AnyObject]=[]
     override func viewDidLoad() {
         super.viewDidLoad()
       
-        
+        lblnodata.isHidden = true
         getUserDetails()
         SelectPrimaryorder()
         //SelectPrimary2order()
@@ -69,8 +71,23 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
         InputTB.dataSource=self
         InputTB.delegate=self
         BackButton.addTarget(target: self, action: #selector(closeMenuWin))
+        PrimayOrderViewTB.addSubview(refreshControl)
+        refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
         // Do any additional setup after loading the view.
     }
+    @objc func refreshData() {
+         
+           fetchDataFromServer()
+       }
+    func fetchDataFromServer() {
+        
+        DispatchQueue.main.async {
+            self.PrimayOrderViewTB.reloadData()
+            self.refreshControl.endRefreshing()
+        }
+    }
+    
+    
     @objc func closeMenuWin(){
         GlobalFunc.movetoHomePage()
     }
@@ -84,7 +101,14 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView == PrimayOrderViewTB {
-            return PrimarySubmittedDCR.objcalls_SelectPrimaryorder2.count
+            
+            if PrimarySubmittedDCR.objcalls_SelectPrimaryorder2.isEmpty {
+                PrimayOrderViewTB.isHidden=true
+                lblnodata.isHidden=false
+                lblnodata.text="No data available"
+            }else{
+                return PrimarySubmittedDCR.objcalls_SelectPrimaryorder2.count
+            }
         }
         if tableView == OrderTB {
             return View.count
@@ -98,6 +122,8 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell:cellListItem = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
         if tableView == PrimayOrderViewTB {
+            lblnodata.isHidden=true
+            PrimayOrderViewTB.isHidden=false
             let item: [String: Any] = PrimarySubmittedDCR.objcalls_SelectPrimaryorder2[indexPath.row] as! [String : Any]
             cell.Disbutor?.text = item["Trans_Detail_Name"] as? String
             cell.rout?.text = item["SDP"] as? String
@@ -149,7 +175,7 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
         let params: Parameters = [
             "data": jsonString
         ]
-        
+        lblnodata.isHidden=true
         AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
             AFdata in
             switch AFdata.result
@@ -191,9 +217,10 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
         let params: Parameters = [
             "data": jsonString
         ]
-        
+            lblnodata.isHidden=true
         AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
             AFdata in
+            lblnodata.isHidden=false
             switch AFdata.result
             {
                 
@@ -246,12 +273,14 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
         myDyPln.productData1 = item1
         myDyPln.productData2 = item2
         myDyPln.areypostion = arey
-        viewController.setViewControllers([myDyPln], animated: true)
-        UIApplication.shared.windows.first?.rootViewController = viewController
+        self.navigationController?.pushViewController(myDyPln, animated: true)
+         UIApplication.shared.windows.first?.rootViewController = navigationController
     }
     
     
     @IBAction func DeleteButton(_ sender: Any) {
+        let alert = UIAlertController(title: "Confirmation", message: "Do you want to Delete order?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
         self.ShowLoading(Message: "    Loading...")
         let buttonPosition:CGPoint = (sender as AnyObject).convert(CGPoint.zero, to: self.PrimayOrderViewTB)
         guard let indexPath = self.PrimayOrderViewTB.indexPathForRow(at: buttonPosition) else{
@@ -262,7 +291,7 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
              print(product)
             
             
-            let apiKey: String = "\(axnDelete)&divisionCode=\(DivCode)%2C&desig=\(Desig)&rSF=\(SFCode)&sfCode=\(SFCode)&State_Code=\(StateCode)"
+            let apiKey: String = "\(self.axnDelete)&divisionCode=\(self.DivCode)%2C&desig=\(self.Desig)&rSF=\(self.SFCode)&sfCode=\(self.SFCode)&State_Code=\(self.StateCode)"
             
             if let transid = product["Trans_SlNo"] as? String,let transid2 = product["Trans_Detail_Slno"] as? String{
                 // Use the unwrapped value of 'transid' here
@@ -298,6 +327,12 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
                         
                     case .success(let value):
                         print(value)
+                        let storyboard = UIStoryboard(name: "Submittedcalls", bundle: nil)
+                        let viewController = storyboard.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
+                        let myDyPln = storyboard.instantiateViewController(withIdentifier: "PrimarySubmittedDCR") as! PrimarySubmittedDCR
+                        viewController.setViewControllers([myDyPln], animated: true)
+                        UIApplication.shared.windows.first?.rootViewController = viewController
+                        refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
                         Toast.show(message: "Deleted successfully ")
                         if let json = value as? [String: Any] {
                             guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
@@ -313,11 +348,22 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
                         }
                     case .failure(let error):
                         //Toast.show(message: error.errorDescription!)
+                        let storyboard = UIStoryboard(name: "Submittedcalls", bundle: nil)
+                        let viewController = storyboard.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
+                        let myDyPln = storyboard.instantiateViewController(withIdentifier: "PrimarySubmittedDCR") as! PrimarySubmittedDCR
+                        viewController.setViewControllers([myDyPln], animated: true)
+                        UIApplication.shared.windows.first?.rootViewController = viewController
+                        refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
                         Toast.show(message: "Deleted successfully ")
                     }
                     self.LoadingDismiss()
                 }
         }
+        })
+        alert.addAction(UIAlertAction(title: "Cancel", style: .destructive) { _ in
+            return
+        })
+        self.present(alert, animated: true)
 
     }
     

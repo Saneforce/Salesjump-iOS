@@ -272,6 +272,7 @@ class PrimaryVisit: IViewController, UITableViewDelegate, UITableViewDataSource,
         closeWin(self)
     }
     func validateForm() -> Bool {
+        VisitData.shared.VstRemarks.name = txvRmks.text
         if VisitData.shared.CustID == "" {
             Toast.show(message: "Select the Distributor") //, controller: self
             return false
@@ -336,7 +337,7 @@ class PrimaryVisit: IViewController, UITableViewDelegate, UITableViewDataSource,
                             sImgItems = sImgItems + "{\"imgurl\":\"'" + (item["FileName"]  as! String) + "'\",\"title\":\"''\",\"remarks\":\"''\",\"f_key\":{\"Activity_Report_Code\":\"Activity_Report_APP\"}}"
                         }
                     }
-               
+                        self.subcall()
                 }
             }, error:{ errMsg in
                 self.LoadingDismiss()
@@ -353,11 +354,10 @@ class PrimaryVisit: IViewController, UITableViewDelegate, UITableViewDataSource,
             return
         })
         self.present(alert, animated: true)
-        subcall()
+        
     }
     func subcall() {
         let sLocation = Location
-        
         let jsonString = "[{\"Activity_Report_APP\":{\"Worktype_code\":\"'" + (self.lstPlnDetail[0]["worktype"] as! String) + "'\",\"Town_code\":\"'" + (self.lstPlnDetail[0]["clusterid"] as! String) + "'\",\"RateEditable\":\"''\",\"dcr_activity_date\":\"'" + VisitData.shared.cInTime + "'\",\"Daywise_Remarks\":\"" + VisitData.shared.VstRemarks.name + "\",\"eKey\":\"" + self.eKey + "\",\"rx\":\"'1'\",\"rx_t\":\"''\",\"DataSF\":\"'" + self.DataSF + "'\"}},{\"Activity_Stockist_Report\":{\"Stockist_POB\":\"" + VisitData.shared.PayValue + "\",\"Worked_With\":\"''\",\"location\":\"'" + sLocation + "'\",\"geoaddress\":\"" + sAddress + "\",\"stockist_code\":\"'" + VisitData.shared.CustID + "'\",\"superstockistid\":\"''\",\"Stk_Meet_Time\":\"'" + VisitData.shared.cInTime + "'\",\"modified_time\":\"'" + VisitData.shared.cInTime + "'\",\"date_of_intrument\":\"" + VisitData.shared.DOP.id + "\",\"intrumenttype\":\"" + VisitData.shared.PayType.id + "\",\"orderValue\":\"0\",\"Aob\":0,\"CheckinTime\":\"" + VisitData.shared.cInTime + "\",\"CheckoutTime\":\"" + VisitData.shared.cOutTime + "\",\"f_key\":{\"Activity_Report_Code\":\"'Activity_Report_APP'\"},\"PhoneOrderTypes\":" + VisitData.shared.OrderMode.id + "}},{\"Activity_Stk_POB_Report\":[]},{\"Activity_Stk_Sample_Report\":[]},{\"Activity_Event_Captures\":[" + sImgItems +  "]},{\"PENDING_Bills\":[]},{\"Compititor_Product\":[]}]"
         
         let params: Parameters = [
