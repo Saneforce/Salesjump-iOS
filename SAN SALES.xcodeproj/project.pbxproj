@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		19247A3DB960E114A6C28FB3 /* Pods_SAN_SALES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 448C0B69977667C109C50683 /* Pods_SAN_SALES.framework */; };
+		385ED6042ABAB50400B43564 /* FSCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 385ED6032ABAB50400B43564 /* FSCalendar */; };
 		386A43912A1CBB0200CE1833 /* SubmittedDCR.swift in Sources */ = {isa = PBXBuildFile; fileRef = 386A43902A1CBB0200CE1833 /* SubmittedDCR.swift */; };
 		386A43932A1CC3E000CE1833 /* Submittedcalls.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 386A43922A1CC3E000CE1833 /* Submittedcalls.storyboard */; };
 		386A43952A1CC63100CE1833 /* PrimarySubmittedDCR.swift in Sources */ = {isa = PBXBuildFile; fileRef = 386A43942A1CC63100CE1833 /* PrimarySubmittedDCR.swift */; };
@@ -83,7 +85,6 @@
 		3FBF387527E4488100900007 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FBF387427E4488100900007 /* APIClient.swift */; };
 		3FBF387727E4AA8300900007 /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FBF387627E4AA8300900007 /* Toast.swift */; };
 		3FF57C1D286C4A76009E3FE5 /* RptVisitDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF57C1C286C4A76009E3FE5 /* RptVisitDetail.swift */; };
-		6FF359B69DE682BEF3D0B5B4 /* Pods_SAN_SALES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C05F882C905DE5237A46D02 /* Pods_SAN_SALES.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -94,7 +95,6 @@
 		3883A09B2A176B6300B858CF /* SubmittedCalls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmittedCalls.swift; sourceTree = "<group>"; };
 		38A2E9B12A0E1B940061B854 /* Brand Availability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Brand Availability.swift"; sourceTree = "<group>"; };
 		38D0F76729BB2447003EEB03 /* BrandReviewVisit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrandReviewVisit.swift; sourceTree = "<group>"; };
-		3C05F882C905DE5237A46D02 /* Pods_SAN_SALES.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SAN_SALES.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F063526283A8C070027842E /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		3F063529283A8C920027842E /* ColorTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorTheme.swift; sourceTree = "<group>"; };
 		3F06352B283BC9790027842E /* PhotoGallary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoGallary.swift; sourceTree = "<group>"; };
@@ -167,6 +167,7 @@
 		3FBF387427E4488100900007 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
 		3FBF387627E4AA8300900007 /* Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
 		3FF57C1C286C4A76009E3FE5 /* RptVisitDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RptVisitDetail.swift; sourceTree = "<group>"; };
+		448C0B69977667C109C50683 /* Pods_SAN_SALES.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SAN_SALES.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		ABF79223AB38281122FCCDD2 /* Pods-SAN SALES.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SAN SALES.debug.xcconfig"; path = "Target Support Files/Pods-SAN SALES/Pods-SAN SALES.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -175,9 +176,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6FF359B69DE682BEF3D0B5B4 /* Pods_SAN_SALES.framework in Frameworks */,
 				3F4CC1932875580100BA2B4E /* AppTrackingTransparency.framework in Frameworks */,
+				385ED6042ABAB50400B43564 /* FSCalendar in Frameworks */,
 				3F4CC1952875581400BA2B4E /* AdSupport.framework in Frameworks */,
+				19247A3DB960E114A6C28FB3 /* Pods_SAN_SALES.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -349,7 +351,7 @@
 			children = (
 				3F4CC1942875581400BA2B4E /* AdSupport.framework */,
 				3F4CC1922875580100BA2B4E /* AppTrackingTransparency.framework */,
-				3C05F882C905DE5237A46D02 /* Pods_SAN_SALES.framework */,
+				448C0B69977667C109C50683 /* Pods_SAN_SALES.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -417,6 +419,9 @@
 			dependencies = (
 			);
 			name = "SAN SALES";
+			packageProductDependencies = (
+				385ED6032ABAB50400B43564 /* FSCalendar */,
+			);
 			productName = "SAN SALES";
 			productReference = 3F2F810727CEB30C0015E1CA /* SAN SALES.app */;
 			productType = "com.apple.product-type.application";
@@ -445,6 +450,9 @@
 				Base,
 			);
 			mainGroup = 3F2F80FE27CEB30C0015E1CA;
+			packageReferences = (
+				385ED6022ABAB50400B43564 /* XCRemoteSwiftPackageReference "FSCalendar.git" */,
+			);
 			productRefGroup = 3F2F810827CEB30C0015E1CA /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -753,7 +761,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.1;
+				MARKETING_VERSION = 2.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.saneforce.sansales;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -790,7 +798,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.1;
+				MARKETING_VERSION = 2.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.saneforce.sansales;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -822,6 +830,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		385ED6022ABAB50400B43564 /* XCRemoteSwiftPackageReference "FSCalendar.git" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/WenchaoD/FSCalendar.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		385ED6032ABAB50400B43564 /* FSCalendar */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 385ED6022ABAB50400B43564 /* XCRemoteSwiftPackageReference "FSCalendar.git" */;
+			productName = FSCalendar;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 3F2F80FF27CEB30C0015E1CA /* Project object */;
 }
