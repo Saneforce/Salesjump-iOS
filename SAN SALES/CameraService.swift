@@ -48,11 +48,16 @@ extension AVCaptureDevice {
     }
 }
 class CameraService: IViewController , AVCapturePhotoCaptureDelegate{
-    let session = AVCaptureSession()
+    var session = AVCaptureSession()
     var camera: AVCaptureDevice?
     var previewLayer = AVCaptureVideoPreviewLayer()
     var output = AVCapturePhotoOutput()
     var callback: ((_ photo: UIImage, _ fileName: String) -> Void)?
+    private var stillImageOutput: AVCapturePhotoOutput!
+    private var currentCamera: AVCaptureDevice?
+    
+    let backCamera = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back)
+    let frontCamera = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .front)
     
    // AVCapturePhotoCaptureDelegate?
     @IBOutlet weak var CamPrevHolder: UIView!
@@ -213,4 +218,62 @@ class CameraService: IViewController , AVCapturePhotoCaptureDelegate{
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
+    func setupCamera() {
+            session = AVCaptureSession()
+            session.sessionPreset = .photo
+            
+            guard let backCamera = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back) else {
+                print("Unable to access back camera")
+                return
+            }
+            
+            do {
+                let input = try AVCaptureDeviceInput(device: backCamera)
+                
+                if session.canAddInput(input) {
+                    session.addInput(input)
+                    
+                    stillImageOutput = AVCapturePhotoOutput()
+                    
+                    if session.canAddOutput(stillImageOutput) {
+                        session.addOutput(stillImageOutput)
+                        
+                        previewLayer = AVCaptureVideoPreviewLayer(session: session)
+                        previewLayer.frame = view.bounds
+                        previewLayer.videoGravity = .resizeAspectFill
+                        previewLayer.connection?.videoOrientation = .portrait
+                        
+                        view.layer.addSublayer(previewLayer)
+                        
+                        session.startRunning()
+                    }
+                }
+            } catch {
+                print("Error setting up camera: \(error.localizedDescription)")
+            }
+        }
+    @IBAction func CamFrontandBack(_ sender: UIButton) {
+        guard let currentCameraInput = session.inputs.first as? AVCaptureDeviceInput else {
+            print("No camera input found")
+            return
+        }
+
+        session.removeInput(currentCameraInput)
+
+        if let newCamera = (currentCameraInput.device == backCamera) ? frontCamera : backCamera {
+            currentCamera = newCamera
+        }
+
+        do {
+            let newCameraInput = try AVCaptureDeviceInput(device: currentCamera!)
+
+            if session.canAddInput(newCameraInput) {
+                session.addInput(newCameraInput)
+            }
+        } catch {
+            print("Error switching camera: \(error.localizedDescription)")
+        }
+
+    }
+    
 }

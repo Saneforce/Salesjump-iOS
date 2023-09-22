@@ -63,6 +63,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
     
     var strJWCd: String = ""
     var strJWNm: String = ""
+    var ImgName:String = ""
 
     var lAllObjSel: [AnyObject] = []
     var lObjSel: [AnyObject] = []
@@ -81,6 +82,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
     var SFCode: String=""
     var DivCode: String=""
     var Leaveid: String = ""
+   // var selfieLoginActive = 1
     public static var SfidString: String=""
     var leavWorktype: String = ""
     let LocalStoreage = UserDefaults.standard
@@ -400,6 +402,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                 })
             } else if SelMode == "RUT" {
                 lblRoute.text = name  //+(item["id"] as! String)
+                
             }else if SelMode == "HQ" {
                 lblHQ.text = name  //+(item["id"] as! String)
                 var DistData: String=""
@@ -578,6 +581,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                 let rtid=String(format: "%@", lstPlnDetail[0]["clusterid"] as! CVarArg)
                 if let indexToDelete = lstRoutes.firstIndex(where: { String(format: "%@", $0["id"] as! CVarArg) == rtid }) {
                     lblRoute.text = lstRoutes[indexToDelete]["name"] as? String
+                    HomePageViewController.selfieLoginActive = 0
                     let rtname: String = lstRoutes[indexToDelete]["name"] as! String
                     print(rtname)
                    myDyTp.updateValue(lItem(id: rtid, name: rtname,FWFlg: ""), forKey: "RUT")
@@ -745,6 +749,45 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
     }
     
     @IBAction func SaveMyDayPlan(_ sender: Any) {
+        if (HomePageViewController.selfieLoginActive == 1){
+            if(PhotosCollection.shared.PhotoList.count>0){
+               print("In Data")
+            }else{
+                openCamera()
+            }
+            
+            
+           
+                if(PhotosCollection.shared.PhotoList.count>0){
+                    for i in 0...PhotosCollection.shared.PhotoList.count-1{
+                        let item: [String: Any] = PhotosCollection.shared.PhotoList[i] as! [String : Any]
+                        print(item["FileName"]  as! String)
+                        let sep = item["FileName"]  as! String
+                        let fullNameArr = sep.components(separatedBy: "_")
+                        
+                        let phono = fullNameArr[2]
+                        var fullid = "_\(phono)"
+                        print(fullid)
+                        ImgName = ",\"profilepic\":{\"imgurl\":\"\(fullid)\"}"
+                        getLocatio()
+                
+                    }
+                }
+               
+                print("My Day Plan Not Sumbite")
+            
+            
+
+        }else{
+           //openCamera()
+            getLocatio()
+            print("My Day Plan Sumbite")
+        }
+        
+        
+       /* */
+    }
+    func getLocatio(){
         var Leavtyp = leavWorktype
         print(Leavtyp)
  
@@ -781,9 +824,6 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
             viewController.setViewControllers([myDyPln], animated: true)
             UIApplication.shared.windows.first?.rootViewController = viewController
         }
-        
-        
-       /* */
     }
     
     
@@ -806,8 +846,11 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                     }
                 }
             }
+            print(HomePageViewController.selfieLoginActive)
+      
             
-            let jsonString = "[{\"tbMyDayPlan\":{\"wtype\":\"'" + (myDyTp["WT"]?.id ?? "") + "'\",\"sf_member_code\":\"'" + (myDyTp["HQ"]?.id ?? SFCode) + "'\",\"stockist\":\"'" + (myDyTp["DIS"]?.id ?? "") + "'\",\"stkName\":\"" + (myDyTp["DIS"]?.name ?? "") + "\",\"dcrtype\":\"App\",\"cluster\":\"'" + (myDyTp["RUT"]?.id ?? "") + "'\",\"custid\":\"" + (myDyTp["RUT"]?.id ?? "") + "\",\"custName\":\"" + (myDyTp["RUT"]?.name ?? "") + "\",\"address\":\"" + sAddress + "\",\"remarks\":\"'" + (txRem.text as! String ?? "" ) + "'\",\"OtherWors\":\"\",\"FWFlg\":\"'" + (myDyTp["WT"]?.FWFlg ?? "") + "'\",\"SundayWorkigFlag\":\"''\",\"Place_Inv\":\"\",\"WType_SName\":\"" + (myDyTp["WT"]?.name ?? "") + "\",\"ClstrName\":\"'" + (myDyTp["RUT"]?.name ?? "") + "'\",\"AppVersion\":\"Vi_2.4.0\",\"self\":1,\"location\":\"" + slocation + "\",\"dcr_activity_date\":\"'" + dateString + "'\",\"worked_with\":\"'" + strJWCd.replacingOccurrences(of: ";", with: ",") + "'\"}}]"
+            
+            let jsonString = "[{\"tbMyDayPlan\":{\"wtype\":\"'" + (myDyTp["WT"]?.id ?? "") + "'\",\"sf_member_code\":\"'" + (myDyTp["HQ"]?.id ?? SFCode) + "'\",\"stockist\":\"'" + (myDyTp["DIS"]?.id ?? "") + "'\",\"stkName\":\"" + (myDyTp["DIS"]?.name ?? "") + "\",\"dcrtype\":\"App\",\"cluster\":\"'" + (myDyTp["RUT"]?.id ?? "") + "'\",\"custid\":\"" + (myDyTp["RUT"]?.id ?? "") + "\",\"custName\":\"" + (myDyTp["RUT"]?.name ?? "") + "\",\"address\":\"" + sAddress + "\",\"remarks\":\"'" + (txRem.text as! String ?? "" ) + "'\",\"OtherWors\":\"\",\"FWFlg\":\"'" + (myDyTp["WT"]?.FWFlg ?? "") + "'\",\"SundayWorkigFlag\":\"''\",\"Place_Inv\":\"\",\"WType_SName\":\"" + (myDyTp["WT"]?.name ?? "") + "\",\"ClstrName\":\"'" + (myDyTp["RUT"]?.name ?? "") + "'\",\"AppVersion\":\"Vi_2.4.0\",\"self\":1,\"location\":\"" + slocation + "\",\"dcr_activity_date\":\"'" + dateString + "'\",\"worked_with\":\"'" + strJWCd.replacingOccurrences(of: ";", with: ",") + "'\"\(ImgName)}}]"
        // let jsonString: String = ""
         //AppVersion\":\"Vi1.1.0\
 
@@ -815,6 +858,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
             "data": jsonString //"["+jsonString+"]"
         ]
         print(params)
+            print(self.SFCode)
         AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+"dcr/save&divisionCode="+self.DivCode+"&rSF="+self.SFCode+"&sfCode="+self.SFCode, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
             AFdata in
             self.LoadingDismiss()
@@ -877,4 +921,11 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
             }
         }
     }
+    @objc private func openCamera(){
+        let vc=self.storyboard?.instantiateViewController(withIdentifier: "PhotoGallary") as!  PhotoGallary
+
+        vc.modalPresentationStyle = .overCurrentContext
+        self.present(vc, animated: true, completion: nil)
+    }
 }
+

@@ -296,6 +296,7 @@ class BrandReviewVisit: IViewController, UITableViewDataSource, UITableViewDeleg
     
     
     @IBAction func SubmitCall(_ sender: Any) {
+       
         if validateForm() == false {
             return
         }
