@@ -7,6 +7,7 @@
 
 import Foundation
 import Alamofire
+import UIKit
 
 class ImageUploader {
     func uploadImage(SFCode: String,image: UIImage,fileName: String)

@@ -27,6 +27,7 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
     @IBOutlet weak var mMainMnu: UIImageView!
     @IBOutlet weak var DashBoradTB: UITableView!
     @IBOutlet weak var currentdate: UILabel!
+   
     var lstMyplnList: [AnyObject] = []
     var TodayDate: [String:AnyObject] = [:]
     var routeNames = [String]()
@@ -55,6 +56,7 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
     var TodayDetls:[Todaydate] = []
     var strMenuList:[mnuItem]=[]
     var SFCode: String = "", StateCode: String = "", DivCode: String = ""
+    public static var selfieLoginActive = 0
     
     let LocalStoreage = UserDefaults.standard
     
@@ -129,7 +131,7 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
                     self.navigationController?.pushViewController(myDyPln, animated: true)
                     return
                 }else{
-                
+                    HomePageViewController.selfieLoginActive = 1
                     let lstMyPlnData: String = self.LocalStoreage.string(forKey: "Mydayplan")!
                     if let list = GlobalFunc.convertToDictionary(text: lstMyPlnData) as? [AnyObject] {
                         self.lstMyplnList = list;
@@ -517,8 +519,8 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
 
 
 //Server username
-//username =
-//Password = 
+//username =Developer
+//Password = DevFMCG@1234
 
 //MYSORE DEMO 1
 //123
