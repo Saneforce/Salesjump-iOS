@@ -27,7 +27,11 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
     @IBOutlet weak var mMainMnu: UIImageView!
     @IBOutlet weak var DashBoradTB: UITableView!
     @IBOutlet weak var currentdate: UILabel!
-   
+    @IBOutlet weak var Managerdas: UILabel!
+    @IBOutlet weak var DayEnd: UILabel!
+    @IBOutlet weak var DayEandClosBt: UIButton!
+    @IBOutlet weak var DayEndView: UIView!
+    
     var lstMyplnList: [AnyObject] = []
     var TodayDate: [String:AnyObject] = [:]
     var routeNames = [String]()
@@ -63,6 +67,21 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
     override func viewDidLoad() {
         DashBoradTB.delegate=self
         DashBoradTB.dataSource=self
+        
+        
+        Managerdas.layer.cornerRadius = 20
+        Managerdas.layer.borderWidth = 3.0
+        Managerdas.layer.borderColor = UIColor(red: 0.16, green: 0.50, blue: 0.73, alpha: 1.00).cgColor
+        Managerdas.addTarget(target: self, action: #selector(MangerBtTap))
+        
+        DayEnd.layer.cornerRadius = 20
+        DayEnd.layer.borderWidth = 3.0
+        DayEnd.layer.borderColor = UIColor(red: 0.16, green: 0.50, blue: 0.73, alpha: 1.00).cgColor//Colore = 10ADC2
+        DayEnd.addTarget(target: self, action: #selector(OpenDayEndView))
+        
+      
+        
+        
         
        // LocalStoreage.removeObject(forKey: "Mydayplan")
         
@@ -508,7 +527,23 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         
         self.present(vc, animated: true, completion: nil)
     }
+    @objc func MangerBtTap(){
+        let storyboard = UIStoryboard(name: "ManagerDashboard", bundle: nil)
+        let viewController = storyboard.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
+    let myDyPln = storyboard.instantiateViewController(withIdentifier: "ManagerDashboard") as! ManagerDashboard
+       self.navigationController?.pushViewController(myDyPln, animated: true)
+        UIApplication.shared.windows.first?.rootViewController = navigationController
+    }
+    @objc func OpenDayEndView(){
+        DayEndView.isHidden = false
+    }
+    
+    @IBAction func DayEndView(_ sender: Any) {
+        DayEndView.isHidden = true
+    }
 }
+
+
 //Username: Sankafo2,aachi-testso2
 //Paswoord :123,123
 
@@ -525,5 +560,6 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
 //MYSORE DEMO 1
 //123
 
-
+//ENGL-MR00121
+//PASS = EBIL
 

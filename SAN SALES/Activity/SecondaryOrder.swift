@@ -137,15 +137,18 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         }
         if let list = GlobalFunc.convertToDictionary(text: lstProdData) as? [AnyObject] {
             lstAllProducts = list;
+            print(lstProdData)
         }
         if let list = GlobalFunc.convertToDictionary(text: lstUnitData) as? [AnyObject] {
             lstAllUnitList = list;
         }
         if let list = GlobalFunc.convertToDictionary(text: lstSchemData) as? [AnyObject] {
             lstSchemList = list;
+            print(lstSchemData)
         }
         if let list = GlobalFunc.convertToDictionary(text: lstRateData) as? [AnyObject] {
             lstRateList = list;
+            print(lstRateList)
         }
         if lstBrands.count>0{
             let item: [String: Any]=lstBrands[0] as! [String : Any]
@@ -331,8 +334,12 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
             }
             cell.imgSelect?.image = nil
         } else if tbPrvOrderProduct == tableView {
+            print(lstPrvOrder)
             let item: [String: Any]=lstPrvOrder[indexPath.row] as! [String : Any]
+            print(item)
+            print([indexPath.row])
             let id=String(format: "%@", item["id"] as! CVarArg)
+            print(id)
             let ProdItems = lstAllProducts.filter({(product) in
                 let ProdId: String = String(format: "%@", product["id"] as! CVarArg)
                 return Bool(ProdId == id)
@@ -387,7 +394,8 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
             
             
             let items: [AnyObject] = VisitData.shared.ProductCart.filter ({ (Cart) in
-                
+                print(Cart)
+                print(id    )
                 if Cart["id"] as! String == id {
                     return true
                 }
@@ -965,8 +973,11 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         print(ProdItem)
         
         let TotQty: Double = Double((sQty as! NSString).intValue * (sUomConv as! NSString).intValue)
-        
+        print(lstSchemList)
         let Schemes: [AnyObject] = lstSchemList.filter ({ (item) in
+            print(item)
+            print(id)
+            print(TotQty)
             if item["PCode"] as! String == id && (item["Scheme"] as! NSString).doubleValue <= TotQty {
                 return true
             }
@@ -1008,10 +1019,20 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
             Disc = Schemes[0]["Disc"] as! String
             if (Disc != "") {
                 dis = ItmValue * (Double(Disc)! / 100);
+                print(dis)
             }
             Schmval = String(format: "%.02f", dis);
             ItmValue = ItmValue - dis;
         }
+        
+        print(Scheme)
+        print(FQ)
+        print(OffQty)
+        print(OffProd)
+        print(OffProdNm)
+        print(Rate)
+        print(Schmval)
+        print(Disc)
         if items.count>0 {
             print(VisitData.shared.ProductCart)
             if let i = VisitData.shared.ProductCart.firstIndex(where: { (item) in
@@ -1021,7 +1042,6 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
                 return false
             })
             {
-
                 let itm: [String: Any]=["id": id,"Qty": sQty,"UOM": sUom, "UOMNm": sUomNm, "UOMConv": sUomConv, "SalQty": TotQty,"NetWt": sNetUnt,"Scheme": Scheme,"FQ": FQ,"OffQty": OffQty,"OffProd":OffProd,"OffProdNm":OffProdNm,"Rate": Rate,"Value": (TotQty*Rate), "Disc": Disc, "DisVal": Schmval, "NetVal": ItmValue];
                 let jitm: AnyObject = itm as AnyObject
                 VisitData.shared.ProductCart[i] = jitm
@@ -1034,6 +1054,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
             VisitData.shared.ProductCart.append(jitm)
             
         }
+        print(VisitData.shared.ProductCart)
         updateOrderValues(refresh: refresh)
     }
     @objc private func deleteItem(_ sender: UITapGestureRecognizer) {
@@ -1153,6 +1174,8 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         
         var sPItems:String = ""
         var sPItems2:String = ""
+        print(lstPrvOrder.count)
+        print(VisitData.shared.ProductCart.count)
         self.ShowLoading(Message: "Data Submitting Please wait...")
         for i in 0...self.lstPrvOrder.count-1{
             let item: [String: Any]=self.lstPrvOrder[i] as! [String : Any]
@@ -1375,8 +1398,8 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
        
     }
      else{
-         
-         AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+"dcr/save&divisionCode=" + self.DivCode + "&rSF=" + self.SFCode + "&sfCode=" + self.SFCode, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
+         print(params)
+         AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"dcr/save&divisionCode=" + self.DivCode + "&rSF=" + self.SFCode + "&sfCode=" + self.SFCode, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
          AFdata in
          self.LoadingDismiss()
          PhotosCollection.shared.PhotoList = []

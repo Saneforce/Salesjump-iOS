@@ -186,7 +186,6 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
             print(list)
         }
         
-        
         let sfid=String(format: "%@", lstPlnDetail[0]["subordinateid"] as! CVarArg)
         //MydayPlanCtrl.SfidString = sfid
         print(sfid)
