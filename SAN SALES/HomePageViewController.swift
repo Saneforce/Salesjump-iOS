@@ -79,7 +79,7 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         Managerdas.layer.borderColor = UIColor(red: 0.10, green: 0.59, blue: 0.81, alpha: 1.00).cgColor
         Managerdas.addTarget(target: self, action: #selector(MangerBtTap))
         
-        Managerdas.isHidden = true
+        //Managerdas.isHidden = true
         if(UserSetup.shared.BrndRvwNd > 0){
             Managerdas.isHidden = true
         }

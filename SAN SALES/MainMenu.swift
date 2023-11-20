@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import Alamofire
 
 extension Notification.Name {
     static let didRegistered = Notification.Name("didRegistered")
@@ -31,6 +32,9 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
     var lstDist: [AnyObject] = []
     var lstAllRoutes: [AnyObject] = []
     var lstRoutes: [AnyObject] = []
+    var lat: Double = 0.0
+    var log: Double = 0.0
+    var SFCode: String = "", StateCode: String = "", DivCode: String = ""
     let LocalStoreage = UserDefaults.standard
     
     override func viewDidLoad() {
@@ -71,12 +75,56 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
 //        if UserSetup.shared.BrndRvwNd > 0{
 //            selectedid()
 //        }
+        getUserDetails()
+    }
+    func getUserDetails(){
+        let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
+        let data = Data(prettyPrintedJson!.utf8)
+        guard let prettyJsonData = try? JSONSerialization.jsonObject(with: data, options:[]) as? [String: Any] else {
+            print("Error: Cannot convert JSON object to Pretty JSON data")
+            return
+        }
+        
+        SFCode = prettyJsonData["sfCode"] as? String ?? ""
+        StateCode = prettyJsonData["State_Code"] as? String ?? ""
+        DivCode = prettyJsonData["divisionCode"] as? String ?? ""
     }
     @IBAction func userLogout(_ sender: Any) {
         //dismissedAllAlert()
         
+        LocationService.sharedInstance.getNewLocation(location: { location in
+            print ("New  : "+location.coordinate.latitude.description + ":" + location.coordinate.longitude.description)
+            if let latitude = Double(location.coordinate.latitude.description),
+                let longitude = Double(location.coordinate.longitude.description) {
+
+                 // Assign the values to your Double variables
+                self.lat = latitude
+                self.log = longitude
+
+                 // Now you can use lat and log as Double values
+             }
+            
+        }, error:{ errMsg in
+            
+            print (errMsg)
+            let alert = UIAlertController(title: "Information", message: errMsg, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
+                return
+            })
+            
+        })
+        
+        
+        
+        
+        
         let alert = UIAlertController(title: "Confirmation", message: "Do you want Logout ?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
+            
+            print(self.lat)
+            print(self.log)
+            self.DayEndSub(lat:self.lat, log: self.log)
+            
             UserDefaults.standard.removeObject(forKey: "UserLogged")
             self.dismiss(animated: true)
             /*{
@@ -96,6 +144,71 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
         })
         self.present(alert, animated: true)
     }
+    
+    func DayEndSub(lat:Double,log:Double){
+     
+        print(lat)
+        print(log)
+        let axn = "get/logouttime"
+         let apiKey: String = "\(axn)&divisionCode=\(DivCode)&SrtEndNd=0&sfCode=\(SFCode)"
+
+         VisitData.shared.cInTime = GlobalFunc.getCurrDateAsString()
+         var date = ""
+         var time = ""
+         let dateString = VisitData.shared.cInTime
+         let dateFormatter = DateFormatter()
+         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+
+         // Convert the string to a Date object
+         if let inputDate = dateFormatter.date(from: dateString) {
+             // Extract date and time components
+             let calendar = Calendar.current
+             let dateComponents = calendar.dateComponents([.year, .month, .day], from: inputDate)
+             let timeComponents = calendar.dateComponents([.hour, .minute, .second], from: inputDate)
+
+             // Print the date and time components
+             if let year = dateComponents.year, let month = dateComponents.month, let day = dateComponents.day,
+                let hour = timeComponents.hour, let minute = timeComponents.minute, let second = timeComponents.second {
+                 print("Date: \(year)-\(month)-\(day)")
+                 print("Time: \(hour):\(minute):\(second)")
+                 date = "\(year)-\(month)-\(day)"
+                 time = "\(hour):\(minute):\(second)"
+             }
+         } else {
+             print("Unable to parse the date string.")
+         }
+
+         // Now you can use the 'date' and 'time' variables as needed
+         print("Formatted Date: \(date)")
+         print("Formatted Time: \(time)")
+
+        
+        var location_lat = "\(self.lat)"
+        var location_log = "\(self.log)"
+        print(location_lat)
+        print(location_log)
+     
+        let jsonString2 = "{\"Lattitude\":\"\(location_lat)\",\"Langitude\":\"\(location_log)\",\"currentTime\":\"\(VisitData.shared.cInTime)\",\"date_time\":\"'\(VisitData.shared.cInTime)'\",\"date\":\"'\(date)'\",\"time\":\"\(time)\",\"remarks\":\"\"}"
+         
+             let params: Parameters = [
+                 "data":jsonString2
+             ]
+             print(params)
+         AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+apiKey, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+                 
+                 AFdata in
+                 print(AFdata)
+                 //self.LoadingDismiss()
+                 switch AFdata.result
+                 {
+                 case .success(let value):
+                     print(value)
+                 case .failure(let error):
+                     Toast.show(message: error.errorDescription ?? "", controller: self)
+                 }
+             }
+    }
+    
     @objc func onDidRegistered(_ notification: Notification) {
        
             let storyboard = UIStoryboard(name: "Main", bundle: nil) 
