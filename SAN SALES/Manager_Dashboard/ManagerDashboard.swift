@@ -14,7 +14,7 @@ class ManagerDashboard: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         BackBT.addTarget(target: self, action: #selector(GotoHome))
-      
+        
     }
     
 

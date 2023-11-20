@@ -684,6 +684,7 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
                     print(cnt)
                     logOutMod = cnt
                     print(logOutMod)
+                    DayEnd.isHidden = true
                     if (logOutMod == 0){
                         DayEnd.isHidden = false
                     }
