@@ -5,9 +5,10 @@
 //  Created by Anbu SaneForce on 03/03/22.
 //
 import Foundation
+import Alamofire
 import UIKit
 import MapKit
-import Alamofire
+
 
 class HomePageViewController: IViewController, UITableViewDelegate, UITableViewDataSource, UITextViewDelegate{
    
@@ -79,9 +80,9 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         Managerdas.layer.borderColor = UIColor(red: 0.10, green: 0.59, blue: 0.81, alpha: 1.00).cgColor
         Managerdas.addTarget(target: self, action: #selector(MangerBtTap))
         
-        //Managerdas.isHidden = true
+       // Managerdas.isHidden = true
         if(UserSetup.shared.BrndRvwNd > 0){
-            Managerdas.isHidden = true
+            Managerdas.isHidden = false
         }
         DayEnd.isHidden = true
         DayEnd.layer.cornerRadius = 20
@@ -129,7 +130,8 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         
         strMenuList.append(mnuItem.init(MnuId: 1, MenuName: UserSetup.shared.SecondaryCaption, MenuImage: "mnuPrimary"))
         strMenuList.append(mnuItem.init(MnuId: 2, MenuName: UserSetup.shared.PrimaryCaption, MenuImage: "mnuPrimary"))
-        if UserSetup.shared.BrndRvwNd > 0{
+        print(UserSetup.shared.BrndRvwNd)
+        if (UserSetup.shared.BrndRvwNd > 0) {
             strMenuList.append(mnuItem.init(MnuId: 3, MenuName: UserSetup.shared.BrandReviewVisit, MenuImage: "mnuPrimary"))
         }
         mnulist.constant = CGFloat(87*self.strMenuList.count)
