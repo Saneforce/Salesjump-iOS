@@ -6,9 +6,10 @@
 //
 import Foundation
 import UIKit
+import MapKit
 import Alamofire
 
-class HomePageViewController: IViewController, UITableViewDelegate, UITableViewDataSource{
+class HomePageViewController: IViewController, UITableViewDelegate, UITableViewDataSource, UITextViewDelegate{
    
     
    // @IBOutlet weak var mnulistHeight: NSLayoutConstraint!
@@ -27,11 +28,17 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
     @IBOutlet weak var mMainMnu: UIImageView!
     @IBOutlet weak var DashBoradTB: UITableView!
     @IBOutlet weak var currentdate: UILabel!
-   
+    @IBOutlet weak var Managerdas: UILabel!
+    @IBOutlet weak var DayEnd: UILabel!
+    @IBOutlet weak var DayEandClosBt: UIButton!
+    @IBOutlet weak var DayEndView: UIView!
+    @IBOutlet weak var EndRmk: UITextView!
+    @IBOutlet weak var DayendBT: UILabel!
     var lstMyplnList: [AnyObject] = []
     var TodayDate: [String:AnyObject] = [:]
     var routeNames = [String]()
     var routeNames1 = [String]()
+    var logOutMod = 1
     
     struct mnuItem: Codable {
         let MnuId: Int
@@ -61,8 +68,43 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
     let LocalStoreage = UserDefaults.standard
     
     override func viewDidLoad() {
+        
+       
         DashBoradTB.delegate=self
         DashBoradTB.dataSource=self
+        
+        
+        Managerdas.layer.cornerRadius = 20
+        Managerdas.layer.borderWidth = 3.0
+        Managerdas.layer.borderColor = UIColor(red: 0.10, green: 0.59, blue: 0.81, alpha: 1.00).cgColor
+        Managerdas.addTarget(target: self, action: #selector(MangerBtTap))
+        
+        //Managerdas.isHidden = true
+        if(UserSetup.shared.BrndRvwNd > 0){
+            Managerdas.isHidden = true
+        }
+        DayEnd.isHidden = true
+        DayEnd.layer.cornerRadius = 20
+        DayEnd.layer.borderWidth = 3.0
+        DayEnd.layer.borderColor = UIColor(red: 0.10, green: 0.59, blue: 0.81, alpha: 1.00).cgColor//Colore = 10ADC2
+        
+        DayEnd.addTarget(target: self, action: #selector(OpenDayEndView))
+        EndRmk.layer.borderWidth = 2.0
+        EndRmk.layer.borderColor = UIColor.gray.cgColor
+        EndRmk.layer.cornerRadius = 5
+        
+        EndRmk.delegate = self
+
+              // Add a UITapGestureRecognizer to dismiss the keyboard when tapping outside the UITextView
+              let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+              view.addGestureRecognizer(tapGesture)
+        
+        
+        DayendBT.layer.cornerRadius = 5
+        DayendBT.addTarget(target: self, action: #selector(ClikDayEnd))
+        
+   
+        
         
        // LocalStoreage.removeObject(forKey: "Mydayplan")
         
@@ -157,6 +199,7 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
             Dashboard()
         }
         DashboardNew()
+        LOG_OUTMODE()
     }
   
     func getUserDetails(){
@@ -508,7 +551,155 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         
         self.present(vc, animated: true, completion: nil)
     }
+    @objc func MangerBtTap(){
+        let storyboard = UIStoryboard(name: "ManagerDashboard", bundle: nil)
+        let viewController = storyboard.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
+    let myDyPln = storyboard.instantiateViewController(withIdentifier: "ManagerDashboard") as! ManagerDashboard
+       self.navigationController?.pushViewController(myDyPln, animated: true)
+        UIApplication.shared.windows.first?.rootViewController = navigationController
+    }
+    @objc func OpenDayEndView(){
+        DayEndView.isHidden = false
+    }
+    
+    @IBAction func DayEndView(_ sender: Any) {
+        DayEndView.isHidden = true
+    }
+    @objc func ClikDayEnd(){
+        LocationService.sharedInstance.getNewLocation(location: { location in
+            print ("New  : "+location.coordinate.latitude.description + ":" + location.coordinate.longitude.description)
+            //self.ShowLoading(Message: "Submitting Please wait...")
+           // self.saveDayTP(location: location)
+            self.DayEndSub(Loction: location)
+        }, error:{ errMsg in
+            //self.LoadingDismiss()
+            print (errMsg)
+            let alert = UIAlertController(title: "Information", message: errMsg, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
+                return
+            })
+            
+        })
+        
+ 
+    }
+    func DayEndSub(Loction: CLLocation){
+     
+        EndRmk.delegate = self
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tapGesture)
+        let axn = "get/logouttime"
+         let apiKey: String = "\(axn)&divisionCode=\(DivCode)&SrtEndNd=0&sfCode=\(SFCode)"
+
+         VisitData.shared.cInTime = GlobalFunc.getCurrDateAsString()
+         var date = ""
+         var time = ""
+         let dateString = VisitData.shared.cInTime
+         let dateFormatter = DateFormatter()
+         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+
+         // Convert the string to a Date object
+         if let inputDate = dateFormatter.date(from: dateString) {
+             // Extract date and time components
+             let calendar = Calendar.current
+             let dateComponents = calendar.dateComponents([.year, .month, .day], from: inputDate)
+             let timeComponents = calendar.dateComponents([.hour, .minute, .second], from: inputDate)
+
+             // Print the date and time components
+             if let year = dateComponents.year, let month = dateComponents.month, let day = dateComponents.day,
+                let hour = timeComponents.hour, let minute = timeComponents.minute, let second = timeComponents.second {
+                 print("Date: \(year)-\(month)-\(day)")
+                 print("Time: \(hour):\(minute):\(second)")
+                 date = "\(year)-\(month)-\(day)"
+                 time = "\(hour):\(minute):\(second)"
+             }
+         } else {
+             print("Unable to parse the date string.")
+         }
+
+         // Now you can use the 'date' and 'time' variables as needed
+         print("Formatted Date: \(date)")
+         print("Formatted Time: \(time)")
+
+         
+         
+         
+         print(VisitData.shared.cInTime)
+         var Remardata = ""
+         if let Reamrk = EndRmk.text{
+             print(Reamrk)
+             Remardata = Reamrk
+         }
+        if Remardata == "" {
+            Toast.show(message: "Select the Reason", controller: self)
+            return
+        }
+   
+        var location_lat = Loction.coordinate.latitude.description
+        var location_log = Loction.coordinate.longitude.description
+         let jsonString = "{\"Lattitude\":\"\(location_lat)\",\"Langitude\":\"\(location_log)\",\"StartTime\":0,\"currentTime\":\"\(VisitData.shared.cInTime)\",\"date_time\":\"'\(VisitData.shared.cInTime)'\",\"date\":\"'\(date)'\",\"time\":\"\(time)\",\"remarks\":\"\(Remardata)\",\"day_end_km\":\"\"}"
+        
+        let jsonString2 = "{\"Lattitude\":\"\(location_lat)\",\"Langitude\":\"\(location_log)\",\"currentTime\":\"\(VisitData.shared.cInTime)\",\"date_time\":\"'\(VisitData.shared.cInTime)'\",\"date\":\"'\(date)'\",\"time\":\"\(time)\",\"remarks\":\"\(Remardata)\"}"
+         
+             let params: Parameters = [
+                 "data":jsonString2
+             ]
+             print(params)
+         AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+apiKey, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+                 
+                 AFdata in
+                 print(AFdata)
+                 //self.LoadingDismiss()
+                 switch AFdata.result
+                 {
+                 case .success(let value):
+                     print(value)
+
+                     DayEndView.isHidden = true
+                     LOG_OUTMODE()
+                     Toast.show(message: "Day End has been submitted successfully", controller: self)
+                 case .failure(let error):
+                     Toast.show(message: error.errorDescription ?? "", controller: self)
+                 }
+             }
+    }
+  
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+            if text == "\n" {
+                textView.resignFirstResponder()
+                return false
+            }
+            return true
+        }
+
+        @objc func dismissKeyboard() {
+            view.endEditing(true)
+        }
+    func LOG_OUTMODE() {
+        AF.request(APIClient.shared.BaseURL + APIClient.shared.DBURL1 + "get/logout_day&sfCode=\(SFCode)", method: .post, parameters: nil, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self] AFdata in
+            print(AFdata)
+            switch AFdata.result {
+            case .success(let value):
+                if let json = value as? [String: Any], let cnt = json["cnt"] as? Int {
+                    print(cnt)
+                    logOutMod = cnt
+                    print(logOutMod)
+                    DayEnd.isHidden = true
+                    if (logOutMod == 0){
+                        DayEnd.isHidden = false
+                    }
+                } else {
+                    print("Invalid response format")
+                }
+            case .failure(let error):
+                Toast.show(message: error.errorDescription ?? "", controller: self)
+            }
+        }
+    }
+
 }
+
+
 //Username: Sankafo2,aachi-testso2
 //Paswoord :123,123
 
@@ -525,5 +716,6 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
 //MYSORE DEMO 1
 //123
 
-
+//ENGL-MR00121
+//PASS = EBIL
 

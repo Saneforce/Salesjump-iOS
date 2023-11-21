@@ -181,6 +181,7 @@ class ViewController: IViewController {
             switch AFdata.result
             {
                 case .success(let value):
+                print(value)
                 if let json = value as? [String: Any] {
                     if json["success"] as! Bool == false {
                         Toast.show(message: json["msg"] as! String) //, controller: self
