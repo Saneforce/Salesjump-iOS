@@ -13,6 +13,13 @@ class ManagerDashboard: UIViewController, UICollectionViewDelegate, UICollection
     @IBOutlet weak var cvCategory: UICollectionView!
     @IBOutlet weak var DateView: UIView!
     
+    @IBOutlet weak var view1: UIView!
+    @IBOutlet weak var view2: UIView!
+    @IBOutlet weak var view3: UIView!
+    @IBOutlet weak var view4: UIView!
+    @IBOutlet weak var view5: UIView!
+    
+    
     var lstBrands: [AnyObject] = []
        var Manager_Cap: [String] = ["Attendance", "Summary", "Performance", "Location", "Coverage"]
 
@@ -26,11 +33,7 @@ class ManagerDashboard: UIViewController, UICollectionViewDelegate, UICollection
 
            cvCategory.delegate = self
            cvCategory.dataSource = self
-
-           // Add swipe gesture recognizer
-           let rightSwipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(_:)))
-           rightSwipeGesture.direction = .right
-           cvCategory.addGestureRecognizer(rightSwipeGesture)
+        
 
            BackBT.isUserInteractionEnabled = true
            BackBT.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(GotoHome)))
@@ -55,25 +58,8 @@ class ManagerDashboard: UIViewController, UICollectionViewDelegate, UICollection
            cell.lblText?.text = Manager_Cap[indexPath.row]
            return cell
        }
-
-       func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-           navigateToNextPage()
-       }
-
-       @objc private func handleSwipe(_ gesture: UISwipeGestureRecognizer) {
-           if gesture.direction == .right {
-               navigateToNextPage()
-           }
-       }
-
        @objc private func GotoHome() {
            navigationController?.popViewController(animated: true)
        }
 
-       private func navigateToNextPage() {
-           // Add your navigation logic here
-           // For example, pushing a new view controller
-           let nextViewController = testViewController() // Replace with your actual view controller
-           navigationController?.pushViewController(nextViewController, animated: true)
-       }
    }
