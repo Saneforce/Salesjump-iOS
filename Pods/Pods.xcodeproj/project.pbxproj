@@ -214,8 +214,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				525C5150AFA7C273F098CBFD43F78BC6 /* Foundation.framework in Frameworks */,
-				3F56EFBE2A03256C00939C23 /* FSCalendar.framework in Frameworks */,
-				3F56EFB92A03256700939C23 /* Alamofire.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -270,9 +268,9 @@
 		5C8E673AB0F464C4D85120D297F53ABA /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				5D797E9A5C5782CE845840781FA1CC81 /* Alamofire.framework */,
-				95209B8BB966524BC76543F99C75F5FE /* FSCalendar.framework */,
-				A6A9CDC817879AAF265378BDA1D7F68E /* Pods_SAN_SALES.framework */,
+				5D797E9A5C5782CE845840781FA1CC81 /* Alamofire */,
+				95209B8BB966524BC76543F99C75F5FE /* FSCalendar */,
+				A6A9CDC817879AAF265378BDA1D7F68E /* Pods-SAN SALES */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -338,45 +336,6 @@
 				C101929A14ED76CB1C491A53DB47A70D /* Pods-SAN SALES */,
 			);
 			name = "Targets Support Files";
-			sourceTree = "<group>";
-		};
-		B1EB9BA16AF40D9619330235C0E63F21 /* FSCalendar */ = {
-			isa = PBXGroup;
-			children = (
-				A503960D166CD81127B55D87663F7611 /* FSCalendar.h */,
-				BA2BC7B648A5AFD12B77190A0DB81A01 /* FSCalendar.m */,
-				EF1FD5438AC2DBE91E7311AD8B9E4DDF /* FSCalendarAppearance.h */,
-				B7759AA0777EF1281EFD560BA519656F /* FSCalendarAppearance.m */,
-				204F483A47F5C321B4A2E2DBBF9C73AC /* FSCalendarCalculator.h */,
-				34B850B6BA33095D843347F52F2AA4D2 /* FSCalendarCalculator.m */,
-				1826C071C1E9419C69A9EDEBDC6F5794 /* FSCalendarCell.h */,
-				9835E6CC7B78BABF25BA4D669EC32640 /* FSCalendarCell.m */,
-				240C8DA227FA37825E096674664A0B91 /* FSCalendarCollectionView.h */,
-				83E82ED4E549121BF459BAF659932DE6 /* FSCalendarCollectionView.m */,
-				1E5AC1EFE91507F4B5932723C70E3EE7 /* FSCalendarCollectionViewLayout.h */,
-				5C19D5D143C2BBA8C9C850752B45A1A5 /* FSCalendarCollectionViewLayout.m */,
-				12F535C085356F2D0C3F79508A1FC67C /* FSCalendarConstants.h */,
-				03D3B21DF030E6C894D7778CDA5230F5 /* FSCalendarConstants.m */,
-				B697E057A53974A246AEF8DE7E762A97 /* FSCalendarDelegationFactory.h */,
-				48AE53ACCE336288C6773D15DB09CAAB /* FSCalendarDelegationFactory.m */,
-				C2F5AAF4ECE825FF8C8019886F8FCB08 /* FSCalendarDelegationProxy.h */,
-				26CD1B366F4BC4D81E7C40BEDD9B4334 /* FSCalendarDelegationProxy.m */,
-				BE6B9D64F6D02F77DF545CF76165DC65 /* FSCalendarDynamicHeader.h */,
-				DDC1FA65D223595909E03EE7B8BD0FA7 /* FSCalendarExtensions.h */,
-				DCB2B385F6E454DE7146EFBF7F1C348F /* FSCalendarExtensions.m */,
-				7941F4274191C1F4F7F128B57DBF9B53 /* FSCalendarHeaderView.h */,
-				091B046E8F38A249F94FEB2E9CC7427F /* FSCalendarHeaderView.m */,
-				CD4297A1C5242BC05B6C0A49E182B35C /* FSCalendarSeparatorDecorationView.h */,
-				935513F7F40080A98EED8002D7674F94 /* FSCalendarSeparatorDecorationView.m */,
-				E0AAF6A38F96BFA73F4D3519027A121E /* FSCalendarStickyHeader.h */,
-				3F64E2E726F18F88134B8185556F2588 /* FSCalendarStickyHeader.m */,
-				7E32EAE03C9CC06E57A4BB363382FF89 /* FSCalendarTransitionCoordinator.h */,
-				59A6D55742B6AE384AA490456172126A /* FSCalendarTransitionCoordinator.m */,
-				EDF7EAA934A685D89350195375C9C4CA /* FSCalendarWeekdayView.h */,
-				CD320297C8186B26294A447C36A4153D /* FSCalendarWeekdayView.m */,
-				A1166B771B0D56E961CFF480256C51C0 /* Support Files */,
-			);
-			path = FSCalendar;
 			sourceTree = "<group>";
 		};
 		BA4F31F07263C99FC76E66D632A59F09 /* Frameworks */ = {
@@ -531,7 +490,7 @@
 			);
 			name = FSCalendar;
 			productName = FSCalendar;
-			productReference = 95209B8BB966524BC76543F99C75F5FE /* FSCalendar.framework */;
+			productReference = 95209B8BB966524BC76543F99C75F5FE /* FSCalendar */;
 			productType = "com.apple.product-type.framework";
 		};
 		E709698961EB86B68732F83C27AB6E6F /* Pods-SAN SALES */ = {
@@ -551,7 +510,7 @@
 			);
 			name = "Pods-SAN SALES";
 			productName = Pods_SAN_SALES;
-			productReference = A6A9CDC817879AAF265378BDA1D7F68E /* Pods_SAN_SALES.framework */;
+			productReference = A6A9CDC817879AAF265378BDA1D7F68E /* Pods-SAN SALES */;
 			productType = "com.apple.product-type.framework";
 		};
 		EAAA1AD3A8A1B59AB91319EE40752C6D /* Alamofire */ = {
@@ -569,7 +528,7 @@
 			);
 			name = Alamofire;
 			productName = Alamofire;
-			productReference = 5D797E9A5C5782CE845840781FA1CC81 /* Alamofire.framework */;
+			productReference = 5D797E9A5C5782CE845840781FA1CC81 /* Alamofire */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -578,8 +537,8 @@
 		BFDFE7DC352907FC980B868725387E98 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1300;
-				LastUpgradeCheck = 1300;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
 			};
 			buildConfigurationList = 4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */;
 			compatibilityVersion = "Xcode 13.0";
@@ -758,6 +717,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 62F3C21CD13C96ECE64C628C2472DD35 /* Pods-SAN SALES.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -856,46 +816,11 @@
 			};
 			name = Debug;
 		};
-		90A4588B06F8745E7FCD1B00204D6241 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = C1BAA90F26160DC601EC04AF24DE5632 /* Alamofire.release.xcconfig */;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREFIX_HEADER = "Target Support Files/Alamofire/Alamofire-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/Alamofire/Alamofire-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MODULEMAP_FILE = "Target Support Files/Alamofire/Alamofire.modulemap";
-				PRODUCT_MODULE_NAME = Alamofire;
-				PRODUCT_NAME = Alamofire;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 5.5;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Release;
-		};
 		9B40CF363CC075D33ACAEA4E327ED924 /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = C274253A43D0DA735F6C25C2B65CC683 /* Pods-SAN SALES.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -991,41 +916,6 @@
 			};
 			name = Release;
 		};
-		9E98C04A5FA16D8AD5D48C1861179497 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = A7DCA6F241C430AF04C531C116C7FB8F /* Alamofire.debug.xcconfig */;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREFIX_HEADER = "Target Support Files/Alamofire/Alamofire-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/Alamofire/Alamofire-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MODULEMAP_FILE = "Target Support Files/Alamofire/Alamofire.modulemap";
-				PRODUCT_MODULE_NAME = Alamofire;
-				PRODUCT_NAME = Alamofire;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 5.5;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
 		A160472351B46C565056074E8EAAC9F7 /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4AD2B1692868351B2E2E49803C5A7FA4 /* FSCalendar.release.xcconfig */;
@@ -1041,7 +931,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/FSCalendar/FSCalendar-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/FSCalendar/FSCalendar-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
