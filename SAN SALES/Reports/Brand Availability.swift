@@ -266,8 +266,7 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
             let name: String = lstWType[indexToDelete]["name"] as! String
             
             vwHQCtrl.isHidden=false
-            
-            
+
             if typ != "F" {
                 vwHQCtrl.isHidden=true
                

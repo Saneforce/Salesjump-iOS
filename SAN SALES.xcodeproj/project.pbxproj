@@ -13,6 +13,7 @@
 		386A43932A1CC3E000CE1833 /* Submittedcalls.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 386A43922A1CC3E000CE1833 /* Submittedcalls.storyboard */; };
 		386A43952A1CC63100CE1833 /* PrimarySubmittedDCR.swift in Sources */ = {isa = PBXBuildFile; fileRef = 386A43942A1CC63100CE1833 /* PrimarySubmittedDCR.swift */; };
 		3883A09C2A176B6300B858CF /* SubmittedCalls.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3883A09B2A176B6300B858CF /* SubmittedCalls.swift */; };
+		38A0675E2B0B789B00AEAB48 /* testViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38A0675D2B0B789B00AEAB48 /* testViewController.swift */; };
 		38A2E9B22A0E1B940061B854 /* Brand Availability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38A2E9B12A0E1B940061B854 /* Brand Availability.swift */; };
 		38B05F502B04CAE50025D4C0 /* ManagerDashboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 38B05F4F2B04CAE50025D4C0 /* ManagerDashboard.storyboard */; };
 		38B05F542B05D7040025D4C0 /* ManagerDashboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38B05F532B05D7040025D4C0 /* ManagerDashboard.swift */; };
@@ -95,6 +96,7 @@
 		386A43922A1CC3E000CE1833 /* Submittedcalls.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Submittedcalls.storyboard; sourceTree = "<group>"; };
 		386A43942A1CC63100CE1833 /* PrimarySubmittedDCR.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimarySubmittedDCR.swift; sourceTree = "<group>"; };
 		3883A09B2A176B6300B858CF /* SubmittedCalls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmittedCalls.swift; sourceTree = "<group>"; };
+		38A0675D2B0B789B00AEAB48 /* testViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = testViewController.swift; sourceTree = "<group>"; };
 		38A2E9B12A0E1B940061B854 /* Brand Availability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Brand Availability.swift"; sourceTree = "<group>"; };
 		38B05F4F2B04CAE50025D4C0 /* ManagerDashboard.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ManagerDashboard.storyboard; sourceTree = "<group>"; };
 		38B05F532B05D7040025D4C0 /* ManagerDashboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagerDashboard.swift; sourceTree = "<group>"; };
@@ -204,6 +206,7 @@
 			isa = PBXGroup;
 			children = (
 				38B05F532B05D7040025D4C0 /* ManagerDashboard.swift */,
+				38A0675D2B0B789B00AEAB48 /* testViewController.swift */,
 			);
 			path = Manager_Dashboard;
 			sourceTree = "<group>";
@@ -568,6 +571,7 @@
 				3F06352A283A8C920027842E /* ColorTheme.swift in Sources */,
 				38D0F76829BB2447003EEB03 /* BrandReviewVisit.swift in Sources */,
 				3F97F9F62831B5950097166D /* AddNewCustomer.swift in Sources */,
+				38A0675E2B0B789B00AEAB48 /* testViewController.swift in Sources */,
 				3F5B2FC3284B59E400574D7C /* MsgLoader.swift in Sources */,
 				3F9F379C28631F2C002CC408 /* layBranswsSal.swift in Sources */,
 				3F28CC0C27D5302100B95964 /* MydayPlanCtrl.swift in Sources */,
