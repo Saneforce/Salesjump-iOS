@@ -12,7 +12,6 @@ class ManagerDashboard: UIViewController, UICollectionViewDelegate, UICollection
     @IBOutlet weak var BackBT: UIImageView!
     @IBOutlet weak var cvCategory: UICollectionView!
     @IBOutlet weak var DateView: UIView!
-    
     @IBOutlet weak var view1: UIView!
     @IBOutlet weak var view2: UIView!
     @IBOutlet weak var view3: UIView!
