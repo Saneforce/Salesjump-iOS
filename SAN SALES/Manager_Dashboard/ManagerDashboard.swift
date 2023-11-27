@@ -21,9 +21,9 @@ class ManagerDashboard: UIViewController, UICollectionViewDelegate, UICollection
     
     
     var lstBrands: [AnyObject] = []
-       var Manager_Cap: [String] = ["Attendance", "Summary", "Performance", "Location", "Coverage"]
+       var Manager_Cap: [String] = ["Attendance","Summary","Performance","Location","Coverage"]
 
-       override func viewDidLoad() {
+       override func viewDidLoad(){
            super.viewDidLoad()
            DateView.layer.cornerRadius = 10
            DateView.layer.shadowColor = UIColor.black.cgColor
