@@ -140,8 +140,8 @@ class DayReport:IViewController,UICollectionViewDelegate,UICollectionViewDataSou
                         self.lblPriVal.text=String(format: "%.02f", todayData["prioVal"] as! Double)
                         self.lblAttnTM.text=String(format: "%@", todayData["attTM"] as! String)
                         self.lblDyStTM.text=String(format: "%@", todayData["StartTime"] as! String)
-                        self.lblFCTM.text=String(format: "%@:00", todayData["secFC"] as! String)
-                        self.lblDyEnTM.text=String(format: "%@", todayData["EndTime"] as! String)
+                        self.lblDyEnTM.text=String(format: "%@:00", todayData["secFC"] as! String)
+                        self.lblFCTM.text=String(format: "%@", todayData["EndTime"] as! String)
                         
                         self.lblRetCnt.addTarget(target: self, action: #selector(ShowVstRet))
                         self.lblRetOrdCnt.addTarget(target: self, action: #selector(ShowPVstRet))
