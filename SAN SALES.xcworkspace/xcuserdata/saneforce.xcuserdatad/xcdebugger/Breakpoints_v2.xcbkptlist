@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   uuid = "7AB498D8-F50F-4C46-9FD2-E1EC990FD7A7"
+   type = "0"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "CAAEA3A5-D08E-4F95-BF8D-92264E3716EF"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SAN SALES/Reports/DayReport.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "144"
+            endingLineNumber = "144"
+            landmarkName = "getDayReport()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "CAAEA3A5-D08E-4F95-BF8D-92264E3716EF - 922020aed3128326"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.DayReport.getDayReport() -&gt; ()"
+                  moduleName = "SAN SALES"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/saneforce/Documents/GitHub/Salesjump-iOS/SAN%20SALES/Reports/DayReport.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "144"
+                  endingLineNumber = "144"
+                  offsetFromSymbolStart = "8248">
+               </Location>
+               <Location
+                  uuid = "CAAEA3A5-D08E-4F95-BF8D-92264E3716EF - 922020aed3128326"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.DayReport.getDayReport() -&gt; ()"
+                  moduleName = "SAN SALES"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/saneforce/Documents/GitHub/Salesjump-iOS/SAN%20SALES/Reports/DayReport.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "144"
+                  endingLineNumber = "144"
+                  offsetFromSymbolStart = "8148">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>
