@@ -8,16 +8,22 @@
 
 /* Begin PBXBuildFile section */
 		19247A3DB960E114A6C28FB3 /* Pods_SAN_SALES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 448C0B69977667C109C50683 /* Pods_SAN_SALES.framework */; };
+		381EF93D2B19DB9700CED65F /* UI+Constraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 381EF93C2B19DB9700CED65F /* UI+Constraints.swift */; };
 		385ED6042ABAB50400B43564 /* FSCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 385ED6032ABAB50400B43564 /* FSCalendar */; };
+		386889E22B1868F90015F20C /* RottPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 386889E12B1868F90015F20C /* RottPageViewController.swift */; };
 		386A43912A1CBB0200CE1833 /* SubmittedDCR.swift in Sources */ = {isa = PBXBuildFile; fileRef = 386A43902A1CBB0200CE1833 /* SubmittedDCR.swift */; };
 		386A43932A1CC3E000CE1833 /* Submittedcalls.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 386A43922A1CC3E000CE1833 /* Submittedcalls.storyboard */; };
 		386A43952A1CC63100CE1833 /* PrimarySubmittedDCR.swift in Sources */ = {isa = PBXBuildFile; fileRef = 386A43942A1CC63100CE1833 /* PrimarySubmittedDCR.swift */; };
 		3883A09C2A176B6300B858CF /* SubmittedCalls.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3883A09B2A176B6300B858CF /* SubmittedCalls.swift */; };
-		38A0675E2B0B789B00AEAB48 /* testViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38A0675D2B0B789B00AEAB48 /* testViewController.swift */; };
 		38A2E9B22A0E1B940061B854 /* Brand Availability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38A2E9B12A0E1B940061B854 /* Brand Availability.swift */; };
 		38B05F502B04CAE50025D4C0 /* ManagerDashboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 38B05F4F2B04CAE50025D4C0 /* ManagerDashboard.storyboard */; };
 		38B05F542B05D7040025D4C0 /* ManagerDashboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38B05F532B05D7040025D4C0 /* ManagerDashboard.swift */; };
 		38D0F76829BB2447003EEB03 /* BrandReviewVisit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38D0F76729BB2447003EEB03 /* BrandReviewVisit.swift */; };
+		38F6F5A92B19D2AC007090BF /* Attendance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38F6F5A82B19D2AC007090BF /* Attendance.swift */; };
+		38F6F5AB2B19D2C2007090BF /* Summary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38F6F5AA2B19D2C2007090BF /* Summary.swift */; };
+		38F6F5AD2B19D2DA007090BF /* Performance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38F6F5AC2B19D2DA007090BF /* Performance.swift */; };
+		38F6F5AF2B19D2ED007090BF /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38F6F5AE2B19D2ED007090BF /* Location.swift */; };
+		38F6F5B12B19D305007090BF /* Coverage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38F6F5B02B19D305007090BF /* Coverage.swift */; };
 		3F063527283A8C070027842E /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F063526283A8C070027842E /* CardView.swift */; };
 		3F06352A283A8C920027842E /* ColorTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F063529283A8C920027842E /* ColorTheme.swift */; };
 		3F06352C283BC9790027842E /* PhotoGallary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F06352B283BC9790027842E /* PhotoGallary.swift */; };
@@ -92,15 +98,21 @@
 
 /* Begin PBXFileReference section */
 		3453EBBCA5603BC17DBC6D2A /* Pods-SAN SALES.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SAN SALES.release.xcconfig"; path = "Target Support Files/Pods-SAN SALES/Pods-SAN SALES.release.xcconfig"; sourceTree = "<group>"; };
+		381EF93C2B19DB9700CED65F /* UI+Constraints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UI+Constraints.swift"; sourceTree = "<group>"; };
+		386889E12B1868F90015F20C /* RottPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RottPageViewController.swift; sourceTree = "<group>"; };
 		386A43902A1CBB0200CE1833 /* SubmittedDCR.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmittedDCR.swift; sourceTree = "<group>"; };
 		386A43922A1CC3E000CE1833 /* Submittedcalls.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Submittedcalls.storyboard; sourceTree = "<group>"; };
 		386A43942A1CC63100CE1833 /* PrimarySubmittedDCR.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimarySubmittedDCR.swift; sourceTree = "<group>"; };
 		3883A09B2A176B6300B858CF /* SubmittedCalls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmittedCalls.swift; sourceTree = "<group>"; };
-		38A0675D2B0B789B00AEAB48 /* testViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = testViewController.swift; sourceTree = "<group>"; };
 		38A2E9B12A0E1B940061B854 /* Brand Availability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Brand Availability.swift"; sourceTree = "<group>"; };
 		38B05F4F2B04CAE50025D4C0 /* ManagerDashboard.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ManagerDashboard.storyboard; sourceTree = "<group>"; };
 		38B05F532B05D7040025D4C0 /* ManagerDashboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagerDashboard.swift; sourceTree = "<group>"; };
 		38D0F76729BB2447003EEB03 /* BrandReviewVisit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrandReviewVisit.swift; sourceTree = "<group>"; };
+		38F6F5A82B19D2AC007090BF /* Attendance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Attendance.swift; sourceTree = "<group>"; };
+		38F6F5AA2B19D2C2007090BF /* Summary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Summary.swift; sourceTree = "<group>"; };
+		38F6F5AC2B19D2DA007090BF /* Performance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Performance.swift; sourceTree = "<group>"; };
+		38F6F5AE2B19D2ED007090BF /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
+		38F6F5B02B19D305007090BF /* Coverage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coverage.swift; sourceTree = "<group>"; };
 		3F063526283A8C070027842E /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		3F063529283A8C920027842E /* ColorTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorTheme.swift; sourceTree = "<group>"; };
 		3F06352B283BC9790027842E /* PhotoGallary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoGallary.swift; sourceTree = "<group>"; };
@@ -206,7 +218,13 @@
 			isa = PBXGroup;
 			children = (
 				38B05F532B05D7040025D4C0 /* ManagerDashboard.swift */,
-				38A0675D2B0B789B00AEAB48 /* testViewController.swift */,
+				386889E12B1868F90015F20C /* RottPageViewController.swift */,
+				38F6F5A82B19D2AC007090BF /* Attendance.swift */,
+				38F6F5AA2B19D2C2007090BF /* Summary.swift */,
+				38F6F5AC2B19D2DA007090BF /* Performance.swift */,
+				38F6F5AE2B19D2ED007090BF /* Location.swift */,
+				38F6F5B02B19D305007090BF /* Coverage.swift */,
+				381EF93C2B19DB9700CED65F /* UI+Constraints.swift */,
 			);
 			path = Manager_Dashboard;
 			sourceTree = "<group>";
@@ -571,30 +589,35 @@
 				3F06352A283A8C920027842E /* ColorTheme.swift in Sources */,
 				38D0F76829BB2447003EEB03 /* BrandReviewVisit.swift in Sources */,
 				3F97F9F62831B5950097166D /* AddNewCustomer.swift in Sources */,
-				38A0675E2B0B789B00AEAB48 /* testViewController.swift in Sources */,
 				3F5B2FC3284B59E400574D7C /* MsgLoader.swift in Sources */,
 				3F9F379C28631F2C002CC408 /* layBranswsSal.swift in Sources */,
 				3F28CC0C27D5302100B95964 /* MydayPlanCtrl.swift in Sources */,
 				3F0822BF29000D65009C33EA /* LeaveForm.swift in Sources */,
+				386889E22B1868F90015F20C /* RottPageViewController.swift in Sources */,
 				3FBF387527E4488100900007 /* APIClient.swift in Sources */,
 				3F0861BA28001D47006A30FB /* RoundedCornerView.swift in Sources */,
 				3F14EAEA27F73DAD00B0997B /* SecondaryVisit.swift in Sources */,
+				381EF93D2B19DB9700CED65F /* UI+Constraints.swift in Sources */,
 				3F3D4DDB27E810880063E271 /* GlobalFunc.swift in Sources */,
 				3F06353728421D870027842E /* ImageUploader.swift in Sources */,
 				3F28CC0F27D74D7200B95964 /* LabelSelect.swift in Sources */,
 				3F4CC197287B297A00BA2B4E /* NetworkMonitor.swift in Sources */,
+				38F6F5B12B19D305007090BF /* Coverage.swift in Sources */,
 				3F5816F0281172C400659510 /* MainMenu.swift in Sources */,
+				38F6F5A92B19D2AC007090BF /* Attendance.swift in Sources */,
 				3F97F9F8283216BD0097166D /* EditTextField.swift in Sources */,
 				3F063527283A8C070027842E /* CardView.swift in Sources */,
 				3F0ED6BE2872F61A00FF4460 /* OrderDetailView.swift in Sources */,
 				38B05F542B05D7040025D4C0 /* ManagerDashboard.swift in Sources */,
 				3F8BF29D27E99CCA00E1C41B /* CameraService.swift in Sources */,
+				38F6F5AD2B19D2DA007090BF /* Performance.swift in Sources */,
 				3F9F379A285B5FBA002CC408 /* ReportMenu.swift in Sources */,
 				3F0861BC28019419006A30FB /* SecondaryOrder.swift in Sources */,
 				3FF57C1D286C4A76009E3FE5 /* RptVisitDetail.swift in Sources */,
 				3F5B297828891D5C002D226C /* CheckPermissions.swift in Sources */,
 				3F28CC1127DC856400B95964 /* MasterSync.swift in Sources */,
 				3883A09C2A176B6300B858CF /* SubmittedCalls.swift in Sources */,
+				38F6F5AB2B19D2C2007090BF /* Summary.swift in Sources */,
 				3F28CC1427DC97F000B95964 /* cellListItem.swift in Sources */,
 				3F06352C283BC9790027842E /* PhotoGallary.swift in Sources */,
 				3F9F379828593C99002CC408 /* DayReport.swift in Sources */,
@@ -609,6 +632,7 @@
 				386A43912A1CBB0200CE1833 /* SubmittedDCR.swift in Sources */,
 				3F7CCF0328F14CA3002A7C03 /* GEOTagging.swift in Sources */,
 				3F0861C328053B3A006A30FB /* UserSetup.swift in Sources */,
+				38F6F5AF2B19D2ED007090BF /* Location.swift in Sources */,
 				3F2F810B27CEB30C0015E1CA /* AppDelegate.swift in Sources */,
 				3F063530283E04580027842E /* PrimaryVisit.swift in Sources */,
 				3F2F810D27CEB30C0015E1CA /* SceneDelegate.swift in Sources */,
