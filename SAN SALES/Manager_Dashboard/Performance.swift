@@ -6,11 +6,13 @@
 //
 
 import UIKit
+import Charts
 
 class Performance: UIViewController {
 
     @IBOutlet weak var OrderTyp: UIView!
     @IBOutlet weak var All_Field_Force: UIView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         OrderTyp.backgroundColor = .white
@@ -29,8 +31,5 @@ class Performance: UIViewController {
         All_Field_Force.layer.shadowOpacity = 0.7
         // Do any additional setup after loading the view.
     }
-    
-
-    
 
 }
