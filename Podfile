@@ -9,6 +9,7 @@ target 'SAN SALES' do
   pod 'Alamofire'
   pod 'FSCalendar'
   pod 'Parchment' # Add this line to include the Parchment pod
+  pod 'Charts'
 end
 
 post_install do |installer|

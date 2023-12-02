@@ -283,11 +283,11 @@
 		95209B8BB966524BC76543F99C75F5FE /* FSCalendar */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = FSCalendar; path = FSCalendar.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		96B61BD37441D94C67709D8F55C7AE48 /* PagingState.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PagingState.swift; path = Parchment/Enums/PagingState.swift; sourceTree = "<group>"; };
 		9B1292099BD12D5373078B2DFC3C7262 /* PagingMenuItemSize.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PagingMenuItemSize.swift; path = Parchment/Enums/PagingMenuItemSize.swift; sourceTree = "<group>"; };
-		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		9FFD348221DEC3753D7C4DA68A5B55EE /* FSCalendarSeparatorDecorationView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FSCalendarSeparatorDecorationView.m; path = FSCalendar/FSCalendarSeparatorDecorationView.m; sourceTree = "<group>"; };
 		A06E4FAED9AACAE7786DE6BA24C4BCE3 /* PagingItem.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PagingItem.swift; path = Parchment/Protocols/PagingItem.swift; sourceTree = "<group>"; };
 		A2F985B65C046A8760D1A1C7284982A6 /* URLEncodedFormEncoder.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = URLEncodedFormEncoder.swift; path = Source/URLEncodedFormEncoder.swift; sourceTree = "<group>"; };
-		A6A9CDC817879AAF265378BDA1D7F68E /* Pods-SAN SALES */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = "Pods-SAN SALES"; path = Pods_SAN_SALES.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A6A9CDC817879AAF265378BDA1D7F68E /* Pods_SAN_SALES.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SAN_SALES.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A6F4279BDA5958A15A4FBD23FD35334C /* Alamofire-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Alamofire-prefix.pch"; sourceTree = "<group>"; };
 		A80139E4D5A33CE5A0DBF740BD061740 /* PagingTitleCell.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PagingTitleCell.swift; path = Parchment/Classes/PagingTitleCell.swift; sourceTree = "<group>"; };
 		A955A6478CD616ACEB743B44A839EAE4 /* SessionDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SessionDelegate.swift; path = Source/SessionDelegate.swift; sourceTree = "<group>"; };
@@ -404,7 +404,7 @@
 				5D797E9A5C5782CE845840781FA1CC81 /* Alamofire */,
 				95209B8BB966524BC76543F99C75F5FE /* FSCalendar */,
 				BDD18ACB625B597CC06D7006C44D7FE5 /* Parchment */,
-				A6A9CDC817879AAF265378BDA1D7F68E /* Pods-SAN SALES */,
+				A6A9CDC817879AAF265378BDA1D7F68E /* Pods_SAN_SALES.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -475,7 +475,6 @@
 				152A220BEB77486902263B1CD23E1F38 /* UIView+constraints.swift */,
 				C4BF85C3A77A87A9E783E54D679458B8 /* Support Files */,
 			);
-			name = Parchment;
 			path = Parchment;
 			sourceTree = "<group>";
 		};
@@ -515,7 +514,6 @@
 				C17DC938C2BFBC434499D6027368B148 /* FSCalendarWeekdayView.m */,
 				C300773F1F74A80E4E5DB45A2DF3416A /* Support Files */,
 			);
-			name = FSCalendar;
 			path = FSCalendar;
 			sourceTree = "<group>";
 		};
@@ -561,7 +559,6 @@
 				BFDAF04A9DD8D6DCF7DCC64908030FB1 /* Validation.swift */,
 				F8F014FA602EA0D796BC49383553ABD0 /* Support Files */,
 			);
-			name = Alamofire;
 			path = Alamofire;
 			sourceTree = "<group>";
 		};
@@ -772,7 +769,7 @@
 			);
 			name = "Pods-SAN SALES";
 			productName = Pods_SAN_SALES;
-			productReference = A6A9CDC817879AAF265378BDA1D7F68E /* Pods-SAN SALES */;
+			productReference = A6A9CDC817879AAF265378BDA1D7F68E /* Pods_SAN_SALES.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		EAAA1AD3A8A1B59AB91319EE40752C6D /* Alamofire */ = {
