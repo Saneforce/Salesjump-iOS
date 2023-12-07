@@ -82,7 +82,7 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         
         Managerdas.isHidden = true
         if(UserSetup.shared.BrndRvwNd > 0){
-            Managerdas.isHidden = false
+            Managerdas.isHidden = true
         }
         DayEnd.isHidden = true
         DayEnd.layer.cornerRadius = 20

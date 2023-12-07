@@ -939,8 +939,9 @@
                                 <rect key="frame" x="0.0" y="59" width="393" height="793"/>
                                 <standardMapConfiguration key="preferredConfiguration"/>
                             </mapView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ske-bb-Ofs">
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ske-bb-Ofs">
                                 <rect key="frame" x="16" y="71" width="361" height="40"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="person.3.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="aT3-om-ldx">
                                         <rect key="frame" x="31" y="5" width="25" height="25"/>
@@ -961,23 +962,15 @@
                                     </imageView>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="OQp-jy-5t3"/>
-                                    <constraint firstAttribute="width" constant="361" id="VYo-MN-GOY"/>
-                                </constraints>
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Mav-fU-Lv2"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="Mav-fU-Lv2" firstAttribute="bottom" secondItem="ske-bb-Ofs" secondAttribute="bottom" constant="707" id="0bJ-Ir-iPx"/>
-                            <constraint firstItem="ske-bb-Ofs" firstAttribute="leading" secondItem="Mav-fU-Lv2" secondAttribute="leading" constant="16" id="8LC-mx-w1i"/>
-                            <constraint firstItem="NIp-89-Lzh" firstAttribute="trailing" secondItem="Mav-fU-Lv2" secondAttribute="trailing" id="CWs-PP-2ij"/>
-                            <constraint firstItem="ske-bb-Ofs" firstAttribute="top" secondItem="Mav-fU-Lv2" secondAttribute="top" constant="12" id="Cml-Nc-2g5"/>
-                            <constraint firstItem="NIp-89-Lzh" firstAttribute="bottom" secondItem="Mav-fU-Lv2" secondAttribute="bottom" constant="34" id="Rk3-at-YPK"/>
-                            <constraint firstItem="NIp-89-Lzh" firstAttribute="top" secondItem="Mav-fU-Lv2" secondAttribute="top" id="Z3j-Nu-UDE"/>
-                            <constraint firstItem="NIp-89-Lzh" firstAttribute="leading" secondItem="Mav-fU-Lv2" secondAttribute="leading" id="ZNH-Qg-Tjz"/>
-                            <constraint firstItem="Mav-fU-Lv2" firstAttribute="trailing" secondItem="ske-bb-Ofs" secondAttribute="trailing" constant="16" id="nWs-77-ICx"/>
+                            <constraint firstItem="NIp-89-Lzh" firstAttribute="top" secondItem="Mav-fU-Lv2" secondAttribute="top" id="5cv-Gu-wN3"/>
+                            <constraint firstAttribute="bottom" secondItem="NIp-89-Lzh" secondAttribute="bottom" id="anL-Mi-wZd"/>
+                            <constraint firstItem="NIp-89-Lzh" firstAttribute="leading" secondItem="Mav-fU-Lv2" secondAttribute="leading" id="r87-Bf-AhC"/>
+                            <constraint firstItem="NIp-89-Lzh" firstAttribute="trailing" secondItem="Mav-fU-Lv2" secondAttribute="trailing" id="vlA-6M-b4E"/>
                         </constraints>
                     </view>
                 </viewController>
