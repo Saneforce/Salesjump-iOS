@@ -11,6 +11,9 @@ class Coverage: UIViewController {
 
     @IBOutlet weak var Custom_date: UIView!
     @IBOutlet weak var From_and_to_date: UIView!
+    @IBOutlet weak var Retailers_View: UIView!
+    @IBOutlet weak var Route_View: UIView!
+    @IBOutlet weak var Distributors_View: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,6 +30,28 @@ class Coverage: UIViewController {
         From_and_to_date.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
         From_and_to_date.layer.shadowRadius = 3.0
         From_and_to_date.layer.shadowOpacity = 0.7
+        
+        
+        Retailers_View.backgroundColor = .white
+        Retailers_View.layer.cornerRadius = 10.0
+        Retailers_View.layer.shadowColor = UIColor.gray.cgColor
+        Retailers_View.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
+        Retailers_View.layer.shadowRadius = 3.0
+        Retailers_View.layer.shadowOpacity = 0.7
+        
+        Route_View.backgroundColor = .white
+        Route_View.layer.cornerRadius = 10.0
+        Route_View.layer.shadowColor = UIColor.gray.cgColor
+        Route_View.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
+        Route_View.layer.shadowRadius = 3.0
+        Route_View.layer.shadowOpacity = 0.7
+        
+        Distributors_View.backgroundColor = .white
+        Distributors_View.layer.cornerRadius = 10.0
+        Distributors_View.layer.shadowColor = UIColor.gray.cgColor
+        Distributors_View.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
+        Distributors_View.layer.shadowRadius = 3.0
+        Distributors_View.layer.shadowOpacity = 0.7
         // Do any additional setup after loading the view.
         
         
