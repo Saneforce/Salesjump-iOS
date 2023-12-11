@@ -9,7 +9,7 @@ import UIKit
 import Alamofire
 import FSCalendar
 
-class Attendance: UIViewController,FSCalendarDelegate,FSCalendarDataSource {
+class Attendance: UIViewController,FSCalendarDelegate,FSCalendarDataSource{
 
     @IBOutlet weak var DateView: UIView!
     @IBOutlet weak var Team_Size: UIView!
@@ -23,19 +23,30 @@ class Attendance: UIViewController,FSCalendarDelegate,FSCalendarDataSource {
     @IBOutlet weak var Leave_UILabel: UILabel!
     @IBOutlet weak var other_work_type_UILabel: UILabel!
     
+    @IBOutlet weak var Calender_View: UIView!
+    @IBOutlet weak var Calendar: FSCalendar!
+    @IBOutlet weak var Date_Lbl: UILabel!
+    @IBOutlet weak var Cancle_bt: UIButton!
+    @IBOutlet weak var Click_Det: UIView!
+    
+    @IBOutlet weak var Close_BT: UIButton!
+    
+    
     let axn="ManagerAttendanceData"
     var SFCode: String = "", StateCode: String = "", DivCode: String = "",Desig: String = ""
     let LocalStoreage = UserDefaults.standard
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        calendar.delegate=self
-        calendar.dataSource=self
+        Calendar.delegate=self
+        Calendar.dataSource=self
         Team_Size.layer.cornerRadius = 5
         In_Market.layer.cornerRadius = 5
         Not_Logged_in.layer.cornerRadius = 5
         Leave.layer.cornerRadius = 5
         Other_Work_Type.layer.cornerRadius = 5
+        Cancle_bt.layer.cornerRadius = 10
+        Close_BT.layer.cornerRadius = 10
         
         DateView.layer.cornerRadius = 10
         DateView.layer.shadowColor = UIColor.black.cgColor
@@ -43,8 +54,16 @@ class Attendance: UIViewController,FSCalendarDelegate,FSCalendarDataSource {
         DateView.layer.shadowOffset = CGSize(width: 0, height: 2)
         DateView.layer.shadowRadius = 4
         // Do any additional setup after loading the view.
+       
+        DateView.addTarget(target: self, action: #selector(selDOT))
+        Team_Size.addTarget(target: self, action: #selector(View_BT))
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd/MM/yyyy"
+        Date_Lbl.text = formatter.string(from: Date())
         getUserDetails()
-        Get_Data_Attendance()
+        let formatters = DateFormatter()
+        formatters.dateFormat = "yyyy-MM-dd"
+        Get_Data_Attendance(Date:formatters.string(from: Date()))
     }
     func getUserDetails(){
         let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
@@ -58,9 +77,9 @@ class Attendance: UIViewController,FSCalendarDelegate,FSCalendarDataSource {
         DivCode = prettyJsonData["divisionCode"] as? String ?? ""
         Desig=prettyJsonData["desigCode"] as? String ?? ""
     }
-    func Get_Data_Attendance() {
-        
-        let apiKey1: String = "ManagerAttendanceData&date=2023-12-11&division=\(DivCode)&desig=\(Desig)&divisionCode=\(DivCode)&rSF=\(SFCode)&sfcode=\(SFCode)&sfCode=\(SFCode)&stateCode=\(StateCode)"
+    func Get_Data_Attendance(Date:String) {
+        print(Date)
+        let apiKey1: String = "ManagerAttendanceData&date=\(Date)&division=\(DivCode)&desig=\(Desig)&divisionCode=\(DivCode)&rSF=\(SFCode)&sfcode=\(SFCode)&sfCode=\(SFCode)&stateCode=\(StateCode)"
         
         // Remove the unnecessary commas in the apiKey1 string
         let apiKeyWithoutCommas = apiKey1.replacingOccurrences(of: ",&", with: "&")
@@ -87,7 +106,6 @@ class Attendance: UIViewController,FSCalendarDelegate,FSCalendarDataSource {
                         Team_size_UILabel.text = String(totUser)
                     }
                     let CatWise = json["CatWise"] as? [[String: Any]]
-                    print(CatWise)
                     if let Typ = CatWise![0]["Cnt"] as? Int{
                         print(Typ)
                         In_Market_UILabel.text = String(Typ)
@@ -111,5 +129,45 @@ class Attendance: UIViewController,FSCalendarDelegate,FSCalendarDataSource {
             }
         }
     }
-
+    func maximumDate(for calendar: FSCalendar) -> Date {
+        return Date()
+    }
+    func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
+        let formatter = DateFormatter()
+        let formatters = DateFormatter()
+        formatter.dateFormat = "dd/MM/yyyy"
+        formatters.dateFormat = "yyyy-MM-dd"
+        //print("did select date \(formatter.string(from: date))")
+        print("did select date \(formatters.string(from: date))")
+        let selectedDates = calendar.selectedDates.map({formatter.string(from: $0)})
+        let selectedDates_Attendance = calendar.selectedDates.map({formatters.string(from: $0)})
+        print("selected dates is \(selectedDates_Attendance)")
+        if let firstDate = selectedDates_Attendance.first {
+            print("Selected date outside the box: \(firstDate)")
+            Get_Data_Attendance(Date:firstDate)
+        } else {
+            print("No selected dates.")
+        }
+        Date_Lbl.text = formatter.string(from: date)
+       
+        if monthPosition == .next || monthPosition == .previous {
+            calendar.setCurrentPage(date, animated: true)
+        }
+     
+        Calender_View.isHidden = true
+    }
+    @objc func View_BT(){
+        Click_Det.isHidden = false
+    }
+    @objc func selDOT(){
+        Calender_View.isHidden = false
+    }
+    @IBAction func Cancel_BT(_ sender: Any) {
+        Calender_View.isHidden = true
+    }
+    
+    @IBAction func BT_Close(_ sender: Any) {
+        Click_Det.isHidden = true
+    }
+    
 }
