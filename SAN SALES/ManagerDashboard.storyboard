@@ -112,11 +112,10 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="25" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d6G-Vz-dw1">
-                                        <rect key="frame" x="59" y="31" width="19" height="21"/>
+                                        <rect key="frame" x="59" y="31" width="25" height="25"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="15"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
+                                        <color key="textColor" red="0.85882352941176465" green="0.15294117647058825" blue="0.46666666666666667" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </label>
                                     <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qqe-cw-3LX">
                                         <rect key="frame" x="1" y="0.0" width="3" height="60"/>
@@ -261,11 +260,16 @@
                     </view>
                     <connections>
                         <outlet property="DateView" destination="X4h-xZ-rSV" id="5mr-lb-g8h"/>
-                        <outlet property="In_Market" destination="EHd-nz-Vhh" id="k5z-eZ-nA1"/>
-                        <outlet property="Leave" destination="4PL-7L-Qb2" id="Ywk-kh-O5Q"/>
-                        <outlet property="Not_Logged_in" destination="cA3-dk-zTH" id="v8P-Sm-gFO"/>
+                        <outlet property="In_Market" destination="EHd-nz-Vhh" id="ibD-lG-325"/>
+                        <outlet property="In_Market_UILabel" destination="ois-qY-bLC" id="hNV-j1-JZc"/>
+                        <outlet property="Leave" destination="4PL-7L-Qb2" id="5MF-7m-J9I"/>
+                        <outlet property="Leave_UILabel" destination="oH7-Zc-KbE" id="KmQ-YQ-6nI"/>
+                        <outlet property="Not_Logged_in" destination="cA3-dk-zTH" id="b54-oc-gWr"/>
+                        <outlet property="Not_Logged_in_UILabel" destination="A4R-cT-0IY" id="cgW-yo-blw"/>
                         <outlet property="Other_Work_Type" destination="vAd-BU-W2f" id="Jqb-cu-iqm"/>
                         <outlet property="Team_Size" destination="9Aj-1P-HwZ" id="t3S-mZ-haJ"/>
+                        <outlet property="Team_size_UILabel" destination="d6G-Vz-dw1" id="wZV-jG-oOX"/>
+                        <outlet property="other_work_type_UILabel" destination="Eav-zS-2ol" id="EJO-tT-Q6r"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SOO-jj-DqM" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

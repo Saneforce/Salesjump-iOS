@@ -726,7 +726,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
             return false
         }
         if myDyTp["WT"]?.FWFlg == "F" {
-            if UserSetup.shared.DistBased == 1 && UserSetup.shared.DistBased == 2{
+            if UserSetup.shared.DistBased == 1 || UserSetup.shared.DistBased == 2{
             if (myDyTp["DIS"]?.id ?? "") == "" {
                 Toast.show(message: "Select the Distributor", controller: self)
                 return false
