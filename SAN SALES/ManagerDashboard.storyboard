@@ -293,49 +293,61 @@
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </view>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UCT-0a-iBB">
-                                <rect key="frame" x="0.0" y="59" width="393" height="756"/>
+                                <rect key="frame" x="0.0" y="59" width="393" height="793"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5HO-x7-6Kh">
                                         <rect key="frame" x="8" y="8" width="377" height="50"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Total Team (2023-12-11)" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zk5-Zj-Vdf">
-                                                <rect key="frame" x="57" y="10" width="263" height="30"/>
+                                                <rect key="frame" x="36" y="15" width="305" height="21"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <fontDescription key="fontDescription" name="Poppins-SemiBold" family="Poppins" pointSize="15"/>
-                                                <nil key="textColor"/>
+                                                <fontDescription key="fontDescription" name="Poppins-Bold" family="Poppins" pointSize="18"/>
+                                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="aNV-3P-gVt">
-                                                <rect key="frame" x="0.0" y="48" width="377" height="502"/>
-                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                                <prototypes>
-                                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="PPa-hp-foz">
-                                                        <rect key="frame" x="0.0" y="50" width="377" height="43.666667938232422"/>
-                                                        <autoresizingMask key="autoresizingMask"/>
-                                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="PPa-hp-foz" id="hy8-0c-OB4">
-                                                            <rect key="frame" x="0.0" y="0.0" width="377" height="43.666667938232422"/>
-                                                            <autoresizingMask key="autoresizingMask"/>
-                                                        </tableViewCellContentView>
-                                                    </tableViewCell>
-                                                </prototypes>
-                                            </tableView>
-                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2Py-if-OSe">
-                                                <rect key="frame" x="149" y="560" width="80" height="35"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                <color key="backgroundColor" red="0.062745098039215685" green="0.67843137254901964" blue="0.76078431372549016" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <state key="normal" title="Button"/>
-                                                <buttonConfiguration key="configuration" style="plain" title="OK">
-                                                    <color key="baseForegroundColor" red="0.99215686270000003" green="0.94901960780000005" blue="0.97254901959999995" alpha="1" colorSpace="calibratedRGB"/>
-                                                </buttonConfiguration>
-                                                <connections>
-                                                    <action selector="BT_Close:" destination="Rtn-AG-ZvD" eventType="touchUpInside" id="nKm-Uy-9le"/>
-                                                </connections>
-                                            </button>
                                         </subviews>
-                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <color key="backgroundColor" red="0.062745098039215685" green="0.67843137254901964" blue="0.76078431372549016" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </view>
+                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="aNV-3P-gVt">
+                                        <rect key="frame" x="0.0" y="66" width="393" height="650"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <prototypes>
+                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" id="PPa-hp-foz" customClass="cellListItem" customModule="SAN_SALES" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="50" width="393" height="43.666667938232422"/>
+                                                <autoresizingMask key="autoresizingMask"/>
+                                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="PPa-hp-foz" id="hy8-0c-OB4">
+                                                    <rect key="frame" x="0.0" y="0.0" width="393" height="43.666667938232422"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <subviews>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="kumar" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="krZ-eS-2xf">
+                                                            <rect key="frame" x="24" y="6" width="330" height="30"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                            <fontDescription key="fontDescription" name="Poppins-SemiBold" family="Poppins" pointSize="12"/>
+                                                            <nil key="textColor"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                    </subviews>
+                                                </tableViewCellContentView>
+                                                <connections>
+                                                    <outlet property="lblText" destination="krZ-eS-2xf" id="diq-6x-Sfq"/>
+                                                </connections>
+                                            </tableViewCell>
+                                        </prototypes>
+                                    </tableView>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2Py-if-OSe">
+                                        <rect key="frame" x="0.0" y="724" width="393" height="69"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        <color key="backgroundColor" red="0.062745098039215685" green="0.67843137254901964" blue="0.76078431372549016" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="OK">
+                                            <color key="baseForegroundColor" red="0.99215686270000003" green="0.94901960780000005" blue="0.97254901959999995" alpha="1" colorSpace="calibratedRGB"/>
+                                        </buttonConfiguration>
+                                        <connections>
+                                            <action selector="Close:" destination="Rtn-AG-ZvD" eventType="touchUpInside" id="56v-9P-CGr"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </view>
@@ -360,7 +372,7 @@
                             <constraint firstItem="8Pn-EZ-h6y" firstAttribute="trailing" secondItem="vAd-BU-W2f" secondAttribute="trailing" constant="16" id="jpP-oa-RF2"/>
                             <constraint firstItem="8Pn-EZ-h6y" firstAttribute="trailing" secondItem="9Aj-1P-HwZ" secondAttribute="trailing" constant="16" id="lay-wC-WxF"/>
                             <constraint firstItem="9Aj-1P-HwZ" firstAttribute="leading" secondItem="8Pn-EZ-h6y" secondAttribute="leading" constant="16" id="mER-Qi-5UL"/>
-                            <constraint firstItem="8Pn-EZ-h6y" firstAttribute="bottom" secondItem="UCT-0a-iBB" secondAttribute="bottom" constant="3" id="pa3-6q-sFN"/>
+                            <constraint firstItem="8Pn-EZ-h6y" firstAttribute="bottom" secondItem="UCT-0a-iBB" secondAttribute="bottom" constant="-34" id="pa3-6q-sFN"/>
                             <constraint firstItem="X4h-xZ-rSV" firstAttribute="top" secondItem="8Pn-EZ-h6y" secondAttribute="top" constant="14" id="rP4-gn-k3d"/>
                             <constraint firstItem="cA3-dk-zTH" firstAttribute="leading" secondItem="EHd-nz-Vhh" secondAttribute="trailing" constant="21" id="tBM-Jr-XcR"/>
                             <constraint firstItem="UCT-0a-iBB" firstAttribute="leading" secondItem="8Pn-EZ-h6y" secondAttribute="leading" id="wkh-NR-IMs"/>
@@ -386,6 +398,8 @@
                         <outlet property="Other_Work_Type" destination="vAd-BU-W2f" id="Jqb-cu-iqm"/>
                         <outlet property="Team_Size" destination="9Aj-1P-HwZ" id="t3S-mZ-haJ"/>
                         <outlet property="Team_size_UILabel" destination="d6G-Vz-dw1" id="wZV-jG-oOX"/>
+                        <outlet property="Title_Date" destination="zk5-Zj-Vdf" id="rnJ-or-ggg"/>
+                        <outlet property="Total_Team_Table" destination="aNV-3P-gVt" id="05L-vy-tno"/>
                         <outlet property="other_work_type_UILabel" destination="Eav-zS-2ol" id="EJO-tT-Q6r"/>
                     </connections>
                 </viewController>
@@ -944,18 +958,108 @@
                                 </subviews>
                                 <color key="backgroundColor" red="0.94117647059999998" green="0.97647058819999999" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MN5-9i-Zr4">
+                                <rect key="frame" x="0.0" y="59" width="393" height="793"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="D1A-fh-snG">
+                                        <rect key="frame" x="8" y="8" width="377" height="50"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Select item" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="egv-eF-uOb">
+                                                <rect key="frame" x="36" y="15" width="305" height="21"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" name="Poppins-Bold" family="Poppins" pointSize="18"/>
+                                                <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                        <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
+                                    </view>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6vT-bd-X1l">
+                                        <rect key="frame" x="8" y="66" width="377" height="50"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                        <subviews>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="magnifyingglass" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="Zsp-ef-Brd">
+                                                <rect key="frame" x="316" y="12" width="25" height="25"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <color key="tintColor" systemColor="systemGray2Color"/>
+                                            </imageView>
+                                        </subviews>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                    </view>
+                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="LQQ-Ra-ccd">
+                                        <rect key="frame" x="0.0" y="139" width="393" height="561"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                    </tableView>
+                                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CVH-Nr-Q3W">
+                                        <rect key="frame" x="128" y="708" width="138" height="43"/>
+                                        <color key="backgroundColor" red="0.062745098040000002" green="0.67843137249999996" blue="0.76078431369999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="Close">
+                                            <color key="baseForegroundColor" red="0.99215686270000003" green="0.94901960780000005" blue="0.97254901959999995" alpha="1" colorSpace="calibratedRGB"/>
+                                        </buttonConfiguration>
+                                        <connections>
+                                            <action selector="All_Filed_Close:" destination="RLA-nF-3AS" eventType="touchUpInside" id="sUb-5b-baI"/>
+                                            <action selector="Close:" destination="Rtn-AG-ZvD" eventType="touchUpInside" id="9KK-e5-sSd"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="CVH-Nr-Q3W" secondAttribute="bottom" constant="42" id="0EG-30-8d7"/>
+                                    <constraint firstItem="CVH-Nr-Q3W" firstAttribute="leading" secondItem="MN5-9i-Zr4" secondAttribute="leading" constant="128" id="Nat-XH-O5K"/>
+                                    <constraint firstAttribute="trailing" secondItem="CVH-Nr-Q3W" secondAttribute="trailing" constant="127" id="ZSP-L5-n9E"/>
+                                </constraints>
+                            </view>
+                            <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oS5-DM-kLf">
+                                <rect key="frame" x="0.0" y="59" width="393" height="759"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UPU-sQ-PjY" customClass="FSCalendar">
+                                        <rect key="frame" x="16" y="8" width="361" height="450"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                    </view>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8pX-d8-lhb">
+                                        <rect key="frame" x="46" y="509" width="300" height="35"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" red="0.062745098040000002" green="0.67843137249999996" blue="0.76078431369999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="CANCEL">
+                                            <color key="baseForegroundColor" systemColor="secondarySystemBackgroundColor"/>
+                                        </buttonConfiguration>
+                                        <connections>
+                                            <action selector="Cancel_BT:" destination="Rtn-AG-ZvD" eventType="touchUpInside" id="QUl-W0-8JN"/>
+                                            <action selector="Cancel_Bt:" destination="RLA-nF-3AS" eventType="touchUpInside" id="UDb-Pg-Kmg"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="WuR-ql-Y8Y"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="MN5-9i-Zr4" firstAttribute="trailing" secondItem="WuR-ql-Y8Y" secondAttribute="trailing" id="BvK-gB-X9R"/>
+                            <constraint firstItem="MN5-9i-Zr4" firstAttribute="top" secondItem="3b9-el-9Jd" secondAttribute="top" constant="59" id="ZK8-wu-SuL"/>
+                            <constraint firstAttribute="bottom" secondItem="MN5-9i-Zr4" secondAttribute="bottom" id="xP5-NP-XOP"/>
+                            <constraint firstItem="MN5-9i-Zr4" firstAttribute="leading" secondItem="WuR-ql-Y8Y" secondAttribute="leading" id="yfo-MG-idg"/>
+                        </constraints>
                     </view>
                     <connections>
+                        <outlet property="All_Field_View" destination="MN5-9i-Zr4" id="mOO-bC-SWj"/>
                         <outlet property="All_Filed" destination="QqW-Oa-atM" id="ucq-VB-3gf"/>
+                        <outlet property="Cal_View" destination="oS5-DM-kLf" id="ZPj-ME-bAj"/>
+                        <outlet property="Calendar" destination="UPU-sQ-PjY" id="dVW-4S-pGT"/>
                         <outlet property="Date_View" destination="Rjd-IJ-y4d" id="Akd-rC-zcf"/>
+                        <outlet property="Date_lbl" destination="Q40-5d-VOx" id="0kx-bt-NH4"/>
+                        <outlet property="Search" destination="6vT-bd-X1l" id="bbX-Q4-88p"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="odc-u9-3FT" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1527.4809160305342" y="-213.38028169014086"/>
+            <point key="canvasLocation" x="1534" y="-226"/>
         </scene>
         <!--Performance-->
         <scene sceneID="tgR-Bq-f7g">
@@ -1603,6 +1707,7 @@
         <image name="chevron.down" catalog="system" width="128" height="70"/>
         <image name="circle.fill" catalog="system" width="128" height="123"/>
         <image name="linkpink" width="512" height="512"/>
+        <image name="magnifyingglass" catalog="system" width="128" height="117"/>
         <image name="person.3.fill" catalog="system" width="128" height="61"/>
         <systemColor name="opaqueSeparatorColor">
             <color red="0.77647058823529413" green="0.77647058823529413" blue="0.78431372549019607" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -1612,6 +1717,9 @@
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGray2Color">
+            <color red="0.68235294117647061" green="0.68235294117647061" blue="0.69803921568627447" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGray3Color">
             <color red="0.7803921568627451" green="0.7803921568627451" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
