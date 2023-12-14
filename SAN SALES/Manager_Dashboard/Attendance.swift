@@ -9,6 +9,8 @@ import UIKit
 import Alamofire
 import FSCalendar
 
+
+
 class Attendance: IViewController, UITableViewDelegate,
                   UITableViewDataSource,FSCalendarDelegate,FSCalendarDataSource{
    
@@ -89,6 +91,7 @@ class Attendance: IViewController, UITableViewDelegate,
         cell.lblText?.text = Total_Team_Name[indexPath.row]
         return cell
     }
+   
     
     
     func getUserDetails(){

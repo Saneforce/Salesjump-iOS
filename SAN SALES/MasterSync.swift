@@ -150,6 +150,7 @@ import BackgroundTasks
          strMasList.append(mnuItem.init(MasId: 26, MasName: "Payment Modes", MasImage: "mnuPrimary",StoreKey: "Pay_Types", ApiKey: "get/mas_payment&divisionCode="+(prettyJsonData["divisionCode"] as? String ?? "")+"&rSF="+SFCode+"&sfCode="+SFCode,fromData: [
             "orderBy":"[\"name asc\"]","desig":"mgr"
          ]))
+         
     
          
          

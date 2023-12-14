@@ -8,8 +8,11 @@
 import UIKit
 import Alamofire
 import FSCalendar
-
-class Summary: IViewController,FSCalendarDelegate,FSCalendarDataSource {
+struct sfDetails: Codable {
+    let id: String
+    let name: String
+}
+class Summary: IViewController,FSCalendarDelegate,FSCalendarDataSource, UITableViewDelegate, UITableViewDataSource {
 
     @IBOutlet weak var Date_View: UIView!
     @IBOutlet weak var Date_lbl: UILabel!
@@ -18,13 +21,20 @@ class Summary: IViewController,FSCalendarDelegate,FSCalendarDataSource {
     @IBOutlet weak var Calendar: FSCalendar!
     @IBOutlet weak var All_Field_View: UIView!
     @IBOutlet weak var Search: UIView!
-    
+    @IBOutlet weak var All_Filed_Name: UITableView!
+    var SfData: [sfDetails] = []
+    var targetId: String = ""
     var SelectDate : String = ""
+    let LocalStoreage = UserDefaults.standard
+    var SFCode: String = "", StateCode: String = "", DivCode: String = "",Desig: String = ""
     override func viewDidLoad() {
         super.viewDidLoad()
         
         Calendar.delegate=self
         Calendar.dataSource=self
+        
+        All_Filed_Name.delegate=self
+        All_Filed_Name.dataSource=self
         //Date_Card_View
         Date_View.backgroundColor = .white
         Date_View.layer.cornerRadius = 10.0
@@ -47,13 +57,35 @@ class Summary: IViewController,FSCalendarDelegate,FSCalendarDataSource {
         Search.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
         Search.layer.shadowRadius = 3.0
         Search.layer.shadowOpacity = 0.5
-        
+        getUserDetails()
+        Get_All_Field_Force()
         Date_View.addTarget(target: self, action: #selector(dateView))
         All_Filed.addTarget(target: self, action: #selector(FiledData))
         
         let formatter = DateFormatter()
         formatter.dateFormat = "dd/MM/yyyy"
         Date_lbl.text = formatter.string(from: Date())
+        let formatters = DateFormatter()
+        formatters.dateFormat = "yyyy-MM-dd"
+        Total_Team_Size_List(date: formatters.string(from: Date()))
+        
+    }
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        print(SfData)
+        return SfData.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell:cellListItem = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
+        cell.lblText?.text = SfData[indexPath.row].name
+        return cell
+    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let data =  SfData[indexPath.row].id
+        targetId = data
+        print(targetId)
+        Get_All_Field_Force()
+        All_Field_View.isHidden = true
     }
     func maximumDate(for calendar: FSCalendar) -> Date {
         return Date()
@@ -70,6 +102,7 @@ class Summary: IViewController,FSCalendarDelegate,FSCalendarDataSource {
         print("selected dates is \(selectedDates_Attendance)")
         if let firstDate = selectedDates_Attendance.first {
             print("Selected date outside the box: \(firstDate)")
+            Total_Team_Size_List(date: firstDate)
             SelectDate = firstDate
         } else {
             print("No selected dates.")
@@ -81,6 +114,167 @@ class Summary: IViewController,FSCalendarDelegate,FSCalendarDataSource {
         }
      
         Cal_View.isHidden = true
+    }
+    func getUserDetails(){
+        let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
+        let data = Data(prettyPrintedJson!.utf8)
+        guard let prettyJsonData = try? JSONSerialization.jsonObject(with: data, options:[]) as? [String: Any] else {
+            print("Error: Cannot convert JSON object to Pretty JSON data")
+            return
+        }
+        SFCode = prettyJsonData["sfCode"] as? String ?? ""
+        StateCode = prettyJsonData["State_Code"] as? String ?? ""
+        DivCode = prettyJsonData["divisionCode"] as? String ?? ""
+        Desig=prettyJsonData["desigCode"] as? String ?? ""
+    }
+    
+    func Get_All_Field_Force(){
+    
+        let apiKey1: String = "get/submgr&divisionCode=\(DivCode)&rSF=\(SFCode)&sfcode=\(SFCode)&stateCode=\(StateCode)&desig=\(Desig)"
+        let apiKeyWithoutCommas = apiKey1.replacingOccurrences(of: ",&", with: "&")
+        
+        AF.request(APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKeyWithoutCommas, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+            AFdata in
+            switch AFdata.result {
+                
+            case .success(let value):
+                print(value)
+                if let json = value as? [AnyObject]{
+                    guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
+                        print("Error: Cannot convert JSON object to Pretty JSON data")
+                        return
+                    }
+                    guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+                        print("Error: Could print JSON in String")
+                        return
+                    }
+                    print(prettyPrintedJson)
+                    if (targetId == ""){
+                        if let jsonData = try? JSONSerialization.data(withJSONObject: value, options: []),
+                           let jsonArray = try? JSONSerialization.jsonObject(with: jsonData) as? [[String: Any]] {
+                            var All_Id = [String]()
+                            for item in jsonArray {
+                                if  let id = item["id"] as? String{
+                                    All_Id.append(id)
+                                    
+                                }
+                            }
+                            print(All_Id)
+                            let encodedData = All_Id.map { element in
+                                return "%27\(element)%27"
+                            }
+                            
+                            let joinedString = encodedData.joined(separator: "%2C")
+                            print(joinedString)
+                            get_Summary_data(sfcode:joinedString)
+                            // SfData.append(sfDetails(id: joinedString, name: "All Field Force"))
+                        }else{
+                            print("Error: Unable to parse JSON")
+                        }
+                    }else{
+                        
+                        let matchingEntries = json.filter { entry in
+                            if let rtoSF = entry["rtoSF"] as? String {
+                                return rtoSF == targetId
+                            }
+                            return false
+                        }
+                        // Print matched entries
+                        print(matchingEntries)
+                        print("Matched Entries:")
+                        var select_Id = [String]()
+                        
+                        for entry in matchingEntries {
+                            print(entry)
+                            let rtoSF = entry["rtoSF"] as? String
+                            select_Id.append(rtoSF!)
+                        }
+                        let FilterData = select_Id.map { element in
+                            return "%27\(element)%27"
+                        }
+                        
+                        let joinedString_Data = FilterData.joined(separator: "%2C")
+                        print(joinedString_Data)
+                        
+                        get_Summary_data(sfcode:joinedString_Data)
+                    }
+                }
+            case .failure(let error):
+                Toast.show(message: error.errorDescription!)  //, controller: self
+            }
+        }
+    }
+    
+    func Total_Team_Size_List(date:String){
+        print(date)
+        SfData.removeAll()
+        let apiKey: String = "get/sfDetails&selected_date=\(date)&sf_code=\(SFCode)&division_code=\(DivCode)"
+        
+        let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
+        
+        AF.request(APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKeyWithoutCommas, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+            AFdata in
+            switch AFdata.result {
+                
+            case .success(let value):
+                print(value)
+                if let json = value as? [ AnyObject] {
+                    guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
+                        print("Error: Cannot convert JSON object to Pretty JSON data")
+                        return
+                    }
+                    guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+                        print("Error: Could print JSON in String")
+                        return
+                    }
+                    print(prettyPrintedJson)
+                    if let jsonData = try? JSONSerialization.data(withJSONObject: value, options: []),
+                       let jsonArray = try? JSONSerialization.jsonObject(with: jsonData) as? [[String: Any]] {
+                        SfData.append(sfDetails(id: "", name: "All Field Force"))
+                        
+                        for item in jsonArray {
+                            if let name = item["name"] as? String, let id = item["id"] as? String{
+                                SfData.append(sfDetails(id: id, name: name))
+                            }
+                        }
+                    } else {
+                        print("Error: Unable to parse JSON")
+                    }
+                    print(SfData)
+                    All_Filed_Name.reloadData()
+                }
+            case .failure(let error):
+                Toast.show(message: error.errorDescription!)  //, controller: self
+            }
+        }
+    }
+    func get_Summary_data(sfcode:String){
+    
+        let apiKey: String = "get/fieldForceData&date=\(SelectDate)&desig=\(Desig)&divisionCode=\(DivCode)rSF=\(SFCode)&sfcode=\(sfcode)&sfCode=\(SFCode)&stateCode=\(StateCode)"
+        let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
+        self.ShowLoading(Message: "Loading...")
+        AF.request(APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKeyWithoutCommas, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+            AFdata in
+            switch AFdata.result {
+            case .success(let value):
+                print(value)
+                self.LoadingDismiss()
+                if let json = value as? [String: AnyObject] {
+                    guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
+                        print("Error: Cannot convert JSON object to Pretty JSON data")
+                        return
+                    }
+                    guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+                        print("Error: Could print JSON in String")
+                        return
+                    }
+                    print(prettyPrintedJson)
+                }
+            case .failure(let error):
+                Toast.show(message: error.errorDescription!)  //, controller: self
+            }
+        }
+        
     }
     @objc func dateView(){
         Cal_View.isHidden = false
