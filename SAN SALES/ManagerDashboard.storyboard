@@ -1293,7 +1293,7 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="- Date -" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rI8-Hz-trh" customClass="LabelSelect" customModule="SAN_SALES" customModuleProvider="target">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="- Date -" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rI8-Hz-trh">
                                         <rect key="frame" x="8" y="26" width="137" height="34"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" red="0.93725490199999995" green="0.95294117649999999" blue="0.98431372549999996" alpha="1" colorSpace="calibratedRGB"/>
@@ -1308,7 +1308,7 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="- Date -" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="91b-J6-xEI" customClass="LabelSelect" customModule="SAN_SALES" customModuleProvider="target">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="- Date -" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="91b-J6-xEI">
                                         <rect key="frame" x="216" y="26" width="137" height="34"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" red="0.93725490199999995" green="0.95294117649999999" blue="0.98431372549999996" alpha="1" colorSpace="calibratedRGB"/>
@@ -1707,11 +1707,26 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="Coverage_Dis" destination="Q1a-s6-z2v" id="rio-Nf-gx8"/>
+                        <outlet property="Coverage_Ret" destination="zBh-lE-bCq" id="2x8-MS-u4R"/>
+                        <outlet property="Coverage_Rt" destination="AUF-0i-LL5" id="1rr-Kr-goL"/>
                         <outlet property="Custom_date" destination="1wQ-jO-heb" id="FBC-YU-VqS"/>
                         <outlet property="Distributors_View" destination="5GS-Cq-70t" id="UKI-Vl-usB"/>
+                        <outlet property="From_Date" destination="rI8-Hz-trh" id="40W-Wn-OuO"/>
                         <outlet property="From_and_to_date" destination="eY2-YG-2Gh" id="egE-aq-QXQ"/>
+                        <outlet property="New_Ret" destination="HwP-sN-OX1" id="40M-81-2DT"/>
+                        <outlet property="Not_Visited_Dis" destination="hB5-Tt-f2G" id="FEf-8c-Xod"/>
+                        <outlet property="Not_Visited_Ret" destination="5lP-zr-GdC" id="3S7-d5-E3b"/>
+                        <outlet property="Not_Visited_Rt" destination="p13-fX-JH0" id="JNp-76-TVq"/>
                         <outlet property="Retailers_View" destination="hbI-6X-Nbr" id="AF3-iP-Igp"/>
                         <outlet property="Route_View" destination="9Xf-Dt-gZq" id="bob-WW-jbz"/>
+                        <outlet property="To_Date" destination="91b-J6-xEI" id="VMp-fu-C9w"/>
+                        <outlet property="Total_Dis" destination="nVJ-Ue-iNV" id="8bz-57-HfX"/>
+                        <outlet property="Total_Ret" destination="bYC-cl-I0V" id="p6w-Nk-1jD"/>
+                        <outlet property="Total_Rt" destination="GMC-vp-djE" id="Slj-9Y-pCe"/>
+                        <outlet property="Visited_Dis" destination="Nds-xc-dz5" id="boW-cq-hDC"/>
+                        <outlet property="Visited_Ret" destination="WET-jE-u9h" id="74i-OZ-fUH"/>
+                        <outlet property="Visited_Rt" destination="rkW-8F-CK0" id="6l0-MY-1Ps"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hx2-9i-cxn" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

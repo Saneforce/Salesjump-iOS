@@ -67,6 +67,7 @@ class Summary: IViewController,FSCalendarDelegate,FSCalendarDataSource, UITableV
         Date_lbl.text = formatter.string(from: Date())
         let formatters = DateFormatter()
         formatters.dateFormat = "yyyy-MM-dd"
+        SelectDate = formatters.string(from: Date())
         Total_Team_Size_List(date: formatters.string(from: Date()))
         
     }
@@ -186,7 +187,7 @@ class Summary: IViewController,FSCalendarDelegate,FSCalendarDataSource, UITableV
                         
                         for entry in matchingEntries {
                             print(entry)
-                            let rtoSF = entry["rtoSF"] as? String
+                            let rtoSF = entry["id"] as? String
                             select_Id.append(rtoSF!)
                         }
                         let FilterData = select_Id.map { element in
@@ -249,8 +250,8 @@ class Summary: IViewController,FSCalendarDelegate,FSCalendarDataSource, UITableV
         }
     }
     func get_Summary_data(sfcode:String){
-    
-        let apiKey: String = "get/fieldForceData&date=\(SelectDate)&desig=\(Desig)&divisionCode=\(DivCode)rSF=\(SFCode)&sfcode=\(sfcode)&sfCode=\(SFCode)&stateCode=\(StateCode)"
+    print(SelectDate)
+        let apiKey: String = "get/fieldForceData&date=\(SelectDate)&desig=\(Desig)&divisionCode=\(DivCode)&rSF=\(SFCode)&sfcode=\(sfcode)&sfCode=\(SFCode)&stateCode=\(StateCode)"
         let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
         self.ShowLoading(Message: "Loading...")
         AF.request(APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKeyWithoutCommas, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
