@@ -37,8 +37,8 @@ class Coverage: UIViewController {
     var SFCode: String = "", StateCode: String = "", DivCode: String = "",Desig: String = ""
     let LocalStoreage = UserDefaults.standard
     var Coverage_Sfcode = ""
-    var Fromdate = ""
-    var Todate = ""
+    var Fromdate = "2023-12-15"
+    var Todate = "2023-12-18"
     override func viewDidLoad() {
         super.viewDidLoad()
         Custom_date.backgroundColor = .white
@@ -80,8 +80,8 @@ class Coverage: UIViewController {
         getUserDetails()
         let formatters = DateFormatter()
         formatters.dateFormat = "yyyy-MM-dd"
-        Fromdate = formatters.string(from: Date())
-        Todate = formatters.string(from: Date())
+       // Fromdate = formatters.string(from: Date())
+        //Todate = formatters.string(from: Date())
         Total_Team_Size_List(date:formatters.string(from: Date()))
         
     }
@@ -147,44 +147,87 @@ class Coverage: UIViewController {
             }
         }
     }
-    func Get_Coverage_data(){
+    func Get_Coverage_data() {
         print(Coverage_Sfcode)
-            let apiKey: String = "get/CoverageDetails&desig=\(Desig)&divisionCode=\(DivCode)&todate=\(Todate)&rSF=\(SFCode)&sfcode=\(Coverage_Sfcode)&sfCode=\(SFCode)&stateCode=\(StateCode)&fromdate=\(Fromdate)"
-            
-            let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
+        let apiKey: String = "get/CoverageDetails&desig=\(Desig)&divisionCode=\(DivCode)&todate=\(Todate)&rSF=\(SFCode)&sfcode=\(Coverage_Sfcode)&sfCode=\(SFCode)&stateCode=\(StateCode)&fromdate=\(Fromdate)"
+        
+        let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
+        
         self.ShowLoading(Message: "Get Coverage Data...")
-            AF.request(APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKeyWithoutCommas, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
-                AFdata in
-                switch AFdata.result {
+        
+        AF.request(APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKeyWithoutCommas, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self] AFdata in
+            switch AFdata.result {
+            case .success(let value):
+                print(value)
+                self.LoadingDismiss()
+                
+                if let json = value as? [String: Any],
+                   let totRetailArray = json["totRetail"] as? [[String: Int]],
+                   let totRetailDict = totRetailArray.first,
+                   let totalRetailer = totRetailDict["total_retailer"] {
                     
-                case .success(let value):
-                    print(value)
-                    self.LoadingDismiss()
-                    if let json = value as? [String: AnyObject] {
-                        guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
-                            print("Error: Cannot convert JSON object to Pretty JSON data")
-                            return
+                    print("Total Retailer: \(totalRetailer)")
+                    print(json)
+                    var ToalRot = 0
+                    var TotDis = 0
+                    Total_Ret.text = String(totalRetailer)
+                    if let total_route =  json["totRoute"] as? [[String: Int]],
+                       let totRetailDict = total_route.first,
+                       let totalroute = totRetailDict["total_route"]{
+                        print("Total Route: \(totalroute)")
+                        ToalRot = totalroute
+                        Total_Rt.text = String(totalroute)
+                    }
+                    if let totDis =  json["totDis"] as? [[String: Int]],
+                       let totRetailDict = totDis.first,
+                       let totalDis = totRetailDict["total_dis"]{
+                        print("Total Dis: \(totalDis)")
+                        TotDis = totalDis
+                        Total_Dis.text = String(totalDis)
+                    }
+                    
+                    if let visit_Details = json["visit_Details"] as? [[String:Int]]{
+                        if let visit_Ret = visit_Details[0]["Ret"]{
+                           let NotVis = totalRetailer - visit_Ret
+                            print(NotVis)
+                            Not_Visited_Ret.text = String(NotVis)
+                            Visited_Ret.text = String(visit_Ret)
+                            //cell.lblUOM?.text = String(format: "%@",item["OffUntName"] as! String)
+                            let Coverage_mul = Double(visit_Ret) / Double(totalRetailer)
+                            let Coverage = Double(Coverage_mul) * 100
+                            print(Coverage)
+                            Coverage_Ret.text = String(format: "%.2f",Coverage)
                         }
-                        guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
-                            print("Error: Could print JSON in String")
-                            return
-                        }
-                        print(prettyPrintedJson)
-                       // let totRetail = prettyPrintedJson["totRetail"] as? [AnyObject]
-                        if let jsonData = try? JSONSerialization.data(withJSONObject: json, options: []),
-                           let jsonArray = try? JSONSerialization.jsonObject(with: jsonData) as? [[String: AnyObject]] {
-                       print(jsonArray)
-                           // let Total_Ret = prettyPrintedJson["totRetail"] as? [String:Any]
+                        if let visit_dis = visit_Details[0]["dis"]{
+                            Not_Visited_Rt.text = String(ToalRot - visit_dis)
+                            Visited_Rt.text = String(visit_dis)
+                            let Coverage_mul = Double(visit_dis) / Double(ToalRot)
                            
-                        } else {
-                            print("Error: Unable to parse JSON")
+                            let Coverage = Double(Coverage_mul) * 100
+                            Coverage_Rt.text = String(format: "%.2f",Coverage)
+                        }
+                        if let visit_rout = visit_Details[0]["rout"]{
+                            Not_Visited_Dis.text = String(TotDis - visit_rout)
+                            Visited_Dis.text = String(visit_rout)
+                            let Coverage_mul = Double(visit_rout) / Double(TotDis)
+                            print(Coverage_mul)
+                            let Coverage = Double(Coverage_mul) * 100
+                            Coverage_Dis.text = String(format: "%.2f",Coverage)
                         }
                     }
-                case .failure(let error):
-                    Toast.show(message: error.errorDescription!)  //, controller: self
+                    if let newRetail =  json["newRetail"] as? [[String: Int]],
+                       let totRetailDict = newRetail.first,
+                       let totalroute = totRetailDict["new_retailer"]{
+                        print("New Retailer : \(totalroute)")
+                        New_Ret.text = String(totalroute)
+                    }
                 }
+                
+            case .failure(let error):
+                Toast.show(message: error.errorDescription!)
             }
-        
+        }
     }
+
 
 }

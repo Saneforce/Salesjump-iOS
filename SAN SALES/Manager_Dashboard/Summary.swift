@@ -22,6 +22,14 @@ class Summary: IViewController,FSCalendarDelegate,FSCalendarDataSource, UITableV
     @IBOutlet weak var All_Field_View: UIView!
     @IBOutlet weak var Search: UIView!
     @IBOutlet weak var All_Filed_Name: UITableView!
+    @IBOutlet weak var Total_Outlets: UILabel!
+    @IBOutlet weak var Total_Calls: UILabel!
+    @IBOutlet weak var Productive_Calls: UILabel!
+    @IBOutlet weak var Primary_Call: UILabel!
+    @IBOutlet weak var Secondary_Calls: UILabel!
+    @IBOutlet weak var Productivity: UILabel!
+    @IBOutlet weak var UPC: UILabel!
+    @IBOutlet weak var Net_Weight: UILabel!
     var SfData: [sfDetails] = []
     var targetId: String = ""
     var SelectDate : String = ""
@@ -113,8 +121,9 @@ class Summary: IViewController,FSCalendarDelegate,FSCalendarDataSource, UITableV
         if monthPosition == .next || monthPosition == .previous {
             calendar.setCurrentPage(date, animated: true)
         }
-     
+        Get_All_Field_Force()
         Cal_View.isHidden = true
+        
     }
     func getUserDetails(){
         let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
@@ -261,16 +270,58 @@ class Summary: IViewController,FSCalendarDelegate,FSCalendarDataSource, UITableV
                 print(value)
                 self.LoadingDismiss()
                 if let json = value as? [String: AnyObject] {
-                    guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
+                    guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
                         print("Error: Cannot convert JSON object to Pretty JSON data")
                         return
                     }
-                    guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
-                        print("Error: Could print JSON in String")
+                    
+                    guard let prettyPrintedJson = try? JSONSerialization.jsonObject(with: prettyJsonData, options: []) as? [String: Any] else {
+                        print("Error: Could not convert Pretty JSON data to Dictionary")
                         return
                     }
+                    
                     print(prettyPrintedJson)
+                    
+                    if let Secon_Det = prettyPrintedJson["SEC"] as? [[String: Any]] {
+                        var Total_Call = 0
+                        var Productive_Call = 0
+                        var UPClls = 0
+                        var Order_Val = 0
+                        
+                        for item in Secon_Det {
+                            let TC = item["TC"] as? Int
+                            let PC = item["PC"] as? Int
+                            let orderValue = Int((item["orderValue"] as? String)!)
+                            let UPC = item["UPC"] as? Int
+                            Total_Call = Total_Call + TC!
+                            Productive_Call = Productive_Call + PC!
+                            UPClls = UPClls + UPC!
+                            Order_Val = Order_Val + orderValue!
+                        }
+                        
+                        Total_Calls.text = String(Total_Call)
+                        Productive_Calls.text = String(Productive_Call)
+                        UPC.text = String(UPClls)
+                        Secondary_Calls.text = String(Order_Val)
+                        
+                        
+                        
+                    }
+                    if let PRI = prettyPrintedJson["PRI"] as? [[String: Any]]{
+                        print(PRI)
+                        var Order_Val = 0
+                        for item in PRI {
+                            let orderValue = Int((item["Order_Value"] as? String)!)
+                            Order_Val = Order_Val + orderValue!
+                        }
+                        Primary_Call.text = String(Order_Val)
+                    }
+                    
+                    if let OUTLET = prettyPrintedJson["OUTLET"] as? [[String: Any]]{
+                        Total_Outlets.text = String((OUTLET[0]["total_outlet"] as? Int)!)
+                    }
                 }
+
             case .failure(let error):
                 Toast.show(message: error.errorDescription!)  //, controller: self
             }
