@@ -30,6 +30,7 @@ class Summary: IViewController,FSCalendarDelegate,FSCalendarDataSource, UITableV
     @IBOutlet weak var Productivity: UILabel!
     @IBOutlet weak var UPC: UILabel!
     @IBOutlet weak var Net_Weight: UILabel!
+    @IBOutlet weak var Select_Field: UILabel!
     var SfData: [sfDetails] = []
     var targetId: String = ""
     var SelectDate : String = ""
@@ -92,6 +93,7 @@ class Summary: IViewController,FSCalendarDelegate,FSCalendarDataSource, UITableV
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let data =  SfData[indexPath.row].id
         targetId = data
+        Select_Field.text = SfData[indexPath.row].name
         print(targetId)
         Get_All_Field_Force()
         All_Field_View.isHidden = true
@@ -182,22 +184,31 @@ class Summary: IViewController,FSCalendarDelegate,FSCalendarDataSource, UITableV
                             print("Error: Unable to parse JSON")
                         }
                     }else{
-                        
+                        var Count = 0
                         let matchingEntries = json.filter { entry in
                             if let rtoSF = entry["rtoSF"] as? String {
+                                Count = Count + 1
                                 return rtoSF == targetId
                             }
                             return false
                         }
                         // Print matched entries
+                      
                         print(matchingEntries)
                         print("Matched Entries:")
                         var select_Id = [String]()
-                        
-                        for entry in matchingEntries {
-                            print(entry)
-                            let rtoSF = entry["id"] as? String
-                            select_Id.append(rtoSF!)
+                        if matchingEntries.isEmpty{
+                            select_Id.removeAll()
+                                for _ in 0..<Count {
+                                    select_Id.append(targetId)
+                                }
+                        }else{
+                            select_Id.removeAll()
+                            for entry in matchingEntries {
+                                print(entry)
+                                let rtoSF = entry["id"] as? String
+                                select_Id.append(rtoSF!)
+                            }
                         }
                         let FilterData = select_Id.map { element in
                             return "%27\(element)%27"
@@ -259,6 +270,7 @@ class Summary: IViewController,FSCalendarDelegate,FSCalendarDataSource, UITableV
         }
     }
     func get_Summary_data(sfcode:String){
+        print(sfcode)
     print(SelectDate)
         let apiKey: String = "get/fieldForceData&date=\(SelectDate)&desig=\(Desig)&divisionCode=\(DivCode)&rSF=\(SFCode)&sfcode=\(sfcode)&sfCode=\(SFCode)&stateCode=\(StateCode)"
         let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
@@ -287,22 +299,36 @@ class Summary: IViewController,FSCalendarDelegate,FSCalendarDataSource, UITableV
                         var Productive_Call = 0
                         var UPClls = 0
                         var Order_Val = 0
+                        var weightValue = 0
                         
                         for item in Secon_Det {
                             let TC = item["TC"] as? Int
                             let PC = item["PC"] as? Int
                             let orderValue = Int((item["orderValue"] as? String)!)
                             let UPC = item["UPC"] as? Int
+                            let weight = item["weightValue"] as? Int ?? 0
                             Total_Call = Total_Call + TC!
                             Productive_Call = Productive_Call + PC!
                             UPClls = UPClls + UPC!
                             Order_Val = Order_Val + orderValue!
+                            weightValue = weightValue + weight
                         }
                         
                         Total_Calls.text = String(Total_Call)
                         Productive_Calls.text = String(Productive_Call)
                         UPC.text = String(UPClls)
                         Secondary_Calls.text = String(Order_Val)
+                        Net_Weight.text = String(weightValue)+".00"
+                        var Productivity_Data: Int
+
+                        if Total_Call != 0 {
+                            Productivity_Data = Int(Productive_Call) / Total_Call * 100
+                        } else {
+                           
+                            Productivity_Data = 0 // Setting a default value
+                        }
+                        print(Productivity_Data)
+                        Productivity.text = String(Productivity_Data)+".00"
                         
                         
                         
@@ -311,8 +337,8 @@ class Summary: IViewController,FSCalendarDelegate,FSCalendarDataSource, UITableV
                         print(PRI)
                         var Order_Val = 0
                         for item in PRI {
-                            let orderValue = Int((item["Order_Value"] as? String)!)
-                            Order_Val = Order_Val + orderValue!
+                            let orderValue = Int((item["Order_Value"] as? Double)!)
+                            Order_Val = Order_Val + orderValue
                         }
                         Primary_Call.text = String(Order_Val)
                     }

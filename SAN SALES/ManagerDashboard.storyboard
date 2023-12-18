@@ -1002,7 +1002,7 @@
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7li-hv-3dR">
                                                             <rect key="frame" x="20" y="11" width="353" height="21"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                            <fontDescription key="fontDescription" name="Poppins-SemiBold" family="Poppins" pointSize="15"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
@@ -1083,6 +1083,7 @@
                         <outlet property="Productivity" destination="pVT-ER-M2V" id="bID-j0-fRU"/>
                         <outlet property="Search" destination="6vT-bd-X1l" id="bbX-Q4-88p"/>
                         <outlet property="Secondary_Calls" destination="MMi-Zc-rIX" id="798-r9-bH8"/>
+                        <outlet property="Select_Field" destination="oUT-P0-V2u" id="otd-eq-U7U"/>
                         <outlet property="Total_Calls" destination="yyO-s9-nzS" id="3Ur-hF-7Bj"/>
                         <outlet property="Total_Outlets" destination="HIY-Uy-O5B" id="wcb-zX-eE8"/>
                         <outlet property="UPC" destination="Jeg-zK-bGO" id="GuK-k1-4xI"/>
