@@ -7,8 +7,9 @@
 
 import UIKit
 import Alamofire
+import FSCalendar
 
-class Coverage: UIViewController {
+class Coverage: UIViewController,FSCalendarDelegate,FSCalendarDataSource {
 
     @IBOutlet weak var Custom_date: UIView!
     @IBOutlet weak var From_and_to_date: UIView!
@@ -33,14 +34,27 @@ class Coverage: UIViewController {
     @IBOutlet weak var Visited_Dis: UILabel!
     @IBOutlet weak var Coverage_Dis: UILabel!
     @IBOutlet weak var Not_Visited_Dis: UILabel!
+    @IBOutlet weak var Filtter_date: UIView!
+    @IBOutlet weak var ThiseMonth: UILabel!
+    @IBOutlet weak var Today: UILabel!
+    @IBOutlet weak var ThiseWeek: UILabel!
+    @IBOutlet weak var Calendar_Head: UILabel!
+    @IBOutlet weak var Calendars: FSCalendar!
+    @IBOutlet weak var Calendar_View: UIView!
     
     var SFCode: String = "", StateCode: String = "", DivCode: String = "",Desig: String = ""
     let LocalStoreage = UserDefaults.standard
     var Coverage_Sfcode = ""
-    var Fromdate = "2023-12-15"
-    var Todate = "2023-12-18"
+    var Fromdate = ""
+    var Todate = ""
+    let calendar = Calendar.current
+    let currentDate = Date()
+    var SelMode = ""
+    var FDate: Date = Date(),TDate: Date = Date()
     override func viewDidLoad() {
         super.viewDidLoad()
+        Calendars.delegate=self
+        Calendars.dataSource=self
         Custom_date.backgroundColor = .white
         Custom_date.layer.cornerRadius = 10.0
         Custom_date.layer.shadowColor = UIColor.gray.cgColor
@@ -77,13 +91,111 @@ class Coverage: UIViewController {
         Distributors_View.layer.shadowRadius = 3.0
         Distributors_View.layer.shadowOpacity = 0.7
         // Do any additional setup after loading the view.
+        Custom_date.addTarget(target: self, action: #selector(Viewopen))
+        ThiseMonth.addTarget(target: self, action: #selector(ThiseMonth_Date))
+        Today.addTarget(target: self, action: #selector(TodayDate))
+        ThiseWeek.addTarget(target: self, action: #selector(ThiseWeek_Date))
+        From_Date.addTarget(target: self, action: #selector(selDOF))
+        To_Date.addTarget(target: self, action: #selector(selDOT))
         getUserDetails()
-        let formatters = DateFormatter()
-        formatters.dateFormat = "yyyy-MM-dd"
+        ThiseMonth_Date()
+   
+       // let formatters = DateFormatter()
+        //formatters.dateFormat = "yyyy-MM-dd"
        // Fromdate = formatters.string(from: Date())
         //Todate = formatters.string(from: Date())
-        Total_Team_Size_List(date:formatters.string(from: Date()))
+       // Total_Team_Size_List(date:formatters.string(from: Date()))
         
+    }
+    @objc private func selDOF() {
+        SelMode = "DOF"
+        Calendar_Head.text="Select from date"
+        Calendars.reloadData()
+        Calendar_View.isHidden = false
+        
+    }
+    @objc private func selDOT() {
+        if From_Date.text == To_Date.text {
+            Toast.show(message: "Select From Date", controller: self)
+                    } else {
+            SelMode = "DOT"
+            Calendar_Head.text="Select to date"
+            Calendars.reloadData()
+            Calendar_View.isHidden = false
+        }
+    }
+    func openWin(Mode:String){
+    }
+    func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd-MM-yyyy"
+        print("did select date \(formatter.string(from: date))")
+       // let selectedDates = calendar.selectedDates.sorted(by: {formatter.string(from: $0)})
+        let selectedDates = calendar.selectedDates.map({formatter.string(from: $0)})
+        print("selected dates is \(selectedDates)")
+        if monthPosition == .next || monthPosition == .previous {
+            calendar.setCurrentPage(date, animated: true)
+        }
+        if SelMode == "DOF"{
+            FDate=date
+            print(selectedDates)
+            formatter.dateFormat = "yyyy-MM-dd"
+            
+            Calendars.reloadData()
+            
+            
+        }
+        
+        if SelMode == "DOT" {
+            TDate=date
+           formatter.dateFormat = "yyyy-MM-dd"
+            print(selectedDates)
+        }
+        Calendar_View.isHidden = true
+
+    }
+    func minimumDate(for calendar: FSCalendar) -> Date {
+        let formatter = DateFormatter()
+                formatter.dateFormat = "yyyy-MM-dd"
+        if SelMode == "DOT"{
+            return FDate
+                }
+        if SelMode == "DOF"{
+           // return TDate
+        }
+       
+        return formatter.date(from: "1900/01/01")!
+       
+    }
+    @objc func ThiseMonth_Date(){
+        Fromdate = (formattedDate(date: calculateStartDate(for: 30)))
+        let formatters = DateFormatter()
+        formatters.dateFormat = "yyyy-MM-dd"
+        Todate = formatters.string(from: Date())
+        From_Date.text = (formattedDate(date: calculateStartDate(for: 30)))
+        To_Date.text = formatters.string(from: Date())
+        Filtter_date.isHidden = true
+        Total_Team_Size_List(date:formatters.string(from: Date()))
+    }
+    @objc func TodayDate(){
+        let formatters = DateFormatter()
+        formatters.dateFormat = "yyyy-MM-dd"
+        Fromdate = formatters.string(from: Date())
+        Todate = formatters.string(from: Date())
+        From_Date.text = formatters.string(from: Date())
+        To_Date.text = formatters.string(from: Date())
+        Filtter_date.isHidden = true
+        Total_Team_Size_List(date:formatters.string(from: Date()))
+    }
+    @objc func ThiseWeek_Date(){
+        Fromdate = (formattedDate(date: calculateStartDate(for: 7)))
+        let formatters = DateFormatter()
+        formatters.dateFormat = "yyyy-MM-dd"
+        Todate = formatters.string(from: Date())
+        From_Date.text = (formattedDate(date: calculateStartDate(for: 7)))
+        To_Date.text = formatters.string(from: Date())
+        Filtter_date.isHidden = true
+        Total_Team_Size_List(date:formatters.string(from: Date()))
     }
     func getUserDetails(){
         let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
@@ -228,6 +340,26 @@ class Coverage: UIViewController {
             }
         }
     }
-
-
+    @objc func Viewopen(){
+        Filtter_date.isHidden = false
+    }
+    func formattedDate(date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        return dateFormatter.string(from: date)
+    }
+    private func calculateStartDate(for days: Int) -> Date {
+         let startDate = calendar.date(byAdding: .day, value: -days, to: currentDate)
+         return startDate ?? currentDate
+     }
+ 
+    
+    @IBAction func Close_View(_ sender: Any) {
+        Filtter_date.isHidden = true
+    }
+    
+    
+    @IBAction func Calendar_View_Close(_ sender: Any) {
+        Calendar_View.isHidden =  true
+    }
 }
