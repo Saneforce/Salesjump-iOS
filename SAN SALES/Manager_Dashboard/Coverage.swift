@@ -115,7 +115,7 @@ class Coverage: UIViewController,FSCalendarDelegate,FSCalendarDataSource {
         
     }
     @objc private func selDOT() {
-        if From_Date.text == To_Date.text {
+        if Fromdate == Todate{
             Toast.show(message: "Select From Date", controller: self)
                     } else {
             SelMode = "DOT"
@@ -140,8 +140,10 @@ class Coverage: UIViewController,FSCalendarDelegate,FSCalendarDataSource {
             FDate=date
             print(selectedDates)
             formatter.dateFormat = "yyyy-MM-dd"
-            
+            From_Date.text = selectedDates[0]
+            Fromdate = selectedDates[0]
             Calendars.reloadData()
+            Total_Team_Size_List(date:formatter.string(from: Date()))
             
             
         }
@@ -149,10 +151,19 @@ class Coverage: UIViewController,FSCalendarDelegate,FSCalendarDataSource {
         if SelMode == "DOT" {
             TDate=date
            formatter.dateFormat = "yyyy-MM-dd"
+            To_Date.text = selectedDates[0]
+            Todate = selectedDates[0]
             print(selectedDates)
+            Total_Team_Size_List(date:formatter.string(from: Date()))
         }
         Calendar_View.isHidden = true
 
+    }
+    func maximumDate(for calendar: FSCalendar) -> Date {
+        if SelMode == "DOF"{
+            return TDate
+        }
+        return Date()
     }
     func minimumDate(for calendar: FSCalendar) -> Date {
         let formatter = DateFormatter()
@@ -160,12 +171,7 @@ class Coverage: UIViewController,FSCalendarDelegate,FSCalendarDataSource {
         if SelMode == "DOT"{
             return FDate
                 }
-        if SelMode == "DOF"{
-           // return TDate
-        }
-       
         return formatter.date(from: "1900/01/01")!
-       
     }
     @objc func ThiseMonth_Date(){
         Fromdate = (formattedDate(date: calculateStartDate(for: 30)))
