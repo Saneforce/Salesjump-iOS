@@ -155,7 +155,9 @@ class Location: UIViewController,MKMapViewDelegate,UITableViewDelegate, UITableV
     }
     func GetUser_Lat_Log(sfdata:String) {
         Userlatlog.removeAll()
-        let apiKey: String = "get/locations&date=2023-12-20&desig=\(Desig)&divisionCode=\(DivCode)&rSF=\(SFCode)&sfcode=\(sfdata)&sfCode=\(SFCode)&stateCode=\(StateCode)"
+         let formatters = DateFormatter()
+         formatters.dateFormat = "yyyy-MM-dd"
+        let apiKey: String = "get/locations&date=\(formatters.string(from: Date()))&desig=\(Desig)&divisionCode=\(DivCode)&rSF=\(SFCode)&sfcode=\(sfdata)&sfCode=\(SFCode)&stateCode=\(StateCode)"
         
         let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
         

@@ -11,6 +11,7 @@ import UIKit
 class cellListItem:UITableViewCell{
     @IBOutlet weak var vwContainer: UIView!
     @IBOutlet weak var lblText: UILabel!
+    @IBOutlet weak var lblText2: UILabel!
     @IBOutlet weak var lblTime: UILabel!
     @IBOutlet weak var lblUOM: UILabel!
     @IBOutlet weak var lblFreeCap: UILabel!
