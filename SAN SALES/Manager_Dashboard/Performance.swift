@@ -115,11 +115,13 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
                        totalOrderValue += orderValue
                    }
                }
+            print(Target_Data)
             for achievement in Target_Data {
                 if let orderValue = Double(achievement.target_val) {
                     totalTarget += orderValue
                 }
             }
+            print(totalTarget)
             OrderVal.text = String(totalOrderValue)
             TargetVal.text = String(totalTarget)
            // String(format: "%.2f",Coverage)
@@ -249,13 +251,15 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
                         return
                     }
                     print(prettyPrintedJson)
-                    if let achievedArray = prettyPrintedJson["Target"] as? [[String: Any]] {
-                      
-                        for item in achievedArray {
+                    if let TargetArray = prettyPrintedJson["Target"] as? [[String: Any]] {
+                      print(TargetArray)
+                        for item in TargetArray {
                             let orderValue = item["target_val"] as? Double ?? 0.0
                             let reportingCode = item["reporting_code"] as? String ?? ""
                             let sfCode = item["Sf_Code"] as? String ?? ""
+                            print(orderValue)
                             Target_Data.append(Target(target_val: String(orderValue), Sf_Code: sfCode, reporting_code: reportingCode))
+                            print(Target_Data)
                         }
                     }
                     
