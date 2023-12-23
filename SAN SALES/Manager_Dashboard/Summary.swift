@@ -31,7 +31,9 @@ class Summary: IViewController,FSCalendarDelegate,FSCalendarDataSource, UITableV
     @IBOutlet weak var UPC: UILabel!
     @IBOutlet weak var Net_Weight: UILabel!
     @IBOutlet weak var Select_Field: UILabel!
+    @IBOutlet weak var txSearchSel: UITextField!
     var SfData: [sfDetails] = []
+    var lAllObjSel: [sfDetails] = []
     var targetId: String = ""
     var SelectDate : String = ""
     let LocalStoreage = UserDefaults.standard
@@ -96,6 +98,7 @@ class Summary: IViewController,FSCalendarDelegate,FSCalendarDataSource, UITableV
         Select_Field.text = SfData[indexPath.row].name
         print(targetId)
         Get_All_Field_Force()
+        txSearchSel.text = ""
         All_Field_View.isHidden = true
     }
     func maximumDate(for calendar: FSCalendar) -> Date {
@@ -262,6 +265,7 @@ class Summary: IViewController,FSCalendarDelegate,FSCalendarDataSource, UITableV
                         print("Error: Unable to parse JSON")
                     }
                     print(SfData)
+                    self.lAllObjSel = SfData
                     All_Filed_Name.reloadData()
                 }
             case .failure(let error):
@@ -365,8 +369,23 @@ class Summary: IViewController,FSCalendarDelegate,FSCalendarDataSource, UITableV
     }
     
     @IBAction func All_Filed_Close(_ sender: Any) {
+        txSearchSel.text = ""
         All_Field_View.isHidden = true
     }
     
 
+    @IBAction func searchBytext(_ sender: Any) {
+        print(SfData)
+        print(lAllObjSel)
+        let txtbx: UITextField = sender as! UITextField
+        if txtbx.text!.isEmpty {
+            SfData = lAllObjSel
+        }else{
+            SfData = lAllObjSel.filter({(product) in
+                let name: String = product.name
+                return name.lowercased().contains(txtbx.text!.lowercased())
+            })
+        }
+        All_Filed_Name.reloadData()
+    }
 }

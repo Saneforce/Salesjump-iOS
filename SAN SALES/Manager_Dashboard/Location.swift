@@ -24,15 +24,26 @@ class Location: UIViewController,MKMapViewDelegate,UITableViewDelegate, UITableV
     @IBOutlet weak var All_Field_Table: UITableView!
     
     @IBOutlet weak var Field_Force_lable: UILabel!
+    @IBOutlet weak var Search: UIView!
+    
+    @IBOutlet weak var txSearchSel: UITextField!
     
     var SFCode: String = "", StateCode: String = "", DivCode: String = "",Desig: String = ""
     let LocalStoreage = UserDefaults.standard
     var Userlatlog:[sflatlog] = []
     var FiledName:[Tabldata] = []
+    var lAllObjSel: [Tabldata] = []
     var targetId: String = ""
     var First_Map_Open_Mod = "1"
     override func viewDidLoad() {
         super.viewDidLoad()
+        Search.backgroundColor = .white
+        Search.layer.cornerRadius = 10.0
+        Search.layer.shadowColor = UIColor.gray.cgColor
+        Search.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
+        Search.layer.shadowRadius = 3.0
+        Search.layer.shadowOpacity = 0.5
+        
         Map_View.delegate = self
         All_Field_Table.delegate=self
         All_Field_Table.dataSource=self
@@ -76,11 +87,13 @@ class Location: UIViewController,MKMapViewDelegate,UITableViewDelegate, UITableV
                 Toast.show(message: "No Location Found", controller: self)
             }
         }
+        txSearchSel.text = ""
     }
     @objc func OpenView(){
         All_field_Force_View.isHidden = false
     }
     @IBAction func Close_View(_ sender: Any) {
+        txSearchSel.text = ""
         All_field_Force_View.isHidden = true
     }
     
@@ -146,7 +159,7 @@ class Location: UIViewController,MKMapViewDelegate,UITableViewDelegate, UITableV
                         }else{
                             print("Error: Unable to parse JSON")
                         }
-                    
+                    self.lAllObjSel = FiledName
                 }
             case .failure(let error):
                 Toast.show(message: error.errorDescription!)  //, controller: self
@@ -263,17 +276,25 @@ class Location: UIViewController,MKMapViewDelegate,UITableViewDelegate, UITableV
         }
     }
 
-    
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         if control == view.rightCalloutAccessoryView {
-            // The right accessory view (info button) is tapped
             if let title = view.annotation?.title, let subtitle = view.annotation?.subtitle {
                 print("Title: \(title ?? ""), Subtitle: \(subtitle ?? "")")
-                // You can show your custom info window here
-                // Use the title and subtitle properties to display information
             }
         }
     }
-
+    
+    @IBAction func searchBytext(_ sender: Any) {
+        let txtbx: UITextField = sender as! UITextField
+        if txtbx.text!.isEmpty {
+            FiledName = lAllObjSel
+        }else{
+            FiledName = lAllObjSel.filter({(product) in
+                let name: String = product.Name
+                return name.lowercased().contains(txtbx.text!.lowercased())
+            })
+        }
+        All_Field_Table.reloadData()
+    }
 }
 

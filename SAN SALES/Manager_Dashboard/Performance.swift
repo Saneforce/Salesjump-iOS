@@ -187,7 +187,7 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
         print(targetValues)
         print(achievementValues)
         var values: [BarChartDataEntry] = []
-        for (index, target) in targetValues.enumerated() {
+        for (index, target) in targetValues.enumerated(){
                 var achievementValue: Double = 0.0
                 if index < achievementValues.count {
                     achievementValue = Double(achievementValues[index].Order_Value) ?? 0.0
