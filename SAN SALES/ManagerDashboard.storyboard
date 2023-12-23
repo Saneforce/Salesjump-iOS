@@ -1085,7 +1085,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="6B4-l1-Qf8">
-                                                <rect key="frame" x="8" y="594" width="377" height="296"/>
+                                                <rect key="frame" x="8" y="572" width="377" height="296"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                 <prototypes>
@@ -1097,7 +1097,7 @@
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <subviews>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5ag-hJ-DIz">
-                                                                    <rect key="frame" x="20" y="11" width="170" height="21"/>
+                                                                    <rect key="frame" x="20" y="0.0" width="170" height="21"/>
                                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                                     <fontDescription key="fontDescription" name="Poppins-SemiBold" family="Poppins" pointSize="12"/>
                                                                     <nil key="textColor"/>
@@ -1222,10 +1222,11 @@
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oRt-Je-wgF">
                                 <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yp3-UE-rkv">
-                                        <rect key="frame" x="0.0" y="54" width="393" height="60"/>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yp3-UE-rkv">
+                                        <rect key="frame" x="0.0" y="8" width="393" height="50"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Select Quick Dates" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oac-0M-Z3H">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Select item" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oac-0M-Z3H">
                                                 <rect key="frame" x="16" y="19" width="314" height="21"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <fontDescription key="fontDescription" name="Poppins-SemiBold" family="Poppins" pointSize="18"/>
@@ -1240,8 +1241,31 @@
                                         </subviews>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                     </view>
-                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="drF-rK-EiH">
-                                        <rect key="frame" x="8" y="134" width="377" height="650"/>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eHo-eS-n5f">
+                                        <rect key="frame" x="8" y="78" width="377" height="50"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                        <subviews>
+                                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="fJG-V8-pN5">
+                                                <rect key="frame" x="8" y="8" width="300" height="34"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                                <color key="backgroundColor" red="0.93725490199999995" green="0.95294117649999999" blue="0.98431372549999996" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                <textInputTraits key="textInputTraits"/>
+                                                <connections>
+                                                    <action selector="searchBytext:" destination="hUJ-lE-aXA" eventType="editingChanged" id="s6e-CV-bCp"/>
+                                                </connections>
+                                            </textField>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="magnifyingglass" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="oNj-1m-c3f">
+                                                <rect key="frame" x="316" y="12" width="25" height="25"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <color key="tintColor" systemColor="systemGray2Color"/>
+                                            </imageView>
+                                        </subviews>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                    </view>
+                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="drF-rK-EiH">
+                                        <rect key="frame" x="8" y="136" width="377" height="600"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <prototypes>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" id="TNi-5a-5je" customClass="cellListItem" customModule="SAN_SALES" customModuleProvider="target">
@@ -1254,7 +1278,7 @@
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zVO-XH-EPG">
                                                             <rect key="frame" x="20" y="11" width="357" height="21"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                            <fontDescription key="fontDescription" name="Poppins-SemiBold" family="Poppins" pointSize="15"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
@@ -1284,15 +1308,7 @@
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="WuB-uE-UWq" secondAttribute="trailing" id="CrL-pi-qE3"/>
-                                    <constraint firstItem="yp3-UE-rkv" firstAttribute="top" secondItem="oRt-Je-wgF" secondAttribute="top" constant="54" id="Kgl-FP-Cyp"/>
-                                    <constraint firstAttribute="bottom" secondItem="yp3-UE-rkv" secondAttribute="bottom" constant="738" id="QcV-qM-aVB"/>
                                     <constraint firstItem="WuB-uE-UWq" firstAttribute="leading" secondItem="oRt-Je-wgF" secondAttribute="leading" id="SAn-wZ-Dol"/>
-                                    <constraint firstItem="yp3-UE-rkv" firstAttribute="leading" secondItem="WuB-uE-UWq" secondAttribute="leading" id="aWT-Rf-cwK"/>
-                                    <constraint firstItem="drF-rK-EiH" firstAttribute="leading" secondItem="oRt-Je-wgF" secondAttribute="leading" constant="8" id="b5B-54-kae"/>
-                                    <constraint firstItem="drF-rK-EiH" firstAttribute="top" secondItem="yp3-UE-rkv" secondAttribute="bottom" constant="20" id="h38-fM-WOY"/>
-                                    <constraint firstAttribute="trailing" secondItem="drF-rK-EiH" secondAttribute="trailing" constant="8" id="jiG-BO-pTg"/>
-                                    <constraint firstItem="WuB-uE-UWq" firstAttribute="top" secondItem="drF-rK-EiH" secondAttribute="bottom" constant="8" symbolic="YES" id="n26-T2-8u4"/>
-                                    <constraint firstItem="yp3-UE-rkv" firstAttribute="trailing" secondItem="WuB-uE-UWq" secondAttribute="trailing" id="q5O-Gt-e4t"/>
                                     <constraint firstAttribute="bottom" secondItem="WuB-uE-UWq" secondAttribute="bottom" id="y6h-M9-5NT"/>
                                 </constraints>
                             </view>
@@ -1324,11 +1340,13 @@
                         <outlet property="OrderVal" destination="tpz-I2-DGQ" id="5w9-QP-0Na"/>
                         <outlet property="OrdrTyp" destination="srZ-4b-xKG" id="Vde-LX-eqt"/>
                         <outlet property="Primary_Ordr" destination="zeS-9U-L4W" id="dTC-6o-H0B"/>
+                        <outlet property="Search" destination="eHo-eS-n5f" id="sSb-DW-j6V"/>
                         <outlet property="Secondry_Oredr" destination="cpn-yi-yRg" id="TaU-pm-bFs"/>
                         <outlet property="SelectField" destination="0GH-Dk-yeN" id="nYN-SG-MqY"/>
                         <outlet property="Select_Ord" destination="h6L-vE-MPx" id="H1E-aP-oug"/>
                         <outlet property="Summary_Table" destination="6B4-l1-Qf8" id="1tQ-FN-BSY"/>
                         <outlet property="TargetVal" destination="Loi-QV-3jC" id="Xgi-Yt-U5h"/>
+                        <outlet property="txSearchSel" destination="fJG-V8-pN5" id="bVk-rz-FKH"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="a9I-2C-Rme" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

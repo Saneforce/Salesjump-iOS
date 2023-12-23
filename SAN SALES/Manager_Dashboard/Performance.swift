@@ -24,6 +24,12 @@ struct Target:Codable{
     let reporting_code:String
 }
 
+struct ChartName:Codable{
+    let Target:String
+    let Achievement:String
+    let BarName:String
+}
+
 class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITableViewDataSource{
     @IBOutlet weak var OrderTyp: UIView!
     @IBOutlet weak var All_Field_Force: UIView!
@@ -37,6 +43,8 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
     var Achieved_data:[Achieved] = []
     var Field_Force_data:[Field_Force] = []
     var Target_Data:[Target] = []
+    var lAllObjSel: [Field_Force] = []
+    var BarsName:[ChartName] = []
     @IBOutlet weak var Select_Ord: UILabel!
     @IBOutlet weak var SelectField: UILabel!
     @IBOutlet weak var TargetVal: UILabel!
@@ -45,6 +53,10 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
     
     @IBOutlet weak var Secondry_Oredr: UILabel!
     @IBOutlet weak var Primary_Ordr: UILabel!
+    @IBOutlet weak var Search: UIView!
+    
+    @IBOutlet weak var txSearchSel: UITextField!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         Chart_View.delegate = self
@@ -66,6 +78,13 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
         OrderTyp.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
         OrderTyp.layer.shadowRadius = 3.0
         OrderTyp.layer.shadowOpacity = 0.7
+        
+        Search.backgroundColor = .white
+        Search.layer.cornerRadius = 10.0
+        Search.layer.shadowColor = UIColor.gray.cgColor
+        Search.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
+        Search.layer.shadowRadius = 3.0
+        Search.layer.shadowOpacity = 0.5
         
         
         All_Field_Force.backgroundColor = .white
@@ -135,20 +154,43 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
         SelectField.text = Field_Force_data[indexPath.row].Name
         
         if (id == ""){
+    
             var totalOrderValue: Double = 0.0
             var totalTarget:Double = 0.0
+            var Ach = [String]()
+            var Tar = [String]()
+            var Cou = 0
                for achievement in Achieved_data {
+                   Ach.append(achievement.Order_Value)
                    if let orderValue = Double(achievement.Order_Value) {
                        totalOrderValue += orderValue
                    }
+                  
                }
-            print(Target_Data)
-            print(Achieved_data)
+
             for achievement in Target_Data {
+                Tar.append(achievement.target_val)
                 if let orderValue = Double(achievement.target_val) {
                     totalTarget += orderValue
                 }
             }
+            var Target = 100
+            var Achievement = 12
+            var count = 0
+            for _ in 0..<12 {
+                Target += 50
+                Achievement += 25
+                count += 1
+
+                let changeStringTarget = String(Target)
+                let changeStringAchievement = String(Achievement)
+                let changeStringCount = String(count)
+
+                BarsName.append(ChartName(Target: changeStringTarget, Achievement: changeStringAchievement, BarName: "E\(changeStringCount)"))
+            }
+
+            print(BarsName)
+            Demobar()
             print(totalTarget)
             OrderVal.text = String(totalOrderValue)
             TargetVal.text = String(totalTarget)
@@ -180,57 +222,94 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
             setupBarChartData(targetValues: Target_Data, achievementValues: Achieved_data)
 
         }
+        txSearchSel.text = ""
         All_Field.isHidden = true
+    }
+    func Demobar(){
+        // Create an array to store the BarChartDataEntry objects
+           var dataEntries: [BarChartDataEntry] = []
+
+           // Iterate through your data and create BarChartDataEntry objects
+           for (index, entry) in BarsName.enumerated() {
+               if let targetValue = Double(entry.Target),
+                  let achievementValue = Double(entry.Achievement) {
+                   let targetEntry = BarChartDataEntry(x: Double(index) - 0.2, y: targetValue, data: entry.BarName as AnyObject?)
+                   let achievementEntry = BarChartDataEntry(x: Double(index) + 0.2, y: achievementValue, data: entry.BarName as AnyObject?)
+                   dataEntries.append(contentsOf: [targetEntry, achievementEntry])
+               }
+           }
+
+           // Create a dataset with the data entries
+           let dataSet = BarChartDataSet(entries: dataEntries, label: "Your BarChart Label")
+
+           // Set colors for the bars if needed
+           dataSet.colors = [NSUIColor.blue, NSUIColor.green] // Change colors as needed
+           // Create a BarChartData object with the dataset
+           let chartData = BarChartData(dataSet: dataSet)
+
+           // Set chart data to your BarChartView
+        Chart_View.data = chartData
+
+           // Customize chart appearance as needed
+        Chart_View.chartDescription.text = "Your Chart Description"
+        Chart_View.xAxis.valueFormatter = IndexAxisValueFormatter(values: chartData.dataSets.count > 0 ? (0..<chartData.dataSets[0].entryCount).map { index in
+            return (chartData.dataSets[0].entryForIndex(index)?.data as? String) ?? ""
+        } : [])
+        Chart_View.scaleXEnabled = true
+        Chart_View.scaleYEnabled = false
+        Chart_View.groupBars(fromX: 0.0, groupSpace: 0.2, barSpace: 0.1)
+        Chart_View.xAxis.labelPosition = .bottom
+        Chart_View.animate(yAxisDuration: 1.5)
     }
     
     func setupBarChartData(targetValues: [Target], achievementValues: [Achieved]) {
         print(targetValues)
-        print(achievementValues)
-        var values: [BarChartDataEntry] = []
-        for (index, target) in targetValues.enumerated(){
-                var achievementValue: Double = 0.0
-                if index < achievementValues.count {
-                    achievementValue = Double(achievementValues[index].Order_Value) ?? 0.0
-                }
-
-                let targetEntry = BarChartDataEntry(x: Double(index), yValues: [Double(target.target_val) ?? 0.0, achievementValue])
-                values.append(targetEntry)
-            }
-        
-            if targetValues.isEmpty {
-                let defaultEntry = BarChartDataEntry(x: 0.0, yValues: [0.0, 0.0])
-                values.append(defaultEntry)
-            }
-        let dataSet1 = BarChartDataSet(entries: values, label: "Target & Achievement")
-        dataSet1.stackLabels = ["Target", "Achievement"]
-        dataSet1.colors = [NSUIColor.blue, NSUIColor.red]
-        dataSet1.valueTextColor = NSUIColor.black
-        dataSet1.drawValuesEnabled = false
-        
-        let dataSets: [ChartDataSet] = [dataSet1]
-
-        let data = BarChartData(dataSets: dataSets)
-        data.groupBars(fromX: 0.0, groupSpace: 0.2, barSpace: 0.1)
-
-        Chart_View.data = data
-
-        let xAxis = Chart_View.xAxis
-        xAxis.valueFormatter = IndexAxisValueFormatter(values: targetValues.map { $0.Sf_Code })
-
-        xAxis.labelPosition = .bottom
-        xAxis.labelCount = targetValues.count
-        Chart_View.setVisibleXRangeMinimum(1.0)
-        Chart_View.setVisibleXRangeMaximum(5.0)
-
-        
-        Chart_View.scaleXEnabled = true
-        Chart_View.scaleYEnabled = true
-        Chart_View.doubleTapToZoomEnabled = false
-        Chart_View.dragEnabled = true
-
-        
-        let rightAxis = Chart_View.rightAxis
-        rightAxis.enabled = false
+//        print(achievementValues)
+//        var values: [BarChartDataEntry] = []
+//        for (index, target) in targetValues.enumerated(){
+//                var achievementValue: Double = 0.0
+//                if index < achievementValues.count {
+//                    achievementValue = Double(achievementValues[index].Order_Value) ?? 0.0
+//                }
+//
+//                let targetEntry = BarChartDataEntry(x: Double(index), yValues: [Double(target.target_val) ?? 0.0, achievementValue])
+//                values.append(targetEntry)
+//            }
+//
+//            if targetValues.isEmpty {
+//                let defaultEntry = BarChartDataEntry(x: 0.0, yValues: [0.0, 0.0])
+//                values.append(defaultEntry)
+//            }
+//        let dataSet1 = BarChartDataSet(entries: values, label: "Target & Achievement")
+//        dataSet1.stackLabels = ["Target", "Achievement"]
+//        dataSet1.colors = [NSUIColor.blue, NSUIColor.red]
+//        dataSet1.valueTextColor = NSUIColor.black
+//        dataSet1.drawValuesEnabled = false
+//
+//        let dataSets: [ChartDataSet] = [dataSet1]
+//
+//        let data = BarChartData(dataSets: dataSets)
+//        data.groupBars(fromX: 0.0, groupSpace: 0.2, barSpace: 0.1)
+//
+//        Chart_View.data = data
+//
+//        let xAxis = Chart_View.xAxis
+//        xAxis.valueFormatter = IndexAxisValueFormatter(values: targetValues.map { $0.Sf_Code })
+//
+//        xAxis.labelPosition = .bottom
+//        xAxis.labelCount = targetValues.count
+//        Chart_View.setVisibleXRangeMinimum(1.0)
+//        Chart_View.setVisibleXRangeMaximum(5.0)
+//
+//
+//        Chart_View.scaleXEnabled = true
+//        Chart_View.scaleYEnabled = true
+//        Chart_View.doubleTapToZoomEnabled = false
+//        Chart_View.dragEnabled = true
+//
+//
+//        let rightAxis = Chart_View.rightAxis
+//        rightAxis.enabled = false
     }
 
 
@@ -289,6 +368,7 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
                                 }
                                 
                             }
+                            self.lAllObjSel = Field_Force_data
                             print(Field_Force_data)
                             Summary_Table.reloadData()
                             All_Field_table.reloadData()
@@ -383,11 +463,28 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
         OrdrTyp.isHidden = false
     }
     @IBAction func Close_BT(_ sender: Any) {
+        txSearchSel.text = ""
         All_Field.isHidden = true
     }
     @IBAction func CloseOredtyp(_ sender: Any) {
         OrdrTyp.isHidden = true
     }
     
-}
+    
+    @IBAction func searchBytext(_ sender: Any) {
+        
+        let txtbx: UITextField = sender as! UITextField
+        if txtbx.text!.isEmpty {
+            Field_Force_data = lAllObjSel
+        }else{
+            Field_Force_data = lAllObjSel.filter({(product) in
+                let name: String = product.Name
+                return name.lowercased().contains(txtbx.text!.lowercased())
+            })
+        }
+        All_Field_table.reloadData()
+    }
+    }
+    
+
 
