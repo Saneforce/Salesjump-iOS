@@ -56,7 +56,9 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
     @IBOutlet weak var Search: UIView!
     
     @IBOutlet weak var txSearchSel: UITextField!
-    
+    let months = ["Jan", "Feb", "Mar", "Apr", "May","Jan", "Feb", "Mar", "Apr", "May"]
+        let unitsSold = [20.0, 4.0, 6.0, 3.0, 12.0,20.0, 4.0, 6.0, 500.0, 12.0]
+        let unitsBought = [1000.0, 14.0, 200.0, 13.0, 2.0,10.0, 14.0, 200.0, 13.0, 2.0]
     override func viewDidLoad() {
         super.viewDidLoad()
         Chart_View.delegate = self
@@ -95,20 +97,14 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
         All_Field_Force.layer.shadowOpacity = 0.7
         // Do any additional setup after loading the view.
         // Set up the bar chart appearance
-           Chart_View.backgroundColor = .white
-           Chart_View.layer.cornerRadius = 10.0
-           Chart_View.layer.shadowColor = UIColor.gray.cgColor
-           Chart_View.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
-           Chart_View.layer.shadowRadius = 3.0
-           Chart_View.layer.shadowOpacity = 0.7
-
-           // Call a function to set up and display data
+   
         getUserDetails()
         Get_All_Field_Force()
-        //manager_performance()
-      //  setupBarChartData()
+     
        
     }
+
+    
     @objc func SecData(){
         Select_Ord.text = "Secondary"
         manager_performance(sec_or_pri:0)
@@ -190,12 +186,12 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
             }
 
             print(BarsName)
-            Demobar()
+            demoBar()
             print(totalTarget)
             OrderVal.text = String(totalOrderValue)
             TargetVal.text = String(totalTarget)
            // String(format: "%.2f",Coverage)
-            setupBarChartData(targetValues: Target_Data, achievementValues: Achieved_data)
+
         }else{
             print(id)
             print(Target_Data)
@@ -219,51 +215,110 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
                 print("No match found for SF_Code = MR4126")
                 TargetVal.text = "0.00"
             }
-            setupBarChartData(targetValues: Target_Data, achievementValues: Achieved_data)
 
         }
         txSearchSel.text = ""
         All_Field.isHidden = true
     }
-    func Demobar(){
-        // Create an array to store the BarChartDataEntry objects
-           var dataEntries: [BarChartDataEntry] = []
+    func demoBar() {
+        
+        //legend
+        let legend = Chart_View.legend
+        legend.enabled = true
+        legend.horizontalAlignment = .right
+        legend.verticalAlignment = .top
+        legend.orientation = .vertical
+        legend.drawInside = true
+        legend.yOffset = 10.0;
+        legend.xOffset = 10.0;
+        legend.yEntrySpace = 0.0;
 
-           // Iterate through your data and create BarChartDataEntry objects
-           for (index, entry) in BarsName.enumerated() {
-               if let targetValue = Double(entry.Target),
-                  let achievementValue = Double(entry.Achievement) {
-                   let targetEntry = BarChartDataEntry(x: Double(index) - 0.2, y: targetValue, data: entry.BarName as AnyObject?)
-                   let achievementEntry = BarChartDataEntry(x: Double(index) + 0.2, y: achievementValue, data: entry.BarName as AnyObject?)
-                   dataEntries.append(contentsOf: [targetEntry, achievementEntry])
-               }
-           }
 
-           // Create a dataset with the data entries
-           let dataSet = BarChartDataSet(entries: dataEntries, label: "Your BarChart Label")
+        let xaxis = Chart_View.xAxis
+        //xaxis.valueFormatter = axisFormatDelegate
+        xaxis.drawGridLinesEnabled = true
+        xaxis.labelPosition = .bottom
+        xaxis.centerAxisLabelsEnabled = true
+        let values = self.BarsName.map { $0.BarName }
+        xaxis.valueFormatter = IndexAxisValueFormatter(values: values)
+        xaxis.granularity = 1
 
-           // Set colors for the bars if needed
-           dataSet.colors = [NSUIColor.blue, NSUIColor.green] // Change colors as needed
-           // Create a BarChartData object with the dataset
-           let chartData = BarChartData(dataSet: dataSet)
 
-           // Set chart data to your BarChartView
+        let leftAxisFormatter = NumberFormatter()
+        leftAxisFormatter.maximumFractionDigits = 1
+
+        let yaxis = Chart_View.leftAxis
+        yaxis.spaceTop = 0.35
+        yaxis.axisMinimum = 0
+        yaxis.drawGridLinesEnabled = false
+
+        Chart_View.rightAxis.enabled = false
+       //axisFormatDelegate = self
+        
+        Chart_View.noDataText = "You need to provide data for the chart."
+        var dataEntries: [BarChartDataEntry] = []
+        var dataEntries1: [BarChartDataEntry] = []
+
+        for i in 0..<self.BarsName.count {
+                 let dataEntry = BarChartDataEntry(x: Double(i), y: Double(self.BarsName[i].Target) ?? 0.0)
+                 dataEntries.append(dataEntry)
+
+                 let dataEntry1 = BarChartDataEntry(x: Double(i), y: Double(self.BarsName[i].Achievement) ?? 0.0)
+                 dataEntries1.append(dataEntry1)
+             }
+
+        let chartDataSet = BarChartDataSet(entries: dataEntries, label: "Target")
+        let chartDataSet1 = BarChartDataSet(entries: dataEntries1, label: "Achievement")
+
+        let dataSets: [BarChartDataSet] = [chartDataSet,chartDataSet1]
+        chartDataSet.colors = [UIColor(red: 230/255, green: 126/255, blue: 34/255, alpha: 1)]
+        //chartDataSet.colors = ChartColorTemplates.colorful()
+        //let chartData = BarChartData(dataSet: chartDataSet)
+
+        let chartData = BarChartData(dataSets: dataSets)
+
+
+        let groupSpace = 0.3
+        let barSpace = 0.05
+        let barWidth = 0.3
+        // (0.3 + 0.05) * 2 + 0.3 = 1.00 -> interval per "group"
+
+        let groupCount = self.months.count
+        let startYear = 0
+
+
+        chartData.barWidth = barWidth;
+        Chart_View.xAxis.axisMinimum = Double(startYear)
+        let gg = chartData.groupWidth(groupSpace: groupSpace, barSpace: barSpace)
+        print("Groupspace: \(gg)")
+        Chart_View.xAxis.axisMaximum = Double(startYear) + gg * Double(groupCount)
+
+        chartData.groupBars(fromX: Double(startYear), groupSpace: groupSpace, barSpace: barSpace)
+        //chartData.groupWidth(groupSpace: groupSpace, barSpace: barSpace)
+        Chart_View.notifyDataSetChanged()
+
         Chart_View.data = chartData
 
-           // Customize chart appearance as needed
-        Chart_View.chartDescription.text = "Your Chart Description"
-        Chart_View.xAxis.valueFormatter = IndexAxisValueFormatter(values: chartData.dataSets.count > 0 ? (0..<chartData.dataSets[0].entryCount).map { index in
-            return (chartData.dataSets[0].entryForIndex(index)?.data as? String) ?? ""
-        } : [])
-        Chart_View.scaleXEnabled = true
-        Chart_View.scaleYEnabled = false
-        Chart_View.groupBars(fromX: 0.0, groupSpace: 0.2, barSpace: 0.1)
-        Chart_View.xAxis.labelPosition = .bottom
-        Chart_View.animate(yAxisDuration: 1.5)
-    }
+        //background color
+       // Chart_View.backgroundColor = UIColor(red: 189/255, green: 195/255, blue: 199/255, alpha: 1)
+        Chart_View.backgroundColor = .white
+
+        //chart animation
+        Chart_View.animate(xAxisDuration: 1.5, yAxisDuration: 1.5, easingOption: .linear)
+        
+        // Enable zooming
+           Chart_View.setScaleEnabled(true)
+           
+           // Set the minimum and maximum visible range on the x-axis
+           Chart_View.setVisibleXRangeMinimum(1)  // Minimum number of bars visible at once
+           Chart_View.setVisibleXRangeMaximum(5)  // Maximum number of bars visible at once
+
+           // Limit the zoom out
+           Chart_View.setScaleMinima(1.0, scaleY: 1.0)
+        }
     
     func setupBarChartData(targetValues: [Target], achievementValues: [Achieved]) {
-        print(targetValues)
+//        print(targetValues)
 //        print(achievementValues)
 //        var values: [BarChartDataEntry] = []
 //        for (index, target) in targetValues.enumerated(){
@@ -447,7 +502,6 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
                         }
                         OrderVal.text = String(Totatal_Order)
                     }
-                    setupBarChartData(targetValues: Target_Data, achievementValues: Achieved_data)
                     SelectField.text = "ALL FIELD FORCE"
                     print(Achieved_data)
                 }
@@ -486,5 +540,3 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
     }
     }
     
-
-
