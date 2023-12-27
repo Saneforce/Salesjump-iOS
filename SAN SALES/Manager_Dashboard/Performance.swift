@@ -58,9 +58,6 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
     @IBOutlet weak var Search: UIView!
     
     @IBOutlet weak var txSearchSel: UITextField!
-    let months = ["Jan", "Feb", "Mar", "Apr", "May","Jan", "Feb", "Mar", "Apr", "May"]
-        let unitsSold = [0.0, 4.0, 6.0, 3.0, 12.0,20.0, 4.0, 6.0, 500.0, 12.0]
-        let unitsBought = [1000.0, 14.0, 200.0, 13.0, 2.0,10.0, 14.0, 200.0, 13.0, 2.0]
     override func viewDidLoad() {
         super.viewDidLoad()
         Chart_View.delegate = self
@@ -152,10 +149,15 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
         SelectField.text = Field_Force_data[indexPath.row].Name
         
         if (id == ""){
+            
+            print(lAllObjSelNmae)
             self.BarsName = lAllObjSelNmae
+            print(BarsName)
+            Chart_View.notifyDataSetChanged()
             demoBar()
           
         }else{
+            self.BarsName = lAllObjSelNmae
             print(id)
             print(Target_Data)
             let filteredData = Achieved_data.filter { $0.SF_Code == id }
@@ -180,6 +182,8 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
             }
 
         }
+        self.BarsName = BarsName.filter { $0.Id == id }
+        demoBar()
         txSearchSel.text = ""
         All_Field.isHidden = true
     }
@@ -221,20 +225,31 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
         Chart_View.noDataText = "You need to provide data for the chart."
         var dataEntries: [BarChartDataEntry] = []
         var dataEntries1: [BarChartDataEntry] = []
-
+        print(dataEntries)
         for i in 0..<self.BarsName.count {
+            print(i)
                  let dataEntry = BarChartDataEntry(x: Double(i), y: Double(self.BarsName[i].Target) ?? 0.0)
                  dataEntries.append(dataEntry)
-
+                print(dataEntries)
                  let dataEntry1 = BarChartDataEntry(x: Double(i), y: Double(self.BarsName[i].Achievement) ?? 0.0)
                  dataEntries1.append(dataEntry1)
+            print(dataEntries1)
              }
+        print(dataEntries)
 
         let chartDataSet = BarChartDataSet(entries: dataEntries, label: "Target")
         let chartDataSet1 = BarChartDataSet(entries: dataEntries1, label: "Achievement")
 
-        let dataSets: [BarChartDataSet] = [chartDataSet,chartDataSet1]
-        chartDataSet.colors = [UIColor(red: 230/255, green: 126/255, blue: 34/255, alpha: 1)]
+        let dataSetColors: [NSUIColor] = [
+            NSUIColor(red: 0.06, green: 0.68, blue: 0.76, alpha: 1.00),
+            NSUIColor(red: 1.00, green: 0.00, blue: 0.00, alpha: 1.00)
+        ]
+
+        let dataSets: [BarChartDataSet] = [chartDataSet, chartDataSet1]
+
+        for (index, dataSet) in dataSets.enumerated() {
+            dataSet.colors = [dataSetColors[index]]
+        }
         //chartDataSet.colors = ChartColorTemplates.colorful()
         //let chartData = BarChartData(dataSet: chartDataSet)
 
@@ -246,7 +261,7 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
         let barWidth = 0.3
         // (0.3 + 0.05) * 2 + 0.3 = 1.00 -> interval per "group"
 
-        let groupCount = self.months.count
+        let groupCount = self.BarsName.count
         let startYear = 0
 
 
