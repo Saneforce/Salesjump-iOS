@@ -941,10 +941,10 @@
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="0.00" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Loi-QV-3jC">
-                                                        <rect key="frame" x="19" y="31" width="70" height="25"/>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="0.00" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Loi-QV-3jC">
+                                                        <rect key="frame" x="19" y="31" width="105" height="25"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="17"/>
+                                                        <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="15"/>
                                                         <color key="textColor" red="0.031372549019607843" green="0.56862745098039214" blue="0.69803921568627447" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
@@ -974,10 +974,10 @@
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="0.00" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tpz-I2-DGQ">
-                                                        <rect key="frame" x="19" y="31" width="70" height="25"/>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="0.00" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tpz-I2-DGQ">
+                                                        <rect key="frame" x="19" y="31" width="105" height="25"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="17"/>
+                                                        <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="15"/>
                                                         <color key="textColor" red="0.85882352941176465" green="0.15294117647058825" blue="0.46666666666666667" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
@@ -1006,12 +1006,12 @@
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0.00" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kmz-8I-2qt">
-                                                        <rect key="frame" x="19" y="31" width="70" height="25"/>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0.00" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kmz-8I-2qt">
+                                                        <rect key="frame" x="19" y="31" width="105" height="25"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="25" id="FUO-0v-7GF"/>
                                                         </constraints>
-                                                        <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="17"/>
+                                                        <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="15"/>
                                                         <color key="textColor" red="0.96078431372549022" green="0.61960784313725492" blue="0.043137254901960784" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
@@ -1037,7 +1037,7 @@
                                                     <constraint firstAttribute="height" constant="60" id="cPd-U6-U90"/>
                                                     <constraint firstItem="Kmz-8I-2qt" firstAttribute="top" secondItem="nrG-xR-6jh" secondAttribute="bottom" constant="6" id="e1c-Ke-Uvz"/>
                                                     <constraint firstItem="j6m-Td-lcz" firstAttribute="top" secondItem="gRA-ls-RPX" secondAttribute="top" id="iYd-xj-rYb"/>
-                                                    <constraint firstItem="fPX-Df-If5" firstAttribute="leading" secondItem="Kmz-8I-2qt" secondAttribute="trailing" constant="43" id="lf8-oc-tf4"/>
+                                                    <constraint firstItem="fPX-Df-If5" firstAttribute="leading" secondItem="Kmz-8I-2qt" secondAttribute="trailing" constant="8" id="lf8-oc-tf4"/>
                                                     <constraint firstItem="nrG-xR-6jh" firstAttribute="leading" secondItem="j6m-Td-lcz" secondAttribute="trailing" constant="16" id="n3B-ek-O3z"/>
                                                     <constraint firstItem="Kmz-8I-2qt" firstAttribute="leading" secondItem="nrG-xR-6jh" secondAttribute="leading" id="pdW-lh-RRZ"/>
                                                     <constraint firstItem="fPX-Df-If5" firstAttribute="centerY" secondItem="gRA-ls-RPX" secondAttribute="centerY" id="q0H-wK-1NA"/>
@@ -1054,10 +1054,10 @@
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="0.00" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="b6Z-UQ-baQ">
-                                                        <rect key="frame" x="19" y="31" width="70" height="25"/>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="0.00" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="b6Z-UQ-baQ">
+                                                        <rect key="frame" x="19" y="31" width="100" height="25"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="17"/>
+                                                        <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="15"/>
                                                         <color key="textColor" red="0.086274509803921567" green="0.63921568627450975" blue="0.29019607843137252" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>

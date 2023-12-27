@@ -58,6 +58,7 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
     @IBOutlet weak var Search: UIView!
     
     @IBOutlet weak var txSearchSel: UITextField!
+    var VrfCount = 0
     override func viewDidLoad() {
         super.viewDidLoad()
         Chart_View.delegate = self
@@ -153,10 +154,13 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
             print(lAllObjSelNmae)
             self.BarsName = lAllObjSelNmae
             print(BarsName)
-            Chart_View.notifyDataSetChanged()
+            VrfCount = 0
             demoBar()
+            self.BarsName = lAllObjSelNmae
+            print(VrfCount)
           
         }else{
+            VrfCount = 0
             self.BarsName = lAllObjSelNmae
             print(id)
             print(Target_Data)
@@ -190,6 +194,15 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
     func demoBar() {
         
         //legend
+        VrfCount = VrfCount+1
+        print(VrfCount)
+        if (VrfCount == 2){
+            self.BarsName = lAllObjSelNmae
+        }
+        if (VrfCount == 2){
+            VrfCount = 0
+        }
+       print(BarsName)
         let legend = Chart_View.legend
         legend.enabled = true
         legend.horizontalAlignment = .right
@@ -217,7 +230,7 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
         let yaxis = Chart_View.leftAxis
         yaxis.spaceTop = 0.35
         yaxis.axisMinimum = 0
-        yaxis.drawGridLinesEnabled = false
+        yaxis.drawGridLinesEnabled = true
 
         Chart_View.rightAxis.enabled = false
        //axisFormatDelegate = self
@@ -230,10 +243,8 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
             print(i)
                  let dataEntry = BarChartDataEntry(x: Double(i), y: Double(self.BarsName[i].Target) ?? 0.0)
                  dataEntries.append(dataEntry)
-                print(dataEntries)
                  let dataEntry1 = BarChartDataEntry(x: Double(i), y: Double(self.BarsName[i].Achievement) ?? 0.0)
                  dataEntries1.append(dataEntry1)
-            print(dataEntries1)
              }
         print(dataEntries)
 
@@ -246,6 +257,7 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
         ]
 
         let dataSets: [BarChartDataSet] = [chartDataSet, chartDataSet1]
+        print(dataSets)
 
         for (index, dataSet) in dataSets.enumerated() {
             dataSet.colors = [dataSetColors[index]]
