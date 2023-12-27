@@ -25,9 +25,10 @@ struct Target:Codable{
 }
 
 struct ChartName:Codable{
-    let Target:String
-    let Achievement:String
+    var Target:String
+    var Achievement:String
     let BarName:String
+    let Id:String
 }
 
 class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITableViewDataSource{
@@ -45,6 +46,7 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
     var Target_Data:[Target] = []
     var lAllObjSel: [Field_Force] = []
     var BarsName:[ChartName] = []
+    var lAllObjSelNmae: [ChartName] = []
     @IBOutlet weak var Select_Ord: UILabel!
     @IBOutlet weak var SelectField: UILabel!
     @IBOutlet weak var TargetVal: UILabel!
@@ -57,7 +59,7 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
     
     @IBOutlet weak var txSearchSel: UITextField!
     let months = ["Jan", "Feb", "Mar", "Apr", "May","Jan", "Feb", "Mar", "Apr", "May"]
-        let unitsSold = [20.0, 4.0, 6.0, 3.0, 12.0,20.0, 4.0, 6.0, 500.0, 12.0]
+        let unitsSold = [0.0, 4.0, 6.0, 3.0, 12.0,20.0, 4.0, 6.0, 500.0, 12.0]
         let unitsBought = [1000.0, 14.0, 200.0, 13.0, 2.0,10.0, 14.0, 200.0, 13.0, 2.0]
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -150,48 +152,9 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
         SelectField.text = Field_Force_data[indexPath.row].Name
         
         if (id == ""){
-    
-            var totalOrderValue: Double = 0.0
-            var totalTarget:Double = 0.0
-            var Ach = [String]()
-            var Tar = [String]()
-            var Cou = 0
-               for achievement in Achieved_data {
-                   Ach.append(achievement.Order_Value)
-                   if let orderValue = Double(achievement.Order_Value) {
-                       totalOrderValue += orderValue
-                   }
-                  
-               }
-
-            for achievement in Target_Data {
-                Tar.append(achievement.target_val)
-                if let orderValue = Double(achievement.target_val) {
-                    totalTarget += orderValue
-                }
-            }
-            var Target = 100
-            var Achievement = 12
-            var count = 0
-            for _ in 0..<12 {
-                Target += 50
-                Achievement += 25
-                count += 1
-
-                let changeStringTarget = String(Target)
-                let changeStringAchievement = String(Achievement)
-                let changeStringCount = String(count)
-
-                BarsName.append(ChartName(Target: changeStringTarget, Achievement: changeStringAchievement, BarName: "E\(changeStringCount)"))
-            }
-
-            print(BarsName)
+            self.BarsName = lAllObjSelNmae
             demoBar()
-            print(totalTarget)
-            OrderVal.text = String(totalOrderValue)
-            TargetVal.text = String(totalTarget)
-           // String(format: "%.2f",Coverage)
-
+          
         }else{
             print(id)
             print(Target_Data)
@@ -317,59 +280,6 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
            Chart_View.setScaleMinima(1.0, scaleY: 1.0)
         }
     
-    func setupBarChartData(targetValues: [Target], achievementValues: [Achieved]) {
-//        print(targetValues)
-//        print(achievementValues)
-//        var values: [BarChartDataEntry] = []
-//        for (index, target) in targetValues.enumerated(){
-//                var achievementValue: Double = 0.0
-//                if index < achievementValues.count {
-//                    achievementValue = Double(achievementValues[index].Order_Value) ?? 0.0
-//                }
-//
-//                let targetEntry = BarChartDataEntry(x: Double(index), yValues: [Double(target.target_val) ?? 0.0, achievementValue])
-//                values.append(targetEntry)
-//            }
-//
-//            if targetValues.isEmpty {
-//                let defaultEntry = BarChartDataEntry(x: 0.0, yValues: [0.0, 0.0])
-//                values.append(defaultEntry)
-//            }
-//        let dataSet1 = BarChartDataSet(entries: values, label: "Target & Achievement")
-//        dataSet1.stackLabels = ["Target", "Achievement"]
-//        dataSet1.colors = [NSUIColor.blue, NSUIColor.red]
-//        dataSet1.valueTextColor = NSUIColor.black
-//        dataSet1.drawValuesEnabled = false
-//
-//        let dataSets: [ChartDataSet] = [dataSet1]
-//
-//        let data = BarChartData(dataSets: dataSets)
-//        data.groupBars(fromX: 0.0, groupSpace: 0.2, barSpace: 0.1)
-//
-//        Chart_View.data = data
-//
-//        let xAxis = Chart_View.xAxis
-//        xAxis.valueFormatter = IndexAxisValueFormatter(values: targetValues.map { $0.Sf_Code })
-//
-//        xAxis.labelPosition = .bottom
-//        xAxis.labelCount = targetValues.count
-//        Chart_View.setVisibleXRangeMinimum(1.0)
-//        Chart_View.setVisibleXRangeMaximum(5.0)
-//
-//
-//        Chart_View.scaleXEnabled = true
-//        Chart_View.scaleYEnabled = true
-//        Chart_View.doubleTapToZoomEnabled = false
-//        Chart_View.dragEnabled = true
-//
-//
-//        let rightAxis = Chart_View.rightAxis
-//        rightAxis.enabled = false
-    }
-
-
-
-
 
     func getUserDetails(){
         let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
@@ -418,8 +328,10 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
                                  let Countdata = "E"+String(Count)
                                 if (ID == SFCode){
                                     Field_Force_data.append(Field_Force(Name: name!, id: ID!, dsg: dsg!, Sf_id: Countdata))
+                                    BarsName.append(ChartName(Target: "", Achievement: "", BarName: "E\(Count)", Id: ID!))
                                 }else if (id == SFCode){
                                     Field_Force_data.append(Field_Force(Name: name!, id: ID!, dsg: dsg!, Sf_id: Countdata))
+                                    BarsName.append(ChartName(Target: "", Achievement: "", BarName: "E\(Count)", Id: ID!))
                                 }
                                 
                             }
@@ -503,7 +415,34 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
                         OrderVal.text = String(Totatal_Order)
                     }
                     SelectField.text = "ALL FIELD FORCE"
+                    print(BarsName)
+          
                     print(Achieved_data)
+                    print(Target_Data)
+                    for index in BarsName.indices {
+                        if let achievedEntry = Achieved_data.first(where: { $0.SF_Code == BarsName[index].Id }) {
+                            BarsName[index].Achievement = achievedEntry.Order_Value
+                        } else {
+                            BarsName[index].Achievement = "0.0"
+                        }
+                    }
+
+                    // Update BarsName with Target data
+                    for index in BarsName.indices {
+                        if let targetEntry = Target_Data.first(where: { $0.Sf_Code == BarsName[index].Id }) {
+                            BarsName[index].Target = targetEntry.target_val
+                        } else {
+                            BarsName[index].Target = "0.0"
+                        }
+                    }
+
+                    // Print the updated BarsName list
+                    for barsName in BarsName {
+                        print(barsName)
+                    }
+                    self.lAllObjSelNmae = BarsName
+                    demoBar()
+                    
                 }
             case .failure(let error):
                 Toast.show(message: error.errorDescription!)  //, controller: self
