@@ -58,6 +58,10 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
     @IBOutlet weak var Search: UIView!
     
     @IBOutlet weak var txSearchSel: UITextField!
+    
+    @IBOutlet weak var BalToDo: UILabel!
+    @IBOutlet weak var Ache: UILabel!
+    
     var VrfCount = 0
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -158,7 +162,44 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
             demoBar()
             self.BarsName = lAllObjSelNmae
             print(VrfCount)
-          
+            print(Target_Data)
+            print(Achieved_data)
+            var totalTargetValue: Double = 0.0
+            var totalOrderValue: Double = 0.0
+
+            // Calculate total target value
+            for target in Target_Data {
+                let targetValue = Double(target.target_val)!
+                totalTargetValue = totalTargetValue + targetValue
+            }
+
+            // Calculate total achieved value
+            for achieved in Achieved_data {
+                let achievedValue = Double(achieved.Order_Value)!
+                totalOrderValue = totalOrderValue + achievedValue
+            }
+
+            print("Total Target Value: \(totalTargetValue)")
+            print("Total Achieved Value: \(totalOrderValue)")
+            TargetVal.text = String(format:"%.2f",totalTargetValue)
+            OrderVal.text = String(format:"%.2f",totalOrderValue)
+            let bal = totalTargetValue  - totalOrderValue
+            let Ach_Percent = totalOrderValue / totalTargetValue * 100
+            if (bal < 0){
+                BalToDo.text = "0.00"
+            }else{
+                BalToDo.text = String(format:"%.2f",bal)
+            }
+            if (Ach_Percent < 0){
+                Ache.text = "0.00"
+            }else if(Ach_Percent.isNaN){
+                Ache.text = "0.00"
+            }else if(Ach_Percent > bal){
+                Ache.text = "100.00"
+            }else{
+                Ache.text = String(format:"%.2f",Ach_Percent)
+            }
+            
         }else{
             VrfCount = 0
             self.BarsName = lAllObjSelNmae
@@ -167,24 +208,46 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
             let filteredData = Achieved_data.filter { $0.SF_Code == id }
             let Targetdata = Target_Data.filter{ $0.Sf_Code == id }
             print(filteredData)
+            var totalTargetValue: Double = 0.0
+            var totalOrderValue: Double = 0.0
             if let firstMatch = filteredData.first {
                 let orderValue = firstMatch.Order_Value
                 print("Order Value: \(orderValue)")
                 OrderVal.text = orderValue
+                totalOrderValue = Double(orderValue)!
             } else {
                 print("No match found for SF_Code = MR4126")
                 OrderVal.text = "0.00"
+                totalOrderValue = 0.0
             }
             
             if let targetMatch = Targetdata.first {
                 let orderValue = targetMatch.target_val
                 print("Order Value: \(orderValue)")
                 TargetVal.text = orderValue
+                totalTargetValue = Double(orderValue)!
             } else {
                 print("No match found for SF_Code = MR4126")
                 TargetVal.text = "0.00"
+                totalTargetValue = 0.0
             }
-
+            let bal = totalTargetValue  - totalOrderValue
+            let Ach_Percent = totalOrderValue / totalTargetValue * 100
+            if (bal < 0){
+                BalToDo.text = "0.00"
+            }else{
+                BalToDo.text = String(format:"%.2f",bal)
+            }
+            
+            if (Ach_Percent < 0){
+                Ache.text = "0.00"
+            }else if(Ach_Percent.isNaN) {
+                Ache.text = "0.00"
+            }else if(Ach_Percent > bal){
+                Ache.text = "100.00"
+            }else{
+                Ache.text = String(format:"%.2f",Ach_Percent)
+            }
         }
         self.BarsName = BarsName.filter { $0.Id == id }
         demoBar()

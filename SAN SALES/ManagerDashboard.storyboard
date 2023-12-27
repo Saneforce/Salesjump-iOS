@@ -1332,9 +1332,11 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="Ache" destination="b6Z-UQ-baQ" id="49W-sK-mqO"/>
                         <outlet property="All_Field" destination="oRt-Je-wgF" id="j1f-kS-BaY"/>
                         <outlet property="All_Field_Force" destination="azw-Se-4at" id="nmv-GE-QCV"/>
                         <outlet property="All_Field_table" destination="drF-rK-EiH" id="2TB-is-G6Z"/>
+                        <outlet property="BalToDo" destination="Kmz-8I-2qt" id="gsd-9X-hWN"/>
                         <outlet property="Chart_View" destination="p2N-Os-c3b" id="RRf-sM-quN"/>
                         <outlet property="OrderTyp" destination="JbP-6J-qED" id="aop-eL-pNp"/>
                         <outlet property="OrderVal" destination="tpz-I2-DGQ" id="5w9-QP-0Na"/>
