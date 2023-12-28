@@ -212,10 +212,14 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
             var totalTargetValue: Double = 0.0
             var totalOrderValue: Double = 0.0
             if let firstMatch = filteredData.first {
-                let orderValue = firstMatch.Order_Value
-                print("Order Value: \(orderValue)")
-                OrderVal.text = orderValue
-                totalOrderValue = Double(orderValue)!
+                var Toatla_Order = 0.0
+                for item in filteredData{
+                    let individualTarget = Double(item.Order_Value) ?? 0.0
+                    Toatla_Order += individualTarget
+                }
+                print(Toatla_Order)
+                OrderVal.text = String(format:"%.2f",Toatla_Order)
+                totalOrderValue = Toatla_Order
             } else {
                 print("No match found for SF_Code = MR4126")
                 OrderVal.text = "0.00"
@@ -228,7 +232,7 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
                     let individualTarget = Double(item.target_val) ?? 0.0
                     Toatla_Tar += individualTarget
                 }
-                
+                print(Toatla_Tar)
     
                 TargetVal.text = String(format:"%.2f",Toatla_Tar)
                 totalTargetValue = Toatla_Tar
@@ -514,6 +518,8 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
                                 Achieved_data.append(Achieved(Order_Value: String(orderValue), Reporting_Code: reportingCode, SF_Code: sfCode))
                             }
                         }
+                        print(Achieved_data)
+                        print(SFCode)
                         OrderVal.text = String(Totatal_Order)
                     }
                     let bal = Total_Target  - Totatal_Order
@@ -536,20 +542,47 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
                     SelectField.text = "ALL FIELD FORCE"
                
                     for index in BarsName.indices {
-                        if let achievedEntry = Achieved_data.first(where: { $0.SF_Code == BarsName[index].Id }) {
-                            BarsName[index].Achievement = achievedEntry.Order_Value
-                        } else {
-                            BarsName[index].Achievement = "0.0"
+                        if SFCode == BarsName[index].Id {
+                            if let achievedEntry = Achieved_data.first(where: { $0.Reporting_Code == SFCode }) {
+                                let filteredTargets = Achieved_data.filter { $0.Reporting_Code == SFCode}
+                                var Total_Achieved = 0.0
+                                for filterdata in filteredTargets{
+                                    let individualTarget = Double(filterdata.Order_Value) ?? 0.0
+                                    Total_Achieved += individualTarget
+                                }
+                                BarsName[index].Achievement = String(format: "%.2f", Total_Achieved)
+                                print("Total")
+                            } else {
+                                BarsName[index].Achievement = "0.0"
+                            }
+                        }else{
+                            if let achievedEntry = Achieved_data.first(where: { $0.Reporting_Code == BarsName[index].Id }) {
+                                let filteredTargets = Achieved_data.filter { $0.Reporting_Code == BarsName[index].Id}
+                                var Total_Achieved = 0.0
+                                for filterdata in filteredTargets{
+                                    let individualTarget = Double(filterdata.Order_Value) ?? 0.0
+                                    Total_Achieved += individualTarget
+                                }
+                                BarsName[index].Achievement = String(format: "%.2f", Total_Achieved)
+                            } else {
+                                BarsName[index].Achievement = "0.0"
+                            }
                         }
                     }
 
-                    print(Target_Data)
-                    var totalTargetValue: Double = 0.0
+                    print(Achieved_data)
                     for index in BarsName.indices {
                         if SFCode == BarsName[index].Id {
                             if let targetEntry = Target_Data.first(where: { $0.reporting_code == SFCode }) {
                                 print(targetEntry)
-                                BarsName[index].Target = targetEntry.target_val
+                                let filteredTargets = Target_Data.filter { $0.reporting_code == SFCode}
+                                var Total_Target = 0.0
+                                for filterdata in filteredTargets{
+                                    let individualTarget = Double(filterdata.target_val) ?? 0.0
+                                    Total_Target += individualTarget
+                                }
+                              
+                                BarsName[index].Target = String(format: "%.2f", Total_Target)
                             } else {
                                 BarsName[index].Target = "0.0"
                             }
