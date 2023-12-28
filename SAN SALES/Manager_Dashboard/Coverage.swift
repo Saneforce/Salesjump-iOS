@@ -34,6 +34,7 @@ class Coverage: UIViewController,FSCalendarDelegate,FSCalendarDataSource {
     @IBOutlet weak var Visited_Dis: UILabel!
     @IBOutlet weak var Coverage_Dis: UILabel!
     @IBOutlet weak var Not_Visited_Dis: UILabel!
+    
     @IBOutlet weak var Filtter_date: UIView!
     @IBOutlet weak var ThiseMonth: UILabel!
     @IBOutlet weak var Today: UILabel!
@@ -128,7 +129,7 @@ class Coverage: UIViewController,FSCalendarDelegate,FSCalendarDataSource {
     }
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
         let formatter = DateFormatter()
-        formatter.dateFormat = "dd-MM-yyyy"
+        formatter.dateFormat = "yyyy-MM-dd"
         print("did select date \(formatter.string(from: date))")
        // let selectedDates = calendar.selectedDates.sorted(by: {formatter.string(from: $0)})
         let selectedDates = calendar.selectedDates.map({formatter.string(from: $0)})
@@ -311,26 +312,36 @@ class Coverage: UIViewController,FSCalendarDelegate,FSCalendarDataSource {
                             Not_Visited_Ret.text = String(NotVis)
                             Visited_Ret.text = String(visit_Ret)
                             //cell.lblUOM?.text = String(format: "%@",item["OffUntName"] as! String)
-                            let Coverage_mul = Double(visit_Ret) / Double(totalRetailer)
-                            let Coverage = Double(Coverage_mul) * 100
-                            print(Coverage)
-                            Coverage_Ret.text = String(format: "%.2f",Coverage)
+                            if(totalRetailer < visit_Ret){
+                                Coverage_Ret.text = "0.0"
+                            }else{
+                                let Coverage_mul = Double(visit_Ret) / Double(totalRetailer)
+                                let Coverage = Double(Coverage_mul) * 100
+                                print(Coverage)
+                                Coverage_Ret.text = String(format: "%.2f",Coverage)
+                            }
                         }
                         if let visit_dis = visit_Details[0]["dis"]{
                             Not_Visited_Rt.text = String(ToalRot - visit_dis)
                             Visited_Rt.text = String(visit_dis)
-                            let Coverage_mul = Double(visit_dis) / Double(ToalRot)
-                           
-                            let Coverage = Double(Coverage_mul) * 100
-                            Coverage_Rt.text = String(format: "%.2f",Coverage)
+                            if (ToalRot < visit_dis){
+                                Coverage_Rt.text = "0.0"
+                            }else{
+                                let Coverage_mul = Double(visit_dis) / Double(ToalRot)
+                                let Coverage = Double(Coverage_mul) * 100
+                                Coverage_Rt.text = String(format: "%.2f",Coverage)
+                            }
                         }
                         if let visit_rout = visit_Details[0]["rout"]{
                             Not_Visited_Dis.text = String(TotDis - visit_rout)
                             Visited_Dis.text = String(visit_rout)
-                            let Coverage_mul = Double(visit_rout) / Double(TotDis)
-                            print(Coverage_mul)
-                            let Coverage = Double(Coverage_mul) * 100
-                            Coverage_Dis.text = String(format: "%.2f",Coverage)
+                            if(TotDis < visit_rout){
+                                Coverage_Dis.text = "0.0"
+                            }else{
+                                let Coverage_mul = Double(visit_rout) / Double(TotDis)
+                                let Coverage = Double(Coverage_mul) * 100
+                                Coverage_Dis.text = String(format: "%.2f",Coverage)
+                            }
                         }
                     }
                     if let newRetail =  json["newRetail"] as? [[String: Int]],

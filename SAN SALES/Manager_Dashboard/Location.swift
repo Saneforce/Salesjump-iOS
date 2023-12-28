@@ -200,44 +200,69 @@ class Location: UIViewController,MKMapViewDelegate,UITableViewDelegate, UITableV
     }
     func addMarkersToMap() {
         let allAnnotations = Map_View.annotations
-          Map_View.removeAnnotations(allAnnotations)
+        Map_View.removeAnnotations(allAnnotations)
         print(Userlatlog)
-            for latLog in Userlatlog {
-                let annotation = MKPointAnnotation()
-                   annotation.coordinate = CLLocationCoordinate2D(latitude: Double(latLog.lat)!, longitude: Double(latLog.log)!)
-                   annotation.title = "Your Title"
-                   //annotation.subtitle = "Your Subtitle"
-                   Map_View.addAnnotation(annotation)
-                
-            }
 
-            // You can set the region to fit all markers
-            if let firstLatLog = Userlatlog.first {
-                let span = MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
-                let region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: Double(firstLatLog.lat)!, longitude: Double(firstLatLog.log)!), span: span)
-                Map_View.setRegion(region, animated: true)
-            }
+        for latLog in Userlatlog {
+            let annotation = MKPointAnnotation()
+            annotation.coordinate = CLLocationCoordinate2D(latitude: Double(latLog.lat)!, longitude: Double(latLog.log)!)
+            annotation.title = "Your Title"
+            Map_View.addAnnotation(annotation)
+            let circle = MKCircle(center: annotation.coordinate, radius: 500)
+                Map_View.addOverlay(circle)
         }
- 
+
+        // Add custom markers with custom images
+        for latLog in Userlatlog {
+            let annotation = CustomAnnotation()
+            annotation.coordinate = CLLocationCoordinate2D(latitude: Double(latLog.lat)!, longitude: Double(latLog.log)!)
+            annotation.title = "Your Title"
+            Map_View.addAnnotation(annotation)
+        }
+
+        // You can set the region to fit all markers
+        if let firstLatLog = Userlatlog.first {
+            let span = MKCoordinateSpan(latitudeDelta: 8.0, longitudeDelta: 8.0)
+            let region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: Double(firstLatLog.lat)!, longitude: Double(firstLatLog.log)!), span: span)
+            Map_View.setRegion(region, animated: true)
+        }
+    }
+
+    // CustomAnnotation class to use custom marker images
+    class CustomAnnotation: MKPointAnnotation {
+        var imageName: String = "mark"
+    }
+
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        guard let customAnnotation = annotation as? CustomAnnotation else {
+            return nil
+        }
+
+        let annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: "customAnnotationView")
+        annotationView.image = UIImage(named: customAnnotation.imageName)
+        annotationView.canShowCallout = true
+        return annotationView
+    }
+
 
         // MARK: - MKMapViewDelegate
-    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-           guard annotation is MKPointAnnotation else { return nil }
-
-           let identifier = "marker"
-           var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier)
-
-           if annotationView == nil {
-               annotationView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
-               annotationView?.canShowCallout = true
-               let btn = UIButton(type: .detailDisclosure)
-               annotationView?.rightCalloutAccessoryView = btn
-           } else {
-               annotationView?.annotation = annotation
-           }
-
-           return annotationView
-       }
+//    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+//           guard annotation is MKPointAnnotation else { return nil }
+//
+//           let identifier = "marker"
+//           var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier)
+//
+//           if annotationView == nil {
+//               annotationView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+//               annotationView?.canShowCallout = true
+//               let btn = UIButton(type: .detailDisclosure)
+//               annotationView?.rightCalloutAccessoryView = btn
+//           } else {
+//               annotationView?.annotation = annotation
+//           }
+//
+//           return annotationView
+//       }
 
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         guard let annotation = view.annotation as? MKPointAnnotation else { return }
