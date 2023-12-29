@@ -339,9 +339,6 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
             }
         }
 
-        if(UserSetup.shared.DistBased == 1){
-            
-        }
     }
     
     

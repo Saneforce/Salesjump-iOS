@@ -1,20 +1,34 @@
 PODS:
-  - Alamofire (5.8.1)
+  - Alamofire (5.8.0)
+  - Charts (4.1.0):
+    - Charts/Core (= 4.1.0)
+  - Charts/Core (4.1.0):
+    - SwiftAlgorithms (~> 1.0)
   - FSCalendar (2.8.4)
+  - Parchment (3.2.0)
+  - SwiftAlgorithms (1.0.0)
 
 DEPENDENCIES:
   - Alamofire
+  - Charts
   - FSCalendar
+  - Parchment
 
 SPEC REPOS:
   trunk:
     - Alamofire
+    - Charts
     - FSCalendar
+    - Parchment
+    - SwiftAlgorithms
 
 SPEC CHECKSUMS:
-  Alamofire: 3ca42e259043ee0dc5c0cdd76c4bc568b8e42af7
+  Alamofire: 0e92e751b3e9e66d7982db43919d01f313b8eb91
+  Charts: ce0768268078eee0336f122c3c4ca248e4e204c5
   FSCalendar: 2d1d0d9398f12d439f55c1fe0f01525b151b8260
+  Parchment: a43c440b22c8a60f7e0196b74339446d4d1d18ea
+  SwiftAlgorithms: 38dda4731d19027fdeee1125f973111bf3386b53
 
-PODFILE CHECKSUM: 46a3c2c23788ae6a65ffa2641b396271e5e222c8
+PODFILE CHECKSUM: ff989bc87147ed71399f0a21c9aca013098fe088
 
 COCOAPODS: 1.14.3

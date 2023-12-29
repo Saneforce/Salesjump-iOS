@@ -147,7 +147,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
             lstJoint = list;
             print("JointWData  ___________________________")
         }
-        
+
         
         if let HQData = LocalStoreage.string(forKey: "HQ_Master"),
            let list = GlobalFunc.convertToDictionary(text:  HQData) as? [AnyObject] {
@@ -244,6 +244,17 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         
         tbJWKSelect.delegate=self
         tbJWKSelect.dataSource=self
+        print(UserSetup.shared.DistBased)
+        if UserSetup.shared.DistBased == 0 {
+            self.vwDistCtrl.isHidden = true
+               }
+        if (UserSetup.shared.DistBased == 1){
+            vwDistCtrl.isHidden = false
+        }
+        if (UserSetup.shared.DistBased == 2){
+            vwDistCtrl.isHidden = false
+        }
+        
         Applylev.addTarget(target: self, action: #selector(levedata))
         
         setTodayPlan()
@@ -381,13 +392,13 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                 typ=item["FWFlg"] as! String
                 lblWorktype.text = name
                 vwHQCtrl.isHidden=false
-                vwDistCtrl.isHidden=false
+               // vwDistCtrl.isHidden=false
                 vwRouteCtrl.isHidden=false
                 vwJointCtrl.isHidden=false
                 self.vwRmksCtrl.frame.origin.y = vwJointCtrl.frame.origin.y+vwJointCtrl.frame.height+8
                 if typ != "F" {
                     vwHQCtrl.isHidden=true
-                    vwDistCtrl.isHidden=true
+                   // vwDistCtrl.isHidden=true
                     vwRouteCtrl.isHidden=true
                     vwJointCtrl.isHidden=true
                     
@@ -520,13 +531,13 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
             
             txRem.text = lstPlnDetail[0]["remarks"] as? String
             vwHQCtrl.isHidden=false
-            vwDistCtrl.isHidden=false
+           // vwDistCtrl.isHidden=false
             vwRouteCtrl.isHidden=false
             vwJointCtrl.isHidden=false
             self.vwRmksCtrl.frame.origin.y = vwJointCtrl.frame.origin.y+vwJointCtrl.frame.height+8
             if typ != "F" {
                 vwHQCtrl.isHidden=true
-                vwDistCtrl.isHidden=true
+               //vwDistCtrl.isHidden=true
                 vwRouteCtrl.isHidden=true
                 vwJointCtrl.isHidden=true
                 
@@ -715,10 +726,12 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
             return false
         }
         if myDyTp["WT"]?.FWFlg == "F" {
+            if UserSetup.shared.DistBased == 1 || UserSetup.shared.DistBased == 2{
             if (myDyTp["DIS"]?.id ?? "") == "" {
                 Toast.show(message: "Select the Distributor", controller: self)
                 return false
             }
+        }
             if (myDyTp["RUT"]?.id ?? "") == "" {
                 Toast.show(message: "Select the Route", controller: self)
                 return false
@@ -753,7 +766,12 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
             if(PhotosCollection.shared.PhotoList.count>0){
                print("In Data")
             }else{
-                openCamera()
+                if UserSetup.shared.Selfie == 1{
+                    openCamera()
+                }
+                if UserSetup.shared.Selfie == 0{
+                    getLocatio()
+                }
             }
             
             
@@ -866,6 +884,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
             {
                
             case .success(let value):
+                print(value)
                 if let json = value as? [String: Any] {
                     if((json["success"] as! Bool) == false){
                         Toast.show(message: json["msg"] as! String, controller: self)

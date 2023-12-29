@@ -141,7 +141,11 @@ class DayReport:IViewController,UICollectionViewDelegate,UICollectionViewDataSou
                         self.lblAttnTM.text=String(format: "%@", todayData["attTM"] as! String)
                         self.lblDyStTM.text=String(format: "%@", todayData["StartTime"] as! String)
                         self.lblDyEnTM.text=String(format: "%@:00", todayData["secFC"] as! String)
-                        self.lblFCTM.text=String(format: "%@", todayData["EndTime"] as! String)
+                        if let endTime = todayData["EndTime"] as? String, !endTime.isEmpty {
+                            self.lblFCTM.text = endTime
+                        } else {
+                            self.lblFCTM.text = "-"
+                        }
                         
                         self.lblRetCnt.addTarget(target: self, action: #selector(ShowVstRet))
                         self.lblRetOrdCnt.addTarget(target: self, action: #selector(ShowPVstRet))
