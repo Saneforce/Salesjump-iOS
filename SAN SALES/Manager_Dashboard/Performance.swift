@@ -104,21 +104,21 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
         // Set up the bar chart appearance
    
         getUserDetails()
-        Get_All_Field_Force()
-     
-       
+        Get_All_Field_Force(Ored_Typ:0)
     }
 
     
     @objc func SecData(){
         Select_Ord.text = "Secondary"
-        manager_performance(sec_or_pri:0)
+        //manager_performance(sec_or_pri:0)
+        Get_All_Field_Force(Ored_Typ: 0)
         OrdrTyp.isHidden = true
     }
     
     @objc func PriData(){
         Select_Ord.text = "Primary"
-        manager_performance(sec_or_pri:1)
+       //manager_performance(sec_or_pri:1)
+        Get_All_Field_Force(Ored_Typ: 1)
         OrdrTyp.isHidden = true
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -200,11 +200,12 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
             }else{
                 Ache.text = String(format:"%.2f",Ach_Percent)
             }
-            
+            print(BarsName)
         }else{
             VrfCount = 0
             self.BarsName = lAllObjSelNmae
             print(id)
+            print(BarsName)
             print(Target_Data)
             print(Achieved_data)
             let filteredData = Achieved_data.filter { $0.Reporting_Code == id }
@@ -260,6 +261,7 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
             }else{
                 Ache.text = String(format:"%.2f",Ach_Percent)
             }
+            print(BarsName)
         }
         self.BarsName = BarsName.filter { $0.Id == id }
         demoBar()
@@ -271,6 +273,7 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
         //legend
         VrfCount = VrfCount+1
         print(VrfCount)
+        print(BarsName)
         if (VrfCount == 2){
             self.BarsName = lAllObjSelNmae
         }
@@ -384,6 +387,7 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
     
 
     func getUserDetails(){
+        BarsName.removeAll()
         let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
         let data = Data(prettyPrintedJson!.utf8)
         guard let prettyJsonData = try? JSONSerialization.jsonObject(with: data, options:[]) as? [String: Any] else {
@@ -395,7 +399,7 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
         DivCode = prettyJsonData["divisionCode"] as? String ?? ""
         Desig=prettyJsonData["desigCode"] as? String ?? ""
     }
-    func Get_All_Field_Force(){
+    func Get_All_Field_Force(Ored_Typ:Int){
         Field_Force_data.removeAll()
         let apiKey1: String = "get/submgr&divisionCode=\(DivCode)&rSF=\(SFCode)&sfcode=\(SFCode)&stateCode=\(StateCode)&desig=\(Desig)"
         let apiKeyWithoutCommas = apiKey1.replacingOccurrences(of: ",&", with: "&")
@@ -444,7 +448,7 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
                             print(Field_Force_data)
                             Summary_Table.reloadData()
                             All_Field_table.reloadData()
-                            manager_performance(sec_or_pri:0)
+                            manager_performance(sec_or_pri:Ored_Typ)
                         }else{
                             print("Error: Unable to parse JSON")
                         }

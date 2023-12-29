@@ -175,11 +175,21 @@ class Coverage: UIViewController,FSCalendarDelegate,FSCalendarDataSource {
         return formatter.date(from: "1900/01/01")!
     }
     @objc func ThiseMonth_Date(){
-        Fromdate = (formattedDate(date: calculateStartDate(for: 30)))
+        let calendar = Calendar.current
+           let startOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: calendar.startOfDay(for: currentDate)))!
+           
+           // Format the start and end dates
+           let dateFormatter = DateFormatter()
+           dateFormatter.dateFormat = "yyyy-MM-dd"
+           
+           Fromdate = dateFormatter.string(from: startOfMonth)
+        
+        
+       // Fromdate = (formattedDate(date: calculateStartDate(for: 30)))
         let formatters = DateFormatter()
         formatters.dateFormat = "yyyy-MM-dd"
         Todate = formatters.string(from: Date())
-        From_Date.text = (formattedDate(date: calculateStartDate(for: 30)))
+        From_Date.text = dateFormatter.string(from: startOfMonth)
         To_Date.text = formatters.string(from: Date())
         Filtter_date.isHidden = true
         Total_Team_Size_List(date:formatters.string(from: Date()))
