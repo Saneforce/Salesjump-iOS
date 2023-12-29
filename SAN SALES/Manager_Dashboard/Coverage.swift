@@ -321,7 +321,7 @@ class Coverage: UIViewController,FSCalendarDelegate,FSCalendarDataSource {
                                 Coverage_Ret.text = String(format: "%.2f",Coverage)
                             }
                         }
-                        if let visit_dis = visit_Details[0]["dis"]{
+                        if let visit_dis = visit_Details[0]["rout"]{
                             Not_Visited_Rt.text = String(ToalRot - visit_dis)
                             Visited_Rt.text = String(visit_dis)
                             if (ToalRot < visit_dis){
@@ -332,7 +332,7 @@ class Coverage: UIViewController,FSCalendarDelegate,FSCalendarDataSource {
                                 Coverage_Rt.text = String(format: "%.2f",Coverage)
                             }
                         }
-                        if let visit_rout = visit_Details[0]["rout"]{
+                        if let visit_rout = visit_Details[0]["dis"]{
                             Not_Visited_Dis.text = String(TotDis - visit_rout)
                             Visited_Dis.text = String(visit_rout)
                             if(TotDis < visit_rout){

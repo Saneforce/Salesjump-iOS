@@ -206,9 +206,11 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
             self.BarsName = lAllObjSelNmae
             print(id)
             print(Target_Data)
-            let filteredData = Achieved_data.filter { $0.SF_Code == id }
+            print(Achieved_data)
+            let filteredData = Achieved_data.filter { $0.Reporting_Code == id }
             let Targetdata = Target_Data.filter{ $0.reporting_code == id }
             print(Targetdata)
+            print(filteredData)
             var totalTargetValue: Double = 0.0
             var totalOrderValue: Double = 0.0
             if let firstMatch = filteredData.first {
@@ -501,7 +503,7 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
 //                                Target_Data.append(Target(target_val: String(orderValue), Sf_Code: sfCode, reporting_code: reportingCode))
 //                                }
                         }
-                        TargetVal.text = String(Total_Target)
+                        TargetVal.text = String(format:"%.2f",Total_Target)
                     }
                     
                     if let achievedArray = prettyPrintedJson["Achieved"] as? [[String: Any]] {
@@ -520,7 +522,7 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
                         }
                         print(Achieved_data)
                         print(SFCode)
-                        OrderVal.text = String(Totatal_Order)
+                        OrderVal.text = String(format:"%.2f",Totatal_Order)
                     }
                     let bal = Total_Target  - Totatal_Order
                     let Ach_Percent = Totatal_Order / Total_Target * 100
