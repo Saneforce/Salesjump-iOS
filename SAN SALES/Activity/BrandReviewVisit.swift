@@ -643,9 +643,6 @@ class BrandReviewVisit: IViewController, UITableViewDataSource, UITableViewDeleg
                     lstRoutes = list
                 }
             }
-            if(UserSetup.shared.DistBased == 1){
-                
-            }
         }
         if SelMode=="RMK" {
             txvRmks.text = name
