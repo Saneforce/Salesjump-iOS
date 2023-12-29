@@ -514,7 +514,7 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
                             let sfCode = item["Sf_Code"] as? String ?? ""
                             if (sfCode == SFCode){
                                 Totatal_Order = Totatal_Order+orderValue
-                                Achieved_data.append(Achieved(Order_Value: String(orderValue), Reporting_Code: reportingCode, SF_Code: sfCode))
+                                Achieved_data.append(Achieved(Order_Value: String(orderValue), Reporting_Code: sfCode, SF_Code: sfCode))
                             }else if (reportingCode == SFCode){
                                 Totatal_Order = Totatal_Order+orderValue
                                 Achieved_data.append(Achieved(Order_Value: String(orderValue), Reporting_Code: reportingCode, SF_Code: sfCode))
