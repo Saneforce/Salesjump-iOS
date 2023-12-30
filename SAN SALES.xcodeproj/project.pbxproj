@@ -346,9 +346,9 @@
 			isa = PBXGroup;
 			children = (
 				38B05F4E2B04C9F30025D4C0 /* Manager_Dashboard */,
+				3F9F379628593C73002CC408 /* Reports */,
 				386A43872A1B223400CE1833 /* SubmittedCalls */,
 				3F0822BB29000842009C33EA /* AdminForms */,
-				3F9F379628593C73002CC408 /* Reports */,
 				3F0635332841710F0027842E /* Model */,
 				3F063528283A8C720027842E /* Style */,
 				3F0861BD2801D551006A30FB /* CollectionCell */,
@@ -805,7 +805,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.6;
+				MARKETING_VERSION = 2.7;
 				PRODUCT_BUNDLE_IDENTIFIER = com.saneforce.sansales;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -842,7 +842,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.6;
+				MARKETING_VERSION = 2.7;
 				PRODUCT_BUNDLE_IDENTIFIER = com.saneforce.sansales;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

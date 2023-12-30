@@ -60,7 +60,9 @@ class RptVisitDetail: IViewController, UITableViewDelegate, UITableViewDataSourc
         autoreleasepool {
         let cell:cellListItem = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
         if tbVstDetail == tableView {
+            print(RptVisitDetail.objVstDetail)
             let item: [String: Any] = RptVisitDetail.objVstDetail[indexPath.row] as! [String : Any]
+            print(item)
             cell.lblText?.text = item["OutletName"] as? String
             cell.lblTime?.text = item["VstTime"] as? String
             cell.lblActRate?.text = String(format: "Rs. %.02f", item["OrdVal"] as! Double)
