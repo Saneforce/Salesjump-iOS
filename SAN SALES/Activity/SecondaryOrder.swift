@@ -312,7 +312,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if tbDataSelect == tableView { return 42}
-        return 112
+        return 120
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView==tbProduct { return lstProducts.count }
