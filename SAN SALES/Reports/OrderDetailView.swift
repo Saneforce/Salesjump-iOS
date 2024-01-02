@@ -121,9 +121,7 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                 cell.lblTax.text = String(detail[indexPath.row].Tax)
                 cell.lblAmt.text =  (String(format: "%.02f",detail[indexPath.row].value))
                 cell.lblValue.text = String(format: "%.02f",detail[indexPath.row].rate)
-                print(detail)
                 
-                String(detail[indexPath.row].rate)
             }
             if tbZeroOrd == tableView {
                 
@@ -167,7 +165,7 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
             "data": jsonString
         ]
         
-        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
             AFdata in
             switch AFdata.result
             {
@@ -219,8 +217,18 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                 Toast.show(message: error.errorDescription!, controller: self)
             }
         }
-        ViewOrder((Any).self)
-        viewprimary()
+        
+       
+        if (StrMode == "VstPRet" || StrMode == "VstRet"){
+           // self.ShowLoading(Message: "Loading...")
+            ViewOrder()
+            print("Finesh")
+           // self.LoadingDismiss()
+        }
+        if (StrMode == "VstPDis" || StrMode == "VstDis"){
+            self.ShowLoading(Message: "Loading...")
+            viewprimary()
+        }
     }
     func RefreshData(indx: Int){
         if self.objOrderDetails.count < 1 { return }
@@ -314,9 +322,8 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
 //            }
 //        }
 //    }
-    
-    func ViewOrder(_ sender: Any){
-        
+    //func ViewOrder(_ sender: Any)
+    func ViewOrder(){
         let item = RptVisitDetail.objVstDetail
         print(item)
         
@@ -347,6 +354,7 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
             
             AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
                 AFdata in
+                self.LoadingDismiss()
                 switch AFdata.result
                 {
                     
@@ -416,8 +424,7 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                // let apiKey: String = "\(axbDet)&desig=\(Desig)&divisionCode=\(DivCode)&ACd=\(items)&rSF=\(SFCode)&typ=1&sfCode=\(SFCode)&State_Code=\(StateCode)"
 
         let apiKey: String = "\(axnprimary)&desig=\(Desig)&divisionCode=\(DivCode)&ACd=\(items)&rSF=\(SFCode)&typ=3&sfCode=\(SFCode)&State_Code=\(StateCode)"
-   // http://www.fmcg.sanfmcg.com/server/native_Db_V13_1.php?desig=MR&divisionCode=29%2C&ACd=SEF3-357&rSF=MR4126&axn=get%2FvwVstDetNative&typ=3&sfCode=MR4126&stateCode=24
-            
+
             let aFormData: [String: Any] = [
                 "orderBy":"[\"name asc\"]","desig":"mgr"
             ]
@@ -430,6 +437,7 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
             
             AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
                 AFdata in
+                self.LoadingDismiss()
                 switch AFdata.result
                 {
                     
