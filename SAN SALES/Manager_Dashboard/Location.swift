@@ -119,7 +119,7 @@ class Location: UIViewController,MKMapViewDelegate,UITableViewDelegate, UITableV
             switch AFdata.result {
                 
             case .success(let value):
-                print(value)
+                //print(value)
                 if let json = value as? [AnyObject]{
                     guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
                         print("Error: Cannot convert JSON object to Pretty JSON data")
@@ -129,11 +129,11 @@ class Location: UIViewController,MKMapViewDelegate,UITableViewDelegate, UITableV
                         print("Error: Could print JSON in String")
                         return
                     }
-                    print(prettyPrintedJson)
+                    //print(prettyPrintedJson)
                    
                         if let jsonData = try? JSONSerialization.data(withJSONObject: value, options: []),
                            let jsonArray = try? JSONSerialization.jsonObject(with: jsonData) as? [[String: Any]] {
-                            print(jsonArray)
+    
                             var All_Id = [String]()
                             FiledName.append(Tabldata(Id: "", Name: "All FIELD FORCE"))
                             for item in jsonArray {
@@ -153,7 +153,7 @@ class Location: UIViewController,MKMapViewDelegate,UITableViewDelegate, UITableV
                             }
                             
                             let joinedString = encodedData.joined(separator: "%2C")
-                            print(joinedString)
+                            //print(joinedString)
                             GetUser_Lat_Log(sfdata:joinedString)
                             // SfData.append(sfDetails(id: joinedString, name: "All Field Force"))
                         }else{
@@ -179,7 +179,7 @@ class Location: UIViewController,MKMapViewDelegate,UITableViewDelegate, UITableV
             switch response.result {
                 
             case .success(let value):
-                print(value)
+               // print(value)
                 if let json = value as? [String: AnyObject] {
                     if let resultArray = json["result"] as? [[String: AnyObject]] {
                         for result in resultArray {

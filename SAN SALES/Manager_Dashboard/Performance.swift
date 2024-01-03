@@ -400,6 +400,7 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
         Desig=prettyJsonData["desigCode"] as? String ?? ""
     }
     func Get_All_Field_Force(Ored_Typ:Int){
+        BarsName.removeAll()
         Field_Force_data.removeAll()
         let apiKey1: String = "get/submgr&divisionCode=\(DivCode)&rSF=\(SFCode)&sfcode=\(SFCode)&stateCode=\(StateCode)&desig=\(Desig)"
         let apiKeyWithoutCommas = apiKey1.replacingOccurrences(of: ",&", with: "&")
@@ -409,7 +410,7 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
             switch AFdata.result {
                 
             case .success(let value):
-                print(value)
+               // print(value)
                 if let json = value as? [AnyObject]{
                     guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
                         print("Error: Cannot convert JSON object to Pretty JSON data")
@@ -424,7 +425,7 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
                         if let jsonData = try? JSONSerialization.data(withJSONObject: value, options: []),
                            let jsonArray = try? JSONSerialization.jsonObject(with: jsonData) as? [[String: Any]] {
                             Field_Force_data.append(Field_Force(Name: "ALL FIELD FORCE", id: "", dsg: "", Sf_id: ""))
-                            print(jsonArray)
+                           
                             for item in jsonArray{
                                 Count = Count+1
                                 let name = item["name"] as? String
@@ -433,19 +434,23 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
                                 let ID =  item["id"] as? String
                                  let Countdata = "E"+String(Count)
                                 
-                                
                                 if (ID == SFCode){
                                     dsgMod = dsg!
+                                }
+                                print(dsgMod)
+                                
+                                if (ID == SFCode){
                                     Field_Force_data.append(Field_Force(Name: name!, id: ID!, dsg: dsg!, Sf_id: Countdata))
                                     BarsName.append(ChartName(Target: "", Achievement: "", BarName: "E\(Count)", Id: ID!))
                                 }else if (id == SFCode){
                                     Field_Force_data.append(Field_Force(Name: name!, id: ID!, dsg: dsg!, Sf_id: Countdata))
                                     BarsName.append(ChartName(Target: "", Achievement: "", BarName: "E\(Count)", Id: ID!))
                                 }
-                                
+                              
                             }
-                            self.lAllObjSel = Field_Force_data
                             print(Field_Force_data)
+                            print(BarsName)
+                            self.lAllObjSel = Field_Force_data
                             Summary_Table.reloadData()
                             All_Field_table.reloadData()
                             manager_performance(sec_or_pri:Ored_Typ)
@@ -474,8 +479,6 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
             switch AFdata.result {
                 
             case .success(let value):
-                print(value)
-                print(BarsName)
                 if let json = value as? [String: Any] {
                     guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
                         print("Error: Cannot convert JSON object to Pretty JSON data")
@@ -485,7 +488,10 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
                         print("Error: Could not parse JSON data")
                         return
                     }
+                    
                     print(prettyPrintedJson)
+                    
+                    
                     var Total_Target = 0.0
                     var Totatal_Order = 0.0
                     if let TargetArray = prettyPrintedJson["Target"] as? [[String: Any]] {
@@ -513,9 +519,11 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
                     if let achievedArray = prettyPrintedJson["Achieved"] as? [[String: Any]] {
                        
                         for item in achievedArray {
+                            print(item)
                             let orderValue = item["order_value"] as? Double ?? 0.0
                             let reportingCode = item["reporting_code"] as? String ?? ""
                             let sfCode = item["Sf_Code"] as? String ?? ""
+                     
                             if (sfCode == SFCode){
                                 Totatal_Order = Totatal_Order+orderValue
                                 Achieved_data.append(Achieved(Order_Value: String(orderValue), Reporting_Code: sfCode, SF_Code: sfCode))
