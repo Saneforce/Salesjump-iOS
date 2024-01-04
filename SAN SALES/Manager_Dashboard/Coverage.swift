@@ -9,7 +9,7 @@ import UIKit
 import Alamofire
 import FSCalendar
 
-class Coverage: UIViewController,FSCalendarDelegate,FSCalendarDataSource {
+class Coverage: IViewController,FSCalendarDelegate,FSCalendarDataSource {
 
     @IBOutlet weak var Custom_date: UIView!
     @IBOutlet weak var From_and_to_date: UIView!
@@ -116,14 +116,14 @@ class Coverage: UIViewController,FSCalendarDelegate,FSCalendarDataSource {
         
     }
     @objc private func selDOT() {
-        if Fromdate == Todate{
-            Toast.show(message: "Select From Date", controller: self)
-                    } else {
+//        if Fromdate == Todate{
+//            Toast.show(message: "Select From Date", controller: self)
+//                    } else {
             SelMode = "DOT"
             Calendar_Head.text="Select to date"
             Calendars.reloadData()
             Calendar_View.isHidden = false
-        }
+//        }
     }
     func openWin(Mode:String){
     }
@@ -324,6 +324,8 @@ class Coverage: UIViewController,FSCalendarDelegate,FSCalendarDataSource {
                             //cell.lblUOM?.text = String(format: "%@",item["OffUntName"] as! String)
                             if(totalRetailer < visit_Ret){
                                 Coverage_Ret.text = "0.0"
+                            }else if(totalRetailer == 0 && visit_Ret == 0) {
+                                Coverage_Ret.text = "0.0"
                             }else{
                                 let Coverage_mul = Double(visit_Ret) / Double(totalRetailer)
                                 let Coverage = Double(Coverage_mul) * 100
@@ -336,6 +338,8 @@ class Coverage: UIViewController,FSCalendarDelegate,FSCalendarDataSource {
                             Visited_Rt.text = String(visit_dis)
                             if (ToalRot < visit_dis){
                                 Coverage_Rt.text = "0.0"
+                            }else if (ToalRot == 0 && visit_dis == 0){
+                                Coverage_Rt.text = "0.0"
                             }else{
                                 let Coverage_mul = Double(visit_dis) / Double(ToalRot)
                                 let Coverage = Double(Coverage_mul) * 100
@@ -346,6 +350,8 @@ class Coverage: UIViewController,FSCalendarDelegate,FSCalendarDataSource {
                             Not_Visited_Dis.text = String(TotDis - visit_rout)
                             Visited_Dis.text = String(visit_rout)
                             if(TotDis < visit_rout){
+                                Coverage_Dis.text = "0.0"
+                            }else if (TotDis == 0 && visit_rout == 0){
                                 Coverage_Dis.text = "0.0"
                             }else{
                                 let Coverage_mul = Double(visit_rout) / Double(TotDis)

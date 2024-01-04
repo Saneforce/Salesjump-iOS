@@ -31,7 +31,7 @@ struct ChartName:Codable{
     let Id:String
 }
 
-class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITableViewDataSource{
+class Performance: IViewController,ChartViewDelegate, UITableViewDelegate, UITableViewDataSource{
     @IBOutlet weak var OrderTyp: UIView!
     @IBOutlet weak var All_Field_Force: UIView!
     @IBOutlet weak var Chart_View: BarChartView!
@@ -151,6 +151,8 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
         return cell
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        if (All_Field_table == tableView){
         let id = Field_Force_data[indexPath.row].id
         SelectField.text = Field_Force_data[indexPath.row].Name
         
@@ -167,19 +169,19 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
             print(Achieved_data)
             var totalTargetValue: Double = 0.0
             var totalOrderValue: Double = 0.0
-
+            
             // Calculate total target value
             for target in Target_Data {
                 let targetValue = Double(target.target_val)!
                 totalTargetValue = totalTargetValue + targetValue
             }
-
+            
             // Calculate total achieved value
             for achieved in Achieved_data {
                 let achievedValue = Double(achieved.Order_Value)!
                 totalOrderValue = totalOrderValue + achievedValue
             }
-
+            
             print("Total Target Value: \(totalTargetValue)")
             print("Total Achieved Value: \(totalOrderValue)")
             TargetVal.text = String(format:"%.2f",totalTargetValue)
@@ -208,7 +210,13 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
             print(BarsName)
             print(Target_Data)
             print(Achieved_data)
-            let filteredData = Achieved_data.filter { $0.Reporting_Code == id }
+            var filteredData: [Achieved]
+            if (dsgMod == "ASM"){
+                filteredData = Achieved_data.filter { $0.SF_Code == id }
+            }else{
+                filteredData = Achieved_data.filter { $0.Reporting_Code == id }
+            }
+            
             let Targetdata = Target_Data.filter{ $0.reporting_code == id }
             print(Targetdata)
             print(filteredData)
@@ -236,7 +244,7 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
                     Toatla_Tar += individualTarget
                 }
                 print(Toatla_Tar)
-    
+                
                 TargetVal.text = String(format:"%.2f",Toatla_Tar)
                 totalTargetValue = Toatla_Tar
             } else {
@@ -267,6 +275,7 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
         demoBar()
         txSearchSel.text = ""
         All_Field.isHidden = true
+    }
     }
     func demoBar() {
         
@@ -438,7 +447,8 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
                                     dsgMod = dsg!
                                 }
                                 print(dsgMod)
-                                
+                                if (dsgMod=="ASM"){
+                        
                                 if (ID == SFCode){
                                     Field_Force_data.append(Field_Force(Name: name!, id: ID!, dsg: dsg!, Sf_id: Countdata))
                                     BarsName.append(ChartName(Target: "", Achievement: "", BarName: "E\(Count)", Id: ID!))
@@ -446,9 +456,25 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
                                     Field_Force_data.append(Field_Force(Name: name!, id: ID!, dsg: dsg!, Sf_id: Countdata))
                                     BarsName.append(ChartName(Target: "", Achievement: "", BarName: "E\(Count)", Id: ID!))
                                 }
-                              
+                                }else{
+                                    let filteredData = jsonArray.filter { $0["rtoSF"] as? String == SFCode}
+                                    print(filteredData)
+                                    if let firstItem = filteredData.first, let idValue = firstItem["id"] as? String {
+                                        print("ID: \(idValue)")
+                                    } else {
+                                        print("No exact matches found.")
+                                    }
+                                   
+                                    if (ID == SFCode){
+                                        Field_Force_data.append(Field_Force(Name: name!, id: ID!, dsg: dsg!, Sf_id: Countdata))
+                                        BarsName.append(ChartName(Target: "", Achievement: "", BarName: "E\(Count)", Id: ID!))
+                                    }else if (id == SFCode){
+                                        Field_Force_data.append(Field_Force(Name: name!, id: ID!, dsg: dsg!, Sf_id: Countdata))
+                                        BarsName.append(ChartName(Target: "", Achievement: "", BarName: "E\(Count)", Id: ID!))
+                                    }
+                                }
                             }
-                            print(Field_Force_data)
+                           // print(Field_Force_data)
                             print(BarsName)
                             self.lAllObjSel = Field_Force_data
                             Summary_Table.reloadData()
@@ -520,16 +546,35 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
                        
                         for item in achievedArray {
                             print(item)
+                            let sfCode = item["Sf_Code"] as? String ?? ""
                             let orderValue = item["order_value"] as? Double ?? 0.0
                             let reportingCode = item["reporting_code"] as? String ?? ""
-                            let sfCode = item["Sf_Code"] as? String ?? ""
+                          
                      
-                            if (sfCode == SFCode){
-                                Totatal_Order = Totatal_Order+orderValue
-                                Achieved_data.append(Achieved(Order_Value: String(orderValue), Reporting_Code: sfCode, SF_Code: sfCode))
-                            }else if (reportingCode == SFCode){
-                                Totatal_Order = Totatal_Order+orderValue
-                                Achieved_data.append(Achieved(Order_Value: String(orderValue), Reporting_Code: reportingCode, SF_Code: sfCode))
+                            
+                            if(dsgMod == "ASM"){
+                                if (sfCode == SFCode){
+                                    Totatal_Order = Totatal_Order+orderValue
+                                    Achieved_data.append(Achieved(Order_Value: String(orderValue), Reporting_Code: sfCode, SF_Code: sfCode))
+                                }else if (reportingCode == SFCode){
+                                    Totatal_Order = Totatal_Order+orderValue
+                                    Achieved_data.append(Achieved(Order_Value: String(orderValue), Reporting_Code: reportingCode, SF_Code: sfCode))
+                                }
+                                
+                            }else{
+                                print(BarsName)
+                                for item in BarsName{
+                                    let Iddata = item.Id
+                                    print( SFCode)
+                                    print( Iddata)
+                                    if (sfCode == SFCode){
+                                        Totatal_Order = Totatal_Order+orderValue
+                                        Achieved_data.append(Achieved(Order_Value: String(orderValue), Reporting_Code: sfCode, SF_Code: sfCode))
+                                    }else if (reportingCode == Iddata){
+                                        Totatal_Order = Totatal_Order+orderValue
+                                        Achieved_data.append(Achieved(Order_Value: String(orderValue), Reporting_Code: Iddata, SF_Code: Iddata))
+                                    }
+                                }
                             }
                         }
                         print(Achieved_data)
@@ -556,30 +601,59 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
                     SelectField.text = "ALL FIELD FORCE"
                
                     for index in BarsName.indices {
-                        if SFCode == BarsName[index].Id {
-                            if let achievedEntry = Achieved_data.first(where: { $0.Reporting_Code == SFCode }) {
-                                let filteredTargets = Achieved_data.filter { $0.Reporting_Code == SFCode}
-                                var Total_Achieved = 0.0
-                                for filterdata in filteredTargets{
-                                    let individualTarget = Double(filterdata.Order_Value) ?? 0.0
-                                    Total_Achieved += individualTarget
+                        if (dsgMod == "ASM"){
+                            if SFCode == BarsName[index].Id {
+                                if let achievedEntry = Achieved_data.first(where: { $0.SF_Code == SFCode }) {
+                                    let filteredTargets = Achieved_data.filter { $0.SF_Code == SFCode}
+                                    var Total_Achieved = 0.0
+                                    for filterdata in filteredTargets{
+                                        let individualTarget = Double(filterdata.Order_Value) ?? 0.0
+                                        Total_Achieved += individualTarget
+                                    }
+                                    BarsName[index].Achievement = String(format: "%.2f", Total_Achieved)
+                                    print("Total")
+                                } else {
+                                    BarsName[index].Achievement = "0.0"
                                 }
-                                BarsName[index].Achievement = String(format: "%.2f", Total_Achieved)
-                                print("Total")
-                            } else {
-                                BarsName[index].Achievement = "0.0"
+                            }else{
+                                if let achievedEntry = Achieved_data.first(where: { $0.SF_Code == BarsName[index].Id }) {
+                                    let filteredTargets = Achieved_data.filter { $0.SF_Code == BarsName[index].Id}
+                                    var Total_Achieved = 0.0
+                                    for filterdata in filteredTargets{
+                                        let individualTarget = Double(filterdata.Order_Value) ?? 0.0
+                                        Total_Achieved += individualTarget
+                                    }
+                                    BarsName[index].Achievement = String(format: "%.2f", Total_Achieved)
+                                } else {
+                                    BarsName[index].Achievement = "0.0"
+                                }
                             }
                         }else{
-                            if let achievedEntry = Achieved_data.first(where: { $0.Reporting_Code == BarsName[index].Id }) {
-                                let filteredTargets = Achieved_data.filter { $0.Reporting_Code == BarsName[index].Id}
-                                var Total_Achieved = 0.0
-                                for filterdata in filteredTargets{
-                                    let individualTarget = Double(filterdata.Order_Value) ?? 0.0
-                                    Total_Achieved += individualTarget
+                            if SFCode == BarsName[index].Id {
+                                if let achievedEntry = Achieved_data.first(where: { $0.Reporting_Code == SFCode }) {
+                                    let filteredTargets = Achieved_data.filter { $0.Reporting_Code == SFCode}
+                                    var Total_Achieved = 0.0
+                                    for filterdata in filteredTargets{
+                                        let individualTarget = Double(filterdata.Order_Value) ?? 0.0
+                                        Total_Achieved += individualTarget
+                                    }
+                                    BarsName[index].Achievement = String(format: "%.2f", Total_Achieved)
+                                    print("Total")
+                                } else {
+                                    BarsName[index].Achievement = "0.0"
                                 }
-                                BarsName[index].Achievement = String(format: "%.2f", Total_Achieved)
-                            } else {
-                                BarsName[index].Achievement = "0.0"
+                            }else{
+                                if let achievedEntry = Achieved_data.first(where: { $0.Reporting_Code == BarsName[index].Id }) {
+                                    let filteredTargets = Achieved_data.filter { $0.Reporting_Code == BarsName[index].Id}
+                                    var Total_Achieved = 0.0
+                                    for filterdata in filteredTargets{
+                                        let individualTarget = Double(filterdata.Order_Value) ?? 0.0
+                                        Total_Achieved += individualTarget
+                                    }
+                                    BarsName[index].Achievement = String(format: "%.2f", Total_Achieved)
+                                } else {
+                                    BarsName[index].Achievement = "0.0"
+                                }
                             }
                         }
                     }
@@ -632,6 +706,8 @@ class Performance: UIViewController,ChartViewDelegate, UITableViewDelegate, UITa
         }
     }
     @objc func Viewopen(){
+        Field_Force_data = lAllObjSel
+        All_Field_table.reloadData()
         All_Field.isHidden = false
     }
     @objc func OrderTyps(){

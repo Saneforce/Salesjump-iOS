@@ -16,7 +16,7 @@ struct Tabldata:Codable{
     let Id:String
     let Name:String
 }
-class Location: UIViewController,MKMapViewDelegate,UITableViewDelegate, UITableViewDataSource {
+class Location: IViewController,MKMapViewDelegate,UITableViewDelegate, UITableViewDataSource {
 
     @IBOutlet weak var Select_Field: UIView!
     @IBOutlet weak var All_field_Force_View: UIView!
@@ -90,6 +90,8 @@ class Location: UIViewController,MKMapViewDelegate,UITableViewDelegate, UITableV
         txSearchSel.text = ""
     }
     @objc func OpenView(){
+        FiledName = lAllObjSel
+        All_Field_Table.reloadData()
         All_field_Force_View.isHidden = false
     }
     @IBAction func Close_View(_ sender: Any) {

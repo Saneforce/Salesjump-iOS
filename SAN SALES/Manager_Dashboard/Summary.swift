@@ -323,16 +323,18 @@ class Summary: IViewController,FSCalendarDelegate,FSCalendarDataSource, UITableV
                         UPC.text = String(UPClls)
                         Secondary_Calls.text = String(Order_Val)
                         Net_Weight.text = String(weightValue)+".00"
-                        var Productivity_Data: Int
+                        var Productivity_Data: Double
 
                         if Total_Call != 0 {
-                            Productivity_Data = Int(Productive_Call) / Total_Call * 100
+                            Productivity_Data = Double(Productive_Call) / Double(Total_Call) * 100
+                            print(Productivity_Data)
+                            
                         } else {
                            
                             Productivity_Data = 0 // Setting a default value
                         }
                         print(Productivity_Data)
-                        Productivity.text = String(Productivity_Data)+".00"
+                        Productivity.text = String(format: "%.2f",Productivity_Data)
                         
                         
                         
@@ -362,6 +364,8 @@ class Summary: IViewController,FSCalendarDelegate,FSCalendarDataSource, UITableV
         Cal_View.isHidden = false
     }
     @objc func FiledData(){
+        SfData = lAllObjSel
+        All_Filed_Name.reloadData()
         All_Field_View.isHidden = false
     }
     @IBAction func Cancel_Bt(_ sender: Any) {
