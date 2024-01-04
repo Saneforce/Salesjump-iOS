@@ -11,6 +11,7 @@ struct sflatlog: Codable {
     let lat: String
     let log: String
     let SfCode:String
+    let username:String
 }
 struct Tabldata:Codable{
     let Id:String
@@ -181,13 +182,13 @@ class Location: IViewController,MKMapViewDelegate,UITableViewDelegate, UITableVi
             switch response.result {
                 
             case .success(let value):
-               // print(value)
+                print(value)
                 if let json = value as? [String: AnyObject] {
                     if let resultArray = json["result"] as? [[String: AnyObject]] {
                         for result in resultArray {
                             if let lat = result["lat"] as? String,
-                               let long = result["long"] as? String,let sfcode = result["sfcode"] as? String {
-                                Userlatlog.append(sflatlog(lat: lat, log: long, SfCode: sfcode))
+                               let long = result["long"] as? String,let sfcode = result["sfcode"] as? String,let username = result["username"] as? String {
+                                Userlatlog.append(sflatlog(lat: lat, log: long, SfCode: sfcode,username: username))
                             }
                         }
                     }
@@ -208,7 +209,7 @@ class Location: IViewController,MKMapViewDelegate,UITableViewDelegate, UITableVi
         for latLog in Userlatlog {
             let annotation = MKPointAnnotation()
             annotation.coordinate = CLLocationCoordinate2D(latitude: Double(latLog.lat)!, longitude: Double(latLog.log)!)
-            annotation.title = "Your Title"
+            annotation.title = latLog.username
             Map_View.addAnnotation(annotation)
             let circle = MKCircle(center: annotation.coordinate, radius: 500)
                 Map_View.addOverlay(circle)
@@ -218,7 +219,7 @@ class Location: IViewController,MKMapViewDelegate,UITableViewDelegate, UITableVi
         for latLog in Userlatlog {
             let annotation = CustomAnnotation()
             annotation.coordinate = CLLocationCoordinate2D(latitude: Double(latLog.lat)!, longitude: Double(latLog.log)!)
-            annotation.title = "Your Title"
+            annotation.title = latLog.username
             Map_View.addAnnotation(annotation)
         }
 
@@ -243,8 +244,12 @@ class Location: IViewController,MKMapViewDelegate,UITableViewDelegate, UITableVi
         let annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: "customAnnotationView")
         annotationView.image = UIImage(named: customAnnotation.imageName)
         annotationView.canShowCallout = true
+        
+       
+        
         return annotationView
     }
+
 
 
         // MARK: - MKMapViewDelegate
@@ -296,7 +301,11 @@ class Location: IViewController,MKMapViewDelegate,UITableViewDelegate, UITableVi
             print("Address: \(addressString)")
 
             annotation.subtitle = addressString
-
+            
+            // Create a custom annotation view
+                   let customAnnotationView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: "customAnnotationView")
+                   customAnnotationView.canShowCallout = true
+            
             DispatchQueue.main.asyncAfter(deadline: .now() + 60.0) {
                       mapView.deselectAnnotation(annotation, animated: true)
                   }
@@ -324,4 +333,6 @@ class Location: IViewController,MKMapViewDelegate,UITableViewDelegate, UITableVi
         All_Field_Table.reloadData()
     }
 }
+
+
 
