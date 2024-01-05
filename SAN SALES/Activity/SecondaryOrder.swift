@@ -1478,7 +1478,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
                 {
                     
                 case .success(let value):
-                    //print(value)
+                    print(value)
                     if let json = value as? [AnyObject] {
                         guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
                             print("Error: Cannot convert JSON object to Pretty JSON data")
@@ -1522,6 +1522,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
                         self.Editobjcalls = json
 //                        print(Editobjcalls)
                         Editoredr(sender: button)
+                        DemoEdite()
                        // setSecEditeOrder()
                     }
                 case .failure(let error):
@@ -1551,9 +1552,9 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
             // The optional value is nil
             print("Product is nil")
         }
-        let product = Editobjcalls[ary]
-        print(product)
-                let Additional_Prod_Dtls = product["Additional_Prod_Code1"] as? String
+       // let product = Editobjcalls[ary]
+      
+                let Additional_Prod_Dtls = Editobjcalls[0]["Additional_Prod_Code1"] as? String
                 let productArray = Additional_Prod_Dtls?.components(separatedBy: "#")
                 if let products = productArray {
                     for product in products {
@@ -1642,7 +1643,13 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
                             selNetWt=String("")
                             print(selNetWt)
                         }
-
+                            print(id)
+                            print(selUOM)
+                            print(selUOMNm)
+                            print(selUOMConv)
+                            print(selNetWt)
+                            print(sQty)
+                            print(lProdItem)
                 
                 updateQty(id: id, sUom: selUOM, sUomNm: selUOMNm, sUomConv: selUOMConv,sNetUnt: selNetWt, sQty: String(sQty),ProdItem: lProdItem,refresh: 1)
                         tbProduct.reloadData()
@@ -1653,7 +1660,38 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
                     }
                 }
     }
-    
+    func DemoEdite(){
+        
+        for item in Editobjcalls {
+            
+            print(item)
+            
+            if let Additional_Prod_Dtls = item["Additional_Prod_Dtls"] as? String{
+                print(Additional_Prod_Dtls)
+               
+                let components = Additional_Prod_Dtls.components(separatedBy: "@")
+                print(components)
+                for component in components {
+                    print(component)
+                }
+           
+            let id: String
+            var BasUnitCode: Int = 0
+            var selNetWt: String = ""
+            let trimmedString = ""
+            
+//            let indexToDelete = lstAllProducts.firstIndex(where: { String(format: "%@", $0["id"] as! CVarArg) == "\(String(describing: trimmedString))" })
+//            
+//            if let baseUnitCodeStr = lstAllProducts[indexToDelete!]["Base_Unit_code"] as? String,
+//               let baseUnitCodeInt = Int(baseUnitCodeStr) {
+//                BasUnitCode = baseUnitCodeInt
+//                print(BasUnitCode)
+//            }
+            
+            
+        }
+    }
+    }
      
     @objc private func GotoHome() {
         self.resignFirstResponder()

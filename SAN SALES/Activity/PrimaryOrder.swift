@@ -905,6 +905,7 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
             VisitData.shared.ProductCart.append(jitm)
             
         }
+        print(VisitData.shared.ProductCart)
         updateOrderValues(refresh: refresh)
     }
     @objc private func deleteItem(_ sender: UITapGestureRecognizer) {
@@ -1185,7 +1186,7 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
         
         if let unwrappedProduct = item,let unwrappedProduct2 = item2 {
             
-            let apiKey: String = "\(axnEdit)&State_Code=\(StateCode)&Trans_Detail_SlNo=\(unwrappedProduct)&&Order_No=\(unwrappedProduct2)"
+            let apiKey: String = "\(axnEdit)&State_Code=\(StateCode)&Trans_Detail_SlNo=\(unwrappedProduct)&Order_No=\(unwrappedProduct2)"
             
             
             AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
@@ -1206,7 +1207,8 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
                         }
                         print(prettyPrintedJson)
                         self.objcallsprimary = json
-                        Editoredr()
+                        //Editoredr()
+                        DemoEdite()
                     }
                 case .failure(let error):
                     Toast.show(message: error.errorDescription!)  //, controller: self
@@ -1227,18 +1229,20 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
         
         let indxPath = lstAllProducts
         print(indxPath)
-        print(areypostion as Any)
-        var ary: Int = 0
-        if let unwrappedProduct = areypostion {
-            print(unwrappedProduct)
-            ary = unwrappedProduct
-        } else {
-            // The optional value is nil
-            print("Product is nil")
-        }
-        let product = objcallsprimary[ary]
+//        print(areypostion as Any)
+//        var ary: Int = 0
+//        if let unwrappedProduct = areypostion {
+//            print(unwrappedProduct)
+//            ary = unwrappedProduct
+//        } else {
+//            // The optional value is nil
+//            print("Product is nil")
+//        }
+//        print(objcallsprimary)
+//        let product = objcallsprimary[ary]
+//        print(product)
+        let Additional_Prod_Dtls = objcallsprimary[0]["Additional_Prod_Code"] as? String
         
-        let Additional_Prod_Dtls = product["Additional_Prod_Code"] as? String
         
         
         //        let price1 = objcallsprimary[0]["CQty"] as! Int
@@ -1249,7 +1253,7 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
      
         for proditem in objcallsprimary{
             let CQty = proditem["CQty"] as! Int
-            print( CQty)
+            print(objcallsprimary)
             let Product_Code = proditem["Product_Code"] as! String
             print(Product_Code)
         
@@ -1319,20 +1323,31 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
                     
                     if(items.count>0)
                     {
+                        print(items)
                         selUOM=String(format: "%@", items[0]["UOM"] as! CVarArg)
                         selUOMNm=String(format: "%@", items[0]["UOMNm"] as! CVarArg)
                         selUOMConv=String(format: "%@", items[0]["UOMConv"] as! CVarArg)
                         selNetWt=String(format: "%@", items[0]["NetWt"] as! CVarArg)
                     }else{
+                        print(proditem)
+                        
                         selUOM=String(BasUnitCode)
                         print(selUOM)
-                        selUOMNm=String(stkname["Product_Sale_Unit"] as! String)
+                        selUOMNm=String(proditem["Product_Unit_Name"] as! String)
                         print(selUOMNm)
-                        selUOMConv=String(stkname["conversionQty"] as! Int)
+                        selUOMConv=String(proditem["Product_Unit_Value"] as! Int)
                         print(selUOMConv)
                         selNetWt=String("")
                         print(selNetWt)
                     }
+                    print(id)
+                    print(selUOM)
+                    print(selUOMNm)
+                    print(selUOMConv)
+                    print(selNetWt)
+                    print(sQty)
+                    print(lProdItem)
+                    
                     updateQty(id: id, sUom: selUOM, sUomNm: selUOMNm, sUomConv: selUOMConv,sNetUnt: selNetWt, sQty: String(sQty),ProdItem: lProdItem,refresh: 1)
                 }
                 else {
@@ -1345,6 +1360,36 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
     }
         
     }
+    func DemoEdite(){
+        for item in objcallsprimary{
+            print(item)
+            let id: String
+            let lProdItem:[String: Any]
+            let Product_Code = item["Product_Code"] as! String
+            var BasUnitCode: Int = 0
+            let indexToDelete = lstAllProducts.firstIndex(where: { String(format: "%@", $0["id"] as! CVarArg) == "\(String(describing: Product_Code))" })
+            let stkname = lstAllProducts[indexToDelete!]
+            print(stkname)
+            lProdItem = stkname as! [String : Any]
+            id=String(format: "%@", lstAllProducts[indexToDelete!]["id"] as! CVarArg)
+            let sUom = item["Product_Code"] as? String
+            if let baseUnitCodeStr = lstAllProducts[indexToDelete!]["Base_Unit_code"] as? String,
+               let baseUnitCodeInt = Int(baseUnitCodeStr) {
+                BasUnitCode = baseUnitCodeInt
+                print(BasUnitCode)
+            }
+            
+            let sUomNm = item["Product_Unit_Name"] as? String
+            let sUomConv = String((item["CQty"] as? Int)!)
+            let sNetUnt = ""
+            let sQty = item["Qty"] as? Int
+            
+            
+            
+            updateQty(id: sUom!, sUom: String(BasUnitCode), sUomNm: sUomNm!, sUomConv: sUomConv,sNetUnt: sNetUnt, sQty: String(sQty!),ProdItem: lProdItem,refresh: 1)
+        }
+    }
+    
     
 }
 /*

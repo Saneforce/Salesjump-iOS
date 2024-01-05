@@ -38,7 +38,7 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
     struct Viewval: Any {
         let Product : String
         let qty : Int
-        let value : Int
+        let value : Double
     }
     var View:[Viewval]=[]
     
@@ -114,7 +114,7 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
             return View.count
         }
         if tableView == InputTB {
-            return View.count
+            return Input.count
         }
         return 0
     }
@@ -125,16 +125,28 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
             lblnodata.isHidden=true
             PrimayOrderViewTB.isHidden=false
             let item: [String: Any] = PrimarySubmittedDCR.objcalls_SelectPrimaryorder2[indexPath.row] as! [String : Any]
+            print(item)
             cell.Disbutor?.text = item["Trans_Detail_Name"] as? String
             cell.rout?.text = item["SDP"] as? String
             cell.meettime.text = item["StartOrder_Time"] as? String
            
             if let order = item["Order_date"] as? String {
                 cell.ordertime.text = order
-            }else{
-                cell.EditButton.isHidden = true
-                cell.ViewButton.isHidden = true
             }
+             
+            let order = item["Order_No"] as? String
+            let Additional_Prod_Dtls = item["Additional_Prod_Dtls"] as! String
+            if (order == nil || Additional_Prod_Dtls == "" ) {
+                cell.EditButton.isHidden = true
+                cell.DeleteButton.isHidden = true
+            } else {
+                cell.EditButton.isHidden = false
+                cell.DeleteButton.isHidden = false
+            }
+            
+           
+           
+            
             cell.vwContainer.layer.cornerRadius = 20
             cell.ViewButton.layer.cornerRadius = 12
             cell.EditButton.layer.cornerRadius = 12
@@ -283,9 +295,11 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
         alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
         self.ShowLoading(Message: "    Loading...")
         let buttonPosition:CGPoint = (sender as AnyObject).convert(CGPoint.zero, to: self.PrimayOrderViewTB)
+            print(buttonPosition)
         guard let indexPath = self.PrimayOrderViewTB.indexPathForRow(at: buttonPosition) else{
             return
         }
+            print(indexPath)
         let product = PrimarySubmittedDCR.objcalls_SelectPrimaryorder2[indexPath.row]
             //let item = product["Trans_Sl_No"] as! String
              print(product)
@@ -368,7 +382,7 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     @IBAction func ViewBT(_ sender: Any) {
-    
+        Input.removeAll()
         let buttonPosition:CGPoint = (sender as AnyObject).convert(CGPoint.zero, to: self.PrimayOrderViewTB)
         guard let indexPath = self.PrimayOrderViewTB.indexPathForRow(at: buttonPosition) else{
             return
@@ -381,11 +395,19 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
             self.Disbutorsname.text = product["Trans_Detail_Name"] as? String
             self.Route.text = product["SDP"] as? String
             self.Joint_Work.text = product["jgch"] as? String
+            
+     
         
         Input.append(inputval(Key: "Meet Time", Value: product["StartOrder_Time"] as! String))
-        Input.append(inputval(Key: "Order Time", Value: product["Order_date"] as! String))
-        Input.append(inputval(Key: "Order Value", Value: String(product["POB_Value"] as! Int)))
+        Input.append(inputval(Key: "Order Time", Value: product["StartOrder_Time"] as! String))
+        if let pobValue = product["POB_Value"] as? Double {
+            Input.append(inputval(Key: "Order Value", Value: String(pobValue)))
+        } else {
+            Input.append(inputval(Key: "Order Value", Value: ""))
+        }
+
         Input.append(inputval(Key: "Remarks", Value: product["Activity_Remarks"] as! String))
+        print(Input)
         InputTB.reloadData()
         PrimarySubmittedDCR.EndOrder_Time = product["EndOrder_Time"] as! String
         
@@ -393,23 +415,29 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
             let productArray = Additional_Prod_Dtls.components(separatedBy: "#")
         print(productArray)
         View.removeAll()
+        if (Additional_Prod_Dtls == ""){
+            print("No Data")
+            OrderTB.reloadData()
+        }else{
             for product in productArray {
                 let productData = product.components(separatedBy: "@")
                 print(productData[0])
                 let productData2 = productData[0]
                 print(productData2)
-                   
-                    let productDatas = productData2.components(separatedBy: "~")
-                    print(productDatas[0])
-                    let price = productDatas[1].components(separatedBy: "$")[0]
-                    let price1 = productDatas[1].components(separatedBy: "$")[1]
-                    print(price)
-                    print(price1)
-
-                    View.append(Viewval(Product:productDatas[0] , qty: Int(price1)!, value: Int(price)!))
+                
+                let productDatas = productData2.components(separatedBy: "~")
+                print(productDatas[0])
+                let price = productDatas[1].components(separatedBy: "$")[0]
+                let price1 = productDatas[1].components(separatedBy: "$")[1]
+                print(price)
+                print(price1)
+                
+                View.append(Viewval(Product:productDatas[0] , qty: Int(price1)!, value: Double(price)!))
+                print(View)
                 OrderTB.reloadData()
                 
             }
+        }
         OrderHig.constant = 100 + CGFloat(40*self.View.count)
         print(OrderHig.constant)
             self.view.layoutIfNeeded()
