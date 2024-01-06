@@ -1521,7 +1521,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
                         }
                         self.Editobjcalls = json
 //                        print(Editobjcalls)
-                        Editoredr(sender: button)
+                        //Editoredr(sender: button)
                         DemoEdite()
                        // setSecEditeOrder()
                     }
@@ -1664,31 +1664,42 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         
         for item in Editobjcalls {
             
-            print(item)
-            
-            if let Additional_Prod_Dtls = item["Additional_Prod_Dtls"] as? String{
-                print(Additional_Prod_Dtls)
-               
-                let components = Additional_Prod_Dtls.components(separatedBy: "@")
-                print(components)
-                for component in components {
-                    print(component)
+            if let Additional_Prod_Dtls = item["Additional_Prod_Dtls"] as? String, let Additional_Prod_Code = item["Additional_Prod_Code"] as? String{
+                
+                let  separates = Additional_Prod_Dtls.components(separatedBy: "#")
+                let  separte_Prod_Code = Additional_Prod_Code.components(separatedBy: "#")
+                for (separt_item, separte_Prod_Code_item) in zip(separates, separte_Prod_Code) {
+                    let id: String
+                    var BasUnitCode: Int = 0
+                    var selNetWt: String = ""
+                    let trimmedString = ""
+                    let lProdItem:[String: Any]
+                    var sQty : String = ""
+                    var selUOMNm:String = ""
+                    var selUOMConv:String = ""
+                    let prod_components = separte_Prod_Code_item.components(separatedBy: "~")
+                    let Prod_Id = prod_components[0].trimmingCharacters(in: .whitespacesAndNewlines)
+                    let Separt_UomConv = prod_components[1].components(separatedBy: "$")
+                    let Separt_UomConv2 = Separt_UomConv[1].components(separatedBy: "@")
+                    selUOMConv = Separt_UomConv2[0]
+                    let components = separt_item.components(separatedBy: "@")
+                    let Cod_and_uom = components[3]
+                    let selUnit = Cod_and_uom.components(separatedBy: "?")
+                    sQty = selUnit[0]
+                    selUOMNm = selUnit[0]
+                    let separt_id_and_Uom = selUnit[1].components(separatedBy: "-")
+                    selUOMNm = separt_id_and_Uom[1]
+                 
+                let indexToDelete = lstAllProducts.firstIndex(where: { String(format: "%@", $0["id"] as! CVarArg) == Prod_Id })
+                    let stkname = lstAllProducts[indexToDelete!]
+                    lProdItem = stkname as! [String : Any]
+                if let baseUnitCodeStr = lstAllProducts[indexToDelete!]["Base_Unit_code"] as? String,
+                   let baseUnitCodeInt = Int(baseUnitCodeStr) {
+                    BasUnitCode = baseUnitCodeInt
                 }
-           
-            let id: String
-            var BasUnitCode: Int = 0
-            var selNetWt: String = ""
-            let trimmedString = ""
-            
-//            let indexToDelete = lstAllProducts.firstIndex(where: { String(format: "%@", $0["id"] as! CVarArg) == "\(String(describing: trimmedString))" })
-//            
-//            if let baseUnitCodeStr = lstAllProducts[indexToDelete!]["Base_Unit_code"] as? String,
-//               let baseUnitCodeInt = Int(baseUnitCodeStr) {
-//                BasUnitCode = baseUnitCodeInt
-//                print(BasUnitCode)
-//            }
-            
-            
+                
+                    updateQty(id: Prod_Id, sUom: String(BasUnitCode), sUomNm: selUOMNm, sUomConv: selUOMConv,sNetUnt: selNetWt, sQty: sQty,ProdItem: lProdItem,refresh: 1)
+            }
         }
     }
     }

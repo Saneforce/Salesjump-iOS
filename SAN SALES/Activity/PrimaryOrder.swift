@@ -1385,7 +1385,6 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
             let sQty = item["Qty"] as? Int
             
             
-            
             updateQty(id: sUom!, sUom: String(BasUnitCode), sUomNm: sUomNm!, sUomConv: sUomConv,sNetUnt: sNetUnt, sQty: String(sQty!),ProdItem: lProdItem,refresh: 1)
         }
     }

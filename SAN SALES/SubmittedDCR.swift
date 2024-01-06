@@ -164,6 +164,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
             submittedDCRTB.isHidden = false
                 print(SubmittedDCR.objcalls_SelectSecondaryorder2)
                 let item: [String: Any] = SubmittedDCR.objcalls_SelectSecondaryorder2[indexPath.row] as! [String : Any]
+            print(item)
                 cell.RetailerName?.text = item["Trans_Detail_Name"] as? String
                 cell.DistributerName?.text = item["Trans_Detail_Slno"] as? String
                 cell.Rou?.text = item["SDP_Name"] as? String
@@ -173,9 +174,14 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
                 if let transSlNo = item["Order_Out_Time"] as? String {
                     cell.OrderTime?.text = transSlNo
                     
-                } else {
-                    cell.EditBton.isHidden = true
-                    cell.Viewbt.isHidden = true
+                }
+            
+            if (item["Trans_Sl_No"] as? String == nil){
+                cell.EditBton.isHidden = true
+                cell.DeleteButton.isHidden = true
+            }else {
+                    cell.EditBton.isHidden = false
+                    cell.DeleteButton.isHidden = false
                 }
                 cell.vwContainer.layer.cornerRadius = 20
                 cell.Viewbt.layer.cornerRadius = 12
@@ -317,69 +323,92 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
             return
         }
         
-   
-            let product = SubmittedDCR.objcalls_SelectSecondaryorder2[indexPath.row]
-            print(product)
-
-   
-            self.Retlbl.text=String(format: "%@", product["Trans_Detail_Name"] as! String)
-            self.Dislbl.text=String(format: "%@", product["Trans_Detail_Slno"] as! String)
-            self.Rotlbl.text=String(format: "%@", product["SDP_Name"] as! String)
-            let item2 = product["Trans_Sl_No"] as! String
-            
-             Input.removeAll()
         
-            Input.append(inputval(Key: "Meet Time", Value: product["StartOrder_Time"] as! String))
+        let product = SubmittedDCR.objcalls_SelectSecondaryorder2[indexPath.row]
+        print(product)
+        
+        
+        self.Retlbl.text=String(format: "%@", product["Trans_Detail_Name"] as! String)
+        self.Dislbl.text=String(format: "%@", product["Trans_Detail_Slno"] as! String)
+        self.Rotlbl.text=String(format: "%@", product["SDP_Name"] as! String)
+        
+        
+        
+        Input.removeAll()
+        
+        Input.append(inputval(Key: "Meet Time", Value: product["StartOrder_Time"] as! String))
+        
+        if (product["Order_Out_Time"] as? String == nil){
+            Input.append(inputval(Key: "Order Time", Value: ""))
+        }else{
             Input.append(inputval(Key: "Order Time", Value: product["Order_Out_Time"] as! String))
-            Input.append(inputval(Key: "Order Value", Value: product["finalNetAmnt"] as! String))
-            Input.append(inputval(Key: "Remarks", Value: product["Activity_Remarks"] as! String))
-            InputTB.reloadData()
-        SubmittedDCR.Order_Out_Time =  product["Order_Out_Time"] as! String
-        print(SubmittedDCR.Order_Out_Time)
+        }
+        if (product["Order_Value"] as? String == nil){
+            Input.append(inputval(Key: "Order Value", Value: "0.0"))
+        }else{
+            Input.append(inputval(Key: "Order Value", Value: product["Order_Value"] as! String))
+        }
+        Input.append(inputval(Key: "Remarks", Value: product["Activity_Remarks"] as! String))
+        InputTB.reloadData()
         
-            let apiKey: String = "\(axnview)&divisionCode=\(DivCode)&desig=\(Desig)&rSF=\(SFCode)&sfCode=\(SFCode)&State_Code=\(StateCode)&Order_No=\(item2)"
+        if (product["Order_Out_Time"] as? String == nil){
+            SubmittedDCR.Order_Out_Time =  ""
+        }else{
+            SubmittedDCR.Order_Out_Time =  product["Order_Out_Time"] as! String
+        }
+        print(SubmittedDCR.Order_Out_Time)
+        if (product["Trans_Sl_No"] as? String == nil){
+            print("No Data")
+            self.OrderView2.reloadData()
+        }else{
+            var Trans_Sl_No_Code = ""
+            if let item2 = product["Trans_Sl_No"] as? String{
+                Trans_Sl_No_Code = item2
+            }
             
-            
-            AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
-                AFdata in
-                switch AFdata.result
-                {
+        let apiKey: String = "\(axnview)&divisionCode=\(DivCode)&desig=\(Desig)&rSF=\(SFCode)&sfCode=\(SFCode)&State_Code=\(StateCode)&Order_No=\(Trans_Sl_No_Code)"
+        
+        
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+            AFdata in
+            switch AFdata.result
+            {
+                
+            case .success(let value):
+                print(value)
+                if let json = value as? [AnyObject] {
+                    guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
+                        print("Error: Cannot convert JSON object to Pretty JSON data")
+                        return
+                    }
+                    guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+                        print("Error: Could print JSON in String")
+                        return
+                    }
+                    print(prettyPrintedJson)
+                    self.objcalls = json
                     
-                case .success(let value):
-                    print(value)
-                    if let json = value as? [AnyObject] {
-                        guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
-                            print("Error: Cannot convert JSON object to Pretty JSON data")
-                            return
-                        }
-                        guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
-                            print("Error: Could print JSON in String")
-                            return
-                        }
-                        print(prettyPrintedJson)
-                        self.objcalls = json
-                    
-                        View.removeAll()
-                        for item in json {
-                            
-                            View.append(Viewval(Product: item["Product_Name"] as! String, qty: item["Quantity"] as! Int, value: Int(item["value"] as! Double)))
-                            
-                        }
-                        OrederTBHight.constant = 100 + CGFloat(40*self.View.count)
-                        print(OrederTBHight.constant)
-                            self.view.layoutIfNeeded()
-                        ScroolHight.constant = 100 + CGFloat(60*self.View.count)
-                        print(ScroolHight.constant)
-                            self.view.layoutIfNeeded()                  
-                        updateTableViewAndSubview()
-                        self.OrderView2.reloadData()
+                    View.removeAll()
+                    for item in json {
+                        
+                        View.append(Viewval(Product: item["Product_Name"] as! String, qty: item["Quantity"] as! Int, value: Int(item["value"] as! Double)))
                         
                     }
-                case .failure(let error):
-                    Toast.show(message: error.errorDescription!)  //, controller: self
+                    OrederTBHight.constant = 100 + CGFloat(40*self.View.count)
+                    print(OrederTBHight.constant)
+                    self.view.layoutIfNeeded()
+                    ScroolHight.constant = 100 + CGFloat(60*self.View.count)
+                    print(ScroolHight.constant)
+                    self.view.layoutIfNeeded()
+                    updateTableViewAndSubview()
+                    self.OrderView2.reloadData()
+                    
                 }
+            case .failure(let error):
+                Toast.show(message: error.errorDescription!)  //, controller: self
             }
-        
+        }
+    }
 
         Viewwindow.isHidden=false
     }
