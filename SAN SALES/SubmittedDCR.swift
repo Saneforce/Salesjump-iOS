@@ -41,6 +41,8 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
     
     @IBOutlet weak var Ret_and_img_Hed2: UIView!
     
+    @IBOutlet weak var scrollView: UIScrollView!
+    
     
     struct mnuItem: Any {
         let MasId: Int
@@ -127,7 +129,9 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
 
     
     @objc func closeMenuWin(){
-        GlobalFunc.movetoHomePage()
+        if let navigationController = self.navigationController {
+                navigationController.popViewController(animated: true)
+            }
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if submittedDCRTB == tableView { return 190}
@@ -180,7 +184,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
             
                 cell.DistributerName?.text = ""
                 cell.Rou?.text = item["SDP_Name"] as? String
-                cell.MeetTime?.text = item["Order_In_Time"] as? String
+                cell.MeetTime?.text = item["StartOrder_Time"] as? String
                 cell.OrderTime?.text = item["Order_Out_Time"] as? String
                 
                 if let transSlNo = item["Order_Out_Time"] as? String {
@@ -336,7 +340,9 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
     
      
     @IBAction func Edit(_ sender: Any) {
+        self.ShowLoading(Message: "Loading...")
         View.removeAll()
+        self.OrderView2.reloadData()
         let buttonPosition:CGPoint = (sender as AnyObject).convert(CGPoint.zero, to: self.submittedDCRTB)
         guard let indexPath = self.submittedDCRTB.indexPathForRow(at: buttonPosition) else{
             return
@@ -363,7 +369,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
         }else{
             Input.append(inputval(Key: "Order Time", Value: product["Order_Out_Time"] as! String))
         }
-        if (product["finalNetAmnt"] as? String == nil){
+        if (product["finalNetAmnt"] as? String == ""){
             Input.append(inputval(Key: "Order Value", Value: "0.0"))
         }else{
             Input.append(inputval(Key: "Order Value", Value: product["finalNetAmnt"] as! String))
@@ -381,6 +387,10 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
             print("No Data")
 
             self.OrderView2.reloadData()
+            ScroolHight.constant = 1000
+            print(ScroolHight.constant)
+            self.view.layoutIfNeeded()
+            self.LoadingDismiss()
         }else{
             var Trans_Sl_No_Code = ""
             if let item2 = product["Trans_Sl_No"] as? String{
@@ -418,11 +428,13 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
                     OrederTBHight.constant = 100 + CGFloat(40*self.View.count)
                     print(OrederTBHight.constant)
                     self.view.layoutIfNeeded()
-                    ScroolHight.constant = 100 + CGFloat(60*self.View.count)
+                    ScroolHight.constant = 100 + CGFloat(60*self.View.count) + CGFloat(50*self.Input.count)
                     print(ScroolHight.constant)
                     self.view.layoutIfNeeded()
+                    
                     updateTableViewAndSubview()
                     self.OrderView2.reloadData()
+                    self.LoadingDismiss()
                     
                 }
             case .failure(let error):

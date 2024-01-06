@@ -128,7 +128,7 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
             let item: [String: Any] = PrimarySubmittedDCR.objcalls_SelectPrimaryorder2[indexPath.row] as! [String : Any]
             print(item)
             cell.Disbutor?.text = item["Trans_Detail_Name"] as? String
-            cell.rout?.text = item["SDP"] as? String
+            cell.rout?.text = item["SDP_Name"] as? String
             cell.meettime.text = item["StartOrder_Time"] as? String
            
             if let order = item["Order_date"] as? String {
@@ -404,7 +404,7 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
             let product = PrimarySubmittedDCR.objcalls_SelectPrimaryorder2[indexPath.row]
             print(product)
             self.Disbutorsname.text = product["Trans_Detail_Name"] as? String
-            self.Route.text = product["SDP"] as? String
+            self.Route.text = product["SDP_Name"] as? String
             self.Joint_Work.text = product["jgch"] as? String
             
      

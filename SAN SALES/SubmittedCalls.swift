@@ -95,10 +95,9 @@ class SubmittedCalls: UIViewController, UITableViewDelegate, UITableViewDataSour
             (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
         }
         if lItm.MasId == 2  {
-            //let Homevc = storyboard.instantiateViewController(withIdentifier: "SubmittedCalls") as! SubmittedCalls
-           // let SubCalls = storyboard.instantiateViewController(withIdentifier: "SubmittedCalls") as! SubmittedCalls
+     
             let PSUBDCR = storyboard.instantiateViewController(withIdentifier: "PrimarySubmittedDCR") as! PrimarySubmittedDCR
-            viewController.setViewControllers([PSUBDCR], animated: false)
+            viewController.pushViewController([PSUBDCR], animated: true)
             (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
         }
         (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
