@@ -55,7 +55,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
     struct Viewval: Any {
         let Product : String
         let qty : Int
-        let value : Int
+        let value : String
     }
     var View:[Viewval]=[]
     
@@ -336,6 +336,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
     
      
     @IBAction func Edit(_ sender: Any) {
+        View.removeAll()
         let buttonPosition:CGPoint = (sender as AnyObject).convert(CGPoint.zero, to: self.submittedDCRTB)
         guard let indexPath = self.submittedDCRTB.indexPathForRow(at: buttonPosition) else{
             return
@@ -354,6 +355,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
         
         Input.removeAll()
         
+        print(product)
         Input.append(inputval(Key: "Meet Time", Value: product["StartOrder_Time"] as! String))
         
         if (product["Order_Out_Time"] as? String == nil){
@@ -361,10 +363,10 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
         }else{
             Input.append(inputval(Key: "Order Time", Value: product["Order_Out_Time"] as! String))
         }
-        if (product["Order_Value"] as? String == nil){
+        if (product["finalNetAmnt"] as? String == nil){
             Input.append(inputval(Key: "Order Value", Value: "0.0"))
         }else{
-            Input.append(inputval(Key: "Order Value", Value: product["Order_Value"] as! String))
+            Input.append(inputval(Key: "Order Value", Value: product["finalNetAmnt"] as! String))
         }
         Input.append(inputval(Key: "Remarks", Value: product["Activity_Remarks"] as! String))
         InputTB.reloadData()
@@ -377,6 +379,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
         print(SubmittedDCR.Order_Out_Time)
         if (product["Trans_Sl_No"] as? String == nil){
             print("No Data")
+
             self.OrderView2.reloadData()
         }else{
             var Trans_Sl_No_Code = ""
@@ -409,7 +412,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
                     View.removeAll()
                     for item in json {
                         
-                        View.append(Viewval(Product: item["Product_Name"] as! String, qty: item["Quantity"] as! Int, value: Int(item["value"] as! Double)))
+                        View.append(Viewval(Product: item["Product_Name"] as! String, qty: item["Quantity"] as! Int, value: String(format: "%.2f",item["value"] as! Double)))
                         
                     }
                     OrederTBHight.constant = 100 + CGFloat(40*self.View.count)
