@@ -89,6 +89,8 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
     public static var Order_Out_Time: String = ""
     
     var refreshControl = UIRefreshControl()
+    var lstPlnDetail: [AnyObject] = []
+    var DataSF: String = ""
     
     var Submittedclickdata = [SubmittedDCRselect]()
     override func viewDidLoad() {
@@ -98,10 +100,16 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
         getUserDetails()
         SelectSecondaryorder()
 
-//        let lstDisData: String=LocalStoreage.string(forKey: "Distributors_Master_")!
-//        if let list = GlobalFunc.convertToDictionary(text: lstDisData) as? [AnyObject] {
-//            lstDisDetail = list;
-//        }
+        let PlnDets: String=LocalStoreage.string(forKey: "Mydayplan")!
+        if let list = GlobalFunc.convertToDictionary(text: PlnDets) as? [AnyObject] {
+            lstPlnDetail = list;
+        }
+        DataSF = self.lstPlnDetail[0]["subordinateid"] as! String
+        let lstDisData: String=LocalStoreage.string(forKey: "Distributors_Master_"+DataSF)!
+        if let list = GlobalFunc.convertToDictionary(text: lstDisData) as? [AnyObject] {
+            lstDisDetail = list;
+        }
+        print(lstDisDetail)
         
         submittedDCRTB.delegate=self
         submittedDCRTB.dataSource=self
@@ -178,16 +186,27 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
                 let item: [String: Any] = SubmittedDCR.objcalls_SelectSecondaryorder2[indexPath.row] as! [String : Any]
             print(item)
                 cell.RetailerName?.text = item["Trans_Detail_Name"] as? String
-            print(lstDisDetail)
             
+            if let Sto_Code = item["Stockist_Code"] as? String {
+                print(Sto_Code)
+                let filteredArray = lstDisDetail.filter {
+                    ($0["id"] as? String) == Sto_Code
+                    
+                }
+               
+                
+                print(lstDisDetail)
+                print(filteredArray)
                 cell.DistributerName?.text = ""
+            }else{
+                cell.DistributerName?.text = ""
+            }
                 cell.Rou?.text = item["SDP_Name"] as? String
                 cell.MeetTime?.text = item["StartOrder_Time"] as? String
                 cell.OrderTime?.text = item["Order_Out_Time"] as? String
                 
                 if let transSlNo = item["Order_Out_Time"] as? String {
                     cell.OrderTime?.text = transSlNo
-                    
                 }
             
             if (item["Trans_Sl_No"] as? String == nil){
