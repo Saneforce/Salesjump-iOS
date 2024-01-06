@@ -87,17 +87,18 @@ class SubmittedCalls: UIViewController, UITableViewDelegate, UITableViewDataSour
         let lItm: mnuItem=strMasList[indexPath.row]
         self.dismiss(animated: true, completion: nil)
         let storyboard = UIStoryboard(name: "Submittedcalls", bundle: nil)
+        let storyboardMain = UIStoryboard(name: "Main", bundle: nil)
         let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
         if lItm.MasId == 1 {
-           // let SubCalls = storyboard.instantiateViewController(withIdentifier: "SubmittedCalls") as! SubmittedCalls
+            let SubCalls = storyboardMain.instantiateViewController(withIdentifier: "SubmittedCalls") as! SubmittedCalls
             let SUBDCR = storyboard.instantiateViewController(withIdentifier: "SubmittedDCR") as! SubmittedDCR
-            viewController.setViewControllers([SUBDCR], animated: false)
+            viewController.setViewControllers([SubCalls,SUBDCR], animated: false)
             (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
         }
         if lItm.MasId == 2  {
-     
+            let SubCalls = storyboardMain.instantiateViewController(withIdentifier: "SubmittedCalls") as! SubmittedCalls
             let PSUBDCR = storyboard.instantiateViewController(withIdentifier: "PrimarySubmittedDCR") as! PrimarySubmittedDCR
-            viewController.pushViewController([PSUBDCR], animated: true)
+            viewController.setViewControllers([SubCalls,PSUBDCR], animated: false)
             (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
         }
         (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)

@@ -129,9 +129,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
 
     
     @objc func closeMenuWin(){
-        if let navigationController = self.navigationController {
-                navigationController.popViewController(animated: true)
-            }
+        navigationController?.popViewController(animated: true)
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if submittedDCRTB == tableView { return 190}

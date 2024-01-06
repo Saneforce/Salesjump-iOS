@@ -89,7 +89,8 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
     
     
     @objc func closeMenuWin(){
-        GlobalFunc.movetoHomePage()
+        navigationController?.popViewController(animated: true)
+        
     }
 //    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
 //        <#code#>
@@ -243,7 +244,7 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
         AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
             AFdata in
             lblnodata.isHidden=false
-            self.LoadingDismiss()
+           
             switch AFdata.result
             {
                 
@@ -265,6 +266,7 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
                     PrimarySubmittedDCR.objcalls_SelectPrimaryorder2 = json
                     self.PrimayOrderViewTB.reloadData()
                     self.OrderTB.reloadData()
+                    self.LoadingDismiss()
                     
                 }
             case .failure(let error):
