@@ -80,6 +80,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
     let LocalStoreage = UserDefaults.standard
     var objcalls: [AnyObject]=[]
     var objcallsSINO: [AnyObject]=[]
+    var lstDisDetail: [AnyObject] = []
     public static var objcalls_SelectSecondaryorder2: [AnyObject] = []
     
     public static var secondaryOrderData: [AnyObject] = []
@@ -90,9 +91,16 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
     var Submittedclickdata = [SubmittedDCRselect]()
     override func viewDidLoad() {
         super.viewDidLoad()
+        let LocalStoreage = UserDefaults.standard
         Nodatalbl.isHidden = true
         getUserDetails()
         SelectSecondaryorder()
+
+//        let lstDisData: String=LocalStoreage.string(forKey: "Distributors_Master_")!
+//        if let list = GlobalFunc.convertToDictionary(text: lstDisData) as? [AnyObject] {
+//            lstDisDetail = list;
+//        }
+        
         submittedDCRTB.delegate=self
         submittedDCRTB.dataSource=self
         OrderView2.delegate=self
@@ -103,6 +111,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
         // Do any additional setup after loading the view.
         submittedDCRTB.addSubview(refreshControl)
         refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
+        
     }
     @objc func refreshData() {
          
@@ -167,7 +176,9 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
                 let item: [String: Any] = SubmittedDCR.objcalls_SelectSecondaryorder2[indexPath.row] as! [String : Any]
             print(item)
                 cell.RetailerName?.text = item["Trans_Detail_Name"] as? String
-                cell.DistributerName?.text = item["Trans_Detail_Slno"] as? String
+            print(lstDisDetail)
+            
+                cell.DistributerName?.text = ""
                 cell.Rou?.text = item["SDP_Name"] as? String
                 cell.MeetTime?.text = item["Order_In_Time"] as? String
                 cell.OrderTime?.text = item["Order_Out_Time"] as? String
