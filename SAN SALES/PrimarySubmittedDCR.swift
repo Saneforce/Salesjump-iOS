@@ -206,8 +206,17 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
                         return
                     }
                     print(prettyPrintedJson)
+                    print(json)
                     self.objcalls=json
-                    SelectPrimary2order()
+                    print(json.count)
+                    print(prettyPrintedJson.count)
+                    if(json.count != 0){
+                        SelectPrimary2order()
+                    }
+                    if(json.count == 0){
+                        self.LoadingDismiss()
+                    }
+                    
                 }
             case .failure(let error):
                 Toast.show(message: error.errorDescription!)  //, controller: self

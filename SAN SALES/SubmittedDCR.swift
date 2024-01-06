@@ -143,6 +143,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
                 submittedDCRTB.isHidden = true
                 Nodatalbl.isHidden = false
                 Nodatalbl.text = "No data available"
+                self.ShowLoading(Message: "Loading...")
                
             }else{
               return SubmittedDCR.objcalls_SelectSecondaryorder2.count
@@ -249,8 +250,13 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
                     }
                     print(prettyPrintedJson)
                     self.objcalls = json
-                
-                    SelectSecondaryorder2()
+                    if (json.count != 0){
+                        SelectSecondaryorder2()
+                    }
+                    
+                    if(json.count == 0){
+                        self.LoadingDismiss()
+                    }
                 }
             case .failure(let error):
                 Toast.show(message: error.errorDescription!)  //, controller: self
@@ -278,6 +284,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
                 Nodatalbl.isHidden = true
             AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
                 AFdata in
+                self.LoadingDismiss()
                 switch AFdata.result
                 {
                     
