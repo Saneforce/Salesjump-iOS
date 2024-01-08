@@ -99,15 +99,17 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
         Nodatalbl.isHidden = true
         getUserDetails()
         SelectSecondaryorder()
-
+        SubmittedDCR.objcalls_SelectSecondaryorder2.removeAll()
         let PlnDets: String=LocalStoreage.string(forKey: "Mydayplan")!
         if let list = GlobalFunc.convertToDictionary(text: PlnDets) as? [AnyObject] {
             lstPlnDetail = list;
         }
+        
         DataSF = self.lstPlnDetail[0]["subordinateid"] as! String
-        let lstDisData: String=LocalStoreage.string(forKey: "Distributors_Master_"+DataSF)!
-        if let list = GlobalFunc.convertToDictionary(text: lstDisData) as? [AnyObject] {
-            lstDisDetail = list;
+        if let lstDistData = LocalStoreage.string(forKey: "Distributors_Master_"+DataSF),
+           let list = GlobalFunc.convertToDictionary(text:  lstDistData) as? [AnyObject] {
+            lstDisDetail = list
+            
         }
         print(lstDisDetail)
         
@@ -157,14 +159,15 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
         if tableView == OrderView{return OrdeView.count}
         if tableView == OrderView2{return View.count}
         if tableView == submittedDCRTB {
-            
-            if SubmittedDCR.objcalls_SelectSecondaryorder2.isEmpty{
-                submittedDCRTB.isHidden = true
-                Nodatalbl.isHidden = false
-                Nodatalbl.text = "No data available"
+            print(SubmittedDCR.objcalls_SelectSecondaryorder2.count)
+            if SubmittedDCR.objcalls_SelectSecondaryorder2.count == 0{
+//                submittedDCRTB.isHidden = true
+//                Nodatalbl.isHidden = false
+//                Nodatalbl.text = "No data available"
                 self.ShowLoading(Message: "Loading...")
                
             }else{
+                print(SubmittedDCR.objcalls_SelectSecondaryorder2.count)
               return SubmittedDCR.objcalls_SelectSecondaryorder2.count
             }
            
@@ -190,14 +193,16 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
             if let Sto_Code = item["Stockist_Code"] as? String {
                 print(Sto_Code)
                 let filteredArray = lstDisDetail.filter {
-                    ($0["id"] as? String) == Sto_Code
-                    
+                    ($0["id"] as? Int) == Int(Sto_Code)
                 }
-               
-                
+              
                 print(lstDisDetail)
                 print(filteredArray)
-                cell.DistributerName?.text = ""
+                if(filteredArray.isEmpty){
+                    cell.DistributerName?.text = ""
+                }else{
+                    cell.DistributerName?.text = filteredArray[0]["name"] as? String
+                }
             }else{
                 cell.DistributerName?.text = ""
             }
@@ -332,6 +337,13 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
                             return
                         }
                         print(prettyPrintedJson)
+                        print(prettyPrintedJson.count)
+                        print(json.count)
+                        if (json.count == 0){
+                            submittedDCRTB.isHidden = true
+                            Nodatalbl.isHidden = false
+                            Nodatalbl.text = "No data available"
+                        }
                         SubmittedDCR.objcalls_SelectSecondaryorder2 = json
                    
                         
@@ -371,7 +383,20 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
         
         
         self.Retlbl.text=String(format: "%@", product["Trans_Detail_Name"] as! String)
-        self.Dislbl.text=String(format: "%@", product["Trans_Detail_Slno"] as! String)
+        
+        if let Sto_Code = product["Stockist_Code"] as? String {
+            print(Sto_Code)
+            let filteredArray = lstDisDetail.filter {
+                ($0["id"] as? Int) == Int(Sto_Code)
+            }
+          
+            print(lstDisDetail)
+            print(filteredArray)
+            self.Dislbl.text=String(format: "%@", filteredArray[0]["name"] as! String)
+        }else{
+            self.Dislbl.text=String(format: "%@", "")
+        }
+       
         self.Rotlbl.text=String(format: "%@", product["SDP_Name"] as! String)
         
         

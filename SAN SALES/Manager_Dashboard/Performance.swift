@@ -552,7 +552,7 @@ class Performance: IViewController,ChartViewDelegate, UITableViewDelegate, UITab
                           
                      
                             
-                            if(dsgMod == "ASM"){
+                            if(dsgMod == "ASM" || dsgMod == "ZSM"){
                                 if (sfCode == SFCode){
                                     Totatal_Order = Totatal_Order+orderValue
                                     Achieved_data.append(Achieved(Order_Value: String(orderValue), Reporting_Code: sfCode, SF_Code: sfCode))
@@ -563,6 +563,7 @@ class Performance: IViewController,ChartViewDelegate, UITableViewDelegate, UITab
                                 
                             }else{
                                 print(BarsName)
+                                
                                 for item in BarsName{
                                     let Iddata = item.Id
                                     print( SFCode)
@@ -576,6 +577,7 @@ class Performance: IViewController,ChartViewDelegate, UITableViewDelegate, UITab
                                     }
                                 }
                             }
+                            
                         }
                         print(Achieved_data)
                         print(SFCode)

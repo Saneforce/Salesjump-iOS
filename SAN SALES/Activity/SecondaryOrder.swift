@@ -102,6 +102,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
     var Trans_Sl_No: String = ""
     var Route: String = ""
     var Stockist_Code: String = ""
+    var Edit_Order_Count = 0
     
     override func viewDidLoad() {
         loadViewIfNeeded()
@@ -1156,8 +1157,9 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
                                 }
                             }
                         }
-                        self.OrderSubmit(sLocation: sLocation, sAddress: sAddress)
+                       
                     }
+                    self.OrderSubmit(sLocation: sLocation, sAddress: sAddress)
                 }, error:{ errMsg in
                     print (errMsg)
                     self.LoadingDismiss()
@@ -1196,7 +1198,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
             sPItems = sPItems + " \"Product_Rx_Qty\":" + (String(format: "%.0f", item["SalQty"] as! Double)) + ","
             sPItems = sPItems + " \"UnitId\": \"" + (item["UOM"] as! String) + "\","
             sPItems = sPItems + " \"UnitName\": \"" + (item["UOMNm"] as! String) + "\","
-            sPItems = sPItems + " \"rx_Conqty\":" + (item["Qty"] as! String) + ","
+            sPItems = sPItems + " \"rx_Conqty\":" + (item["UOMConv"] as! String) + ","
             sPItems = sPItems + " \"Product_Rx_NQty\": 0,"
             sPItems = sPItems + " \"Product_Sample_Qty\": \"" + (String(format: "%.2f", item["NetVal"] as! Double)) + "\","
             sPItems = sPItems + " \"vanSalesOrder\":0,"
@@ -1264,7 +1266,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
             sPItems2 = sPItems2 + " \"id\":\""+id+"\", \"name\":\""+(ProdItems[0]["name"] as! String)+"\","
             sPItems2 = sPItems2 + " \"rx_remarks\":\"\","
             sPItems2 = sPItems2 + " \"rx_remarks_Id\": \"\","
-            sPItems2 = sPItems2 + " \"sample_qty\": \"10.0\","
+            sPItems2 = sPItems2 + " \"sample_qty\": \"" + (String(format: "%.2f", item["NetVal"] as! Double)) + "\","
             sPItems2 = sPItems2 + " \"FreeP_Code\": \"" + (item["OffProd"] as! String) + "\","
             sPItems2 = sPItems2 + " \"Fname\": \"" + (item["OffProdNm"] as! String) + "\","
             sPItems2 = sPItems2 + " \"PromoVal\": 0,"
@@ -1345,7 +1347,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         print(SubmittedDCR.Order_Out_Time)
         
         if VisitData.shared.cInTime.isEmpty {
-            
+          
             var sPItems3: String = ""
             if sPItems2.hasSuffix(",") {
                 // Remove the last comma from sPItems2
@@ -1354,48 +1356,52 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
             }
             
             print("No data")
-          let jsonString2 = "{\"Products\":[" + sPItems3 +  "],\"Activity_Event_Captures\":[],\"POB\":\"0\",\"Value\":\"\(Subtotal)\",\"disPercnt\":0.0,\"disValue\":0.0,\"finalNetAmt\":\(Subtotal),\"taxTotalValue\":\"0\",\"discTotalValue\":\"0.0\",\"subTotal\":\"\(Subtotal)\",\"No_Of_items\":\"\(lstPrvOrder.count)\",\"Cust_Code\":\"'\(Cust_Code)'\",\"DCR_Code\":\"\(DCR_Code)\",\"Trans_Sl_No\":\"\(Trans_Sl_No)\",\"Route\":\"\(Route)\",\"net_weight_value\":\"0\",\"Discountpercent\":0.0,\"discount_price\":0.0,\"target\":\"0\",\"rateMode\":\"free\",\"Stockist\":\"\(Stockist_Code)\",\"RateEditable\":\"\",\"PhoneOrderTypes\":0}"
-          
-        
-         
-
-          let params2: Parameters = [
-              "data": jsonString2 //"["+jsonString+"]"//
-          ]
-          
-          print(params2)
-          print("_________________________________________________________________________________________")
-          AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"dcr/updateProducts" + "&divisionCode=" + self.DivCode + "&sfCode=" + self.SFCode + "&desig=" + self.Desig, method: .post, parameters: params2, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
-          AFdata in
-          self.LoadingDismiss()
-          PhotosCollection.shared.PhotoList = []
-          switch AFdata.result
-          {
-              
-          case .success(let value):
-              print(value)
-              if let json = value as? [String: Any] {
-                  
-                  Toast.show(message: "Order has been submitted successfully", controller: self)
-                  let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
-                  UIApplication.shared.windows.first?.rootViewController = viewController
-                  UIApplication.shared.windows.first?.makeKeyAndVisible()
-                  
-                  VisitData.shared.clear()
-              }
-              
-          case .failure(let error):
-              
-              let alert = UIAlertController(title: "Information", message: error.errorDescription, preferredStyle: .alert)
-              alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
-                  return
-              })
-              self.present(alert, animated: true)
-          }
-      }
-          
+            let jsonString2 = "{\"Products\":[" + sPItems3 +  "],\"Activity_Event_Captures\":[],\"POB\":\"0\",\"Value\":\"\(Subtotal)\",\"disPercnt\":0.0,\"disValue\":0.0,\"finalNetAmt\":\(Subtotal),\"taxTotalValue\":\"0\",\"discTotalValue\":\"0.0\",\"subTotal\":\"\(Subtotal)\",\"No_Of_items\":\"\(lstPrvOrder.count)\",\"Cust_Code\":\"'\(Cust_Code)'\",\"DCR_Code\":\"\(DCR_Code)\",\"Trans_Sl_No\":\"\(Trans_Sl_No)\",\"Route\":\"\(Route)\",\"net_weight_value\":\"0\",\"Discountpercent\":0.0,\"discount_price\":0.0,\"target\":\"0\",\"rateMode\":\"free\",\"Stockist\":\"\(Stockist_Code)\",\"RateEditable\":\"\",\"PhoneOrderTypes\":0}"
             
-       
+            
+            
+            
+            let params2: Parameters = [
+                "data": jsonString2 //"["+jsonString+"]"//
+            ]
+            
+            print(params2)
+            print("_________________________________________________________________________________________")
+            if (Edit_Order_Count == 0){
+            AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"dcr/updateProducts" + "&divisionCode=" + self.DivCode + "&sfCode=" + self.SFCode + "&desig=" + self.Desig, method: .post, parameters: params2, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
+                AFdata in
+                self.LoadingDismiss()
+                PhotosCollection.shared.PhotoList = []
+                switch AFdata.result
+                {
+                    
+                case .success(let value):
+                    print(value)
+                    if let json = value as? [String: Any] {
+                        
+                        Toast.show(message: "Order has been submitted successfully", controller: self)
+                        let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
+                        UIApplication.shared.windows.first?.rootViewController = viewController
+                        UIApplication.shared.windows.first?.makeKeyAndVisible()
+                        print(json)
+                        if  let success = json["success"] as? Int{
+                            self.Edit_Order_Count = success
+                        }
+                        VisitData.shared.clear()
+                    }
+                    
+                case .failure(let error):
+                    
+                    let alert = UIAlertController(title: "Information", message: error.errorDescription, preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
+                        return
+                    })
+                    self.present(alert, animated: true)
+                }
+            }
+            
+            
+        }
     }
      else{
          print(params)
@@ -1663,11 +1669,11 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
     func DemoEdite(){
         
         for item in Editobjcalls {
-            
             if let Additional_Prod_Dtls = item["Additional_Prod_Dtls"] as? String, let Additional_Prod_Code = item["Additional_Prod_Code"] as? String{
                 
                 let  separates = Additional_Prod_Dtls.components(separatedBy: "#")
                 let  separte_Prod_Code = Additional_Prod_Code.components(separatedBy: "#")
+                
                 for (separt_item, separte_Prod_Code_item) in zip(separates, separte_Prod_Code) {
                     let id: String
                     var BasUnitCode: Int = 0
@@ -1681,11 +1687,11 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
                     let Prod_Id = prod_components[0].trimmingCharacters(in: .whitespacesAndNewlines)
                     let Separt_UomConv = prod_components[1].components(separatedBy: "$")
                     let Separt_UomConv2 = Separt_UomConv[1].components(separatedBy: "@")
-                    selUOMConv = Separt_UomConv2[0]
+                    sQty = Separt_UomConv2[0]
                     let components = separt_item.components(separatedBy: "@")
                     let Cod_and_uom = components[3]
                     let selUnit = Cod_and_uom.components(separatedBy: "?")
-                    sQty = selUnit[0]
+                    selUOMConv = selUnit[0]
                     selUOMNm = selUnit[0]
                     let separt_id_and_Uom = selUnit[1].components(separatedBy: "-")
                     selUOMNm = separt_id_and_Uom[1]

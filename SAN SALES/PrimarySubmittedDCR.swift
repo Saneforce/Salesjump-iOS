@@ -64,6 +64,7 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
         getUserDetails()
         SelectPrimaryorder()
         //SelectPrimary2order()
+        PrimarySubmittedDCR.objcalls_SelectPrimaryorder2.removeAll()
         PrimayOrderViewTB.delegate=self
         PrimayOrderViewTB.dataSource=self
         OrderTB.dataSource=self
@@ -260,7 +261,13 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
                         return
                     }
                     print(prettyPrintedJson)
-                  //  self.lblWorkTyp.text=String(format: "%@", todayData["wtype"] as! String)
+                    print(prettyPrintedJson.count)
+                    print(json.count)
+                    if (json.count == 0){
+                        PrimayOrderViewTB.isHidden=true
+                        lblnodata.isHidden=false
+                        lblnodata.text="No data available"
+                    }
                  
                                                
                     PrimarySubmittedDCR.objcalls_SelectPrimaryorder2 = json

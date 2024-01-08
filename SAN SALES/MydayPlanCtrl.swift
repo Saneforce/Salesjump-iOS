@@ -846,6 +846,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
     
     
     func saveDayTP(location: CLLocation){
+        
         let dateString = GlobalFunc.getCurrDateAsString()
         lazy var geocoder = CLGeocoder()
         var sAddress: String = ""

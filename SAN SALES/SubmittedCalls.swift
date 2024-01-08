@@ -38,7 +38,7 @@ class SubmittedCalls: UIViewController, UITableViewDelegate, UITableViewDataSour
         super.viewDidLoad()
         getUserDetails()
         SelectSecondaryorder()
-        self.ShowLoading(Message: "Loading...")
+        //self.ShowLoading(Message: "Loading...")
         let LocalStoreage = UserDefaults.standard
         let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
         let data = Data(prettyPrintedJson!.utf8)
@@ -123,7 +123,7 @@ class SubmittedCalls: UIViewController, UITableViewDelegate, UITableViewDataSour
     
         AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
             AFdata in
-            self.LoadingDismiss()
+            //self.LoadingDismiss()
             switch AFdata.result
             {
                 
