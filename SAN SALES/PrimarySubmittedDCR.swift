@@ -458,10 +458,14 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
                 
             }
         }
-        OrderHig.constant = 100 + CGFloat(40*self.View.count)
+        if (View.count == 0){
+            OrderHig.constant = 10
+        }else{
+            OrderHig.constant = 100 + CGFloat(25*self.View.count)
+        }
         print(OrderHig.constant)
             self.view.layoutIfNeeded()
-        ScHig.constant = 100 + CGFloat(60*self.View.count)
+        ScHig.constant = 100 + CGFloat(40*self.View.count)+CGFloat(35*self.Input.count)
         self.view.layoutIfNeeded()
         
         

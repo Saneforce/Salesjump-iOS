@@ -467,10 +467,14 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
                         View.append(Viewval(Product: item["Product_Name"] as! String, qty: item["Quantity"] as! Int, value: String(format: "%.2f",item["value"] as! Double)))
                         
                     }
-                    OrederTBHight.constant = 100 + CGFloat(40*self.View.count)
+                    if(View.count == 0){
+                        OrederTBHight.constant = 10
+                    }else{
+                        OrederTBHight.constant = 100 + CGFloat(25*self.View.count)
+                    }
                     print(OrederTBHight.constant)
                     self.view.layoutIfNeeded()
-                    ScroolHight.constant = 100 + CGFloat(60*self.View.count) + CGFloat(50*self.Input.count)
+                    ScroolHight.constant = 100 + CGFloat(40*self.View.count) + CGFloat(35*self.Input.count)
                     print(ScroolHight.constant)
                     self.view.layoutIfNeeded()
                     
@@ -489,7 +493,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
     }
     func updateTableViewAndSubview() {
         // Step 1: Calculate the new height for the tableView
-        let tableViewHeight = 100 + CGFloat(40 * View.count)
+        let tableViewHeight = 100 + CGFloat(25 * View.count)
 
         // Assuming you have a reference to your tableView and viewBelowTableView
         // Replace 'YourTableView' and 'YourViewBelowTableView' with the appropriate class names.
