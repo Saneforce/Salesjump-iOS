@@ -953,6 +953,8 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
     }
     
     @IBAction func SubmitCall(_ sender: Any) {
+        var OrderSub = "OD"
+        var Count = 0
         if validateForm() == false {
             return
         }
@@ -980,7 +982,13 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
                     }
                     print(sLocation)
                     print(sAddress)
-                    self.OrderSubmit(sLocation: sLocation, sAddress: sAddress)
+                    if (OrderSub == "OD"){
+                        self.OrderSubmit(sLocation: sLocation, sAddress: sAddress)
+                        OrderSub  = ""
+                        print(Count)
+                    }else{
+                        print(Count)
+                    }
                 }
             }, error:{ errMsg in
                 print (errMsg)
@@ -1081,13 +1089,14 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
             }
             print(Date_Time)
             print(objcallsprimary)
-            let jsonString2 = "{\"Products\":[" + sPItems3 + "],\"Activity_Event_Captures\":[],\"POB\":\"\(objcallsprimary[0]["POB"] as! Int)\",\"Value\":\"\(TotaAmout)\",\"order_No\":\"\(objcallsprimary[0]["Order_No"] as! String)\",\"DCR_Code\":\"\(objcallsprimary[0]["DCR_Code"] as! String)\",\"Trans_Sl_No\":\"\(objcallsprimary[0]["DCR_Code"] as! String)\",\"Trans_Detail_slNo\":\"\(objcallsprimary[0]["Trans_Detail_SlNo"] as! String)\",\"Route\":\"\",\"net_weight_value\":\"\",\"target\":\"\",\"rateMode\":null,\"Stockist\":\"\(objcallsprimary[0]["stockist_code"] as! String)\",\"RateEditable\":\"\",\"orderValue\":" + (lblTotAmt.text!).replacingOccurrences(of: "Rs. ", with: "") + ",\"Stockist_POB\":\"" + VisitData.shared.PayValue + "\",\"Stk_Meet_Time\":\"\(Date_Time)\",\"modified_time\":\"\(Date_Time)\",\"CheckoutTime\":\"\(Date_Time)\",\"PhoneOrderTypes\":0,\"dcr_activity_date\":\"\(Date_Time)\"}"
+            let jsonString2 = "{\"Products\":[" + sPItems3 + "],\"Activity_Event_Captures\":[],\"POB\":\"\(objcallsprimary[0]["POB"] as! Int)\",\"Value\":\"\(TotaAmout)\",\"order_No\":\"\(objcallsprimary[0]["Order_No"] as! String)\",\"DCR_Code\":\"\(objcallsprimary[0]["DCR_Code"] as! String)\",\"Trans_Sl_No\":\"\(objcallsprimary[0]["DCR_Code"] as! String)\",\"Trans_Detail_slNo\":\"\(objcallsprimary[0]["Trans_Detail_SlNo"] as! String)\",\"Route\":\"\",\"net_weight_value\":\"\",\"target\":\"\",\"rateMode\":null,\"Stockist\":\"\(objcallsprimary[0]["stockist_code"] as! String)\",\"RateEditable\":\"\",\"orderValue\":" + (lblTotAmt.text!).replacingOccurrences(of: "Rs. ", with: "") + ",\"Stockist_POB\":\"" + VisitData.shared.PayValue + "\",\"Stk_Meet_Time\":\"'\(Date_Time)'\",\"modified_time\":\"'\(Date_Time)'\",\"CheckoutTime\":\"\(Date_Time)\",\"PhoneOrderTypes\":0,\"dcr_activity_date\":\"'\(Date_Time)'\"}"
             
 
             
 //            {"Products":[],"Activity_Event_Captures":[],"POB":"0","Value":"151.04000000000002","order_No":"MR4126-23-24-PO-606","DCR_Code":"SEF3-531","Trans_Sl_No":"SEF3-531","Trans_Detail_slNo":"SEF3-2177","Route":"","net_weight_value":"","target":"","rateMode":null,"Stockist":"32468","RateEditable":"","orderValue":151.04000000000002,"Stockist_POB":"","Stk_Meet_Time":"'2024-01-08 18:11:48'","modified_time":"'2024-01-08 18:11:48'","CheckoutTime":"2024-01-08 18:11:48","PhoneOrderTypes":0,"dcr_activity_date":"'2024-01-08 00:00:00'"}
 //
-//        "{\"Products\":[],\"Activity_Event_Captures\":[],\"POB\":\"0\",\"Value\":\"8701.0\",\"order_No\":\"SEFMR0010-23-24-PO-61\",\"DCR_Code\":\"SEF26-112\",\"Trans_Sl_No\":\"SEFMR0010-23-24-PO-61\",\"Trans_Detail_slNo\":\"SEF26-169\",\"Route\":\"\",\"net_weight_value\":\"\",\"target\":\"\",\"rateMode\":null,\"Stockist\":\"32414\",\"RateEditable\":\"\",\"orderValue\":8701.00,\"Stockist_POB\":\"\",\"Stk_Meet_Time\":\"2023-07-28 14:39:09\",\"modified_time\":\"2023-07-28 14:39:09\",\"CheckoutTime\":\"2023-07-28 14:39:09\",\"PhoneOrderTypes\":0,\"dcr_activity_date\":\"2023-07-28 14:39:09\"}"
+//
+
             
 
             

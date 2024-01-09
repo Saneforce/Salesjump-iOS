@@ -1120,7 +1120,8 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
     }
     
     @IBAction func SubmitCall(_ sender: Any) {
-        
+        var OrderSub = "OD"
+        var Count = 0
         print(SubmittedDCR.Order_Out_Time)
         
         if validateForm() == false {
@@ -1159,7 +1160,14 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
                         }
                        
                     }
-                    self.OrderSubmit(sLocation: sLocation, sAddress: sAddress)
+                    Count = Count+1
+                    if (OrderSub == "OD"){
+                        self.OrderSubmit(sLocation: sLocation, sAddress: sAddress)
+                        OrderSub  = ""
+                        print(Count)
+                    }else{
+                        print(Count)
+                    }
                 }, error:{ errMsg in
                     print (errMsg)
                     self.LoadingDismiss()
@@ -1170,6 +1178,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
                 return
             })
             self.present(alert, animated: true)
+        
         
     }
     func OrderSubmit(sLocation: String,sAddress: String){
@@ -1317,9 +1326,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
                 sImgItems = sImgItems + "{\"imgurl\":\"'" + (item["FileName"]  as! String) + "'\",\"title\":\"''\",\"remarks\":\"''\",\"f_key\":{\"Activity_Report_Code\":\"Activity_Report_APP\"}}"
             }
         }
-        
-        
-        //        let jsonString = "[{\"Activity_Report_APP\":{\"dcr_activity_date\":\"\'" + VisitData.shared.cInTime + "\'\",\"rx\":\"\'1\'\",\"rx_t\":\"\'\'\",\"Daywise_Remarks\":\"\'" + VisitData.shared.VstRemarks.name + "\'\",\"RateEditable\":\"\'\'\",\"Worktype_code\":\"\'" + (self.lstPlnDetail[0]["worktype"] as! String) + "\'\",\"Town_code\":\"\'" + (self.lstPlnDetail[0]["clusterid"] as! String) + "\'\",\"DataSF\":\"\'" + DataSF + "\'\",\"eKey\":\"" + self.eKey + "\"}},{\"Activity_Doctor_Report\":{\"modified_time\":\"\'" + VisitData.shared.cInTime + "\'\",\"CheckinTime\":\"" + VisitData.shared.cInTime + "\",\"rateMode\":\"Nil\",\"CheckoutTime\":\"" + VisitData.shared.cOutTime + "\",\"Order_No\":\"\'0\'\",\"Doc_Meet_Time\":\"\'" + VisitData.shared.cInTime + "\'\",\"Worked_With\":\"\'\'\",\"discount_price\":\"0\",\"Discountpercent\":\"0\",\"PhoneOrderTypes\":\"" + VisitData.shared.OrderMode.id + "\",\"net_weight_value\":\"0\",\"stockist_name\":\"\'\'\",\"location\":\"\'" + sLocation + "\'\",\"stockist_code\":\"\'" + (VisitData.shared.Dist.id ) + "\'\",\"Order_Stk\":\"\'\'\",\"superstockistid\":\"\'\'\",\"geoaddress\":\"" + sAddress + "\",\"f_key\":{\"Activity_Report_Code\":\"\'Activity_Report_APP\'\"},\"doctor_name\":\"\'" + VisitData.shared.CustName + "\'\",\"rootTarget\":\"\'0\'\",\"disPercnt\":\"\'0\'\",\"orderValue\":\"\'0\'\",\"disValue\":\"\'0\'\",\"finalNetAmt\":\"\'0\'\",\"taxTotalValue\":\"\'0\'\",\"discTotalValue\":\"\'0\'\",\"subTota\":\"\'0\'\",\"No_Of_items\":\"\'0\'\",\"Doctor_POB\":\"0\",\"doctor_code\":\"\'" + VisitData.shared.CustID + "\'\"}},{\"Activity_Sample_Report\":[" + sPItems +  "]},{\"Trans_Order_Details\":[]},{\"Activity_Event_Captures\":[" + sImgItems +  "]},{\"Activity_Input_Report\":[]},{\"Compititor_Product\":[]},{\"PENDING_Bills\":[]}]"
+      
         
         let Subtotal = lbltotalamunt
         print(Subtotal)
