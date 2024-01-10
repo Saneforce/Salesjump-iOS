@@ -1028,12 +1028,9 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
             
             sPItems = sPItems + "{\"product_code\":\""+id+"\",\"product_Name\":\""+(ProdItems[0]["name"] as! String)+"\",\"rx_Conqty\":" + (item["Qty"] as! String) + ",\"Qty\":" + (String(format: "%.0f", item["SalQty"] as! Double)) + ",\"PQty\":0,\"cb_qty\":0,\"free\":" + (String(format: "%i", item["OffQty"] as! Int)) + ",\"Pfree\":0,\"Rate\":" + (String(format: "%.2f", item["Rate"] as! Double)) + ",\"PieseRate\":" + (String(format: "%.2f", item["Rate"] as! Double)) + ",\"discount\":" + Disc + ",\"FreeP_Code\":\"" + (item["OffProd"] as! String) + "\",\"Fname\":\"" + (item["OffProdNm"] as! String) + "\",\"discount_price\":" +  DisVal + ",\"tax\":0.0,\"tax_price\":0.0,\"OrdConv\":\"" + (item["UOMConv"] as! String) + "\",\"product_unit_name\":\"" + (item["UOMNm"] as! String) + "\",\"selectedScheme\":" + (String(format: "%.0f", item["Scheme"] as! Double)) + ",\"selectedOffProCode\":\"" + (item["UOM"] as! String) + "\",\"selectedOffProName\":\"" + (item["UOMNm"] as! String) + "\",\"selectedOffProUnit\":\"" + (item["UOMConv"] as! String) + "\",\"f_key\":{\"activity_stockist_code\":\"Activity_Stockist_Report\"}}"
             
-            
-            sPItems2 = sPItems2 + "{\"product_code\":\""+id+"\",\"product_Name\":\""+(ProdItems[0]["name"] as! String)+"\",\"rx_Conqty\":" + (item["Qty"] as! String) + ",\"Qty\":" + (String(format: "%.0f", item["SalQty"] as! Double)) + ",\"PQty\":0,\"cb_qty\":0,\"free\":" + (String(format: "%i", item["OffQty"] as! Int)) + ",\"Pfree\":0,\"Pfree\":0,\"PieseRate\":" + (String(format: "%.2f", item["Rate"] as! Double)) + ",\"discount\":" + Disc + ",\"FreeP_Code\":0,\"Fname\":0,\"discount_price\":" +  DisVal + ",\"tax\":0.0,\"tax_price\":0.0,\"OrdConv\":" + (item["UOMConv"] as! String) + ",\"product_unit_name\":\"" + (item["UOMNm"] as! String) + "\",\"Trans_POrd_No\":\"\",\"Order_Flag\":0,\"Division_code\":\(Int(DivCode)),\"selectedScheme\":" + (String(format: "%.0f", item["Scheme"] as! Double)) + ",\"selectedOffProCode\":\"" + (item["UOM"] as! String) + "\",\"selectedOffProName\":\"" + (item["UOMNm"] as! String) + "\",\"selectedOffProUnit\":\"" + (item["UOMConv"] as! String) + "\",\"sample_qty\":\"204.0\"},"
+            print(item)
+            sPItems2 = sPItems2 + "{\"product_code\":\""+id+"\",\"product_Name\":\""+(ProdItems[0]["name"] as! String)+"\",\"rx_Conqty\":" + (item["Qty"] as! String) + ",\"Qty\":" + (String(format: "%.0f", item["SalQty"] as! Double)) + ",\"PQty\":0,\"cb_qty\":0,\"free\":" + (String(format: "%i", item["OffQty"] as! Int)) + ",\"Pfree\":0,\"Pfree\":0,\"PieseRate\":" + (String(format: "%.2f", item["Rate"] as! Double)) + ",\"discount\":" + Disc + ",\"FreeP_Code\":0,\"Fname\":0,\"discount_price\":" +  DisVal + ",\"tax\":0.0,\"tax_price\":0.0,\"OrdConv\":" + (item["UOMConv"] as! String) + ",\"product_unit_name\":\"" + (item["UOMNm"] as! String) + "\",\"Trans_POrd_No\":\"\",\"Order_Flag\":0,\"Division_code\":29,\"selectedScheme\":" + (String(format: "%.0f", item["Scheme"] as! Double)) + ",\"selectedOffProCode\":\"" + (item["UOM"] as! String) + "\",\"selectedOffProName\":\"" + (item["UOMNm"] as! String) + "\",\"selectedOffProUnit\":\"" + (item["UOMConv"] as! String) + "\",\"sample_qty\":" + (String(format: "%.2f", item["Rate"] as! Double)) + "},"
 
-//            let json = "{\"product_code\":\"SAN361520\",\"product_Name\":\"BUTTERFLY PLUS 1.8LTR RICE COOKER\",\"rx_Conqty\":2,\"Qty\":4,\"PQty\":0,\"cb_qty\":0,\"free\":0,\"Pfree\":0,\"Pfree\":0,\"PieseRate\":1700.00,\"discount\":0,\"FreeP_Code\":0,\"Fname\":0,\"discount_price\":0,\"tax\":0.0,\"tax_price\":0.0,\"OrdConv\":2,\"product_unit_name\":\"PIECE\",\"Trans_POrd_No\":\"\",\"Order_Flag\":0,\"Division_code\":29,\"selectedScheme\":0,\"selectedOffProCode\":\"241\",\"selectedOffProName\":\"PIECE\",\"selectedOffProUnit\":\"2\",\"sample_qty\":\"204.0\"}"
-            
-            
          
           
         }
@@ -1089,13 +1086,8 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
             }
             print(Date_Time)
             print(objcallsprimary)
-            let jsonString2 = "{\"Products\":[" + sPItems3 + "],\"Activity_Event_Captures\":[],\"POB\":\"\(objcallsprimary[0]["POB"] as! Int)\",\"Value\":\"\(TotaAmout)\",\"order_No\":\"\(objcallsprimary[0]["Order_No"] as! String)\",\"DCR_Code\":\"\(objcallsprimary[0]["DCR_Code"] as! String)\",\"Trans_Sl_No\":\"\(objcallsprimary[0]["DCR_Code"] as! String)\",\"Trans_Detail_slNo\":\"\(objcallsprimary[0]["Trans_Detail_SlNo"] as! String)\",\"Route\":\"\",\"net_weight_value\":\"\",\"target\":\"\",\"rateMode\":null,\"Stockist\":\"\(objcallsprimary[0]["stockist_code"] as! String)\",\"RateEditable\":\"\",\"orderValue\":" + (lblTotAmt.text!).replacingOccurrences(of: "Rs. ", with: "") + ",\"Stockist_POB\":\"" + VisitData.shared.PayValue + "\",\"Stk_Meet_Time\":\"'\(Date_Time)'\",\"modified_time\":\"'\(Date_Time)'\",\"CheckoutTime\":\"\(Date_Time)\",\"PhoneOrderTypes\":0,\"dcr_activity_date\":\"'\(Date_Time)'\"}"
+            let jsonString2 = "{\"Products\":[" + sPItems3 + "],\"Activity_Event_Captures\":[],\"POB\":\"\(objcallsprimary[0]["POB"] as! Int)\",\"Value\":\"\(TotaAmout)\",\"order_No\":\"\(objcallsprimary[0]["Order_No"] as! String)\",\"DCR_Code\":\"\(objcallsprimary[0]["DCR_Code"] as! String)\",\"Trans_Sl_No\":\"\(objcallsprimary[0]["DCR_Code"] as! String)\",\"Trans_Detail_slNo\":\"\(objcallsprimary[0]["Trans_Detail_SlNo"] as! String)\",\"Route\":\"\",\"net_weight_value\":\"\",\"target\":\"\",\"rateMode\":null,\"Stockist\":\"\(objcallsprimary[0]["stockist_code"] as! String)\",\"RateEditable\":\"\",\"orderValue\":" + (lblTotAmt.text!).replacingOccurrences(of: "Rs. ", with: "") + ",\"Stockist_POB\":\"" + VisitData.shared.PayValue + "\",\"Stk_Meet_Time\":\"\(Date_Time)\",\"modified_time\":\"\(Date_Time)\",\"CheckoutTime\":\"\(Date_Time)\",\"PhoneOrderTypes\":0,\"dcr_activity_date\":\"\(Date_Time)\"}"
             
-
-            
-//            {"Products":[],"Activity_Event_Captures":[],"POB":"0","Value":"151.04000000000002","order_No":"MR4126-23-24-PO-606","DCR_Code":"SEF3-531","Trans_Sl_No":"SEF3-531","Trans_Detail_slNo":"SEF3-2177","Route":"","net_weight_value":"","target":"","rateMode":null,"Stockist":"32468","RateEditable":"","orderValue":151.04000000000002,"Stockist_POB":"","Stk_Meet_Time":"'2024-01-08 18:11:48'","modified_time":"'2024-01-08 18:11:48'","CheckoutTime":"2024-01-08 18:11:48","PhoneOrderTypes":0,"dcr_activity_date":"'2024-01-08 00:00:00'"}
-//
-//
 
             
 
@@ -1108,7 +1100,7 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
             let apiKeys: String = "\(axn)&divisionCode=\(DivCode)&sfCode=\(SFCode)&desig=\(Desig)"
             print(apiKeys)
         
-            AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+apiKeys, method: .post, parameters: params2, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
+            AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKeys, method: .post, parameters: params2, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
             AFdata in
             self.LoadingDismiss()
             switch AFdata.result
