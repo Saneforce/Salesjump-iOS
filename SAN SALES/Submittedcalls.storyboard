@@ -24,7 +24,7 @@
         <!--Navigation Controller-->
         <scene sceneID="ZtY-ka-9nv">
             <objects>
-                <navigationController useStoryboardIdentifierAsRestorationIdentifier="YES" id="Ewd-OY-pXn" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="SecSubNav" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Ewd-OY-pXn" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" largeTitleDisplayMode="always" id="Xmw-sO-lqy"/>
                     <navigationBar key="navigationBar" hidden="YES" contentMode="scaleToFill" id="a8I-6x-Q8Z">
                         <rect key="frame" x="0.0" y="59" width="393" height="44"/>
@@ -33,6 +33,9 @@
                     <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="YY5-OG-Czk">
                         <autoresizingMask key="autoresizingMask"/>
                     </toolbar>
+                    <connections>
+                        <segue destination="Wzo-2E-Ooj" kind="relationship" relationship="rootViewController" id="sKS-lS-iUq"/>
+                    </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yt3-3I-hzg" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -501,14 +504,14 @@
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lSg-Rr-CVC">
                                                         <rect key="frame" x="8" y="318" width="377" height="43"/>
                                                         <subviews>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Input" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kzt-eQ-CAb">
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Description" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kzt-eQ-CAb">
                                                                 <rect key="frame" x="8" y="11" width="154" height="21"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                                 <fontDescription key="fontDescription" name="Poppins-Bold" family="Poppins" pointSize="15"/>
                                                                 <nil key="textColor"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Qty" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zLI-Le-tJM">
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Data" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zLI-Le-tJM">
                                                                 <rect key="frame" x="214" y="11" width="154" height="21"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                                                 <fontDescription key="fontDescription" name="Poppins-Bold" family="Poppins" pointSize="15"/>
@@ -615,6 +618,7 @@
                             <constraint firstItem="IZo-ZV-7LL" firstAttribute="trailing" secondItem="RL8-ss-b18" secondAttribute="trailing" id="axv-l1-R38"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" id="u45-Wb-bei"/>
                     <connections>
                         <outlet property="BackButton" destination="NnW-l1-xy7" id="WCW-oT-EBc"/>
                         <outlet property="Dislbl" destination="ZrS-6R-EEA" id="gzB-gE-TVq"/>
@@ -643,7 +647,7 @@
         <!--Navigation Controller-->
         <scene sceneID="hPb-3x-yXc">
             <objects>
-                <navigationController useStoryboardIdentifierAsRestorationIdentifier="YES" id="DyA-9Z-9mM" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="PriSubNav" useStoryboardIdentifierAsRestorationIdentifier="YES" id="DyA-9Z-9mM" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" largeTitleDisplayMode="always" id="vQH-IZ-L8J"/>
                     <navigationBar key="navigationBar" hidden="YES" contentMode="scaleToFill" id="gk3-M9-pc2">
                         <rect key="frame" x="0.0" y="59" width="393" height="44"/>
@@ -652,6 +656,9 @@
                     <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="1kf-zX-wpJ">
                         <autoresizingMask key="autoresizingMask"/>
                     </toolbar>
+                    <connections>
+                        <segue destination="XbH-qR-uj0" kind="relationship" relationship="rootViewController" id="TEd-iA-f0Y"/>
+                    </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ayt-dW-uO0" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -666,7 +673,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VyK-EO-slf">
-                                <rect key="frame" x="0.0" y="32" width="393" height="47"/>
+                                <rect key="frame" x="0.0" y="76" width="393" height="47"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" fixedFrame="YES" text="Primary Submitted DCR" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GJg-wQ-kUV">
                                         <rect key="frame" x="49" y="15" width="258" height="23"/>
@@ -691,7 +698,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="re3-1N-iL7">
-                                <rect key="frame" x="0.0" y="98" width="393" height="754"/>
+                                <rect key="frame" x="0.0" y="142" width="393" height="710"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1049,7 +1056,7 @@
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IZz-fv-48o">
                                                         <rect key="frame" x="8" y="294" width="377" height="43"/>
                                                         <subviews>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Input" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="COQ-Ie-0UR">
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Description" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="COQ-Ie-0UR">
                                                                 <rect key="frame" x="8" y="11" width="133" height="21"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                                 <fontDescription key="fontDescription" name="Poppins-Bold" family="Poppins" pointSize="15"/>
@@ -1174,6 +1181,7 @@
                             <constraint firstItem="VyK-EO-slf" firstAttribute="top" secondItem="3CT-iI-Qnq" secondAttribute="topMargin" constant="-27" id="puJ-17-IaU"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" id="tuh-Bd-lse"/>
                     <connections>
                         <outlet property="BackButton" destination="f9C-LD-eoi" id="ee7-kb-Epa"/>
                         <outlet property="Disbutorsname" destination="U1J-ty-Yjf" id="D3X-lw-oJ4"/>

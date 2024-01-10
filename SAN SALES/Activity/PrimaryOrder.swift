@@ -1111,7 +1111,8 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
                 if let json = value as? [String: Any] {
                     
                     Toast.show(message: "Order has been submitted successfully") //, controller: self
-                    let viewController = self.storyboard?.instantiateViewController(withIdentifier: "SubmittedDCR") as! UINavigationController
+                    let storyboard = UIStoryboard(name: "Submittedcalls", bundle: nil)
+                    let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
                     UIApplication.shared.windows.first?.rootViewController = viewController
                     UIApplication.shared.windows.first?.makeKeyAndVisible()
                     
