@@ -1100,7 +1100,7 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
             let apiKeys: String = "\(axn)&divisionCode=\(DivCode)&sfCode=\(SFCode)&desig=\(Desig)"
             print(apiKeys)
         
-            AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKeys, method: .post, parameters: params2, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
+            AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+apiKeys, method: .post, parameters: params2, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
             AFdata in
             self.LoadingDismiss()
             switch AFdata.result
@@ -1111,7 +1111,7 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
                 if let json = value as? [String: Any] {
                     
                     Toast.show(message: "Order has been submitted successfully") //, controller: self
-                    let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
+                    let viewController = self.storyboard?.instantiateViewController(withIdentifier: "SubmittedDCR") as! UINavigationController
                     UIApplication.shared.windows.first?.rootViewController = viewController
                     UIApplication.shared.windows.first?.makeKeyAndVisible()
                     
