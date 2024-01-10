@@ -302,13 +302,14 @@ class Summary: IViewController,FSCalendarDelegate,FSCalendarDataSource, UITableV
                         var Total_Call = 0
                         var Productive_Call = 0
                         var UPClls = 0
-                        var Order_Val = 0
+                        var Order_Val = 0.0
                         var weightValue = 0
                         
                         for item in Secon_Det {
+                            print(item)
                             let TC = item["TC"] as? Int
                             let PC = item["PC"] as? Int
-                            let orderValue = Int((item["orderValue"] as? String)!)
+                            let orderValue = Double((item["orderValue"] as? String)!)
                             let UPC = item["UPC"] as? Int
                             let weight = item["weightValue"] as? Int ?? 0
                             Total_Call = Total_Call + TC!
@@ -321,7 +322,7 @@ class Summary: IViewController,FSCalendarDelegate,FSCalendarDataSource, UITableV
                         Total_Calls.text = String(Total_Call)
                         Productive_Calls.text = String(Productive_Call)
                         UPC.text = String(UPClls)
-                        Secondary_Calls.text = String(Order_Val)
+                        Secondary_Calls.text = String(format: "%.2f",Order_Val)
                         Net_Weight.text = String(weightValue)+".00"
                         var Productivity_Data: Double
 
@@ -341,12 +342,12 @@ class Summary: IViewController,FSCalendarDelegate,FSCalendarDataSource, UITableV
                     }
                     if let PRI = prettyPrintedJson["PRI"] as? [[String: Any]]{
                         print(PRI)
-                        var Order_Val = 0
+                        var Order_Val = 0.0
                         for item in PRI {
-                            let orderValue = Int((item["Order_Value"] as? Double)!)
-                            Order_Val = Order_Val + orderValue
+                            let orderValue = item["Order_Value"] as? Double
+                            Order_Val = Order_Val + orderValue!
                         }
-                        Primary_Call.text = String(Order_Val)
+                        Primary_Call.text = String(format: "%.2f",Order_Val)
                     }
                     
                     if let OUTLET = prettyPrintedJson["OUTLET"] as? [[String: Any]]{

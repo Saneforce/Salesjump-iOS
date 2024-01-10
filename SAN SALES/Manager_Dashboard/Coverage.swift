@@ -282,7 +282,7 @@ class Coverage: IViewController,FSCalendarDelegate,FSCalendarDataSource {
         
         let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
         
-        self.ShowLoading(Message: "Get Coverage Data...")
+        self.ShowLoading(Message: "Loading ...")
         
         AF.request(APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKeyWithoutCommas, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self] AFdata in
             switch AFdata.result {
