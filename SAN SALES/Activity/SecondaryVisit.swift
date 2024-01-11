@@ -286,8 +286,7 @@ class SecondaryVisit: IViewController, UITableViewDelegate, UITableViewDataSourc
             let sLocation: String = location.coordinate.latitude.description + ":" + location.coordinate.longitude.description
             lazy var geocoder = CLGeocoder()
             self.Location = sLocation
-           
-                print("Order No is NILL")
+         
       
             geocoder.reverseGeocodeLocation(location ) { (placemarks, error) in
                
@@ -325,12 +324,7 @@ class SecondaryVisit: IViewController, UITableViewDelegate, UITableViewDataSourc
                         self.sImgItems = self.sImgItems + "{\"imgurl\":\"'" + (item["FileName"]  as! String) + "'\",\"title\":\"''\",\"remarks\":\"''\",\"f_key\":{\"Activity_Report_Code\":\"Activity_Report_APP\"}}"
                     }
                 }
-                
-                
-
-               
-                print("Order No is 25432")
-                
+  
                 let sessionManager = Session(configuration: URLSessionConfiguration.default)
 
                 sessionManager.session.configuration.httpMaximumConnectionsPerHost = 1

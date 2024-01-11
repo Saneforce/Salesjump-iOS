@@ -342,6 +342,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         let cell:cellListItem = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
         if tableView == tbJWKSelect {
             let item: [String: Any]=lstJWNms[indexPath.row] as! [String : Any]
+            print(item)
             cell.lblText?.text = item["name"] as? String
             cell.imgBtnDel.addTarget(target: self, action: #selector(self.delJWK(_:)))
         }else{
@@ -597,10 +598,13 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                     print(rtname)
                    myDyTp.updateValue(lItem(id: rtid, name: rtname,FWFlg: ""), forKey: "RUT")
                 }
-                let jwids=(String(format: "%@", lstPlnDetail[0]["worked_with_code"] as! CVarArg)).replacingOccurrences(of: ",", with: ";")
+                let jwids=(String(format: "%@", lstPlnDetail[0]["worked_with_code"] as! CVarArg)).replacingOccurrences(of: "$$", with: ";")
+                    .replacingOccurrences(of: "$", with: ";")
                     .components(separatedBy: ";")
+                print(lstPlnDetail[0]["worked_with_code"] as! CVarArg)
                 for k in 0...jwids.count-1 {
                     if let indexToDelete = lstJoint.firstIndex(where: { String(format: "%@", $0["id"] as! CVarArg) == jwids[k] }) {
+                        print(lstJoint)
                         let jwid: String = lstJoint[indexToDelete]["id"] as! String
                         let jwname: String = lstJoint[indexToDelete]["name"] as! String
                         
@@ -610,6 +614,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                         lstJWNms.append(jitm)
                     }
                 }
+                print(lstJWNms)
                 tbJWKSelect.reloadData()
             }
             
@@ -806,6 +811,8 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
        /* */
     }
     func getLocatio(){
+        var OrderSub = "MyDay"
+        var Count = 0
         var Leavtyp = leavWorktype
         print(Leavtyp)
  
@@ -825,7 +832,14 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
             LocationService.sharedInstance.getNewLocation(location: { location in
                 print ("New  : "+location.coordinate.latitude.description + ":" + location.coordinate.longitude.description)
                 self.ShowLoading(Message: "Submitting Please wait...")
-                self.saveDayTP(location: location)
+                Count = Count+1
+                if (OrderSub == "MyDay"){
+                    self.saveDayTP(location: location)
+                    OrderSub  = ""
+                    print(Count)
+                }else{
+                    print(Count)
+                }
             }, error:{ errMsg in
                 self.LoadingDismiss()
                 print (errMsg)
@@ -867,9 +881,18 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
             }
             print(HomePageViewController.selfieLoginActive)
       print(slocation)
+            print(strJWCd)
+            let JointData = strJWCd
+            var Join_Works = JointData.replacingOccurrences(of: ";", with: "$$")
+            if Join_Works.hasSuffix("$") {
+//                while Join_Works.hasSuffix("$$") {
+//                    Join_Works.removeLast()
+//                }
+                Join_Works.removeLast()
+                print(Join_Works)
+            }
             
-            
-            let jsonString = "[{\"tbMyDayPlan\":{\"wtype\":\"'" + (myDyTp["WT"]?.id ?? "") + "'\",\"sf_member_code\":\"'" + (myDyTp["HQ"]?.id ?? SFCode) + "'\",\"stockist\":\"'" + (myDyTp["DIS"]?.id ?? "") + "'\",\"stkName\":\"" + (myDyTp["DIS"]?.name ?? "") + "\",\"dcrtype\":\"App\",\"cluster\":\"'" + (myDyTp["RUT"]?.id ?? "") + "'\",\"custid\":\"" + (myDyTp["RUT"]?.id ?? "") + "\",\"custName\":\"" + (myDyTp["RUT"]?.name ?? "") + "\",\"address\":\"" + sAddress + "\",\"remarks\":\"'" + (txRem.text as! String ?? "" ) + "'\",\"OtherWors\":\"\",\"FWFlg\":\"'" + (myDyTp["WT"]?.FWFlg ?? "") + "'\",\"SundayWorkigFlag\":\"''\",\"Place_Inv\":\"\",\"WType_SName\":\"" + (myDyTp["WT"]?.name ?? "") + "\",\"ClstrName\":\"'" + (myDyTp["RUT"]?.name ?? "") + "'\",\"AppVersion\":\"Vi_\(Bundle.main.appVersionLong).\(Bundle.main.appBuild)\",\"self\":1,\"location\":\"" + slocation + "\",\"dcr_activity_date\":\"'" + dateString + "'\",\"worked_with\":\"'" + strJWCd.replacingOccurrences(of: ";", with: ",") + "'\"\(ImgName)}}]"
+            let jsonString = "[{\"tbMyDayPlan\":{\"wtype\":\"'" + (myDyTp["WT"]?.id ?? "") + "'\",\"sf_member_code\":\"'" + (myDyTp["HQ"]?.id ?? SFCode) + "'\",\"stockist\":\"'" + (myDyTp["DIS"]?.id ?? "") + "'\",\"stkName\":\"" + (myDyTp["DIS"]?.name ?? "") + "\",\"dcrtype\":\"App\",\"cluster\":\"'" + (myDyTp["RUT"]?.id ?? "") + "'\",\"custid\":\"" + (myDyTp["RUT"]?.id ?? "") + "\",\"custName\":\"" + (myDyTp["RUT"]?.name ?? "") + "\",\"address\":\"" + sAddress + "\",\"remarks\":\"'" + (txRem.text as! String ?? "" ) + "'\",\"OtherWors\":\"\",\"FWFlg\":\"'" + (myDyTp["WT"]?.FWFlg ?? "") + "'\",\"SundayWorkigFlag\":\"''\",\"Place_Inv\":\"\",\"WType_SName\":\"" + (myDyTp["WT"]?.name ?? "") + "\",\"ClstrName\":\"'" + (myDyTp["RUT"]?.name ?? "") + "'\",\"AppVersion\":\"Vi_\(Bundle.main.appVersionLong).\(Bundle.main.appBuild)\",\"self\":1,\"location\":\"" + slocation + "\",\"dcr_activity_date\":\"'" + dateString + "'\",\"worked_with\":\"'\(Join_Works)'\"\(ImgName)}}]"
        // let jsonString: String = ""
         //AppVersion\":\"Vi1.1.0\
 

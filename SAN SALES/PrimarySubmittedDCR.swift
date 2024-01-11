@@ -414,7 +414,7 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
             print(product)
             self.Disbutorsname.text = product["Trans_Detail_Name"] as? String
             self.Route.text = product["SDP_Name"] as? String
-            self.Joint_Work.text = product["jgch"] as? String
+            self.Joint_Work.text = product["Worked_with_Name"] as? String
             
      
         

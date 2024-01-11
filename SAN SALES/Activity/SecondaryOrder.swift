@@ -103,6 +103,10 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
     var Route: String = ""
     var Stockist_Code: String = ""
     var Edit_Order_Count = 0
+    var lstJWNms: [AnyObject] = []
+    var strJWCd: String = ""
+    var strJWNm: String = ""
+    var lstJoint: [AnyObject] = []
     
     override func viewDidLoad() {
         loadViewIfNeeded()
@@ -130,6 +134,11 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         let lstSchemData: String = LocalStoreage.string(forKey: "Schemes_Master")!
         let lstRateData: String = LocalStoreage.string(forKey: "ProductRate_Master")!
         let PlnDets: String=LocalStoreage.string(forKey: "Mydayplan")!
+        if let JointWData = LocalStoreage.string(forKey: "Jointwork_Master"),
+           let list = GlobalFunc.convertToDictionary(text:  JointWData) as? [AnyObject] {
+            lstJoint = list;
+            print("JointWData  ___________________________")
+        }
         if let list = GlobalFunc.convertToDictionary(text: PlnDets) as? [AnyObject] {
             lstPlnDetail = list;
         }
@@ -1339,8 +1348,39 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
             sPItems4 = sPItems
         }
         
-        
-        let jsonString = "[{\"Activity_Report_APP\":{\"Worktype_code\":\"\'" + (self.lstPlnDetail[0]["worktype"] as! String) + "\'\",\"Town_code\":\"\'" + (self.lstPlnDetail[0]["clusterid"] as! String) + "\'\",\"RateEditable\":\"''\",\"dcr_activity_date\":\"\'" + VisitData.shared.cInTime + "\'\",\"Daywise_Remarks\":\"" + VisitData.shared.VstRemarks.name + "\",\"eKey\":\"" + self.eKey + "\",\"rx\":\"'1'\",\"rx_t\":\"''\",\"DataSF\":\"\'" + DataSF + "\'\"}},{\"Activity_Doctor_Report\":{\"Doctor_POB\":0,\"Worked_With\":\"''\",\"Doc_Meet_Time\":\"\'" + VisitData.shared.cInTime + "\'\",\"modified_time\":\"\'" + VisitData.shared.cInTime + "\'\",\"net_weight_value\":\"0.00\",\"stockist_code\":\"\'" + (VisitData.shared.Dist.id ) + "\'\",\"stockist_name\":\"''\",\"superstockistid\":\"''\",\"Discountpercent\":0,\"CheckinTime\":\"" + VisitData.shared.cInTime + "\",\"CheckoutTime\":\"" + VisitData.shared.cOutTime + "\",\"location\":\"\'" + sLocation + "\'\",\"geoaddress\":\"" + sAddress + "\",\"PhoneOrderTypes\":\"" + VisitData.shared.OrderMode.id + "\",\"Order_Stk\":\"'15560'\",\"Order_No\":\"''\",\"rootTarget\":\"0\",\"orderValue\":\(Subtotal),\"disPercnt\":0.0,\"disValue\":0.0,\"finalNetAmt\":\(Subtotal),\"taxTotalValue\":0,\"discTotalValue\":0.0,\"subTotal\":0,\"No_Of_items\":\(lstPrvOrder.count),\"rateMode\":\"free\",\"discount_price\":0,\"doctor_code\":\"\'" + VisitData.shared.CustID + "\'\",\"doctor_name\":\"\'" + VisitData.shared.CustName + "\'\",\"doctor_route\":\"'mylapore'\",\"f_key\":{\"Activity_Report_Code\":\"'Activity_Report_APP'\"}}},{\"Activity_Sample_Report\":[" + sPItems4 +  "]},{\"Trans_Order_Details\":[]},{\"Activity_Input_Report\":[]},{\"Activity_Event_Captures\":[]},{\"PENDING_Bills\":[]},{\"Compititor_Product\":[]},{\"Activity_Event_Captures_Call\":[]}]"
+        var lstPlnDetail: [AnyObject] = []
+        if self.LocalStoreage.string(forKey: "Mydayplan") == nil { return }
+        let PlnDets: String=LocalStoreage.string(forKey: "Mydayplan")!
+        if let list = GlobalFunc.convertToDictionary(text: PlnDets) as? [AnyObject] {
+            lstPlnDetail = list;
+        }
+        let jwids=(String(format: "%@", lstPlnDetail[0]["worked_with_code"] as! CVarArg)).replacingOccurrences(of: "$$", with: ";")
+            .replacingOccurrences(of: "$", with: ";")
+            .components(separatedBy: ";")
+        print(lstPlnDetail[0]["worked_with_code"] as! CVarArg)
+        for k in 0...jwids.count-1 {
+            if let indexToDelete = lstJoint.firstIndex(where: { String(format: "%@", $0["id"] as! CVarArg) == jwids[k] }) {
+                print(lstJoint)
+                let jwid: String = lstJoint[indexToDelete]["id"] as! String
+                let jwname: String = lstJoint[indexToDelete]["name"] as! String
+                
+                strJWCd += jwid+";"
+                strJWNm += jwname+";"
+                let jitm: AnyObject = lstJoint[indexToDelete] as AnyObject
+                lstJWNms.append(jitm)
+            }
+            
+        }
+        print(lstJWNms)
+        print(strJWCd)
+        let JointData = strJWCd
+        var Join_Works = JointData.replacingOccurrences(of: ";", with: "$$")
+        if Join_Works.hasSuffix("$") {
+
+            Join_Works.removeLast()
+            print(Join_Works)
+        }
+        let jsonString = "[{\"Activity_Report_APP\":{\"Worktype_code\":\"\'" + (self.lstPlnDetail[0]["worktype"] as! String) + "\'\",\"Town_code\":\"\'" + (self.lstPlnDetail[0]["clusterid"] as! String) + "\'\",\"RateEditable\":\"''\",\"dcr_activity_date\":\"\'" + VisitData.shared.cInTime + "\'\",\"Daywise_Remarks\":\"" + VisitData.shared.VstRemarks.name + "\",\"eKey\":\"" + self.eKey + "\",\"rx\":\"'1'\",\"rx_t\":\"''\",\"DataSF\":\"\'" + DataSF + "\'\"}},{\"Activity_Doctor_Report\":{\"Doctor_POB\":0,\"Worked_With\":\"'"+Join_Works+"'\",\"Doc_Meet_Time\":\"\'" + VisitData.shared.cInTime + "\'\",\"modified_time\":\"\'" + VisitData.shared.cInTime + "\'\",\"net_weight_value\":\"0.00\",\"stockist_code\":\"\'" + (VisitData.shared.Dist.id ) + "\'\",\"stockist_name\":\"''\",\"superstockistid\":\"''\",\"Discountpercent\":0,\"CheckinTime\":\"" + VisitData.shared.cInTime + "\",\"CheckoutTime\":\"" + VisitData.shared.cOutTime + "\",\"location\":\"\'" + sLocation + "\'\",\"geoaddress\":\"" + sAddress + "\",\"PhoneOrderTypes\":\"" + VisitData.shared.OrderMode.id + "\",\"Order_Stk\":\"'15560'\",\"Order_No\":\"''\",\"rootTarget\":\"0\",\"orderValue\":\(Subtotal),\"disPercnt\":0.0,\"disValue\":0.0,\"finalNetAmt\":\(Subtotal),\"taxTotalValue\":0,\"discTotalValue\":0.0,\"subTotal\":0,\"No_Of_items\":\(lstPrvOrder.count),\"rateMode\":\"free\",\"discount_price\":0,\"doctor_code\":\"\'" + VisitData.shared.CustID + "\'\",\"doctor_name\":\"\'" + VisitData.shared.CustName + "\'\",\"doctor_route\":\"'mylapore'\",\"f_key\":{\"Activity_Report_Code\":\"'Activity_Report_APP'\"}}},{\"Activity_Sample_Report\":[" + sPItems4 +  "]},{\"Trans_Order_Details\":[]},{\"Activity_Input_Report\":[]},{\"Activity_Event_Captures\":[]},{\"PENDING_Bills\":[]},{\"Compititor_Product\":[]},{\"Activity_Event_Captures_Call\":[]}]"
         
         
         

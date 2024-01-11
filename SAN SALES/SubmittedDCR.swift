@@ -398,6 +398,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
         }
        
         self.Rotlbl.text=String(format: "%@", product["SDP_Name"] as! String)
+        self.Jointlbl.text = product["Worked_with_Name"] as? String
         
         
         

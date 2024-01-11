@@ -514,21 +514,14 @@ class Performance: IViewController,ChartViewDelegate, UITableViewDelegate, UITab
                         print("Error: Could not parse JSON data")
                         return
                     }
-                    
                     print(prettyPrintedJson)
-                    
-                    
                     var Total_Target = 0.0
                     var Totatal_Order = 0.0
                     if let TargetArray = prettyPrintedJson["Target"] as? [[String: Any]] {
-                     
-                        
                         for item in TargetArray {
                             let orderValue = item["target_val"] as? String ?? "0.0"
                             let reportingCode = item["reporting_code"] as? String ?? ""
                             let sfCode = item["Sf_Code"] as? String ?? ""
-                           
-                            
                             let Change_Double = Double(orderValue)
 //                            if (sfCode == SFCode){
                                 Total_Target = Total_Target + Change_Double!
@@ -549,16 +542,30 @@ class Performance: IViewController,ChartViewDelegate, UITableViewDelegate, UITab
                             let sfCode = item["Sf_Code"] as? String ?? ""
                             let orderValue = item["order_value"] as? Double ?? 0.0
                             let reportingCode = item["reporting_code"] as? String ?? ""
-                          
+                          print(SFCode)
                      
                             
-                            if(dsgMod == "ASM" || dsgMod == "ZSM"){
+                            if(dsgMod == "ASM" || dsgMod == "ZSM" ){
                                 if (sfCode == SFCode){
                                     Totatal_Order = Totatal_Order+orderValue
                                     Achieved_data.append(Achieved(Order_Value: String(orderValue), Reporting_Code: sfCode, SF_Code: sfCode))
                                 }else if (reportingCode == SFCode){
                                     Totatal_Order = Totatal_Order+orderValue
                                     Achieved_data.append(Achieved(Order_Value: String(orderValue), Reporting_Code: reportingCode, SF_Code: sfCode))
+                                }else if(Select_Ord.text == "Primary"){
+                                    print(BarsName)
+                                    for item in BarsName{
+                                        let Iddata = item.Id
+                                        print( SFCode)
+                                        print( Iddata)
+                                        if (sfCode == SFCode){
+                                            Totatal_Order = Totatal_Order+orderValue
+                                            Achieved_data.append(Achieved(Order_Value: String(orderValue), Reporting_Code: sfCode, SF_Code: sfCode))
+                                        }else if (reportingCode == Iddata){
+                                            Totatal_Order = Totatal_Order+orderValue
+                                            Achieved_data.append(Achieved(Order_Value: String(orderValue), Reporting_Code: Iddata, SF_Code: Iddata))
+                                        }
+                                    }
                                 }
                                 
                             }else{
