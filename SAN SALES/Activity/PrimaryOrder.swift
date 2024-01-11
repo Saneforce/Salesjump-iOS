@@ -288,6 +288,7 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
             let cell:cellListItem = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
             if tbDataSelect == tableView {
                 let item: [String: Any] = lObjSel[indexPath.row] as! [String : Any]
+                print(item)
                 cell.lblText?.text = item["name"] as? String
                 cell.lblUOM?.text = ""
                 if SelMode=="UOM" {
@@ -521,6 +522,8 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
                 lblPrvSuppNm.text = name
                 VisitData.shared.Dist.name = name
                 VisitData.shared.Dist.id = id
+                VisitData.shared.Sup.id = id
+                VisitData.shared.Sup.id = name
                 print(id)
                 
             }
@@ -902,7 +905,6 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
                 return false
             })
             {
-                
                 let itm: [String: Any]=["id": id,"Qty": sQty,"UOM": sUom, "UOMNm": sUomNm, "UOMConv": sUomConv, "SalQty": TotQty,"NetWt": sNetUnt,"Scheme": Scheme,"FQ": FQ,"OffQty": OffQty,"OffProd":OffProd,"OffProdNm":OffProdNm,"Rate": Rate,"Value": (TotQty*Rate), "Disc": Disc, "DisVal": Schmval, "NetVal": ItmValue];
                 let jitm: AnyObject = itm as AnyObject
                 VisitData.shared.ProductCart[i] = jitm
@@ -1419,6 +1421,7 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
     func DemoEdite(){
         for item in objcallsprimary{
             print(item)
+            print(lstSuppList)
             let id: String
             let lProdItem:[String: Any]
             let Product_Code = item["Product_Code"] as! String

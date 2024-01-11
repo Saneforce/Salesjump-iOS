@@ -392,7 +392,12 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
           
             print(lstDisDetail)
             print(filteredArray)
-            self.Dislbl.text=String(format: "%@", filteredArray[0]["name"] as! String)
+            
+            if(filteredArray.isEmpty){
+                self.Dislbl?.text = ""
+            }else{
+                self.Dislbl.text=String(format: "%@", filteredArray[0]["name"] as! String)
+            }
         }else{
             self.Dislbl.text=String(format: "%@", "")
         }
