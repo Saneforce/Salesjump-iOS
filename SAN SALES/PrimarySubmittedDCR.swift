@@ -361,12 +361,13 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
                         
                     case .success(let value):
                         print(value)
-                        let storyboard = UIStoryboard(name: "Submittedcalls", bundle: nil)
-                        let viewController = storyboard.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
-                        let myDyPln = storyboard.instantiateViewController(withIdentifier: "PrimarySubmittedDCR") as! PrimarySubmittedDCR
-                        viewController.setViewControllers([myDyPln], animated: true)
-                        UIApplication.shared.windows.first?.rootViewController = viewController
+//                        let storyboard = UIStoryboard(name: "Submittedcalls", bundle: nil)
+//                        let viewController = storyboard.instantiateViewController(withIdentifier: "PriSubNav") as! UINavigationController
+//                        let myDyPln = storyboard.instantiateViewController(withIdentifier: "PrimarySubmittedDCR") as! PrimarySubmittedDCR
+//                        viewController.setViewControllers([myDyPln], animated: true)
+//                        UIApplication.shared.windows.first?.rootViewController = viewController
                         refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
+                        SelectPrimaryorder()
                         Toast.show(message: "Deleted successfully ")
                         if let json = value as? [String: Any] {
                             guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
@@ -382,12 +383,13 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
                         }
                     case .failure(let error):
                         //Toast.show(message: error.errorDescription!)
-                        let storyboard = UIStoryboard(name: "Submittedcalls", bundle: nil)
-                        let viewController = storyboard.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
-                        let myDyPln = storyboard.instantiateViewController(withIdentifier: "PrimarySubmittedDCR") as! PrimarySubmittedDCR
-                        viewController.setViewControllers([myDyPln], animated: true)
-                        UIApplication.shared.windows.first?.rootViewController = viewController
+//                        let storyboard = UIStoryboard(name: "Submittedcalls", bundle: nil)
+//                        let viewController = storyboard.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
+//                        let myDyPln = storyboard.instantiateViewController(withIdentifier: "PrimarySubmittedDCR") as! PrimarySubmittedDCR
+//                        viewController.setViewControllers([myDyPln], animated: true)
+//                        UIApplication.shared.windows.first?.rootViewController = viewController
                         refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
+                        SelectPrimaryorder()
                         Toast.show(message: "Deleted successfully ")
                     }
                     self.LoadingDismiss()

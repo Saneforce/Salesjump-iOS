@@ -664,12 +664,13 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
                         }
                     case .failure(let error):
                        // Toast.show(message: error.errorDescription!)
-                        let storyboard = UIStoryboard(name: "Submittedcalls", bundle: nil)
-                        let viewController = storyboard.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
-                        let myDyPln = storyboard.instantiateViewController(withIdentifier: "SubmittedDCR") as! SubmittedDCR
-                        viewController.setViewControllers([myDyPln], animated: true)
-                        UIApplication.shared.windows.first?.rootViewController = viewController
+//                        let storyboard = UIStoryboard(name: "Submittedcalls", bundle: nil)
+//                        let viewController = storyboard.instantiateViewController(withIdentifier: "SecSubNav") as! UINavigationController
+//                        let myDyPln = storyboard.instantiateViewController(withIdentifier: "SubmittedDCR") as! SubmittedDCR
+//                        viewController.setViewControllers([myDyPln], animated: true)
+//                        UIApplication.shared.windows.first?.rootViewController = viewController
                         refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
+                        SelectSecondaryorder()
                         Toast.show(message: "Deleted successfully ")
                     }
                     self.LoadingDismiss()
