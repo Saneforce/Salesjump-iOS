@@ -227,6 +227,7 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func SelectPrimary2order(){
+        self.ShowLoading(Message: "Loading...")
         if let transid = objcalls[0]["Trans_SlNo"] as? String {
             // Use the unwrapped value of 'transid' here
             print(transid)

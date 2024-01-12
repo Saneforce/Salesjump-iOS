@@ -204,16 +204,44 @@ class Coverage: IViewController,FSCalendarDelegate,FSCalendarDataSource {
         Filtter_date.isHidden = true
         Total_Team_Size_List(date:formatters.string(from: Date()))
     }
-    @objc func ThiseWeek_Date(){
-        Fromdate = (formattedDate(date: calculateStartDate(for: 7)))
+//    @objc func ThiseWeek_Date(){
+//        Fromdate = (formattedDate(date: calculateStartDate(for: 7)))
+//        let formatters = DateFormatter()
+//        formatters.dateFormat = "yyyy-MM-dd"
+//        Todate = formatters.string(from: Date())
+//        From_Date.text = (formattedDate(date: calculateStartDate(for: 7)))
+//        To_Date.text = formatters.string(from: Date())
+//        Filtter_date.isHidden = true
+//        Total_Team_Size_List(date:formatters.string(from: Date()))
+//    }
+    
+
+    func calculateStartDateForThisWeek() -> Date {
+        let calendar = Calendar.current
+        let currentDate = Date()
+        
+        guard let startOfWeek = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: currentDate)) else {
+            return currentDate
+        }
+        // Adjust the weekday to ensure Monday is considered as the first day of the week
+        let monday = calendar.date(byAdding: .day, value: 2 - (calendar.component(.weekday, from: startOfWeek)), to: startOfWeek) ?? currentDate
+        return monday
+    }
+
+
+
+    @objc func ThiseWeek_Date() {
+        Fromdate = formattedDate(date: calculateStartDateForThisWeek())
         let formatters = DateFormatter()
         formatters.dateFormat = "yyyy-MM-dd"
         Todate = formatters.string(from: Date())
-        From_Date.text = (formattedDate(date: calculateStartDate(for: 7)))
+        From_Date.text = formattedDate(date: calculateStartDateForThisWeek())
         To_Date.text = formatters.string(from: Date())
         Filtter_date.isHidden = true
-        Total_Team_Size_List(date:formatters.string(from: Date()))
+        Total_Team_Size_List(date: formatters.string(from: Date()))
     }
+
+    
     func getUserDetails(){
         let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
         let data = Data(prettyPrintedJson!.utf8)

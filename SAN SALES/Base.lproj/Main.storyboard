@@ -785,9 +785,13 @@
                         <constraints>
                             <constraint firstItem="N3c-So-Gqt" firstAttribute="leading" secondItem="0OE-tt-Rsg" secondAttribute="leading" id="0R2-iY-2uU"/>
                             <constraint firstItem="8Sb-WO-zFQ" firstAttribute="top" secondItem="v0Z-cM-M0R" secondAttribute="top" id="0cn-13-bCu"/>
+                            <constraint firstItem="N3c-So-Gqt" firstAttribute="leading" secondItem="0OE-tt-Rsg" secondAttribute="leading" id="5N3-F6-D98"/>
+                            <constraint firstItem="N3c-So-Gqt" firstAttribute="trailing" secondItem="0OE-tt-Rsg" secondAttribute="trailing" id="8tY-Xz-xDD"/>
                             <constraint firstItem="8Sb-WO-zFQ" firstAttribute="trailing" secondItem="0OE-tt-Rsg" secondAttribute="trailing" id="I2g-Bg-Dda"/>
                             <constraint firstItem="8Sb-WO-zFQ" firstAttribute="leading" secondItem="0OE-tt-Rsg" secondAttribute="leading" id="Kzp-pd-hGC"/>
                             <constraint firstAttribute="bottom" secondItem="8Sb-WO-zFQ" secondAttribute="bottom" id="XFi-eJ-Vev"/>
+                            <constraint firstAttribute="bottom" secondItem="N3c-So-Gqt" secondAttribute="bottom" id="ZU6-WS-2o2"/>
+                            <constraint firstItem="N3c-So-Gqt" firstAttribute="top" secondItem="v0Z-cM-M0R" secondAttribute="top" id="aZ2-1H-Rkj"/>
                             <constraint firstItem="N3c-So-Gqt" firstAttribute="trailing" secondItem="0OE-tt-Rsg" secondAttribute="trailing" id="g1Y-ax-7Ur"/>
                             <constraint firstItem="N3c-So-Gqt" firstAttribute="top" secondItem="v0Z-cM-M0R" secondAttribute="top" id="hng-L6-1Gs"/>
                             <constraint firstAttribute="bottom" secondItem="N3c-So-Gqt" secondAttribute="bottom" id="m6G-XN-21r"/>
@@ -1832,12 +1836,10 @@
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="6bd-At-UO1">
-                                <rect key="frame" x="0.0" y="80" width="414" height="772"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="6bd-At-UO1">
+                                <rect key="frame" x="0.0" y="92" width="414" height="753"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="772" id="bjF-g4-QcO"/>
-                                </constraints>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" id="U1v-8k-dVw" customClass="cellListItem" customModule="SAN_SALES" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="50" width="414" height="43.5"/>
@@ -1870,11 +1872,6 @@
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="0sh-U4-fiW"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="6bd-At-UO1" firstAttribute="top" secondItem="0sh-U4-fiW" secondAttribute="top" constant="32" id="0jo-Om-Gyb"/>
-                            <constraint firstItem="6bd-At-UO1" firstAttribute="leading" secondItem="0sh-U4-fiW" secondAttribute="leading" id="X6O-Oa-9hR"/>
-                            <constraint firstItem="6bd-At-UO1" firstAttribute="trailing" secondItem="0sh-U4-fiW" secondAttribute="trailing" id="zoC-jG-0wA"/>
-                        </constraints>
                     </view>
                     <connections>
                         <outlet property="btnClearData" destination="Mgl-ch-amb" id="GQy-ZU-0Jg"/>
@@ -3961,10 +3958,10 @@
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                 <prototypes>
                                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" id="7ex-g0-4qE" customClass="cellListItem" customModule="SAN_SALES" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="50" width="404" height="14.5"/>
+                                                        <rect key="frame" x="0.0" y="50" width="404" height="13.5"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="7ex-g0-4qE" id="MbE-Y3-0E6">
-                                                            <rect key="frame" x="0.0" y="0.0" width="404" height="14.5"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="404" height="13.5"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <subviews>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wvb-UC-NdD">
@@ -3975,7 +3972,7 @@
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
                                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Select" translatesAutoresizingMaskIntoConstraints="NO" id="ZtE-Af-8A6">
-                                                                    <rect key="frame" x="9" y="-16" width="25" height="1"/>
+                                                                    <rect key="frame" x="9" y="-17" width="25" height="1"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                 </imageView>
                                                             </subviews>
@@ -4356,10 +4353,10 @@
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <prototypes>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" id="IYr-sn-QF3" customClass="cellListItem" customModule="SAN_SALES" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="50" width="397" height="30"/>
+                                                <rect key="frame" x="0.0" y="50" width="397" height="31"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="IYr-sn-QF3" id="O81-6j-USv">
-                                                    <rect key="frame" x="0.0" y="0.0" width="397" height="30"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="397" height="31"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="41o-3e-T3o">
@@ -4370,7 +4367,7 @@
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Select" translatesAutoresizingMaskIntoConstraints="NO" id="kUX-lG-LhO">
-                                                            <rect key="frame" x="10" y="-1" width="19" height="0.0"/>
+                                                            <rect key="frame" x="10" y="-1" width="19" height="1"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         </imageView>
                                                     </subviews>
