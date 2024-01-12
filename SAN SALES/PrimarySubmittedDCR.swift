@@ -128,7 +128,6 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
             lblnodata.isHidden=true
             PrimayOrderViewTB.isHidden=false
             let item: [String: Any] = PrimarySubmittedDCR.objcalls_SelectPrimaryorder2[indexPath.row] as! [String : Any]
-            print(item)
             cell.Disbutor?.text = item["Trans_Detail_Name"] as? String
             cell.rout?.text = item["SDP_Name"] as? String
             cell.meettime.text = item["StartOrder_Time"] as? String
@@ -463,12 +462,19 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
         }
         if (View.count == 0){
             OrderHig.constant = 10
-        }else{
+        }else if (10 < View.count){
+            OrderHig.constant = 100 + CGFloat(35*self.View.count)
+        }
+        else{
             OrderHig.constant = 100 + CGFloat(25*self.View.count)
         }
         print(OrderHig.constant)
             self.view.layoutIfNeeded()
-        ScHig.constant = 100 + CGFloat(40*self.View.count)+CGFloat(35*self.Input.count)
+        if ( 10 < View.count){
+            ScHig.constant = 120 + CGFloat(55*self.View.count)+CGFloat(45*self.Input.count)
+        }else{
+            ScHig.constant = 100 + CGFloat(40*self.View.count)+CGFloat(35*self.Input.count)
+        }
         self.view.layoutIfNeeded()
         
         

@@ -848,7 +848,12 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
             }
             return false
         })
-        let TotQty: Double = Double((sQty as! NSString).intValue * (sUomConv as! NSString).intValue)
+      //  let TotQty: Double = Double((sQty as! NSString).intValue * (sUomConv as! NSString).intValue)
+        let sQtyValue = (sQty as NSString).intValue
+        let sUomConvValue = (sUomConv as NSString).intValue
+
+        let multipliedResult: Int64 = Int64(sQtyValue) * Int64(sUomConvValue)
+        let TotQty: Double = Double(multipliedResult)
         
         let Schemes: [AnyObject] = lstSchemList.filter ({ (item) in
             if item["PCode"] as! String == id && (item["Scheme"] as! NSString).doubleValue <= TotQty {

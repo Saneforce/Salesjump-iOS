@@ -29,6 +29,7 @@ struct ChartName:Codable{
     var Achievement:String
     let BarName:String
     let Id:String
+    let dsg:String
 }
 
 class Performance: IViewController,ChartViewDelegate, UITableViewDelegate, UITableViewDataSource{
@@ -211,7 +212,11 @@ class Performance: IViewController,ChartViewDelegate, UITableViewDelegate, UITab
             print(Target_Data)
             print(Achieved_data)
             var filteredData: [Achieved]
+            print(dsgMod)
             if (dsgMod == "ASM"){
+                filteredData = Achieved_data.filter { $0.SF_Code == id }
+            }else if (dsgMod == "ZSM"){
+              print(dsgMod)
                 filteredData = Achieved_data.filter { $0.SF_Code == id }
             }else{
                 filteredData = Achieved_data.filter { $0.Reporting_Code == id }
@@ -451,10 +456,10 @@ class Performance: IViewController,ChartViewDelegate, UITableViewDelegate, UITab
                         
                                 if (ID == SFCode){
                                     Field_Force_data.append(Field_Force(Name: name!, id: ID!, dsg: dsg!, Sf_id: Countdata))
-                                    BarsName.append(ChartName(Target: "", Achievement: "", BarName: "E\(Count)", Id: ID!))
+                                    BarsName.append(ChartName(Target: "", Achievement: "", BarName: "E\(Count)", Id: ID!, dsg: dsg!))
                                 }else if (id == SFCode){
                                     Field_Force_data.append(Field_Force(Name: name!, id: ID!, dsg: dsg!, Sf_id: Countdata))
-                                    BarsName.append(ChartName(Target: "", Achievement: "", BarName: "E\(Count)", Id: ID!))
+                                    BarsName.append(ChartName(Target: "", Achievement: "", BarName: "E\(Count)", Id: ID!, dsg: dsg!))
                                 }
                                 }else{
                                     let filteredData = jsonArray.filter { $0["rtoSF"] as? String == SFCode}
@@ -467,10 +472,10 @@ class Performance: IViewController,ChartViewDelegate, UITableViewDelegate, UITab
                                    
                                     if (ID == SFCode){
                                         Field_Force_data.append(Field_Force(Name: name!, id: ID!, dsg: dsg!, Sf_id: Countdata))
-                                        BarsName.append(ChartName(Target: "", Achievement: "", BarName: "E\(Count)", Id: ID!))
+                                        BarsName.append(ChartName(Target: "", Achievement: "", BarName: "E\(Count)", Id: ID!, dsg: dsg!))
                                     }else if (id == SFCode){
                                         Field_Force_data.append(Field_Force(Name: name!, id: ID!, dsg: dsg!, Sf_id: Countdata))
-                                        BarsName.append(ChartName(Target: "", Achievement: "", BarName: "E\(Count)", Id: ID!))
+                                        BarsName.append(ChartName(Target: "", Achievement: "", BarName: "E\(Count)", Id: ID!, dsg: dsg!))
                                     }
                                 }
                             }
@@ -515,6 +520,7 @@ class Performance: IViewController,ChartViewDelegate, UITableViewDelegate, UITab
                         return
                     }
                     print(prettyPrintedJson)
+                    print(BarsName)
                     var Total_Target = 0.0
                     var Totatal_Order = 0.0
                     if let TargetArray = prettyPrintedJson["Target"] as? [[String: Any]] {
@@ -539,8 +545,44 @@ class Performance: IViewController,ChartViewDelegate, UITableViewDelegate, UITab
                        
                         for item in achievedArray {
                             print(item)
+                            print(achievedArray)
+                            print(BarsName)
+                            var orderValue = 0.0
                             let sfCode = item["Sf_Code"] as? String ?? ""
-                            let orderValue = item["order_value"] as? Double ?? 0.0
+                            orderValue = item["order_value"] as? Double ?? 0.0
+                            if(sfCode != SFCode){
+                                print(achievedArray)
+                                let filteredOrders = achievedArray.filter { order in
+                                    if let reportingCode = order["reporting_code"] as? String {
+                                        return reportingCode == sfCode
+                                    }
+                                    return false
+                                }
+                                print(filteredOrders)
+                                print(BarsName)
+                                let filteredData = BarsName.filter { $0.Id == sfCode }
+                                print(filteredData)
+                                let dsgValues = filteredData.map { $0.dsg }
+                                print(dsgValues)
+                                if dsgValues.contains("ASM") {
+                                    print(filteredOrders)
+                                    for items in filteredOrders {
+                                        let order_value = items["order_value"] as? Double ?? 0.0
+                                        print(order_value)
+                                        orderValue = orderValue + order_value
+                                        print(orderValue)
+                                    }
+                                    
+                                }else if (dsgValues.contains("ZSM")){
+                                    
+                                }else {
+                                    orderValue = item["order_value"] as? Double ?? 0.0
+                                }
+                             
+                            }else{
+                               
+                                orderValue = item["order_value"] as? Double ?? 0.0
+                            }
                             let reportingCode = item["reporting_code"] as? String ?? ""
                           print(SFCode)
                      
@@ -562,12 +604,14 @@ class Performance: IViewController,ChartViewDelegate, UITableViewDelegate, UITab
                                             Totatal_Order = Totatal_Order+orderValue
                                             Achieved_data.append(Achieved(Order_Value: String(orderValue), Reporting_Code: sfCode, SF_Code: sfCode))
                                         }else if (reportingCode == Iddata){
+                                            print(reportingCode)
+                                            print(Iddata)
                                             Totatal_Order = Totatal_Order+orderValue
                                             Achieved_data.append(Achieved(Order_Value: String(orderValue), Reporting_Code: Iddata, SF_Code: Iddata))
                                         }
                                     }
                                 }
-                                
+                                print(Achieved_data)
                             }else{
                                 print(BarsName)
                                 
@@ -637,6 +681,41 @@ class Performance: IViewController,ChartViewDelegate, UITableViewDelegate, UITab
                                     BarsName[index].Achievement = "0.0"
                                 }
                             }
+                            
+                        }else if (dsgMod == "ZSM"){
+                            print("ZSM")
+                            print(BarsName[index].Id)
+                            print(SFCode)
+                            if (SFCode == BarsName[index].Id) {
+                                if let achievedEntry = Achieved_data.first(where: { $0.SF_Code == SFCode }) {
+                                    let filteredTargets = Achieved_data.filter { $0.SF_Code == SFCode}
+                                    print(filteredTargets)
+                                    var Total_Achieved = 0.0
+                                    for filterdata in filteredTargets{
+                                        let individualTarget = Double(filterdata.Order_Value) ?? 0.0
+                                        Total_Achieved += individualTarget
+                                    }
+                                    BarsName[index].Achievement = String(format: "%.2f", Total_Achieved)
+                                    print("Total")
+                                } else {
+                                    BarsName[index].Achievement = "0.0"
+                                }
+                            }else{
+                                let filteredTargets = Achieved_data.filter({ $0.SF_Code == BarsName[index].Id})
+                                print(filteredTargets)
+                                if !filteredTargets.isEmpty {
+                                    print(filteredTargets)
+                                    var Total_Achieved = 0.0
+                                    for filterdata in filteredTargets {
+                                        let individualTarget = Double(filterdata.Order_Value) ?? 0.0
+                                        Total_Achieved += individualTarget
+                                    }
+                                    BarsName[index].Achievement = String(format: "%.2f", Total_Achieved)
+                                } else {
+                                    BarsName[index].Achievement = "0.0"
+                                }
+                            }
+                            print(BarsName)
                         }else{
                             if SFCode == BarsName[index].Id {
                                 if let achievedEntry = Achieved_data.first(where: { $0.Reporting_Code == SFCode }) {
@@ -666,7 +745,7 @@ class Performance: IViewController,ChartViewDelegate, UITableViewDelegate, UITab
                             }
                         }
                     }
-
+                    print(BarsName)
                     print(Achieved_data)
                     for index in BarsName.indices {
                         if SFCode == BarsName[index].Id {
