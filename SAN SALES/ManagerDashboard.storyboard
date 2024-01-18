@@ -1475,20 +1475,33 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Rax-08-dN9">
-                                <rect key="frame" x="184" y="81" width="193" height="50"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Rax-08-dN9">
+                                <rect key="frame" x="16" y="67" width="361" height="50"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="calendar" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="I4k-TY-Yqs">
                                         <rect key="frame" x="8" y="7" width="30" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="tintColor" red="0.062745098040000002" green="0.67843137249999996" blue="0.76078431369999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EZa-Xz-hXK">
+                                        <rect key="frame" x="46" y="12" width="106" height="20"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" name="Poppins-SemiBold" family="Poppins" pointSize="15"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="chevron.down" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="Cu5-5A-ygT">
+                                        <rect key="frame" x="328" y="12" width="20" height="20"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                    </imageView>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="VP4-eu-G0i"/>
+                                </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eY2-YG-2Gh">
-                                <rect key="frame" x="16" y="152" width="305" height="50"/>
+                                <rect key="frame" x="16" y="127" width="305" height="50"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="- Date -" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rI8-Hz-trh">
                                         <rect key="frame" x="8" y="8" width="120" height="34"/>
@@ -1520,13 +1533,15 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1wQ-jO-heb">
-                                <rect key="frame" x="327" y="152" width="50" height="50"/>
+                                <rect key="frame" x="327" y="127" width="50" height="50"/>
                                 <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="calendar" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="QKY-aP-CTd">
-                                        <rect key="frame" x="5" y="6" width="40" height="40"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <color key="tintColor" red="0.062745098040000002" green="0.67843137249999996" blue="0.76078431369999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="GO" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pxE-d1-oLm">
+                                        <rect key="frame" x="2" y="5" width="40" height="40"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" name="Poppins-Bold" family="Poppins" pointSize="15"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
@@ -1534,7 +1549,7 @@
                                 </constraints>
                             </view>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yGs-fF-KoO">
-                                <rect key="frame" x="0.0" y="254" width="393" height="564"/>
+                                <rect key="frame" x="0.0" y="185" width="393" height="633"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="s7D-6M-4K2">
                                         <rect key="frame" x="0.0" y="0.0" width="393" height="1000"/>
@@ -1901,7 +1916,7 @@
                                     <constraint firstItem="s7D-6M-4K2" firstAttribute="top" secondItem="yGs-fF-KoO" secondAttribute="top" id="1HF-Ef-zdq"/>
                                     <constraint firstItem="s7D-6M-4K2" firstAttribute="centerX" secondItem="yGs-fF-KoO" secondAttribute="centerX" id="Abj-oZ-HVz"/>
                                     <constraint firstItem="s7D-6M-4K2" firstAttribute="leading" secondItem="yGs-fF-KoO" secondAttribute="leading" id="Id8-Hq-KNU"/>
-                                    <constraint firstAttribute="bottom" secondItem="s7D-6M-4K2" secondAttribute="bottom" constant="-436" id="MO0-NY-Oht"/>
+                                    <constraint firstAttribute="bottom" secondItem="s7D-6M-4K2" secondAttribute="bottom" constant="-367" id="MO0-NY-Oht"/>
                                     <constraint firstAttribute="trailing" secondItem="s7D-6M-4K2" secondAttribute="trailing" id="Wo6-Zb-YBB"/>
                                 </constraints>
                             </scrollView>
@@ -2030,13 +2045,17 @@
                         <viewLayoutGuide key="safeArea" id="onP-Vy-0YP"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="Rax-08-dN9" firstAttribute="top" secondItem="onP-Vy-0YP" secondAttribute="top" constant="8" id="6py-wD-1JI"/>
                             <constraint firstItem="zUQ-0L-Ywu" firstAttribute="trailing" secondItem="onP-Vy-0YP" secondAttribute="trailing" id="7mm-TN-slv"/>
                             <constraint firstItem="yGs-fF-KoO" firstAttribute="bottom" secondItem="onP-Vy-0YP" secondAttribute="bottom" id="7rF-hK-xU7"/>
-                            <constraint firstItem="eY2-YG-2Gh" firstAttribute="top" secondItem="onP-Vy-0YP" secondAttribute="top" constant="93" id="9FT-BK-KgC"/>
+                            <constraint firstItem="eY2-YG-2Gh" firstAttribute="top" secondItem="Rax-08-dN9" secondAttribute="bottom" constant="10" id="AFk-13-g0o"/>
+                            <constraint firstItem="onP-Vy-0YP" firstAttribute="trailing" secondItem="Rax-08-dN9" secondAttribute="trailing" constant="16" id="GNZ-lz-YgP"/>
                             <constraint firstItem="1jW-35-4jh" firstAttribute="top" secondItem="onP-Vy-0YP" secondAttribute="top" id="Hy6-e3-FZE"/>
-                            <constraint firstItem="yGs-fF-KoO" firstAttribute="top" secondItem="eY2-YG-2Gh" secondAttribute="bottom" constant="52" id="JRc-kr-ddC"/>
+                            <constraint firstItem="yGs-fF-KoO" firstAttribute="top" secondItem="eY2-YG-2Gh" secondAttribute="bottom" constant="8" id="JRc-kr-ddC"/>
+                            <constraint firstItem="Rax-08-dN9" firstAttribute="leading" secondItem="onP-Vy-0YP" secondAttribute="leading" constant="16" id="LG6-WM-hhd"/>
                             <constraint firstItem="1wQ-jO-heb" firstAttribute="leading" secondItem="eY2-YG-2Gh" secondAttribute="trailing" constant="6" id="MNx-l1-lPz"/>
                             <constraint firstItem="onP-Vy-0YP" firstAttribute="trailing" secondItem="1wQ-jO-heb" secondAttribute="trailing" constant="16" id="QyB-6M-VBT"/>
+                            <constraint firstItem="eY2-YG-2Gh" firstAttribute="top" secondItem="Rax-08-dN9" secondAttribute="bottom" constant="10" id="QyP-MY-ZPS"/>
                             <constraint firstAttribute="bottom" secondItem="zUQ-0L-Ywu" secondAttribute="bottom" id="UP4-ah-hbQ"/>
                             <constraint firstAttribute="trailing" secondItem="eY2-YG-2Gh" secondAttribute="trailing" constant="72" id="VJx-Kp-7ZR"/>
                             <constraint firstItem="zUQ-0L-Ywu" firstAttribute="leading" secondItem="onP-Vy-0YP" secondAttribute="leading" id="VSH-9a-8r2"/>
@@ -2059,11 +2078,13 @@
                         <outlet property="Coverage_Dis" destination="Q1a-s6-z2v" id="rio-Nf-gx8"/>
                         <outlet property="Coverage_Ret" destination="zBh-lE-bCq" id="2x8-MS-u4R"/>
                         <outlet property="Coverage_Rt" destination="AUF-0i-LL5" id="1rr-Kr-goL"/>
-                        <outlet property="Custom_date" destination="1wQ-jO-heb" id="FBC-YU-VqS"/>
+                        <outlet property="Cst_Nam_Lbl" destination="EZa-Xz-hXK" id="RA9-6u-jXJ"/>
+                        <outlet property="Custom_date" destination="Rax-08-dN9" id="Syj-6Z-Nwm"/>
                         <outlet property="Distributors_View" destination="5GS-Cq-70t" id="UKI-Vl-usB"/>
                         <outlet property="Filtter_date" destination="1jW-35-4jh" id="uqM-4x-EP4"/>
                         <outlet property="From_Date" destination="rI8-Hz-trh" id="40W-Wn-OuO"/>
                         <outlet property="From_and_to_date" destination="eY2-YG-2Gh" id="egE-aq-QXQ"/>
+                        <outlet property="Go_Button" destination="1wQ-jO-heb" id="9cg-RI-qda"/>
                         <outlet property="New_Ret" destination="HwP-sN-OX1" id="40M-81-2DT"/>
                         <outlet property="Not_Visited_Dis" destination="hB5-Tt-f2G" id="FEf-8c-Xod"/>
                         <outlet property="Not_Visited_Ret" destination="5lP-zr-GdC" id="3S7-d5-E3b"/>

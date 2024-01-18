@@ -12,6 +12,12 @@ import FSCalendar
 class Coverage: IViewController,FSCalendarDelegate,FSCalendarDataSource {
 
     @IBOutlet weak var Custom_date: UIView!
+    
+    @IBOutlet weak var Cst_Nam_Lbl: UILabel!
+    
+    
+    @IBOutlet weak var Go_Button: UIView!
+    
     @IBOutlet weak var From_and_to_date: UIView!
     @IBOutlet weak var Retailers_View: UIView!
     @IBOutlet weak var Route_View: UIView!
@@ -43,6 +49,7 @@ class Coverage: IViewController,FSCalendarDelegate,FSCalendarDataSource {
     @IBOutlet weak var Calendars: FSCalendar!
     @IBOutlet weak var Calendar_View: UIView!
     
+    
     var SFCode: String = "", StateCode: String = "", DivCode: String = "",Desig: String = ""
     let LocalStoreage = UserDefaults.standard
     var Coverage_Sfcode = ""
@@ -56,6 +63,15 @@ class Coverage: IViewController,FSCalendarDelegate,FSCalendarDataSource {
         super.viewDidLoad()
         Calendars.delegate=self
         Calendars.dataSource=self
+        
+        Go_Button.backgroundColor = .white
+        Go_Button.layer.cornerRadius = 10.0
+        Go_Button.layer.shadowColor = UIColor.gray.cgColor
+        Go_Button.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
+        Go_Button.layer.shadowRadius = 3.0
+        Go_Button.layer.shadowOpacity = 0.7
+        
+        
         Custom_date.backgroundColor = .white
         Custom_date.layer.cornerRadius = 10.0
         Custom_date.layer.shadowColor = UIColor.gray.cgColor
@@ -98,6 +114,7 @@ class Coverage: IViewController,FSCalendarDelegate,FSCalendarDataSource {
         ThiseWeek.addTarget(target: self, action: #selector(ThiseWeek_Date))
         From_Date.addTarget(target: self, action: #selector(selDOF))
         To_Date.addTarget(target: self, action: #selector(selDOT))
+        Go_Button.addTarget(target: self, action: #selector(Click_Go_Button))
         getUserDetails()
         ThiseMonth_Date()
    
@@ -107,6 +124,7 @@ class Coverage: IViewController,FSCalendarDelegate,FSCalendarDataSource {
         //Todate = formatters.string(from: Date())
        // Total_Team_Size_List(date:formatters.string(from: Date()))
         
+        Cst_Nam_Lbl.text = "This month"
     }
     @objc private func selDOF() {
         SelMode = "DOF"
@@ -144,7 +162,7 @@ class Coverage: IViewController,FSCalendarDelegate,FSCalendarDataSource {
             From_Date.text = selectedDates[0]
             Fromdate = selectedDates[0]
             Calendars.reloadData()
-            Total_Team_Size_List(date:formatter.string(from: Date()))
+          //  Total_Team_Size_List(date:formatter.string(from: Date()))
             
             
         }
@@ -155,7 +173,7 @@ class Coverage: IViewController,FSCalendarDelegate,FSCalendarDataSource {
             To_Date.text = selectedDates[0]
             Todate = selectedDates[0]
             print(selectedDates)
-            Total_Team_Size_List(date:formatter.string(from: Date()))
+            //Total_Team_Size_List(date:formatter.string(from: Date()))
         }
         Calendar_View.isHidden = true
 
@@ -175,6 +193,7 @@ class Coverage: IViewController,FSCalendarDelegate,FSCalendarDataSource {
         return formatter.date(from: "1900/01/01")!
     }
     @objc func ThiseMonth_Date(){
+        Cst_Nam_Lbl.text = "Thise month"
         let calendar = Calendar.current
            let startOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: calendar.startOfDay(for: currentDate)))!
            
@@ -195,6 +214,7 @@ class Coverage: IViewController,FSCalendarDelegate,FSCalendarDataSource {
         Total_Team_Size_List(date:formatters.string(from: Date()))
     }
     @objc func TodayDate(){
+        Cst_Nam_Lbl.text = "Today"
         let formatters = DateFormatter()
         formatters.dateFormat = "yyyy-MM-dd"
         Fromdate = formatters.string(from: Date())
@@ -231,6 +251,7 @@ class Coverage: IViewController,FSCalendarDelegate,FSCalendarDataSource {
 
 
     @objc func ThiseWeek_Date() {
+        Cst_Nam_Lbl.text = "Thise Week"
         Fromdate = formattedDate(date: calculateStartDateForThisWeek())
         let formatters = DateFormatter()
         formatters.dateFormat = "yyyy-MM-dd"
@@ -422,5 +443,10 @@ class Coverage: IViewController,FSCalendarDelegate,FSCalendarDataSource {
     
     @IBAction func Calendar_View_Close(_ sender: Any) {
         Calendar_View.isHidden =  true
+    }
+    @objc func Click_Go_Button(){
+        let formatters = DateFormatter()
+        formatters.dateFormat = "yyyy-MM-dd"
+        Total_Team_Size_List(date:formatters.string(from: Date()))
     }
 }
