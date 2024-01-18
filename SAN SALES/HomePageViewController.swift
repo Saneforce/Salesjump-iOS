@@ -727,9 +727,6 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
 
 }
 
-
-
-
 //Username: Sankafo2,aachi-testso2
 //Paswoord :123,123
 
