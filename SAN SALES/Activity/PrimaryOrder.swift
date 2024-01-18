@@ -876,9 +876,12 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
             }
             return false
         })
+        print(RateItems)
+        print(TotQty)
         if(RateItems.count>0){
             Rate = (RateItems[0]["Retailor_Price"] as! NSString).doubleValue
         }
+        print(Rate)
         var ItmValue: Double = (TotQty*Rate)
         if(Schemes.count>0){
             Scheme = (Schemes[0]["Scheme"] as! NSString).doubleValue
@@ -957,7 +960,7 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
         }
         lblTotAmt.text = String(format: "Rs. %.02f", totAmt)
         lblPrvTotAmt.text = String(format: "Rs. %.02f", totAmt)
-        
+        print(totAmt)
         TotaAmout = String(totAmt)
         
         lblTotItem.text = String(format: "%i",  lstPrvOrder.count)
@@ -1443,7 +1446,7 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
             }
             
             let sUomNm = item["Product_Unit_Name"] as? String
-            let sUomConv = String((item["CQty"] as? Int)!)
+            let sUomConv = String((item["Product_Unit_Value"] as? Int)!)
             let sNetUnt = ""
             let sQty = item["Qty"] as? Int
             
