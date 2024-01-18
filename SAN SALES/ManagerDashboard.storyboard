@@ -1552,7 +1552,7 @@
                                 <rect key="frame" x="0.0" y="185" width="393" height="633"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="s7D-6M-4K2">
-                                        <rect key="frame" x="0.0" y="0.0" width="393" height="1000"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="393" height="1250"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Wwc-Bp-JQB">
                                                 <rect key="frame" x="10" y="1" width="138" height="38"/>
@@ -1908,7 +1908,7 @@
                                         </subviews>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="1000" id="XRe-bW-h7s"/>
+                                            <constraint firstAttribute="height" constant="1250" id="XRe-bW-h7s"/>
                                         </constraints>
                                     </view>
                                 </subviews>
