@@ -772,7 +772,9 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                print("In Data")
             }else{
                 if UserSetup.shared.Selfie == 1{
-                    openCamera()
+                    if Leaveid != "9999"{
+                        openCamera()
+                    }
                    
                 }
                 if UserSetup.shared.Selfie == 0{

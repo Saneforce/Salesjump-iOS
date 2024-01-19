@@ -88,7 +88,14 @@ class Attendance: IViewController, UITableViewDelegate,
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell:cellListItem = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
-        cell.lblText?.text = Total_Team_Name[indexPath.row]
+        // let sortedTeamNames = Total_Team_Name.sorted()
+        var sortedArray = Total_Team_Name.sorted { $0.localizedCaseInsensitiveCompare($1) == ComparisonResult.orderedAscending }
+        if  (Title_Date.text == "Total Team(\(SelectDate))"){
+            cell.lblText?.text = Total_Team_Name[indexPath.row]
+        }else{
+            
+            cell.lblText?.text = sortedArray[indexPath.row]
+        }
         return cell
     }
    

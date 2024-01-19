@@ -441,7 +441,9 @@ class Performance: IViewController,ChartViewDelegate, UITableViewDelegate, UITab
                             Field_Force_data.append(Field_Force(Name: "ALL FIELD FORCE", id: "", dsg: "", Sf_id: ""))
                            
                             for item in jsonArray{
-                                Count = Count+1
+                                print(Count)
+                                Count += 1
+                                print(Count)
                                 let name = item["name"] as? String
                                 let id = item["rtoSF"] as? String
                                 let dsg = item["dsg"] as? String
@@ -478,6 +480,7 @@ class Performance: IViewController,ChartViewDelegate, UITableViewDelegate, UITab
                                         BarsName.append(ChartName(Target: "", Achievement: "", BarName: "E\(Count)", Id: ID!, dsg: dsg!))
                                     }
                                 }
+                                print(BarsName)
                             }
                            // print(Field_Force_data)
                             print(BarsName)
