@@ -179,53 +179,66 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
         return 0
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell:cellListItem = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
-           
-        
-        if tableView == submittedDCRTB {
-            submittedDCRTB.isHidden = false
-                print(SubmittedDCR.objcalls_SelectSecondaryorder2)
-                let item: [String: Any] = SubmittedDCR.objcalls_SelectSecondaryorder2[indexPath.row] as! [String : Any]
-            print(item)
-                cell.RetailerName?.text = item["Trans_Detail_Name"] as? String
+        func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+            let cell:cellListItem = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
+               
             
-            if let Sto_Code = item["Stockist_Code"] as? String {
-                print(Sto_Code)
-                let filteredArray = lstDisDetail.filter {
-                    ($0["id"] as? Int) == Int(Sto_Code)
+            if tableView == submittedDCRTB {
+                submittedDCRTB.isHidden = false
+                    print(SubmittedDCR.objcalls_SelectSecondaryorder2)
+                let sortedData = SubmittedDCR.objcalls_SelectSecondaryorder2.sorted {
+                    (item1, item2) -> Bool in
+                    
+                    if let startTime1 = item1["StartOrder_Time"] as? String,
+                       let startTime2 = item2["StartOrder_Time"] as? String {
+                        
+                        return startTime1.compare(startTime2) == .orderedAscending
+                    }
+                    
+                    return false
                 }
-              
-                print(lstDisDetail)
-                print(filteredArray)
-                if(filteredArray.isEmpty){
-                    cell.DistributerName?.text = ""
-                }else{
-                    cell.DistributerName?.text = filteredArray[0]["name"] as? String
-                }
-            }else{
-                cell.DistributerName?.text = ""
-            }
-                cell.Rou?.text = item["SDP_Name"] as? String
-                cell.MeetTime?.text = item["StartOrder_Time"] as? String
-                cell.OrderTime?.text = item["Order_Out_Time"] as? String
+                SubmittedDCR.objcalls_SelectSecondaryorder2 = sortedData
+
+                    let item: [String: Any] = SubmittedDCR.objcalls_SelectSecondaryorder2[indexPath.row] as! [String : Any]
+                print(item)
+                    cell.RetailerName?.text = item["Trans_Detail_Name"] as? String
                 
-                if let transSlNo = item["Order_Out_Time"] as? String {
-                    cell.OrderTime?.text = transSlNo
+                if let Sto_Code = item["Stockist_Code"] as? String {
+                    print(Sto_Code)
+                    let filteredArray = lstDisDetail.filter {
+                        ($0["id"] as? Int) == Int(Sto_Code)
+                    }
+                  
+                    print(lstDisDetail)
+                    print(filteredArray)
+                    if(filteredArray.isEmpty){
+                        cell.DistributerName?.text = ""
+                    }else{
+                        cell.DistributerName?.text = filteredArray[0]["name"] as? String
+                    }
+                }else{
+                    cell.DistributerName?.text = ""
                 }
-            
-            if (item["Trans_Sl_No"] as? String == nil){
-                cell.EditBton.isHidden = true
-                cell.DeleteButton.isHidden = true
-            }else {
-                    cell.EditBton.isHidden = false
-                    cell.DeleteButton.isHidden = false
-                }
-                cell.vwContainer.layer.cornerRadius = 20
-                cell.Viewbt.layer.cornerRadius = 12
-                cell.EditBton.layer.cornerRadius = 12
-                cell.DeleteButton.layer.cornerRadius = 12
-        }
+                    cell.Rou?.text = item["SDP_Name"] as? String
+                    cell.MeetTime?.text = item["StartOrder_Time"] as? String
+                    cell.OrderTime?.text = item["Order_Out_Time"] as? String
+                    
+                    if let transSlNo = item["Order_Out_Time"] as? String {
+                        cell.OrderTime?.text = transSlNo
+                    }
+                
+                if (item["Trans_Sl_No"] as? String == nil){
+                    cell.EditBton.isHidden = true
+                    cell.DeleteButton.isHidden = true
+                }else {
+                        cell.EditBton.isHidden = false
+                        cell.DeleteButton.isHidden = false
+                    }
+                    cell.vwContainer.layer.cornerRadius = 20
+                    cell.Viewbt.layer.cornerRadius = 12
+                    cell.EditBton.layer.cornerRadius = 12
+                    cell.DeleteButton.layer.cornerRadius = 12
+            }
         if tableView == OrderView {
             cell.lblText.text = OrdeView[indexPath.row].MasName
             cell.OrderValue.text = OrdeView[indexPath.row].MasLbl
@@ -563,7 +576,9 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
             }
          let arey = indexPath.row
         let product = SubmittedDCR.objcalls_SelectSecondaryorder2[indexPath.row]
+        print(product)
             let item1 = product["Trans_Detail_Slno"] as! String
+            let item2 = product["Trans_Sl_No"] as? String
         print(item1)
        // let =self.storyboard?.instantiateViewController(withIdentifier: "sbSecondaryOrder") as!  SecondaryOrder
         
@@ -573,6 +588,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
             let viewController = storyboard.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
         let myDyPln = storyboard.instantiateViewController(withIdentifier: "sbSecondaryOrder") as! SecondaryOrder
                myDyPln.productData = item1
+               myDyPln.ProdTrans_Sl_No = item2
                myDyPln.areypostion = arey
            // viewController.setViewControllers([myDyPln], animated: true)
            self.navigationController?.pushViewController(myDyPln, animated: true)

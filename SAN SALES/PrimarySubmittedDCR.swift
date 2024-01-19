@@ -127,6 +127,21 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
         if tableView == PrimayOrderViewTB {
             lblnodata.isHidden=true
             PrimayOrderViewTB.isHidden=false
+            
+            print(PrimarySubmittedDCR.objcalls_SelectPrimaryorder2)
+            
+//            let sortedData = PrimarySubmittedDCR.objcalls_SelectPrimaryorder2.sorted {
+//                (item1, item2) -> Bool in
+//                
+//                if let startTime1 = item1["StartOrder_Time"] as? String,
+//                   let startTime2 = item2["StartOrder_Time"] as? String {
+//                    
+//                    return startTime1.compare(startTime2) == .orderedDescending
+//                }
+//                
+//                return false
+//            }
+//            PrimarySubmittedDCR.objcalls_SelectPrimaryorder2 = sortedData
             let item: [String: Any] = PrimarySubmittedDCR.objcalls_SelectPrimaryorder2[indexPath.row] as! [String : Any]
             cell.Disbutor?.text = item["Trans_Detail_Name"] as? String
             cell.rout?.text = item["SDP_Name"] as? String
@@ -451,8 +466,8 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
                 print(productDatas[0])
                 let price = productDatas[1].components(separatedBy: "$")[0]
                 let price1 = productDatas[1].components(separatedBy: "$")[1]
-                print(price)
                 print(price1)
+                print(price)
                 
                 View.append(Viewval(Product:productDatas[0] , qty: Int(price1)!, value: Double(price)!))
                 print(View)

@@ -90,6 +90,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
     var pCatIndexPath = IndexPath()
     var Editobjcalls: [AnyObject]=[]
     var productData : String?
+    var ProdTrans_Sl_No : String?
     var areypostion: Int?
     var Order_Out: String?
     var disbuttername : String?
@@ -113,7 +114,6 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
        
         
         getUserDetails()
-        EditSecondaryordervalue()
         let LocalStoreage = UserDefaults.standard
         let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
         let data = Data(prettyPrintedJson!.utf8)
@@ -178,6 +178,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
             if let lstDistData = LocalStoreage.string(forKey: "Distributors_Master_"+DataSF),
                let list = GlobalFunc.convertToDictionary(text:  lstDistData) as? [AnyObject] {
                 lstDistList = list
+                print(lstDistList)
             }
             
 //        if let list = GlobalFunc.convertToDictionary(text: lstDistData) as? [AnyObject] {
@@ -218,7 +219,8 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         tbPrvOrderProduct.dataSource=self
         tbDataSelect.delegate=self
         tbDataSelect.dataSource=self
-   
+        
+        EditSecondaryordervalue()
 
     }
     override func viewDidAppear(_ animated: Bool) {
@@ -643,6 +645,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if tbDataSelect == tableView {
+            print(lObjSel)
             let item: [String: Any]=lObjSel[indexPath.row] as! [String : Any]
             let name=item["name"] as! String
             let id=String(format: "%@", item["id"] as! CVarArg)
@@ -962,6 +965,20 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         guard let text = textField.text, let number = Int(text) else {
             return 0
         }
+        if text.count > 6 {
+               let truncatedText = String(text.prefix(6))
+                print(truncatedText)
+            var ConvInt2 = 0
+            if let ConvInt = Int(truncatedText){
+                ConvInt2 = ConvInt
+            }
+            print(ConvInt2)
+               //textField.text = truncatedText
+
+               Toast.show(message: "Text count cannot be more than 6 characters.")
+            return ConvInt2
+            
+           }
         return number
     }
     
@@ -1572,9 +1589,11 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
                           
                             }
                         }
-                        self.Editobjcalls = json
-//                        print(Editobjcalls)
-                        //Editoredr(sender: button)
+                        if let ProdCode = ProdTrans_Sl_No {
+                            let filteredArray = json.filter { ($0["Trans_Sl_No"] as? String) == ProdCode }
+                            self.Editobjcalls = filteredArray
+                            
+                        }
                         DemoEdite()
                        // setSecEditeOrder()
                     }
@@ -1714,9 +1733,19 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
                 }
     }
     func DemoEdite(){
-        
+        print(Editobjcalls)
         for item in Editobjcalls {
+            if let stock_Code =  Editobjcalls[0]["Stockist_Code"] as? String{
+                print(lstDistList)
+               
+                let filteredArray = lstDistList.filter { ($0["id"] as? Int) == Int(stock_Code) }
+                print(filteredArray)
+                lblDistNm.text = filteredArray[0]["name"] as? String
+                   
+                    
+            }
             if let Additional_Prod_Dtls = item["Additional_Prod_Dtls"] as? String, let Additional_Prod_Code = item["Additional_Prod_Code"] as? String{
+               
                 
                 let  separates = Additional_Prod_Dtls.components(separatedBy: "#")
                 let  separte_Prod_Code = Additional_Prod_Code.components(separatedBy: "#")

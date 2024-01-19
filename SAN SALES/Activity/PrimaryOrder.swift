@@ -838,6 +838,20 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
         guard let text = textField.text, let number = Int(text) else {
             return 0
         }
+        if text.count > 6 {
+               let truncatedText = String(text.prefix(6))
+                print(truncatedText)
+            var ConvInt2 = 0
+            if let ConvInt = Int(truncatedText){
+                ConvInt2 = ConvInt
+            }
+            print(ConvInt2)
+               //textField.text = truncatedText
+
+               Toast.show(message: "Text count cannot be more than 6 characters.")
+            return ConvInt2
+            
+           }
         return number
     }
     
@@ -1458,8 +1472,6 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
     
 }
 
-
-//{"Products":[{"product_code":"SEF11251","product_Name":"Britannia Milk bikis 150g","rx_Conqty":1,"Qty":1,"PQty":0,"cb_qty":0,"free":0,"Pfree":0,"Rate":20.0,"PieseRate":10.0,"discount":0.0,"FreeP_Code":0,"Fname":0,"discount_price":0.0,"tax":2.0,"tax_price":0.4,"OrdConv":1,"product_unit_name":"PIECE","Trans_POrd_No":"1502655","Order_Flag":0,"Division_code":29,"selectedScheme":0,"selectedOffProCode":"445","selectedOffProName":"PIECE","selectedOffProUnit":"1","sample_qty":"20.4"},{"product_code":"SEF11426","product_Name":"Oreo","rx_Conqty":1,"Qty":1,"PQty":0,"cb_qty":0,"free":0,"Pfree":0,"Rate":8.0,"PieseRate":6.0,"discount":0.0,"FreeP_Code":0,"Fname":0,"discount_price":0.0,"tax":3.0,"tax_price":0.24,"OrdConv":1,"product_unit_name":"PIECE","Trans_POrd_No":"1502656","Order_Flag":0,"Division_code":29,"selectedScheme":0,"selectedOffProCode":"441","selectedOffProName":"PIECE","selectedOffProUnit":"1","sample_qty":"8.24"},{"product_code":"SEF11254","product_Name":"Parle-G","rx_Conqty":1,"Qty":20,"PQty":0,"cb_qty":0,"free":0,"Pfree":0,"Rate":6.0,"PieseRate":6.0,"discount":0.0,"FreeP_Code":0,"Fname":0,"discount_price":0.0,"tax":2.0,"tax_price":2.4,"OrdConv":20,"product_unit_name":"BOX","Trans_POrd_No":"","Order_Flag":0,"Division_code":0,"selectedScheme":0,"selectedOffProCode":"441","selectedOffProName":"BOX","selectedOffProUnit":"20","sample_qty":"122.4"}],"Activity_Event_Captures":[],"POB":"0","Value":"151.04000000000002","order_No":"MR4126-23-24-PO-606","DCR_Code":"SEF3-531","Trans_Sl_No":"SEF3-531","Trans_Detail_slNo":"SEF3-2177","Route":"","net_weight_value":"","target":"","rateMode":null,"Stockist":"32468","RateEditable":"","orderValue":151.04000000000002,"Stockist_POB":"","Stk_Meet_Time":"'2024-01-08 18:11:48'","modified_time":"'2024-01-08 18:11:48'","CheckoutTime":"2024-01-08 18:11:48","PhoneOrderTypes":0,"dcr_activity_date":"'2024-01-08 00:00:00'"}
 
 
 
