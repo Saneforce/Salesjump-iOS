@@ -1099,6 +1099,8 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         updateOrderValues(refresh: 1)
     }
     func updateOrderValues(refresh: Int){
+        print(lstPrvOrder)
+        print(VisitData.shared.ProductCart)
         var totAmt: Double = 0
         lstPrvOrder = VisitData.shared.ProductCart.filter ({ (Cart) in
             
@@ -1107,6 +1109,8 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
             }
             return false
         })
+        
+        print(lstPrvOrder)
         if lstPrvOrder.count>0 {
             for i in 0...lstPrvOrder.count-1 {
                 let item: AnyObject = lstPrvOrder[i]
@@ -1121,10 +1125,9 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         
         lblTotItem.text = String(format: "%i",  lstPrvOrder.count)
         lblPrvTotItem.text = String(format: "%i",  lstPrvOrder.count)
-        if(refresh == 1){
-            tbPrvOrderProduct.reloadData()
-            tbProduct.reloadData()
-        }
+        tbPrvOrderProduct.reloadData()
+        tbProduct.reloadData()
+       
     }
     
     func validateForm() -> Bool {
@@ -1233,7 +1236,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
             sPItems = sPItems + " \"Product_Rx_Qty\":" + (String(format: "%.0f", item["SalQty"] as! Double)) + ","
             sPItems = sPItems + " \"UnitId\": \"" + (item["UOM"] as! String) + "\","
             sPItems = sPItems + " \"UnitName\": \"" + (item["UOMNm"] as! String) + "\","
-            sPItems = sPItems + " \"rx_Conqty\":" + (item["UOMConv"] as! String) + ","
+            sPItems = sPItems + " \"rx_Conqty\":" + (item["Qty"] as! String) + ","
             sPItems = sPItems + " \"Product_Rx_NQty\": 0,"
             sPItems = sPItems + " \"Product_Sample_Qty\": \"" + (String(format: "%.2f", item["NetVal"] as! Double)) + "\","
             sPItems = sPItems + " \"vanSalesOrder\":0,"
@@ -1740,6 +1743,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
                
                 let filteredArray = lstDistList.filter { ($0["id"] as? Int) == Int(stock_Code) }
                 print(filteredArray)
+                VisitData.shared.Dist.id = String((filteredArray[0]["id"] as? Int)!)
                 lblDistNm.text = filteredArray[0]["name"] as? String
                    
                     
@@ -1760,13 +1764,16 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
                     var selUOMNm:String = ""
                     var selUOMConv:String = ""
                     let prod_components = separte_Prod_Code_item.components(separatedBy: "~")
+                    print(prod_components)
                     let Prod_Id = prod_components[0].trimmingCharacters(in: .whitespacesAndNewlines)
                     let Separt_UomConv = prod_components[1].components(separatedBy: "$")
                     let Separt_UomConv2 = Separt_UomConv[1].components(separatedBy: "@")
-                    sQty = Separt_UomConv2[0]
                     let components = separt_item.components(separatedBy: "@")
+                    let qtycon = components[3].components(separatedBy: "?")
+                    sQty = qtycon[0]
                     let Cod_and_uom = components[3]
                     let selUnit = Cod_and_uom.components(separatedBy: "?")
+                    
                     selUOMConv = selUnit[0]
                     selUOMNm = selUnit[0]
                     let separt_id_and_Uom = selUnit[1].components(separatedBy: "-")

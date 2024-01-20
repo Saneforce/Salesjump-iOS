@@ -525,6 +525,7 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
                 VisitData.shared.Sup.id = id
                 VisitData.shared.Sup.id = name
                 print(id)
+                print(VisitData.shared.ProductCart)
                 
             }
             else if SelMode=="UOM"
@@ -553,6 +554,7 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
                 {
                     sQty = Int((items[0]["Qty"] as! NSString).intValue)
                 }
+                print(VisitData.shared.ProductCart)
                 print(name)
                 updateQty(id: selectProd, sUom: id, sUomNm: name, sUomConv: ConvQty, sNetUnt: selNetWt, sQty: String(sQty),ProdItem: lProdItem, refresh: 1)
             }
@@ -979,10 +981,9 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
         
         lblTotItem.text = String(format: "%i",  lstPrvOrder.count)
         lblPrvTotItem.text = String(format: "%i",  lstPrvOrder.count)
-        if(refresh == 1){
-            tbPrvOrderProduct.reloadData()
-            tbProduct.reloadData()
-        }
+        tbPrvOrderProduct.reloadData()
+        tbProduct.reloadData()
+      
     }
     
     @IBAction func SubmitCall(_ sender: Any) {
@@ -1038,6 +1039,7 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
     func OrderSubmit(sLocation: String,sAddress: String){
         var sPItems:String = ""
         var sPItems2:String = ""
+        print(VisitData.shared.ProductCart)
         self.ShowLoading(Message: "Data Submitting Please wait...")
         for i in 0...self.lstPrvOrder.count-1{
             let item: [String: Any]=self.lstPrvOrder[i] as! [String : Any]
@@ -1067,6 +1069,8 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
          
           
         }
+        
+        print(sPItems)
       
         let DataSF: String = self.lstPlnDetail[0]["subordinateid"] as! String
         
@@ -1116,16 +1120,7 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
             print(Join_Works)
         }
         
-        let jsonString =  "[{\"Activity_Report_APP\":{\"Worktype_code\":\"'" + (self.lstPlnDetail[0]["worktype"] as! String) + "'\",\"Town_code\":\"'" + (self.lstPlnDetail[0]["clusterid"] as! String) + "'\",\"RateEditable\":\"''\",\"dcr_activity_date\":\"'" + VisitData.shared.cInTime + "'\",\"Daywise_Remarks\":\"" + VisitData.shared.VstRemarks.name + "\",\"eKey\":\"" + self.eKey + "\",\"rx\":\"'1'\",\"rx_t\":\"''\",\"DataSF\":\"'" + DataSF + "'\"}},{\"Activity_Stockist_Report\":{\"Stockist_POB\":\"" + VisitData.shared.PayValue + "\",\"Worked_With\":\"'"+Join_Works+"'\",\"location\":\"'" + sLocation + "'\",\"geoaddress\":\"" + sAddress + "\",\"superstockistid\":\"''\",\"Stk_Meet_Time\":\"'" + VisitData.shared.cInTime + "'\",\"modified_time\":\"'" + VisitData.shared.cInTime + "'\",\"date_of_intrument\":\"" + VisitData.shared.DOP.id + "\",\"intrumenttype\":\""+VisitData.shared.PayType.id+"\",\"orderValue\":\"" + (lblTotAmt.text!).replacingOccurrences(of: "Rs. ", with: "") + "\",\"Aob\":0,\"CheckinTime\":\"" + VisitData.shared.cInTime + "\",\"CheckoutTime\":\"" + VisitData.shared.cOutTime + "\",\"PhoneOrderTypes\":" + VisitData.shared.OrderMode.id + ",\"Super_Stck_code\":\"'\(VisitData.shared.Dist.id)'\",\"stockist_code\":\"'" + VisitData.shared.CustID + "'\",\"stockist_name\":\"''\",\"f_key\":{\"Activity_Report_Code\":\"'Activity_Report_APP'\"}}},{\"Activity_Stk_POB_Report\":[" + sPItems +  "]},{\"Activity_Stk_Sample_Report\":[]},{\"Activity_Event_Captures\":[]},{\"PENDING_Bills\":[]},{\"Compititor_Product\":[]},{\"Activity_Event_Captures_Call\":[]}]"
-        
-        
-        print(objcallsprimary)
-   
-        
-        
-        let params: Parameters = [
-            "data": jsonString //"["+jsonString+"]"//
-        ]
+
         if VisitData.shared.cInTime.isEmpty{
             print("No data")
             
@@ -1194,6 +1189,16 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
         }
    
     }else{
+        let jsonString =  "[{\"Activity_Report_APP\":{\"Worktype_code\":\"'" + (self.lstPlnDetail[0]["worktype"] as! String) + "'\",\"Town_code\":\"'" + (self.lstPlnDetail[0]["clusterid"] as! String) + "'\",\"RateEditable\":\"''\",\"dcr_activity_date\":\"'" + VisitData.shared.cInTime + "'\",\"Daywise_Remarks\":\"" + VisitData.shared.VstRemarks.name + "\",\"eKey\":\"" + self.eKey + "\",\"rx\":\"'1'\",\"rx_t\":\"''\",\"DataSF\":\"'" + DataSF + "'\"}},{\"Activity_Stockist_Report\":{\"Stockist_POB\":\"" + VisitData.shared.PayValue + "\",\"Worked_With\":\"'"+Join_Works+"'\",\"location\":\"'" + sLocation + "'\",\"geoaddress\":\"" + sAddress + "\",\"superstockistid\":\"''\",\"Stk_Meet_Time\":\"'" + VisitData.shared.cInTime + "'\",\"modified_time\":\"'" + VisitData.shared.cInTime + "'\",\"date_of_intrument\":\"" + VisitData.shared.DOP.id + "\",\"intrumenttype\":\""+VisitData.shared.PayType.id+"\",\"orderValue\":\"" + (lblTotAmt.text!).replacingOccurrences(of: "Rs. ", with: "") + "\",\"Aob\":0,\"CheckinTime\":\"" + VisitData.shared.cInTime + "\",\"CheckoutTime\":\"" + VisitData.shared.cOutTime + "\",\"PhoneOrderTypes\":" + VisitData.shared.OrderMode.id + ",\"Super_Stck_code\":\"'\(VisitData.shared.Dist.id)'\",\"stockist_code\":\"'" + VisitData.shared.CustID + "'\",\"stockist_name\":\"''\",\"f_key\":{\"Activity_Report_Code\":\"'Activity_Report_APP'\"}}},{\"Activity_Stk_POB_Report\":[" + sPItems +  "]},{\"Activity_Stk_Sample_Report\":[]},{\"Activity_Event_Captures\":[]},{\"PENDING_Bills\":[]},{\"Compititor_Product\":[]},{\"Activity_Event_Captures_Call\":[]}]"
+        
+        
+        print(objcallsprimary)
+   
+        
+        
+        let params: Parameters = [
+            "data": jsonString //"["+jsonString+"]"//
+        ]
         print(params)
 
         AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"dcr/save&divisionCode=" + self.DivCode + "&rSF=" + self.SFCode + "&sfCode=" + self.SFCode, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
