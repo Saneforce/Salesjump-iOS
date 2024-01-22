@@ -348,6 +348,7 @@ class Coverage: IViewController,FSCalendarDelegate,FSCalendarDataSource {
                     print(json)
                     var ToalRot = 0
                     var TotDis = 0
+                    var visit_Rets = 0
                     Total_Ret.text = String(totalRetailer)
                     if let total_route =  json["totRoute"] as? [[String: Int]],
                        let totRetailDict = total_route.first,
@@ -366,9 +367,8 @@ class Coverage: IViewController,FSCalendarDelegate,FSCalendarDataSource {
                     
                     if let visit_Details = json["visit_Details"] as? [[String:Int]]{
                         if let visit_Ret = visit_Details[0]["Ret"]{
-                           let NotVis = totalRetailer - visit_Ret
-                            print(NotVis)
-                            Not_Visited_Ret.text = String(NotVis)
+                            visit_Rets = visit_Ret
+                         
                             Visited_Ret.text = String(visit_Ret)
                             //cell.lblUOM?.text = String(format: "%@",item["OffUntName"] as! String)
                             if(totalRetailer < visit_Ret){
@@ -414,6 +414,9 @@ class Coverage: IViewController,FSCalendarDelegate,FSCalendarDataSource {
                        let totalroute = totRetailDict["new_retailer"]{
                         print("New Retailer : \(totalroute)")
                         New_Ret.text = String(totalroute)
+                        let NotVis = totalRetailer - visit_Rets - totalroute
+                         print(NotVis)
+                         Not_Visited_Ret.text = String(NotVis)
                     }
                 }
                 

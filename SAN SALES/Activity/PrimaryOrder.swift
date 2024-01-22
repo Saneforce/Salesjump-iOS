@@ -959,10 +959,15 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
     }
     func updateOrderValues(refresh: Int){
         var totAmt: Double = 0
+        var Upadet_table = 0
         lstPrvOrder = VisitData.shared.ProductCart.filter ({ (Cart) in
             
             if (Cart["SalQty"] as! Double) > 0 {
                 return true
+            }else{
+                Upadet_table = 2
+   
+                print("No data")
             }
             return false
         })
@@ -981,8 +986,10 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
         
         lblTotItem.text = String(format: "%i",  lstPrvOrder.count)
         lblPrvTotItem.text = String(format: "%i",  lstPrvOrder.count)
-        tbPrvOrderProduct.reloadData()
-        tbProduct.reloadData()
+        if (refresh == 1 || Upadet_table == 2){
+            tbPrvOrderProduct.reloadData()
+            tbProduct.reloadData()
+        }
       
     }
     

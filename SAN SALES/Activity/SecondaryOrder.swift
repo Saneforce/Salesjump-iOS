@@ -108,6 +108,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
     var strJWCd: String = ""
     var strJWNm: String = ""
     var lstJoint: [AnyObject] = []
+    var net_weight_data = ""
     
     override func viewDidLoad() {
         loadViewIfNeeded()
@@ -806,12 +807,15 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
                 lblSelTitle.tag = 0
                 item = lstProducts[indxPath.row] as! [String : Any]
             }
+            print(item)
             let selProdID=String(format: "%@", item["id"] as! CVarArg)
+            print(lstAllUnitList)
             lstUnitList = lstAllUnitList.filter({(product) in
                 let ProdId: String = String(format: "%@", product["Product_Code"] as! CVarArg)
                 return Bool(ProdId == selProdID)
             })
         }
+        print(lstUnitList)
         lObjSel=lstUnitList
         self.tbDataSelect.tag = indxPath.row
         self.tbDataSelect.reloadData()
@@ -1099,6 +1103,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         updateOrderValues(refresh: 1)
     }
     func updateOrderValues(refresh: Int){
+        var Upadet_table = 0
         print(lstPrvOrder)
         print(VisitData.shared.ProductCart)
         var totAmt: Double = 0
@@ -1106,6 +1111,10 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
             
             if (Cart["SalQty"] as! Double) > 0 {
                 return true
+            }else{
+                Upadet_table = 2
+   
+                print("No data")
             }
             return false
         })
@@ -1125,8 +1134,12 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         
         lblTotItem.text = String(format: "%i",  lstPrvOrder.count)
         lblPrvTotItem.text = String(format: "%i",  lstPrvOrder.count)
-        tbPrvOrderProduct.reloadData()
-        tbProduct.reloadData()
+        if (refresh == 1 || Upadet_table == 2){
+            tbPrvOrderProduct.reloadData()
+            tbProduct.reloadData()
+        }
+        
+
        
     }
     
@@ -1214,6 +1227,8 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         
         var sPItems:String = ""
         var sPItems2:String = ""
+        var netWet = 0.0
+        var NetQty = 0.0
         print(lstPrvOrder.count)
         print(VisitData.shared.ProductCart.count)
         self.ShowLoading(Message: "Data Submitting Please wait...")
@@ -1231,6 +1246,23 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
             if Disc == "" { Disc = "0"}
             var DisVal: String = item["DisVal"] as! String
             if DisVal == "" { DisVal="0" }
+            
+            if(item["Qty"] as! String == ""){
+                NetQty = 0
+            }else{
+                NetQty = Double(item["Qty"] as! String)!
+            }
+            
+            if(item["NetWt"] as! String == ""){
+                netWet = 0
+            }else{
+                netWet = Double(item["NetWt"] as! String)!
+            }
+           
+            
+            
+            net_weight_data = String(format: "%.2f",NetQty * netWet)
+            print(net_weight_data)
             
             sPItems = sPItems + "{\"product_code\":\""+id+"\", \"product_Name\":\""+(ProdItems[0]["name"] as! String)+"\","
             sPItems = sPItems + " \"Product_Rx_Qty\":" + (String(format: "%.0f", item["SalQty"] as! Double)) + ","
@@ -1263,8 +1295,8 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
             sPItems = sPItems + " \"OrdConv\":" + (item["UOMConv"] as! String) + ","
             sPItems = sPItems + " \"selectedScheme\":" + (String(format: "%.0f", item["Scheme"] as! Double)) + ","
             // sPItems = sPItems + " \"selectedOffProCode\": \"" + (item["OffProd"] as! String) + "\","
-            sPItems = sPItems + " \"selectedOffProCode\": \"241\","
-            sPItems = sPItems + " \"selectedOffProName\":\"PIECE\","
+            sPItems = sPItems + " \"selectedOffProCode\": \"" + (item["UOM"] as! String) + "\","
+            sPItems = sPItems + " \"selectedOffProName\":\"" + (item["UOMNm"] as! String) + "\","
             sPItems = sPItems + " \"selectedOffProUnit\": \"1\","
             sPItems = sPItems + " \"f_key\": {\"Activity_MSL_Code\": \"Activity_Doctor_Report\"}},"
             
@@ -1293,7 +1325,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
             sPItems2 = sPItems2 + " \"Rate\": " + (String(format: "%.2f", item["Rate"] as! Double)) + ","
             sPItems2 = sPItems2 + " \"imageUri\": \"\","
             sPItems2 = sPItems2 + " \"Schmval\": 0,"
-            sPItems2 = sPItems2 + " \"rx_qty\": " + (item["Qty"] as! String) + ","
+            sPItems2 = sPItems2 + " \"rx_qty\": " + (String(format: "%.0f", item["SalQty"] as! Double)) + ","
             sPItems2 = sPItems2 + " \"recv_qty\": 0,"
             sPItems2 = sPItems2 + " \"product_netwt\": 0,"
             sPItems2 = sPItems2 + " \"netweightvalue\": 0,"
@@ -1320,8 +1352,8 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
           
         }
         
-        
-        
+        print(sPItems)
+        print(sPItems2)
         
         
         
@@ -1400,7 +1432,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
             Join_Works.removeLast()
             print(Join_Works)
         }
-        let jsonString = "[{\"Activity_Report_APP\":{\"Worktype_code\":\"\'" + (self.lstPlnDetail[0]["worktype"] as! String) + "\'\",\"Town_code\":\"\'" + (self.lstPlnDetail[0]["clusterid"] as! String) + "\'\",\"RateEditable\":\"''\",\"dcr_activity_date\":\"\'" + VisitData.shared.cInTime + "\'\",\"Daywise_Remarks\":\"" + VisitData.shared.VstRemarks.name + "\",\"eKey\":\"" + self.eKey + "\",\"rx\":\"'1'\",\"rx_t\":\"''\",\"DataSF\":\"\'" + DataSF + "\'\"}},{\"Activity_Doctor_Report\":{\"Doctor_POB\":0,\"Worked_With\":\"'"+Join_Works+"'\",\"Doc_Meet_Time\":\"\'" + VisitData.shared.cInTime + "\'\",\"modified_time\":\"\'" + VisitData.shared.cInTime + "\'\",\"net_weight_value\":\"0.00\",\"stockist_code\":\"\'" + (VisitData.shared.Dist.id ) + "\'\",\"stockist_name\":\"''\",\"superstockistid\":\"''\",\"Discountpercent\":0,\"CheckinTime\":\"" + VisitData.shared.cInTime + "\",\"CheckoutTime\":\"" + VisitData.shared.cOutTime + "\",\"location\":\"\'" + sLocation + "\'\",\"geoaddress\":\"" + sAddress + "\",\"PhoneOrderTypes\":\"" + VisitData.shared.OrderMode.id + "\",\"Order_Stk\":\"'15560'\",\"Order_No\":\"''\",\"rootTarget\":\"0\",\"orderValue\":\(Subtotal),\"disPercnt\":0.0,\"disValue\":0.0,\"finalNetAmt\":\(Subtotal),\"taxTotalValue\":0,\"discTotalValue\":0.0,\"subTotal\":0,\"No_Of_items\":\(lstPrvOrder.count),\"rateMode\":\"free\",\"discount_price\":0,\"doctor_code\":\"\'" + VisitData.shared.CustID + "\'\",\"doctor_name\":\"\'" + VisitData.shared.CustName + "\'\",\"doctor_route\":\"'mylapore'\",\"f_key\":{\"Activity_Report_Code\":\"'Activity_Report_APP'\"}}},{\"Activity_Sample_Report\":[" + sPItems4 +  "]},{\"Trans_Order_Details\":[]},{\"Activity_Input_Report\":[]},{\"Activity_Event_Captures\":[]},{\"PENDING_Bills\":[]},{\"Compititor_Product\":[]},{\"Activity_Event_Captures_Call\":[]}]"
+        let jsonString = "[{\"Activity_Report_APP\":{\"Worktype_code\":\"\'" + (self.lstPlnDetail[0]["worktype"] as! String) + "\'\",\"Town_code\":\"\'" + (self.lstPlnDetail[0]["clusterid"] as! String) + "\'\",\"RateEditable\":\"''\",\"dcr_activity_date\":\"\'" + VisitData.shared.cInTime + "\'\",\"Daywise_Remarks\":\"" + VisitData.shared.VstRemarks.name + "\",\"eKey\":\"" + self.eKey + "\",\"rx\":\"'1'\",\"rx_t\":\"''\",\"DataSF\":\"\'" + DataSF + "\'\"}},{\"Activity_Doctor_Report\":{\"Doctor_POB\":0,\"Worked_With\":\"'"+Join_Works+"'\",\"Doc_Meet_Time\":\"\'" + VisitData.shared.cInTime + "\'\",\"modified_time\":\"\'" + VisitData.shared.cInTime + "\'\",\"net_weight_value\":\"\(net_weight_data)\",\"stockist_code\":\"\'" + (VisitData.shared.Dist.id ) + "\'\",\"stockist_name\":\"''\",\"superstockistid\":\"''\",\"Discountpercent\":0,\"CheckinTime\":\"" + VisitData.shared.cInTime + "\",\"CheckoutTime\":\"" + VisitData.shared.cOutTime + "\",\"location\":\"\'" + sLocation + "\'\",\"geoaddress\":\"" + sAddress + "\",\"PhoneOrderTypes\":\"" + VisitData.shared.OrderMode.id + "\",\"Order_Stk\":\"'15560'\",\"Order_No\":\"''\",\"rootTarget\":\"0\",\"orderValue\":\(Subtotal),\"disPercnt\":0.0,\"disValue\":0.0,\"finalNetAmt\":\(Subtotal),\"taxTotalValue\":0,\"discTotalValue\":0.0,\"subTotal\":0,\"No_Of_items\":\(lstPrvOrder.count),\"rateMode\":\"free\",\"discount_price\":0,\"doctor_code\":\"\'" + VisitData.shared.CustID + "\'\",\"doctor_name\":\"\'" + VisitData.shared.CustName + "\'\",\"doctor_route\":\"'mylapore'\",\"f_key\":{\"Activity_Report_Code\":\"'Activity_Report_APP'\"}}},{\"Activity_Sample_Report\":[" + sPItems4 +  "]},{\"Trans_Order_Details\":[]},{\"Activity_Input_Report\":[]},{\"Activity_Event_Captures\":[]},{\"PENDING_Bills\":[]},{\"Compititor_Product\":[]},{\"Activity_Event_Captures_Call\":[]}]"
         
         
         
@@ -1423,7 +1455,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
             }
             
             print("No data")
-            let jsonString2 = "{\"Products\":[" + sPItems3 +  "],\"Activity_Event_Captures\":[],\"POB\":\"0\",\"Value\":\"\(Subtotal)\",\"disPercnt\":0.0,\"disValue\":0.0,\"finalNetAmt\":\(Subtotal),\"taxTotalValue\":\"0\",\"discTotalValue\":\"0.0\",\"subTotal\":\"\(Subtotal)\",\"No_Of_items\":\"\(lstPrvOrder.count)\",\"Cust_Code\":\"'\(Cust_Code)'\",\"DCR_Code\":\"\(DCR_Code)\",\"Trans_Sl_No\":\"\(Trans_Sl_No)\",\"Route\":\"\(Route)\",\"net_weight_value\":\"0\",\"Discountpercent\":0.0,\"discount_price\":0.0,\"target\":\"0\",\"rateMode\":\"free\",\"Stockist\":\"\(Stockist_Code)\",\"RateEditable\":\"\",\"PhoneOrderTypes\":0}"
+            let jsonString2 = "{\"Products\":[" + sPItems3 +  "],\"Activity_Event_Captures\":[],\"POB\":\"0\",\"Value\":\"\(Subtotal)\",\"disPercnt\":0.0,\"disValue\":0.0,\"finalNetAmt\":\(Subtotal),\"taxTotalValue\":\"0\",\"discTotalValue\":\"0.0\",\"subTotal\":\"\(Subtotal)\",\"No_Of_items\":\"\(lstPrvOrder.count)\",\"Cust_Code\":\"'\(Cust_Code)'\",\"DCR_Code\":\"\(DCR_Code)\",\"Trans_Sl_No\":\"\(Trans_Sl_No)\",\"Route\":\"\(Route)\",\"net_weight_value\":\"\(net_weight_data)\",\"Discountpercent\":0.0,\"discount_price\":0.0,\"target\":\"0\",\"rateMode\":\"free\",\"Stockist\":\"\(Stockist_Code)\",\"RateEditable\":\"\",\"PhoneOrderTypes\":0}"
             
             
             
@@ -1737,6 +1769,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
     }
     func DemoEdite(){
         print(Editobjcalls)
+        print(lstAllUnitList)
         for item in Editobjcalls {
             if let stock_Code =  Editobjcalls[0]["Stockist_Code"] as? String{
                 print(lstDistList)
@@ -1766,11 +1799,33 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
                     let prod_components = separte_Prod_Code_item.components(separatedBy: "~")
                     print(prod_components)
                     let Prod_Id = prod_components[0].trimmingCharacters(in: .whitespacesAndNewlines)
+
+                    var Uomdata = lstAllUnitList.filter({(product) in
+                        let ProdId: String = String(format: "%@", product["Product_Code"] as! CVarArg)
+                        return Bool(ProdId == Prod_Id)
+                    })
+                    
+                    print(Uomdata)
                     let Separt_UomConv = prod_components[1].components(separatedBy: "$")
                     let Separt_UomConv2 = Separt_UomConv[1].components(separatedBy: "@")
                     let components = separt_item.components(separatedBy: "@")
+                    print(components)
+                    
                     let qtycon = components[3].components(separatedBy: "?")
+                    print(qtycon)
                     sQty = qtycon[0]
+                    let Uomid = qtycon[1].components(separatedBy: "-")
+                    let Uomid2 = Uomid[0]
+                    var Uomdata2 = Uomdata.filter({(product) in
+                        let ProdId: String = String(format: "%@", product["id"] as! CVarArg)
+                        return Bool(ProdId == Uomid2)
+                    })
+                    print(Uomdata2)
+                    var UomConQtydata2 = ""
+                    if  let UomConQtydata = Uomdata2[0]["ConQty"] as? Int {
+                        UomConQtydata2 = String(UomConQtydata)
+                    }
+                    print(UomConQtydata2)
                     let Cod_and_uom = components[3]
                     let selUnit = Cod_and_uom.components(separatedBy: "?")
                     
@@ -1787,7 +1842,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
                     BasUnitCode = baseUnitCodeInt
                 }
                 
-                    updateQty(id: Prod_Id, sUom: String(BasUnitCode), sUomNm: selUOMNm, sUomConv: selUOMConv,sNetUnt: selNetWt, sQty: sQty,ProdItem: lProdItem,refresh: 1)
+                    updateQty(id: Prod_Id, sUom: Uomid2, sUomNm: selUOMNm, sUomConv: UomConQtydata2,sNetUnt: selNetWt, sQty: sQty,ProdItem: lProdItem,refresh: 1)
             }
         }
     }
