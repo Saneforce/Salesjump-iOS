@@ -650,6 +650,7 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
     @IBAction func closePreview(_ sender: Any) {
         vwPrvOrderCtrl.isHidden = true
         tbProduct.isHidden = false
+        tbProduct.reloadData()
     }
     @IBAction func searchSelBytext(_ sender: Any) {
         
@@ -718,6 +719,7 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
         
         let id: String
         let lProdItem:[String: Any]
+        lstPrvOrder = VisitData.shared.ProductCart
         if(tbView==tbPrvOrderProduct)
         {
             lProdItem = lstPrvOrder[indxPath.row] as! [String : Any]
@@ -758,6 +760,7 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
         var sQty: Int =  integer(from: cell.txtQty)
         sQty = sQty+1
         let id: String
+        lstPrvOrder = VisitData.shared.ProductCart
         let lProdItem:[String: Any]
         if(tbView==tbPrvOrderProduct)
         {
@@ -789,7 +792,7 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
             selNetWt=String(format: "%@", lstProducts[indxPath.row]["product_netwt"] as! CVarArg)
         }
         cell.txtQty.text = String(sQty)
-        updateQty(id: id, sUom: selUOM, sUomNm: selUOMNm, sUomConv: selUOMConv,sNetUnt: selNetWt, sQty: String(sQty),ProdItem: lProdItem,refresh: 1)
+        updateQty(id: id, sUom: selUOM, sUomNm: selUOMNm, sUomConv: selUOMConv,sNetUnt: selNetWt, sQty: String(sQty),ProdItem: lProdItem,refresh: 2)
         //tbView.reloadRows(at: [indxPath], with: .fade)
     }
     
@@ -800,6 +803,7 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
         var sQty: Int =  integer(from: cell.txtQty)
         
         let id: String
+        lstPrvOrder = VisitData.shared.ProductCart
         let lProdItem:[String: Any]
         if(tbView==tbPrvOrderProduct)
         {
@@ -833,7 +837,7 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
         sQty = sQty-1
         if sQty<0 { sQty = 0 }
         cell.txtQty.text = String(sQty)
-        updateQty(id: id, sUom: selUOM, sUomNm: selUOMNm, sUomConv: selUOMConv, sNetUnt: selNetWt, sQty: String(sQty),ProdItem: lProdItem,refresh: 1)
+        updateQty(id: id, sUom: selUOM, sUomNm: selUOMNm, sUomConv: selUOMConv, sNetUnt: selNetWt, sQty: String(sQty),ProdItem: lProdItem,refresh: 2)
         //tbView.reloadRows(at: [indxPath], with: .fade)
     }
     func integer(from textField: UITextField) -> Int {
@@ -987,8 +991,12 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
         lblTotItem.text = String(format: "%i",  lstPrvOrder.count)
         lblPrvTotItem.text = String(format: "%i",  lstPrvOrder.count)
         if (refresh == 1 || Upadet_table == 2){
-            tbPrvOrderProduct.reloadData()
             tbProduct.reloadData()
+        }
+        
+        
+        if (refresh == 1 ){
+            tbPrvOrderProduct.reloadData()
         }
       
     }
@@ -1046,7 +1054,16 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
     func OrderSubmit(sLocation: String,sAddress: String){
         var sPItems:String = ""
         var sPItems2:String = ""
-        print(VisitData.shared.ProductCart)
+        print(lstPrvOrder.count)
+        lstPrvOrder = VisitData.shared.ProductCart.filter ({ (Cart) in
+            
+            if (Cart["SalQty"] as! Double) > 0 {
+                return true
+            }
+            return false
+        })
+        print(VisitData.shared.ProductCart.count)
+        print(lstPrvOrder.count)
         self.ShowLoading(Message: "Data Submitting Please wait...")
         for i in 0...self.lstPrvOrder.count-1{
             let item: [String: Any]=self.lstPrvOrder[i] as! [String : Any]
@@ -1196,7 +1213,7 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
         }
    
     }else{
-        let jsonString =  "[{\"Activity_Report_APP\":{\"Worktype_code\":\"'" + (self.lstPlnDetail[0]["worktype"] as! String) + "'\",\"Town_code\":\"'" + (self.lstPlnDetail[0]["clusterid"] as! String) + "'\",\"RateEditable\":\"''\",\"dcr_activity_date\":\"'" + VisitData.shared.cInTime + "'\",\"Daywise_Remarks\":\"" + VisitData.shared.VstRemarks.name + "\",\"eKey\":\"" + self.eKey + "\",\"rx\":\"'1'\",\"rx_t\":\"''\",\"DataSF\":\"'" + DataSF + "'\"}},{\"Activity_Stockist_Report\":{\"Stockist_POB\":\"" + VisitData.shared.PayValue + "\",\"Worked_With\":\"'"+Join_Works+"'\",\"location\":\"'" + sLocation + "'\",\"geoaddress\":\"" + sAddress + "\",\"superstockistid\":\"''\",\"Stk_Meet_Time\":\"'" + VisitData.shared.cInTime + "'\",\"modified_time\":\"'" + VisitData.shared.cInTime + "'\",\"date_of_intrument\":\"" + VisitData.shared.DOP.id + "\",\"intrumenttype\":\""+VisitData.shared.PayType.id+"\",\"orderValue\":\"" + (lblTotAmt.text!).replacingOccurrences(of: "Rs. ", with: "") + "\",\"Aob\":0,\"CheckinTime\":\"" + VisitData.shared.cInTime + "\",\"CheckoutTime\":\"" + VisitData.shared.cOutTime + "\",\"PhoneOrderTypes\":" + VisitData.shared.OrderMode.id + ",\"Super_Stck_code\":\"'\(VisitData.shared.Dist.id)'\",\"stockist_code\":\"'" + VisitData.shared.CustID + "'\",\"stockist_name\":\"''\",\"f_key\":{\"Activity_Report_Code\":\"'Activity_Report_APP'\"}}},{\"Activity_Stk_POB_Report\":[" + sPItems +  "]},{\"Activity_Stk_Sample_Report\":[]},{\"Activity_Event_Captures\":[]},{\"PENDING_Bills\":[]},{\"Compititor_Product\":[]},{\"Activity_Event_Captures_Call\":[]}]"
+        let jsonString =  "[{\"Activity_Report_APP\":{\"Worktype_code\":\"'" + (self.lstPlnDetail[0]["worktype"] as! String) + "'\",\"Town_code\":\"'" + (self.lstPlnDetail[0]["clusterid"] as! String) + "'\",\"RateEditable\":\"''\",\"dcr_activity_date\":\"'" + VisitData.shared.cInTime + "'\",\"Daywise_Remarks\":\"" + VisitData.shared.VstRemarks.name.trimmingCharacters(in: .whitespacesAndNewlines) + "\",\"eKey\":\"" + self.eKey + "\",\"rx\":\"'1'\",\"rx_t\":\"''\",\"DataSF\":\"'" + DataSF + "'\"}},{\"Activity_Stockist_Report\":{\"Stockist_POB\":\"" + VisitData.shared.PayValue + "\",\"Worked_With\":\"'"+Join_Works+"'\",\"location\":\"'" + sLocation + "'\",\"geoaddress\":\"" + sAddress + "\",\"superstockistid\":\"''\",\"Stk_Meet_Time\":\"'" + VisitData.shared.cInTime + "'\",\"modified_time\":\"'" + VisitData.shared.cInTime + "'\",\"date_of_intrument\":\"" + VisitData.shared.DOP.id + "\",\"intrumenttype\":\""+VisitData.shared.PayType.id+"\",\"orderValue\":\"" + (lblTotAmt.text!).replacingOccurrences(of: "Rs. ", with: "") + "\",\"Aob\":0,\"CheckinTime\":\"" + VisitData.shared.cInTime + "\",\"CheckoutTime\":\"" + VisitData.shared.cOutTime + "\",\"PhoneOrderTypes\":" + VisitData.shared.OrderMode.id + ",\"Super_Stck_code\":\"'\(VisitData.shared.Dist.id)'\",\"stockist_code\":\"'" + VisitData.shared.CustID + "'\",\"stockist_name\":\"''\",\"f_key\":{\"Activity_Report_Code\":\"'Activity_Report_APP'\"}}},{\"Activity_Stk_POB_Report\":[" + sPItems +  "]},{\"Activity_Stk_Sample_Report\":[]},{\"Activity_Event_Captures\":[]},{\"PENDING_Bills\":[]},{\"Compititor_Product\":[]},{\"Activity_Event_Captures_Call\":[]}]"
         
         
         print(objcallsprimary)

@@ -760,6 +760,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
     @IBAction func closePreview(_ sender: Any) {
         vwPrvOrderCtrl.isHidden = true
         tbProduct.isHidden = false
+        tbProduct.reloadData()
     }
     func openWin(Mode:String){
         SelMode=Mode
@@ -823,6 +824,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         openWin(Mode: "UOM")
     }
     @objc private func changeQty(_ txtQty: UITextField)
+    
     {
         let cell:cellListItem = GlobalFunc.getTableViewCell(view: txtQty) as! cellListItem
         let tbView:UITableView = GlobalFunc.getTableView(view: txtQty) as! UITableView
@@ -832,6 +834,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         
         let id: String
         let lProdItem:[String: Any]
+        lstPrvOrder = VisitData.shared.ProductCart
         if(tbView==tbPrvOrderProduct)
         {
             lProdItem = lstPrvOrder[indxPath.row] as! [String : Any]
@@ -875,6 +878,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         let id: String
         let lProdItem:[String: Any]
         print(tbPrvOrderProduct as Any)
+        lstPrvOrder = VisitData.shared.ProductCart
         if(tbView==tbPrvOrderProduct)
         {
             lProdItem = lstPrvOrder[indxPath.row] as! [String : Any]
@@ -918,7 +922,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
             print(selNetWt)
         }
         cell.txtQty.text = String(sQty)
-        updateQty(id: id, sUom: selUOM, sUomNm: selUOMNm, sUomConv: selUOMConv,sNetUnt: selNetWt, sQty: String(sQty),ProdItem: lProdItem,refresh: 1)
+        updateQty(id: id, sUom: selUOM, sUomNm: selUOMNm, sUomConv: selUOMConv,sNetUnt: selNetWt, sQty: String(sQty),ProdItem: lProdItem,refresh: 2)
         //tbView.reloadRows(at: [indxPath], with: .fade)
     }
     
@@ -930,6 +934,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         
         let id: String
         let lProdItem:[String: Any]
+        lstPrvOrder = VisitData.shared.ProductCart
         if(tbView==tbPrvOrderProduct)
         {
             lProdItem = lstPrvOrder[indxPath.row] as! [String : Any]
@@ -962,7 +967,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         sQty = sQty-1
         if sQty<0 { sQty = 0 }
         cell.txtQty.text = String(sQty)
-        updateQty(id: id, sUom: selUOM, sUomNm: selUOMNm, sUomConv: selUOMConv, sNetUnt: selNetWt, sQty: String(sQty),ProdItem: lProdItem,refresh: 1)
+        updateQty(id: id, sUom: selUOM, sUomNm: selUOMNm, sUomConv: selUOMConv, sNetUnt: selNetWt, sQty: String(sQty),ProdItem: lProdItem,refresh: 2)
         //tbView.reloadRows(at: [indxPath], with: .fade)
     }
     func integer(from textField: UITextField) -> Int {
@@ -1113,7 +1118,6 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
                 return true
             }else{
                 Upadet_table = 2
-   
                 print("No data")
             }
             return false
@@ -1135,10 +1139,13 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         lblTotItem.text = String(format: "%i",  lstPrvOrder.count)
         lblPrvTotItem.text = String(format: "%i",  lstPrvOrder.count)
         if (refresh == 1 || Upadet_table == 2){
-            tbPrvOrderProduct.reloadData()
             tbProduct.reloadData()
         }
         
+        
+        if (refresh == 1 ){
+            tbPrvOrderProduct.reloadData()
+        }
 
        
     }
@@ -1230,7 +1237,15 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         var netWet = 0.0
         var NetQty = 0.0
         print(lstPrvOrder.count)
+        lstPrvOrder = VisitData.shared.ProductCart.filter ({ (Cart) in
+            
+            if (Cart["SalQty"] as! Double) > 0 {
+                return true
+            }
+            return false
+        })
         print(VisitData.shared.ProductCart.count)
+        print(lstPrvOrder.count)
         self.ShowLoading(Message: "Data Submitting Please wait...")
         for i in 0...self.lstPrvOrder.count-1{
             let item: [String: Any]=self.lstPrvOrder[i] as! [String : Any]
@@ -1432,12 +1447,9 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
             Join_Works.removeLast()
             print(Join_Works)
         }
-        let jsonString = "[{\"Activity_Report_APP\":{\"Worktype_code\":\"\'" + (self.lstPlnDetail[0]["worktype"] as! String) + "\'\",\"Town_code\":\"\'" + (self.lstPlnDetail[0]["clusterid"] as! String) + "\'\",\"RateEditable\":\"''\",\"dcr_activity_date\":\"\'" + VisitData.shared.cInTime + "\'\",\"Daywise_Remarks\":\"" + VisitData.shared.VstRemarks.name + "\",\"eKey\":\"" + self.eKey + "\",\"rx\":\"'1'\",\"rx_t\":\"''\",\"DataSF\":\"\'" + DataSF + "\'\"}},{\"Activity_Doctor_Report\":{\"Doctor_POB\":0,\"Worked_With\":\"'"+Join_Works+"'\",\"Doc_Meet_Time\":\"\'" + VisitData.shared.cInTime + "\'\",\"modified_time\":\"\'" + VisitData.shared.cInTime + "\'\",\"net_weight_value\":\"\(net_weight_data)\",\"stockist_code\":\"\'" + (VisitData.shared.Dist.id ) + "\'\",\"stockist_name\":\"''\",\"superstockistid\":\"''\",\"Discountpercent\":0,\"CheckinTime\":\"" + VisitData.shared.cInTime + "\",\"CheckoutTime\":\"" + VisitData.shared.cOutTime + "\",\"location\":\"\'" + sLocation + "\'\",\"geoaddress\":\"" + sAddress + "\",\"PhoneOrderTypes\":\"" + VisitData.shared.OrderMode.id + "\",\"Order_Stk\":\"'15560'\",\"Order_No\":\"''\",\"rootTarget\":\"0\",\"orderValue\":\(Subtotal),\"disPercnt\":0.0,\"disValue\":0.0,\"finalNetAmt\":\(Subtotal),\"taxTotalValue\":0,\"discTotalValue\":0.0,\"subTotal\":0,\"No_Of_items\":\(lstPrvOrder.count),\"rateMode\":\"free\",\"discount_price\":0,\"doctor_code\":\"\'" + VisitData.shared.CustID + "\'\",\"doctor_name\":\"\'" + VisitData.shared.CustName + "\'\",\"doctor_route\":\"'mylapore'\",\"f_key\":{\"Activity_Report_Code\":\"'Activity_Report_APP'\"}}},{\"Activity_Sample_Report\":[" + sPItems4 +  "]},{\"Trans_Order_Details\":[]},{\"Activity_Input_Report\":[]},{\"Activity_Event_Captures\":[]},{\"PENDING_Bills\":[]},{\"Compititor_Product\":[]},{\"Activity_Event_Captures_Call\":[]}]"
+        let jsonString = "[{\"Activity_Report_APP\":{\"Worktype_code\":\"\'" + (self.lstPlnDetail[0]["worktype"] as! String) + "\'\",\"Town_code\":\"\'" + (self.lstPlnDetail[0]["clusterid"] as! String) + "\'\",\"RateEditable\":\"''\",\"dcr_activity_date\":\"\'" + VisitData.shared.cInTime + "\'\",\"Daywise_Remarks\":\"" + VisitData.shared.VstRemarks.name.trimmingCharacters(in: .whitespacesAndNewlines) + "\",\"eKey\":\"" + self.eKey + "\",\"rx\":\"'1'\",\"rx_t\":\"''\",\"DataSF\":\"\'" + DataSF + "\'\"}},{\"Activity_Doctor_Report\":{\"Doctor_POB\":0,\"Worked_With\":\"'"+Join_Works+"'\",\"Doc_Meet_Time\":\"\'" + VisitData.shared.cInTime + "\'\",\"modified_time\":\"\'" + VisitData.shared.cInTime + "\'\",\"net_weight_value\":\"\(net_weight_data)\",\"stockist_code\":\"\'" + (VisitData.shared.Dist.id ) + "\'\",\"stockist_name\":\"''\",\"superstockistid\":\"''\",\"Discountpercent\":0,\"CheckinTime\":\"" + VisitData.shared.cInTime + "\",\"CheckoutTime\":\"" + VisitData.shared.cOutTime + "\",\"location\":\"\'" + sLocation + "\'\",\"geoaddress\":\"" + sAddress + "\",\"PhoneOrderTypes\":\"" + VisitData.shared.OrderMode.id + "\",\"Order_Stk\":\"'15560'\",\"Order_No\":\"''\",\"rootTarget\":\"0\",\"orderValue\":\(Subtotal),\"disPercnt\":0.0,\"disValue\":0.0,\"finalNetAmt\":\(Subtotal),\"taxTotalValue\":0,\"discTotalValue\":0.0,\"subTotal\":0,\"No_Of_items\":\(lstPrvOrder.count),\"rateMode\":\"free\",\"discount_price\":0,\"doctor_code\":\"\'" + VisitData.shared.CustID + "\'\",\"doctor_name\":\"\'" + VisitData.shared.CustName + "\'\",\"doctor_route\":\"'mylapore'\",\"f_key\":{\"Activity_Report_Code\":\"'Activity_Report_APP'\"}}},{\"Activity_Sample_Report\":[" + sPItems4 +  "]},{\"Trans_Order_Details\":[]},{\"Activity_Input_Report\":[]},{\"Activity_Event_Captures\":[]},{\"PENDING_Bills\":[]},{\"Compititor_Product\":[]},{\"Activity_Event_Captures_Call\":[]}]"
         
-        
-        
-        
-        
+       
         let params: Parameters = [
             "data": jsonString //"["+jsonString+"]"//
         ]
@@ -1458,14 +1470,11 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
             let jsonString2 = "{\"Products\":[" + sPItems3 +  "],\"Activity_Event_Captures\":[],\"POB\":\"0\",\"Value\":\"\(Subtotal)\",\"disPercnt\":0.0,\"disValue\":0.0,\"finalNetAmt\":\(Subtotal),\"taxTotalValue\":\"0\",\"discTotalValue\":\"0.0\",\"subTotal\":\"\(Subtotal)\",\"No_Of_items\":\"\(lstPrvOrder.count)\",\"Cust_Code\":\"'\(Cust_Code)'\",\"DCR_Code\":\"\(DCR_Code)\",\"Trans_Sl_No\":\"\(Trans_Sl_No)\",\"Route\":\"\(Route)\",\"net_weight_value\":\"\(net_weight_data)\",\"Discountpercent\":0.0,\"discount_price\":0.0,\"target\":\"0\",\"rateMode\":\"free\",\"Stockist\":\"\(Stockist_Code)\",\"RateEditable\":\"\",\"PhoneOrderTypes\":0}"
             
             
-            
-            
             let params2: Parameters = [
                 "data": jsonString2 //"["+jsonString+"]"//
             ]
-            
             print(params2)
-            print("_________________________________________________________________________________________")
+            
             if (Edit_Order_Count == 0){
             AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"dcr/updateProducts" + "&divisionCode=" + self.DivCode + "&sfCode=" + self.SFCode + "&desig=" + self.Desig, method: .post, parameters: params2, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
                 AFdata in
