@@ -383,7 +383,12 @@ class Coverage: IViewController,FSCalendarDelegate,FSCalendarDataSource {
                             }
                         }
                         if let visit_dis = visit_Details[0]["rout"]{
-                            Not_Visited_Rt.text = String(ToalRot - visit_dis)
+                            var Not_Visited_Rtdata = ToalRot - visit_dis
+                            if Not_Visited_Rtdata > 0 {
+                                Not_Visited_Rt.text = String(Not_Visited_Rtdata)
+                            } else {
+                                Not_Visited_Rt.text = "0"
+                            }
                             Visited_Rt.text = String(visit_dis)
                             if (ToalRot < visit_dis){
                                 Coverage_Rt.text = "0.0"
@@ -396,7 +401,13 @@ class Coverage: IViewController,FSCalendarDelegate,FSCalendarDataSource {
                             }
                         }
                         if let visit_rout = visit_Details[0]["dis"]{
-                            Not_Visited_Dis.text = String(TotDis - visit_rout)
+                            var Not_Vis_Countdata = TotDis - visit_rout
+                            if Not_Vis_Countdata > 0 {
+                                Not_Visited_Dis.text = String(Not_Vis_Countdata)
+                            } else {
+                                Not_Visited_Dis.text = "0"
+                            }
+
                             Visited_Dis.text = String(visit_rout)
                             if(TotDis < visit_rout){
                                 Coverage_Dis.text = "0.0"
@@ -416,6 +427,11 @@ class Coverage: IViewController,FSCalendarDelegate,FSCalendarDataSource {
                         New_Ret.text = String(totalroute)
                         let NotVis = totalRetailer - visit_Rets - totalroute
                          print(NotVis)
+                        if NotVis > 0 {
+                            Not_Visited_Ret.text  = String(NotVis)
+                        } else {
+                            Not_Visited_Ret.text  = "0"
+                        }
                          Not_Visited_Ret.text = String(NotVis)
                     }
                 }
