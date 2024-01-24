@@ -1236,6 +1236,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         var sPItems2:String = ""
         var netWet = 0.0
         var NetQty = 0.0
+        var net_weight_data2 = 0.0
         print(lstPrvOrder.count)
         lstPrvOrder = VisitData.shared.ProductCart.filter ({ (Cart) in
             
@@ -1273,10 +1274,12 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
             }else{
                 netWet = Double(item["NetWt"] as! String)!
             }
-           
-            
-            
-            net_weight_data = String(format: "%.2f",NetQty * netWet)
+           let UomConvData = item["UOMConv"] as! String
+            print(item)
+            let uOM_Conv_NetWight = Double(NetQty) * Double(UomConvData)!
+            let Wight_Data = uOM_Conv_NetWight * netWet
+            net_weight_data2 = net_weight_data2 + Wight_Data
+            net_weight_data = String(format: "%.2f",net_weight_data2)
             print(net_weight_data)
             
             sPItems = sPItems + "{\"product_code\":\""+id+"\", \"product_Name\":\""+(ProdItems[0]["name"] as! String)+"\","
@@ -1608,8 +1611,8 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
 //                        print(amount)
 //                        \"No_Of_items\":\"3\",\"Cust_Code\":\"'2149655'\",\"DCR_Code\":\"SEF1-279\",\"Trans_Sl_No\":\"MGR1018-23-24-SO-126\",\"Route\":\"114726\",\"net_weight_value\":\"0\"
                         
-                        
-                         net_weight_value = json[0]["net_weight_value"] as! Int
+                        print(json)
+                         //net_weight_value = json[0]["net_weight_value"] as! Int
                          Cust_Code = json[0]["Cust_Code"] as! String
                          DCR_Code = json[0]["DCR_Code"] as! String
                          Trans_Sl_No = json[0]["Trans_Sl_No"] as! String

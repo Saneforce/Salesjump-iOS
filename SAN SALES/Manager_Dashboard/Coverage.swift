@@ -383,7 +383,7 @@ class Coverage: IViewController,FSCalendarDelegate,FSCalendarDataSource {
                             }
                         }
                         if let visit_dis = visit_Details[0]["rout"]{
-                            var Not_Visited_Rtdata = ToalRot - visit_dis
+                            let Not_Visited_Rtdata = ToalRot - visit_dis
                             if Not_Visited_Rtdata > 0 {
                                 Not_Visited_Rt.text = String(Not_Visited_Rtdata)
                             } else {
@@ -401,7 +401,7 @@ class Coverage: IViewController,FSCalendarDelegate,FSCalendarDataSource {
                             }
                         }
                         if let visit_rout = visit_Details[0]["dis"]{
-                            var Not_Vis_Countdata = TotDis - visit_rout
+                            let Not_Vis_Countdata = TotDis - visit_rout
                             if Not_Vis_Countdata > 0 {
                                 Not_Visited_Dis.text = String(Not_Vis_Countdata)
                             } else {

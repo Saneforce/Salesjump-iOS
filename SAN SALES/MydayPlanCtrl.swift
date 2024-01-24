@@ -767,6 +767,8 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
     }
     
     @IBAction func SaveMyDayPlan(_ sender: Any) {
+        print(HomePageViewController.selfieLoginActive)
+        print(PhotosCollection.shared.PhotoList.count)
         if (HomePageViewController.selfieLoginActive == 1){
             if(PhotosCollection.shared.PhotoList.count>0){
                print("In Data")
@@ -782,8 +784,6 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                 }
             }
             
-            
-           
                 if(PhotosCollection.shared.PhotoList.count>0){
                     for i in 0...PhotosCollection.shared.PhotoList.count-1{
                         let item: [String: Any] = PhotosCollection.shared.PhotoList[i] as! [String : Any]
@@ -800,6 +800,9 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                     }
                 }
                
+            if (Leaveid == "9999" && PhotosCollection.shared.PhotoList.count == 0 ){
+                getLocatio()
+            }
                 print("My Day Plan Not Sumbite")
             
             
@@ -818,7 +821,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         var Count = 0
         var Leavtyp = leavWorktype
         print(Leavtyp)
- 
+ print(Leaveid)
         if Leaveid != "9999"{
             if validateForm() == false {
                 return
