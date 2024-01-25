@@ -389,12 +389,8 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
         guard let indexPath = self.submittedDCRTB.indexPathForRow(at: buttonPosition) else{
             return
         }
-        
-        
         let product = SubmittedDCR.objcalls_SelectSecondaryorder2[indexPath.row]
         print(product)
-        
-        
         self.Retlbl.text=String(format: "%@", product["Trans_Detail_Name"] as! String)
         
         if let Sto_Code = product["Stockist_Code"] as? String {

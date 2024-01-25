@@ -1612,34 +1612,31 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
 //                        \"No_Of_items\":\"3\",\"Cust_Code\":\"'2149655'\",\"DCR_Code\":\"SEF1-279\",\"Trans_Sl_No\":\"MGR1018-23-24-SO-126\",\"Route\":\"114726\",\"net_weight_value\":\"0\"
                         
                         print(json)
-                         //net_weight_value = json[0]["net_weight_value"] as! Int
-                         Cust_Code = json[0]["Cust_Code"] as! String
-                         DCR_Code = json[0]["DCR_Code"] as! String
-                         Trans_Sl_No = json[0]["Trans_Sl_No"] as! String
-                         Route = json[0]["Route"] as! String
-                        Stockist_Code = json[0]["Stockist_Code"] as! String
-                        
-                        
+
                         let Additional_Prod_Dtls = json[0]["Additional_Prod_Dtls1"] as? String
                         let productArray = Additional_Prod_Dtls?.components(separatedBy: "#")
                         if let products = productArray {
                             for product in products {
-                               
-                                  
                                     let productData = product.components(separatedBy: "~")
-                                    print(productData[0])
-                                
                                     let price = productData[1].components(separatedBy: "$")[0]
                                     let price1 = productData[1].components(separatedBy: "$")[1]
-                                    print(price)
-                                    print(price1)
-                          
                             }
                         }
                         if let ProdCode = ProdTrans_Sl_No {
                             let filteredArray = json.filter { ($0["Trans_Sl_No"] as? String) == ProdCode }
                             self.Editobjcalls = filteredArray
-                            
+                            print(filteredArray)
+                           // net_weight_value = filteredArray[0]["net_weight_value"] as! Int
+                            Cust_Code = filteredArray[0]["Cust_Code"] as! String
+                            DCR_Code = filteredArray[0]["DCR_Code"] as! String
+                            Trans_Sl_No = filteredArray[0]["Trans_Sl_No"] as! String
+                           
+                            if let route = filteredArray[0]["Route"] as? String {
+                                Route = route
+                            } else {
+                                Route = ""
+                            }
+                           Stockist_Code = filteredArray[0]["Stockist_Code"] as! String
                         }
                         DemoEdite()
                        // setSecEditeOrder()
@@ -1788,8 +1785,14 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
                
                 let filteredArray = lstDistList.filter { ($0["id"] as? Int) == Int(stock_Code) }
                 print(filteredArray)
-                VisitData.shared.Dist.id = String((filteredArray[0]["id"] as? Int)!)
-                lblDistNm.text = filteredArray[0]["name"] as? String
+                if (filteredArray.isEmpty){
+                    VisitData.shared.Dist.id = ""
+                    lblDistNm.text = ""
+                }else{
+                    VisitData.shared.Dist.id = String((filteredArray[0]["id"] as? Int)!)
+                    lblDistNm.text = filteredArray[0]["name"] as? String
+                }
+                
                    
                     
             }
@@ -1832,6 +1835,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
                         let ProdId: String = String(format: "%@", product["id"] as! CVarArg)
                         return Bool(ProdId == Uomid2)
                     })
+                    print(Uomdata2)
                     print(Uomdata2)
                     var UomConQtydata2 = ""
                     if  let UomConQtydata = Uomdata2[0]["ConQty"] as? Int {

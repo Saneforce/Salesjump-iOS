@@ -357,18 +357,18 @@ class Coverage: IViewController,FSCalendarDelegate,FSCalendarDataSource {
                         ToalRot = totalroute
                         Total_Rt.text = String(totalroute)
                     }
-                    if let totDis =  json["totDis"] as? [[String: Int]],
-                       let totRetailDict = totDis.first,
-                       let totalDis = totRetailDict["total_dis"]{
-                        print("Total Dis: \(totalDis)")
-                        TotDis = totalDis
-                        Total_Dis.text = String(totalDis)
+                    print(json)
+                    if let totDisArray = json["totDis"] as? [[String: Any]],
+                        let totRetailDict = totDisArray.first,
+                        let totalDis = totRetailDict["total_dis"] as? String {
+                            print("Total Dis: \(totalDis)")
+                        TotDis = Int(totalDis)!
+                            Total_Dis.text = String(totalDis)
                     }
                     
                     if let visit_Details = json["visit_Details"] as? [[String:Int]]{
                         if let visit_Ret = visit_Details[0]["Ret"]{
                             visit_Rets = visit_Ret
-                         
                             Visited_Ret.text = String(visit_Ret)
                             //cell.lblUOM?.text = String(format: "%@",item["OffUntName"] as! String)
                             if(totalRetailer < visit_Ret){
