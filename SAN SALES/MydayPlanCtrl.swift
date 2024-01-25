@@ -859,8 +859,8 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
             let storyboard = UIStoryboard(name: "AdminForms", bundle: nil)
             let viewController = storyboard.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
             let myDyPln = storyboard.instantiateViewController(withIdentifier: "sbLeaveFrm") as! LeaveForm
-            viewController.setViewControllers([myDyPln], animated: true)
-            UIApplication.shared.windows.first?.rootViewController = viewController
+            self.navigationController?.pushViewController(myDyPln, animated: true)
+            UIApplication.shared.windows.first?.rootViewController = navigationController
         }
     }
     

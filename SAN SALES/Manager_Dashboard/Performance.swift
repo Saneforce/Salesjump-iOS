@@ -47,6 +47,7 @@ class Performance: IViewController,ChartViewDelegate, UITableViewDelegate, UITab
     var Target_Data:[Target] = []
     var lAllObjSel: [Field_Force] = []
     var BarsName:[ChartName] = []
+    var StoreBarsName:[ChartName] = []
     var lAllObjSelNmae: [ChartName] = []
     @IBOutlet weak var Select_Ord: UILabel!
     @IBOutlet weak var SelectField: UILabel!
@@ -183,10 +184,7 @@ class Performance: IViewController,ChartViewDelegate, UITableViewDelegate, UITab
                 totalOrderValue = totalOrderValue + achievedValue
             }
             
-            print("Total Target Value: \(totalTargetValue)")
-            print("Total Achieved Value: \(totalOrderValue)")
-            TargetVal.text = String(format:"%.2f",totalTargetValue)
-            OrderVal.text = String(format:"%.2f",totalOrderValue)
+
             let bal = totalTargetValue  - totalOrderValue
             let Ach_Percent = totalOrderValue / totalTargetValue * 100
             if (bal < 0){
@@ -203,7 +201,10 @@ class Performance: IViewController,ChartViewDelegate, UITableViewDelegate, UITab
             }else{
                 Ache.text = String(format:"%.2f",Ach_Percent)
             }
-            print(BarsName)
+            let totalTarget = BarsName.reduce(into: 0.0) { $0 += Double($1.Target) ?? 0.0 }
+            let totalAchievement = BarsName.reduce(into: 0.0) { $0 += Double($1.Achievement) ?? 0.0 }
+            TargetVal.text = String(format:"%.2f",totalTarget)
+            OrderVal.text = String(format:"%.2f",totalAchievement)
         }else{
             VrfCount = 0
             self.BarsName = lAllObjSelNmae
@@ -276,7 +277,29 @@ class Performance: IViewController,ChartViewDelegate, UITableViewDelegate, UITab
             }
             print(BarsName)
         }
-        self.BarsName = BarsName.filter { $0.Id == id }
+            self.StoreBarsName = BarsName.filter { $0.Id == id }
+            let filteredIds = StoreBarsName.map { $0.Id }
+
+            if filteredIds.contains(SFCode){
+                print(self.StoreBarsName)
+                
+                let totalTarget = BarsName.reduce(into: 0.0) { $0 += Double($1.Target) ?? 0.0 }
+                let totalAchievement = BarsName.reduce(into: 0.0) { $0 += Double($1.Achievement) ?? 0.0 }
+                TargetVal.text = String(format:"%.2f",totalTarget)
+                OrderVal.text = String(format:"%.2f",totalAchievement)
+                
+                for index in StoreBarsName.indices {
+                    StoreBarsName[index].Target = String(format: "%.2f", totalTarget)
+                    StoreBarsName[index].Achievement = String(format: "%.2f", totalAchievement)
+                }
+                print(StoreBarsName)
+                self.BarsName = self.StoreBarsName
+                
+            }else{
+                self.BarsName = BarsName.filter { $0.Id == id }
+            }
+           
+            
         demoBar()
         txSearchSel.text = ""
         All_Field.isHidden = true
@@ -541,7 +564,6 @@ class Performance: IViewController,ChartViewDelegate, UITableViewDelegate, UITab
 //                                Target_Data.append(Target(target_val: String(orderValue), Sf_Code: sfCode, reporting_code: reportingCode))
 //                                }
                         }
-                        TargetVal.text = String(format:"%.2f",Total_Target)
                     }
                     
                     if let achievedArray = prettyPrintedJson["Achieved"] as? [[String: Any]] {
@@ -635,7 +657,7 @@ class Performance: IViewController,ChartViewDelegate, UITableViewDelegate, UITab
                         }
                         print(Achieved_data)
                         print(SFCode)
-                        OrderVal.text = String(format:"%.2f",Totatal_Order)
+                        
                     }
                     let bal = Total_Target  - Totatal_Order
                     let Ach_Percent = Totatal_Order / Total_Target * 100
@@ -786,6 +808,10 @@ class Performance: IViewController,ChartViewDelegate, UITableViewDelegate, UITab
                     for barsName in BarsName {
                         print(barsName)
                     }
+                    let totalTarget = BarsName.reduce(into: 0.0) { $0 += Double($1.Target) ?? 0.0 }
+                    let totalAchievement = BarsName.reduce(into: 0.0) { $0 += Double($1.Achievement) ?? 0.0 }
+                    TargetVal.text = String(format:"%.2f",totalTarget)
+                    OrderVal.text = String(format:"%.2f",totalAchievement)
                     print(BarsName)
                     self.lAllObjSelNmae = BarsName
                     demoBar()
