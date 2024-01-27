@@ -132,20 +132,15 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         if let DistData = LocalStoreage.string(forKey: "Distributors_Master_"+SFCode),
            let list = GlobalFunc.convertToDictionary(text:  DistData) as? [AnyObject] {
             lstDist = list;
-            print(SFCode)
         }
-        
         if let RouteData = LocalStoreage.string(forKey: "Route_Master_"+SFCode),
            let list = GlobalFunc.convertToDictionary(text:  RouteData) as? [AnyObject] {
             lstAllRoutes = list
             lstRoutes = list
-            print(list)
         }
-        
         if let JointWData = LocalStoreage.string(forKey: "Jointwork_Master"),
            let list = GlobalFunc.convertToDictionary(text:  JointWData) as? [AnyObject] {
             lstJoint = list;
-            print("JointWData  ___________________________")
         }
 
         

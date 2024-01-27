@@ -55,6 +55,8 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
     var objcalls: [AnyObject]=[]
     public static var EndOrder_Time: String = ""
     var refreshControl = UIRefreshControl()
+    var lstSuppList: [AnyObject] = []
+    var lstAllRoutes: [AnyObject] = []
      
    public static var objcalls_SelectPrimaryorder2: [AnyObject]=[]
     override func viewDidLoad() {
@@ -62,6 +64,15 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
       
         lblnodata.isHidden = true
         getUserDetails()
+        let lstDistData: String = LocalStoreage.string(forKey: "Supplier_Master_"+SFCode)!
+        
+        if let list = GlobalFunc.convertToDictionary(text: lstDistData) as? [AnyObject] {
+            lstSuppList = list;
+        }
+        if let RouteData = LocalStoreage.string(forKey: "Route_Master_"+SFCode),
+           let list = GlobalFunc.convertToDictionary(text:  RouteData) as? [AnyObject] {
+            lstAllRoutes = list
+        }
         SelectPrimaryorder()
         //SelectPrimary2order()
         PrimarySubmittedDCR.objcalls_SelectPrimaryorder2.removeAll()
@@ -129,7 +140,6 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
             PrimayOrderViewTB.isHidden=false
             
             print(PrimarySubmittedDCR.objcalls_SelectPrimaryorder2)
-            
 //            let sortedData = PrimarySubmittedDCR.objcalls_SelectPrimaryorder2.sorted {
 //                (item1, item2) -> Bool in
 //                
@@ -143,8 +153,12 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
 //            }
 //            PrimarySubmittedDCR.objcalls_SelectPrimaryorder2 = sortedData
             let item: [String: Any] = PrimarySubmittedDCR.objcalls_SelectPrimaryorder2[indexPath.row] as! [String : Any]
+            let Id_For_Route = item["SDP"] as? String
+            let filteredData = lstAllRoutes.filter { ($0["id"] as? String) == Id_For_Route }
+            print(filteredData)
+            
             cell.Disbutor?.text = item["Trans_Detail_Name"] as? String
-            cell.rout?.text = item["SDP_Name"] as? String
+            cell.rout?.text = filteredData[0]["name"] as? String
             cell.meettime.text = item["StartOrder_Time"] as? String
            
             if let order = item["Order_date"] as? String {
@@ -424,17 +438,14 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
         guard let indexPath = self.PrimayOrderViewTB.indexPathForRow(at: buttonPosition) else{
             return
         }
-        print(buttonPosition)
-        print(indexPath)
-        
+
             let product = PrimarySubmittedDCR.objcalls_SelectPrimaryorder2[indexPath.row]
-            print(product)
+        let Id_For_Route = product["SDP"] as? String
+        let filteredData = lstAllRoutes.filter { ($0["id"] as? String) == Id_For_Route }
             self.Disbutorsname.text = product["Trans_Detail_Name"] as? String
-            self.Route.text = product["SDP_Name"] as? String
+            self.Route.text = filteredData[0]["name"] as? String
             self.Joint_Work.text = product["Worked_with_Name"] as? String
             
-     
-        
         Input.append(inputval(Key: "Meet Time", Value: product["StartOrder_Time"] as! String))
         Input.append(inputval(Key: "Order Time", Value: product["StartOrder_Time"] as! String))
         if let pobValue = product["POB_Value"] as? Double {

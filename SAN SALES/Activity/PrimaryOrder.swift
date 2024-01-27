@@ -1493,15 +1493,11 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
                 else {
                     print("Item not found in lstAllProducts.")
                 }
-                
-                
             }
         }
     }
-        
     }
     func DemoEdite(){
-        print(objcallsprimary)
         for item in objcallsprimary{
             print(item)
             print(lstSuppList)
@@ -1512,38 +1508,30 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
             var BasUnitCode: Int = 0
             let indexToDelete = lstAllProducts.firstIndex(where: { String(format: "%@", $0["id"] as! CVarArg) == "\(String(describing: Product_Code))" })
             let stkname = lstAllProducts[indexToDelete!]
-            print(stkname)
             lProdItem = stkname as! [String : Any]
             id=String(format: "%@", lstAllProducts[indexToDelete!]["id"] as! CVarArg)
             let sUom = item["Product_Code"] as? String
             if let baseUnitCodeStr = lstAllProducts[indexToDelete!]["Base_Unit_code"] as? String,
                let baseUnitCodeInt = Int(baseUnitCodeStr) {
                 BasUnitCode = baseUnitCodeInt
-                print(BasUnitCode)
+                
             }
-            
             let sUomNm = item["Product_Unit_Name"] as? String
             let sUomConv = String((item["Product_Unit_Value"] as? Int)!)
             let sNetUnt = ""
             let sQty = item["Qty"] as? Int
-            
             var Uomdata = lstAllUnitList.filter({(product) in
                 let ProdId: String = String(format: "%@", product["Product_Code"] as! CVarArg)
                 return Bool(ProdId == sUom)
             })
-            
-            print(Uomdata)
-            
             var Uomdata2 = Uomdata.filter({(product) in
                 let ProdId: String = String(format: "%@", product["name"] as! CVarArg)
                 return Bool(ProdId == sUomNm)
             })
-            print(Uomdata2)
             var Uomid2 = ""
             if let Uomiddata = Uomdata2[0]["id"] {
                 Uomid2 = Uomiddata as! String
             }
-            print(Uomid2)
             updateQty(id: sUom!, sUom: Uomid2, sUomNm: sUomNm!, sUomConv: sUomConv,sNetUnt: sNetUnt, sQty: String(sQty!),ProdItem: lProdItem,refresh: 1)
         }
     }
