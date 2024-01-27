@@ -137,6 +137,7 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
         }
         if let list = GlobalFunc.convertToDictionary(text: lstSchemData) as? [AnyObject] {
             lstSchemList = list;
+            print(lstSchemList)
         }
         if let list = GlobalFunc.convertToDictionary(text: lstRateData) as? [AnyObject] {
             lstRateList = list;

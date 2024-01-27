@@ -425,14 +425,14 @@ class Coverage: IViewController,FSCalendarDelegate,FSCalendarDataSource {
                        let totalroute = totRetailDict["new_retailer"]{
                         print("New Retailer : \(totalroute)")
                         New_Ret.text = String(totalroute)
-                        let NotVis = totalRetailer - visit_Rets - totalroute
+                        let total_New_Rout_data = totalRetailer + totalroute
+                        let NotVis =  total_New_Rout_data - visit_Rets
                          print(NotVis)
                         if NotVis > 0 {
                             Not_Visited_Ret.text  = String(NotVis)
                         } else {
                             Not_Visited_Ret.text  = "0"
                         }
-                         Not_Visited_Ret.text = String(NotVis)
                     }
                 }
                 

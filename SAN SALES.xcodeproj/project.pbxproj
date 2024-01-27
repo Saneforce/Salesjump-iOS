@@ -407,8 +407,8 @@
 				3F9F379728593C99002CC408 /* DayReport.swift */,
 				3F9F3799285B5FBA002CC408 /* ReportMenu.swift */,
 				3FF57C1C286C4A76009E3FE5 /* RptVisitDetail.swift */,
-				38A2E9B12A0E1B940061B854 /* Brand Availability.swift */,
 				3F0ED6BD2872F61A00FF4460 /* OrderDetailView.swift */,
+				38A2E9B12A0E1B940061B854 /* Brand Availability.swift */,
 			);
 			path = Reports;
 			sourceTree = "<group>";
@@ -805,7 +805,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = T.10;
+				MARKETING_VERSION = T.12;
 				PRODUCT_BUNDLE_IDENTIFIER = com.saneforce.sansales;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -842,7 +842,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = T.10;
+				MARKETING_VERSION = T.12;
 				PRODUCT_BUNDLE_IDENTIFIER = com.saneforce.sansales;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

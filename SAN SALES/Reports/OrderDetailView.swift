@@ -103,7 +103,7 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
         autoreleasepool {
             let cell:cellListItem = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
             if tbOrderDetail == tableView {
-                //                let item: [String: Any] = objOrderDetail[indexPath.row] as! [String : Any]
+                               let item: [String: Any] = objOrderDetail[indexPath.row] as! [String : Any]
                 //                print(item)
                 //                cell.lblText?.text = item["PName"] as? String
                 //                cell.lblActRate?.text = String(format: "%.02f", item["Rate"] as! Double)
@@ -113,11 +113,13 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                 //                cell.lblDisc?.text = String(format: "%.02f", item["Disc"] as! Double)
                 //                cell.lblTax?.text = String(format: "%.02f", item["Tax"] as! Double)
                 //                cell.lblAmt?.text = String(format: "%.02f", item["value"] as! Double)
+                print(detail)
+                print(item)
                 cell.lblText.text = String(detail[indexPath.row].Prname)
                 cell.lblActRate.text = String(format: "%.02f",detail[indexPath.row].rate)
                 cell.lblQty.text = String(detail[indexPath.row].qty)
                 cell.lblUOM.text =  String(detail[indexPath.row].Cl)
-                cell.lblDisc.text = String(detail[indexPath.row].Disc)
+                cell.lblDisc.text = String(format: "%.02f", item["Disc"] as! Double)
                 cell.lblTax.text = String(detail[indexPath.row].Tax)
                 cell.lblAmt.text =  (String(format: "%.02f",detail[indexPath.row].value))
                 cell.lblValue.text = String(format: "%.02f",detail[indexPath.row].rate)

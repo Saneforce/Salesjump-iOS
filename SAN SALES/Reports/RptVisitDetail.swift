@@ -18,7 +18,7 @@ class RptVisitDetail: IViewController, UITableViewDelegate, UITableViewDataSourc
     @IBOutlet weak var itmSmryHeight: NSLayoutConstraint!
     @IBOutlet weak var ContentHeight: NSLayoutConstraint!
     @IBOutlet weak var btnBack: UIImageView!
-    
+    @IBOutlet weak var LBLRemarkHeight: NSLayoutConstraint!
     var RptDate: String = ""
     var RptCode: String = ""
     var CusCount: String = ""
