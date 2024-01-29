@@ -69,7 +69,6 @@ class Summary: IViewController,FSCalendarDelegate,FSCalendarDataSource, UITableV
         Search.layer.shadowRadius = 3.0
         Search.layer.shadowOpacity = 0.5
         getUserDetails()
-        Get_All_Field_Force()
         Date_View.addTarget(target: self, action: #selector(dateView))
         All_Filed.addTarget(target: self, action: #selector(FiledData))
         
@@ -80,6 +79,7 @@ class Summary: IViewController,FSCalendarDelegate,FSCalendarDataSource, UITableV
         formatters.dateFormat = "yyyy-MM-dd"
         SelectDate = formatters.string(from: Date())
         Total_Team_Size_List(date: formatters.string(from: Date()))
+        Get_All_Field_Force(Data: formatters.string(from: Date()))
         
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -97,7 +97,7 @@ class Summary: IViewController,FSCalendarDelegate,FSCalendarDataSource, UITableV
         targetId = data
         Select_Field.text = SfData[indexPath.row].name
         print(targetId)
-        Get_All_Field_Force()
+        Get_All_Field_Force(Data: SelectDate)
         txSearchSel.text = ""
         All_Field_View.isHidden = true
     }
@@ -116,17 +116,19 @@ class Summary: IViewController,FSCalendarDelegate,FSCalendarDataSource, UITableV
         print("selected dates is \(selectedDates_Attendance)")
         if let firstDate = selectedDates_Attendance.first {
             print("Selected date outside the box: \(firstDate)")
+            targetId = ""
+            Select_Field.text = "All Field Force"
             Total_Team_Size_List(date: firstDate)
+            Get_All_Field_Force(Data: firstDate)
             SelectDate = firstDate
         } else {
             print("No selected dates.")
         }
         Date_lbl.text = formatter.string(from: date)
-       
         if monthPosition == .next || monthPosition == .previous {
             calendar.setCurrentPage(date, animated: true)
         }
-        Get_All_Field_Force()
+        
         Cal_View.isHidden = true
         
     }
@@ -143,9 +145,11 @@ class Summary: IViewController,FSCalendarDelegate,FSCalendarDataSource, UITableV
         Desig=prettyJsonData["desigCode"] as? String ?? ""
     }
     
-    func Get_All_Field_Force(){
-    
-        let apiKey1: String = "get/submgr&divisionCode=\(DivCode)&rSF=\(SFCode)&sfcode=\(SFCode)&stateCode=\(StateCode)&desig=\(Desig)"
+    func Get_All_Field_Force(Data:String){
+        print(Data)
+        let formatters = DateFormatter()
+        formatters.dateFormat = "yyyy-MM-dd"
+        let apiKey1: String = "get/sfDetails&selected_date=\(Data)&sf_code=\(SFCode)&division_code=\(DivCode)"
         let apiKeyWithoutCommas = apiKey1.replacingOccurrences(of: ",&", with: "&")
         
         AF.request(APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKeyWithoutCommas, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
@@ -189,8 +193,11 @@ class Summary: IViewController,FSCalendarDelegate,FSCalendarDataSource, UITableV
                     }else{
                         var Count = 0
                         let matchingEntries = json.filter { entry in
-                            if let rtoSF = entry["rtoSF"] as? String {
+                            if let rtoSF = entry["id"] as? String {
                                 Count = Count + 1
+                                print(targetId)
+                                print(rtoSF)
+                                print(entry)
                                 return rtoSF == targetId
                             }
                             return false

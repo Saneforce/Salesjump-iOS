@@ -45,6 +45,7 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
         let Tax : Int
         let qty: Int
         let value: Double
+        let Product_Code:String
        }
        
        var detail: [viewDet] = []
@@ -93,6 +94,9 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         //if tableView==tbOrderDetail { return objOrderDetail.count }
+        print(detail.count)
+        print(objOrderDetail)
+        print(detail)
         if tableView==tbOrderDetail {return detail.count}
         if tableView==tbZeroOrd { return objOfferDetail.count }
         return 0
@@ -103,7 +107,15 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
         autoreleasepool {
             let cell:cellListItem = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
             if tbOrderDetail == tableView {
-                               let item: [String: Any] = objOrderDetail[indexPath.row] as! [String : Any]
+                let Pro_ID = detail[indexPath.row].Product_Code
+                let filterData = objOrderDetail.filter { $0["PCode"] as? String == Pro_ID }
+                var Dis_Amt = 0.0
+                if filterData.isEmpty{
+                    Dis_Amt = 0.0
+                }else{
+                    Dis_Amt = filterData[0]["Disc"] as! Double
+                }
+//                               let item: [String: Any] = objOrderDetail[indexPath.row] as! [String : Any]
                 //                print(item)
                 //                cell.lblText?.text = item["PName"] as? String
                 //                cell.lblActRate?.text = String(format: "%.02f", item["Rate"] as! Double)
@@ -113,20 +125,17 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                 //                cell.lblDisc?.text = String(format: "%.02f", item["Disc"] as! Double)
                 //                cell.lblTax?.text = String(format: "%.02f", item["Tax"] as! Double)
                 //                cell.lblAmt?.text = String(format: "%.02f", item["value"] as! Double)
-                print(detail)
-                print(item)
                 cell.lblText.text = String(detail[indexPath.row].Prname)
                 cell.lblActRate.text = String(format: "%.02f",detail[indexPath.row].rate)
                 cell.lblQty.text = String(detail[indexPath.row].qty)
                 cell.lblUOM.text =  String(detail[indexPath.row].Cl)
-                cell.lblDisc.text = String(format: "%.02f", item["Disc"] as! Double)
+                cell.lblDisc.text = String(format: "%.02f", Dis_Amt)
                 cell.lblTax.text = String(detail[indexPath.row].Tax)
                 cell.lblAmt.text =  (String(format: "%.02f",detail[indexPath.row].value))
                 cell.lblValue.text = String(format: "%.02f",detail[indexPath.row].rate)
                 
             }
             if tbZeroOrd == tableView {
-                
                 let item: [String: Any] = objOfferDetail[indexPath.row] as! [String : Any]
                 print(item)
                 cell.lblText?.text = item["OffPName"] as? String
@@ -142,7 +151,6 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
         return cell
     }
     }
-    
     func getUserDetails(){
         let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
         let data = Data(prettyPrintedJson!.utf8)
@@ -186,8 +194,6 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                         self.objOrderDetails = list;
                         print(list)
                     print(list)
-                                        
-                        
                         self.lblOrderNo.text=String(format: "%@", list[0]["Trans_Sl_No"] as! String)
                         self.lblOrderType.text=String(format: "%@", list[0]["OrderTypeNm"] as! String)
                         self.lblFrmCus.text=String(format: "%@", list[0]["StkName"] as! CVarArg)
@@ -212,6 +218,16 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                             self.lblToMob.text=""
                         }
                         RefreshData(indx: 0)
+                        if (StrMode == "VstPRet" || StrMode == "VstRet"){
+                           // self.ShowLoading(Message: "Loading...")
+                            ViewOrder()
+                            print("Finesh")
+                           // self.LoadingDismiss()
+                        }
+                        if (StrMode == "VstPDis" || StrMode == "VstDis"){
+                            self.ShowLoading(Message: "Loading...")
+                            viewprimary()
+                        }
                         Trans_Sl_No = String(format: "%@", list[0]["Trans_Sl_No"] as! String)
                     }
              
@@ -221,18 +237,10 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
         }
         
        
-        if (StrMode == "VstPRet" || StrMode == "VstRet"){
-           // self.ShowLoading(Message: "Loading...")
-            ViewOrder()
-            print("Finesh")
-           // self.LoadingDismiss()
-        }
-        if (StrMode == "VstPDis" || StrMode == "VstDis"){
-            self.ShowLoading(Message: "Loading...")
-            viewprimary()
-        }
+    
     }
     func RefreshData(indx: Int){
+        
         if self.objOrderDetails.count < 1 { return }
         let todayData:[String: Any] = self.objOrderDetails[indx] as! [String: Any]
         if(todayData.count>0){
@@ -245,7 +253,9 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
             self.lblToCus.text=String(format: "%@", todayData["StkName"] as! CVarArg)
             self.lblToAdd.text=String(format: "%@", todayData["StkAddr"] as! CVarArg)
             self.lblToMob.text=String(format: "%@", todayData["StkMob"] as! CVarArg)
+            print(todayData)
             self.objOrderDetail = todayData["Items"] as! [AnyObject]
+            print(objOrderDetail)
             var totAmt: Double = 0
 //            for i in 0...objOrderDetail.count-1 {
 //                let item: [String: Any] = objOrderDetail[i] as! [String : Any]
@@ -324,7 +334,6 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
 //            }
 //        }
 //    }
-    //func ViewOrder(_ sender: Any)
     func ViewOrder(){
         let item = RptVisitDetail.objVstDetail
         print(item)
@@ -380,13 +389,16 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                             //dayrepDict = json["dayrep"] as! [AnyObject]
                             for Item2 in Additional_Prod_Dtls {
                                 print(Item2)
-                                detail.append(viewDet(Prname: Item2["Product_Name"] as! String, rate: Item2["Rate"] as! Double, Cl: Item2["Product_Unit_Name"] as! String, Free:Item2["discount"] as! Int, Disc: Item2["discount"] as! Int, Tax: Int(Item2["taxval"] as! Double), qty: Item2["Quantity"] as! Int, value: Item2["sub_total"] as! Double))
-                                self.lblTotAmt.text = String(Item2["OrderVal"] as! Double)
                                 
-                                tbOrderDetail.reloadData()
+                                detail.append(viewDet(Prname: Item2["Product_Name"] as! String, rate: Item2["Rate"] as! Double, Cl: Item2["Product_Unit_Name"] as! String, Free:Item2["discount"] as! Int, Disc: Item2["discount"] as! Int, Tax: Int(Item2["taxval"] as! Double), qty: Item2["Quantity"] as! Int, value: Item2["sub_total"] as! Double,Product_Code: Item2["Product_Code"] as! String))
+                                self.lblTotAmt.text = String(Item2["OrderVal"] as! Double)
+                                print(detail)
+                                
                                 //                            let contentSize = CGSize(width: ScrollViewsize.bounds.width, height: ScrollViewsize.bounds.height)
                                 //                            ScrollViewsize.contentSize = contentSize
                             }
+                            print(detail)
+                            tbOrderDetail.reloadData()
                             OrdHeight.constant = 40+CGFloat(55*detail.count)
                             self.view.layoutIfNeeded()
                             let newHeight = 100 + CGFloat(75 * detail.count) + CGFloat(2 * detail.count)
@@ -403,9 +415,6 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                 }
             }
     }
-//    func updateContentView() {
-//        ContentHeight.height = subviews.sorted(by: { $0.frame.maxY < $1.frame.maxY }).last?.frame.maxY ?? detail.height
-//        }
     
     func viewprimary(){
         let item = RptVisitDetail.objVstDetail
@@ -471,7 +480,7 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                                 
                                 if let clBalString = Item2["Product_Unit_Name"] as? String {
                                    
-                                detail.append(viewDet(Prname: Item2["Product_Name"] as! String, rate: Item2["Rate"] as! Double, Cl:clBalString, Free:Item2["discount"] as! Int, Disc: Item2["discount"] as! Int, Tax: Int(Item2["taxval"] as! Double), qty: Item2["Quantity"] as! Int, value: Item2["sub_total"] as! Double))
+                                detail.append(viewDet(Prname: Item2["Product_Name"] as! String, rate: Item2["Rate"] as! Double, Cl:clBalString, Free:Item2["discount"] as! Int, Disc: Item2["discount"] as! Int, Tax: Int(Item2["taxval"] as! Double), qty: Item2["Quantity"] as! Int, value: Item2["sub_total"] as! Double,Product_Code: Item2["Product_Code"] as! String))
                                         
                                         print(ContentHeight as Any)
                                    

@@ -211,7 +211,14 @@ class Coverage: IViewController,FSCalendarDelegate,FSCalendarDataSource {
         From_Date.text = dateFormatter.string(from: startOfMonth)
         To_Date.text = formatters.string(from: Date())
         Filtter_date.isHidden = true
-        Total_Team_Size_List(date:formatters.string(from: Date()))
+        
+
+          let startOfMonthData = calendar.startOfDay(for: calendar.date(bySetting: .day, value: 1, of: currentDate)!)
+          let endOfMonth = calendar.date(byAdding: DateComponents(month: 1, day: -1), to: startOfMonth)!
+          
+          print("Last date of this month: \(endOfMonth)")
+        
+        Total_Team_Size_List(date:formatters.string(from: endOfMonth))
     }
     @objc func TodayDate(){
         Cst_Nam_Lbl.text = "Today"
@@ -224,17 +231,6 @@ class Coverage: IViewController,FSCalendarDelegate,FSCalendarDataSource {
         Filtter_date.isHidden = true
         Total_Team_Size_List(date:formatters.string(from: Date()))
     }
-//    @objc func ThiseWeek_Date(){
-//        Fromdate = (formattedDate(date: calculateStartDate(for: 7)))
-//        let formatters = DateFormatter()
-//        formatters.dateFormat = "yyyy-MM-dd"
-//        Todate = formatters.string(from: Date())
-//        From_Date.text = (formattedDate(date: calculateStartDate(for: 7)))
-//        To_Date.text = formatters.string(from: Date())
-//        Filtter_date.isHidden = true
-//        Total_Team_Size_List(date:formatters.string(from: Date()))
-//    }
-    
 
     func calculateStartDateForThisWeek() -> Date {
         let calendar = Calendar.current
@@ -247,7 +243,17 @@ class Coverage: IViewController,FSCalendarDelegate,FSCalendarDataSource {
         let monday = calendar.date(byAdding: .day, value: 2 - (calendar.component(.weekday, from: startOfWeek)), to: startOfWeek) ?? currentDate
         return monday
     }
+    func lastDateOfWeek(for date: Date) -> Date? {
+           let calendar = Calendar.current
 
+           // Find the first day of the week (Monday)
+           guard let startOfWeek = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear, .weekday], from: date)),
+               let lastDayOfWeek = calendar.date(byAdding: .day, value: 6, to: startOfWeek) else {
+                   return nil
+           }
+
+           return lastDayOfWeek
+       }
 
 
     @objc func ThiseWeek_Date() {
@@ -259,7 +265,13 @@ class Coverage: IViewController,FSCalendarDelegate,FSCalendarDataSource {
         From_Date.text = formattedDate(date: calculateStartDateForThisWeek())
         To_Date.text = formatters.string(from: Date())
         Filtter_date.isHidden = true
-        Total_Team_Size_List(date: formatters.string(from: Date()))
+        let currentDate = Date()
+
+            if let lastDateOfThisWeek = lastDateOfWeek(for: currentDate) {
+                print("Last date of this week (Monday to Sunday): \(lastDateOfThisWeek)")
+                Total_Team_Size_List(date: formatters.string(from: lastDateOfThisWeek))
+            }
+        
     }
 
     
@@ -425,8 +437,8 @@ class Coverage: IViewController,FSCalendarDelegate,FSCalendarDataSource {
                        let totalroute = totRetailDict["new_retailer"]{
                         print("New Retailer : \(totalroute)")
                         New_Ret.text = String(totalroute)
-                        let total_New_Rout_data = totalRetailer + totalroute
-                        let NotVis =  total_New_Rout_data - visit_Rets
+                        //let total_New_Rout_data = totalRetailer + totalroute
+                        let NotVis =  totalRetailer - visit_Rets
                          print(NotVis)
                         if NotVis > 0 {
                             Not_Visited_Ret.text  = String(NotVis)
@@ -466,6 +478,6 @@ class Coverage: IViewController,FSCalendarDelegate,FSCalendarDataSource {
     @objc func Click_Go_Button(){
         let formatters = DateFormatter()
         formatters.dateFormat = "yyyy-MM-dd"
-        Total_Team_Size_List(date:formatters.string(from: Date()))
+        Total_Team_Size_List(date:Todate)
     }
 }
