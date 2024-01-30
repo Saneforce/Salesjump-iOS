@@ -352,9 +352,9 @@ class Coverage: IViewController,FSCalendarDelegate,FSCalendarDataSource {
                 self.LoadingDismiss()
                 
                 if let json = value as? [String: Any],
-                   let totRetailArray = json["totRetail"] as? [[String: Int]],
+                   let totRetailArray = json["totRetail"] as? [[String: Any]],
                    let totRetailDict = totRetailArray.first,
-                   let totalRetailer = totRetailDict["total_retailer"] {
+                   let totalRetailer = totRetailDict["total_retailer"] as? String{
                     
                     print("Total Retailer: \(totalRetailer)")
                     print(json)
@@ -362,11 +362,11 @@ class Coverage: IViewController,FSCalendarDelegate,FSCalendarDataSource {
                     var TotDis = 0
                     var visit_Rets = 0
                     Total_Ret.text = String(totalRetailer)
-                    if let total_route =  json["totRoute"] as? [[String: Int]],
+                    if let total_route =  json["totRoute"] as? [[String: Any]],
                        let totRetailDict = total_route.first,
-                       let totalroute = totRetailDict["total_route"]{
+                       let totalroute = totRetailDict["total_route"] as? String{
                         print("Total Route: \(totalroute)")
-                        ToalRot = totalroute
+                        ToalRot = Int(totalroute)!
                         Total_Rt.text = String(totalroute)
                     }
                     print(json)
@@ -378,23 +378,23 @@ class Coverage: IViewController,FSCalendarDelegate,FSCalendarDataSource {
                             Total_Dis.text = String(totalDis)
                     }
                     
-                    if let visit_Details = json["visit_Details"] as? [[String:Int]]{
-                        if let visit_Ret = visit_Details[0]["Ret"]{
+                    if let visit_Details = json["visit_Details"] as? [[String:Any]]{
+                        if let visit_Ret = visit_Details[0]["Ret"] as? Int{
                             visit_Rets = visit_Ret
                             Visited_Ret.text = String(visit_Ret)
                             //cell.lblUOM?.text = String(format: "%@",item["OffUntName"] as! String)
-                            if(totalRetailer < visit_Ret){
+                            if(Int(totalRetailer)! < visit_Ret){
                                 Coverage_Ret.text = "0.0"
-                            }else if(totalRetailer == 0 && visit_Ret == 0) {
+                            }else if(Int(totalRetailer) == 0 && visit_Ret == 0) {
                                 Coverage_Ret.text = "0.0"
                             }else{
-                                let Coverage_mul = Double(visit_Ret) / Double(totalRetailer)
+                                let Coverage_mul = Double(visit_Ret) / Double(totalRetailer)!
                                 let Coverage = Double(Coverage_mul) * 100
                                 print(Coverage)
                                 Coverage_Ret.text = String(format: "%.2f",Coverage)
                             }
                         }
-                        if let visit_dis = visit_Details[0]["rout"]{
+                        if let visit_dis = visit_Details[0]["rout"] as? Int{
                             let Not_Visited_Rtdata = ToalRot - visit_dis
                             if Not_Visited_Rtdata > 0 {
                                 Not_Visited_Rt.text = String(Not_Visited_Rtdata)
@@ -402,9 +402,9 @@ class Coverage: IViewController,FSCalendarDelegate,FSCalendarDataSource {
                                 Not_Visited_Rt.text = "0"
                             }
                             Visited_Rt.text = String(visit_dis)
-                            if (ToalRot < visit_dis){
+                            if (Int(ToalRot) < visit_dis){
                                 Coverage_Rt.text = "0.0"
-                            }else if (ToalRot == 0 && visit_dis == 0){
+                            }else if (Int(ToalRot) == 0 && visit_dis == 0){
                                 Coverage_Rt.text = "0.0"
                             }else{
                                 let Coverage_mul = Double(visit_dis) / Double(ToalRot)
@@ -412,7 +412,7 @@ class Coverage: IViewController,FSCalendarDelegate,FSCalendarDataSource {
                                 Coverage_Rt.text = String(format: "%.2f",Coverage)
                             }
                         }
-                        if let visit_rout = visit_Details[0]["dis"]{
+                        if let visit_rout = visit_Details[0]["dis"] as? Int{
                             let Not_Vis_Countdata = TotDis - visit_rout
                             if Not_Vis_Countdata > 0 {
                                 Not_Visited_Dis.text = String(Not_Vis_Countdata)
@@ -421,9 +421,9 @@ class Coverage: IViewController,FSCalendarDelegate,FSCalendarDataSource {
                             }
 
                             Visited_Dis.text = String(visit_rout)
-                            if(TotDis < visit_rout){
+                            if(Int(TotDis) < visit_rout){
                                 Coverage_Dis.text = "0.0"
-                            }else if (TotDis == 0 && visit_rout == 0){
+                            }else if (Int(TotDis) == 0 && visit_rout == 0){
                                 Coverage_Dis.text = "0.0"
                             }else{
                                 let Coverage_mul = Double(visit_rout) / Double(TotDis)
@@ -438,7 +438,7 @@ class Coverage: IViewController,FSCalendarDelegate,FSCalendarDataSource {
                         print("New Retailer : \(totalroute)")
                         New_Ret.text = String(totalroute)
                         //let total_New_Rout_data = totalRetailer + totalroute
-                        let NotVis =  totalRetailer - visit_Rets
+                        let NotVis =  Int(totalRetailer)! - visit_Rets
                          print(NotVis)
                         if NotVis > 0 {
                             Not_Visited_Ret.text  = String(NotVis)
