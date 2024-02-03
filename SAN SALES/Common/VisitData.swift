@@ -23,6 +23,7 @@ class VisitData{
     var CustName: String = ""
     var cInTime: String = ""
     var cOutTime: String = ""
+    var Sup: item = item()
     var Dist: item = item()
     var OrderMode: item = item()
     var VstRemarks: item = item()

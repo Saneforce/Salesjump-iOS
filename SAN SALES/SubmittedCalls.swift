@@ -38,6 +38,7 @@ class SubmittedCalls: UIViewController, UITableViewDelegate, UITableViewDataSour
         super.viewDidLoad()
         getUserDetails()
         SelectSecondaryorder()
+        //self.ShowLoading(Message: "Loading...")
         let LocalStoreage = UserDefaults.standard
         let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
         let data = Data(prettyPrintedJson!.utf8)
@@ -86,18 +87,18 @@ class SubmittedCalls: UIViewController, UITableViewDelegate, UITableViewDataSour
         let lItm: mnuItem=strMasList[indexPath.row]
         self.dismiss(animated: true, completion: nil)
         let storyboard = UIStoryboard(name: "Submittedcalls", bundle: nil)
+        let storyboardMain = UIStoryboard(name: "Main", bundle: nil)
         let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
         if lItm.MasId == 1 {
-           // let SubCalls = storyboard.instantiateViewController(withIdentifier: "SubmittedCalls") as! SubmittedCalls
+            let SubCalls = storyboardMain.instantiateViewController(withIdentifier: "SubmittedCalls") as! SubmittedCalls
             let SUBDCR = storyboard.instantiateViewController(withIdentifier: "SubmittedDCR") as! SubmittedDCR
-            viewController.setViewControllers([SUBDCR], animated: false)
+            viewController.setViewControllers([SubCalls,SUBDCR], animated: false)
             (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
         }
         if lItm.MasId == 2  {
-            //let Homevc = storyboard.instantiateViewController(withIdentifier: "SubmittedCalls") as! SubmittedCalls
-           // let SubCalls = storyboard.instantiateViewController(withIdentifier: "SubmittedCalls") as! SubmittedCalls
+            let SubCalls = storyboardMain.instantiateViewController(withIdentifier: "SubmittedCalls") as! SubmittedCalls
             let PSUBDCR = storyboard.instantiateViewController(withIdentifier: "PrimarySubmittedDCR") as! PrimarySubmittedDCR
-            viewController.setViewControllers([PSUBDCR], animated: false)
+            viewController.setViewControllers([SubCalls,PSUBDCR], animated: false)
             (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
         }
         (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
@@ -122,6 +123,7 @@ class SubmittedCalls: UIViewController, UITableViewDelegate, UITableViewDataSour
     
         AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
             AFdata in
+            //self.LoadingDismiss()
             switch AFdata.result
             {
                 
@@ -137,27 +139,24 @@ class SubmittedCalls: UIViewController, UITableViewDelegate, UITableViewDataSour
                         return
                     }
                     print(prettyPrintedJson)
+                    var Secondary_order_Count = 0
+                    var Primary_Order_Count = 0
+                   if  let secondary = json["data"] as? [[String: Any]]{
                     
-                            let secondary = json["data"] as? [[String: Any]]
-                 
-                    
-                    
-               
-//                    if let  doctorCount = secondary?[0]["doctor_count"] as? Int,let doctorCount1 = secondary?[2]["stockist_count"] as? Int{
-                                 
-//                        print(doctorCount)
-//                        print(doctorCount1)
-                        strMasList.append(mnuItem.init(MasId: 1, MasName: "Secondary Order", MasImage: "SwitchRoute",BTC: ""))
-                        strMasList.append(mnuItem.init(MasId: 2, MasName: "Primary Order", MasImage: "SwitchRoute",BTC: ""))
-//                   } else {
-//                                  // The value was nil or couldn't be cast to a String
-//                                  print("Value is nil or not a String")
-//                              }
-                    
-                    
-                   
-                 
-                  //  self.objcalls = json
+                    for dictionary in secondary {
+                        if let doctorCount = dictionary["doctor_count"] as? Int {
+                            Secondary_order_Count = doctorCount
+                        }
+                        
+                        if let stockistCount = dictionary["stockist_count"] as? Int {
+                            Primary_Order_Count = stockistCount
+                        }
+                    }
+                }
+
+                        strMasList.append(mnuItem.init(MasId: 1, MasName: "Secondary Order", MasImage: "SwitchRoute",BTC: String(Secondary_order_Count)))
+                        strMasList.append(mnuItem.init(MasId: 2, MasName: "Primary Order", MasImage: "SwitchRoute",BTC: String(Primary_Order_Count)))
+
                     self.SubmittedcallsTB.reloadData()
                     
                 }

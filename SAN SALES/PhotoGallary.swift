@@ -111,3 +111,6 @@ class PhotoGallary: IViewController, UICollectionViewDelegate, UICollectionViewD
       return UICollectionViewCompositionalLayout(section: .init(group: group))
     }
 }
+
+
+

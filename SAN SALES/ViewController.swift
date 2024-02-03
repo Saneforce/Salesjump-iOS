@@ -96,8 +96,16 @@ class ViewController: IViewController {
 //
 //        NotificationCenter.default.addObserver(self, selector: #selector(ViewController.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
 
+        
+        let formatters = DateFormatter()
+        formatters.dateFormat = "yyyy-MM-dd"
+        let formattedDate = formatters.string(from: Date())
+        let defaults = UserDefaults.standard
+        defaults.set(formattedDate, forKey: "storedDate")
+        
     }
     @IBAction func signin(_ sender: Any) {
+        
         if txUsrNm.text?.isEmpty==true {
            /* let alert = UIAlertController(title: "Information", message: "Enter the User Name", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in

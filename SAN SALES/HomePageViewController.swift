@@ -70,7 +70,7 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
     
     override func viewDidLoad() {
         
-       
+        AutoLogOut()
         DashBoradTB.delegate=self
         DashBoradTB.dataSource=self
         
@@ -362,6 +362,7 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
                     
                     let MonthData:[String:Any] = json["month"] as! [String: Any]
                     x = 40
+                    print(MonthData)
                     let Mcalls = MonthData["calls"] as! Int
                     let PMcalls = MonthData["order"] as! Int
                     if (MonthData["orderVal"].debugDescription != "Optional(<null>)"){
@@ -375,12 +376,12 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
                     } else {
                         TAmt = "0"
                     }
-                    let AAmt = MonthData["AAmt"] as! Double
+                    //let AAmt = MonthData["orderVal"] as! Double ?? 0
                     x = self.addMonthVstDetControl(aY: x, h: 20, Caption: "Visited", text: String(format: "%i", Mcalls),textAlign: .right)
                     x = self.addMonthVstDetControl(aY: x, h: 20, Caption: "Ordered", text: String(format: "%i", PMcalls),textAlign: .right)
                     x = self.addMonthVstDetControl(aY: x, h: 20, Caption: "Order Value", text: String(format: "%.02f", OAmt),textAlign: .right)
                     x = self.addMonthVstDetControl(aY: x, h: 20, Caption: "Target", text: String(TAmt),textAlign: .right)
-                    x = self.addMonthVstDetControl(aY: x, h: 20, Caption: "Achieve", text: String(format: "%.02f", AAmt),textAlign: .right)
+                    x = self.addMonthVstDetControl(aY: x, h: 20, Caption: "Achieve", text: String(format: "%.02f", OAmt),textAlign: .right)
                 }
                case .failure(let error):
                    print(error.errorDescription!)
@@ -698,9 +699,33 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
             }
         }
     }
+    func AutoLogOut(){
+        let formatters = DateFormatter()
+        formatters.dateFormat = "yyyy-MM-dd"
+        let formattedDate = formatters.string(from: Date())
+        let defaults = UserDefaults.standard
+        var storedDate_Today = ""
+        if let storedDate = defaults.string(forKey: "storedDate") {
+            print("Stored Date: \(storedDate)")
+            storedDate_Today = storedDate
+        }
+      
+        if (storedDate_Today != formattedDate){
+            defaults.set(formattedDate, forKey: "storedDate")
+            UserDefaults.standard.removeObject(forKey: "UserLogged")
+            self.dismiss(animated: true)
+         
+            self.dismiss(animated: true, completion: nil)
+             let storyboard = UIStoryboard(name: "Main", bundle: nil)
+             let mainTabBarController = storyboard.instantiateViewController(identifier: "sbLogin")
+             
+             (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(mainTabBarController)
+            return
+        }
+
+    }
 
 }
-
 
 //Username: Sankafo2,aachi-testso2
 //Paswoord :123,123

@@ -53,6 +53,8 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
         let id: String
         let name: String
     }
+    
+    var Trans_POrd_No = ""
     var vstDets: [String: lItem] = [:]
     
     var lObjSel: [AnyObject] = []
@@ -86,8 +88,13 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
     var areypostion: Int?
     //    var SFCode: String = ""
     //    var DivCode: String = ""
+    var lstJWNms: [AnyObject] = []
+    var strJWCd: String = ""
+    var strJWNm: String = ""
+    var lstJoint: [AnyObject] = []
     var SFCode: String = "", StateCode: String = "", DivCode: String = "",Desig: String="", rSF: String = ""
     let LocalStoreage = UserDefaults.standard
+    var net_weight_data = ""
     override func viewDidLoad() {
         getUserDetails()
         updateEditOrderValues()
@@ -111,6 +118,11 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
         let lstSchemData: String = LocalStoreage.string(forKey: "Schemes_Master")!
         let lstRateData: String = LocalStoreage.string(forKey: "ProductRate_Master")!
         let PlnDets: String=LocalStoreage.string(forKey: "Mydayplan")!
+        if let JointWData = LocalStoreage.string(forKey: "Jointwork_Master"),
+           let list = GlobalFunc.convertToDictionary(text:  JointWData) as? [AnyObject] {
+            lstJoint = list;
+            print("JointWData  ___________________________")
+        }
         if let list = GlobalFunc.convertToDictionary(text: PlnDets) as? [AnyObject] {
             lstPlnDetail = list;
         }
@@ -125,6 +137,7 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
         }
         if let list = GlobalFunc.convertToDictionary(text: lstSchemData) as? [AnyObject] {
             lstSchemList = list;
+            print(lstSchemList)
         }
         if let list = GlobalFunc.convertToDictionary(text: lstRateData) as? [AnyObject] {
             lstRateList = list;
@@ -279,6 +292,7 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
             let cell:cellListItem = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
             if tbDataSelect == tableView {
                 let item: [String: Any] = lObjSel[indexPath.row] as! [String : Any]
+                print(item)
                 cell.lblText?.text = item["name"] as? String
                 cell.lblUOM?.text = ""
                 if SelMode=="UOM" {
@@ -512,7 +526,10 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
                 lblPrvSuppNm.text = name
                 VisitData.shared.Dist.name = name
                 VisitData.shared.Dist.id = id
+                VisitData.shared.Sup.id = id
+                VisitData.shared.Sup.id = name
                 print(id)
+                print(VisitData.shared.ProductCart)
                 
             }
             else if SelMode=="UOM"
@@ -541,6 +558,7 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
                 {
                     sQty = Int((items[0]["Qty"] as! NSString).intValue)
                 }
+                print(VisitData.shared.ProductCart)
                 print(name)
                 updateQty(id: selectProd, sUom: id, sUomNm: name, sUomConv: ConvQty, sNetUnt: selNetWt, sQty: String(sQty),ProdItem: lProdItem, refresh: 1)
             }
@@ -636,6 +654,7 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
     @IBAction func closePreview(_ sender: Any) {
         vwPrvOrderCtrl.isHidden = true
         tbProduct.isHidden = false
+        tbProduct.reloadData()
     }
     @IBAction func searchSelBytext(_ sender: Any) {
         
@@ -704,6 +723,7 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
         
         let id: String
         let lProdItem:[String: Any]
+        lstPrvOrder = VisitData.shared.ProductCart
         if(tbView==tbPrvOrderProduct)
         {
             lProdItem = lstPrvOrder[indxPath.row] as! [String : Any]
@@ -744,6 +764,7 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
         var sQty: Int =  integer(from: cell.txtQty)
         sQty = sQty+1
         let id: String
+        lstPrvOrder = VisitData.shared.ProductCart
         let lProdItem:[String: Any]
         if(tbView==tbPrvOrderProduct)
         {
@@ -775,7 +796,7 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
             selNetWt=String(format: "%@", lstProducts[indxPath.row]["product_netwt"] as! CVarArg)
         }
         cell.txtQty.text = String(sQty)
-        updateQty(id: id, sUom: selUOM, sUomNm: selUOMNm, sUomConv: selUOMConv,sNetUnt: selNetWt, sQty: String(sQty),ProdItem: lProdItem,refresh: 1)
+        updateQty(id: id, sUom: selUOM, sUomNm: selUOMNm, sUomConv: selUOMConv,sNetUnt: selNetWt, sQty: String(sQty),ProdItem: lProdItem,refresh: 2)
         //tbView.reloadRows(at: [indxPath], with: .fade)
     }
     
@@ -786,6 +807,7 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
         var sQty: Int =  integer(from: cell.txtQty)
         
         let id: String
+        lstPrvOrder = VisitData.shared.ProductCart
         let lProdItem:[String: Any]
         if(tbView==tbPrvOrderProduct)
         {
@@ -819,13 +841,27 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
         sQty = sQty-1
         if sQty<0 { sQty = 0 }
         cell.txtQty.text = String(sQty)
-        updateQty(id: id, sUom: selUOM, sUomNm: selUOMNm, sUomConv: selUOMConv, sNetUnt: selNetWt, sQty: String(sQty),ProdItem: lProdItem,refresh: 1)
+        updateQty(id: id, sUom: selUOM, sUomNm: selUOMNm, sUomConv: selUOMConv, sNetUnt: selNetWt, sQty: String(sQty),ProdItem: lProdItem,refresh: 2)
         //tbView.reloadRows(at: [indxPath], with: .fade)
     }
     func integer(from textField: UITextField) -> Int {
         guard let text = textField.text, let number = Int(text) else {
             return 0
         }
+        if text.count > 6 {
+               let truncatedText = String(text.prefix(6))
+                print(truncatedText)
+            var ConvInt2 = 0
+            if let ConvInt = Int(truncatedText){
+                ConvInt2 = ConvInt
+            }
+            print(ConvInt2)
+               //textField.text = truncatedText
+
+               Toast.show(message: "Text count cannot be more than 6 characters.")
+            return ConvInt2
+            
+           }
         return number
     }
     
@@ -836,7 +872,12 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
             }
             return false
         })
-        let TotQty: Double = Double((sQty as! NSString).intValue * (sUomConv as! NSString).intValue)
+      //  let TotQty: Double = Double((sQty as! NSString).intValue * (sUomConv as! NSString).intValue)
+        let sQtyValue = (sQty as NSString).intValue
+        let sUomConvValue = (sUomConv as NSString).intValue
+
+        let multipliedResult: Int64 = Int64(sQtyValue) * Int64(sUomConvValue)
+        let TotQty: Double = Double(multipliedResult)
         
         let Schemes: [AnyObject] = lstSchemList.filter ({ (item) in
             if item["PCode"] as! String == id && (item["Scheme"] as! NSString).doubleValue <= TotQty {
@@ -859,9 +900,12 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
             }
             return false
         })
+        print(RateItems)
+        print(TotQty)
         if(RateItems.count>0){
             Rate = (RateItems[0]["Retailor_Price"] as! NSString).doubleValue
         }
+        print(Rate)
         var ItmValue: Double = (TotQty*Rate)
         if(Schemes.count>0){
             Scheme = (Schemes[0]["Scheme"] as! NSString).doubleValue
@@ -893,7 +937,6 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
                 return false
             })
             {
-                
                 let itm: [String: Any]=["id": id,"Qty": sQty,"UOM": sUom, "UOMNm": sUomNm, "UOMConv": sUomConv, "SalQty": TotQty,"NetWt": sNetUnt,"Scheme": Scheme,"FQ": FQ,"OffQty": OffQty,"OffProd":OffProd,"OffProdNm":OffProdNm,"Rate": Rate,"Value": (TotQty*Rate), "Disc": Disc, "DisVal": Schmval, "NetVal": ItmValue];
                 let jitm: AnyObject = itm as AnyObject
                 VisitData.shared.ProductCart[i] = jitm
@@ -905,6 +948,7 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
             VisitData.shared.ProductCart.append(jitm)
             
         }
+        print(VisitData.shared.ProductCart)
         updateOrderValues(refresh: refresh)
     }
     @objc private func deleteItem(_ sender: UITapGestureRecognizer) {
@@ -923,10 +967,15 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
     }
     func updateOrderValues(refresh: Int){
         var totAmt: Double = 0
+        var Upadet_table = 0
         lstPrvOrder = VisitData.shared.ProductCart.filter ({ (Cart) in
             
             if (Cart["SalQty"] as! Double) > 0 {
                 return true
+            }else{
+                Upadet_table = 2
+   
+                print("No data")
             }
             return false
         })
@@ -940,18 +989,25 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
         }
         lblTotAmt.text = String(format: "Rs. %.02f", totAmt)
         lblPrvTotAmt.text = String(format: "Rs. %.02f", totAmt)
-        
+        print(totAmt)
         TotaAmout = String(totAmt)
         
         lblTotItem.text = String(format: "%i",  lstPrvOrder.count)
         lblPrvTotItem.text = String(format: "%i",  lstPrvOrder.count)
-        if(refresh == 1){
-            tbPrvOrderProduct.reloadData()
+        if (refresh == 1 || Upadet_table == 2){
             tbProduct.reloadData()
         }
+        
+        
+        if (refresh == 1 ){
+            tbPrvOrderProduct.reloadData()
+        }
+      
     }
     
     @IBAction func SubmitCall(_ sender: Any) {
+        var OrderSub = "OD"
+        var Count = 0
         if validateForm() == false {
             return
         }
@@ -979,7 +1035,13 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
                     }
                     print(sLocation)
                     print(sAddress)
-                    self.OrderSubmit(sLocation: sLocation, sAddress: sAddress)
+                    if (OrderSub == "OD"){
+                        self.OrderSubmit(sLocation: sLocation, sAddress: sAddress)
+                        OrderSub  = ""
+                        print(Count)
+                    }else{
+                        print(Count)
+                    }
                 }
             }, error:{ errMsg in
                 print (errMsg)
@@ -996,6 +1058,19 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
     func OrderSubmit(sLocation: String,sAddress: String){
         var sPItems:String = ""
         var sPItems2:String = ""
+        var netWet = 0.0
+        var NetQty = 0.0
+        var net_weight_data2 = 0.0
+        print(lstPrvOrder.count)
+        lstPrvOrder = VisitData.shared.ProductCart.filter ({ (Cart) in
+            
+            if (Cart["SalQty"] as! Double) > 0 {
+                return true
+            }
+            return false
+        })
+        print(VisitData.shared.ProductCart.count)
+        print(lstPrvOrder.count)
         self.ShowLoading(Message: "Data Submitting Please wait...")
         for i in 0...self.lstPrvOrder.count-1{
             let item: [String: Any]=self.lstPrvOrder[i] as! [String : Any]
@@ -1019,21 +1094,40 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
             
             sPItems = sPItems + "{\"product_code\":\""+id+"\",\"product_Name\":\""+(ProdItems[0]["name"] as! String)+"\",\"rx_Conqty\":" + (item["Qty"] as! String) + ",\"Qty\":" + (String(format: "%.0f", item["SalQty"] as! Double)) + ",\"PQty\":0,\"cb_qty\":0,\"free\":" + (String(format: "%i", item["OffQty"] as! Int)) + ",\"Pfree\":0,\"Rate\":" + (String(format: "%.2f", item["Rate"] as! Double)) + ",\"PieseRate\":" + (String(format: "%.2f", item["Rate"] as! Double)) + ",\"discount\":" + Disc + ",\"FreeP_Code\":\"" + (item["OffProd"] as! String) + "\",\"Fname\":\"" + (item["OffProdNm"] as! String) + "\",\"discount_price\":" +  DisVal + ",\"tax\":0.0,\"tax_price\":0.0,\"OrdConv\":\"" + (item["UOMConv"] as! String) + "\",\"product_unit_name\":\"" + (item["UOMNm"] as! String) + "\",\"selectedScheme\":" + (String(format: "%.0f", item["Scheme"] as! Double)) + ",\"selectedOffProCode\":\"" + (item["UOM"] as! String) + "\",\"selectedOffProName\":\"" + (item["UOMNm"] as! String) + "\",\"selectedOffProUnit\":\"" + (item["UOMConv"] as! String) + "\",\"f_key\":{\"activity_stockist_code\":\"Activity_Stockist_Report\"}}"
             
+        
+            let sample_qty = Double(item["UOMConv"] as! String)! * (item["Rate"] as! Double)
+            let sample_qty2 = Double(item["Qty"] as! String)! * (sample_qty)
             
-            sPItems2 = sPItems2 + "{\"product_code\":\""+id+"\",\"product_Name\":\""+(ProdItems[0]["name"] as! String)+"\",\"rx_Conqty\":" + (item["Qty"] as! String) + ",\"Qty\":" + (String(format: "%.0f", item["SalQty"] as! Double)) + ",\"PQty\":0,\"cb_qty\":0,\"free\":" + (String(format: "%i", item["OffQty"] as! Int)) + ",\"Pfree\":0,\"Pfree\":0,\"PieseRate\":" + (String(format: "%.2f", item["Rate"] as! Double)) + ",\"discount\":" + Disc + ",\"FreeP_Code\":0,\"Fname\":0,\"discount_price\":" +  DisVal + ",\"tax\":0.0,\"tax_price\":0.0,\"OrdConv\":" + (item["UOMConv"] as! String) + ",\"product_unit_name\":\"" + (item["UOMNm"] as! String) + "\",\"Trans_POrd_No\":\"1328115\",\"Order_Flag\":0,\"Division_code\":29,\"selectedScheme\":" + (String(format: "%.0f", item["Scheme"] as! Double)) + ",\"selectedOffProCode\":\"" + (item["UOM"] as! String) + "\",\"selectedOffProName\":\"" + (item["UOMNm"] as! String) + "\",\"selectedOffProUnit\":\"" + (item["UOMConv"] as! String) + "\",\"sample_qty\":\"204.0\"},"
+            if(item["Qty"] as! String == ""){
+                NetQty = 0
+            }else{
+                NetQty = Double(item["Qty"] as! String)!
+            }
+            
+            if(item["NetWt"] as! String == ""){
+                netWet = 0
+            }else{
+                netWet = Double(item["NetWt"] as! String)!
+            }
+            
+            let UomConvData = item["UOMConv"] as! String
+             print(item)
+             let uOM_Conv_NetWight = Double(NetQty) * Double(UomConvData)!
+             let Wight_Data = uOM_Conv_NetWight * netWet
+             net_weight_data2 = net_weight_data2 + Wight_Data
+             net_weight_data = String(format: "%.2f",net_weight_data2)
+             print(net_weight_data)
             
             
-            //OrdConv ==
-            //orderValue
-            
+            sPItems2 = sPItems2 + "{\"product_code\":\""+id+"\",\"product_Name\":\""+(ProdItems[0]["name"] as! String)+"\",\"rx_Conqty\":" + (item["Qty"] as! String) + ",\"Qty\":" + (String(format: "%.0f", item["SalQty"] as! Double)) + ",\"PQty\":0,\"cb_qty\":0,\"free\":" + (String(format: "%i", item["OffQty"] as! Int)) + ",\"Pfree\":0,\"Pfree\":0,\"PieseRate\":" + (String(format: "%.2f", item["Rate"] as! Double)) + ",\"discount\":" + Disc + ",\"FreeP_Code\":0,\"Fname\":0,\"discount_price\":" +  DisVal + ",\"tax\":0.0,\"tax_price\":0.0,\"OrdConv\":" + (item["UOMConv"] as! String) + ",\"product_unit_name\":\"" + (item["UOMNm"] as! String) + "\",\"Trans_POrd_No\":\"\",\"Order_Flag\":0,\"Division_code\":29,\"selectedScheme\":" + (String(format: "%.0f", item["Scheme"] as! Double)) + ",\"selectedOffProCode\":\"" + (item["UOM"] as! String) + "\",\"selectedOffProName\":\"" + (item["UOMNm"] as! String) + "\",\"selectedOffProUnit\":\"" + (item["UOMConv"] as! String) + "\",\"sample_qty\":" + (String(format: "%.2f", sample_qty2)) + "},"
+
+         
+          
         }
         
-        
-        
-        
-
-        
-        
+        print(sPItems)
+        print(sPItems2)
+      
         let DataSF: String = self.lstPlnDetail[0]["subordinateid"] as! String
         
         var sImgItems:String = ""
@@ -1049,7 +1143,109 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
         //        let jsonString = "[{\"Activity_Report_APP\":{\"Worktype_code\":\"'" + (self.lstPlnDetail[0]["worktype"] as! String) + "'\",\"Town_code\":\"'" + (self.lstPlnDetail[0]["clusterid"] as! String) + "'\",\"RateEditable\":\"''\",\"dcr_activity_date\":\"'" + VisitData.shared.cInTime + "'\",\"Daywise_Remarks\":\"'" + VisitData.shared.VstRemarks.name + "'\",\"eKey\":\"" + self.eKey + "\",\"rx\":\"'1'\",\"rx_t\":\"''\",\"DataSF\":\"'" + DataSF + "'\"}},{\"Activity_Stockist_Report\":{\"Stockist_POB\":\"" + VisitData.shared.PayValue + "\",\"Worked_With\":\"''\",\"location\":\"'" + sLocation + "'\",\"geoaddress\":\"" + sAddress + "\",\"stockist_code\":\"'" + VisitData.shared.CustID + "'\",\"superstockistid\":\"''\",\"Stk_Meet_Time\":\"'" + VisitData.shared.cInTime + "'\",\"modified_time\":\"'" + VisitData.shared.cInTime + "'\",\"date_of_intrument\":\"" + VisitData.shared.DOP.id + "\",\"intrumenttype\":\""+VisitData.shared.PayType.id+"\",\"orderValue\":\"" + (lblTotAmt.text!).replacingOccurrences(of: "Rs. ", with: "") + "\",\"Aob\":0,\"CheckinTime\":\"" + VisitData.shared.cInTime + "\",\"CheckoutTime\":\"" + VisitData.shared.cOutTime + "\",\"f_key\":{\"Activity_Report_Code\":\"'Activity_Report_APP'\"},\"PhoneOrderTypes\":" + VisitData.shared.OrderMode.id + "}},{\"Activity_Stk_POB_Report\":[" + sPItems +  "]},{\"Activity_Stk_Sample_Report\":[]},{\"Activity_Event_Captures\":[" + sImgItems +  "]},{\"PENDING_Bills\":[]},{\"Compititor_Product\":[]}]"
         //
         // Thise New
-        let jsonString =  "[{\"Activity_Report_APP\":{\"Worktype_code\":\"'" + (self.lstPlnDetail[0]["worktype"] as! String) + "'\",\"Town_code\":\"'" + (self.lstPlnDetail[0]["clusterid"] as! String) + "'\",\"RateEditable\":\"''\",\"dcr_activity_date\":\"'" + VisitData.shared.cInTime + "'\",\"Daywise_Remarks\":\"" + VisitData.shared.VstRemarks.name + "\",\"eKey\":\"" + self.eKey + "\",\"rx\":\"'1'\",\"rx_t\":\"''\",\"DataSF\":\"'" + DataSF + "'\"}},{\"Activity_Stockist_Report\":{\"Stockist_POB\":\"" + VisitData.shared.PayValue + "\",\"Worked_With\":\"''\",\"location\":\"'" + sLocation + "'\",\"geoaddress\":\"" + sAddress + "\",\"superstockistid\":\"''\",\"Stk_Meet_Time\":\"'" + VisitData.shared.cInTime + "'\",\"modified_time\":\"'" + VisitData.shared.cInTime + "'\",\"date_of_intrument\":\"" + VisitData.shared.DOP.id + "\",\"intrumenttype\":\""+VisitData.shared.PayType.id+"\",\"orderValue\":\"" + (lblTotAmt.text!).replacingOccurrences(of: "Rs. ", with: "") + "\",\"Aob\":0,\"CheckinTime\":\"" + VisitData.shared.cInTime + "\",\"CheckoutTime\":\"" + VisitData.shared.cOutTime + "\",\"PhoneOrderTypes\":" + VisitData.shared.OrderMode.id + ",\"Super_Stck_code\":\"'\(VisitData.shared.Dist.id)'\",\"stockist_code\":\"'" + VisitData.shared.CustID + "'\",\"stockist_name\":\"''\",\"f_key\":{\"Activity_Report_Code\":\"'Activity_Report_APP'\"}}},{\"Activity_Stk_POB_Report\":[" + sPItems +  "]},{\"Activity_Stk_Sample_Report\":[]},{\"Activity_Event_Captures\":[]},{\"PENDING_Bills\":[]},{\"Compititor_Product\":[]},{\"Activity_Event_Captures_Call\":[]}]"
+        var lstPlnDetail: [AnyObject] = []
+        if self.LocalStoreage.string(forKey: "Mydayplan") == nil { return }
+        let PlnDets: String=LocalStoreage.string(forKey: "Mydayplan")!
+        if let list = GlobalFunc.convertToDictionary(text: PlnDets) as? [AnyObject] {
+            lstPlnDetail = list;
+        }
+        let jwids=(String(format: "%@", lstPlnDetail[0]["worked_with_code"] as! CVarArg)).replacingOccurrences(of: "$$", with: ";")
+            .replacingOccurrences(of: "$", with: ";")
+            .components(separatedBy: ";")
+        print(lstPlnDetail[0]["worked_with_code"] as! CVarArg)
+        for k in 0...jwids.count-1 {
+            if let indexToDelete = lstJoint.firstIndex(where: { String(format: "%@", $0["id"] as! CVarArg) == jwids[k] }) {
+                print(lstJoint)
+                let jwid: String = lstJoint[indexToDelete]["id"] as! String
+                let jwname: String = lstJoint[indexToDelete]["name"] as! String
+                
+                strJWCd += jwid+";"
+                strJWNm += jwname+";"
+                let jitm: AnyObject = lstJoint[indexToDelete] as AnyObject
+                lstJWNms.append(jitm)
+            }
+            
+        }
+        print(lstJWNms)
+        print(strJWCd)
+        let JointData = strJWCd
+        var Join_Works = JointData.replacingOccurrences(of: ";", with: "$$")
+        if Join_Works.hasSuffix("$") {
+
+            Join_Works.removeLast()
+            print(Join_Works)
+        }
+        
+
+        if VisitData.shared.cInTime.isEmpty{
+            print("No data")
+            
+            var sPItems3: String = ""
+            if sPItems2.hasSuffix(",") {
+                // Remove the last comma from sPItems2
+                sPItems2.removeLast()
+                sPItems3 = sPItems2
+            }
+            print(sPItems3)
+            let dateString = "2023-07-28 14:39:09"
+            let dateFormatter = DateFormatter()
+            
+            dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+            var Date_Time =  ""
+            if let date = dateFormatter.date(from: dateString) {
+                let outputFormatter = DateFormatter()
+                outputFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+                let formattedDate = outputFormatter.string(from: date)
+                Date_Time = formattedDate
+                print("Formatted Date and Time: \(formattedDate)")
+            } else {
+                print("Failed to convert the string to a date.")
+            }
+            print(Date_Time)
+            print(objcallsprimary)
+            let jsonString2 = "{\"Products\":[" + sPItems3 + "],\"Activity_Event_Captures\":[],\"POB\":\"\(objcallsprimary[0]["POB"] as! Int)\",\"Value\":\"\(TotaAmout)\",\"order_No\":\"\(objcallsprimary[0]["Order_No"] as! String)\",\"DCR_Code\":\"\(objcallsprimary[0]["DCR_Code"] as! String)\",\"Trans_Sl_No\":\"\(objcallsprimary[0]["DCR_Code"] as! String)\",\"Trans_Detail_slNo\":\"\(objcallsprimary[0]["Trans_Detail_SlNo"] as! String)\",\"Route\":\"\",\"net_weight_value\":\"\(net_weight_data)\",\"target\":\"\",\"rateMode\":null,\"Stockist\":\"\(objcallsprimary[0]["stockist_code"] as! String)\",\"RateEditable\":\"\",\"orderValue\":" + (lblTotAmt.text!).replacingOccurrences(of: "Rs. ", with: "") + ",\"Stockist_POB\":\"" + VisitData.shared.PayValue + "\",\"Stk_Meet_Time\":\"\(Date_Time)\",\"modified_time\":\"\(Date_Time)\",\"CheckoutTime\":\"\(Date_Time)\",\"PhoneOrderTypes\":0,\"dcr_activity_date\":\"\(Date_Time)\"}"
+            
+
+            
+
+            
+            let params2: Parameters = [
+                "data": jsonString2 //"["+jsonString+"]"//
+            ]
+            print(params2)
+            let axn = "dcr/updatePrimaryProducts"
+            let apiKeys: String = "\(axn)&divisionCode=\(DivCode)&sfCode=\(SFCode)&desig=\(Desig)"
+            print(apiKeys)
+        print(SFCode)
+            AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+apiKeys, method: .post, parameters: params2, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
+            AFdata in
+            self.LoadingDismiss()
+            switch AFdata.result
+            {
+                
+            case .success(let value):
+                print(value)
+                if let json = value as? [String: Any] {
+                    
+                    Toast.show(message: "Order has been submitted successfully") //, controller: self
+                    let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
+                    UIApplication.shared.windows.first?.rootViewController = viewController
+                    UIApplication.shared.windows.first?.makeKeyAndVisible()
+                    
+                    VisitData.shared.clear()
+                }
+                
+            case .failure(let error):
+                let alert = UIAlertController(title: "Information", message: error.errorDescription, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
+                    return
+                })
+                self.present(alert, animated: true)
+            }
+        }
+   
+    }else{
+        let jsonString =  "[{\"Activity_Report_APP\":{\"Worktype_code\":\"'" + (self.lstPlnDetail[0]["worktype"] as! String) + "'\",\"Town_code\":\"'" + (self.lstPlnDetail[0]["clusterid"] as! String) + "'\",\"RateEditable\":\"''\",\"dcr_activity_date\":\"'" + VisitData.shared.cInTime + "'\",\"Daywise_Remarks\":\"" + VisitData.shared.VstRemarks.name.trimmingCharacters(in: .whitespacesAndNewlines) + "\",\"eKey\":\"" + self.eKey + "\",\"rx\":\"'1'\",\"rx_t\":\"''\",\"DataSF\":\"'" + DataSF + "'\"}},{\"Activity_Stockist_Report\":{\"Stockist_POB\":\"" + VisitData.shared.PayValue + "\",\"Worked_With\":\"'"+Join_Works+"'\",\"location\":\"'" + sLocation + "'\",\"geoaddress\":\"" + sAddress + "\",\"superstockistid\":\"''\",\"Stk_Meet_Time\":\"'" + VisitData.shared.cInTime + "'\",\"modified_time\":\"'" + VisitData.shared.cInTime + "'\",\"date_of_intrument\":\"" + VisitData.shared.DOP.id + "\",\"intrumenttype\":\""+VisitData.shared.PayType.id+"\",\"orderValue\":\"" + (lblTotAmt.text!).replacingOccurrences(of: "Rs. ", with: "") + "\",\"Aob\":0,\"CheckinTime\":\"" + VisitData.shared.cInTime + "\",\"CheckoutTime\":\"" + VisitData.shared.cOutTime + "\",\"PhoneOrderTypes\":" + VisitData.shared.OrderMode.id + ",\"Super_Stck_code\":\"'\(VisitData.shared.Dist.id)'\",\"stockist_code\":\"'" + VisitData.shared.CustID + "'\",\"stockist_name\":\"''\",\"f_key\":{\"Activity_Report_Code\":\"'Activity_Report_APP'\"}}},{\"Activity_Stk_POB_Report\":[" + sPItems +  "]},{\"Activity_Stk_Sample_Report\":[]},{\"Activity_Event_Captures\":[]},{\"PENDING_Bills\":[]},{\"Compititor_Product\":[]},{\"Activity_Event_Captures_Call\":[]}]"
         
         
         print(objcallsprimary)
@@ -1060,89 +1256,34 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
             "data": jsonString //"["+jsonString+"]"//
         ]
         print(params)
-        if VisitData.shared.cInTime != PrimarySubmittedDCR.EndOrder_Time{
+
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"dcr/save&divisionCode=" + self.DivCode + "&rSF=" + self.SFCode + "&sfCode=" + self.SFCode, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
+        AFdata in
+        self.LoadingDismiss()
+        switch AFdata.result
+        {
             
-            print(params)
-            
-            AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+"dcr/save&divisionCode=" + self.DivCode + "&rSF=" + self.SFCode + "&sfCode=" + self.SFCode, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
-            AFdata in
-            self.LoadingDismiss()
-            switch AFdata.result
-            {
+        case .success(let value):
+            print(value)
+            if let json = value as? [String: Any] {
                 
-            case .success(let value):
-                print(value)
-                if let json = value as? [String: Any] {
-                    
-                    Toast.show(message: "Order has been submitted successfully") //, controller: self
-                    let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
-                    UIApplication.shared.windows.first?.rootViewController = viewController
-                    UIApplication.shared.windows.first?.makeKeyAndVisible()
-                    
-                    VisitData.shared.clear()
-                }
+                Toast.show(message: "Order has been submitted successfully") //, controller: self
+                let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
+                UIApplication.shared.windows.first?.rootViewController = viewController
+                UIApplication.shared.windows.first?.makeKeyAndVisible()
                 
-            case .failure(let error):
-                let alert = UIAlertController(title: "Information", message: error.errorDescription, preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
-                    return
-                })
-                self.present(alert, animated: true)
+                VisitData.shared.clear()
             }
+            
+        case .failure(let error):
+            let alert = UIAlertController(title: "Information", message: error.errorDescription, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
+                return
+            })
+            self.present(alert, animated: true)
         }
-    }
-        else{
-            print("No data")
-                       
-            print(objcallsprimary)
-            var sPItems3: String = ""
-            if sPItems2.hasSuffix(",") {
-                // Remove the last comma from sPItems2
-                sPItems2.removeLast()
-                sPItems3 = sPItems2
-            }
-            
-            let jsonString2 = "{\"Products\":[" + sPItems3 + "],\"Activity_Event_Captures\":[],\"POB\":\"\(objcallsprimary[0]["POB"] as! Int)\",\"Value\":\"\(TotaAmout)\",\"order_No\":\"\(objcallsprimary[0]["Order_No"] as! String)\",\"DCR_Code\":\"\(objcallsprimary[0]["DCR_Code"] as! String)\",\"Trans_Sl_No\":\"\(objcallsprimary[0]["Trans_Sl_No"] as! String)\",\"Trans_Detail_slNo\":\"\(objcallsprimary[0]["Trans_Detail_SlNo"] as! String)\",\"Route\":\"\",\"net_weight_value\":\"\",\"target\":\"\",\"rateMode\":null,\"Stockist\":\"\(objcallsprimary[0]["stockist_code"] as! String)\",\"RateEditable\":\"\",\"orderValue\":" + (lblTotAmt.text!).replacingOccurrences(of: "Rs. ", with: "") + ",\"Stockist_POB\":\"" + VisitData.shared.PayValue + "\",\"Stk_Meet_Time\":\"2023-07-28 14:39:09\",\"modified_time\":\"2023-07-28 14:39:09\",\"CheckoutTime\":\"" + VisitData.shared.cOutTime + "\",\"PhoneOrderTypes\":0,\"dcr_activity_date\":\"2023-07-28 14:39:09\"}"
-            
-//            let jsonString2 = "{\"Products\":[{\"product_code\":\"SEF13362\",\"product_Name\":\"testfor_sap_code\",\"rx_Conqty\":2,\"Qty\":2,\"PQty\":0,\"cb_qty\":0,\"free\":0,\"Pfree\":0,\"Rate\":6.0,\"PieseRate\":6.0,\"discount\":0.0,\"FreeP_Code\":0,\"Fname\":0,\"discount_price\":0.0,\"tax\":2.0,\"tax_price\":7.2,\"OrdConv\":1,\"product_unit_name\":\"PIECE\",\"Trans_POrd_No\":\"1328115\",\"Order_Flag\":0,\"Division_code\":29,\"selectedScheme\":0,\"selectedOffProCode\":\"441\",\"selectedOffProName\":\"BOX\",\"selectedOffProUnit\":\"20\",\"sample_qty\":\"367.2\"}],\"Activity_Event_Captures\":[],\"POB\":\"0\",\"Value\":\"63.0\",\"order_No\":\"SEF19640-15\",\"DCR_Code\":\"SEF19640-46\",\"Trans_Sl_No\":\"SEF19640-15\",\"Trans_Detail_slNo\":\"SEF19640-80\",\"Route\":\"\",\"net_weight_value\":\"\",\"target\":\"\",\"rateMode\":null,\"Stockist\":\"15560\",\"RateEditable\":\"\",\"orderValue\":200.00,\"Stockist_POB\":\"\",\"Stk_Meet_Time\":\"'2023-07-28 14:39:09'\",\"modified_time\":\"'2023-07-28 14:39:09'\",\"CheckoutTime\":\"2023-07-31 14:46:32\",\"PhoneOrderTypes\":0,\"dcr_activity_date\":\"'2023-07-28 14:39:09'\"}"
-            
-    
-            
-            
-            let params2: Parameters = [
-                "data": jsonString2 //"["+jsonString+"]"//
-            ]
-            print(params2)
-            let axn = "dcr/updatePrimaryProducts"
-            let apiKeys: String = "\(axn)&divisionCode=\(DivCode)&sfCode=\(SFCode)&desig=\(Desig)"
-            print(apiKeys)
-        
-            AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKeys, method: .post, parameters: params2, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
-            AFdata in
-            self.LoadingDismiss()
-            switch AFdata.result
-            {
-                
-            case .success(let value):
-                print(value)
-                if let json = value as? [String: Any] {
-                    
-                    Toast.show(message: "Order has been submitted successfully") //, controller: self
-                    let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
-                    UIApplication.shared.windows.first?.rootViewController = viewController
-                    UIApplication.shared.windows.first?.makeKeyAndVisible()
-                    
-                    VisitData.shared.clear()
-                }
-                
-            case .failure(let error):
-                let alert = UIAlertController(title: "Information", message: error.errorDescription, preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
-                    return
-                })
-                self.present(alert, animated: true)
-            }
         }
+
         }
         
     }
@@ -1185,7 +1326,7 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
         
         if let unwrappedProduct = item,let unwrappedProduct2 = item2 {
             
-            let apiKey: String = "\(axnEdit)&State_Code=\(StateCode)&Trans_Detail_SlNo=\(unwrappedProduct)&&Order_No=\(unwrappedProduct2)"
+            let apiKey: String = "\(axnEdit)&State_Code=\(StateCode)&Trans_Detail_SlNo=\(unwrappedProduct)&Order_No=\(unwrappedProduct2)"
             
             
             AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
@@ -1206,7 +1347,8 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
                         }
                         print(prettyPrintedJson)
                         self.objcallsprimary = json
-                        Editoredr()
+                        //Editoredr()
+                        DemoEdite()
                     }
                 case .failure(let error):
                     Toast.show(message: error.errorDescription!)  //, controller: self
@@ -1227,18 +1369,20 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
         
         let indxPath = lstAllProducts
         print(indxPath)
-        print(areypostion as Any)
-        var ary: Int = 0
-        if let unwrappedProduct = areypostion {
-            print(unwrappedProduct)
-            ary = unwrappedProduct
-        } else {
-            // The optional value is nil
-            print("Product is nil")
-        }
-        let product = objcallsprimary[ary]
+//        print(areypostion as Any)
+//        var ary: Int = 0
+//        if let unwrappedProduct = areypostion {
+//            print(unwrappedProduct)
+//            ary = unwrappedProduct
+//        } else {
+//            // The optional value is nil
+//            print("Product is nil")
+//        }
+//        print(objcallsprimary)
+//        let product = objcallsprimary[ary]
+//        print(product)
+        let Additional_Prod_Dtls = objcallsprimary[0]["Additional_Prod_Code"] as? String
         
-        let Additional_Prod_Dtls = product["Additional_Prod_Code"] as? String
         
         
         //        let price1 = objcallsprimary[0]["CQty"] as! Int
@@ -1249,7 +1393,7 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
      
         for proditem in objcallsprimary{
             let CQty = proditem["CQty"] as! Int
-            print( CQty)
+            print(objcallsprimary)
             let Product_Code = proditem["Product_Code"] as! String
             print(Product_Code)
         
@@ -1319,34 +1463,82 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
                     
                     if(items.count>0)
                     {
+                        print(items)
                         selUOM=String(format: "%@", items[0]["UOM"] as! CVarArg)
                         selUOMNm=String(format: "%@", items[0]["UOMNm"] as! CVarArg)
                         selUOMConv=String(format: "%@", items[0]["UOMConv"] as! CVarArg)
                         selNetWt=String(format: "%@", items[0]["NetWt"] as! CVarArg)
                     }else{
+                        print(proditem)
+                        
                         selUOM=String(BasUnitCode)
                         print(selUOM)
-                        selUOMNm=String(stkname["Product_Sale_Unit"] as! String)
+                        selUOMNm=String(proditem["Product_Unit_Name"] as! String)
                         print(selUOMNm)
-                        selUOMConv=String(stkname["conversionQty"] as! Int)
+                        selUOMConv=String(proditem["Product_Unit_Value"] as! Int)
                         print(selUOMConv)
                         selNetWt=String("")
                         print(selNetWt)
                     }
+                    print(id)
+                    print(selUOM)
+                    print(selUOMNm)
+                    print(selUOMConv)
+                    print(selNetWt)
+                    print(sQty)
+                    print(lProdItem)
+                    
                     updateQty(id: id, sUom: selUOM, sUomNm: selUOMNm, sUomConv: selUOMConv,sNetUnt: selNetWt, sQty: String(sQty),ProdItem: lProdItem,refresh: 1)
                 }
                 else {
                     print("Item not found in lstAllProducts.")
                 }
-                
-                
             }
         }
     }
-        
+    }
+    func DemoEdite(){
+        for item in objcallsprimary{
+            print(item)
+            print(lstSuppList)
+            let id: String
+            let lProdItem:[String: Any]
+            let Product_Code = item["Product_Code"] as! String
+            
+            var BasUnitCode: Int = 0
+            let indexToDelete = lstAllProducts.firstIndex(where: { String(format: "%@", $0["id"] as! CVarArg) == "\(String(describing: Product_Code))" })
+            let stkname = lstAllProducts[indexToDelete!]
+            lProdItem = stkname as! [String : Any]
+            id=String(format: "%@", lstAllProducts[indexToDelete!]["id"] as! CVarArg)
+            let sUom = item["Product_Code"] as? String
+            if let baseUnitCodeStr = lstAllProducts[indexToDelete!]["Base_Unit_code"] as? String,
+               let baseUnitCodeInt = Int(baseUnitCodeStr) {
+                BasUnitCode = baseUnitCodeInt
+                
+            }
+            let sUomNm = item["Product_Unit_Name"] as? String
+            let sUomConv = String((item["Product_Unit_Value"] as? Int)!)
+            let sNetUnt = ""
+            let sQty = item["Qty"] as? Int
+            var Uomdata = lstAllUnitList.filter({(product) in
+                let ProdId: String = String(format: "%@", product["Product_Code"] as! CVarArg)
+                return Bool(ProdId == sUom)
+            })
+            var Uomdata2 = Uomdata.filter({(product) in
+                let ProdId: String = String(format: "%@", product["name"] as! CVarArg)
+                return Bool(ProdId == sUomNm)
+            })
+            var Uomid2 = ""
+            if let Uomiddata = Uomdata2[0]["id"] {
+                Uomid2 = Uomiddata as! String
+            }
+            updateQty(id: sUom!, sUom: Uomid2, sUomNm: sUomNm!, sUomConv: sUomConv,sNetUnt: sNetUnt, sQty: String(sQty!),ProdItem: lProdItem,refresh: 1)
+        }
     }
     
+    
 }
-/*
- let jsonString3 = "{\"Products\":[{\"product_code\":\"SEF13362\",\"product_Name\":\"testfor_sap_code\",\"rx_Conqty\":1,\"Qty\":1,\"PQty\":0,\"cb_qty\":0,\"free\":0,\"Pfree\":0,\"Pfree\":0,\"PieseRate\":100.00,\"discount\":0,\"FreeP_Code\":0,\"Fname\":0,\"discount_price\":0,\"tax\":0.0,\"tax_price\":0.0,\"OrdConv\":1,\"product_unit_name\":\"PIECE\",\"Trans_POrd_No\":\"1328115\",\"Order_Flag\":0,\"Division_code\":29,\"selectedScheme\":0,\"selectedOffProCode\":\"241\",\"selectedOffProName\":\"PIECE\",\"selectedOffProUnit\":\"1\",\"sample_qty\":\"204.0\"},{\"product_code\":\"SAN361521\",\"product_Name\":\"BUTTERFLY PLUS 2.8LTR RICE COOKER\",\"rx_Conqty\":2,\"Qty\":2,\"PQty\":0,\"cb_qty\":0,\"free\":0,\"Pfree\":0,\"Pfree\":0,\"PieseRate\":1900.00,\"discount\":0,\"FreeP_Code\":0,\"Fname\":0,\"discount_price\":0,\"tax\":0.0,\"tax_price\":0.0,\"OrdConv\":1,\"product_unit_name\":\"PIECE\",\"Trans_POrd_No\":\"1328115\",\"Order_Flag\":0,\"Division_code\":29,\"selectedScheme\":0,\"selectedOffProCode\":\"241\",\"selectedOffProName\":\"PIECE\",\"selectedOffProUnit\":\"1\",\"sample_qty\":\"204.0\"},{\"product_code\":\"SAN361520\",\"product_Name\":\"BUTTERFLY PLUS 1.8LTR RICE COOKER\",\"rx_Conqty\":1,\"Qty\":1,\"PQty\":0,\"cb_qty\":0,\"free\":0,\"Pfree\":0,\"Pfree\":0,\"PieseRate\":1700.00,\"discount\":0,\"FreeP_Code\":0,\"Fname\":0,\"discount_price\":0,\"tax\":0.0,\"tax_price\":0.0,\"OrdConv\":1,\"product_unit_name\":\"PIECE\",\"Trans_POrd_No\":\"1328115\",\"Order_Flag\":0,\"Division_code\":29,\"selectedScheme\":0,\"selectedOffProCode\":\"241\",\"selectedOffProName\":\"PIECE\",\"selectedOffProUnit\":\"1\",\"sample_qty\":\"204.0\"},{\"product_code\":\"SAN361519\",\"product_Name\":\"BUTTERFLY 1.8LTR RICE COOKER\",\"rx_Conqty\":1,\"Qty\":1,\"PQty\":0,\"cb_qty\":0,\"free\":0,\"Pfree\":0,\"Pfree\":0,\"PieseRate\":1.00,\"discount\":0,\"FreeP_Code\":0,\"Fname\":0,\"discount_price\":0,\"tax\":0.0,\"tax_price\":0.0,\"OrdConv\":1,\"product_unit_name\":\"PIECE\",\"Trans_POrd_No\":\"1328115\",\"Order_Flag\":0,\"Division_code\":29,\"selectedScheme\":0,\"selectedOffProCode\":\"241\",\"selectedOffProName\":\"PIECE\",\"selectedOffProUnit\":\"1\",\"sample_qty\":\"204.0\"}],\"Activity_Event_Captures\":[],\"POB\":\"0\",\"Value\":\"5601.0\",\"order_No\":\"SEF19640-19\",\"DCR_Code\":\"SEF19640-47\",\"Trans_Sl_No\":\"SEF19640-19\",\"Trans_Detail_slNo\":\"SEF19640-83\",\"Route\":\"\",\"net_weight_value\":\"\",\"target\":\"\",\"rateMode\":null,\"Stockist\":\"31800\",\"RateEditable\":\"\",\"orderValue\":5601.00,\"Stockist_POB\":\"\",\"Stk_Meet_Time\":\"2023-07-28 14:39:09\",\"modified_time\":\"2023-07-28 14:39:09\",\"CheckoutTime\":\"2023-08-01 10:13:49\",\"PhoneOrderTypes\":0,\"dcr_activity_date\":\"2023-07-28 14:39:09\"}"
- */
+
+
+
+

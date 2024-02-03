@@ -346,9 +346,9 @@
 			isa = PBXGroup;
 			children = (
 				38B05F4E2B04C9F30025D4C0 /* Manager_Dashboard */,
+				3F9F379628593C73002CC408 /* Reports */,
 				386A43872A1B223400CE1833 /* SubmittedCalls */,
 				3F0822BB29000842009C33EA /* AdminForms */,
-				3F9F379628593C73002CC408 /* Reports */,
 				3F0635332841710F0027842E /* Model */,
 				3F063528283A8C720027842E /* Style */,
 				3F0861BD2801D551006A30FB /* CollectionCell */,
@@ -407,8 +407,8 @@
 				3F9F379728593C99002CC408 /* DayReport.swift */,
 				3F9F3799285B5FBA002CC408 /* ReportMenu.swift */,
 				3FF57C1C286C4A76009E3FE5 /* RptVisitDetail.swift */,
-				38A2E9B12A0E1B940061B854 /* Brand Availability.swift */,
 				3F0ED6BD2872F61A00FF4460 /* OrderDetailView.swift */,
+				38A2E9B12A0E1B940061B854 /* Brand Availability.swift */,
 			);
 			path = Reports;
 			sourceTree = "<group>";
@@ -805,7 +805,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.6;
+				MARKETING_VERSION = T.13;
 				PRODUCT_BUNDLE_IDENTIFIER = com.saneforce.sansales;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

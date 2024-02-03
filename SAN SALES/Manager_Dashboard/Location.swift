@@ -11,12 +11,13 @@ struct sflatlog: Codable {
     let lat: String
     let log: String
     let SfCode:String
+    let username:String
 }
 struct Tabldata:Codable{
     let Id:String
     let Name:String
 }
-class Location: UIViewController,MKMapViewDelegate,UITableViewDelegate, UITableViewDataSource {
+class Location: IViewController,MKMapViewDelegate,UITableViewDelegate, UITableViewDataSource {
 
     @IBOutlet weak var Select_Field: UIView!
     @IBOutlet weak var All_field_Force_View: UIView!
@@ -90,6 +91,8 @@ class Location: UIViewController,MKMapViewDelegate,UITableViewDelegate, UITableV
         txSearchSel.text = ""
     }
     @objc func OpenView(){
+        FiledName = lAllObjSel
+        All_Field_Table.reloadData()
         All_field_Force_View.isHidden = false
     }
     @IBAction func Close_View(_ sender: Any) {
@@ -119,7 +122,7 @@ class Location: UIViewController,MKMapViewDelegate,UITableViewDelegate, UITableV
             switch AFdata.result {
                 
             case .success(let value):
-                print(value)
+                //print(value)
                 if let json = value as? [AnyObject]{
                     guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
                         print("Error: Cannot convert JSON object to Pretty JSON data")
@@ -129,11 +132,11 @@ class Location: UIViewController,MKMapViewDelegate,UITableViewDelegate, UITableV
                         print("Error: Could print JSON in String")
                         return
                     }
-                    print(prettyPrintedJson)
+                    //print(prettyPrintedJson)
                    
                         if let jsonData = try? JSONSerialization.data(withJSONObject: value, options: []),
                            let jsonArray = try? JSONSerialization.jsonObject(with: jsonData) as? [[String: Any]] {
-                            print(jsonArray)
+    
                             var All_Id = [String]()
                             FiledName.append(Tabldata(Id: "", Name: "All FIELD FORCE"))
                             for item in jsonArray {
@@ -153,7 +156,7 @@ class Location: UIViewController,MKMapViewDelegate,UITableViewDelegate, UITableV
                             }
                             
                             let joinedString = encodedData.joined(separator: "%2C")
-                            print(joinedString)
+                            //print(joinedString)
                             GetUser_Lat_Log(sfdata:joinedString)
                             // SfData.append(sfDetails(id: joinedString, name: "All Field Force"))
                         }else{
@@ -184,8 +187,8 @@ class Location: UIViewController,MKMapViewDelegate,UITableViewDelegate, UITableV
                     if let resultArray = json["result"] as? [[String: AnyObject]] {
                         for result in resultArray {
                             if let lat = result["lat"] as? String,
-                               let long = result["long"] as? String,let sfcode = result["sfcode"] as? String {
-                                Userlatlog.append(sflatlog(lat: lat, log: long, SfCode: sfcode))
+                               let long = result["long"] as? String,let sfcode = result["sfcode"] as? String,let username = result["username"] as? String {
+                                Userlatlog.append(sflatlog(lat: lat, log: long, SfCode: sfcode,username: username))
                             }
                         }
                     }
@@ -206,7 +209,7 @@ class Location: UIViewController,MKMapViewDelegate,UITableViewDelegate, UITableV
         for latLog in Userlatlog {
             let annotation = MKPointAnnotation()
             annotation.coordinate = CLLocationCoordinate2D(latitude: Double(latLog.lat)!, longitude: Double(latLog.log)!)
-            annotation.title = "Your Title"
+            annotation.title = latLog.username
             Map_View.addAnnotation(annotation)
             let circle = MKCircle(center: annotation.coordinate, radius: 500)
                 Map_View.addOverlay(circle)
@@ -216,7 +219,7 @@ class Location: UIViewController,MKMapViewDelegate,UITableViewDelegate, UITableV
         for latLog in Userlatlog {
             let annotation = CustomAnnotation()
             annotation.coordinate = CLLocationCoordinate2D(latitude: Double(latLog.lat)!, longitude: Double(latLog.log)!)
-            annotation.title = "Your Title"
+            annotation.title = latLog.username
             Map_View.addAnnotation(annotation)
         }
 
@@ -241,8 +244,12 @@ class Location: UIViewController,MKMapViewDelegate,UITableViewDelegate, UITableV
         let annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: "customAnnotationView")
         annotationView.image = UIImage(named: customAnnotation.imageName)
         annotationView.canShowCallout = true
+        
+       
+        
         return annotationView
     }
+
 
 
         // MARK: - MKMapViewDelegate
@@ -294,7 +301,11 @@ class Location: UIViewController,MKMapViewDelegate,UITableViewDelegate, UITableV
             print("Address: \(addressString)")
 
             annotation.subtitle = addressString
-
+            
+            // Create a custom annotation view
+                   let customAnnotationView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: "customAnnotationView")
+                   customAnnotationView.canShowCallout = true
+            
             DispatchQueue.main.asyncAfter(deadline: .now() + 60.0) {
                       mapView.deselectAnnotation(annotation, animated: true)
                   }
@@ -322,4 +333,6 @@ class Location: UIViewController,MKMapViewDelegate,UITableViewDelegate, UITableV
         All_Field_Table.reloadData()
     }
 }
+
+
 

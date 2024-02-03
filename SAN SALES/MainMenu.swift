@@ -269,12 +269,23 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
             //viewController.navigationController?.pushViewController(myDyPln, animated: true)
         }
         else if lItm.MasId == 12 {
-           // let rptstoryboard = UIStoryboard(name: "Submittedcalls", bundle: nil)
-//            let Homevc = storyboard.instantiateViewController(withIdentifier: "HomePageVwControl") as! HomePageViewController
-            let SBCalls = storyboard.instantiateViewController(withIdentifier: "SubmittedCalls") as! SubmittedCalls
-            viewController.setViewControllers([SBCalls], animated: false)
-            
-            //viewController.navigationController?.pushViewController(myDyPln, animated: true)
+            var lstPlnDetail: [AnyObject] = []
+            let PlnDets: String=LocalStoreage.string(forKey: "Mydayplan")!
+            if let list = GlobalFunc.convertToDictionary(text: PlnDets) as? [AnyObject] {
+                lstPlnDetail = list;
+            }
+            let typ: String = lstPlnDetail[0]["FWFlg"] as! String
+            if(typ != "F"){
+                Toast.show(message: "Your are submitted 'Non - Field Work'. kindly use switch route", controller: self)
+                return
+            }else{
+                // let rptstoryboard = UIStoryboard(name: "Submittedcalls", bundle: nil)
+                //            let Homevc = storyboard.instantiateViewController(withIdentifier: "HomePageVwControl") as! HomePageViewController
+                let SBCalls = storyboard.instantiateViewController(withIdentifier: "SubmittedCalls") as! SubmittedCalls
+                viewController.setViewControllers([SBCalls], animated: false)
+                
+                //viewController.navigationController?.pushViewController(myDyPln, animated: true)
+            }
         }
         (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
         print(strMasList[indexPath.row].MasName)

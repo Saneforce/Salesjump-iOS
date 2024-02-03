@@ -38,7 +38,7 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
     struct Viewval: Any {
         let Product : String
         let qty : Int
-        let value : Int
+        let value : Double
     }
     var View:[Viewval]=[]
     
@@ -55,6 +55,8 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
     var objcalls: [AnyObject]=[]
     public static var EndOrder_Time: String = ""
     var refreshControl = UIRefreshControl()
+    var lstSuppList: [AnyObject] = []
+    var lstAllRoutes: [AnyObject] = []
      
    public static var objcalls_SelectPrimaryorder2: [AnyObject]=[]
     override func viewDidLoad() {
@@ -62,8 +64,18 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
       
         lblnodata.isHidden = true
         getUserDetails()
+        let lstDistData: String = LocalStoreage.string(forKey: "Supplier_Master_"+SFCode)!
+        
+        if let list = GlobalFunc.convertToDictionary(text: lstDistData) as? [AnyObject] {
+            lstSuppList = list;
+        }
+        if let RouteData = LocalStoreage.string(forKey: "Route_Master_"+SFCode),
+           let list = GlobalFunc.convertToDictionary(text:  RouteData) as? [AnyObject] {
+            lstAllRoutes = list
+        }
         SelectPrimaryorder()
         //SelectPrimary2order()
+        PrimarySubmittedDCR.objcalls_SelectPrimaryorder2.removeAll()
         PrimayOrderViewTB.delegate=self
         PrimayOrderViewTB.dataSource=self
         OrderTB.dataSource=self
@@ -89,7 +101,8 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
     
     
     @objc func closeMenuWin(){
-        GlobalFunc.movetoHomePage()
+        navigationController?.popViewController(animated: true)
+        
     }
 //    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
 //        <#code#>
@@ -106,6 +119,7 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
                 PrimayOrderViewTB.isHidden=true
                 lblnodata.isHidden=false
                 lblnodata.text="No data available"
+                self.ShowLoading(Message: "Loading...")
             }else{
                 return PrimarySubmittedDCR.objcalls_SelectPrimaryorder2.count
             }
@@ -114,7 +128,7 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
             return View.count
         }
         if tableView == InputTB {
-            return View.count
+            return Input.count
         }
         return 0
     }
@@ -124,17 +138,46 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
         if tableView == PrimayOrderViewTB {
             lblnodata.isHidden=true
             PrimayOrderViewTB.isHidden=false
+            
+            print(PrimarySubmittedDCR.objcalls_SelectPrimaryorder2)
+//            let sortedData = PrimarySubmittedDCR.objcalls_SelectPrimaryorder2.sorted {
+//                (item1, item2) -> Bool in
+//                
+//                if let startTime1 = item1["StartOrder_Time"] as? String,
+//                   let startTime2 = item2["StartOrder_Time"] as? String {
+//                    
+//                    return startTime1.compare(startTime2) == .orderedDescending
+//                }
+//                
+//                return false
+//            }
+//            PrimarySubmittedDCR.objcalls_SelectPrimaryorder2 = sortedData
             let item: [String: Any] = PrimarySubmittedDCR.objcalls_SelectPrimaryorder2[indexPath.row] as! [String : Any]
+            let Id_For_Route = item["SDP"] as? String
+            let filteredData = lstAllRoutes.filter { ($0["id"] as? String) == Id_For_Route }
+            print(filteredData)
+            
             cell.Disbutor?.text = item["Trans_Detail_Name"] as? String
-            cell.rout?.text = item["SDP"] as? String
+            cell.rout?.text = filteredData[0]["name"] as? String
             cell.meettime.text = item["StartOrder_Time"] as? String
            
             if let order = item["Order_date"] as? String {
                 cell.ordertime.text = order
-            }else{
-                cell.EditButton.isHidden = true
-                cell.ViewButton.isHidden = true
             }
+             
+            let order = item["Order_No"] as? String
+            let Additional_Prod_Dtls = item["Additional_Prod_Dtls"] as! String
+            if (order == nil || Additional_Prod_Dtls == "" ) {
+                cell.EditButton.isHidden = true
+                cell.DeleteButton.isHidden = true
+            } else {
+                cell.EditButton.isHidden = false
+                cell.DeleteButton.isHidden = false
+            }
+            
+           
+           
+            
             cell.vwContainer.layer.cornerRadius = 20
             cell.ViewButton.layer.cornerRadius = 12
             cell.EditButton.layer.cornerRadius = 12
@@ -193,8 +236,17 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
                         return
                     }
                     print(prettyPrintedJson)
+                    print(json)
                     self.objcalls=json
-                    SelectPrimary2order()
+                    print(json.count)
+                    print(prettyPrintedJson.count)
+                    if(json.count != 0){
+                        SelectPrimary2order()
+                    }
+                    if(json.count == 0){
+                        self.LoadingDismiss()
+                    }
+                    
                 }
             case .failure(let error):
                 Toast.show(message: error.errorDescription!)  //, controller: self
@@ -203,6 +255,7 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func SelectPrimary2order(){
+        self.ShowLoading(Message: "Loading...")
         if let transid = objcalls[0]["Trans_SlNo"] as? String {
             // Use the unwrapped value of 'transid' here
             print(transid)
@@ -221,6 +274,7 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
         AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
             AFdata in
             lblnodata.isHidden=false
+           
             switch AFdata.result
             {
                 
@@ -236,12 +290,19 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
                         return
                     }
                     print(prettyPrintedJson)
-                  //  self.lblWorkTyp.text=String(format: "%@", todayData["wtype"] as! String)
+                    print(prettyPrintedJson.count)
+                    print(json.count)
+                    if (json.count == 0){
+                        PrimayOrderViewTB.isHidden=true
+                        lblnodata.isHidden=false
+                        lblnodata.text="No data available"
+                    }
                  
                                                
                     PrimarySubmittedDCR.objcalls_SelectPrimaryorder2 = json
                     self.PrimayOrderViewTB.reloadData()
                     self.OrderTB.reloadData()
+                    self.LoadingDismiss()
                     
                 }
             case .failure(let error):
@@ -283,9 +344,11 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
         alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
         self.ShowLoading(Message: "    Loading...")
         let buttonPosition:CGPoint = (sender as AnyObject).convert(CGPoint.zero, to: self.PrimayOrderViewTB)
+            print(buttonPosition)
         guard let indexPath = self.PrimayOrderViewTB.indexPathForRow(at: buttonPosition) else{
             return
         }
+            print(indexPath)
         let product = PrimarySubmittedDCR.objcalls_SelectPrimaryorder2[indexPath.row]
             //let item = product["Trans_Sl_No"] as! String
              print(product)
@@ -327,12 +390,13 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
                         
                     case .success(let value):
                         print(value)
-                        let storyboard = UIStoryboard(name: "Submittedcalls", bundle: nil)
-                        let viewController = storyboard.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
-                        let myDyPln = storyboard.instantiateViewController(withIdentifier: "PrimarySubmittedDCR") as! PrimarySubmittedDCR
-                        viewController.setViewControllers([myDyPln], animated: true)
-                        UIApplication.shared.windows.first?.rootViewController = viewController
+//                        let storyboard = UIStoryboard(name: "Submittedcalls", bundle: nil)
+//                        let viewController = storyboard.instantiateViewController(withIdentifier: "PriSubNav") as! UINavigationController
+//                        let myDyPln = storyboard.instantiateViewController(withIdentifier: "PrimarySubmittedDCR") as! PrimarySubmittedDCR
+//                        viewController.setViewControllers([myDyPln], animated: true)
+//                        UIApplication.shared.windows.first?.rootViewController = viewController
                         refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
+                        SelectPrimaryorder()
                         Toast.show(message: "Deleted successfully ")
                         if let json = value as? [String: Any] {
                             guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
@@ -348,12 +412,13 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
                         }
                     case .failure(let error):
                         //Toast.show(message: error.errorDescription!)
-                        let storyboard = UIStoryboard(name: "Submittedcalls", bundle: nil)
-                        let viewController = storyboard.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
-                        let myDyPln = storyboard.instantiateViewController(withIdentifier: "PrimarySubmittedDCR") as! PrimarySubmittedDCR
-                        viewController.setViewControllers([myDyPln], animated: true)
-                        UIApplication.shared.windows.first?.rootViewController = viewController
+//                        let storyboard = UIStoryboard(name: "Submittedcalls", bundle: nil)
+//                        let viewController = storyboard.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
+//                        let myDyPln = storyboard.instantiateViewController(withIdentifier: "PrimarySubmittedDCR") as! PrimarySubmittedDCR
+//                        viewController.setViewControllers([myDyPln], animated: true)
+//                        UIApplication.shared.windows.first?.rootViewController = viewController
                         refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
+                        SelectPrimaryorder()
                         Toast.show(message: "Deleted successfully ")
                     }
                     self.LoadingDismiss()
@@ -368,24 +433,29 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     @IBAction func ViewBT(_ sender: Any) {
-    
+        Input.removeAll()
         let buttonPosition:CGPoint = (sender as AnyObject).convert(CGPoint.zero, to: self.PrimayOrderViewTB)
         guard let indexPath = self.PrimayOrderViewTB.indexPathForRow(at: buttonPosition) else{
             return
         }
-        print(buttonPosition)
-        print(indexPath)
-        
+
             let product = PrimarySubmittedDCR.objcalls_SelectPrimaryorder2[indexPath.row]
-            print(product)
+        let Id_For_Route = product["SDP"] as? String
+        let filteredData = lstAllRoutes.filter { ($0["id"] as? String) == Id_For_Route }
             self.Disbutorsname.text = product["Trans_Detail_Name"] as? String
-            self.Route.text = product["SDP"] as? String
-            self.Joint_Work.text = product["jgch"] as? String
-        
+            self.Route.text = filteredData[0]["name"] as? String
+            self.Joint_Work.text = product["Worked_with_Name"] as? String
+            
         Input.append(inputval(Key: "Meet Time", Value: product["StartOrder_Time"] as! String))
-        Input.append(inputval(Key: "Order Time", Value: product["Order_date"] as! String))
-        Input.append(inputval(Key: "Order Value", Value: String(product["POB_Value"] as! Int)))
+        Input.append(inputval(Key: "Order Time", Value: product["StartOrder_Time"] as! String))
+        if let pobValue = product["POB_Value"] as? Double {
+            Input.append(inputval(Key: "Order Value", Value: String(pobValue)))
+        } else {
+            Input.append(inputval(Key: "Order Value", Value: ""))
+        }
+
         Input.append(inputval(Key: "Remarks", Value: product["Activity_Remarks"] as! String))
+        print(Input)
         InputTB.reloadData()
         PrimarySubmittedDCR.EndOrder_Time = product["EndOrder_Time"] as! String
         
@@ -393,27 +463,44 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
             let productArray = Additional_Prod_Dtls.components(separatedBy: "#")
         print(productArray)
         View.removeAll()
+        if (Additional_Prod_Dtls == ""){
+            print("No Data")
+            OrderTB.reloadData()
+        }else{
             for product in productArray {
                 let productData = product.components(separatedBy: "@")
                 print(productData[0])
                 let productData2 = productData[0]
                 print(productData2)
-                   
-                    let productDatas = productData2.components(separatedBy: "~")
-                    print(productDatas[0])
-                    let price = productDatas[1].components(separatedBy: "$")[0]
-                    let price1 = productDatas[1].components(separatedBy: "$")[1]
-                    print(price)
-                    print(price1)
-
-                    View.append(Viewval(Product:productDatas[0] , qty: Int(price1)!, value: Int(price)!))
+                
+                let productDatas = productData2.components(separatedBy: "~")
+                print(productDatas[0])
+                let price = productDatas[1].components(separatedBy: "$")[0]
+                let price1 = productDatas[1].components(separatedBy: "$")[1]
+                print(price1)
+                print(price)
+                
+                View.append(Viewval(Product:productDatas[0] , qty: Int(price1)!, value: Double(price)!))
+                print(View)
                 OrderTB.reloadData()
                 
             }
-        OrderHig.constant = 100 + CGFloat(40*self.View.count)
+        }
+        if (View.count == 0){
+            OrderHig.constant = 10
+        }else if (10 < View.count){
+            OrderHig.constant = 100 + CGFloat(35*self.View.count)
+        }
+        else{
+            OrderHig.constant = 100 + CGFloat(25*self.View.count)
+        }
         print(OrderHig.constant)
             self.view.layoutIfNeeded()
-        ScHig.constant = 100 + CGFloat(60*self.View.count)
+        if ( 10 < View.count){
+            ScHig.constant = 120 + CGFloat(55*self.View.count)+CGFloat(45*self.Input.count)
+        }else{
+            ScHig.constant = 100 + CGFloat(40*self.View.count)+CGFloat(35*self.Input.count)
+        }
         self.view.layoutIfNeeded()
         
         

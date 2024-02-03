@@ -37,6 +37,7 @@ class ManagerDashboard: UIViewController{
          CoverageViewController,
             
         ])
+       // pagingViewController.select(index: 0, animated: false)
 
         // Make sure you add the PagingViewController as a child view
         // controller and contrain it to the edges of the view.

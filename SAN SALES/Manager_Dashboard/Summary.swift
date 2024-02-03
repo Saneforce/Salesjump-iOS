@@ -69,7 +69,6 @@ class Summary: IViewController,FSCalendarDelegate,FSCalendarDataSource, UITableV
         Search.layer.shadowRadius = 3.0
         Search.layer.shadowOpacity = 0.5
         getUserDetails()
-        Get_All_Field_Force()
         Date_View.addTarget(target: self, action: #selector(dateView))
         All_Filed.addTarget(target: self, action: #selector(FiledData))
         
@@ -80,6 +79,7 @@ class Summary: IViewController,FSCalendarDelegate,FSCalendarDataSource, UITableV
         formatters.dateFormat = "yyyy-MM-dd"
         SelectDate = formatters.string(from: Date())
         Total_Team_Size_List(date: formatters.string(from: Date()))
+        Get_All_Field_Force(Data: formatters.string(from: Date()))
         
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -97,7 +97,7 @@ class Summary: IViewController,FSCalendarDelegate,FSCalendarDataSource, UITableV
         targetId = data
         Select_Field.text = SfData[indexPath.row].name
         print(targetId)
-        Get_All_Field_Force()
+        Get_All_Field_Force(Data: SelectDate)
         txSearchSel.text = ""
         All_Field_View.isHidden = true
     }
@@ -116,17 +116,19 @@ class Summary: IViewController,FSCalendarDelegate,FSCalendarDataSource, UITableV
         print("selected dates is \(selectedDates_Attendance)")
         if let firstDate = selectedDates_Attendance.first {
             print("Selected date outside the box: \(firstDate)")
+            targetId = ""
+            Select_Field.text = "All Field Force"
             Total_Team_Size_List(date: firstDate)
+            Get_All_Field_Force(Data: firstDate)
             SelectDate = firstDate
         } else {
             print("No selected dates.")
         }
         Date_lbl.text = formatter.string(from: date)
-       
         if monthPosition == .next || monthPosition == .previous {
             calendar.setCurrentPage(date, animated: true)
         }
-        Get_All_Field_Force()
+        
         Cal_View.isHidden = true
         
     }
@@ -143,9 +145,11 @@ class Summary: IViewController,FSCalendarDelegate,FSCalendarDataSource, UITableV
         Desig=prettyJsonData["desigCode"] as? String ?? ""
     }
     
-    func Get_All_Field_Force(){
-    
-        let apiKey1: String = "get/submgr&divisionCode=\(DivCode)&rSF=\(SFCode)&sfcode=\(SFCode)&stateCode=\(StateCode)&desig=\(Desig)"
+    func Get_All_Field_Force(Data:String){
+        print(Data)
+        let formatters = DateFormatter()
+        formatters.dateFormat = "yyyy-MM-dd"
+        let apiKey1: String = "get/sfDetails&selected_date=\(Data)&sf_code=\(SFCode)&division_code=\(DivCode)"
         let apiKeyWithoutCommas = apiKey1.replacingOccurrences(of: ",&", with: "&")
         
         AF.request(APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKeyWithoutCommas, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
@@ -189,8 +193,11 @@ class Summary: IViewController,FSCalendarDelegate,FSCalendarDataSource, UITableV
                     }else{
                         var Count = 0
                         let matchingEntries = json.filter { entry in
-                            if let rtoSF = entry["rtoSF"] as? String {
+                            if let rtoSF = entry["id"] as? String {
                                 Count = Count + 1
+                                print(targetId)
+                                print(rtoSF)
+                                print(entry)
                                 return rtoSF == targetId
                             }
                             return false
@@ -302,13 +309,14 @@ class Summary: IViewController,FSCalendarDelegate,FSCalendarDataSource, UITableV
                         var Total_Call = 0
                         var Productive_Call = 0
                         var UPClls = 0
-                        var Order_Val = 0
+                        var Order_Val = 0.0
                         var weightValue = 0
                         
                         for item in Secon_Det {
+                            print(item)
                             let TC = item["TC"] as? Int
                             let PC = item["PC"] as? Int
-                            let orderValue = Int((item["orderValue"] as? String)!)
+                            let orderValue = Double((item["orderValue"] as? String)!)
                             let UPC = item["UPC"] as? Int
                             let weight = item["weightValue"] as? Int ?? 0
                             Total_Call = Total_Call + TC!
@@ -321,30 +329,32 @@ class Summary: IViewController,FSCalendarDelegate,FSCalendarDataSource, UITableV
                         Total_Calls.text = String(Total_Call)
                         Productive_Calls.text = String(Productive_Call)
                         UPC.text = String(UPClls)
-                        Secondary_Calls.text = String(Order_Val)
+                        Secondary_Calls.text = String(format: "%.2f",Order_Val)
                         Net_Weight.text = String(weightValue)+".00"
-                        var Productivity_Data: Int
+                        var Productivity_Data: Double
 
                         if Total_Call != 0 {
-                            Productivity_Data = Int(Productive_Call) / Total_Call * 100
+                            Productivity_Data = Double(Productive_Call) / Double(Total_Call) * 100
+                            print(Productivity_Data)
+                            
                         } else {
                            
                             Productivity_Data = 0 // Setting a default value
                         }
                         print(Productivity_Data)
-                        Productivity.text = String(Productivity_Data)+".00"
+                        Productivity.text = String(format: "%.2f",Productivity_Data)
                         
                         
                         
                     }
                     if let PRI = prettyPrintedJson["PRI"] as? [[String: Any]]{
                         print(PRI)
-                        var Order_Val = 0
+                        var Order_Val = 0.0
                         for item in PRI {
-                            let orderValue = Int((item["Order_Value"] as? Double)!)
-                            Order_Val = Order_Val + orderValue
+                            let orderValue = item["Order_Value"] as? Double
+                            Order_Val = Order_Val + orderValue!
                         }
-                        Primary_Call.text = String(Order_Val)
+                        Primary_Call.text = String(format: "%.2f",Order_Val)
                     }
                     
                     if let OUTLET = prettyPrintedJson["OUTLET"] as? [[String: Any]]{
@@ -362,6 +372,8 @@ class Summary: IViewController,FSCalendarDelegate,FSCalendarDataSource, UITableV
         Cal_View.isHidden = false
     }
     @objc func FiledData(){
+        SfData = lAllObjSel
+        All_Filed_Name.reloadData()
         All_Field_View.isHidden = false
     }
     @IBAction func Cancel_Bt(_ sender: Any) {

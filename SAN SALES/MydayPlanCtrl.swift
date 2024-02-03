@@ -132,20 +132,15 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         if let DistData = LocalStoreage.string(forKey: "Distributors_Master_"+SFCode),
            let list = GlobalFunc.convertToDictionary(text:  DistData) as? [AnyObject] {
             lstDist = list;
-            print(SFCode)
         }
-        
         if let RouteData = LocalStoreage.string(forKey: "Route_Master_"+SFCode),
            let list = GlobalFunc.convertToDictionary(text:  RouteData) as? [AnyObject] {
             lstAllRoutes = list
             lstRoutes = list
-            print(list)
         }
-        
         if let JointWData = LocalStoreage.string(forKey: "Jointwork_Master"),
            let list = GlobalFunc.convertToDictionary(text:  JointWData) as? [AnyObject] {
             lstJoint = list;
-            print("JointWData  ___________________________")
         }
 
         
@@ -342,6 +337,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         let cell:cellListItem = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
         if tableView == tbJWKSelect {
             let item: [String: Any]=lstJWNms[indexPath.row] as! [String : Any]
+            print(item)
             cell.lblText?.text = item["name"] as? String
             cell.imgBtnDel.addTarget(target: self, action: #selector(self.delJWK(_:)))
         }else{
@@ -597,10 +593,13 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                     print(rtname)
                    myDyTp.updateValue(lItem(id: rtid, name: rtname,FWFlg: ""), forKey: "RUT")
                 }
-                let jwids=(String(format: "%@", lstPlnDetail[0]["worked_with_code"] as! CVarArg)).replacingOccurrences(of: ",", with: ";")
+                let jwids=(String(format: "%@", lstPlnDetail[0]["worked_with_code"] as! CVarArg)).replacingOccurrences(of: "$$", with: ";")
+                    .replacingOccurrences(of: "$", with: ";")
                     .components(separatedBy: ";")
+                print(lstPlnDetail[0]["worked_with_code"] as! CVarArg)
                 for k in 0...jwids.count-1 {
                     if let indexToDelete = lstJoint.firstIndex(where: { String(format: "%@", $0["id"] as! CVarArg) == jwids[k] }) {
+                        print(lstJoint)
                         let jwid: String = lstJoint[indexToDelete]["id"] as! String
                         let jwname: String = lstJoint[indexToDelete]["name"] as! String
                         
@@ -610,6 +609,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                         lstJWNms.append(jitm)
                     }
                 }
+                print(lstJWNms)
                 tbJWKSelect.reloadData()
             }
             
@@ -762,20 +762,23 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
     }
     
     @IBAction func SaveMyDayPlan(_ sender: Any) {
+        print(HomePageViewController.selfieLoginActive)
+        print(PhotosCollection.shared.PhotoList.count)
         if (HomePageViewController.selfieLoginActive == 1){
             if(PhotosCollection.shared.PhotoList.count>0){
                print("In Data")
             }else{
                 if UserSetup.shared.Selfie == 1{
-                    openCamera()
+                    if Leaveid != "9999"{
+                        openCamera()
+                    }
+                   
                 }
                 if UserSetup.shared.Selfie == 0{
                     getLocatio()
                 }
             }
             
-            
-           
                 if(PhotosCollection.shared.PhotoList.count>0){
                     for i in 0...PhotosCollection.shared.PhotoList.count-1{
                         let item: [String: Any] = PhotosCollection.shared.PhotoList[i] as! [String : Any]
@@ -792,6 +795,9 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                     }
                 }
                
+            if (Leaveid == "9999" && PhotosCollection.shared.PhotoList.count == 0 ){
+                getLocatio()
+            }
                 print("My Day Plan Not Sumbite")
             
             
@@ -806,9 +812,11 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
        /* */
     }
     func getLocatio(){
+        var OrderSub = "MyDay"
+        var Count = 0
         var Leavtyp = leavWorktype
         print(Leavtyp)
- 
+ print(Leaveid)
         if Leaveid != "9999"{
             if validateForm() == false {
                 return
@@ -825,7 +833,14 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
             LocationService.sharedInstance.getNewLocation(location: { location in
                 print ("New  : "+location.coordinate.latitude.description + ":" + location.coordinate.longitude.description)
                 self.ShowLoading(Message: "Submitting Please wait...")
-                self.saveDayTP(location: location)
+                Count = Count+1
+                if (OrderSub == "MyDay"){
+                    self.saveDayTP(location: location)
+                    OrderSub  = ""
+                    print(Count)
+                }else{
+                    print(Count)
+                }
             }, error:{ errMsg in
                 self.LoadingDismiss()
                 print (errMsg)
@@ -839,13 +854,14 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
             let storyboard = UIStoryboard(name: "AdminForms", bundle: nil)
             let viewController = storyboard.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
             let myDyPln = storyboard.instantiateViewController(withIdentifier: "sbLeaveFrm") as! LeaveForm
-            viewController.setViewControllers([myDyPln], animated: true)
-            UIApplication.shared.windows.first?.rootViewController = viewController
+            self.navigationController?.pushViewController(myDyPln, animated: true)
+            UIApplication.shared.windows.first?.rootViewController = navigationController
         }
     }
     
     
     func saveDayTP(location: CLLocation){
+        
         let dateString = GlobalFunc.getCurrDateAsString()
         lazy var geocoder = CLGeocoder()
         var sAddress: String = ""
@@ -866,9 +882,25 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
             }
             print(HomePageViewController.selfieLoginActive)
       print(slocation)
-            
-            
-            let jsonString = "[{\"tbMyDayPlan\":{\"wtype\":\"'" + (myDyTp["WT"]?.id ?? "") + "'\",\"sf_member_code\":\"'" + (myDyTp["HQ"]?.id ?? SFCode) + "'\",\"stockist\":\"'" + (myDyTp["DIS"]?.id ?? "") + "'\",\"stkName\":\"" + (myDyTp["DIS"]?.name ?? "") + "\",\"dcrtype\":\"App\",\"cluster\":\"'" + (myDyTp["RUT"]?.id ?? "") + "'\",\"custid\":\"" + (myDyTp["RUT"]?.id ?? "") + "\",\"custName\":\"" + (myDyTp["RUT"]?.name ?? "") + "\",\"address\":\"" + sAddress + "\",\"remarks\":\"'" + (txRem.text as! String ?? "" ) + "'\",\"OtherWors\":\"\",\"FWFlg\":\"'" + (myDyTp["WT"]?.FWFlg ?? "") + "'\",\"SundayWorkigFlag\":\"''\",\"Place_Inv\":\"\",\"WType_SName\":\"" + (myDyTp["WT"]?.name ?? "") + "\",\"ClstrName\":\"'" + (myDyTp["RUT"]?.name ?? "") + "'\",\"AppVersion\":\"Vi_\(Bundle.main.appVersionLong).\(Bundle.main.appBuild)\",\"self\":1,\"location\":\"" + slocation + "\",\"dcr_activity_date\":\"'" + dateString + "'\",\"worked_with\":\"'" + strJWCd.replacingOccurrences(of: ";", with: ",") + "'\"\(ImgName)}}]"
+            print(strJWCd)
+            let JointData = strJWCd
+            var Join_Works = JointData.replacingOccurrences(of: ";", with: "$$")
+            if Join_Works.hasSuffix("$") {
+//                while Join_Works.hasSuffix("$$") {
+//                    Join_Works.removeLast()
+//                }
+                Join_Works.removeLast()
+                print(Join_Works)
+            }
+            var remarks:String = ""
+            if let trimmedText = txRem.text?.trimmingCharacters(in: .whitespacesAndNewlines) {
+                
+                print(trimmedText)
+                remarks = trimmedText
+            } else {
+                
+            }
+            let jsonString = "[{\"tbMyDayPlan\":{\"wtype\":\"'" + (myDyTp["WT"]?.id ?? "") + "'\",\"sf_member_code\":\"'" + (myDyTp["HQ"]?.id ?? SFCode) + "'\",\"stockist\":\"'" + (myDyTp["DIS"]?.id ?? "") + "'\",\"stkName\":\"" + (myDyTp["DIS"]?.name ?? "") + "\",\"dcrtype\":\"App\",\"cluster\":\"'" + (myDyTp["RUT"]?.id ?? "") + "'\",\"custid\":\"" + (myDyTp["RUT"]?.id ?? "") + "\",\"custName\":\"" + (myDyTp["RUT"]?.name ?? "") + "\",\"address\":\"" + sAddress + "\",\"remarks\":\"'" + (remarks) + "'\",\"OtherWors\":\"\",\"FWFlg\":\"'" + (myDyTp["WT"]?.FWFlg ?? "") + "'\",\"SundayWorkigFlag\":\"''\",\"Place_Inv\":\"\",\"WType_SName\":\"" + (myDyTp["WT"]?.name ?? "") + "\",\"ClstrName\":\"'" + (myDyTp["RUT"]?.name ?? "") + "'\",\"AppVersion\":\"Vi_\(Bundle.main.appVersionLong).\(Bundle.main.appBuild)\",\"self\":1,\"location\":\"" + slocation + "\",\"dcr_activity_date\":\"'" + dateString + "'\",\"worked_with\":\"'\(Join_Works)'\"\(ImgName)}}]"
        // let jsonString: String = ""
         //AppVersion\":\"Vi1.1.0\
 
@@ -877,7 +909,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         ]
         print(params)
             print(self.SFCode)
-        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+"dcr/save&divisionCode="+self.DivCode+"&rSF="+self.SFCode+"&sfCode="+self.SFCode, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"dcr/save&divisionCode="+self.DivCode+"&rSF="+self.SFCode+"&sfCode="+self.SFCode, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
             AFdata in
             self.LoadingDismiss()
             switch AFdata.result
