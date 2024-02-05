@@ -399,8 +399,6 @@ print(Date)
                         BrandList.removeAll()
                         BrandAV.reloadData()
                         ImgViewtb.reloadData()
-                        
-
                         Toast.show(message: "No calls on this date.")
                     }
                     updateTableViewAndSubview()

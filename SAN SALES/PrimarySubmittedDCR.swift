@@ -72,6 +72,7 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
         if let RouteData = LocalStoreage.string(forKey: "Route_Master_"+SFCode),
            let list = GlobalFunc.convertToDictionary(text:  RouteData) as? [AnyObject] {
             lstAllRoutes = list
+            print(lstAllRoutes)
         }
         SelectPrimaryorder()
         //SelectPrimary2order()
@@ -153,12 +154,21 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
 //            }
 //            PrimarySubmittedDCR.objcalls_SelectPrimaryorder2 = sortedData
             let item: [String: Any] = PrimarySubmittedDCR.objcalls_SelectPrimaryorder2[indexPath.row] as! [String : Any]
-            let Id_For_Route = item["SDP"] as? String
-            let filteredData = lstAllRoutes.filter { ($0["id"] as? String) == Id_For_Route }
+            print(item)
+            var Id_For_Route2 = ""
+            if let Id_For_Route = item["SDP"] as? String{
+                Id_For_Route2
+            }
+            print(Id_For_Route2)
+            print(lstAllRoutes)
+            let filteredData = lstAllRoutes.filter { ($0["id"] as? String) == Id_For_Route2 }
             print(filteredData)
-            
             cell.Disbutor?.text = item["Trans_Detail_Name"] as? String
-            cell.rout?.text = filteredData[0]["name"] as? String
+            if filteredData.isEmpty{
+                cell.rout?.text = item["SDP_Name"] as? String
+            }else{
+                cell.rout?.text = filteredData[0]["name"] as? String
+            }
             cell.meettime.text = item["StartOrder_Time"] as? String
            
             if let order = item["Order_date"] as? String {
@@ -440,10 +450,21 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
         }
 
             let product = PrimarySubmittedDCR.objcalls_SelectPrimaryorder2[indexPath.row]
-        let Id_For_Route = product["SDP"] as? String
-        let filteredData = lstAllRoutes.filter { ($0["id"] as? String) == Id_For_Route }
+        
+        var Id_For_Route2 = ""
+        if let Id_For_Route = product["SDP"] as? String{
+            Id_For_Route2 = Id_For_Route
+        }
+        print(lstAllRoutes)
+        let filteredData = lstAllRoutes.filter { ($0["id"] as? String) == Id_For_Route2 }
+        print(product)
             self.Disbutorsname.text = product["Trans_Detail_Name"] as? String
+        if filteredData.isEmpty{
+            self.Route.text = product["SDP_Name"] as? String
+        }else{
             self.Route.text = filteredData[0]["name"] as? String
+        }
+            
             self.Joint_Work.text = product["Worked_with_Name"] as? String
             
         Input.append(inputval(Key: "Meet Time", Value: product["StartOrder_Time"] as! String))
