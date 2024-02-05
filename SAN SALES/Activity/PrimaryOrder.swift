@@ -131,6 +131,7 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
         }
         if let list = GlobalFunc.convertToDictionary(text: lstProdData) as? [AnyObject] {
             lstAllProducts = list;
+            print(lstAllProducts)
         }
         if let list = GlobalFunc.convertToDictionary(text: lstUnitData) as? [AnyObject] {
             lstAllUnitList = list;
@@ -1538,7 +1539,3 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
     
     
 }
-
-
-
-

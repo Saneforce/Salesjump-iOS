@@ -120,7 +120,6 @@ class IViewController: UIViewController, UITextFieldDelegate{
         self.view.frame.origin.y = 0
     }
     
-
     func getVisibleViewController(_ rootViewController: UIViewController?) -> UIViewController? {
         
         var rootVC = rootViewController
