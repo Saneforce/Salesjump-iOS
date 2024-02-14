@@ -267,12 +267,9 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         if let list = GlobalFunc.convertToDictionary(text: PlnDets) as? [AnyObject] {
             lstPlnDetail = list;
         }
-
-
         let sfid=String(format: "%@", lstPlnDetail[0]["subordinateid"] as! CVarArg)
         //MydayPlanCtrl.SfidString = sfid
         print(sfid)
-
        // print(MydayPlanCtrl.SfidString)
         var DistData: String=""
         if(LocalStoreage.string(forKey: "Distributors_Master_"+sfid)==nil){
@@ -308,9 +305,6 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
 
         }
     }
-    
-    
-    
     @objc func levedata () {
         let vc=self.storyboard?.instantiateViewController(withIdentifier: "sbMainmnu") as!  MainMenu
         vc.modalPresentationStyle = .overCurrentContext
@@ -359,7 +353,8 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let item: [String: Any]=lObjSel[indexPath.row] as! [String : Any]
         let name=item["name"] as! String
-        let id=String(format: "%@", item["id"] as! CVarArg)
+        let id=String(format: "%@", item["FWFlg"] as! CVarArg)
+        print(item)
         print(id)
         Leaveid = id
         var typ: String = ""
@@ -522,6 +517,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
             lblWorktype.text = lstWType[indexToDelete]["name"] as? String
             leavWorktype = lstWType[indexToDelete]["name"] as! String
             print(leavWorktype)
+            Leaveid = typ
             let id=String(format: "%@", lstWType[indexToDelete]["id"] as! CVarArg)
             let name: String = lstWType[indexToDelete]["name"] as! String
             
@@ -769,7 +765,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                print("In Data")
             }else{
                 if UserSetup.shared.Selfie == 1{
-                    if Leaveid != "9999"{
+                    if Leaveid != "L"{
                         openCamera()
                     }
                    
@@ -794,21 +790,17 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                 
                     }
                 }
-               
-            if (Leaveid == "9999" && PhotosCollection.shared.PhotoList.count == 0 ){
+            
+            if (Leaveid == "L" && PhotosCollection.shared.PhotoList.count == 0 ){
                 getLocatio()
             }
                 print("My Day Plan Not Sumbite")
-            
-            
-
         }else{
            //openCamera()
+            print(Leaveid)
             getLocatio()
             print("My Day Plan Sumbite")
         }
-        
-        
        /* */
     }
     func getLocatio(){
@@ -817,7 +809,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         var Leavtyp = leavWorktype
         print(Leavtyp)
  print(Leaveid)
-        if Leaveid != "9999"{
+        if Leaveid != "L"{
             if validateForm() == false {
                 return
             }

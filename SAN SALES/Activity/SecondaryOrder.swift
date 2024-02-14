@@ -148,7 +148,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         }
         if let list = GlobalFunc.convertToDictionary(text: lstProdData) as? [AnyObject] {
             lstAllProducts = list;
-            print(lstProdData)
+            //print(lstProdData)
         }
         if let list = GlobalFunc.convertToDictionary(text: lstUnitData) as? [AnyObject] {
             lstAllUnitList = list;
@@ -156,6 +156,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         if let list = GlobalFunc.convertToDictionary(text: lstSchemData) as? [AnyObject] {
             lstSchemList = list;
             print(lstSchemData)
+            print(lstAllProducts)
         }
         if let list = GlobalFunc.convertToDictionary(text: lstRateData) as? [AnyObject] {
             lstRateList = list;

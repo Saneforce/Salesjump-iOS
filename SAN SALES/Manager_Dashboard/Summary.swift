@@ -297,14 +297,11 @@ class Summary: IViewController,FSCalendarDelegate,FSCalendarDataSource, UITableV
                         print("Error: Cannot convert JSON object to Pretty JSON data")
                         return
                     }
-                    
                     guard let prettyPrintedJson = try? JSONSerialization.jsonObject(with: prettyJsonData, options: []) as? [String: Any] else {
                         print("Error: Could not convert Pretty JSON data to Dictionary")
                         return
                     }
-                    
                     print(prettyPrintedJson)
-                    
                     if let Secon_Det = prettyPrintedJson["SEC"] as? [[String: Any]] {
                         var Total_Call = 0
                         var Productive_Call = 0
