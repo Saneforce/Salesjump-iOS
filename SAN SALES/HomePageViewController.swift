@@ -74,7 +74,6 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         DashBoradTB.delegate=self
         DashBoradTB.dataSource=self
         
-        
         Managerdas.layer.cornerRadius = 20
         Managerdas.layer.borderWidth = 3.0
         Managerdas.layer.borderColor = UIColor(red: 0.10, green: 0.59, blue: 0.81, alpha: 1.00).cgColor
