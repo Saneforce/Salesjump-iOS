@@ -199,23 +199,21 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                         self.lblFrmCus.text=String(format: "%@", list[0]["StkName"] as! CVarArg)
                         self.lblFrmAdd.text=String(format: "%@", list[0]["StkAddr"] as! CVarArg)
  
-                        
-                        if let cusMobile = list[0]["StkMob"] as? String {
-                            self.lblFrmMob.text = cusMobile
+                        if let stkMob = list[0]["StkMob"] as? String, stkMob != "<null>" {
+                            self.lblFrmMob.text = stkMob
+                            print(stkMob)
                         } else {
                             self.lblFrmMob.text = ""
                         }
-                        
-                    
+
                         
                         self.lblToCus.text=String(format: "%@", list[0]["CusName"] as! String)
                         self.lblToAdd.text=String(format: "%@", list[0]["CusAddr"] as! String)
                         
-                        
-                        if let StkMob = list[0]["CusMobile"] as? String{
-                            self.lblToMob.text=StkMob
-                        }else{
+                        if (list[0]["CusMobile"] as? String == "<null>"){
                             self.lblToMob.text=""
+                        } else if let StkMob = list[0]["CusMobile"] as? String{
+                            self.lblToMob.text=StkMob
                         }
                         RefreshData(indx: 0)
                         if (StrMode == "VstPRet" || StrMode == "VstRet"){

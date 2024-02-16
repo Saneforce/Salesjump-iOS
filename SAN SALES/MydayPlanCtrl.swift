@@ -353,10 +353,15 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let item: [String: Any]=lObjSel[indexPath.row] as! [String : Any]
         let name=item["name"] as! String
-        let id=String(format: "%@", item["FWFlg"] as! CVarArg)
         print(item)
-        print(id)
-        Leaveid = id
+        var id = ""
+        if let ids=item["id"] as? String {
+            id = ids
+        }
+        if let Flg_id = item["FWFlg"] as? String{
+            Leaveid = Flg_id
+        }
+        
         var typ: String = ""
         if isMulti==true {
             if SelMode == "JWK" {
@@ -458,10 +463,10 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                 }
             }
             
-            myDyTp.updateValue(lItem(id: id, name: name,FWFlg: typ), forKey: SelMode)
+            myDyTp.updateValue(lItem(id: Leaveid, name: name,FWFlg: typ), forKey: SelMode)
+            print(myDyTp)
             closeWin(self)
         }
-    
     }
    /* func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let item: [String: Any]=lObjSel[indexPath.row] as! [String : Any]

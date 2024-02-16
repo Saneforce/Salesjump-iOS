@@ -47,7 +47,7 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
             print("Error: Cannot convert JSON object to Pretty JSON data")
             return
         }
-        
+        print(prettyJsonData)
         let SFName: String=prettyJsonData["sfName"] as? String ?? ""
         let Desig: String=prettyJsonData["desigCode"] as? String ?? ""
         lblSFName.text = SFName
