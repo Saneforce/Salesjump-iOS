@@ -57,17 +57,25 @@ class DayReport:IViewController,UICollectionViewDelegate,UICollectionViewDataSou
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return objBrnd.count
+        if (objBrnd.count == 0){
+            return 1
+        }else{
+            return objBrnd.count
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         autoreleasepool {
             let cell:CollectionCell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! CollectionCell
-            let item: [String: Any]=objBrnd[indexPath.row] as! [String : Any]
-            
-            cell.lblCap.text = item["product_brd_name"] as? String
-            cell.lblText.text = String(format: "%i",item["RetailCount"] as! Int)
-                
+            print(objBrnd)
+            if objBrnd.isEmpty{
+                cell.lblCap.text = "No data available"
+                cell.lblText.text = ""
+            }else{
+                let item: [String: Any]=objBrnd[indexPath.row] as! [String : Any]
+                cell.lblCap.text = item["product_brd_name"] as? String
+                cell.lblText.text = String(format: "%i",item["RetailCount"] as! Int)
+            }
             return cell
         }
     }

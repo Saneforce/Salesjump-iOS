@@ -28,7 +28,7 @@ class BrandReviewVisit: IViewController, UITableViewDataSource, UITableViewDeleg
     @IBOutlet weak var textField: UITextField!
     
     
-    let product:[String] = ["Start Time","Customer Channel","Address","GST"]
+    let product:[String] = ["Start Time","Retailer Channel","Address","GST"]
     
     struct SVCallRevw: Codable {
         let svCallRevw: SVCallRevwDetails
@@ -225,7 +225,9 @@ class BrandReviewVisit: IViewController, UITableViewDataSource, UITableViewDeleg
             //let productitem: [String: Any]=lstAllProducts[indexPath.row] as! [String : Any]
             cell.imgSelect.addTarget(target: self, action: #selector(self.checkboxTappedAvl(_:)))
             cell.imgSelect2.addTarget(target: self, action: #selector(self.checkboxTappedEc(_:)))
-            cell.lblText?.text = item["name"] as? String
+            let proName = item["name"] as? String
+            let uppercasedProName = proName?.uppercased()
+            cell.lblText?.text = uppercasedProName
             // cell.lblText?.text = productitem["name"] as? String
             cell.imgSelect.image = UIImage(named:"uncheckbox")
             cell.selectionStyle = .none
@@ -509,7 +511,7 @@ class BrandReviewVisit: IViewController, UITableViewDataSource, UITableViewDeleg
                       strMasList=[]
                     if(json.count>1){
                         strMasList.append(mnuItem.init(MasId: 1, MasName: "Start Time", MasLbl:VisitData.shared.cInTime))
-                        strMasList.append(mnuItem.init(MasId: 2, MasName: "Customer Channel", MasLbl:json["DrSpl"] as! String))//Doc_Spec_ShortName
+                        strMasList.append(mnuItem.init(MasId: 2, MasName: "Retailer Channel", MasLbl:json["DrSpl"] as! String))//Doc_Spec_ShortName
                         strMasList.append(mnuItem.init(MasId: 3, MasName: "Address", MasLbl:json["Address"] as! String))
                         strMasList.append(mnuItem.init(MasId: 4, MasName: "GST", MasLbl:json["GST"] as! String))
                         strMasList.append(mnuItem(MasId:5, MasName: "Last Order Date", MasLbl: json["Last_Order_Date"] as! String))

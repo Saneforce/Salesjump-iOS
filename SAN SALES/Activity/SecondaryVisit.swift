@@ -133,7 +133,6 @@ class SecondaryVisit: IViewController, UITableViewDelegate, UITableViewDataSourc
         tbJWKSelect.dataSource=self
     }
     
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView==tbJWKSelect { return lstJWNms.count }
         return lObjSel.count

@@ -13,7 +13,7 @@ import Alamofire
 import CoreLocation
 
 class LeaveForm: IViewController, UITableViewDelegate,
-                    UITableViewDataSource,FSCalendarDelegate,FSCalendarDataSource  {
+                 UITableViewDataSource,FSCalendarDelegate,FSCalendarDataSource, UITextViewDelegate  {
     @IBOutlet weak var vwSelWindow: UIView!
     @IBOutlet weak var lblSelTitle: UILabel!
     @IBOutlet weak var lblFDate: UILabel!
@@ -62,8 +62,12 @@ class LeaveForm: IViewController, UITableViewDelegate,
     var NolevPat: String = ""
     var printvalue : String = ""
     let LocalStoreage = UserDefaults.standard
+   
     override func viewDidLoad() {
-        
+        txReason.text = "Reason"
+        txReason.textColor = UIColor.lightGray
+        txReason.returnKeyType = .done
+        txReason.delegate = self
         
         
         getUserDetails()
@@ -124,6 +128,26 @@ class LeaveForm: IViewController, UITableViewDelegate,
         lblNoDays.text = "0 Days"
         Leave_Avaailability_View.isHidden = true
     }
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.text == "Reason"{
+            textView.text = ""
+            textView.textColor = .black
+        }
+    }
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool{
+        if text == "\n"{
+            textView.resignFirstResponder()
+        }
+        return true
+    }
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text == ""{
+            textView.text = "Reason"
+            textView.textColor = UIColor.lightGray
+        }
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView == LeaveAvailability {
             return LeveDet.count
