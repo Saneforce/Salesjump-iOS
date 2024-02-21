@@ -152,7 +152,9 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
         }
         Ret_and_img_Hed.isHidden = true
     }
-
+    func maximumDate(for calendar: FSCalendar) -> Date {
+        return Date()
+    }
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
         let formatter = DateFormatter()
         formatter.dateFormat = "dd/MM/yyyy"
@@ -249,74 +251,7 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
          }
      }
 
-//    func setTodayPlan(){
-//        var lstPlnDetail: [AnyObject] = []
-//        if self.LocalStoreage.string(forKey: "Mydayplan") == nil { return }
-//        let PlnDets: String=LocalStoreage.string(forKey: "Mydayplan")!
-//        if let list = GlobalFunc.convertToDictionary(text: PlnDets) as? [AnyObject] {
-//            lstPlnDetail = list;
-//        }
-//        if(lstPlnDetail.count < 1){ return }
-//        let wtid=String(format: "%@", lstPlnDetail[0]["worktype"] as! CVarArg)
-//        if let indexToDelete = lstWType.firstIndex(where: { String(format: "%@", $0["id"] as! CVarArg) == wtid }) {
-//
-//            let typ: String = lstWType[indexToDelete]["FWFlg"] as! String
-//            let id=String(format: "%@", lstWType[indexToDelete]["id"] as! CVarArg)
-//            let name: String = lstWType[indexToDelete]["name"] as! String
-//
-//            vwHQCtrl.isHidden=false
-//
-//            if typ != "F" {
-//                vwHQCtrl.isHidden=true
-//
-//            }else{
-//
-//                let sfid=String(format: "%@", lstPlnDetail[0]["subordinateid"] as! CVarArg)
-//                if let indexToDelete = lstHQs.firstIndex(where: { String(format: "%@", $0["id"] as! CVarArg) == sfid }) {
-//                    lblHQ.text = lstHQs[indexToDelete]["name"] as? String
-//                    let sfname: String = lstHQs[indexToDelete]["name"] as! String
-//                    //new
-//                    if let DistData = LocalStoreage.string(forKey: "Distributors_Master_"+sfid),
-//                       let list = GlobalFunc.convertToDictionary(text:  DistData) as? [AnyObject] {
-//                        lstDist = list
-//                    }
-//                    if let RouteData = LocalStoreage.string(forKey: "Route_Master_"+sfid),
-//                       let list = GlobalFunc.convertToDictionary(text:  RouteData) as? [AnyObject] {
-//                        lstAllRoutes = list
-//                        lstRoutes = list
-//                    }
-//
-//
-//                    myDyTp.updateValue(lItem(id: sfid, name: sfname,FWFlg: ""), forKey: "HQ")
-//                }
-//                let stkid=String(format: "%@", lstPlnDetail[0]["stockistid"] as! CVarArg)
-//                let rtid=String(format: "%@", lstPlnDetail[0]["clusterid"] as! CVarArg)
-//                if let indexToDelete = lstRoutes.firstIndex(where: { String(format: "%@", $0["id"] as! CVarArg) == rtid }) {
-//                    let rtname: String = lstRoutes[indexToDelete]["name"] as! String
-//
-//                    myDyTp.updateValue(lItem(id: rtid, name: rtname,FWFlg: ""), forKey: "RUT")
-//                }
-//                let jwids=(String(format: "%@", lstPlnDetail[0]["worked_with_code"] as! CVarArg)).replacingOccurrences(of: ",", with: ";")
-//                    .components(separatedBy: ";")
-//                for k in 0...jwids.count-1 {
-//                    if let indexToDelete = lstJoint.firstIndex(where: { String(format: "%@", $0["id"] as! CVarArg) == jwids[k] }) {
-//                        let jwid: String = lstJoint[indexToDelete]["id"] as! String
-//                        let jwname: String = lstJoint[indexToDelete]["name"] as! String
-//
-//                        strJWCd += jwid+";"
-//                        strJWNm += jwname+";"
-//                        let jitm: AnyObject = lstJoint[indexToDelete] as AnyObject
-//                        lstJWNms.append(jitm)
-//                    }
-//                }
-//            }
-//
-//            myDyTp.updateValue(lItem(id: id, name: name,FWFlg: typ), forKey: "WT")
-//        }else{
-//            print(" No Data")
-//        }
-//
-//    }
+
     @objc private func selHeadquaters() {
         calendar.isHidden = true
         HeadquarterTable.isHidden = false

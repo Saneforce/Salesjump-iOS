@@ -664,7 +664,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         isMulti=false
         lObjSel=lstRoutes
         tbDataSelect.reloadData()
-        lblSelTitle.text="Select the Routes"
+        lblSelTitle.text="Select the Route"
         openWin(Mode: "RUT")
     }
     @objc private func selJointWK() {

@@ -261,7 +261,7 @@ class AddNewCustomer: IViewController, UITableViewDelegate, UITableViewDataSourc
         lObjSel=lstRoutes
         openWin(Mode: "RUT")
         tbDataSelect.reloadData()
-        lblSelTitle.text="Select the Routes"
+        lblSelTitle.text="Select the Route"
     }
     @objc private func selCats() {
         isDate=false

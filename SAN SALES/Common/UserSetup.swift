@@ -22,6 +22,7 @@ class UserSetup{
     var DistRad: Double = 0
     var Selfie:Int = 0
     var SF_type:Int = 0
+    var Desig:String = ""
     var OrderMode: item = item()
     func initUserSetup(){
         let SetupStoreage = UserDefaults.standard
@@ -40,6 +41,7 @@ class UserSetup{
         DistRad = lstSetups[0]["DisRad"] as? Double ?? 0
         Selfie = lstSetups[0]["Selfie"] as? Int ?? 0
         SF_type = lstSetups[0]["SF_type"] as? Int ?? 0
+        Desig = lstSetups[0]["Desig"] as? String ?? ""
         if(lstSetups[0]["Geo_Fencing"] as? Int == 1){
             Fenching = true
         }else{

@@ -247,7 +247,6 @@ class ViewController: IViewController {
                              if( self.lstPlnDets.isEmpty || self.lstPlnDets.count<1){ myDyPlFl=true }
                              
                              }*/
-                            
                             if myDyPlFl==true {
                                 let vc=self.storyboard?.instantiateViewController(withIdentifier: "sbMydayplan") as!  MydayPlanCtrl
                                 vc.modalPresentationStyle = .overCurrentContext
