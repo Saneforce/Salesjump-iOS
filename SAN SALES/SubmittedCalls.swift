@@ -167,7 +167,7 @@ class SubmittedCalls: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     @objc func closeMenuWin(){
-        GlobalFunc.movetoHomePage()
+        GlobalFunc.MovetoMainMenu()
         
     }
  

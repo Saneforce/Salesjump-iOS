@@ -72,7 +72,6 @@ class SecondaryVisit: IViewController, UITableViewDelegate, UITableViewDataSourc
         lcLastvistHeight.constant = 0
         //lcContentHeight.constant = -400
         loadViewIfNeeded()
-        
         let LocalStoreage = UserDefaults.standard
         let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
         let data = Data(prettyPrintedJson!.utf8)
@@ -263,7 +262,7 @@ class SecondaryVisit: IViewController, UITableViewDelegate, UITableViewDataSourc
         }
         
         if VisitData.shared.VstRemarks.name == "" {
-            Toast.show(message: "Select the Reason", controller: self)
+            Toast.show(message: "Select the Remarks", controller: self)
             return
         }
         if(NetworkMonitor.Shared.isConnected != true){

@@ -130,7 +130,7 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
         
         
         
-        let alert = UIAlertController(title: "Confirmation", message: "Do you want Logout ?", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Confirmation", message: "Do you want to Logout ?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
             
             print(self.lat)
@@ -305,12 +305,10 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
     
     @objc func closeMenuWin(){
         dismiss(animated: false)
+        GlobalFunc.movetoHomePage()
         
     }
-    
-    
     func selectedid(){
-        
         
         var lstPlnDetail: [AnyObject] = []
         if self.LocalStoreage.string(forKey: "Mydayplan") == nil { return }

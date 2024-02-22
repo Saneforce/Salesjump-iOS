@@ -284,7 +284,7 @@ class PrimaryVisit: IViewController, UITableViewDelegate, UITableViewDataSource,
             return
         }
         if VisitData.shared.VstRemarks.name == "" {
-            Toast.show(message: "Select the Reason", controller: self)
+            Toast.show(message: "Select the Remarks", controller: self)
             return
         }
         

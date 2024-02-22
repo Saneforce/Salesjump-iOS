@@ -633,7 +633,7 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
              Remardata = Reamrk
          }
         if Remardata == "" {
-            Toast.show(message: "Select the Reason", controller: self)
+            Toast.show(message: "Enter the Remarks", controller: self)
             return
         }
    

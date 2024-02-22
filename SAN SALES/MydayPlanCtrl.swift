@@ -622,7 +622,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
     }
     @objc private func GotoHome() {
         self.dismiss(animated: true, completion: nil)
-        GlobalFunc.movetoHomePage()
+        GlobalFunc.MovetoMainMenu()
     }
     @IBAction func setSelValues(_ sender: Any) {
         strJWCd=strSelJWCd

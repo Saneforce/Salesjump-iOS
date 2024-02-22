@@ -1874,7 +1874,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
                 vwPrvOrderCtrl.isHidden = true
                 tbProduct.isHidden = false
         }else{
-            let alert = UIAlertController(title: "Confirmation", message: "Do you want cancel this order draft", preferredStyle: .alert)
+            let alert = UIAlertController(title: "Confirmation", message: "Do you want to cancel this order draft ?", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
                 VisitData.shared.ProductCart=[]
                 self.navigationController?.popViewController(animated: true)

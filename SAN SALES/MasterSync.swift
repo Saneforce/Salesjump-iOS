@@ -215,7 +215,7 @@ import BackgroundTasks
         }
      }
      @objc func clearAllData(){
-        let alert = UIAlertController(title: "Confirmation", message: "Are sure do you want to clear all data?", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Confirmation", message: "Do you want to clear all data?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
             self.clearData()
             return

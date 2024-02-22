@@ -261,6 +261,13 @@ class GlobalFunc{
         UIApplication.shared.windows.first?.rootViewController = viewController
         UIApplication.shared.windows.first?.makeKeyAndVisible()
     }
+    static func MovetoMainMenu(){
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let viewController = storyboard.instantiateViewController(withIdentifier: "sbMainmnu") as! MainMenu;()
+        UIApplication.shared.windows.first?.rootViewController = viewController
+        UIApplication.shared.windows.first?.makeKeyAndVisible()
+    }
+    
     static func FieldMasterSync(SFCode: String,completion: (() -> Void)? = nil){
         
         struct mnuItem: Any {

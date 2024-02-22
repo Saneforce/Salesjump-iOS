@@ -182,7 +182,7 @@ class GEOTagging: IViewController, UITableViewDelegate, UITableViewDataSource, M
             btntag.isHidden = true
         }else{
             self.dismiss(animated: true, completion: nil)
-            GlobalFunc.movetoHomePage()
+            GlobalFunc.MovetoMainMenu()
         }
     }
     

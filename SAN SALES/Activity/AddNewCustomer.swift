@@ -368,7 +368,7 @@ class AddNewCustomer: IViewController, UITableViewDelegate, UITableViewDataSourc
     }
     @objc private func GotoHome() {
         self.dismiss(animated: true, completion: nil)
-        GlobalFunc.movetoHomePage()
+        GlobalFunc.MovetoMainMenu()
     }
     @objc private func takePhoto() {
         let vc=self.storyboard?.instantiateViewController(withIdentifier: "CameraVwCtrl") as!  CameraService

@@ -150,7 +150,11 @@ class DayReport:IViewController,UICollectionViewDelegate,UICollectionViewDataSou
                         self.lblPriVal.text=String(format: "%.02f", todayData["prioVal"] as! Double)
                         self.lblAttnTM.text=String(format: "%@", todayData["attTM"] as! String)
                         self.lblDyStTM.text=String(format: "%@", todayData["StartTime"] as! String)
-                        self.lblDyEnTM.text=String(format: "%@:00", todayData["secFC"] as! String)
+                        if todayData["secFC"] as! String == "-"{
+                            self.lblDyEnTM.text = (todayData["secFC"] as! String)
+                        }else{
+                            self.lblDyEnTM.text=String(format: "%@:00", todayData["secFC"] as! String)
+                        }
                         if let endTime = todayData["EndTime"] as? String, !endTime.isEmpty {
                             self.lblFCTM.text = endTime
                         } else {
