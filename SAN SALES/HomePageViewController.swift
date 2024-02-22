@@ -92,6 +92,7 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         EndRmk.layer.borderWidth = 2.0
         EndRmk.layer.borderColor = UIColor.gray.cgColor
         EndRmk.layer.cornerRadius = 5
+        EndRmk.returnKeyType = .done
         
         EndRmk.delegate = self
 

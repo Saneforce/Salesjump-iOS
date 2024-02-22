@@ -357,6 +357,8 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         var id = ""
         if let ids=item["id"] as? String {
             id = ids
+        }else{
+            id = String((item["id"] as? Int)!)
         }
         if let Flg_id = item["FWFlg"] as? String{
             Leaveid = Flg_id
@@ -463,7 +465,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                 }
             }
             
-            myDyTp.updateValue(lItem(id: Leaveid, name: name,FWFlg: typ), forKey: SelMode)
+            myDyTp.updateValue(lItem(id: id, name: name,FWFlg: typ), forKey: SelMode)
             print(myDyTp)
             closeWin(self)
         }
@@ -512,16 +514,17 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         if let list = GlobalFunc.convertToDictionary(text: PlnDets) as? [AnyObject] {
             lstPlnDetail = list;
         }
+        print(lstPlnDetail)
         if(lstPlnDetail.count < 1){ return }
         let wtid=String(format: "%@", lstPlnDetail[0]["worktype"] as! CVarArg)
         if let indexToDelete = lstWType.firstIndex(where: { String(format: "%@", $0["id"] as! CVarArg) == wtid }) {
-            print(indexToDelete)
-            print(lstWType)
+           // print(indexToDelete)
+            //print(lstWType)
 
             let typ: String = lstWType[indexToDelete]["FWFlg"] as! String
             lblWorktype.text = lstWType[indexToDelete]["name"] as? String
             leavWorktype = lstWType[indexToDelete]["name"] as! String
-            print(leavWorktype)
+            //print(leavWorktype)
             Leaveid = typ
             let id=String(format: "%@", lstWType[indexToDelete]["id"] as! CVarArg)
             let name: String = lstWType[indexToDelete]["name"] as! String
@@ -542,6 +545,8 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
             }else{
                 
                 let sfid=String(format: "%@", lstPlnDetail[0]["subordinateid"] as! CVarArg)
+                print(lstPlnDetail)
+                print(sfid)
                 MydayPlanCtrl.SfidString = sfid
                 if let indexToDelete = lstHQs.firstIndex(where: { String(format: "%@", $0["id"] as! CVarArg) == sfid }) {
                     lblHQ.text = lstHQs[indexToDelete]["name"] as? String
@@ -550,7 +555,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                     if let DistData = LocalStoreage.string(forKey: "Distributors_Master_"+sfid),
                        let list = GlobalFunc.convertToDictionary(text:  DistData) as? [AnyObject] {
                         lstDist = list
-                        print(DistData)
+                        //print(DistData)
                     }
                     
                     
@@ -558,7 +563,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                        let list = GlobalFunc.convertToDictionary(text:  RouteData) as? [AnyObject] {
                          lstAllRoutes = list
                         lstRoutes = list
-                        print(RouteData)
+                        //print(RouteData)
                     }
                     //new
         
@@ -573,8 +578,12 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
 //                    }
                     
                     myDyTp.updateValue(lItem(id: sfid, name: sfname,FWFlg: ""), forKey: "HQ")
+                    print(myDyTp)
                 }
                 let stkid=String(format: "%@", lstPlnDetail[0]["stockistid"] as! CVarArg)
+                print(lstPlnDetail)
+                print(stkid)
+                print(lstDist)
                 if let indexToDelete = lstDist.firstIndex(where: { String(format: "%@", $0["id"] as! CVarArg) == stkid }) {
                     lblDist.text = lstDist[indexToDelete]["name"] as? String
                     let stkname: String = lstDist[indexToDelete]["name"] as! String
@@ -585,14 +594,19 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                         //return Bool(StkId.range(of: String(format: ",%@,", id))?.lowerBound != nil )
                     })
                     myDyTp.updateValue(lItem(id: stkid, name: stkname,FWFlg: ""), forKey: "DIS")
+                    print(myDyTp)
                 }
                 let rtid=String(format: "%@", lstPlnDetail[0]["clusterid"] as! CVarArg)
+                print(lstPlnDetail)
+                print(rtid)
+                print(lstRoutes)
                 if let indexToDelete = lstRoutes.firstIndex(where: { String(format: "%@", $0["id"] as! CVarArg) == rtid }) {
                     lblRoute.text = lstRoutes[indexToDelete]["name"] as? String
                     HomePageViewController.selfieLoginActive = 0
                     let rtname: String = lstRoutes[indexToDelete]["name"] as! String
                     print(rtname)
                    myDyTp.updateValue(lItem(id: rtid, name: rtname,FWFlg: ""), forKey: "RUT")
+                    print(myDyTp)
                 }
                 let jwids=(String(format: "%@", lstPlnDetail[0]["worked_with_code"] as! CVarArg)).replacingOccurrences(of: "$$", with: ";")
                     .replacingOccurrences(of: "$", with: ";")
@@ -603,7 +617,8 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                         print(lstJoint)
                         let jwid: String = lstJoint[indexToDelete]["id"] as! String
                         let jwname: String = lstJoint[indexToDelete]["name"] as! String
-                        
+                        print(lstJoint)
+                        print(jwid)
                         strJWCd += jwid+";"
                         strJWNm += jwname+";"
                         let jitm: AnyObject = lstJoint[indexToDelete] as AnyObject
@@ -611,10 +626,12 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                     }
                 }
                 print(lstJWNms)
+                myDyTp.updateValue(lItem(id: id, name: name,FWFlg: typ), forKey: "WT")
+                print(myDyTp)
                 tbJWKSelect.reloadData()
             }
             
-            myDyTp.updateValue(lItem(id: id, name: name,FWFlg: typ), forKey: "WT")
+            
         }else{
             print(" No Data")
         }
@@ -897,6 +914,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
             } else {
                 
             }
+            print(myDyTp)
             let jsonString = "[{\"tbMyDayPlan\":{\"wtype\":\"'" + (myDyTp["WT"]?.id ?? "") + "'\",\"sf_member_code\":\"'" + (myDyTp["HQ"]?.id ?? SFCode) + "'\",\"stockist\":\"'" + (myDyTp["DIS"]?.id ?? "") + "'\",\"stkName\":\"" + (myDyTp["DIS"]?.name ?? "") + "\",\"dcrtype\":\"App\",\"cluster\":\"'" + (myDyTp["RUT"]?.id ?? "") + "'\",\"custid\":\"" + (myDyTp["RUT"]?.id ?? "") + "\",\"custName\":\"" + (myDyTp["RUT"]?.name ?? "") + "\",\"address\":\"" + sAddress + "\",\"remarks\":\"'" + (remarks) + "'\",\"OtherWors\":\"\",\"FWFlg\":\"'" + (myDyTp["WT"]?.FWFlg ?? "") + "'\",\"SundayWorkigFlag\":\"''\",\"Place_Inv\":\"\",\"WType_SName\":\"" + (myDyTp["WT"]?.name ?? "") + "\",\"ClstrName\":\"'" + (myDyTp["RUT"]?.name ?? "") + "'\",\"AppVersion\":\"Vi_\(Bundle.main.appVersionLong).\(Bundle.main.appBuild)\",\"self\":1,\"location\":\"" + slocation + "\",\"dcr_activity_date\":\"'" + dateString + "'\",\"worked_with\":\"'\(Join_Works)'\"\(ImgName)}}]"
        // let jsonString: String = ""
         //AppVersion\":\"Vi1.1.0\
