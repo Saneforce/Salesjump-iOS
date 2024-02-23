@@ -44,6 +44,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
     @IBOutlet weak var vwRouteCtrl: UIView!
     @IBOutlet weak var vwJointCtrl: UIView!
     @IBOutlet weak var vwRmksCtrl: UIView!
+    @IBOutlet weak var Setval: UIButton!
     
     
     
@@ -717,6 +718,10 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         SelMode=Mode
         lAllObjSel = lObjSel
         txSearchSel.text = ""
+        Setval.isHidden = true
+        if (Mode == "JWK"){
+            Setval.isHidden = false
+        }
         vwSelWindow.isHidden=false
         
     }
@@ -788,6 +793,9 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
             }else{
                 if UserSetup.shared.Selfie == 1{
                     if Leaveid != "L"{
+                        if validateForm() == false {
+                            return
+                        }
                         openCamera()
                     }
                    
@@ -796,7 +804,6 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                     getLocatio()
                 }
             }
-            
                 if(PhotosCollection.shared.PhotoList.count>0){
                     for i in 0...PhotosCollection.shared.PhotoList.count-1{
                         let item: [String: Any] = PhotosCollection.shared.PhotoList[i] as! [String : Any]

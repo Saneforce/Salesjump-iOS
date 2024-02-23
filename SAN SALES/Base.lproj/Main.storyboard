@@ -1283,6 +1283,7 @@
                     <navigationItem key="navigationItem" id="QMB-rC-8aZ"/>
                     <connections>
                         <outlet property="Applylev" destination="XCo-wu-PrP" id="8fm-Ux-b9f"/>
+                        <outlet property="Setval" destination="kxI-x8-wLR" id="ncv-RQ-v2L"/>
                         <outlet property="btnAdd" destination="SjN-06-8t5" id="hOC-W4-cqu"/>
                         <outlet property="btnBack" destination="eEa-Ht-TD2" id="QDB-1p-Z0j"/>
                         <outlet property="btnSave" destination="RyA-6V-Dto" id="nBr-p9-9g3"/>

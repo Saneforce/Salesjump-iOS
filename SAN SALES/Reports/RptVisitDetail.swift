@@ -206,7 +206,7 @@ class RptVisitDetail: IViewController, UITableViewDelegate, UITableViewDataSourc
                     } catch {
                         print("Error: \(error.localizedDescription)")
                     }
-                    if (prettyPrintedJson.count != 0){
+                    if (RptVisitDetail.objItmSmryDetail.count != 0){
                         RptVisitDetail.objItmSmryDetail.append(ItemSumary(Qty: String(ToatQty), PCode:"" , PName: "TOTAL", Val: String(format: "Rs. %.02f",TotVal)))
                     }
                     //RptVisitDetail.objItmSmryDetail = json

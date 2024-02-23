@@ -249,7 +249,6 @@ class SecondaryVisit: IViewController, UITableViewDelegate, UITableViewDataSourc
             vstDets.updateValue(lItem(id: id, name: name), forKey: SelMode)
             closeWin(self)
         }
-    
     }
     func addVstDetControl(aY: Double, h: Double, Caption: String, text: String) -> Double {
         if text != "" {

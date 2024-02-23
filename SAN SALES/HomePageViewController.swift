@@ -188,6 +188,7 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
                             return
                         }
                     }else{
+                        self.Managerdas.isHidden = true
                         let myDyPln = self.storyboard?.instantiateViewController(withIdentifier: "sbMydayplan") as! MydayPlanCtrl
                         self.navigationController?.pushViewController(myDyPln, animated: true)
                         return
@@ -688,9 +689,14 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
                     logOutMod = cnt
                     print(logOutMod)
                     DayEnd.isHidden = true
-                    if (logOutMod == 0){
-                        DayEnd.isHidden = false
+                    if (self.lstMyplnList.count>0){
+                        if (logOutMod == 0){
+                            DayEnd.isHidden = false
+                        }
+                    }else{
+                        self.Managerdas.isHidden = true
                     }
+                   
                 } else {
                     print("Invalid response format")
                 }
