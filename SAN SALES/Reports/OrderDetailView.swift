@@ -192,8 +192,6 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                     }
                     if let list = GlobalFunc.convertToDictionary(text: prettyPrintedJson) as? [AnyObject] {
                         self.objOrderDetails = list;
-                        print(list)
-                    print(list)
                         self.lblOrderNo.text=String(format: "%@", list[0]["Trans_Sl_No"] as! String)
                         self.lblOrderType.text=String(format: "%@", list[0]["OrderTypeNm"] as! String)
                         self.lblFrmCus.text=String(format: "%@", list[0]["StkName"] as! CVarArg)
@@ -210,10 +208,10 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                         self.lblToCus.text=String(format: "%@", list[0]["CusName"] as! String)
                         self.lblToAdd.text=String(format: "%@", list[0]["CusAddr"] as! String)
                         
-                        if (list[0]["CusMobile"] as? String == "<null>"){
-                            self.lblToMob.text=""
-                        } else if let StkMob = list[0]["CusMobile"] as? String{
+                        if let StkMob = list[0]["CusMobile"] as? String, StkMob != "<null>"{
                             self.lblToMob.text=StkMob
+                        } else {
+                            self.lblToMob.text=""
                         }
                         RefreshData(indx: 0)
                         if (StrMode == "VstPRet" || StrMode == "VstRet"){
@@ -233,9 +231,6 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                 Toast.show(message: error.errorDescription!, controller: self)
             }
         }
-        
-       
-    
     }
     func RefreshData(indx: Int){
         
@@ -246,11 +241,24 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
             self.lblOrderType.text=String(format: "%@", todayData["OrderTypeNm"] as! String)
             self.lblFrmCus.text=String(format: "%@", todayData["CusName"] as! String)
             self.lblFrmAdd.text=String(format: "%@", todayData["CusAddr"] as! String)
-            self.lblFrmMob.text=String(format: "%@", todayData["CusMobile"] as! CVarArg)
-
+            //self.lblFrmMob.text=String(format: "%@", todayData["CusMobile"] as! CVarArg)
+            if let stkMob = todayData["CusMobile"] as? String, stkMob != "<null>" {
+                self.lblFrmMob.text = stkMob
+                print(stkMob)
+            } else {
+                self.lblFrmMob.text = ""
+            }
+    
             self.lblToCus.text=String(format: "%@", todayData["StkName"] as! CVarArg)
             self.lblToAdd.text=String(format: "%@", todayData["StkAddr"] as! CVarArg)
-            self.lblToMob.text=String(format: "%@", todayData["StkMob"] as! CVarArg)
+            //self.lblToMob.text=String(format: "%@", todayData["StkMob"] as! CVarArg)
+            if let stkMob = todayData["StkMob"] as? String, stkMob != "<null>" {
+                self.lblToMob.text = stkMob
+                print(stkMob)
+            } else {
+                self.lblToMob.text = ""
+            }
+
             print(todayData)
             self.objOrderDetail = todayData["Items"] as! [AnyObject]
             print(objOrderDetail)

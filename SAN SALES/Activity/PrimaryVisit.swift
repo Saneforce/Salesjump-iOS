@@ -11,7 +11,7 @@ import FSCalendar
 import Alamofire
 import CoreLocation
 
-class PrimaryVisit: IViewController, UITableViewDelegate, UITableViewDataSource,FSCalendarDelegate,FSCalendarDataSource {
+class PrimaryVisit: IViewController, UITableViewDelegate, UITableViewDataSource,FSCalendarDelegate,FSCalendarDataSource, UITextViewDelegate {
     @IBOutlet weak var lcLastvistHeight: NSLayoutConstraint!
     @IBOutlet weak var lcContentHeight: NSLayoutConstraint!
     
@@ -78,6 +78,11 @@ class PrimaryVisit: IViewController, UITableViewDelegate, UITableViewDataSource,
     var sAddress: String = ""
     let LocalStoreage = UserDefaults.standard
     override func viewDidLoad() {
+        
+        txvRmks.text = "Enter the Remarks"
+        txvRmks.textColor = UIColor.lightGray
+        txvRmks.returnKeyType = .done
+        txvRmks.delegate = self
         
         let LocalStoreage = UserDefaults.standard
         let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
@@ -147,7 +152,24 @@ class PrimaryVisit: IViewController, UITableViewDelegate, UITableViewDataSource,
         tbJWKSelect.delegate=self
         tbJWKSelect.dataSource=self
     }
-    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.text == "Enter the Remarks"{
+            textView.text = ""
+            textView.textColor = .black
+        }
+    }
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool{
+        if text == "\n"{
+            textView.resignFirstResponder()
+        }
+        return true
+    }
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text == ""{
+            textView.text = "Enter the Remarks"
+            textView.textColor = UIColor.lightGray
+        }
+    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView==tbJWKSelect { return lstJWNms.count }

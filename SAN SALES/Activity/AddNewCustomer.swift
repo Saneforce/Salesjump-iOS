@@ -68,8 +68,7 @@ class AddNewCustomer: IViewController, UITableViewDelegate, UITableViewDataSourc
                 setOutletLocation()
             }
         }
-        
-        
+        imgOutlet.image = UIImage(named: "camera")
         let LocalStoreage = UserDefaults.standard
         let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
         let data = Data(prettyPrintedJson!.utf8)
@@ -375,6 +374,7 @@ class AddNewCustomer: IViewController, UITableViewDelegate, UITableViewDataSourc
         vc.modalPresentationStyle = .overCurrentContext
         vc.callback = { (photo, fileName) -> Void in
             print("callback")
+            print(photo)
             self.imgOutlet.image = photo
             NewOutlet.shared.Image = photo
             NewOutlet.shared.ImgFileName = fileName

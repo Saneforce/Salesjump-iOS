@@ -10,7 +10,7 @@ import UIKit
 import Alamofire
 import CoreLocation
 
-class SecondaryVisit: IViewController, UITableViewDelegate, UITableViewDataSource {
+class SecondaryVisit: IViewController, UITableViewDelegate, UITableViewDataSource, UITextViewDelegate {
     @IBOutlet weak var lcLastvistHeight: NSLayoutConstraint!
     @IBOutlet weak var lcContentHeight: NSLayoutConstraint!
     
@@ -71,6 +71,10 @@ class SecondaryVisit: IViewController, UITableViewDelegate, UITableViewDataSourc
     override func viewDidLoad() {
         lcLastvistHeight.constant = 0
         //lcContentHeight.constant = -400
+        txvRmks.text = "Enter the Remarks"
+        txvRmks.textColor = UIColor.lightGray
+        txvRmks.returnKeyType = .done
+        txvRmks.delegate = self
         loadViewIfNeeded()
         let LocalStoreage = UserDefaults.standard
         let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
@@ -130,6 +134,24 @@ class SecondaryVisit: IViewController, UITableViewDelegate, UITableViewDataSourc
         
         tbJWKSelect.delegate=self
         tbJWKSelect.dataSource=self
+    }
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.text == "Enter the Remarks"{
+            textView.text = ""
+            textView.textColor = .black
+        }
+    }
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool{
+        if text == "\n"{
+            textView.resignFirstResponder()
+        }
+        return true
+    }
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text == ""{
+            textView.text = "Enter the Remarks"
+            textView.textColor = UIColor.lightGray
+        }
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -208,9 +230,9 @@ class SecondaryVisit: IViewController, UITableViewDelegate, UITableViewDataSourc
                 lblRetailNm.text = name
                 
                 var yAx: Double = 0
-                yAx = addVstDetControl(aY: yAx, h: 30, Caption: "Address", text: item["ListedDr_Address1"] as! String)
-                yAx = addVstDetControl(aY: yAx, h: 30, Caption: "Contact Person", text: item["ContactPersion"] as! String)
-                yAx = addVstDetControl(aY: yAx, h: 30, Caption: "Mobile", text: item["Mobile_Number"] as! String)
+                yAx = addVstDetControl(aY: yAx, h: 30, Caption: "Address:", text: item["ListedDr_Address1"] as! String)
+                yAx = addVstDetControl(aY: yAx, h: 30, Caption: "Contact Person:", text: item["ContactPersion"] as! String)
+                yAx = addVstDetControl(aY: yAx, h: 30, Caption: "Mobile:", text: item["Mobile_Number"] as! String)
                 
                 vwVstDetCtrl.addSubview(vwVstContainer)
                 
@@ -232,7 +254,7 @@ class SecondaryVisit: IViewController, UITableViewDelegate, UITableViewDataSourc
     func addVstDetControl(aY: Double, h: Double, Caption: String, text: String) -> Double {
         if text != "" {
             let lblCap: UILabel! = UILabel(frame: CGRect(x: 10, y: aY, width: vwVstDetCtrl.frame.width, height: 10))
-            lblCap.font = UIFont(name: "Poppins-Regular", size: 10)
+            lblCap.font = UIFont(name: "Poppins-SemiBold", size: 14)
             lblCap.text = Caption
             let lblAdd: UILabel! = UILabel(frame: CGRect(x: 10, y: aY+5, width: vwVstDetCtrl.frame.width, height: h))
             lblAdd.font = UIFont(name: "Poppins-Regular", size: 13)

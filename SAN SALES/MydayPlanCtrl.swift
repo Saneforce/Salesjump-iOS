@@ -242,6 +242,10 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         print(UserSetup.shared.DistBased)
         if UserSetup.shared.DistBased == 0 {
             self.vwDistCtrl.isHidden = true
+              
+//            self.vwDistCtrl.frame.origin.y = vwRouteCtrl.frame.origin.y+vwRouteCtrl.frame.height+8
+//            self.vwDistCtrl.frame.origin.y = vwJointCtrl.frame.origin.y+vwJointCtrl.frame.height+8
+//            self.vwDistCtrl.frame.origin.y = vwRmksCtrl.frame.origin.y+vwRmksCtrl.frame.height+8
                }
         if (UserSetup.shared.DistBased == 1){
             vwDistCtrl.isHidden = false
@@ -254,10 +258,8 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         
         setTodayPlan()
        //selectedid()
-        
-        
+
     }
-    
 //
     func selectedid(){
 
@@ -300,9 +302,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                 }
             }
         }
-
         if(UserSetup.shared.DistBased == 1){
-
         }
     }
     @objc func levedata () {
@@ -399,7 +399,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                    // vwDistCtrl.isHidden=true
                     vwRouteCtrl.isHidden=true
                     vwJointCtrl.isHidden=true
-                    
+        
                     self.vwRmksCtrl.frame.origin.y = vwWTCtrl.frame.origin.y+vwWTCtrl.frame.height+8
                     
                 }
@@ -537,7 +537,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
             self.vwRmksCtrl.frame.origin.y = vwJointCtrl.frame.origin.y+vwJointCtrl.frame.height+8
             if typ != "F" {
                 vwHQCtrl.isHidden=true
-               //vwDistCtrl.isHidden=true
+                vwDistCtrl.isHidden=true
                 vwRouteCtrl.isHidden=true
                 vwJointCtrl.isHidden=true
                 
