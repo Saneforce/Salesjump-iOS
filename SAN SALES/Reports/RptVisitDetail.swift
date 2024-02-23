@@ -30,7 +30,13 @@ class RptVisitDetail: IViewController, UITableViewDelegate, UITableViewDataSourc
     let LocalStoreage = UserDefaults.standard
     
     public static var objVstDetail: [AnyObject]=[]
-    public static var objItmSmryDetail: [AnyObject]=[]
+    struct ItemSumary: Any {
+        let Qty: String
+        let PCode: String
+        let PName: String
+        let Val: String
+    }
+    public static var objItmSmryDetail: [ItemSumary]=[]
     
     override func viewDidLoad() {
         lblDate.text = RptDate
@@ -72,11 +78,17 @@ class RptVisitDetail: IViewController, UITableViewDelegate, UITableViewDataSourc
             if item["OrdVal"] as! Double > 0 { cell.btnViewDet.isHidden = false }
             cell.btnViewDet.addTarget(target: self, action: #selector(ShowOrderDet(_:)))
         }
+            var ItmSumCount = 0
         if tbItemSumry == tableView {
-            let item: [String: Any] = RptVisitDetail.objItmSmryDetail[indexPath.row] as! [String : Any]
-            cell.lblText?.text = item["PName"] as? String
-            cell.lblQty?.text = String(format: "%i", item["Qty"] as! Int)
-            cell.lblActRate?.text = String(format: "Rs. %.02f", item["Val"] as! Double)
+//            let item: [String: Any] = RptVisitDetail.objItmSmryDetail[indexPath.row] as! [String : Any]
+//            cell.lblText?.text = item["PName"] as? String
+//            cell.lblQty?.text = String(format: "%i", item["Qty"] as! Int)
+//            cell.lblActRate?.text = String(format: "Rs. %.02f", item["Val"] as! Double)
+            
+            cell.lblText?.text = RptVisitDetail.objItmSmryDetail[indexPath.row].PName
+            cell.lblQty?.text = RptVisitDetail.objItmSmryDetail[indexPath.row].Qty
+            cell.lblActRate?.text = RptVisitDetail.objItmSmryDetail[indexPath.row].Val
+                        
             
         }
         return cell
@@ -144,6 +156,7 @@ class RptVisitDetail: IViewController, UITableViewDelegate, UITableViewDataSourc
     }
     
     func getItemSummary(){
+        RptVisitDetail.objItmSmryDetail.removeAll()
         let apiKey: String = "\(axnsumry)&divisionCode=\(DivCode)&rSF=\(SFCode)&rptDt=\(StrRptDt)&sfCode=\(SFCode)&State_Code=\(StateCode)&Mode=\(StrMode)"
         let aFormData: [String: Any] = [
            "tableName":"vwMyDayPlan","coloumns":"[\"worktype\",\"FWFlg\",\"sf_member_code as subordinateid\",\"cluster as clusterid\",\"ClstrName\",\"remarks\",\"stockist as stockistid\",\"worked_with_code\",\"worked_with_name\",\"dcrtype\",\"location\",\"name\",\"Sprstk\",\"Place_Inv\",\"WType_SName\",\"convert(varchar,Pln_date,20) plnDate\"]","desig":"mgr"
@@ -173,8 +186,30 @@ class RptVisitDetail: IViewController, UITableViewDelegate, UITableViewDataSourc
                     }
                  
                     print(prettyPrintedJson)
-                    
-                    RptVisitDetail.objItmSmryDetail = json
+                    var ToatQty = 0
+                    var TotVal = 0.0
+                    do {
+                        if let jsonData = prettyPrintedJson.data(using: .utf8) {
+                            if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
+                                for item in jsonArray {
+                                    
+                                    RptVisitDetail.objItmSmryDetail.append(ItemSumary(Qty: String(format: "%i", item["Qty"] as! Int), PCode: (item["PCode"] as? String)!, PName: (item["PName"] as? String)!, Val: String(format: "Rs. %.02f", item["Val"] as! Double)))
+                                    ToatQty += item["Qty"] as! Int
+                                    TotVal += item["Val"] as! Double
+                                }
+                            } else {
+                                print("Error: Could not convert JSON string to array of dictionaries.")
+                            }
+                        } else {
+                            print("Error: Could not convert JSON string to data.")
+                        }
+                    } catch {
+                        print("Error: \(error.localizedDescription)")
+                    }
+                    if (prettyPrintedJson.count != 0){
+                        RptVisitDetail.objItmSmryDetail.append(ItemSumary(Qty: String(ToatQty), PCode:"" , PName: "TOTAL", Val: String(format: "Rs. %.02f",TotVal)))
+                    }
+                    //RptVisitDetail.objItmSmryDetail = json
                     tbItemSumry.reloadData()
                     itmSmryHeight.constant = CGFloat(42*RptVisitDetail.objItmSmryDetail.count)
                     self.view.layoutIfNeeded()
@@ -184,7 +219,7 @@ class RptVisitDetail: IViewController, UITableViewDelegate, UITableViewDataSourc
                     print(tbItemSumry)
                 }
                case .failure(let error):
-                Toast.show(message: error.errorDescription!)  //, controller: self
+                Toast.show(message: error.errorDescription!)
             }
         }
     }
