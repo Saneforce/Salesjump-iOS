@@ -455,12 +455,6 @@ class BrandReviewVisit: IViewController, UITableViewDataSource, UITableViewDeleg
         
         let jsonString = "[{\"svCallRevw\":{\"worktype\":\"" + (self.lstPlnDetail[0]["worktype"] as! String) + "\",\"entryDate\":\"" + VisitData.shared.cInTime + "\",\"eDt\":\"" + VisitData.shared.cInTime + "\",\"subordinate\":\"MR4126\",\"stockist\":\"32539\",\"cluster\":\"114727\",\"clusterNm\":\"SAIDAPET\",\"doctorid\":\"" + VisitData.shared.CustID + "\",\"remarks\":\"" + VisitData.shared.VstRemarks.name + "\",\"BrandList\":\"[" + brndlst + "]\",\"photosList\":\"[" + sImgItems + "]\"}}]";
         
-//                print("____________")
-//                let jsonString = "[{\"svCallRevw\":{\"worktype\":\"1386\",\"entryDate\":\"2023-07-19 16:32:47\",\"eDt\":\"2023-07-19 00:00:00\",\"subordinate\":\"MR4126\",\"stockist\":\"32538\",\"cluster\":\"114726\",\"clusterNm\":\"SAIDAPET\",\"doctorid\":\"2372978\",\"remarks\":\"NOT INTERESTED\",\"BrandList\":\"[{\\\"id\\\":\\\"1698\\\",\\\"name\\\":\\\"Palkova\\\",\\\"Avai\\\":true,\\\"EC\\\":false},{\\\"id\\\":\\\"1649\\\",\\\"name\\\":\\\"Prestige Cooker\\\",\\\"Avai\\\":false,\\\"EC\\\":true}]\",\"photosList\":\"[{\\\"imgurl\\\":\\\"'_1689760957.jpg'\\\",\\\"title\\\":\\\"''\\\",\\\"remarks\\\":\\\"''\\\"}]\"}}]"
-        
-        
-//                let jsonString = "[{\"svCallRevw\":{\"worktype\":\"1386\",\"entryDate\":\"2023-04-27 10:48:21\",\"eDt\":\"2023-04-27 00:00:00\",\"subordinate\":\"mgr1018\",\"stockist\":\"32538\",\"cluster\":\"114726\",\"clusterNm\":\"SAIDAPET\",\"doctorid\":\"2051498\",\"remarks\":\"OWNER NOT AVAILABLE\",\"BrandList\":\"[{\\\"id\\\":\\\"1658\\\",\\\"name\\\":\\\"Brittania\\\",\\\"Avai\\\":false,\\\"EC\\\":true},{\\\"id\\\":\\\"909\\\",\\\"name\\\":\\\"BUTTERFLY FAN\\\",\\\"Avai\\\":true,\\\"EC\\\":false}]\",\"photosList\":\"[]\"}}]";
-//                print(jsonString)
     
         let params: Parameters = [
             "data": jsonString
@@ -514,14 +508,7 @@ class BrandReviewVisit: IViewController, UITableViewDataSource, UITableViewDeleg
                         strMasList.append(mnuItem.init(MasId: 2, MasName: "Retailer Channel", MasLbl:json["DrSpl"] as! String))//Doc_Spec_ShortName
                         strMasList.append(mnuItem.init(MasId: 3, MasName: "Address", MasLbl:json["Address"] as! String))
                         strMasList.append(mnuItem.init(MasId: 4, MasName: "GST", MasLbl:json["GST"] as! String))
-                        strMasList.append(mnuItem(MasId:5, MasName: "Last Order Date", MasLbl: json["Last_Order_Date"] as! String))
-                        // strMasList.append(mnuItem.init(MasId: 5, MasName: "Potential", MasLbl:"-"))
-                        //trMasList.append(mnuItem.init(MasId: 6, MasName: "Monthly Order Value", MasLbl:"-"))
-                        //strMasList.append(mnuItem.init(MasId: 7, MasName: "Last Order Amount", MasLbl:"-"))
-                        //strMasList.append(mnuItem.init(MasId: 8, MasName: "Last Order Date", MasLbl:"-"))
-                        //strMasList.append(mnuItem.init(MasId: 9, MasName: "Last Visted", MasLbl:"-"))
-                        //strMasList.append(mnuItem.init(MasId: 10, MasName: "Remark", MasLbl:"-"))
-                        //strMasList.append(mnuItem.init(MasId: 11, MasName: "Mobile Number", MasLbl:"-")) //Mobile_Number
+                       // strMasList.append(mnuItem(MasId:5, MasName: "Last Order Date", MasLbl: json["Last_Order_Date"] as! String))
                         
 
                     }

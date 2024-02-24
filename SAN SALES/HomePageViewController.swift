@@ -379,11 +379,11 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
                         TAmt = "0"
                     }
                     //let AAmt = MonthData["orderVal"] as! Double ?? 0
-                    x = self.addMonthVstDetControl(aY: x, h: 20, Caption: "Visited", text: String(format: "%i", Mcalls),textAlign: .right)
-                    x = self.addMonthVstDetControl(aY: x, h: 20, Caption: "Ordered", text: String(format: "%i", PMcalls),textAlign: .right)
-                    x = self.addMonthVstDetControl(aY: x, h: 20, Caption: "Order Value", text: String(format: "%.02f", OAmt),textAlign: .right)
-                    x = self.addMonthVstDetControl(aY: x, h: 20, Caption: "Target", text: String(TAmt),textAlign: .right)
-                    x = self.addMonthVstDetControl(aY: x, h: 20, Caption: "Achieve", text: String(format: "%.02f", OAmt),textAlign: .right)
+                    x = self.addMonthVstDetControl(aY: x, h: 25, Caption: "Visited", text: String(format: "%i", Mcalls),textAlign: .right)
+                    x = self.addMonthVstDetControl(aY: x, h: 25, Caption: "Ordered", text: String(format: "%i", PMcalls),textAlign: .right)
+                    x = self.addMonthVstDetControl(aY: x, h: 25, Caption: "Order Value", text: String(format: "%.02f", OAmt),textAlign: .right)
+                    x = self.addMonthVstDetControl(aY: x, h: 25, Caption: "Target", text: String(TAmt),textAlign: .right)
+                    x = self.addMonthVstDetControl(aY: x, h: 25, Caption: "Achieve", text: String(format: "%.02f", OAmt),textAlign: .right)
                 }
                case .failure(let error):
                    print(error.errorDescription!)

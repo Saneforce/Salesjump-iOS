@@ -1001,4 +1001,3 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         self.present(vc, animated: true, completion: nil)
     }
 }
-
