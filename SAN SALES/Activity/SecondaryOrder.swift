@@ -149,7 +149,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         }
         if let list = GlobalFunc.convertToDictionary(text: lstProdData) as? [AnyObject] {
             lstAllProducts = list;
-            //print(lstProdData)
+            print(lstProdData)
         }
         if let list = GlobalFunc.convertToDictionary(text: lstUnitData) as? [AnyObject] {
             lstAllUnitList = list;
@@ -871,6 +871,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         updateSchme(cell: cell, id: id)
     }
     @objc private func addQty(_ sender: UITapGestureRecognizer) {
+        var Refresh = 1
         let cell:cellListItem = GlobalFunc.getTableViewCell(view: sender.view!) as! cellListItem
         let tbView:UITableView = GlobalFunc.getTableView(view: sender.view!) as! UITableView
         let indxPath: IndexPath = tbView.indexPath(for: cell)!
@@ -924,7 +925,10 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
             print(selNetWt)
         }
         cell.txtQty.text = String(sQty)
-        updateQty(id: id, sUom: selUOM, sUomNm: selUOMNm, sUomConv: selUOMConv,sNetUnt: selNetWt, sQty: String(sQty),ProdItem: lProdItem,refresh: 2)
+        if (sQty == 0){
+            Refresh = 2
+        }
+        updateQty(id: id, sUom: selUOM, sUomNm: selUOMNm, sUomConv: selUOMConv,sNetUnt: selNetWt, sQty: String(sQty),ProdItem: lProdItem,refresh: Refresh)
         //tbView.reloadRows(at: [indxPath], with: .fade)
     }
     
@@ -969,6 +973,12 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         sQty = sQty-1
         if sQty<0 { sQty = 0 }
         cell.txtQty.text = String(sQty)
+        print(sQty)
+        var Refresh = 1
+        if (sQty == 0){
+            Refresh = 2
+        }
+        
         updateQty(id: id, sUom: selUOM, sUomNm: selUOMNm, sUomConv: selUOMConv, sNetUnt: selNetWt, sQty: String(sQty),ProdItem: lProdItem,refresh: 2)
         //tbView.reloadRows(at: [indxPath], with: .fade)
     }
@@ -994,7 +1004,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
     }
     
     func updateQty(id: String,sUom: String,sUomNm: String,sUomConv: String,sNetUnt: String,sQty: String,ProdItem:[String: Any],refresh: Int){
-        
+        var ReFresh:Int =  refresh
         let items: [AnyObject] = VisitData.shared.ProductCart.filter ({(item) in
             if item["id"] as! String == id {
                 return true
@@ -1021,6 +1031,10 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
             }
             return false
         })
+        if Schemes.isEmpty{
+            print("No Schem")
+            ReFresh = 3
+        }
         var Scheme: Double = 0
         var FQ : Int32 = 0
         var OffQty: Int = 0
@@ -1071,6 +1085,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         print(Rate)
         print(Schmval)
         print(Disc)
+        print(refresh)
         if items.count>0 {
             print(VisitData.shared.ProductCart)
             if let i = VisitData.shared.ProductCart.firstIndex(where: { (item) in
@@ -1093,7 +1108,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
             
         }
         print(VisitData.shared.ProductCart)
-        updateOrderValues(refresh: refresh)
+        updateOrderValues(refresh: ReFresh)
     }
     @objc private func deleteItem(_ sender: UITapGestureRecognizer) {
         let cell:cellListItem = GlobalFunc.getTableViewCell(view: sender.view!) as! cellListItem
@@ -1117,6 +1132,9 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         lstPrvOrder = VisitData.shared.ProductCart.filter ({ (Cart) in
             
             if (Cart["SalQty"] as! Double) > 0 {
+                if (refresh == 3 ){
+                    tbPrvOrderProduct.reloadData()
+                }
                 return true
             }else{
                 Upadet_table = 2
@@ -1141,14 +1159,13 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         
         lblTotItem.text = String(format: "%i",  lstPrvOrder.count)
         lblPrvTotItem.text = String(format: "%i",  lstPrvOrder.count)
-        if (refresh == 1 || Upadet_table == 2){
+        if (refresh == 1 || Upadet_table == 2 || refresh == 3){
             tbProduct.reloadData()
         }
         
-        
-        if (refresh == 1 ){
-            tbPrvOrderProduct.reloadData()
-        }
+//        if (refresh == 3 ){
+//            tbPrvOrderProduct.reloadData()
+//        }
 
        
     }

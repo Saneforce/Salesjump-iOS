@@ -678,11 +678,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VyK-EO-slf">
-                                <rect key="frame" x="0.0" y="76" width="393" height="47"/>
+                                <rect key="frame" x="0.0" y="78" width="393" height="47"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" fixedFrame="YES" text="Primary Submitted DCR" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GJg-wQ-kUV">
                                         <rect key="frame" x="49" y="15" width="258" height="23"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" name="Poppins-Bold" family="Poppins" pointSize="20"/>
                                         <color key="textColor" red="0.21176470589999999" green="0.20784313730000001" blue="0.20784313730000001" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -1172,7 +1172,7 @@
                         <viewLayoutGuide key="safeArea" id="g8h-KF-SFy"/>
                         <color key="backgroundColor" red="0.93725490196078431" green="0.95294117647058818" blue="0.98431372549019602" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
-                            <constraint firstItem="re3-1N-iL7" firstAttribute="top" secondItem="VyK-EO-slf" secondAttribute="bottom" constant="19" id="073-sQ-Olw"/>
+                            <constraint firstItem="re3-1N-iL7" firstAttribute="top" secondItem="VyK-EO-slf" secondAttribute="bottom" constant="17" id="073-sQ-Olw"/>
                             <constraint firstItem="re3-1N-iL7" firstAttribute="leading" secondItem="3CT-iI-Qnq" secondAttribute="leading" id="4KY-i9-bte"/>
                             <constraint firstItem="VyK-EO-slf" firstAttribute="trailing" secondItem="a0E-cT-sUJ" secondAttribute="trailing" id="4UN-vr-nuT"/>
                             <constraint firstItem="a0E-cT-sUJ" firstAttribute="top" secondItem="3CT-iI-Qnq" secondAttribute="top" id="4hT-NH-WVS"/>
@@ -1183,7 +1183,7 @@
                             <constraint firstAttribute="bottom" secondItem="re3-1N-iL7" secondAttribute="bottom" id="YBK-FW-gks"/>
                             <constraint firstItem="re3-1N-iL7" firstAttribute="top" secondItem="g8h-KF-SFy" secondAttribute="top" constant="39" id="hEc-b1-BoF"/>
                             <constraint firstItem="VyK-EO-slf" firstAttribute="leading" secondItem="re3-1N-iL7" secondAttribute="leading" id="iIr-td-AjH"/>
-                            <constraint firstItem="VyK-EO-slf" firstAttribute="top" secondItem="3CT-iI-Qnq" secondAttribute="topMargin" constant="-27" id="puJ-17-IaU"/>
+                            <constraint firstItem="VyK-EO-slf" firstAttribute="top" secondItem="3CT-iI-Qnq" secondAttribute="topMargin" constant="-25" id="puJ-17-IaU"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="tuh-Bd-lse"/>
@@ -1205,7 +1205,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Xt2-Ps-r8y" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="102" y="-213"/>
+            <point key="canvasLocation" x="101.5267175572519" y="-213.38028169014086"/>
         </scene>
     </scenes>
     <resources>
