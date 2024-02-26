@@ -447,7 +447,7 @@
                                             <action selector="closeWin:" destination="ob4-dT-d1O" eventType="touchUpInside" id="vEC-eR-Gxs"/>
                                         </connections>
                                     </button>
-                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="FTT-8A-mYa">
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Search" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="FTT-8A-mYa">
                                         <rect key="frame" x="8" y="76" width="374" height="34"/>
                                         <color key="backgroundColor" white="0.91528486394557829" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>

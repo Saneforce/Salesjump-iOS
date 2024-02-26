@@ -302,6 +302,9 @@ class PrimaryVisit: IViewController, UITableViewDelegate, UITableViewDataSource,
         return true
     }
     @IBAction func SubmitCall(_ sender: Any) {
+        
+        var OrderSub = "NOD"
+        var Count = 0
         if validateForm() == false {
             return
         }
@@ -359,7 +362,16 @@ class PrimaryVisit: IViewController, UITableViewDelegate, UITableViewDataSource,
                             sImgItems = sImgItems + "{\"imgurl\":\"'" + (item["FileName"]  as! String) + "'\",\"title\":\"''\",\"remarks\":\"''\",\"f_key\":{\"Activity_Report_Code\":\"Activity_Report_APP\"}}"
                         }
                     }
-                        self.subcall()
+                        
+                }
+                
+                Count = Count+1
+                if (OrderSub == "NOD"){
+                    self.subcall()
+                    OrderSub  = ""
+                    print(Count)
+                }else{
+                    print(Count)
                 }
             }, error:{ errMsg in
                 self.LoadingDismiss()

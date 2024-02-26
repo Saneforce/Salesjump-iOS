@@ -278,6 +278,8 @@ class SecondaryVisit: IViewController, UITableViewDelegate, UITableViewDataSourc
         return true
     }
     @IBAction func SubmitCall(_ sender: Any) {
+        var OrderSub = "NOD"
+        var Count = 0
         if validateForm() == false {
             return
         }
@@ -348,9 +350,11 @@ class SecondaryVisit: IViewController, UITableViewDelegate, UITableViewDataSourc
 
                 sessionManager.session.configuration.httpMaximumConnectionsPerHost = 1
                 
-                self.subcall()
+               
                    
             }
+            
+         
        
         }, error:{ errMsg in
             self.LoadingDismiss()
