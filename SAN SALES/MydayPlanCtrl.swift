@@ -243,10 +243,9 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         print(UserSetup.shared.DistBased)
         if UserSetup.shared.DistBased == 0 {
             self.vwDistCtrl.isHidden = true
-              
-//            self.vwDistCtrl.frame.origin.y = vwRouteCtrl.frame.origin.y+vwRouteCtrl.frame.height+8
-//            self.vwDistCtrl.frame.origin.y = vwJointCtrl.frame.origin.y+vwJointCtrl.frame.height+8
-//            self.vwDistCtrl.frame.origin.y = vwRmksCtrl.frame.origin.y+vwRmksCtrl.frame.height+8
+            self.vwRouteCtrl.frame.origin.y = vwRouteCtrl.frame.origin.y+vwRouteCtrl.frame.height-160
+            self.vwJointCtrl.frame.origin.y = vwJointCtrl.frame.origin.y+vwJointCtrl.frame.height-300
+            self.vwRmksCtrl.frame.origin.y = vwRmksCtrl.frame.origin.y+vwRmksCtrl.frame.height-155
                }
         if (UserSetup.shared.DistBased == 1){
             vwDistCtrl.isHidden = false

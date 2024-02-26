@@ -352,13 +352,10 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
         } else {
             items = "0"
         }
-        //print(Acdid as Any)
-        print(items)
-
         
-                let apiKey: String = "\(axbDet)&desig=\(Desig)&divisionCode=\(DivCode)&ACd=\(items)&rSF=\(SFCode)&typ=1&sfCode=\(SFCode)&State_Code=\(StateCode)"
-
-            
+        print(items)
+       let apiKey: String = "\(axbDet)&desig=\(Desig)&divisionCode=\(DivCode)&ACd=\(items)&rSF=\(SFCode)&typ=1&sfCode=\(SFCode)&State_Code=\(StateCode)"
+        
             let aFormData: [String: Any] = [
                 "orderBy":"[\"name asc\"]","desig":"mgr"
             ]
@@ -386,6 +383,7 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                             print("Error: Could print JSON in String")
                             return
                         }
+                        print(prettyPrintedJson)
                         if let indexToDelete = json.firstIndex(where: { String(format: "%@", $0["Order_No"] as! CVarArg) == Trans_Sl_No }) {
 //                            let ihi =  json[indexToDelete]["productList"] as? String
 //                            print(ihi as Any)
@@ -509,17 +507,12 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
 //                        OrdHeight.constant = CGFloat(60*self.detail.count)
 //                        self.view.layoutIfNeeded()
                         
-                        
-                        
                     }
                 case .failure(let error):
                     Toast.show(message: error.errorDescription!)  //, controller: self
                 }
             }
     }
-    
-    
-   
     @objc private func GotoHome() {
         navigationController?.popViewController(animated: true)
     }
