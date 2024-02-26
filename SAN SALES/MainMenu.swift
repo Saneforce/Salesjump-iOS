@@ -54,18 +54,21 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
         lblDesig.text = UserSetup.shared.Desig
         imgProf.layer.cornerRadius = 10
         let ImgUrl = prettyJsonData["Profile_Pic"] as? String ?? ""
-        let url = URL(string: ImgUrl)
-        if let imageUrl = url {
-            let data = try? Data(contentsOf: imageUrl)
-            if let imageData = data {
-                let image = UIImage(data: imageData)
-                imgProf.image = image
-                imgProf.contentMode = .scaleToFill
+        if (ImgUrl == ""){
+            imgProf.image = UIImage(named: "profile-picture")
+        }else{
+            let url = URL(string: ImgUrl)
+            if let imageUrl = url {
+                let data = try? Data(contentsOf: imageUrl)
+                if let imageData = data {
+                    let image = UIImage(data: imageData)
+                    imgProf.image = image
+                    imgProf.contentMode = .scaleToFill
+                }
             }
+            
         }
 
-        
-        
         strMasList.append(mnuItem.init(MasId: 1, MasName: "Switch Route", MasImage: "SwitchRoute"))
         strMasList.append(mnuItem.init(MasId: 2, MasName: "Add New Retailer", MasImage: "NewRetailer"))
        /* strMasList.append(mnuItem.init(MasId: 3, MasName: "Edit Retailer", MasImage: "EditRetailer"))

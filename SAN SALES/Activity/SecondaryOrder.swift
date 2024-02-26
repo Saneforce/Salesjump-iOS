@@ -418,17 +418,24 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
             })
             cell.lblFreeCap.isHidden = true
             cell.lblFreeQty.isHidden = true
-            cell.lblFreeProd.isHidden = true
+           // cell.lblFreeProd.isHidden = true
             if items.count>0 {
                 let FQ: Int = items[0]["OffQty"] as! Int
                 cell.lblFreeQty?.text = String(format: "%i", FQ)
                 if FQ>0 {
                     cell.lblFreeCap.isHidden = false
                     cell.lblFreeQty.isHidden = false
-                    cell.lblFreeProd.isHidden = false
+                    //cell.lblFreeProd.isHidden = false
                 }
                 //cell.lblUOM?.text = items[0]["OffProd"] as? String
-                cell.lblFreeProd?.text = items[0]["OffProdNm"] as? String
+                if FQ != 0 && items[0]["OffProdNm"] as? String == ""{
+                    cell.lblFreeProd?.text = ProdItems[0]["name"] as? String
+                }else{
+                    
+                    cell.lblFreeProd?.text = items[0]["OffProdNm"] as? String
+                }
+                
+                //cell.lblFreeProd?.text = items[0]["OffProdNm"] as? String
                 var Disc: String = items[0]["Disc"] as! String
                 var dis: Double = 0;
                 if (Disc != "" && Disc != "0") {
@@ -572,7 +579,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
             cell.txtQty?.text = "0"
             cell.lblFreeCap.isHidden = true
             cell.lblFreeQty.isHidden = true
-            cell.lblFreeProd.isHidden = true
+           // cell.lblFreeProd.isHidden = true
             if items.count>0 {
                 cell.txtQty?.text = items[0]["Qty"] as? String
                 cell.lblUOM?.text = items[0]["UOMNm"] as? String
@@ -581,10 +588,16 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
                 if FQ>0 {
                     cell.lblFreeCap.isHidden = false
                     cell.lblFreeQty.isHidden = false
-                    cell.lblFreeProd.isHidden = false
+                    //cell.lblFreeProd.isHidden = false
                 }
                 //cell.lblUOM?.text = items[0]["OffProd"] as? String
-                cell.lblFreeProd?.text = items[0]["OffProdNm"] as? String
+                
+                if FQ != 0 && items[0]["OffProdNm"] as? String == ""{
+                    cell.lblFreeProd?.text = item["name"] as? String
+                }else{
+                    
+                    cell.lblFreeProd?.text = items[0]["OffProdNm"] as? String
+                }
                 
                 var Disc: String = items[0]["Disc"] as! String
                 var dis: Double = 0;
