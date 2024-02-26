@@ -35,6 +35,8 @@ class SecondaryVisit: IViewController, UITableViewDelegate, UITableViewDataSourc
     @IBOutlet weak var vwBtnOrder: RoundedCornerView!
     @IBOutlet weak var vwBtnCam: RoundedCornerView!
     
+    @IBOutlet weak var SetVal: UIButton!
+    
     struct lItem: Any {
         let id: String
         let name: String
@@ -69,6 +71,7 @@ class SecondaryVisit: IViewController, UITableViewDelegate, UITableViewDataSourc
     var sAddress: String = ""
     let LocalStoreage = UserDefaults.standard
     override func viewDidLoad() {
+        SetVal.isHidden = true
         lcLastvistHeight.constant = 0
         //lcContentHeight.constant = -400
         txvRmks.text = "Enter the Remarks"

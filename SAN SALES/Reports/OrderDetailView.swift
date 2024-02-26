@@ -198,7 +198,8 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                         self.lblFrmAdd.text=String(format: "%@", list[0]["StkAddr"] as! CVarArg)
  
                         if let stkMob = list[0]["StkMob"] as? String, stkMob != "<null>" {
-                            self.lblFrmMob.text = stkMob
+                           // self.lblFrmMob.text = stkMob
+                            self.lblFrmMob.text = ""
                             print(stkMob)
                         } else {
                             self.lblFrmMob.text = ""
@@ -239,24 +240,24 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
         if(todayData.count>0){
             self.lblOrderNo.text=String(format: "%@", todayData["Trans_Sl_No"] as! String)
             self.lblOrderType.text=String(format: "%@", todayData["OrderTypeNm"] as! String)
-            self.lblFrmCus.text=String(format: "%@", todayData["CusName"] as! String)
-            self.lblFrmAdd.text=String(format: "%@", todayData["CusAddr"] as! String)
+            self.lblToCus.text=String(format: "%@", todayData["CusName"] as! String)
+            self.lblToAdd.text=String(format: "%@", todayData["CusAddr"] as! String)
             //self.lblFrmMob.text=String(format: "%@", todayData["CusMobile"] as! CVarArg)
             if let stkMob = todayData["CusMobile"] as? String, stkMob != "<null>" {
-                self.lblFrmMob.text = stkMob
-                print(stkMob)
-            } else {
-                self.lblFrmMob.text = ""
-            }
-    
-            self.lblToCus.text=String(format: "%@", todayData["StkName"] as! CVarArg)
-            self.lblToAdd.text=String(format: "%@", todayData["StkAddr"] as! CVarArg)
-            //self.lblToMob.text=String(format: "%@", todayData["StkMob"] as! CVarArg)
-            if let stkMob = todayData["StkMob"] as? String, stkMob != "<null>" {
                 self.lblToMob.text = stkMob
                 print(stkMob)
             } else {
                 self.lblToMob.text = ""
+            }
+            self.lblFrmCus.text=String(format: "%@", todayData["StkName"] as! CVarArg)
+            self.lblFrmAdd.text=String(format: "%@", todayData["StkAddr"] as! CVarArg)
+            //self.lblToMob.text=String(format: "%@", todayData["StkMob"] as! CVarArg)
+            if let stkMob = todayData["StkMob"] as? String, stkMob != "<null>" {
+                //self.lblFrmMob.text = stkMob
+                self.lblFrmMob.text = ""
+                print(stkMob)
+            } else {
+                self.lblFrmMob.text = ""
             }
 
             print(todayData)

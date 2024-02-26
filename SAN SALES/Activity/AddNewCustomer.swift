@@ -37,6 +37,8 @@ class AddNewCustomer: IViewController, UITableViewDelegate, UITableViewDataSourc
     @IBOutlet weak var lblSelTitle: UILabel!
     @IBOutlet weak var tbDataSelect: UITableView!
     
+    @IBOutlet weak var SetSalValu: UIButton!
+    
     struct lItem: Any {
         let id: String
         let name: String
@@ -63,6 +65,7 @@ class AddNewCustomer: IViewController, UITableViewDelegate, UITableViewDataSourc
         vwScroll.contentSize = CGSize(width: view.frame.width, height: vwContent.frame.height)
         btnBack.addTarget(target: self, action: #selector(GotoHome))
         imgOutlet.addTarget(target: self, action: #selector(takePhoto))
+        SetSalValu.isHidden = true
         DispatchQueue.global(qos: .userInitiated).async {
             DispatchQueue.main.async { [self] in
                 setOutletLocation()
