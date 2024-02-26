@@ -229,13 +229,10 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
     }
     func DashboardNew(){
         let apiKey: String = "\(axn)&divisionCode=\(DivCode)&rSF=\(SFCode)&sfCode=\(SFCode)&vanWorkFlag=&State_Code=\(StateCode)"
-        
-        
         AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
             AFdata in
             switch AFdata.result
             {
-                
             case .success(let value):
                 //print(value)
                 if let json = value as? [String:AnyObject] {
@@ -262,7 +259,6 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
                             self.currentdate.text = item["Adate"] as? String
                         }
                     }
-
 //                    mnulistHeight.constant = CGFloat(70*self.strMenuList.count)
 //                    self.view.layoutIfNeeded()
                     self.DashBoradTB.reloadData()
