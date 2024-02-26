@@ -357,7 +357,14 @@ class SecondaryVisit: IViewController, UITableViewDelegate, UITableViewDataSourc
                    
             }
             
-         
+            Count = Count+1
+            if (OrderSub == "NOD"){
+                self.subcall()
+                OrderSub  = ""
+                print(Count)
+            }else{
+                print(Count)
+            }
        
         }, error:{ errMsg in
             self.LoadingDismiss()

@@ -69,7 +69,6 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
     let LocalStoreage = UserDefaults.standard
     
     override func viewDidLoad() {
-        
         AutoLogOut()
         
         DashBoradTB.delegate=self
@@ -96,12 +95,9 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         EndRmk.returnKeyType = .done
         
         EndRmk.delegate = self
-
               // Add a UITapGestureRecognizer to dismiss the keyboard when tapping outside the UITextView
               let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
               view.addGestureRecognizer(tapGesture)
-        
-        
         DayendBT.layer.cornerRadius = 5
         DayendBT.addTarget(target: self, action: #selector(ClikDayEnd))
         
