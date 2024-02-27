@@ -70,7 +70,6 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
     
     override func viewDidLoad() {
         AutoLogOut()
-        
         DashBoradTB.delegate=self
         DashBoradTB.dataSource=self
         
