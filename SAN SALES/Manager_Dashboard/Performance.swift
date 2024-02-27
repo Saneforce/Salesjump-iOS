@@ -536,6 +536,7 @@ class Performance: IViewController,ChartViewDelegate, UITableViewDelegate, UITab
             switch AFdata.result {
                 
             case .success(let value):
+                self.LoadingDismiss()
                 if let json = value as? [String: Any] {
                     guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
                         print("Error: Cannot convert JSON object to Pretty JSON data")
