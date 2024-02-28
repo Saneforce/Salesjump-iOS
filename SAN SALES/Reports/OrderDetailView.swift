@@ -34,6 +34,7 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
     @IBOutlet weak var OfferHeight: NSLayoutConstraint!
     @IBOutlet weak var ContentHeight: NSLayoutConstraint!
     
+    @IBOutlet weak var ListOforderTB: UITableView!
     
     
     struct viewDet: Codable {
@@ -47,10 +48,14 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
         let value: Double
         let Product_Code:String
        }
-       
-       var detail: [viewDet] = []
-
-    
+    struct NoOfOrder:Codable{
+        let OrderId:String
+        let TotAmt:String
+        let Date:String
+        let Rmk:String
+    }
+    var TotaOrderDet:[NoOfOrder] = []
+    var detail: [viewDet] = []
     var RptDate: String = ""
     var RptCode: String = ""
     var CusCount: String = ""
@@ -80,6 +85,8 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
         tbOrderDetail.dataSource=self
         tbZeroOrd.delegate=self
         tbZeroOrd.dataSource=self
+        ListOforderTB.delegate=self
+        ListOforderTB.dataSource=self
         
        // super.viewDidLayoutSubviews()
        // adjustScrollViewContentSize()
@@ -90,6 +97,7 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if tbOrderDetail == tableView { return 55}
         if tbZeroOrd == tableView { return 24 }
+        if ListOforderTB == tableView {return 100}
         return 42
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -99,6 +107,7 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
         print(detail)
         if tableView==tbOrderDetail {return detail.count}
         if tableView==tbZeroOrd { return objOfferDetail.count }
+        if tableView==ListOforderTB{return TotaOrderDet.count}
         return 0
     }
     
@@ -106,6 +115,12 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
         
         autoreleasepool {
             let cell:cellListItem = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
+            if ListOforderTB == tableView{
+                cell.lblText.text = TotaOrderDet[indexPath.row].OrderId
+                cell.lblAmt.text = TotaOrderDet[indexPath.row].TotAmt
+                cell.ordertime.text = TotaOrderDet[indexPath.row].Date
+                cell.Rmks.text = TotaOrderDet[indexPath.row].Rmk
+            }
             if tbOrderDetail == tableView {
                 let Pro_ID = detail[indexPath.row].Product_Code
                 let filterData = objOrderDetail.filter { $0["PCode"] as? String == Pro_ID }
@@ -151,6 +166,14 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
         return cell
     }
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if tableView == ListOforderTB {
+            let item = TotaOrderDet[indexPath.row]
+            print(item)
+        }
+    }
+    
     func getUserDetails(){
         let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
         let data = Data(prettyPrintedJson!.utf8)
@@ -385,38 +408,35 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                             return
                         }
                         print(prettyPrintedJson)
+                        
                         if let indexToDelete = json.firstIndex(where: { String(format: "%@", $0["Order_No"] as! CVarArg) == Trans_Sl_No }) {
-//                            let ihi =  json[indexToDelete]["productList"] as? String
-//                            print(ihi as Any)
-                            
+                            if let orderid = json[indexToDelete]["id"] as? String{
+                                let filteredData = json.filter { $0["id"] as? String == orderid }
+                                for iteminFilter in filteredData{
+                                    print(iteminFilter)
+                                    let Order_No = iteminFilter["Order_No"] as? String
+                                    let TotalAmt = iteminFilter["finalNetAmnt"] as? String
+                                    let date = iteminFilter["Order_date"] as? String
+                                    let Rmk = iteminFilter["remarks"] as? String
+                                    TotaOrderDet.append(NoOfOrder.init(OrderId:Order_No! , TotAmt: TotalAmt!, Date: date!, Rmk: Rmk!))
+                                }
+                            }
                             let Additional_Prod_Dtls = json[indexToDelete]["productList"] as! [AnyObject]
-                            // self.lblTotAmt.text = String(detail[IndexPath].OrderVal as! Int)
-                            //dayrepDict = json["dayrep"] as! [AnyObject]
                             for Item2 in Additional_Prod_Dtls {
-                                print(Item2)
-                                
                                 detail.append(viewDet(Prname: Item2["Product_Name"] as! String, rate: Item2["Rate"] as! Double, Cl: Item2["Product_Unit_Name"] as! String, Free:Item2["discount"] as! Int, Disc: Item2["discount"] as! Int, Tax: Int(Item2["taxval"] as! Double), qty: Item2["Quantity"] as! Int, value: Item2["sub_total"] as! Double,Product_Code: Item2["Product_Code"] as! String))
                                 self.lblTotAmt.text = String(Item2["OrderVal"] as! Double)
-                                print(detail)
-                                
-                                //                            let contentSize = CGSize(width: ScrollViewsize.bounds.width, height: ScrollViewsize.bounds.height)
-                                //                            ScrollViewsize.contentSize = contentSize
                             }
-                            print(detail)
                             tbOrderDetail.reloadData()
+                            ListOforderTB.reloadData()
                             OrdHeight.constant = 40+CGFloat(55*detail.count)
                             self.view.layoutIfNeeded()
                             let newHeight = 100 + CGFloat(75 * detail.count) + CGFloat(2 * detail.count)
                             ContentHeight.constant = newHeight
                             self.view.layoutIfNeeded()
                         }
-//                        OrdHeight.constant = 100+CGFloat(55*detail.count)
-//                        self.view.layoutIfNeeded()
-//                        OrdHeight.constant = CGFloat(60*self.detail.count)
-//                        self.view.layoutIfNeeded()
                     }
                 case .failure(let error):
-                    Toast.show(message: error.errorDescription!)  //, controller: self
+                    Toast.show(message: error.errorDescription!)
                 }
             }
     }
