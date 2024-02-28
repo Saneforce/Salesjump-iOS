@@ -33,9 +33,11 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
     @IBOutlet weak var OrdHeight: NSLayoutConstraint!
     @IBOutlet weak var OfferHeight: NSLayoutConstraint!
     @IBOutlet weak var ContentHeight: NSLayoutConstraint!
-    
     @IBOutlet weak var ListOforderTB: UITableView!
     
+    @IBOutlet weak var TotalOrderView: UIView!
+    
+    @IBOutlet weak var BackTotalOrder: UIImageView!
     
     struct viewDet: Codable {
         let Prname: String
@@ -77,7 +79,8 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
     let LocalStoreage = UserDefaults.standard
     
     override func viewDidLoad() {
-        btnBack.addTarget(target: self, action: #selector(GotoHome))
+        btnBack.addTarget(target: self, action: #selector(CloseWindo))
+        BackTotalOrder.addTarget(target: self, action: #selector(GotoHome))
         lblDate.text = RptDate
         getUserDetails()
         getOrderDetail()
@@ -120,6 +123,7 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                 cell.lblAmt.text = TotaOrderDet[indexPath.row].TotAmt
                 cell.ordertime.text = TotaOrderDet[indexPath.row].Date
                 cell.Rmks.text = TotaOrderDet[indexPath.row].Rmk
+                cell.btnViewDet.addTarget(target: self, action: #selector(ShowOrderDet(_:)))
             }
             if tbOrderDetail == tableView {
                 let Pro_ID = detail[indexPath.row].Product_Code
@@ -213,6 +217,7 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                         print("Error: Could print JSON in String")
                         return
                     }
+                    print(prettyPrintedJson)
                     if let list = GlobalFunc.convertToDictionary(text: prettyPrintedJson) as? [AnyObject] {
                         self.objOrderDetails = list;
                         self.lblOrderNo.text=String(format: "%@", list[0]["Trans_Sl_No"] as! String)
@@ -365,6 +370,8 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
 //        }
 //    }
     func ViewOrder(){
+        TotaOrderDet.removeAll()
+        detail.removeAll()
         let item = RptVisitDetail.objVstDetail
         print(item)
         
@@ -395,7 +402,6 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                 self.LoadingDismiss()
                 switch AFdata.result
                 {
-                    
                 case .success(let value):
                     print(value)
                     if let json = value as? [AnyObject] {
@@ -442,9 +448,9 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     func viewprimary(){
+        TotaOrderDet.removeAll()
+        detail.removeAll()
         let item = RptVisitDetail.objVstDetail
-        print(item)
-        
         var items = ""
    
         if let Acdid = item[0]["ACD"] {
@@ -453,12 +459,6 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
         } else {
             items = "0"
         }
-        //print(Acdid as Any)
-        print(items)
-
-        
-               // let apiKey: String = "\(axbDet)&desig=\(Desig)&divisionCode=\(DivCode)&ACd=\(items)&rSF=\(SFCode)&typ=1&sfCode=\(SFCode)&State_Code=\(StateCode)"
-
         let apiKey: String = "\(axnprimary)&desig=\(Desig)&divisionCode=\(DivCode)&ACd=\(items)&rSF=\(SFCode)&typ=3&sfCode=\(SFCode)&State_Code=\(StateCode)"
 
             let aFormData: [String: Any] = [
@@ -493,22 +493,24 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                         print(Trans_Sl_No)
                         if let indexToDelete = json.firstIndex(where: { String(format: "%@", $0["Order_No"] as! CVarArg) == Trans_Sl_No }) {
                             print(indexToDelete)
-//                            let ihi =  json[indexToDelete]["productList"] as? String
-//                            print(ihi as Any)
+                            
+                            if let orderid = json[indexToDelete]["Territory"] as? String{
+                                let filteredData = json.filter { $0["Territory"] as? String == orderid }
+                                for iteminFilter in filteredData{
+                                    print(iteminFilter)
+                                    let Order_No = iteminFilter["Order_No"] as? String
+                                    let TotalAmt = String((iteminFilter["orderValue"] as? Int)!)
+                                    let date = iteminFilter["Order_date"] as? String
+                                    let Rmk = iteminFilter["remarks"] as? String
+                                    TotaOrderDet.append(NoOfOrder.init(OrderId:Order_No! , TotAmt: TotalAmt, Date: date!, Rmk: Rmk!))
+                                }
+                            }
                             
                             let Additional_Prod_Dtls = json[indexToDelete]["productList"] as! [AnyObject]
-                            // self.lblTotAmt.text = String(detail[IndexPath].OrderVal as! Int)
-                            //dayrepDict = json["dayrep"] as! [AnyObject]
                             print(Additional_Prod_Dtls)
                             for Item2 in Additional_Prod_Dtls {
-                                print(Item2)
-                                
                                 if let clBalString = Item2["Product_Unit_Name"] as? String {
-                                   
                                 detail.append(viewDet(Prname: Item2["Product_Name"] as! String, rate: Item2["Rate"] as! Double, Cl:clBalString, Free:Item2["discount"] as! Int, Disc: Item2["discount"] as! Int, Tax: Int(Item2["taxval"] as! Double), qty: Item2["Quantity"] as! Int, value: Item2["sub_total"] as! Double,Product_Code: Item2["Product_Code"] as! String))
-                                        
-                                        print(ContentHeight as Any)
-                                   
                                 } else {
                                     print("Error: 'Cl_bal' key not found in the dictionary.")
                                 }
@@ -522,22 +524,38 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                             print(newHeight)
                             self.view.layoutIfNeeded()
                             tbOrderDetail.reloadData()
+                            ListOforderTB.reloadData()
                           
                         }
-                        
-//                        OrdHeight.constant = CGFloat(60*self.detail.count)
-//                        self.view.layoutIfNeeded()
-                        
                     }
                 case .failure(let error):
-                    Toast.show(message: error.errorDescription!)  //, controller: self
+                    Toast.show(message: error.errorDescription!)
                 }
             }
     }
     @objc private func GotoHome() {
         navigationController?.popViewController(animated: true)
     }
-    
+    @objc private func CloseWindo() {
+        TotalOrderView.isHidden = false
+    }
+    @objc private func ShowOrderDet(_ sender: UITapGestureRecognizer) {
+        let cell:cellListItem = GlobalFunc.getTableViewCell(view: sender.view!) as! cellListItem
+        let tbView: UITableView = GlobalFunc.getTableView(view: sender.view!)
+        let indx:NSIndexPath = tbView.indexPath(for: cell)! as NSIndexPath
+        Trans_Sl_No = TotaOrderDet[indx.row].OrderId
+        if let indexTo = objOrderDetails.firstIndex(where: { String(format: "%@", $0["Trans_Sl_No"] as! CVarArg) == Trans_Sl_No }){
+        RefreshData(indx: indexTo)
+        }
+        if (StrMode == "VstPRet" || StrMode == "VstRet"){
+            ViewOrder()
+        }
+        if (StrMode == "VstPDis" || StrMode == "VstDis"){
+            self.ShowLoading(Message: "Loading...")
+            viewprimary()
+        }
+        TotalOrderView.isHidden = true
+    }
 }
 
 
