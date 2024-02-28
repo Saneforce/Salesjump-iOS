@@ -442,7 +442,7 @@ class LeaveForm: IViewController, UITableViewDelegate,
                 let jsonString = "[{\"LeaveFormValidate\":{\"Leave_Type\":\"'" + self.sLvlType + "'\",\"From_Date\":\"'" + self.sDOF + "'\",\"To_Date\":\"'" + self.sDOT + "'\",\"Reason\":\"'" + self.txReason.text! + "'\",\"eKey\":\"" + self.eKey + "\",\"address\":\"''\",\"No_of_Days\":\"''\",\"halfday\":\"''\"}}]"
                 let params: Parameters = ["data": jsonString]
                 
-                AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+"dcr/save&divisionCode="+self.DivCode+"&rSF="+self.SFCode+"&sfCode="+self.SFCode, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
+                AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"dcr/save&divisionCode="+self.DivCode+"&rSF="+self.SFCode+"&sfCode="+self.SFCode, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
                     AFdata in
                     self.LoadingDismiss()
                     switch AFdata.result
@@ -517,7 +517,7 @@ class LeaveForm: IViewController, UITableViewDelegate,
        let apiKey: String = "\(axn)&divisionCode=\(DivCode)&desig=\(Desig)&rSF=\(SFCode)&sfCode=\(SFCode)&State_Code=\(StateCode)&Year=2023&stateCode=\(StateCode)&rSF=\(SFCode)"
         
        
-        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
             AFdata in
             switch AFdata.result
             {

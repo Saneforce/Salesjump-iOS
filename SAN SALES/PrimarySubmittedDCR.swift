@@ -229,7 +229,7 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
             "data": jsonString
         ]
         lblnodata.isHidden=true
-        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
             AFdata in
             switch AFdata.result
             {
@@ -281,7 +281,7 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
             "data": jsonString
         ]
             lblnodata.isHidden=true
-        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
             AFdata in
             lblnodata.isHidden=false
            
@@ -393,7 +393,7 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
                 let params: Parameters = [
                     "data": jsonString
                 ]
-                AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+                AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
                     AFdata in
                     switch AFdata.result
                     {

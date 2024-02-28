@@ -120,7 +120,7 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
             let cell:cellListItem = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
             if ListOforderTB == tableView{
                 cell.lblText.text = TotaOrderDet[indexPath.row].OrderId
-                cell.lblAmt.text = TotaOrderDet[indexPath.row].TotAmt
+                cell.lblAmt.text = "Rs. "+TotaOrderDet[indexPath.row].TotAmt
                 cell.ordertime.text = TotaOrderDet[indexPath.row].Date
                 cell.Rmks.text = TotaOrderDet[indexPath.row].Rmk
                 cell.btnViewDet.addTarget(target: self, action: #selector(ShowOrderDet(_:)))
@@ -169,13 +169,6 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
             print(ContentHeight.constant)
         return cell
     }
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if tableView == ListOforderTB {
-            let item = TotaOrderDet[indexPath.row]
-            print(item)
-        }
     }
     
     func getUserDetails(){
@@ -394,7 +387,7 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                 "data": jsonString
             ]
             
-            AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+            AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
                 AFdata in
                 self.LoadingDismiss()
                 switch AFdata.result
@@ -468,7 +461,7 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                 "data": jsonString
             ]
             
-            AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+            AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
                 AFdata in
                 self.LoadingDismiss()
                 switch AFdata.result

@@ -633,8 +633,7 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
    
         var location_lat = Loction.coordinate.latitude.description
         var location_log = Loction.coordinate.longitude.description
-         let jsonString = "{\"Lattitude\":\"\(location_lat)\",\"Langitude\":\"\(location_log)\",\"StartTime\":0,\"currentTime\":\"\(VisitData.shared.cInTime)\",\"date_time\":\"'\(VisitData.shared.cInTime)'\",\"date\":\"'\(date)'\",\"time\":\"\(time)\",\"remarks\":\"\(Remardata)\",\"day_end_km\":\"\"}"
-        
+    
         let jsonString2 = "{\"Lattitude\":\"\(location_lat)\",\"Langitude\":\"\(location_log)\",\"currentTime\":\"\(VisitData.shared.cInTime)\",\"date_time\":\"'\(VisitData.shared.cInTime)'\",\"date\":\"'\(date)'\",\"time\":\"\(time)\",\"remarks\":\"\(Remardata)\"}"
          
              let params: Parameters = [

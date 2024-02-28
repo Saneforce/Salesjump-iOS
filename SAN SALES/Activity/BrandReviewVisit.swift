@@ -486,7 +486,7 @@ class BrandReviewVisit: IViewController, UITableViewDataSource, UITableViewDeleg
     func selectcustomer(mslno : String , sfcode : String ){
         let apiKey: String = "\(axn)&divisionCode=\(DivCode)&Msl_No=\(mslno)&sfCode=\(SFCode)&Mode=\(StrMode)"
 
-        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
             AFdata in
             switch AFdata.result
             {

@@ -209,7 +209,7 @@ class ViewController: IViewController {
                     let LocalStoreage = UserDefaults.standard
                     let AppConfig: [String: Any]=[
                         "BaseURL": APIClient.shared.BaseURL,
-                        "DBURL": APIClient.shared.DBURL
+                        "DBURL": APIClient.shared.DBURL1
                     ]
                     
                     let jsonData = try? JSONSerialization.data(withJSONObject: AppConfig, options: [])
@@ -310,7 +310,7 @@ class ViewController: IViewController {
             "data": "[]"
         ]
         
-        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+"get/setup&divisionCode="+(prettyJsonData["divisionCode"] as? String ?? "")+"&rSF="+SFCode+"&sfCode="+SFCode, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"get/setup&divisionCode="+(prettyJsonData["divisionCode"] as? String ?? "")+"&rSF="+SFCode+"&sfCode="+SFCode, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
             AFdata in
             switch AFdata.result
             {
