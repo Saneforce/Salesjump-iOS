@@ -285,7 +285,7 @@
                                     <constraint firstItem="JQ5-bw-IVJ" firstAttribute="leading" secondItem="p6R-ax-UnN" secondAttribute="leading" id="1Nq-p0-sKa"/>
                                     <constraint firstItem="JQ5-bw-IVJ" firstAttribute="top" secondItem="p6R-ax-UnN" secondAttribute="top" constant="3" id="Fse-zm-wgL"/>
                                     <constraint firstItem="JQ5-bw-IVJ" firstAttribute="width" secondItem="p6R-ax-UnN" secondAttribute="width" id="G0c-ko-AOC"/>
-                                    <constraint firstAttribute="bottom" secondItem="JQ5-bw-IVJ" secondAttribute="bottom" id="W5Z-Vh-yIA"/>
+                                    <constraint firstAttribute="bottom" secondItem="JQ5-bw-IVJ" secondAttribute="bottom" constant="-137" id="W5Z-Vh-yIA"/>
                                     <constraint firstAttribute="trailing" secondItem="JQ5-bw-IVJ" secondAttribute="trailing" id="ySP-ew-gUj"/>
                                 </constraints>
                             </scrollView>
@@ -898,6 +898,11 @@
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <color key="tintColor" red="1" green="0.1137254902" blue="0.1450980392" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             </imageView>
+                                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ehl-h8-gBq">
+                                                <rect key="frame" x="0.0" y="49" width="414" height="1"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                                <color key="backgroundColor" systemColor="systemGray6Color"/>
+                                            </view>
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </view>

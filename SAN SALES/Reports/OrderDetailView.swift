@@ -383,14 +383,11 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
         } else {
             items = "0"
         }
-        
-        print(items)
        let apiKey: String = "\(axbDet)&desig=\(Desig)&divisionCode=\(DivCode)&ACd=\(items)&rSF=\(SFCode)&typ=1&sfCode=\(SFCode)&State_Code=\(StateCode)"
         
             let aFormData: [String: Any] = [
                 "orderBy":"[\"name asc\"]","desig":"mgr"
             ]
-           // print(aFormData)
             let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
             let jsonString = String(data: jsonData!, encoding: .utf8)!
             let params: Parameters = [
