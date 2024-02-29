@@ -18,6 +18,11 @@ class RptVisitDetail: IViewController, UITableViewDelegate, UITableViewDataSourc
     @IBOutlet weak var itmSmryHeight: NSLayoutConstraint!
     @IBOutlet weak var ContentHeight: NSLayoutConstraint!
     @IBOutlet weak var btnBack: UIImageView!
+    @IBOutlet var blureView: UIVisualEffectView!
+    @IBOutlet var PopUpView: UIView!
+    @IBOutlet weak var PopUpRmkView3: UIView!
+    
+    @IBOutlet weak var FullRemlbl: UILabel!
     //@IBOutlet weak var LBLRemarkHeight: NSLayoutConstraint!
     var RptDate: String = ""
     var RptCode: String = ""
@@ -39,6 +44,12 @@ class RptVisitDetail: IViewController, UITableViewDelegate, UITableViewDataSourc
     public static var objItmSmryDetail: [ItemSumary]=[]
     
     override func viewDidLoad() {
+        super.viewDidLoad()
+        blureView.bounds = self.view.bounds
+        PopUpView.bounds = CGRect(x: 0, y: 0, width: self.view.bounds.width * 0.9, height: self.view.bounds.height * 0.4)
+        PopUpView.layer.cornerRadius = 10
+        PopUpRmkView3.layer.cornerRadius = 10
+        PopUpRmkView3.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
         lblDate.text = RptDate
         lblCusCnt.text = CusCount
         getUserDetails()
@@ -49,6 +60,25 @@ class RptVisitDetail: IViewController, UITableViewDelegate, UITableViewDataSourc
         tbVstDetail.dataSource = self
         tbItemSumry.delegate = self
         tbItemSumry.dataSource = self
+    }
+    func animateIn(desiredView: UIView){
+        let  backGroundView = self.view
+        backGroundView?.addSubview(desiredView)
+        desiredView.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
+        desiredView.alpha = 0
+        desiredView.center=backGroundView!.center
+        UIView.animate(withDuration: 0.3, animations: {
+            desiredView.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
+            desiredView.alpha = 1
+        })
+    }
+    func animateOut(desiredView:UIView){
+        UIView.animate(withDuration: 0.3, animations: {
+            desiredView.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
+            desiredView.alpha = 0
+        },completion: { _ in
+            desiredView.removeFromSuperview()
+        })
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -73,6 +103,7 @@ class RptVisitDetail: IViewController, UITableViewDelegate, UITableViewDataSourc
             cell.lblTime?.text = item["VstTime"] as? String
             cell.lblActRate?.text = String(format: "Rs. %.02f", item["OrdVal"] as! Double)
             cell.lblremark?.text = item["Activity_Remarks"] as? String
+            cell.lblremark.addTarget(target: self, action: #selector(ShowPopUp(_:)))
             //cell.btnViewDet.addTarget(target: self, action:  )
             cell.btnViewDet.isHidden = true
             if item["OrdVal"] as! Double > 0 { cell.btnViewDet.isHidden = false }
@@ -243,6 +274,20 @@ class RptVisitDetail: IViewController, UITableViewDelegate, UITableViewDataSourc
     
     @objc private func GotoHome() {
         navigationController?.popViewController(animated: true)
+    }
+    
+    @objc private func ShowPopUp(_ sender: UITapGestureRecognizer) {
+        let cell:cellListItem = GlobalFunc.getTableViewCell(view: sender.view!) as! cellListItem
+        let tbView: UITableView = GlobalFunc.getTableView(view: sender.view!)
+        let indx:NSIndexPath = tbView.indexPath(for: cell)! as NSIndexPath
+        let item: [String: Any] = RptVisitDetail.objVstDetail[indx.row] as! [String : Any]
+        FullRemlbl.text = item["Activity_Remarks"] as? String
+        animateIn(desiredView: blureView)
+        animateIn(desiredView: PopUpView)
+    }
+    @IBAction func ClosPopUp(_ sender: Any) {
+        animateOut(desiredView:blureView)
+        animateOut(desiredView:PopUpView)
     }
     
 }

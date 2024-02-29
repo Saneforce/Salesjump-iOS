@@ -100,7 +100,7 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if tbOrderDetail == tableView { return 55}
         if tbZeroOrd == tableView { return 24 }
-        if ListOforderTB == tableView {return 100}
+        if ListOforderTB == tableView {return 80}
         return 42
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -122,7 +122,6 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                 cell.lblText.text = TotaOrderDet[indexPath.row].OrderId
                 cell.lblAmt.text = "Rs. "+TotaOrderDet[indexPath.row].TotAmt
                 cell.ordertime.text = TotaOrderDet[indexPath.row].Date
-                cell.Rmks.text = TotaOrderDet[indexPath.row].Rmk
                 cell.btnViewDet.addTarget(target: self, action: #selector(ShowOrderDet(_:)))
             }
             if tbOrderDetail == tableView {
