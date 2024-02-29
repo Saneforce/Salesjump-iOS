@@ -282,12 +282,13 @@ class RptVisitDetail: IViewController, UITableViewDelegate, UITableViewDataSourc
         let indx:NSIndexPath = tbView.indexPath(for: cell)! as NSIndexPath
         let item: [String: Any] = RptVisitDetail.objVstDetail[indx.row] as! [String : Any]
         FullRemlbl.text = item["Activity_Remarks"] as? String
-        animateIn(desiredView: blureView)
-        animateIn(desiredView: PopUpView)
+        if (item["Activity_Remarks"] as? String != ""){
+            animateIn(desiredView: blureView)
+            animateIn(desiredView: PopUpView)
+        }
     }
     @IBAction func ClosPopUp(_ sender: Any) {
         animateOut(desiredView:blureView)
         animateOut(desiredView:PopUpView)
     }
-    
 }

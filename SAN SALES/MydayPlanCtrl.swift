@@ -19,7 +19,7 @@ extension UIView {
     isUserInteractionEnabled = true
   }
 }
-class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource {
+class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource, UITextViewDelegate {
     @IBOutlet weak var vwMainScroll: UIScrollView!
     @IBOutlet weak var vwContent: UIView!
     
@@ -90,7 +90,11 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        vwMainScroll.contentSize = CGSize(width:view.frame.width, height: vwContent.frame.height)
+        txRem.text = "Enter the Remarks"
+       // txRem.textColor = UIColor.lightGray
+        txRem.returnKeyType = .done
+        txRem.delegate = self
+        txRem.contentSize = CGSize(width:view.frame.width, height: vwContent.frame.height)
         
         Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(TimeDisplay), userInfo: nil, repeats: true)
         
@@ -259,6 +263,24 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         setTodayPlan()
        //selectedid()
 
+    }
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.text == "Enter the Remarks"{
+            textView.text = ""
+            textView.textColor = .black
+        }
+    }
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool{
+        if text == "\n"{
+            textView.resignFirstResponder()
+        }
+        return true
+    }
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text == ""{
+            textView.text = "Enter the Remarks"
+            textView.textColor = UIColor.lightGray
+        }
     }
 //
     func selectedid(){
@@ -881,7 +903,9 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
     
     
     func saveDayTP(location: CLLocation){
-        
+        if (VisitData.shared.VstRemarks.name == "Enter the Remarks"){
+            VisitData.shared.VstRemarks.name = ""
+        }
         let dateString = GlobalFunc.getCurrDateAsString()
         lazy var geocoder = CLGeocoder()
         var sAddress: String = ""

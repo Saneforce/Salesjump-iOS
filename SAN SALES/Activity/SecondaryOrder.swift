@@ -765,7 +765,21 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
     }
     
     @IBAction func openPreview(_ sender: Any) {
+        VisitData.shared.ProductCart = VisitData.shared.ProductCart.filter ({ (Cart) in
+            
+            if (Cart["SalQty"] as! Double) > 0 {
+                return true
+            }
+            return false
+        })
         if validateForm() {
+            lstPrvOrder = VisitData.shared.ProductCart.filter ({ (Cart) in
+                
+                if (Cart["SalQty"] as! Double) > 0 {
+                    return true
+                }
+                return false
+            })
             
             tbPrvOrderProduct.reloadData()
             vwPrvOrderCtrl.isHidden = false
@@ -773,6 +787,13 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         }
     }
     @IBAction func closePreview(_ sender: Any) {
+        VisitData.shared.ProductCart = VisitData.shared.ProductCart.filter ({ (Cart) in
+            
+            if (Cart["SalQty"] as! Double) > 0 {
+                return true
+            }
+            return false
+        })
         vwPrvOrderCtrl.isHidden = true
         tbProduct.isHidden = false
         tbProduct.reloadData()
@@ -1125,6 +1146,8 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         updateOrderValues(refresh: ReFresh)
     }
     @objc private func deleteItem(_ sender: UITapGestureRecognizer) {
+        print(lstPrvOrder)
+        var totAmt: Double = 0
         let cell:cellListItem = GlobalFunc.getTableViewCell(view: sender.view!) as! cellListItem
         let tbView:UITableView = GlobalFunc.getTableView(view: sender.view!) as! UITableView
         let indxPath: IndexPath = tbView.indexPath(for: cell)!
@@ -1136,9 +1159,24 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
             }
             return false
         })
-        updateOrderValues(refresh: 1)
+        if lstPrvOrder.count>0 {
+            for i in 0...lstPrvOrder.count-1 {
+                let item: AnyObject = lstPrvOrder[i]
+                totAmt = totAmt + (item["NetVal"] as! Double)
+            }
+        }
+        lblTotAmt.text = String(format: "Rs. %.02f", totAmt)
+        lbltotalamunt = Double(totAmt)
+        lblPrvTotAmt.text = String(format: "Rs. %.02f", totAmt)
+        
+        lblTotItem.text = String(format: "%i",  lstPrvOrder.count)
+        lblPrvTotItem.text = String(format: "%i",  lstPrvOrder.count)
+        tbPrvOrderProduct.reloadData()
+        //updateOrderValues(refresh: 1)
     }
     func updateOrderValues(refresh: Int){
+        print(refresh)
+        var lstPrvOrders: [AnyObject] = []
         var Upadet_table = 0
         print(lstPrvOrder)
         print(VisitData.shared.ProductCart)
@@ -1146,7 +1184,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         lstPrvOrder = VisitData.shared.ProductCart.filter ({ (Cart) in
             
             if (Cart["SalQty"] as! Double) > 0 {
-                if (refresh == 3 ){
+                if (refresh == 1 || refresh == 3 ){
                     tbPrvOrderProduct.reloadData()
                 }
                 return true
@@ -1156,11 +1194,18 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
             }
             return false
         })
-        
+        lstPrvOrders = VisitData.shared.ProductCart.filter ({ (Cart) in
+            
+            if (Cart["SalQty"] as! Double) > 0 {
+                return true
+            }
+            return false
+        })
+        lstPrvOrder = VisitData.shared.ProductCart
         print(lstPrvOrder)
-        if lstPrvOrder.count>0 {
-            for i in 0...lstPrvOrder.count-1 {
-                let item: AnyObject = lstPrvOrder[i]
+        if lstPrvOrders.count>0 {
+            for i in 0...lstPrvOrders.count-1 {
+                let item: AnyObject = lstPrvOrders[i]
                 totAmt = totAmt + (item["NetVal"] as! Double)
                 //(item["SalQty"] as! NSString).doubleValue
                 
@@ -1171,8 +1216,8 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         lbltotalamunt = Double(totAmt)
         lblPrvTotAmt.text = String(format: "Rs. %.02f", totAmt)
         
-        lblTotItem.text = String(format: "%i",  lstPrvOrder.count)
-        lblPrvTotItem.text = String(format: "%i",  lstPrvOrder.count)
+        lblTotItem.text = String(format: "%i",  lstPrvOrders.count)
+        lblPrvTotItem.text = String(format: "%i",  lstPrvOrders.count)
         if (refresh == 1 || Upadet_table == 2 || refresh == 3){
             tbProduct.reloadData()
         }
@@ -1206,8 +1251,17 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         var OrderSub = "OD"
         var Count = 0
         print(SubmittedDCR.Order_Out_Time)
-        
+        print(lstPrvOrder.count)
+        lstPrvOrder = VisitData.shared.ProductCart.filter ({ (Cart) in
+            
+            if (Cart["SalQty"] as! Double) > 0 {
+                return true
+            }
+            return false
+        })
+        print(lstPrvOrder.count)
         if validateForm() == false {
+            lstPrvOrder = VisitData.shared.ProductCart
             return
         }
         
@@ -1278,14 +1332,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
             lstPlnDetail = list;
         }
         
-        print(lstPrvOrder.count)
-        lstPrvOrder = VisitData.shared.ProductCart.filter ({ (Cart) in
-            
-            if (Cart["SalQty"] as! Double) > 0 {
-                return true
-            }
-            return false
-        })
+    
         print(VisitData.shared.ProductCart.count)
         print(lstPrvOrder.count)
         self.ShowLoading(Message: "Data Submitting Please wait...")

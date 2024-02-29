@@ -55,6 +55,7 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
         let TotAmt:String
         let Date:String
         let Rmk:String
+        let OrdFlg:Int
     }
     var TotaOrderDet:[NoOfOrder] = []
     var detail: [viewDet] = []
@@ -123,6 +124,9 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                 cell.lblAmt.text = "Rs. "+TotaOrderDet[indexPath.row].TotAmt
                 cell.ordertime.text = TotaOrderDet[indexPath.row].Date
                 cell.btnViewDet.addTarget(target: self, action: #selector(ShowOrderDet(_:)))
+                if (TotaOrderDet[indexPath.row].OrdFlg == 1){
+                    cell.btnViewDet.isHidden = true
+                }
             }
             if tbOrderDetail == tableView {
                 let Pro_ID = detail[indexPath.row].Product_Code
@@ -413,7 +417,12 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                                     let TotalAmt = iteminFilter["finalNetAmnt"] as? String
                                     let date = iteminFilter["Order_date"] as? String
                                     let Rmk = iteminFilter["remarks"] as? String
-                                    TotaOrderDet.append(NoOfOrder.init(OrderId:Order_No! , TotAmt: TotalAmt!, Date: date!, Rmk: Rmk!))
+                                    var Prod_Flg = 0
+                                    var ProList = iteminFilter["productList"] as! [AnyObject]
+                                    if (ProList.isEmpty){
+                                        Prod_Flg = 1
+                                    }
+                                    TotaOrderDet.append(NoOfOrder.init(OrderId:Order_No! , TotAmt: TotalAmt!, Date: date!, Rmk: Rmk!,OrdFlg:Prod_Flg))
                                 }
                             }
                             let Additional_Prod_Dtls = json[indexToDelete]["productList"] as! [AnyObject]
@@ -441,7 +450,6 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
         detail.removeAll()
         let item = RptVisitDetail.objVstDetail
         var items = ""
-   
         if let Acdid = item[0]["ACD"] {
 
             items = Acdid as! String
@@ -483,18 +491,23 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                         if let indexToDelete = json.firstIndex(where: { String(format: "%@", $0["Order_No"] as! CVarArg) == Trans_Sl_No }) {
                             print(indexToDelete)
                             
-                            if let orderid = json[indexToDelete]["Territory"] as? String{
-                                let filteredData = json.filter { $0["Territory"] as? String == orderid }
+                            if let orderid = json[indexToDelete]["Trans_Detail_Slno"] as? String{
+                                let filteredData = json.filter { $0["Trans_Detail_Slno"] as? String == orderid }
                                 for iteminFilter in filteredData{
                                     print(iteminFilter)
                                     let Order_No = iteminFilter["Order_No"] as? String
                                     let TotalAmt = String((iteminFilter["orderValue"] as? Int)!)
                                     let date = iteminFilter["Order_date"] as? String
                                     let Rmk = iteminFilter["remarks"] as? String
-                                    TotaOrderDet.append(NoOfOrder.init(OrderId:Order_No! , TotAmt: TotalAmt, Date: date!, Rmk: Rmk!))
+                                    var Prod_Flg = 0
+                                    var ProList = iteminFilter["productList"] as! [AnyObject]
+                                    if (ProList.isEmpty){
+                                        Prod_Flg = 1
+                                    }
+                                    TotaOrderDet.append(NoOfOrder.init(OrderId:Order_No! , TotAmt: TotalAmt, Date: date!, Rmk: Rmk!, OrdFlg :Prod_Flg))
                                 }
                             }
-                            
+                            print(TotaOrderDet)
                             let Additional_Prod_Dtls = json[indexToDelete]["productList"] as! [AnyObject]
                             print(Additional_Prod_Dtls)
                             for Item2 in Additional_Prod_Dtls {
@@ -529,6 +542,7 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
         TotalOrderView.isHidden = false
     }
     @objc private func ShowOrderDet(_ sender: UITapGestureRecognizer) {
+        print(TotaOrderDet)
         let cell:cellListItem = GlobalFunc.getTableViewCell(view: sender.view!) as! cellListItem
         let tbView: UITableView = GlobalFunc.getTableView(view: sender.view!)
         let indx:NSIndexPath = tbView.indexPath(for: cell)! as NSIndexPath

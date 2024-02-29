@@ -286,6 +286,9 @@ class SecondaryVisit: IViewController, UITableViewDelegate, UITableViewDataSourc
         if validateForm() == false {
             return
         }
+        if (VisitData.shared.VstRemarks.name == "Enter the Remarks"){
+            VisitData.shared.VstRemarks.name = ""
+        }
         
         if VisitData.shared.VstRemarks.name == "" {
             Toast.show(message: "Select the Remarks", controller: self)

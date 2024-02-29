@@ -414,6 +414,10 @@ class LeaveForm: IViewController, UITableViewDelegate,
     //        "To_Date":"'2021-11-03'","Reason":"'test'","address":"''","No_of_Days":3,"halfday":"''"}}]
     
     @IBAction func SubmitLeave(_ sender: Any) {
+        
+        if (self.txReason.text == "Reason"){
+            self.txReason.text = ""
+        }
         if validateForm() == false {
             return
         }
@@ -435,9 +439,7 @@ class LeaveForm: IViewController, UITableViewDelegate,
 //            LocationService.sharedInstance.getNewLocation(location: { location in
 //                let sLocation: String = location.coordinate.latitude.description + ":" + location.coordinate.longitude.description
             
-            if (self.txReason.text == "Reason"){
-                self.txReason.text = ""
-            }
+           
                 self.ShowLoading(Message: "Data Submitting Please wait...")
                 let jsonString = "[{\"LeaveFormValidate\":{\"Leave_Type\":\"'" + self.sLvlType + "'\",\"From_Date\":\"'" + self.sDOF + "'\",\"To_Date\":\"'" + self.sDOT + "'\",\"Reason\":\"'" + self.txReason.text! + "'\",\"eKey\":\"" + self.eKey + "\",\"address\":\"''\",\"No_of_Days\":\"''\",\"halfday\":\"''\"}}]"
                 let params: Parameters = ["data": jsonString]

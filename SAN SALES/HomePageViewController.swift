@@ -11,9 +11,6 @@ import MapKit
 
 
 class HomePageViewController: IViewController, UITableViewDelegate, UITableViewDataSource, UITextViewDelegate{
-   
-    
-   // @IBOutlet weak var mnulistHeight: NSLayoutConstraint!
     
     @IBOutlet weak var ScrolHight: NSLayoutConstraint!
     @IBOutlet weak var hightMnth: NSLayoutConstraint!
@@ -72,6 +69,9 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         AutoLogOut()
         DashBoradTB.delegate=self
         DashBoradTB.dataSource=self
+        EndRmk.text = "Enter the Remarks"
+        EndRmk.returnKeyType = .done
+        EndRmk.delegate = self
         
         Managerdas.layer.cornerRadius = 20
         Managerdas.layer.borderWidth = 3.0
@@ -200,7 +200,25 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         DashboardNew()
         LOG_OUTMODE()
     }
-  
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.text == "Enter the Remarks"{
+            textView.text = ""
+            textView.textColor = .black
+        }
+    }
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool{
+        if text == "\n"{
+            textView.resignFirstResponder()
+        }
+        return true
+    }
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text == ""{
+            textView.text = "Enter the Remarks"
+            textView.textColor = UIColor.lightGray
+        }
+    }
+    
     func getUserDetails(){
         let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
         let data = Data(prettyPrintedJson!.utf8)
@@ -621,6 +639,9 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
          
          
          print(VisitData.shared.cInTime)
+        if EndRmk.text == "Enter the Remarks" {
+            EndRmk.text = ""
+        }
          var Remardata = ""
          if let Reamrk = EndRmk.text{
              print(Reamrk)
@@ -659,13 +680,6 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
              }
     }
   
-    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-            if text == "\n" {
-                textView.resignFirstResponder()
-                return false
-            }
-            return true
-        }
 
         @objc func dismissKeyboard() {
             view.endEditing(true)
