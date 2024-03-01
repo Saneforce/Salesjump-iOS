@@ -15,6 +15,7 @@
 		386A43932A1CC3E000CE1833 /* Submittedcalls.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 386A43922A1CC3E000CE1833 /* Submittedcalls.storyboard */; };
 		386A43952A1CC63100CE1833 /* PrimarySubmittedDCR.swift in Sources */ = {isa = PBXBuildFile; fileRef = 386A43942A1CC63100CE1833 /* PrimarySubmittedDCR.swift */; };
 		3883A09C2A176B6300B858CF /* SubmittedCalls.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3883A09B2A176B6300B858CF /* SubmittedCalls.swift */; };
+		3894BC5D2B919A0E0019B40A /* Add Route.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3894BC5C2B919A0E0019B40A /* Add Route.swift */; };
 		38A2E9B22A0E1B940061B854 /* Brand Availability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38A2E9B12A0E1B940061B854 /* Brand Availability.swift */; };
 		38B05F502B04CAE50025D4C0 /* ManagerDashboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 38B05F4F2B04CAE50025D4C0 /* ManagerDashboard.storyboard */; };
 		38B05F542B05D7040025D4C0 /* ManagerDashboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38B05F532B05D7040025D4C0 /* ManagerDashboard.swift */; };
@@ -104,6 +105,7 @@
 		386A43922A1CC3E000CE1833 /* Submittedcalls.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Submittedcalls.storyboard; sourceTree = "<group>"; };
 		386A43942A1CC63100CE1833 /* PrimarySubmittedDCR.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimarySubmittedDCR.swift; sourceTree = "<group>"; };
 		3883A09B2A176B6300B858CF /* SubmittedCalls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmittedCalls.swift; sourceTree = "<group>"; };
+		3894BC5C2B919A0E0019B40A /* Add Route.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Add Route.swift"; sourceTree = "<group>"; };
 		38A2E9B12A0E1B940061B854 /* Brand Availability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Brand Availability.swift"; sourceTree = "<group>"; };
 		38B05F4F2B04CAE50025D4C0 /* ManagerDashboard.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ManagerDashboard.storyboard; sourceTree = "<group>"; };
 		38B05F532B05D7040025D4C0 /* ManagerDashboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagerDashboard.swift; sourceTree = "<group>"; };
@@ -275,6 +277,7 @@
 				3F063531283F5FEF0027842E /* PrimaryOrder.swift */,
 				3F7CCF0228F14CA3002A7C03 /* GEOTagging.swift */,
 				38D0F76729BB2447003EEB03 /* BrandReviewVisit.swift */,
+				3894BC5C2B919A0E0019B40A /* Add Route.swift */,
 			);
 			path = Activity;
 			sourceTree = "<group>";
@@ -610,6 +613,7 @@
 				3F0ED6BE2872F61A00FF4460 /* OrderDetailView.swift in Sources */,
 				38B05F542B05D7040025D4C0 /* ManagerDashboard.swift in Sources */,
 				3F8BF29D27E99CCA00E1C41B /* CameraService.swift in Sources */,
+				3894BC5D2B919A0E0019B40A /* Add Route.swift in Sources */,
 				38F6F5AD2B19D2DA007090BF /* Performance.swift in Sources */,
 				3F9F379A285B5FBA002CC408 /* ReportMenu.swift in Sources */,
 				3F0861BC28019419006A30FB /* SecondaryOrder.swift in Sources */,
@@ -805,7 +809,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = T14;
+				MARKETING_VERSION = T15;
 				PRODUCT_BUNDLE_IDENTIFIER = com.saneforce.sansales;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -842,7 +846,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = T14;
+				MARKETING_VERSION = T15;
 				PRODUCT_BUNDLE_IDENTIFIER = com.saneforce.sansales;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

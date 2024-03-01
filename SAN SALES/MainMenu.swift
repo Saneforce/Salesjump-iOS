@@ -80,7 +80,8 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
         strMasList.append(mnuItem.init(MasId: 9, MasName: "GEO Tagging", MasImage: "GEOTag"))/*
         strMasList.append(mnuItem.init(MasId: 10, MasName: "Closing Stock Entry", MasImage: "ClosingStock"))*/
         strMasList.append(mnuItem.init(MasId: 11, MasName: "Master Sync", MasImage: "MasterSync"))
-        strMasList.append(mnuItem(MasId:12, MasName: "Submitted Calls", MasImage: "SubmittedCalls"))
+        strMasList.append(mnuItem.init(MasId:12, MasName: "Submitted Calls", MasImage: "SubmittedCalls"))
+        strMasList.append(mnuItem.init(MasId:13, MasName: "Add Route", MasImage: "AdminForms"))
         
         menuClose.addTarget(target: self, action: #selector(closeMenuWin))
         tbMenuDetail.delegate=self
@@ -301,6 +302,9 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
                 
                 //viewController.navigationController?.pushViewController(myDyPln, animated: true)
             }
+        }else if lItm.MasId == 13 {
+            let myDyPln = storyboard.instantiateViewController(withIdentifier: "AddRoute") as! Add_Route
+            viewController.setViewControllers([myDyPln], animated: false)
         }
         (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
         print(strMasList[indexPath.row].MasName)
