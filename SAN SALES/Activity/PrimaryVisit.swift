@@ -590,9 +590,9 @@ class PrimaryVisit: IViewController, UITableViewDelegate, UITableViewDataSource,
         tbDataSelect.isHidden = false
         txSearchSel.isHidden = false
         if isDate == true {
-            calendar.isHidden = false
-            tbDataSelect.isHidden = true
-            txSearchSel.isHidden = true
+        calendar.isHidden = false
+        tbDataSelect.isHidden = true
+        txSearchSel.isHidden = true
         }
         vwSelWindow.isHidden=false
         

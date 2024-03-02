@@ -17,13 +17,12 @@ class Add_Route: IViewController, UITableViewDelegate, UITableViewDataSource {
     @IBOutlet weak var SelDis: LabelSelect!
     @IBOutlet weak var SelWindo: UIView!
     @IBOutlet weak var TextSearch: UITextField!
-    
-    var SFCode: String = "", StateCode: String = "", DivCode: String = "",Desig: String = ""
-    let LocalStoreage = UserDefaults.standard
-    var lObjSel: [AnyObject] = []
-    var lstPlnDetail: [AnyObject] = []
-    var lstCustomers: [AnyObject] = []
-    var DataSF: String = ""
+    @IBOutlet weak var Route_Text: EditTextField!
+    @IBOutlet weak var Allowance_Type: LabelSelect!
+    @IBOutlet weak var Target: EditTextField!
+    @IBOutlet weak var Populations: EditTextField!
+    @IBOutlet weak var Minprod: EditTextField!
+    @IBOutlet weak var Add_Rout_Title: UILabel!
     struct customGrp:Codable{
         var FGTableName:String
         var FGroupName:String
@@ -42,6 +41,10 @@ class Add_Route: IViewController, UITableViewDelegate, UITableViewDataSource {
         let Fld_Src_Field : String
         let Field_Col : String
     }
+    struct allowanceList:Codable{
+        let id :Int
+        let Typ:String
+    }
     enum CustomError: Error {
         case missingFGTableName
         case missingFieldGroupId
@@ -58,13 +61,27 @@ class Add_Route: IViewController, UITableViewDelegate, UITableViewDataSource {
         case Fld_Src_Field
         case Field_Col
     }
+    var SFCode: String = "", StateCode: String = "", DivCode: String = "",Desig: String = ""
+    let LocalStoreage = UserDefaults.standard
+    var lObjSel: [AnyObject] = []
+    var lstPlnDetail: [AnyObject] = []
+    var lstCustomers: [AnyObject] = []
+    var Class_Master: [AnyObject] = []
+    var DataSF: String = ""
+    var SelMod: String = ""
     var customGrpData: [customGrp] = []
     var customGetData:[customDatas] = []
+    var allowance:[allowanceList] = []
+    var lOballowance:[allowanceList] = []
+    var stk_Code:String = ""
+    var Ter_Code:String = ""
     override func viewDidLoad() {
         super.viewDidLoad()
+        Add_Rout_Title.text = "Add \(UserSetup.shared.StkRoute)"
         getUserDetails()
         DataTB.delegate = self
         DataTB.dataSource = self
+        Populations.keyboardType = UIKeyboardType.numberPad
         let PlnDets: String=LocalStoreage.string(forKey: "Mydayplan")!
         if let list = GlobalFunc.convertToDictionary(text: PlnDets) as? [AnyObject] {
         lstPlnDetail = list;
@@ -75,8 +92,17 @@ class Add_Route: IViewController, UITableViewDelegate, UITableViewDataSource {
         lstCustomers = list
         lObjSel = list
         }
+        if let lstCustData = LocalStoreage.string(forKey: "Class_Master"),
+        let list = GlobalFunc.convertToDictionary(text:  lstCustData) as? [AnyObject] {
+        Class_Master = list
+        print(Class_Master)
+        }
+        allowancData()
+        
         btnback.addTarget(target: self, action: #selector(GotoHome))
         SelDis.addTarget(target: self, action: #selector(SelDistributor))
+        Allowance_Type.addTarget(target: self, action: #selector(SelAllowance))
+        
         //CustomFieldData()
         }
     func getUserDetails(){
@@ -92,33 +118,103 @@ class Add_Route: IViewController, UITableViewDelegate, UITableViewDataSource {
     Desig=prettyJsonData["desigCode"] as? String ?? ""
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return lObjSel.count
+        if tableView == DataTB {
+            if (SelMod == "DIS"){
+                return lObjSel.count
+            }else if (SelMod == "AlW"){
+                return lOballowance.count
+            }
+        }
+        return 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell:cellListItem = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
         if tableView == DataTB {
-            let item: [String: Any]=lObjSel[indexPath.row] as! [String : Any]
-            cell.lblText?.text = item["name"] as? String
+            if (SelMod == "DIS"){
+                let item: [String: Any]=lObjSel[indexPath.row] as! [String : Any]
+                print(lObjSel)
+                cell.lblText?.text = item["name"] as? String
+            }else if (SelMod == "AlW"){
+                cell.lblText?.text = lOballowance[indexPath.row].Typ
+            }
         }
         return cell
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if (SelMod == "DIS"){
         let item: [String: Any]=lObjSel[indexPath.row] as! [String : Any]
-        print(item)
         self.SelDis.text = item["name"] as? String
+            stk_Code = String((item["id"] as? Int)!)
+            Ter_Code = ((item["Tcode"] as? String)!)
+        }else if (SelMod == "AlW"){
+        self.Allowance_Type.text = lOballowance[indexPath.row].Typ
+        }
+        TextSearch.text = ""
         SelWindo.isHidden = true
         
     }
-    func saveRoute(){
+    func validateForm() -> Bool {
+        if (SelDis.text == "Select Distributor") {
+            Toast.show(message: "Select Distributor", controller: self)
+            return false
+        }
+        if (Route_Text.text == ""){
+            Toast.show(message: "Enter route name", controller: self)
+            return false
+        }
+        return true
+    }
+    
+    @IBAction func Create_Route(_ sender: Any) {
+        
+        if validateForm() == false {
+            return
+        }
+        if(NetworkMonitor.Shared.isConnected != true){
+            let alert = UIAlertController(title: "Information", message: "Check the Internet Connection", preferredStyle: .alert)
+                 alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
+                     return
+                 })
+                 self.present(alert, animated: true)
+                return
+        }
+        self.ShowLoading(Message: "Data Submitting Please wait...")
+        
+        var Dis = ""
+        var Rou = ""
+        var Allowance = ""
+        var Targett = ""
+        var Populationss = ""
+        var Min = ""
+        if let DisNAME = SelDis.text {
+            Dis = DisNAME
+        }
+        if let Rou2 = Route_Text.text{
+            Rou = Rou2
+        }
+        if let Allowances = Allowance_Type.text{
+            Allowance = Allowances
+        }
+        if let Targets = Target.text{
+            Targett = Targets
+        }
+        if let Population = Populations.text{
+            Populationss = Population
+        }
+        if let Mins = Minprod.text{
+            Min = Mins
+        }
+        let currentDate = Date()
+        let timestampInMilliseconds = Int64(currentDate.timeIntervalSinceReferenceDate * 1000)
         let apiKey: String = "dcr/save&desig=\(Desig)&divisionCode=\(DivCode)&rSF=\(SFCode)&sfCode=\(SFCode)&stateCode=\(StateCode)"
-        let jsonString = "[{\"Addnewroute\":{\"routename\":\"tttttrrrr\",\"Target\":\"400\",\"Populations\":\"155\",\"minprod\":\"sgddfg\",\"Allowance_Type\":\"HQ\",\"Sf_HQ\":\"chennai\",\"Stockist_code\":\"32469\",\"Territory_SName\":\"1635\",\"Sf_code\":\"MR4126\",\"DrKeyId\":\"AR-\(SFCode)-1709355543000\"}}]"
+        let jsonString = "[{\"Addnewroute\":{\"routename\":\"\(Rou)\",\"Target\":\"\(Targett)\",\"Populations\":\"\(Populationss)\",\"minprod\":\"\(Min)\",\"Allowance_Type\":\"\(Allowance)\",\"Sf_HQ\":\"\(UserSetup.shared.Sf_HQ)\",\"Stockist_code\":\"\(stk_Code)\",\"Territory_SName\":\"\(Ter_Code)\",\"Sf_code\":\"\(SFCode)\",\"DrKeyId\":\"AR-\(SFCode)-\(timestampInMilliseconds)\"}}]"
         let params: Parameters = [
             "data": jsonString
         ]
-        print(params)
         AF.request(APIClient.shared.BaseURL + APIClient.shared.CustomFieldDB + apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
             AFdata in
+            self.LoadingDismiss()
             switch AFdata.result {
             case .success(let value):
                 if let json = value as? [ String:AnyObject] {
@@ -130,12 +226,13 @@ class Add_Route: IViewController, UITableViewDelegate, UITableViewDataSource {
                         print("Error: Could print JSON in String")
                         return
                     }
+                    Toast.show(message: "\(UserSetup.shared.StkRoute) Created successfully", controller: self)
                     print(prettyPrintedJson)
+                    self.GotoHome()
                 }
             case .failure(let error):
                 Toast.show(message: error.errorDescription!)
             }
-            
         }
     }
         func CustomFieldData(){
@@ -230,28 +327,61 @@ class Add_Route: IViewController, UITableViewDelegate, UITableViewDataSource {
             }
             
         }
-        @objc private func GotoHome() {
+    func allowancData(){
+        if Class_Master.isEmpty{
+            print("No Data")
+        }else{
+            allowance.append(allowanceList(id: 1, Typ: "EX"))
+            allowance.append(allowanceList(id: 2, Typ: "HQ"))
+            allowance.append(allowanceList(id: 3, Typ: "OS"))
+            allowance.append(allowanceList(id: 4, Typ: "OX"))
+        }
+        print(allowance)
+    }
+    @objc private func GotoHome() {
             self.dismiss(animated: true, completion: nil)
             GlobalFunc.MovetoMainMenu()
         }
     @objc private func SelDistributor() {
+        lObjSel = lstCustomers
+        SelMod = "DIS"
         SelWindo.isHidden = false
         WinLbl.text = "Select the Distributor"
         DataTB.reloadData()
     }
+    @objc private func SelAllowance() {
+        lOballowance = allowance
+        SelMod = "AlW"
+        SelWindo.isHidden = false
+        WinLbl.text = "Select item"
+        print(lObjSel)
+        DataTB.reloadData()
+    }
     @IBAction func ClosWin(_ sender: Any) {
+        TextSearch.text = ""
         SelWindo.isHidden = true
     }
     
     @IBAction func searchBytext(_ sender: Any) {
         let txtbx: UITextField = sender as! UITextField
-        if txtbx.text!.isEmpty {
+        if (SelMod == "DIS"){
+            if txtbx.text!.isEmpty {
             lObjSel = lstCustomers
         }else{
             lObjSel = lstCustomers.filter({(product) in
                 let name: String = String(format: "%@", product["name"] as! CVarArg)
                 return name.lowercased().contains(txtbx.text!.lowercased())
             })
+        }
+        }else if (SelMod == "AlW"){
+            if txtbx.text!.isEmpty {
+            lOballowance = allowance
+        }else{
+            lOballowance = allowance.filter({(product) in
+                let name: String = product.Typ
+                return name.lowercased().contains(txtbx.text!.lowercased())
+            })
+        }
         }
         DataTB.reloadData()
     }

@@ -1790,10 +1790,10 @@
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <prototypes>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" id="PCj-pc-SaR" customClass="cellListItem" customModule="SAN_SALES" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="50" width="398" height="16.5"/>
+                                                <rect key="frame" x="0.0" y="50" width="398" height="15.5"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="PCj-pc-SaR" id="eDo-bk-kGr">
-                                                    <rect key="frame" x="0.0" y="0.0" width="398" height="16.5"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="398" height="15.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JOr-of-3ni">
@@ -1804,7 +1804,7 @@
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Select" translatesAutoresizingMaskIntoConstraints="NO" id="dX4-Hq-D3n">
-                                                            <rect key="frame" x="10" y="-19" width="20" height="1"/>
+                                                            <rect key="frame" x="10" y="-20" width="20" height="1"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         </imageView>
                                                     </subviews>
@@ -2346,7 +2346,7 @@
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Select" translatesAutoresizingMaskIntoConstraints="NO" id="F7w-CK-MG7">
-                                                            <rect key="frame" x="9" y="-16" width="21" height="0.0"/>
+                                                            <rect key="frame" x="9" y="-17" width="21" height="1"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         </imageView>
                                                     </subviews>
@@ -4030,10 +4030,10 @@
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                 <prototypes>
                                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" id="7ex-g0-4qE" customClass="cellListItem" customModule="SAN_SALES" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="50" width="397" height="14.5"/>
+                                                        <rect key="frame" x="0.0" y="50" width="397" height="15.5"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="7ex-g0-4qE" id="MbE-Y3-0E6">
-                                                            <rect key="frame" x="0.0" y="0.0" width="397" height="14.5"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="397" height="15.5"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <subviews>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wvb-UC-NdD">
@@ -6323,6 +6323,7 @@
                                         </state>
                                         <connections>
                                             <action selector="CreateNewOutlet:" destination="IjA-X9-dE4" eventType="touchUpInside" id="gBP-jY-Won"/>
+                                            <action selector="Create_Route:" destination="P3x-iZ-FiL" eventType="touchUpInside" id="kK7-jV-GPj"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -6412,9 +6413,15 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="Add_Rout_Title" destination="go4-C9-pGm" id="2sB-R8-w5Y"/>
+                        <outlet property="Allowance_Type" destination="kfb-oa-27v" id="NiL-d0-tkz"/>
                         <outlet property="DataTB" destination="UKd-Y7-C6f" id="Mrl-7Z-n31"/>
+                        <outlet property="Minprod" destination="Cug-Np-cDj" id="dBY-v3-4gF"/>
+                        <outlet property="Populations" destination="iZh-CA-wRX" id="psE-lm-gWI"/>
+                        <outlet property="Route_Text" destination="jbx-if-gSu" id="rwf-5Q-eRI"/>
                         <outlet property="SelDis" destination="SU1-pK-e5A" id="DIi-2s-mCH"/>
                         <outlet property="SelWindo" destination="khB-vd-hZ9" id="oQg-NQ-023"/>
+                        <outlet property="Target" destination="muE-5e-Pe2" id="dwJ-6K-iZ1"/>
                         <outlet property="TextSearch" destination="dlt-1J-zYV" id="TuJ-aQ-LMN"/>
                         <outlet property="WinLbl" destination="jpr-8A-XNk" id="5Pw-5d-LvL"/>
                         <outlet property="btnback" destination="6jr-Vh-kze" id="Vpf-c5-Wot"/>

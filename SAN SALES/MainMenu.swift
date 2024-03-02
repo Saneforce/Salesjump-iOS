@@ -81,8 +81,9 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
         strMasList.append(mnuItem.init(MasId: 10, MasName: "Closing Stock Entry", MasImage: "ClosingStock"))*/
         strMasList.append(mnuItem.init(MasId: 11, MasName: "Master Sync", MasImage: "MasterSync"))
         strMasList.append(mnuItem.init(MasId:12, MasName: "Submitted Calls", MasImage: "SubmittedCalls"))
-        strMasList.append(mnuItem.init(MasId:13, MasName: "Add Route", MasImage: "AdminForms"))
-        
+        if (UserSetup.shared.AddRoute_Nd == 1){
+        strMasList.append(mnuItem.init(MasId:13, MasName: "Add \(UserSetup.shared.StkRoute)", MasImage: "AdminForms"))
+        }
         menuClose.addTarget(target: self, action: #selector(closeMenuWin))
         tbMenuDetail.delegate=self
         tbMenuDetail.dataSource=self
