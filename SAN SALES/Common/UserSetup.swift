@@ -53,7 +53,7 @@ class UserSetup{
         AddRoute_Nd = lstSetups[0]["AddRoute_Nd"] as? Int ?? 0
         AddDistibutor_Nd = lstSetups[0]["AddDistibutor_Nd"] as? Int ?? 0
         StkCap = lstSetups[0]["StkCap"] as? String ?? ""
-        Mandator = lstSetups[0]["Mandator_ERP"] as? String as? String ?? ""
+        Mandator = lstSetups[0]["Mandatory"] as? String ?? ""
         if(lstSetups[0]["Geo_Fencing"] as? Int == 1){
             Fenching = true
         }else{

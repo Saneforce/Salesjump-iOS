@@ -37,13 +37,13 @@ class Add_Distributor: IViewController {
         Sub_BT.setTitle("Create \(UserSetup.shared.StkCap)", for: .normal)
         Mobile_No.keyboardType = UIKeyboardType.numberPad
         Norm_Value.keyboardType = UIKeyboardType.numberPad
+        print(UserSetup.shared.Mandator)
         if let range =  UserSetup.shared.Mandator.range(of: "erp", options: .caseInsensitive) {
             let position = UserSetup.shared.Mandator.distance(from: UserSetup.shared.Mandator.startIndex, to: range.lowerBound)
-            print("Substring 'erp' found at position \(position)")
+            ERP_Ma.isHidden = true
         } else {
             print("Substring 'erp' not found")
         }
-        
         btnback.addTarget(target: self, action: #selector(GotoHome))
         
     }
@@ -172,6 +172,12 @@ class Add_Distributor: IViewController {
         if (Dis_Name.text == "") {
             Toast.show(message: "Enter the Distributor Name", controller: self)
             return false
+        }
+        if let range =  UserSetup.shared.Mandator.range(of: "erp", options: .caseInsensitive) {
+            let position = UserSetup.shared.Mandator.distance(from: UserSetup.shared.Mandator.startIndex, to: range.lowerBound)
+            
+        } else {
+            print("Substring 'erp' not found")
         }
      
         return true
