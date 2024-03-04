@@ -174,10 +174,13 @@ class Add_Distributor: IViewController {
             return false
         }
         if let range =  UserSetup.shared.Mandator.range(of: "erp", options: .caseInsensitive) {
-            let position = UserSetup.shared.Mandator.distance(from: UserSetup.shared.Mandator.startIndex, to: range.lowerBound)
             
         } else {
             print("Substring 'erp' not found")
+            if (ERP_Code.text == "") {
+                Toast.show(message: "Enter the ERP Code", controller: self)
+                return false
+            }
         }
      
         return true
