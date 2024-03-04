@@ -26,6 +26,9 @@ class UserSetup{
     var Sf_HQ:String = ""
     var StkRoute:String = ""
     var AddRoute_Nd:Int = 1
+    var AddDistibutor_Nd:Int = 0
+    var StkCap:String = ""
+    var Mandator:String = ""
     var OrderMode: item = item()
     func initUserSetup(){
         let SetupStoreage = UserDefaults.standard
@@ -48,6 +51,9 @@ class UserSetup{
         Sf_HQ = lstSetups[0]["Sf_HQ"] as? String ?? ""
         StkRoute = lstSetups[0]["StkRoute"] as? String ?? ""
         AddRoute_Nd = lstSetups[0]["AddRoute_Nd"] as? Int ?? 0
+        AddDistibutor_Nd = lstSetups[0]["AddDistibutor_Nd"] as? Int ?? 0
+        StkCap = lstSetups[0]["StkCap"] as? String ?? ""
+        Mandator = lstSetups[0]["Mandator_ERP"] as? String as? String ?? ""
         if(lstSetups[0]["Geo_Fencing"] as? Int == 1){
             Fenching = true
         }else{

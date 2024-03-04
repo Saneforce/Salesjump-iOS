@@ -84,6 +84,9 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
         if (UserSetup.shared.AddRoute_Nd == 1){
         strMasList.append(mnuItem.init(MasId:13, MasName: "Add \(UserSetup.shared.StkRoute)", MasImage: "AdminForms"))
         }
+        if (UserSetup.shared.AddDistibutor_Nd == 1){
+            strMasList.append(mnuItem.init(MasId:14, MasName: "Add \(UserSetup.shared.StkCap)", MasImage: "AdminForms"))
+        }
         menuClose.addTarget(target: self, action: #selector(closeMenuWin))
         tbMenuDetail.delegate=self
         tbMenuDetail.dataSource=self
@@ -305,6 +308,9 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
             }
         }else if lItm.MasId == 13 {
             let myDyPln = storyboard.instantiateViewController(withIdentifier: "AddRoute") as! Add_Route
+            viewController.setViewControllers([myDyPln], animated: false)
+        }else if lItm.MasId == 14{
+            let myDyPln = storyboard.instantiateViewController(withIdentifier: "AddDistributor") as! Add_Distributor
             viewController.setViewControllers([myDyPln], animated: false)
         }
         (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)

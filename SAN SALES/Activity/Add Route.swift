@@ -23,6 +23,7 @@ class Add_Route: IViewController, UITableViewDelegate, UITableViewDataSource {
     @IBOutlet weak var Populations: EditTextField!
     @IBOutlet weak var Minprod: EditTextField!
     @IBOutlet weak var Add_Rout_Title: UILabel!
+    @IBOutlet weak var Sub_BT: UIButton!
     struct customGrp:Codable{
         var FGTableName:String
         var FGroupName:String
@@ -78,6 +79,7 @@ class Add_Route: IViewController, UITableViewDelegate, UITableViewDataSource {
     override func viewDidLoad() {
         super.viewDidLoad()
         Add_Rout_Title.text = "Add \(UserSetup.shared.StkRoute)"
+        Sub_BT.setTitle("Create \(UserSetup.shared.StkRoute)", for: .normal)
         getUserDetails()
         DataTB.delegate = self
         DataTB.dataSource = self
@@ -166,6 +168,7 @@ class Add_Route: IViewController, UITableViewDelegate, UITableViewDataSource {
         return true
     }
     
+    
     @IBAction func Create_Route(_ sender: Any) {
         
         if validateForm() == false {
@@ -179,8 +182,21 @@ class Add_Route: IViewController, UITableViewDelegate, UITableViewDataSource {
                  self.present(alert, animated: true)
                 return
         }
+        let alert = UIAlertController(title: "Confirmation", message: "Do you want to submit?", preferredStyle: .alert)
+
+        alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
+            self.Route_Sub()
+            return
+        })
+
+        alert.addAction(UIAlertAction(title: "Cancel", style: .destructive) { _ in
+            return
+        })
+        self.present(alert, animated: true)
+
+    }
+    func Route_Sub(){
         self.ShowLoading(Message: "Data Submitting Please wait...")
-        
         var Dis = ""
         var Rou = ""
         var Allowance = ""
@@ -235,6 +251,7 @@ class Add_Route: IViewController, UITableViewDelegate, UITableViewDataSource {
             }
         }
     }
+    
         func CustomFieldData(){
             let apiKey: String = "get/CustomDetails&desig=\(Desig)&divisionCode=\(DivCode)&rSF=\(SFCode)&sfCode=\(SFCode)&stateCode=\(StateCode)&moduleId=4"
             

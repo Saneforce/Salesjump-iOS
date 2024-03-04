@@ -19,6 +19,7 @@
 		38A2E9B22A0E1B940061B854 /* Brand Availability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38A2E9B12A0E1B940061B854 /* Brand Availability.swift */; };
 		38B05F502B04CAE50025D4C0 /* ManagerDashboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 38B05F4F2B04CAE50025D4C0 /* ManagerDashboard.storyboard */; };
 		38B05F542B05D7040025D4C0 /* ManagerDashboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38B05F532B05D7040025D4C0 /* ManagerDashboard.swift */; };
+		38C5A9802B958AFB00EF4584 /* Add Distributor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38C5A97F2B958AFB00EF4584 /* Add Distributor.swift */; };
 		38D0F76829BB2447003EEB03 /* BrandReviewVisit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38D0F76729BB2447003EEB03 /* BrandReviewVisit.swift */; };
 		38F6F5A92B19D2AC007090BF /* Attendance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38F6F5A82B19D2AC007090BF /* Attendance.swift */; };
 		38F6F5AB2B19D2C2007090BF /* Summary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38F6F5AA2B19D2C2007090BF /* Summary.swift */; };
@@ -109,6 +110,7 @@
 		38A2E9B12A0E1B940061B854 /* Brand Availability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Brand Availability.swift"; sourceTree = "<group>"; };
 		38B05F4F2B04CAE50025D4C0 /* ManagerDashboard.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ManagerDashboard.storyboard; sourceTree = "<group>"; };
 		38B05F532B05D7040025D4C0 /* ManagerDashboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagerDashboard.swift; sourceTree = "<group>"; };
+		38C5A97F2B958AFB00EF4584 /* Add Distributor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Add Distributor.swift"; sourceTree = "<group>"; };
 		38D0F76729BB2447003EEB03 /* BrandReviewVisit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrandReviewVisit.swift; sourceTree = "<group>"; };
 		38F6F5A82B19D2AC007090BF /* Attendance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Attendance.swift; sourceTree = "<group>"; };
 		38F6F5AA2B19D2C2007090BF /* Summary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Summary.swift; sourceTree = "<group>"; };
@@ -278,6 +280,7 @@
 				3F7CCF0228F14CA3002A7C03 /* GEOTagging.swift */,
 				38D0F76729BB2447003EEB03 /* BrandReviewVisit.swift */,
 				3894BC5C2B919A0E0019B40A /* Add Route.swift */,
+				38C5A97F2B958AFB00EF4584 /* Add Distributor.swift */,
 			);
 			path = Activity;
 			sourceTree = "<group>";
@@ -614,6 +617,7 @@
 				38B05F542B05D7040025D4C0 /* ManagerDashboard.swift in Sources */,
 				3F8BF29D27E99CCA00E1C41B /* CameraService.swift in Sources */,
 				3894BC5D2B919A0E0019B40A /* Add Route.swift in Sources */,
+				38C5A9802B958AFB00EF4584 /* Add Distributor.swift in Sources */,
 				38F6F5AD2B19D2DA007090BF /* Performance.swift in Sources */,
 				3F9F379A285B5FBA002CC408 /* ReportMenu.swift in Sources */,
 				3F0861BC28019419006A30FB /* SecondaryOrder.swift in Sources */,
@@ -809,7 +813,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = T15;
+				MARKETING_VERSION = T16;
 				PRODUCT_BUNDLE_IDENTIFIER = com.saneforce.sansales;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -846,7 +850,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = T15;
+				MARKETING_VERSION = T16;
 				PRODUCT_BUNDLE_IDENTIFIER = com.saneforce.sansales;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
