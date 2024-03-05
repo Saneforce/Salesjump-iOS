@@ -25,6 +25,8 @@ class Add_Distributor: IViewController {
     @IBOutlet weak var Norm_Value: EditTextField!
     @IBOutlet weak var Field_Off: EditTextField!
     @IBOutlet weak var ERP_Ma: UILabel!
+    @IBOutlet weak var Dis_Hed: UILabel!
+    @IBOutlet weak var DisID_Hed: UILabel!
     
     
     @IBOutlet weak var Sub_BT: UIButton!
@@ -34,7 +36,10 @@ class Add_Distributor: IViewController {
         super.viewDidLoad()
         getUserDetails()
         Head_Dis_Name.text = UserSetup.shared.StkCap
+        Dis_Name.placeholder = "Enter the \(UserSetup.shared.StkCap) Name"
         Sub_BT.setTitle("Create \(UserSetup.shared.StkCap)", for: .normal)
+        Dis_Hed.text = "\(UserSetup.shared.StkCap) Name"
+        DisID_Hed.text = "\(UserSetup.shared.StkCap) ID"
         Mobile_No.keyboardType = UIKeyboardType.numberPad
         Norm_Value.keyboardType = UIKeyboardType.numberPad
         print(UserSetup.shared.Mandator)
@@ -170,7 +175,7 @@ class Add_Distributor: IViewController {
     }
     func validateForm() -> Bool {
         if (Dis_Name.text == "") {
-            Toast.show(message: "Enter the Distributor Name", controller: self)
+            Toast.show(message: "Enter the \(UserSetup.shared.StkCap) Name", controller: self)
             return false
         }
         if let range =  UserSetup.shared.Mandator.range(of: "erp", options: .caseInsensitive) {

@@ -162,7 +162,7 @@ class Add_Route: IViewController, UITableViewDelegate, UITableViewDataSource {
             return false
         }
         if (Route_Text.text == ""){
-            Toast.show(message: "Enter route name", controller: self)
+            Toast.show(message: "Enter \(UserSetup.shared.StkRoute) name", controller: self)
             return false
         }
         return true
@@ -370,7 +370,7 @@ class Add_Route: IViewController, UITableViewDelegate, UITableViewDataSource {
         lOballowance = allowance
         SelMod = "AlW"
         SelWindo.isHidden = false
-        WinLbl.text = "Select item"
+        WinLbl.text = "Select allowance type"
         print(lObjSel)
         DataTB.reloadData()
     }

@@ -69,7 +69,7 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
             
         }
 
-        strMasList.append(mnuItem.init(MasId: 1, MasName: "Switch Route", MasImage: "SwitchRoute"))
+        strMasList.append(mnuItem.init(MasId: 1, MasName: "Switch \(UserSetup.shared.StkRoute)", MasImage: "SwitchRoute"))
         strMasList.append(mnuItem.init(MasId: 2, MasName: "Add New Retailer", MasImage: "NewRetailer"))
        /* strMasList.append(mnuItem.init(MasId: 3, MasName: "Edit Retailer", MasImage: "EditRetailer"))
         strMasList.append(mnuItem.init(MasId: 4, MasName: "Submitted Calls", MasImage: "SubmittedCalls"))
