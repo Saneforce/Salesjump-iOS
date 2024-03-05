@@ -294,6 +294,10 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
             if let list = GlobalFunc.convertToDictionary(text: PlnDets) as? [AnyObject] {
                 lstPlnDetail = list;
             }
+            if (lstPlnDetail.isEmpty){
+                Toast.show(message: "You haven't submitted my day plan.", controller: self)
+                return
+            }
             let typ: String = lstPlnDetail[0]["FWFlg"] as! String
             if(typ != "F"){
                 Toast.show(message: "Your are submitted 'Non - Field Work'. kindly use switch route", controller: self)

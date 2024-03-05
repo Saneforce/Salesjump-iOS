@@ -88,8 +88,8 @@ class Add_Route: IViewController, UITableViewDelegate, UITableViewDataSource {
         if let list = GlobalFunc.convertToDictionary(text: PlnDets) as? [AnyObject] {
         lstPlnDetail = list;
         }
-        DataSF = self.lstPlnDetail[0]["subordinateid"] as! String
-        if let lstCustData = LocalStoreage.string(forKey: "Distributors_Master_"+DataSF),
+       // DataSF = self.lstPlnDetail[0]["subordinateid"] as! String
+        if let lstCustData = LocalStoreage.string(forKey: "Distributors_Master_"+SFCode),
         let list = GlobalFunc.convertToDictionary(text:  lstCustData) as? [AnyObject] {
         lstCustomers = list
         lObjSel = list
@@ -356,8 +356,16 @@ class Add_Route: IViewController, UITableViewDelegate, UITableViewDataSource {
         print(allowance)
     }
     @objc private func GotoHome() {
+        let alert = UIAlertController(title: "Confirmation", message: "Do you want to Back?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
             self.dismiss(animated: true, completion: nil)
             GlobalFunc.MovetoMainMenu()
+            return
+        })
+        alert.addAction(UIAlertAction(title: "Cancel", style: .destructive) { _ in
+            return
+        })
+        self.present(alert, animated: true)
         }
     @objc private func SelDistributor() {
         lObjSel = lstCustomers
