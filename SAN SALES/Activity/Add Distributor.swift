@@ -187,16 +187,20 @@ class Add_Distributor: IViewController {
                 return false
             }
         }
-        
-     
+        if Enter_Email.text != "" {
+            if let Mail = Enter_Email.text {
+                print(Mail)
+                let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}"
+                let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
+                let Verf = emailTest.evaluate(with: Mail)
+                if Verf == false {
+                    Toast.show(message: "Enter the valid email", controller: self)
+                }
+                return Verf
+            }
+        }
         return true
     }
-    func isValidEmail(testStr: String) -> Bool {
-        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}"
-        let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
-        return emailTest.evaluate(with: testStr)
-    }
-
     @objc private func GotoHome() {
         let alert = UIAlertController(title: "Confirmation", message: "Do you want to Back?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
