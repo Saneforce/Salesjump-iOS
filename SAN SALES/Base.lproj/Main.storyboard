@@ -6438,7 +6438,7 @@
             <objects>
                 <viewController storyboardIdentifier="AddDistributor" id="5A3-fb-ry4" customClass="Add_Distributor" customModule="SAN_SALES" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Qu0-I9-RSP">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="1250"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="1300"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="y1k-Rr-oSp">
@@ -6463,13 +6463,35 @@
                                 </constraints>
                             </view>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AG2-am-z5l">
-                                <rect key="frame" x="0.0" y="80" width="414" height="1113"/>
+                                <rect key="frame" x="0.0" y="76" width="414" height="1167"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7zc-9J-94y">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="1113"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="1159"/>
                                         <subviews>
+                                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4bA-y1-Nr3">
+                                                <rect key="frame" x="8" y="0.0" width="398" height="80"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Headquarters" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dB7-hY-jth">
+                                                        <rect key="frame" x="16" y="8" width="106" height="21"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        <fontDescription key="fontDescription" name="Poppins-SemiBold" family="Poppins" pointSize="15"/>
+                                                        <color key="textColor" red="0.40061411200000002" green="0.39668652269999999" blue="0.39668652269999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Select the Headquarter" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WbY-IY-VKk" customClass="LabelSelect" customModule="SAN_SALES" customModuleProvider="target">
+                                                        <rect key="frame" x="12" y="34" width="374" height="40"/>
+                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                                        <color key="backgroundColor" red="0.93725490199999995" green="0.95294117649999999" blue="0.98431372549999996" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <fontDescription key="fontDescription" name="Poppins-SemiBold" family="Poppins" pointSize="14"/>
+                                                        <color key="textColor" red="0.21176470589999999" green="0.20784313730000001" blue="0.20784313730000001" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                </subviews>
+                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                            </view>
                                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="q3C-Wk-9bt">
-                                                <rect key="frame" x="8" y="8" width="398" height="80"/>
+                                                <rect key="frame" x="8" y="88" width="398" height="80"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="*" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NGg-sr-9cV">
@@ -6496,7 +6518,7 @@
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             </view>
                                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0hV-42-GPk">
-                                                <rect key="frame" x="8" y="96" width="398" height="80"/>
+                                                <rect key="frame" x="8" y="176" width="398" height="80"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="ERP Code" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ckz-tM-4E6">
@@ -6523,7 +6545,7 @@
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                             </view>
                                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="X3J-77-4TU">
-                                                <rect key="frame" x="8" y="184" width="398" height="80"/>
+                                                <rect key="frame" x="8" y="264" width="398" height="80"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="GST Number" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="39f-pU-9ds">
@@ -6543,7 +6565,7 @@
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             </view>
                                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ofS-hc-V51">
-                                                <rect key="frame" x="8" y="272" width="398" height="80"/>
+                                                <rect key="frame" x="8" y="352" width="398" height="80"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Distributor ID" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7S3-D2-OfY">
@@ -6563,7 +6585,7 @@
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                             </view>
                                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qMm-bJ-UpD">
-                                                <rect key="frame" x="8" y="360" width="398" height="80"/>
+                                                <rect key="frame" x="8" y="440" width="398" height="80"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Password" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vd4-8r-hen">
@@ -6583,7 +6605,7 @@
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                             </view>
                                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5eF-vY-2tq">
-                                                <rect key="frame" x="8" y="448" width="398" height="80"/>
+                                                <rect key="frame" x="8" y="528" width="398" height="80"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Contact Person Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wEj-Nv-pi0">
@@ -6603,7 +6625,7 @@
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                             </view>
                                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="o5i-fg-bg7">
-                                                <rect key="frame" x="8" y="536" width="398" height="80"/>
+                                                <rect key="frame" x="8" y="616" width="398" height="80"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Mobile Number" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zUS-Ma-CQ6">
@@ -6623,7 +6645,7 @@
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                             </view>
                                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0CA-Fo-vUj">
-                                                <rect key="frame" x="8" y="624" width="398" height="80"/>
+                                                <rect key="frame" x="8" y="704" width="398" height="80"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Email" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yse-gz-eP3">
@@ -6643,7 +6665,7 @@
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                             </view>
                                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="In6-7c-zMg">
-                                                <rect key="frame" x="8" y="712" width="398" height="80"/>
+                                                <rect key="frame" x="8" y="792" width="398" height="80"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Address" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eVh-mZ-Xwv">
@@ -6663,7 +6685,7 @@
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                             </view>
                                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1zX-Bq-0XR">
-                                                <rect key="frame" x="8" y="800" width="398" height="80"/>
+                                                <rect key="frame" x="8" y="880" width="398" height="80"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Type" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g6b-jg-2Hb">
@@ -6685,7 +6707,7 @@
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                             </view>
                                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YaY-c0-v5l">
-                                                <rect key="frame" x="8" y="888" width="398" height="80"/>
+                                                <rect key="frame" x="8" y="968" width="398" height="80"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Norm Value" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="toT-Cl-9ad">
@@ -6705,7 +6727,7 @@
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                             </view>
                                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0XE-V5-0JD">
-                                                <rect key="frame" x="8" y="976" width="398" height="80"/>
+                                                <rect key="frame" x="8" y="1056" width="398" height="80"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Field Officer" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0S6-0J-wbx">
@@ -6715,19 +6737,21 @@
                                                         <color key="textColor" red="0.40061411200000002" green="0.39668652269999999" blue="0.39668652269999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter the Field officer" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Qzz-47-nQK" customClass="EditTextField" customModule="SAN_SALES" customModuleProvider="target">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Select the Headquarter" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lSr-wd-kET" customClass="LabelSelect" customModule="SAN_SALES" customModuleProvider="target">
                                                         <rect key="frame" x="12" y="34" width="374" height="40"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                                        <color key="backgroundColor" red="0.93725490199999995" green="0.95294117649999999" blue="0.98431372549999996" alpha="1" colorSpace="calibratedRGB"/>
                                                         <fontDescription key="fontDescription" name="Poppins-SemiBold" family="Poppins" pointSize="14"/>
-                                                        <textInputTraits key="textInputTraits"/>
-                                                    </textField>
+                                                        <color key="textColor" red="0.21176470589999999" green="0.20784313730000001" blue="0.20784313730000001" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
                                                 </subviews>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                             </view>
                                         </subviews>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="1113" id="2Qc-ur-gut"/>
+                                            <constraint firstAttribute="height" constant="1159" id="2Qc-ur-gut"/>
                                         </constraints>
                                     </view>
                                 </subviews>
@@ -6736,12 +6760,12 @@
                                     <constraint firstItem="7zc-9J-94y" firstAttribute="top" secondItem="AG2-am-z5l" secondAttribute="top" id="8B6-CU-g80"/>
                                     <constraint firstItem="7zc-9J-94y" firstAttribute="leading" secondItem="AG2-am-z5l" secondAttribute="leading" id="Egc-2f-jpb"/>
                                     <constraint firstItem="7zc-9J-94y" firstAttribute="centerX" secondItem="AG2-am-z5l" secondAttribute="centerX" id="MZ3-4g-q3l"/>
-                                    <constraint firstAttribute="bottom" secondItem="7zc-9J-94y" secondAttribute="bottom" id="QKd-jQ-gln"/>
+                                    <constraint firstAttribute="bottom" secondItem="7zc-9J-94y" secondAttribute="bottom" constant="8" id="QKd-jQ-gln"/>
                                     <constraint firstAttribute="trailing" secondItem="7zc-9J-94y" secondAttribute="trailing" id="g5E-pC-YmA"/>
                                 </constraints>
                             </scrollView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gBl-TQ-JzV">
-                                <rect key="frame" x="0.0" y="1190" width="414" height="60"/>
+                                <rect key="frame" x="0.0" y="1240" width="414" height="60"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7vA-bV-ygE">
                                         <rect key="frame" x="0.0" y="-1" width="414" height="61"/>
@@ -6765,7 +6789,7 @@
                                 </constraints>
                             </view>
                             <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8gV-3t-7NZ">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="1300"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zVX-bg-Dmw">
@@ -6801,11 +6825,11 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                         <connections>
-                                            <action selector="searchBytext:" destination="P3x-iZ-FiL" eventType="editingChanged" id="QLo-8A-VnP"/>
+                                            <action selector="SerchByText:" destination="5A3-fb-ry4" eventType="editingChanged" id="xZf-2b-wr5"/>
                                         </connections>
                                     </textField>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="U9l-9z-tCb">
-                                        <rect key="frame" x="0.0" y="130" width="414" height="724"/>
+                                        <rect key="frame" x="0.0" y="130" width="414" height="1128"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <inset key="separatorInset" minX="15" minY="0.0" maxX="15" maxY="0.0"/>
@@ -6848,15 +6872,16 @@
                             <constraint firstItem="gBl-TQ-JzV" firstAttribute="top" secondItem="AG2-am-z5l" secondAttribute="bottom" constant="-3" id="csL-tc-vfp"/>
                             <constraint firstItem="y1k-Rr-oSp" firstAttribute="top" secondItem="Qu0-I9-RSP" secondAttribute="top" constant="30" id="fyC-N3-0My"/>
                             <constraint firstItem="gBl-TQ-JzV" firstAttribute="trailing" secondItem="wJp-kO-UeE" secondAttribute="trailing" id="iH3-7w-aPa"/>
-                            <constraint firstItem="AG2-am-z5l" firstAttribute="top" secondItem="y1k-Rr-oSp" secondAttribute="bottom" id="opf-x0-P7q"/>
+                            <constraint firstItem="AG2-am-z5l" firstAttribute="top" secondItem="y1k-Rr-oSp" secondAttribute="bottom" constant="-4" id="opf-x0-P7q"/>
                             <constraint firstItem="AG2-am-z5l" firstAttribute="trailing" secondItem="y1k-Rr-oSp" secondAttribute="trailing" id="tz9-xj-AXi"/>
                             <constraint firstItem="y1k-Rr-oSp" firstAttribute="trailing" secondItem="wJp-kO-UeE" secondAttribute="trailing" id="vHc-Kk-nQB"/>
                             <constraint firstItem="gBl-TQ-JzV" firstAttribute="leading" secondItem="wJp-kO-UeE" secondAttribute="leading" id="zgh-WK-2vF"/>
                         </constraints>
                     </view>
-                    <size key="freeformSize" width="414" height="1250"/>
+                    <size key="freeformSize" width="414" height="1300"/>
                     <connections>
                         <outlet property="Contact_Person" destination="m7K-a5-Gmg" id="5pn-xH-lwY"/>
+                        <outlet property="DataTB" destination="U9l-9z-tCb" id="9FX-BG-xaf"/>
                         <outlet property="DisID_Hed" destination="7S3-D2-OfY" id="c5O-nG-bdf"/>
                         <outlet property="Dis_Hed" destination="JLI-d4-aaN" id="DvW-mA-IKC"/>
                         <outlet property="Dis_Name" destination="z9k-La-vVX" id="CyL-z2-poc"/>
@@ -6864,15 +6889,17 @@
                         <outlet property="ERP_Ma" destination="RM9-Cy-c7J" id="5sX-Qf-BVa"/>
                         <outlet property="Enter_Add" destination="YmX-r9-mAR" id="ZZR-R1-kS4"/>
                         <outlet property="Enter_Email" destination="aI8-5O-2hv" id="rFY-OR-lRy"/>
-                        <outlet property="Field_Off" destination="Qzz-47-nQK" id="Sh4-hL-Z4l"/>
+                        <outlet property="Field_Off" destination="lSr-wd-kET" id="XWK-RR-FSP"/>
                         <outlet property="GST_No" destination="XCc-1B-auo" id="ich-50-JT6"/>
                         <outlet property="Head_Dis_Name" destination="bhB-5F-nrO" id="Lea-eZ-mqu"/>
+                        <outlet property="Hed_Typ" destination="WbY-IY-VKk" id="Q1j-Sc-GzW"/>
                         <outlet property="Mobile_No" destination="FiG-Yu-XxK" id="XfT-fW-zuj"/>
                         <outlet property="Norm_Value" destination="cgI-Yx-3oH" id="iyz-mc-MIv"/>
                         <outlet property="PassWord" destination="UrA-pk-E4g" id="SHx-Wb-2Md"/>
                         <outlet property="SelWindHed" destination="zrB-L9-8a1" id="EBQ-EG-Wze"/>
                         <outlet property="SelWindo" destination="8gV-3t-7NZ" id="c3M-We-6s4"/>
                         <outlet property="Sub_BT" destination="7vA-bV-ygE" id="296-KT-wEH"/>
+                        <outlet property="TextSearch" destination="JpS-NP-He0" id="vLa-do-pLf"/>
                         <outlet property="Typr" destination="v94-VE-2ZB" id="3MP-Pm-anf"/>
                         <outlet property="UserName" destination="SzW-DV-NAN" id="kAn-yB-fBp"/>
                         <outlet property="btnback" destination="NvH-YR-Avf" id="T81-PT-3Mg"/>
