@@ -29,6 +29,7 @@ class UserSetup{
     var AddDistibutor_Nd:Int = 0
     var StkCap:String = ""
     var Mandator:String = ""
+    var Phone_Country_Length:String = ""
     var OrderMode: item = item()
     func initUserSetup(){
         let SetupStoreage = UserDefaults.standard
@@ -54,6 +55,8 @@ class UserSetup{
         AddDistibutor_Nd = lstSetups[0]["AddDistibutor_Nd"] as? Int ?? 0
         StkCap = lstSetups[0]["StkCap"] as? String ?? ""
         Mandator = lstSetups[0]["Mandatory"] as? String ?? ""
+        Phone_Country_Length = lstSetups[0]["Phone_Country_Length"] as? String ?? ""
+        print(UserSetup.shared.Phone_Country_Length)
         if(lstSetups[0]["Geo_Fencing"] as? Int == 1){
             Fenching = true
         }else{

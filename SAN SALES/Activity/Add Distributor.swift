@@ -59,6 +59,7 @@ class Add_Distributor: IViewController, UITableViewDelegate, UITableViewDataSour
         Norm_Value.keyboardType = UIKeyboardType.numberPad
         DataTB.dataSource = self
         DataTB.delegate = self
+        Mobile_No.delegate = self
         if let range =  UserSetup.shared.Mandator.range(of: "erp", options: .caseInsensitive) {
             let position = UserSetup.shared.Mandator.distance(from: UserSetup.shared.Mandator.startIndex, to: range.lowerBound)
             ERP_Ma.isHidden = true
@@ -127,6 +128,13 @@ class Add_Distributor: IViewController, UITableViewDelegate, UITableViewDataSour
     DivCode = prettyJsonData["divisionCode"] as? String ?? ""
     Desig=prettyJsonData["desigCode"] as? String ?? ""
     }
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+          guard let currentText = textField.text else {
+              return true
+          }
+          let newLength = currentText.count + string.count - range.length
+        return newLength <= Int(UserSetup.shared.Phone_Country_Length)!
+      }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if (SelMod == "TY"){
             return lstOfTyp.count
@@ -301,9 +309,18 @@ class Add_Distributor: IViewController, UITableViewDelegate, UITableViewDataSour
                 return Verf
             }
         }
+        if Mobile_No.text != "" {
+            let Mobcount = Mobile_No.text!
+            let textCount = Mobcount.count
+            print(textCount)
+            print(Mobcount.count)
+            if Mobcount.count != Int(UserSetup.shared.Phone_Country_Length)! {
+                Toast.show(message: "Enter the valid Mobile Number", controller: self)
+                return false
+            }
+        }
         return true
     }
-    
     @IBAction func ClosWin(_ sender: Any) {
         TextSearch.text = ""
         SelWindo.isHidden = true
