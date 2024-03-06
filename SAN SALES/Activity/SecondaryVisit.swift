@@ -255,12 +255,16 @@ class SecondaryVisit: IViewController, UITableViewDelegate, UITableViewDataSourc
     }
     func addVstDetControl(aY: Double, h: Double, Caption: String, text: String) -> Double {
         if text != "" {
-            let lblCap: UILabel! = UILabel(frame: CGRect(x: 10, y: aY, width: vwVstDetCtrl.frame.width, height: 10))
+            let lblCap: UILabel! = UILabel(frame: CGRect(x: 10, y: aY-5, width: vwVstDetCtrl.frame.width, height: 12))
             lblCap.font = UIFont(name: "Poppins-SemiBold", size: 14)
             lblCap.text = Caption
             let lblAdd: UILabel! = UILabel(frame: CGRect(x: 10, y: aY+5, width: vwVstDetCtrl.frame.width, height: h))
             lblAdd.font = UIFont(name: "Poppins-Regular", size: 13)
             lblAdd.text = text
+            lblAdd.numberOfLines = 0
+            lblAdd.lineBreakMode = .byWordWrapping
+            lblAdd.sizeToFit()
+
             vwVstContainer.addSubview(lblCap)
             vwVstContainer.addSubview(lblAdd)
             
