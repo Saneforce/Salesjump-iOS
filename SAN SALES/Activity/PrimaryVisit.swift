@@ -152,6 +152,9 @@ class PrimaryVisit: IViewController, UITableViewDelegate, UITableViewDataSource,
         tbJWKSelect.delegate=self
         tbJWKSelect.dataSource=self
     }
+    func maximumDate(for calendar: FSCalendar) -> Date {
+        return Date()
+    }
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.text == "Enter the Remarks"{
             textView.text = ""

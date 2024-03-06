@@ -21,15 +21,16 @@ class Add_Distributor: IViewController {
     @IBOutlet weak var Mobile_No: EditTextField!
     @IBOutlet weak var Enter_Email: EditTextField!
     @IBOutlet weak var Enter_Add: EditTextField!
-    @IBOutlet weak var Typr: EditTextField!
+    @IBOutlet weak var Typr: LabelSelect!
     @IBOutlet weak var Norm_Value: EditTextField!
     @IBOutlet weak var Field_Off: EditTextField!
     @IBOutlet weak var ERP_Ma: UILabel!
     @IBOutlet weak var Dis_Hed: UILabel!
     @IBOutlet weak var DisID_Hed: UILabel!
-    
-    
+    @IBOutlet weak var SelWindo: UIView!
+    @IBOutlet weak var SelWindHed: UILabel!
     @IBOutlet weak var Sub_BT: UIButton!
+    
     var SFCode: String = "", StateCode: String = "", DivCode: String = "",Desig: String = ""
     let LocalStoreage = UserDefaults.standard
     override func viewDidLoad() {
@@ -200,6 +201,10 @@ class Add_Distributor: IViewController {
             }
         }
         return true
+    }
+    
+    @IBAction func ClosWin(_ sender: Any) {
+        SelWindo.isHidden = true
     }
     @objc private func GotoHome() {
         let alert = UIAlertController(title: "Confirmation", message: "Do you want to Back?", preferredStyle: .alert)

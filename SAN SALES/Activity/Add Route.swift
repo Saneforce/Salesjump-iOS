@@ -24,6 +24,7 @@ class Add_Route: IViewController, UITableViewDelegate, UITableViewDataSource {
     @IBOutlet weak var Minprod: EditTextField!
     @IBOutlet weak var Add_Rout_Title: UILabel!
     @IBOutlet weak var Sub_BT: UIButton!
+    @IBOutlet weak var Route_Name_Hed: UILabel!
     struct customGrp:Codable{
         var FGTableName:String
         var FGroupName:String
@@ -80,6 +81,8 @@ class Add_Route: IViewController, UITableViewDelegate, UITableViewDataSource {
         super.viewDidLoad()
         Add_Rout_Title.text = "Add \(UserSetup.shared.StkRoute)"
         Sub_BT.setTitle("Create \(UserSetup.shared.StkRoute)", for: .normal)
+        Route_Text.placeholder = "Enter the \(UserSetup.shared.StkRoute) Name"
+        Route_Name_Hed.text = "\(UserSetup.shared.StkRoute) Name"
         getUserDetails()
         DataTB.delegate = self
         DataTB.dataSource = self
