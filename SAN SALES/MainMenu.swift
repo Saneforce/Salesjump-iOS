@@ -311,6 +311,15 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
                 //viewController.navigationController?.pushViewController(myDyPln, animated: true)
             }
         }else if lItm.MasId == 13 {
+            var lstPlnDetail: [AnyObject] = []
+            let PlnDets: String=LocalStoreage.string(forKey: "Mydayplan")!
+            if let list = GlobalFunc.convertToDictionary(text: PlnDets) as? [AnyObject] {
+                lstPlnDetail = list;
+            }
+            if (lstPlnDetail.isEmpty){
+                Toast.show(message: "You haven't submitted my day plan.", controller: self)
+                return
+            }
             let myDyPln = storyboard.instantiateViewController(withIdentifier: "AddRoute") as! Add_Route
             viewController.setViewControllers([myDyPln], animated: false)
         }else if lItm.MasId == 14{
@@ -320,11 +329,9 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
         (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
         print(strMasList[indexPath.row].MasName)
     }
-    
     @objc func closeMenuWin(){
         dismiss(animated: false)
         GlobalFunc.movetoHomePage()
-        
     }
     func selectedid(){
         

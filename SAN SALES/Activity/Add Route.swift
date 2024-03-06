@@ -91,11 +91,12 @@ class Add_Route: IViewController, UITableViewDelegate, UITableViewDataSource {
         if let list = GlobalFunc.convertToDictionary(text: PlnDets) as? [AnyObject] {
         lstPlnDetail = list;
         }
-       // DataSF = self.lstPlnDetail[0]["subordinateid"] as! String
-        if let lstCustData = LocalStoreage.string(forKey: "Distributors_Master_"+SFCode),
+        DataSF = self.lstPlnDetail[0]["subordinateid"] as! String
+        if let lstCustData = LocalStoreage.string(forKey: "Distributors_Master_"+DataSF),
         let list = GlobalFunc.convertToDictionary(text:  lstCustData) as? [AnyObject] {
         lstCustomers = list
         lObjSel = list
+            print(list)
         }
         if let lstCustData = LocalStoreage.string(forKey: "Class_Master"),
         let list = GlobalFunc.convertToDictionary(text:  lstCustData) as? [AnyObject] {
