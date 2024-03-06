@@ -114,7 +114,7 @@ class Add_Distributor: IViewController, UITableViewDelegate, UITableViewDataSour
         
         TypsData()
         Typr.addTarget(target: self, action: #selector(OpenTyp))
-        btnback.addTarget(target: self, action: #selector(GotoHome))
+        btnback.addTarget(target: self, action: #selector(GotoHomee))
     }
     func getUserDetails(){
     let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
@@ -270,13 +270,11 @@ class Add_Distributor: IViewController, UITableViewDelegate, UITableViewDataSour
                     if let success = prettyPrintedJson["success"] as? Bool, success == false {
                         if let errorMsg = prettyPrintedJson["msg"] as? String {
                             Toast.show(message: errorMsg, controller: self)
-                        } else {
-                            Toast.show(message: "An error occurred.", controller: self)
+                            return
                         }
-                        return
                     }
-                    Toast.show(message: "\(UserSetup.shared.StkCap) Created successfully", controller: self)
-                    self.GotoHome()
+                        Toast.show(message: "\(UserSetup.shared.StkCap) Created successfully", controller: self)
+                        GlobalFunc.MovetoMainMenu()
                 }
             case .failure(let error):
                 Toast.show(message: error.errorDescription!)
@@ -330,7 +328,7 @@ class Add_Distributor: IViewController, UITableViewDelegate, UITableViewDataSour
         Typs.append(TypData(Name: "Warehouse"))
         Typs.append(TypData(Name: "Stockist"))
     }
-    @objc private func GotoHome() {
+    @objc private func GotoHomee() {
         let alert = UIAlertController(title: "Confirmation", message: "Do you want to Back?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
             self.dismiss(animated: true, completion: nil)
