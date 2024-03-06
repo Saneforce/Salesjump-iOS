@@ -6416,9 +6416,11 @@
                         <outlet property="Add_Rout_Title" destination="go4-C9-pGm" id="2sB-R8-w5Y"/>
                         <outlet property="Allowance_Type" destination="kfb-oa-27v" id="NiL-d0-tkz"/>
                         <outlet property="DataTB" destination="UKd-Y7-C6f" id="Mrl-7Z-n31"/>
+                        <outlet property="Dis_Caption" destination="MCR-0T-KKT" id="rOs-gw-9MU"/>
                         <outlet property="Minprod" destination="Cug-Np-cDj" id="dBY-v3-4gF"/>
                         <outlet property="Populations" destination="iZh-CA-wRX" id="psE-lm-gWI"/>
                         <outlet property="Route_Name_Hed" destination="M3s-lK-nmH" id="Pvb-df-9cG"/>
+                        <outlet property="Route_Pop_Hed" destination="VRb-7S-XL1" id="8rT-zg-XIC"/>
                         <outlet property="Route_Text" destination="jbx-if-gSu" id="rwf-5Q-eRI"/>
                         <outlet property="SelDis" destination="SU1-pK-e5A" id="DIi-2s-mCH"/>
                         <outlet property="SelWindo" destination="khB-vd-hZ9" id="oQg-NQ-023"/>

@@ -32,6 +32,7 @@ class Add_Distributor: IViewController, UITableViewDelegate, UITableViewDataSour
     @IBOutlet weak var DataTB: UITableView!
     @IBOutlet weak var TextSearch: UITextField!
     @IBOutlet weak var Hed_Typ: LabelSelect!
+    
     struct TypData:Codable{
         var Name:String
     }
@@ -273,8 +274,8 @@ class Add_Distributor: IViewController, UITableViewDelegate, UITableViewDataSour
                             return
                         }
                     }
-                        Toast.show(message: "\(UserSetup.shared.StkCap) Created successfully", controller: self)
-                        GlobalFunc.MovetoMainMenu()
+                    Toast.show(message: "\(UserSetup.shared.StkCap) Created successfully", controller: self)
+                    GlobalFunc.MovetoMainMenu()
                 }
             case .failure(let error):
                 Toast.show(message: error.errorDescription!)

@@ -25,6 +25,9 @@ class Add_Route: IViewController, UITableViewDelegate, UITableViewDataSource {
     @IBOutlet weak var Add_Rout_Title: UILabel!
     @IBOutlet weak var Sub_BT: UIButton!
     @IBOutlet weak var Route_Name_Hed: UILabel!
+    @IBOutlet weak var Route_Pop_Hed: UILabel!
+    @IBOutlet weak var Dis_Caption: UILabel!
+    
     struct customGrp:Codable{
         var FGTableName:String
         var FGroupName:String
@@ -83,6 +86,11 @@ class Add_Route: IViewController, UITableViewDelegate, UITableViewDataSource {
         Sub_BT.setTitle("Create \(UserSetup.shared.StkRoute)", for: .normal)
         Route_Text.placeholder = "Enter the \(UserSetup.shared.StkRoute) Name"
         Route_Name_Hed.text = "\(UserSetup.shared.StkRoute) Name"
+        Route_Pop_Hed.text = "\(UserSetup.shared.StkRoute) Populations"
+        Populations.placeholder = "Enter the \(UserSetup.shared.StkRoute) Populations"
+        Dis_Caption.text = "\(UserSetup.shared.StkCap) Name"
+        SelDis.text = "Select \(UserSetup.shared.StkCap)"
+        
         getUserDetails()
         DataTB.delegate = self
         DataTB.dataSource = self
@@ -161,8 +169,8 @@ class Add_Route: IViewController, UITableViewDelegate, UITableViewDataSource {
         
     }
     func validateForm() -> Bool {
-        if (SelDis.text == "Select Distributor") {
-            Toast.show(message: "Select Distributor", controller: self)
+        if (SelDis.text == "Select \(UserSetup.shared.StkCap)") {
+            Toast.show(message: "Select \(UserSetup.shared.StkCap)", controller: self)
             return false
         }
         if (Route_Text.text == ""){
@@ -248,7 +256,7 @@ class Add_Route: IViewController, UITableViewDelegate, UITableViewDataSource {
                     }
                     Toast.show(message: "\(UserSetup.shared.StkRoute) Created successfully", controller: self)
                     print(prettyPrintedJson)
-                    self.GotoHome()
+                    GlobalFunc.MovetoMainMenu()
                 }
             case .failure(let error):
                 Toast.show(message: error.errorDescription!)
