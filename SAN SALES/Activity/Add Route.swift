@@ -256,7 +256,7 @@ class Add_Route: IViewController, UITableViewDelegate, UITableViewDataSource {
                     }
                     Toast.show(message: "\(UserSetup.shared.StkRoute) Created successfully", controller: self)
                     print(prettyPrintedJson)
-                    GlobalFunc.MovetoMainMenu()
+                    GlobalFunc.movetoHomePage()
                 }
             case .failure(let error):
                 Toast.show(message: error.errorDescription!)

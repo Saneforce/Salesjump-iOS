@@ -291,11 +291,11 @@ class Add_Distributor: IViewController, UITableViewDelegate, UITableViewDataSour
                         }
                     }
                     Toast.show(message: "\(UserSetup.shared.StkCap) Created successfully", controller: self)
-                    GlobalFunc.MovetoMainMenu()
-                    
+                   
                     SyncDis(apiKey: "table/list&divisionCode="+DivCode+"&rSF="+SFCode+"&sfCode="+SFCode,aFormData: [
                         "tableName":"vwstockiest_Master_APP","coloumns":"[\"distributor_code as id\", \"stockiest_name as name\",\"town_code\",\"town_name\",\"Addr1\",\"Addr2\",\"City\",\"Pincode\",\"GSTN\",\"lat\",\"long\",\"addrs\",\"Tcode\",\"Dis_Cat_Code\"]","where":"[\"isnull(Stockist_Status,0)=0\"]","orderBy":"[\"name asc\"]","desig":"mgr"
                      ], aStoreKey: "Distributors_Master_"+SFCode)
+                    GlobalFunc.movetoHomePage()
                 }
             case .failure(let error):
                 Toast.show(message: error.errorDescription!)
