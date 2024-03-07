@@ -407,6 +407,27 @@ class AddNewCustomer: IViewController, UITableViewDelegate, UITableViewDataSourc
             Toast.show(message: "Take Retailer Photo", controller: self)
             return false
         }
+        if NewOutlet.shared.OwnerName == "" {
+            Toast.show(message: "Enter the Owner Name", controller: self)
+            return false
+        }
+        
+        if NewOutlet.shared.Address == "" {
+            Toast.show(message: "Enter the Address", controller: self)
+            return false
+        }
+        if NewOutlet.shared.Street == "" {
+            Toast.show(message: "Enter the Street", controller: self)
+            return false
+        }
+        if NewOutlet.shared.City == ""{
+            Toast.show(message: "Enter the City", controller: self)
+            return false
+        }
+        if NewOutlet.shared.Pincode == "" {
+            Toast.show(message: "Enter the Pincode", controller: self)
+            return false
+        }
         
         if NewOutlet.shared.Class.id == "" {
             Toast.show(message: "Select the Class", controller: self)
