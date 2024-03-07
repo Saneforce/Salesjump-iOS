@@ -360,12 +360,17 @@ class PrimaryVisit: IViewController, UITableViewDelegate, UITableViewDataSource,
                     }
                     self.ShowLoading(Message: "Data Submitting Please wait...")
                     //DataSF = self.lstPlnDetail[0]["subordinateid"] as! String
-                    var sImgItems:String = ""
                     if(PhotosCollection.shared.PhotoList.count>0){
                         for i in 0...PhotosCollection.shared.PhotoList.count-1{
                             let item: [String: Any] = PhotosCollection.shared.PhotoList[i] as! [String : Any]
-                            if i > 0 { sImgItems = sImgItems + "," }
-                            sImgItems = sImgItems + "{\"imgurl\":\"'" + (item["FileName"]  as! String) + "'\",\"title\":\"''\",\"remarks\":\"''\",\"f_key\":{\"Activity_Report_Code\":\"Activity_Report_APP\"}}"
+                            if i > 0 { self.sImgItems = self.sImgItems + "," }
+                            let sep = item["FileName"]  as! String
+                            let fullNameArr = sep.components(separatedBy: "_")
+                            
+                            let phono = fullNameArr[2]
+                            var fullid = "_\(phono)"
+                            print(fullid)
+                            self.sImgItems = self.sImgItems + "{\"imgurl\":\"'" + fullid + "'\",\"title\":\"''\",\"remarks\":\"''\",\"f_key\":{\"Activity_Report_Code\":\"Activity_Report_APP\"}}"
                         }
                     }
                         
