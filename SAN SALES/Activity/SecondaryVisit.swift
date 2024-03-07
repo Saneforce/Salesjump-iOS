@@ -295,7 +295,7 @@ class SecondaryVisit: IViewController, UITableViewDelegate, UITableViewDataSourc
         }
         
         if VisitData.shared.VstRemarks.name == "" {
-            Toast.show(message: "Select the Remarks", controller: self)
+            Toast.show(message: "Please Enter or Select the Remarks", controller: self)
             return
         }
         if(NetworkMonitor.Shared.isConnected != true){
@@ -317,8 +317,6 @@ class SecondaryVisit: IViewController, UITableViewDelegate, UITableViewDataSourc
             let sLocation: String = location.coordinate.latitude.description + ":" + location.coordinate.longitude.description
             lazy var geocoder = CLGeocoder()
             self.Location = sLocation
-         
-      
             geocoder.reverseGeocodeLocation(location ) { (placemarks, error) in
                
                 if(placemarks != nil){
@@ -348,20 +346,7 @@ class SecondaryVisit: IViewController, UITableViewDelegate, UITableViewDataSourc
                 //let DataSF: String = self.lstPlnDetail[0]["subordinateid"] as! String
                 
               
-                if(PhotosCollection.shared.PhotoList.count>0){
-                    for i in 0...PhotosCollection.shared.PhotoList.count-1{
-                        let item: [String: Any] = PhotosCollection.shared.PhotoList[i] as! [String : Any]
-                        if i > 0 { self.sImgItems = self.sImgItems + "," }
-                        let sep = item["FileName"]  as! String
-                        let fullNameArr = sep.components(separatedBy: "_")
-                        
-                        let phono = fullNameArr[2]
-                        var fullid = "_\(phono)"
-                        print(fullid)
-                        self.sImgItems = self.sImgItems + "{\"imgurl\":\"'" + fullid + "'\",\"title\":\"''\",\"remarks\":\"''\",\"f_key\":{\"Activity_Report_Code\":\"Activity_Report_APP\"}}"
-                    }
-                }
-  
+         
                 let sessionManager = Session(configuration: URLSessionConfiguration.default)
 
                 sessionManager.session.configuration.httpMaximumConnectionsPerHost = 1
@@ -369,6 +354,20 @@ class SecondaryVisit: IViewController, UITableViewDelegate, UITableViewDataSourc
                
                    
             }
+            if(PhotosCollection.shared.PhotoList.count>0){
+                for i in 0...PhotosCollection.shared.PhotoList.count-1{
+                    let item: [String: Any] = PhotosCollection.shared.PhotoList[i] as! [String : Any]
+                    if i > 0 { self.sImgItems = self.sImgItems + "," }
+                    let sep = item["FileName"]  as! String
+                    let fullNameArr = sep.components(separatedBy: "_")
+                    
+                    let phono = fullNameArr[2]
+                    let fullid = "_\(phono)"
+                    print(fullid)
+                    self.sImgItems = self.sImgItems + "{\"imgurl\":\"'" + fullid + "'\",\"title\":\"''\",\"remarks\":\"''\",\"f_key\":{\"Activity_Report_Code\":\"Activity_Report_APP\"}}"
+                }
+            }
+
             
             Count = Count+1
             if (OrderSub == "NOD"){

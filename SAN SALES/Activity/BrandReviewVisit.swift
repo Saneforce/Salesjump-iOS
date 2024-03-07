@@ -328,7 +328,7 @@ class BrandReviewVisit: IViewController, UITableViewDataSource, UITableViewDeleg
         }
       
         if VisitData.shared.VstRemarks.name == "" {
-            Toast.show(message: "Select the Remarks", controller: self)
+            Toast.show(message: "Please Enter or Select the Remarks", controller: self)
             return
         }
         if(NetworkMonitor.Shared.isConnected != true){

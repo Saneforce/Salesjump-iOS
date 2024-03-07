@@ -120,6 +120,7 @@ class ViewController: IViewController {
             return
         }
         let CompDet:[String] = (txUsrNm.text?.components(separatedBy: "-"))!
+        print(CompDet)
         let LocalStoreage = UserDefaults.standard
         self.ShowLoading(Message: "Please wait...")
         let Conf=LocalStoreage.string(forKey: "APPConfig")
@@ -130,7 +131,8 @@ class ViewController: IViewController {
                 {
                 case .success(let value):
                     if let json = value as? [String: Any] {
-                        let CompSH: String = CompDet[0] as! String
+                        let uppercaseCompSH = CompDet[0] as! String
+                        let CompSH: String = uppercaseCompSH.uppercased()
                         let config:[String:Any] = json[CompSH] as? [String: Any] ?? [:]
                         if config.count > 0 {
                             APIClient.shared.BaseURL = config["base_url"] as! String ?? APIClient.shared.BaseURL

@@ -484,7 +484,7 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
             let lblCap: UILabel! = UILabel(frame: CGRect(x: 10, y: aY, width: 180, height: h))
             lblCap.font = UIFont(name: "Poppins-Regular", size: 13)
             lblCap.text = Caption
-            let lblAdd: UILabel! = UILabel(frame: CGRect(x: 110, y: aY, width: 80, height: h))
+            let lblAdd: UILabel! = UILabel(frame: CGRect(x: 190, y: aY, width: 80, height: h))
             lblAdd.font = UIFont(name: "Poppins-Regular", size: 13)
             lblAdd.textAlignment = textAlign
             //lblAdd.backgroundColor = UIColor.orange
