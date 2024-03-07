@@ -48,6 +48,7 @@ class Add_Distributor: IViewController, UITableViewDelegate, UITableViewDataSour
     var tlObjSel: [AnyObject] = []
     var SelMod:String = ""
     var HQ_Sf:String = ""
+    var SyncKeys: String = ""
     override func viewDidLoad() {
         super.viewDidLoad()
         getUserDetails()
@@ -61,8 +62,6 @@ class Add_Distributor: IViewController, UITableViewDelegate, UITableViewDataSour
         Dis_SF_Name.clipsToBounds=true
         Dis_SF_Name.layer.cornerRadius = 6.0
         Dis_SF_Name.backgroundColor = UIColor(red: 239.0/255, green: 243.0/255, blue: 251.0/255, alpha: 1.0)
-        
-        
         
         Mobile_No.keyboardType = UIKeyboardType.numberPad
         Norm_Value.keyboardType = UIKeyboardType.numberPad
@@ -128,6 +127,7 @@ class Add_Distributor: IViewController, UITableViewDelegate, UITableViewDataSour
         Typr.addTarget(target: self, action: #selector(OpenTyp))
         btnback.addTarget(target: self, action: #selector(GotoHomee))
     }
+   
     func getUserDetails(){
     let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
     let data = Data(prettyPrintedJson!.utf8)
@@ -292,12 +292,52 @@ class Add_Distributor: IViewController, UITableViewDelegate, UITableViewDataSour
                     }
                     Toast.show(message: "\(UserSetup.shared.StkCap) Created successfully", controller: self)
                     GlobalFunc.MovetoMainMenu()
+                    
+                    SyncDis(apiKey: "table/list&divisionCode="+DivCode+"&rSF="+SFCode+"&sfCode="+SFCode,aFormData: [
+                        "tableName":"vwstockiest_Master_APP","coloumns":"[\"distributor_code as id\", \"stockiest_name as name\",\"town_code\",\"town_name\",\"Addr1\",\"Addr2\",\"City\",\"Pincode\",\"GSTN\",\"lat\",\"long\",\"addrs\",\"Tcode\",\"Dis_Cat_Code\"]","where":"[\"isnull(Stockist_Status,0)=0\"]","orderBy":"[\"name asc\"]","desig":"mgr"
+                     ], aStoreKey: "Distributors_Master_"+SFCode)
                 }
             case .failure(let error):
                 Toast.show(message: error.errorDescription!)
             }
         }
     }
+    func SyncDis(apiKey: String,aFormData: [String: Any],aStoreKey:String) {
+        let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
+        let jsonString = String(data: jsonData!, encoding: .utf8)!
+        
+        let params: Parameters = [
+            "data": jsonString
+        ]
+        self.SyncKeys = self.SyncKeys.replacingOccurrences(of: ";e:" + aStoreKey + ";", with: "")
+        SyncKeys = SyncKeys + ";" + aStoreKey + ";"
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+apiKey, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
+            AFdata in
+            switch AFdata.result
+            {
+               
+                case .success(let json):
+                   guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
+                       print("Error: Cannot convert JSON object to Pretty JSON data")
+                       return
+                   }
+                   guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+                       print("Error: Could print JSON in String")
+                       return
+                   }
+
+                   print(prettyPrintedJson)
+                   self.SyncKeys = self.SyncKeys.replacingOccurrences(of: ";" + aStoreKey + ";", with: "")
+                   let LocalStoreage = UserDefaults.standard
+                   LocalStoreage.set(prettyPrintedJson, forKey: aStoreKey)
+               case .failure(let error):
+                   self.SyncKeys = self.SyncKeys.replacingOccurrences(of: ";" + aStoreKey + ";", with: ";e:" + aStoreKey + ";")
+                   print(error.errorDescription!)
+            }
+            
+        }
+    }
+    
     func validateForm() -> Bool {
         if (Dis_Name.text == "") {
             Toast.show(message: "Enter the \(UserSetup.shared.StkCap) Name", controller: self)
