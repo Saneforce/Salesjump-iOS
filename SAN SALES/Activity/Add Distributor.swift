@@ -32,7 +32,7 @@ class Add_Distributor: IViewController, UITableViewDelegate, UITableViewDataSour
     @IBOutlet weak var DataTB: UITableView!
     @IBOutlet weak var TextSearch: UITextField!
     @IBOutlet weak var Hed_Typ: LabelSelect!
-    
+    @IBOutlet weak var Dis_SF_Name: UILabel!
     struct TypData:Codable{
         var Name:String
     }
@@ -51,11 +51,19 @@ class Add_Distributor: IViewController, UITableViewDelegate, UITableViewDataSour
     override func viewDidLoad() {
         super.viewDidLoad()
         getUserDetails()
-        Head_Dis_Name.text = UserSetup.shared.StkCap
+        Head_Dis_Name.text = "Add \(UserSetup.shared.StkCap)"
         Dis_Name.placeholder = "Enter the \(UserSetup.shared.StkCap) Name"
         Sub_BT.setTitle("Create \(UserSetup.shared.StkCap)", for: .normal)
         Dis_Hed.text = "\(UserSetup.shared.StkCap) Name"
         DisID_Hed.text = "\(UserSetup.shared.StkCap) ID"
+        Dis_SF_Name.text = "\(UserSetup.shared.Division_SName)S-"
+        
+        Dis_SF_Name.clipsToBounds=true
+        Dis_SF_Name.layer.cornerRadius = 6.0
+        Dis_SF_Name.backgroundColor = UIColor(red: 239.0/255, green: 243.0/255, blue: 251.0/255, alpha: 1.0)
+        
+        
+        
         Mobile_No.keyboardType = UIKeyboardType.numberPad
         Norm_Value.keyboardType = UIKeyboardType.numberPad
         DataTB.dataSource = self
@@ -95,6 +103,7 @@ class Add_Distributor: IViewController, UITableViewDelegate, UITableViewDataSour
             if(lstHQs.count < 2){
                 Hed_Typ.text = name
                 Field_Off.text = name
+                HQ_Sf = SFCode
                 let DistData: String=LocalStoreage.string(forKey: "Distributors_Master_"+id)!
                 let RetailData: String=LocalStoreage.string(forKey: "Retail_Master_"+id)!
                 if let list = GlobalFunc.convertToDictionary(text: DistData) as? [AnyObject] {
@@ -109,6 +118,8 @@ class Add_Distributor: IViewController, UITableViewDelegate, UITableViewDataSour
               let text = lstHQs[0]["name"] as? String
                 Hed_Typ.text = text
                 Field_Off.text = text
+                print(lstHQs)
+                HQ_Sf = (lstHQs[0]["id"] as? String)!
                 Hed_Typ.addTarget(target: self, action: #selector(selHeadquaters))
             }
         }
@@ -216,7 +227,11 @@ class Add_Distributor: IViewController, UITableViewDelegate, UITableViewDataSour
             GST_NO = Gst
         }
         if let User =  UserName.text{
-            UserN =  User
+            if User == ""{
+                UserN = User
+            }else{
+                UserN =  "\(UserSetup.shared.Division_SName)S-"+User
+            }
         }
         if let password = PassWord.text{
             Pass = password
@@ -251,6 +266,7 @@ class Add_Distributor: IViewController, UITableViewDelegate, UITableViewDataSour
         let params: Parameters = [
             "data": jsonString
         ]
+        print(params)
         AF.request(APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
             AFdata in
             self.LoadingDismiss()
@@ -311,8 +327,6 @@ class Add_Distributor: IViewController, UITableViewDelegate, UITableViewDataSour
         if Mobile_No.text != "" {
             let Mobcount = Mobile_No.text!
             let textCount = Mobcount.count
-            print(textCount)
-            print(Mobcount.count)
             if Mobcount.count != Int(UserSetup.shared.Phone_Country_Length)! {
                 Toast.show(message: "Enter the valid Mobile Number", controller: self)
                 return false
