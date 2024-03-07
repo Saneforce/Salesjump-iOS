@@ -10,7 +10,7 @@ import UIKit
 import Alamofire
 import CoreLocation
 
-class BrandReviewVisit: IViewController, UITableViewDataSource, UITableViewDelegate {
+class BrandReviewVisit: IViewController, UITableViewDataSource, UITableViewDelegate, UITextViewDelegate  {
     @IBOutlet weak var btrmktp: UIButton!
     @IBOutlet weak var txvRmks: UITextView!
     @IBOutlet weak var lblSelTitle: UILabel!
@@ -105,7 +105,9 @@ class BrandReviewVisit: IViewController, UITableViewDataSource, UITableViewDeleg
             print("Error: Cannot convert JSON object to Pretty JSON data")
             return
         }
-        
+        txvRmks.text = "Enter the Remarks"
+        txvRmks.returnKeyType = .done
+        txvRmks.delegate = self
         SFCode = prettyJsonData["sfCode"] as? String ?? ""
         DivCode = prettyJsonData["divisionCode"] as? String ?? ""
         eKey = String(format: "EK%@-%i", SFCode,Int(Date().timeIntervalSince1970))
@@ -187,7 +189,24 @@ class BrandReviewVisit: IViewController, UITableViewDataSource, UITableViewDeleg
         
         // Do any additional setup after loading the view.
     }
-    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.text == "Enter the Remarks"{
+            textView.text = ""
+            textView.textColor = .black
+        }
+    }
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool{
+        if text == "\n"{
+            textView.resignFirstResponder()
+        }
+        return true
+    }
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text == ""{
+            textView.text = "Enter the Remarks"
+            textView.textColor = UIColor.lightGray
+        }
+    }
 
     @objc private func selRmksTemp() {
         //isDate = false
@@ -284,6 +303,11 @@ class BrandReviewVisit: IViewController, UITableViewDataSource, UITableViewDeleg
     
     func validateForm() -> Bool {
         VisitData.shared.VstRemarks.name = txvRmks.text
+        if txvRmks.text == "Enter the Remarks" {
+            VisitData.shared.VstRemarks.name = ""
+        }
+        
+        
 //        if VisitData.shared.AV.id == "" {
 //            Toast.show(message: "Click Checkbox", controller: self)
 //            return false
@@ -452,8 +476,11 @@ class BrandReviewVisit: IViewController, UITableViewDataSource, UITableViewDeleg
        }
         
         brndlst = String(brndlst.dropLast())
-        
-        let jsonString = "[{\"svCallRevw\":{\"worktype\":\"" + (self.lstPlnDetail[0]["worktype"] as! String) + "\",\"entryDate\":\"" + VisitData.shared.cInTime + "\",\"eDt\":\"" + VisitData.shared.cInTime + "\",\"subordinate\":\"MR4126\",\"stockist\":\"32539\",\"cluster\":\"114727\",\"clusterNm\":\"SAIDAPET\",\"doctorid\":\"" + VisitData.shared.CustID + "\",\"remarks\":\"" + VisitData.shared.VstRemarks.name + "\",\"BrandList\":\"[" + brndlst + "]\",\"photosList\":\"[" + sImgItems + "]\"}}]";
+        print(VisitData.shared.VstRemarks.name)
+        if (VisitData.shared.VstRemarks.name == "Enter the Remarks"){
+            VisitData.shared.VstRemarks.name = ""
+        }
+        let jsonString = "[{\"svCallRevw\":{\"worktype\":\"" + (self.lstPlnDetail[0]["worktype"] as! String) + "\",\"entryDate\":\"" + VisitData.shared.cInTime + "\",\"eDt\":\"" + VisitData.shared.cInTime + "\",\"subordinate\":\"MR4126\",\"stockist\":\"32539\",\"cluster\":\"114727\",\"clusterNm\":\"SAIDAPET\",\"doctorid\":\"" + VisitData.shared.CustID + "\",\"remarks\":\"" + VisitData.shared.VstRemarks.name.trimmingCharacters(in: .whitespacesAndNewlines) + "\",\"BrandList\":\"[" + brndlst + "]\",\"photosList\":\"[" + sImgItems + "]\"}}]";
         
     
         let params: Parameters = [
