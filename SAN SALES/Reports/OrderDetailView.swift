@@ -223,7 +223,7 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
  
                         if let stkMob = list[0]["StkMob"] as? String, stkMob != "<null>" {
                            // self.lblFrmMob.text = stkMob
-                            self.lblFrmMob.text = ""
+                            self.lblFrmMob.text = stkMob
                             print(stkMob)
                         } else {
                             self.lblFrmMob.text = ""
@@ -269,7 +269,6 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
             //self.lblFrmMob.text=String(format: "%@", todayData["CusMobile"] as! CVarArg)
             if let stkMob = todayData["CusMobile"] as? String, stkMob != "<null>" {
                 self.lblToMob.text = stkMob
-                print(stkMob)
             } else {
                 self.lblToMob.text = ""
             }
@@ -278,15 +277,11 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
             //self.lblToMob.text=String(format: "%@", todayData["StkMob"] as! CVarArg)
             if let stkMob = todayData["StkMob"] as? String, stkMob != "<null>" {
                 //self.lblFrmMob.text = stkMob
-                self.lblFrmMob.text = ""
-                print(stkMob)
+                self.lblFrmMob.text = stkMob
             } else {
                 self.lblFrmMob.text = ""
             }
-
-            print(todayData)
             self.objOrderDetail = todayData["Items"] as! [AnyObject]
-            print(objOrderDetail)
             var totAmt: Double = 0
 //            for i in 0...objOrderDetail.count-1 {
 //                let item: [String: Any] = objOrderDetail[i] as! [String : Any]
