@@ -115,12 +115,36 @@ class RptVisitDetail: IViewController, UITableViewDelegate, UITableViewDataSourc
 //            cell.lblText?.text = item["PName"] as? String
 //            cell.lblQty?.text = String(format: "%i", item["Qty"] as! Int)
 //            cell.lblActRate?.text = String(format: "Rs. %.02f", item["Val"] as! Double)
-            
-            cell.lblText?.text = RptVisitDetail.objItmSmryDetail[indexPath.row].PName
-            cell.lblQty?.text = RptVisitDetail.objItmSmryDetail[indexPath.row].Qty
-            cell.lblActRate?.text = RptVisitDetail.objItmSmryDetail[indexPath.row].Val
+//
+//            cell.lblText?.text = RptVisitDetail.objItmSmryDetail[indexPath.row].PName
+//            cell.lblQty?.text = RptVisitDetail.objItmSmryDetail[indexPath.row].Qty
+//            cell.lblActRate?.text = RptVisitDetail.objItmSmryDetail[indexPath.row].Val
                         
-            
+            if RptVisitDetail.objItmSmryDetail[indexPath.row].PName == "TOTAL" {
+                // Set the text properties first
+                cell.lblText?.text = RptVisitDetail.objItmSmryDetail[indexPath.row].PName
+                cell.lblQty?.text = RptVisitDetail.objItmSmryDetail[indexPath.row].Qty
+                cell.lblActRate?.text = RptVisitDetail.objItmSmryDetail[indexPath.row].Val
+
+                // Apply attributed text (font color in this case)
+                let attributedText = NSAttributedString(string: cell.lblText?.text ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor.red])
+                let attributedqty = NSAttributedString(string: cell.lblQty?.text ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor.red])
+                let attributedRate = NSAttributedString(string: cell.lblActRate?.text ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor.red])
+                cell.lblText?.attributedText = attributedText
+                cell.lblQty?.attributedText = attributedqty
+                cell.lblActRate?.attributedText = attributedRate
+            } else {
+                cell.lblText?.text = RptVisitDetail.objItmSmryDetail[indexPath.row].PName
+                cell.lblQty?.text = RptVisitDetail.objItmSmryDetail[indexPath.row].Qty
+                cell.lblActRate?.text = RptVisitDetail.objItmSmryDetail[indexPath.row].Val
+                let attributedText = NSAttributedString(string: cell.lblText?.text ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
+                let attributedqty = NSAttributedString(string: cell.lblQty?.text ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
+                let attributedRate = NSAttributedString(string: cell.lblActRate?.text ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
+                cell.lblText?.attributedText = attributedText
+                cell.lblQty?.attributedText = attributedqty
+                cell.lblActRate?.attributedText = attributedRate
+                
+            }
         }
         return cell
     }
