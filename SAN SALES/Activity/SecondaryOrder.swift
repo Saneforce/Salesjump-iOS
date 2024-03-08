@@ -193,11 +193,11 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
             if let indexToDelete = lstDistList.firstIndex(where: { String(format: "%@", $0["id"] as! CVarArg) == id }) {
                 let name: String = lstDistList[indexToDelete]["name"] as! String
                 print(name)
-                lblDistNm.text = name
+                //lblDistNm.text = name
                 lblPrvDistNm.text = name
-                VisitData.shared.Dist.name = name
-                disbuttername =  VisitData.shared.Dist.name
-                VisitData.shared.Dist.id = id
+                //VisitData.shared.Dist.name = name
+                //disbuttername =  VisitData.shared.Dist.name
+                //VisitData.shared.Dist.id = id
             }
         }
         btnBack.addTarget(target: self, action: #selector(GotoHome))
