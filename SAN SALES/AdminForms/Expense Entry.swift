@@ -9,7 +9,7 @@ import UIKit
 import FSCalendar
 import Alamofire
 
-class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource, UITableViewDataSource, UITableViewDelegate {
+class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, UITableViewDataSource, UITableViewDelegate {
   
     @IBOutlet weak var BackBT: UIImageView!
     @IBOutlet weak var calendar: FSCalendar!
@@ -31,6 +31,7 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
     var SFCode: String = "", StateCode: String = "", DivCode: String = "",Desig: String = ""
     var Period:[PeriodicData] = []
     var lstOfPeriod:[PeriodicData] = []
+    var FDate: Date = Date(),TDate: Date = Date()
     override func viewDidLoad() {
         super.viewDidLoad()
         getUserDetails()
@@ -56,6 +57,10 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
     }
 
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
+        if (SelPeriod.text == "Select Period"){
+            Toast.show(message: "Select Period")
+            return
+        }
         if monthPosition == .previous || monthPosition == .next {
             return
         }
@@ -71,7 +76,6 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
 
 
     func addLetterA(to cell: FSCalendarCell?) {
-        // Customize the appearance of the letter as needed
         let letterLabel = UILabel()
         letterLabel.text = "A"
         letterLabel.textColor = .red
@@ -92,7 +96,49 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
         return cell
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let item = Period[indexPath.row]
+        print(item)
+        SelPeriod.text = item.Period_Name
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        let From_Date = item.From_Date
+        if let date = dateFormatter.date(from: "2024-03-" + From_Date) {
+            FDate = date
+        } else {
+            print("Error: Unable to convert string to Date")
+        }
+        let To_Date = item.To_Date
+        if To_Date == "end of month"{
+            let currentDate = Date()
+            let calendar = Calendar.current
+            if let monthRange = calendar.range(of: .day, in: .month, for: currentDate) {
+                let lastDayOfMonth = monthRange.upperBound - 1
+                if let lastDateOfMonth = calendar.date(bySetting: .day, value: lastDayOfMonth, of: currentDate) {
+                    print("Last date of the month: \(lastDateOfMonth)")
+                    TDate = lastDateOfMonth
+                }
+            }
+        }else{
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd"
+            let Per_To_Date = To_Date
+            if let date = dateFormatter.date(from: "2024-03-" + Per_To_Date) {
+                TDate = date
+            } else {
+                print("Error: Unable to convert string to Date")
+            }
+            
+            
+        }
+        calendar.reloadData()
         TextSeh.text = ""
+        Selwind.isHidden = true
+    }
+    func maximumDate(for calendar: FSCalendar) -> Date {
+        return TDate
+    }
+    func minimumDate(for calendar: FSCalendar) -> Date {
+       return FDate
     }
     
     func periodic() {

@@ -22,6 +22,7 @@
 		38B05F542B05D7040025D4C0 /* ManagerDashboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38B05F532B05D7040025D4C0 /* ManagerDashboard.swift */; };
 		38C5A9802B958AFB00EF4584 /* Add Distributor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38C5A97F2B958AFB00EF4584 /* Add Distributor.swift */; };
 		38D0F76829BB2447003EEB03 /* BrandReviewVisit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38D0F76729BB2447003EEB03 /* BrandReviewVisit.swift */; };
+		38DDD8492BA1D8120074AEF1 /* Daily Expense Entry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38DDD8482BA1D8120074AEF1 /* Daily Expense Entry.swift */; };
 		38F6F5A92B19D2AC007090BF /* Attendance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38F6F5A82B19D2AC007090BF /* Attendance.swift */; };
 		38F6F5AB2B19D2C2007090BF /* Summary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38F6F5AA2B19D2C2007090BF /* Summary.swift */; };
 		38F6F5AD2B19D2DA007090BF /* Performance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38F6F5AC2B19D2DA007090BF /* Performance.swift */; };
@@ -114,6 +115,7 @@
 		38B05F532B05D7040025D4C0 /* ManagerDashboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagerDashboard.swift; sourceTree = "<group>"; };
 		38C5A97F2B958AFB00EF4584 /* Add Distributor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Add Distributor.swift"; sourceTree = "<group>"; };
 		38D0F76729BB2447003EEB03 /* BrandReviewVisit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrandReviewVisit.swift; sourceTree = "<group>"; };
+		38DDD8482BA1D8120074AEF1 /* Daily Expense Entry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Daily Expense Entry.swift"; sourceTree = "<group>"; };
 		38F6F5A82B19D2AC007090BF /* Attendance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Attendance.swift; sourceTree = "<group>"; };
 		38F6F5AA2B19D2C2007090BF /* Summary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Summary.swift; sourceTree = "<group>"; };
 		38F6F5AC2B19D2DA007090BF /* Performance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Performance.swift; sourceTree = "<group>"; };
@@ -258,6 +260,7 @@
 				3F0822BC29000872009C33EA /* AdminMenus.swift */,
 				3F0822BE29000D65009C33EA /* LeaveForm.swift */,
 				382103F42BA16B83005C02CD /* Expense Entry.swift */,
+				38DDD8482BA1D8120074AEF1 /* Daily Expense Entry.swift */,
 			);
 			path = AdminForms;
 			sourceTree = "<group>";
@@ -599,6 +602,7 @@
 				38D0F76829BB2447003EEB03 /* BrandReviewVisit.swift in Sources */,
 				3F97F9F62831B5950097166D /* AddNewCustomer.swift in Sources */,
 				3F5B2FC3284B59E400574D7C /* MsgLoader.swift in Sources */,
+				38DDD8492BA1D8120074AEF1 /* Daily Expense Entry.swift in Sources */,
 				3F9F379C28631F2C002CC408 /* layBranswsSal.swift in Sources */,
 				3F28CC0C27D5302100B95964 /* MydayPlanCtrl.swift in Sources */,
 				3F0822BF29000D65009C33EA /* LeaveForm.swift in Sources */,
