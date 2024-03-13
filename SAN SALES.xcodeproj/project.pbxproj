@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		19247A3DB960E114A6C28FB3 /* Pods_SAN_SALES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 448C0B69977667C109C50683 /* Pods_SAN_SALES.framework */; };
 		381EF93D2B19DB9700CED65F /* UI+Constraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 381EF93C2B19DB9700CED65F /* UI+Constraints.swift */; };
+		382103F52BA16B83005C02CD /* Expense Entry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 382103F42BA16B83005C02CD /* Expense Entry.swift */; };
 		385ED6042ABAB50400B43564 /* FSCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 385ED6032ABAB50400B43564 /* FSCalendar */; };
 		386889E22B1868F90015F20C /* RottPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 386889E12B1868F90015F20C /* RottPageViewController.swift */; };
 		386A43912A1CBB0200CE1833 /* SubmittedDCR.swift in Sources */ = {isa = PBXBuildFile; fileRef = 386A43902A1CBB0200CE1833 /* SubmittedDCR.swift */; };
@@ -101,6 +102,7 @@
 /* Begin PBXFileReference section */
 		3453EBBCA5603BC17DBC6D2A /* Pods-SAN SALES.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SAN SALES.release.xcconfig"; path = "Target Support Files/Pods-SAN SALES/Pods-SAN SALES.release.xcconfig"; sourceTree = "<group>"; };
 		381EF93C2B19DB9700CED65F /* UI+Constraints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UI+Constraints.swift"; sourceTree = "<group>"; };
+		382103F42BA16B83005C02CD /* Expense Entry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Expense Entry.swift"; sourceTree = "<group>"; };
 		386889E12B1868F90015F20C /* RottPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RottPageViewController.swift; sourceTree = "<group>"; };
 		386A43902A1CBB0200CE1833 /* SubmittedDCR.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmittedDCR.swift; sourceTree = "<group>"; };
 		386A43922A1CC3E000CE1833 /* Submittedcalls.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Submittedcalls.storyboard; sourceTree = "<group>"; };
@@ -255,6 +257,7 @@
 			children = (
 				3F0822BC29000872009C33EA /* AdminMenus.swift */,
 				3F0822BE29000D65009C33EA /* LeaveForm.swift */,
+				382103F42BA16B83005C02CD /* Expense Entry.swift */,
 			);
 			path = AdminForms;
 			sourceTree = "<group>";
@@ -642,6 +645,7 @@
 				3F0861C328053B3A006A30FB /* UserSetup.swift in Sources */,
 				38F6F5AF2B19D2ED007090BF /* Location.swift in Sources */,
 				3F2F810B27CEB30C0015E1CA /* AppDelegate.swift in Sources */,
+				382103F52BA16B83005C02CD /* Expense Entry.swift in Sources */,
 				3F063530283E04580027842E /* PrimaryVisit.swift in Sources */,
 				3F2F810D27CEB30C0015E1CA /* SceneDelegate.swift in Sources */,
 				3F0635392844025C0027842E /* PhotosCollection.swift in Sources */,

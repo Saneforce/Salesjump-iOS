@@ -38,6 +38,7 @@ class AdminMenus: IViewController, UITableViewDelegate, UITableViewDataSource  {
         }
         
         strMasList.append(mnuItem.init(MasId: 1, MasName: "Apply Leave", MasImage: "SwitchRoute"))
+        strMasList.append(mnuItem.init(MasId: 2, MasName: "Expense Entry", MasImage: "SwitchRoute"))
         //strMasList.append(mnuItem.init(MasId: 2, MasName: "Add New Retailer", MasImage: "NewRetailer"))
         //strMasList.append(mnuItem.init(MasId: 11, MasName: "Master Sync", MasImage: "MasterSync"))
         
@@ -83,18 +84,13 @@ class AdminMenus: IViewController, UITableViewDelegate, UITableViewDataSource  {
             viewController.setViewControllers([RptMnuVc,myDyPln], animated: false)
             //viewController.navigationController?.pushViewController(myDyPln, animated: true)
             (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
-        }/*else if lItm.MasId == 2 {
-            let Homevc = storyboard.instantiateViewController(withIdentifier: "HomePageVwControl") as! HomePageViewController
-            let addCus = storyboard.instantiateViewController(withIdentifier: "AddNewRetailer") as! AddNewCustomer
-            viewController.setViewControllers([Homevc, addCus], animated: false)
+        }else if lItm.MasId == 2 {
+            let RptMnuVc = storyboard.instantiateViewController(withIdentifier: "sbAdminMnu") as! AdminMenus
+            let myDyPln = storyboard.instantiateViewController(withIdentifier: "Expense") as! Expense_Entry
+            viewController.setViewControllers([RptMnuVc,myDyPln], animated: false)
             //viewController.navigationController?.pushViewController(myDyPln, animated: true)
-        }else if lItm.MasId == 11 {
-            let MasSync = storyboard.instantiateViewController(withIdentifier: "MasterSyncVwControl") as! MasterSync
-            MasSync.AutoSync = false
-            viewController.setViewControllers([MasSync], animated: false)
-            //viewController.navigationController?.pushViewController(myDyPln, animated: true)
-        }*/
-       // (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
+            (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
+        }
         print(strMasList[indexPath.row].MasName)
     }
     

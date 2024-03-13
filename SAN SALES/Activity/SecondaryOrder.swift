@@ -57,14 +57,10 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         let name: String
     }
     var vstDets: [String: lItem] = [:]
-    
     var lObjSel: [AnyObject] = []
     var lAllObjSel: [AnyObject] = []
-    
     var SelMode: String = ""
-    
     var lstPlnDetail: [AnyObject] = []
-    
     var lstBrands: [AnyObject] = []
     var lstAllProducts: [AnyObject] = []
     var lstProducts: [AnyObject] = []
@@ -96,7 +92,6 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
     var disbuttername : String?
     var lbltotalamunt: Double = 0
     let LocalStoreage = UserDefaults.standard
-    
     var net_weight_value: Int = 0
     var Cust_Code: String = ""
     var DCR_Code: String = ""
@@ -536,9 +531,11 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
             }else{
                 if item["Product_Image"] != nil {
                     if let imgurl = item["Product_Image"] as? String {
+                        print(imgurl)
                         if imgurl != "" {
                             let imageUrlString=String(format: "%@%@", APIClient.shared.ProdImgURL,(item["Product_Image"] as! String).addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!)
                            // if(NSURL(string: imageUrlString) != nil){
+                            print(imageUrlString)
                             let imageUrl:NSURL = NSURL(string: imageUrlString)!
                                 
                                 DispatchQueue.global(qos: .userInitiated).async {
