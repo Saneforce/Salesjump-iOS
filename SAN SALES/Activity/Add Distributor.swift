@@ -433,4 +433,5 @@ class Add_Distributor: IViewController, UITableViewDelegate, UITableViewDataSour
         }
         DataTB.reloadData()
     }
+    
 }
