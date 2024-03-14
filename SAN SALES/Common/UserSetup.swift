@@ -32,6 +32,7 @@ class UserSetup{
     var Phone_Country_Length:String = ""
     var OrderMode: item = item()
     var Division_SName:String = ""
+    var CurentMonthPostion:Int = 0
     func initUserSetup(){
         let SetupStoreage = UserDefaults.standard
         let SetupData: String=SetupStoreage.string(forKey: "UserSetup")!
