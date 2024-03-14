@@ -242,37 +242,43 @@ class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, 
                                     // attance_flg
                                     if let attance_flg = jsonObject["attance_flg"] as?  [[String: Any]]{
                                         print(attance_flg)
+                                        if attance_flg.isEmpty{
+                                            return
+                                        }
                                         let dateFormatter = DateFormatter()
                                         dateFormatter.dateFormat = "dd/MM/yyyy"
+
                                         let dates = attance_flg.compactMap { dictionary -> Date? in
                                             guard let dateString = dictionary["pln_date"] as? String else { return nil }
                                             return dateFormatter.date(from: dateString)
                                         }
 
-                                        // Generate an array of all dates between the start and end dates
                                         let startDate = dates.min() ?? Date()
                                         let endDate = dates.max() ?? Date()
+
                                         var allDates = [Date]()
                                         var currentDate = startDate
+
                                         while currentDate <= endDate {
                                             allDates.append(currentDate)
                                             currentDate = Calendar.current.date(byAdding: .day, value: 1, to: currentDate)!
                                         }
 
-                                        // Find the missing date
-                                        let missingDate = allDates.first { !dates.contains($0) }
-
-                                        // Print the result
-                                        print(missingDate)
-                                        if let missingDate = missingDate {
-                                            let formatter = DateFormatter()
-                                            formatter.dateFormat = "dd/MM/yyyy"
-                                            print(missingDate)
-                                            let cell = calendar.cell(for: missingDate, at: .current)
-                                            addLetterA(to: cell, text: "A")
-                                        } else {
-                                            print("No missing date found.")
+                                        let missingDates = allDates.filter { !dates.contains($0) }
+                                        missingDates.forEach {
+                                            print(dateFormatter.string(from: $0))
+                                            let missingDates = dateFormatter.string(from: $0)
+                                                let formatter = DateFormatter()
+                                                formatter.dateFormat = "dd/MM/yyyy"
+                                                if let missingDate = formatter.date(from: missingDates) {
+                                                    print(missingDate)
+                                                    let cell = calendar.cell(for: missingDate, at: .current)
+                                                    addLetterA(to: cell, text: "A")
+                                                } else {
+                                                    print("Error: Unable to convert string to date.")
+                                                }
                                         }
+                                        
                                     }
                                     // exp_submit
                                     if let exp_submit = jsonObject["exp_submit"] as? [[String: Any]]{
