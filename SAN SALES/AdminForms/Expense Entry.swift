@@ -8,6 +8,7 @@
 import UIKit
 import FSCalendar
 import Alamofire
+import Foundation
 
 class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, UITableViewDataSource, UITableViewDelegate {
   
@@ -32,6 +33,8 @@ class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, 
     var Period:[PeriodicData] = []
     var lstOfPeriod:[PeriodicData] = []
     var FDate: Date = Date(),TDate: Date = Date()
+    var period_from_date = ""
+    var period_to_date = ""
     override func viewDidLoad() {
         super.viewDidLoad()
         getUserDetails()
@@ -64,27 +67,42 @@ class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, 
         if monthPosition == .previous || monthPosition == .next {
             return
         }
-
+        print(date)
+        print(monthPosition)
         let cell = calendar.cell(for: date, at: monthPosition)
 
         // Change the background color of the selected date cell to red
 //        if let label = cell?.titleLabel {
 //               label.textColor = UIColor.red
 //           }
-        addLetterA(to: cell)
+       // addLetterA(to: cell, text: "A")
+        addDART(to: cell, text: ".")
     }
 
 
-    func addLetterA(to cell: FSCalendarCell?) {
+    func addLetterA(to cell: FSCalendarCell?, text:String) {
+        cell?.subviews.filter { $0 is UILabel }.forEach { $0.removeFromSuperview() }
         let letterLabel = UILabel()
-        letterLabel.text = "A"
+        letterLabel.text = text
         letterLabel.textColor = .red
         letterLabel.font = UIFont.boldSystemFont(ofSize: 14)
         letterLabel.textAlignment = .center
-        letterLabel.frame = CGRect(x: 0, y: 10, width: cell?.bounds.width ?? 0, height: cell?.bounds.height ?? 0)
+        letterLabel.frame = CGRect(x: 0, y: 15, width: cell?.bounds.width ?? 0, height: cell?.bounds.height ?? 0)
         cell?.subviews.filter { $0 is UILabel }.forEach { $0.removeFromSuperview() }
         cell?.addSubview(letterLabel)
     }
+    func addDART(to cell: FSCalendarCell?,text:String) {
+        cell?.subviews.filter { $0 is UILabel }.forEach { $0.removeFromSuperview() }
+        let letterLabel = UILabel()
+        letterLabel.text = text
+        letterLabel.textColor = UIColor(red: 0.06, green: 0.68, blue: 0.76, alpha: 1.00)
+        letterLabel.font = UIFont.boldSystemFont(ofSize: 50)
+        letterLabel.textAlignment = .center
+        letterLabel.frame = CGRect(x: 0, y: 3, width: cell?.bounds.width ?? 0, height: cell?.bounds.height ?? 0)
+        cell?.subviews.filter { $0 is UILabel }.forEach { $0.removeFromSuperview() }
+        cell?.addSubview(letterLabel)
+    }
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return Period.count
     }
@@ -96,12 +114,14 @@ class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, 
         return cell
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        calendar.reloadData()
         let item = Period[indexPath.row]
         print(item)
         SelPeriod.text = item.Period_Name
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
         let From_Date = item.From_Date
+        period_from_date = "2024-03-"+From_Date
         if let date = dateFormatter.date(from: "2024-03-" + From_Date) {
             FDate = date
         } else {
@@ -116,20 +136,24 @@ class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, 
                 if let lastDateOfMonth = calendar.date(bySetting: .day, value: lastDayOfMonth, of: currentDate) {
                     print("Last date of the month: \(lastDateOfMonth)")
                     TDate = lastDateOfMonth
+                    print(lastDateOfMonth)
+                    let formatters = DateFormatter()
+                    formatters.dateFormat = "yyyy-MM-dd"
+                    period_to_date = formatters.string(from: lastDateOfMonth)
                 }
             }
         }else{
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd"
             let Per_To_Date = To_Date
+            period_to_date = "2024-03-"+To_Date
             if let date = dateFormatter.date(from: "2024-03-" + Per_To_Date) {
                 TDate = date
             } else {
                 print("Error: Unable to convert string to Date")
             }
-            
-            
         }
+        expSubmitDates()
         calendar.reloadData()
         TextSeh.text = ""
         Selwind.isHidden = true
@@ -140,7 +164,6 @@ class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, 
     func minimumDate(for calendar: FSCalendar) -> Date {
        return FDate
     }
-    
     func periodic() {
         let axn = "get/periodicWise"
         let apiKey = "\(axn)&desig=\(Desig)&divisionCode=\(DivCode)&div_code=\(DivCode)&month=03&rSF=\(SFCode)&year=2024&sfCode=\(SFCode)&stateCode=\(StateCode)&sf_code=\(SFCode)"
@@ -195,6 +218,99 @@ class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, 
                 }
         }
     }
+    
+    func expSubmitDates(){
+        
+        let axn = "get/expSubmitDates"
+        let apiKey = "\(axn)&desig=\(Desig)&divisionCode=\(DivCode)&from_date=\(period_from_date)&to_date=\(period_to_date)&month=3&rSF=\(SFCode)&year=2024&selected_period=58&sfCode=\(SFCode)&stateCode=\(StateCode)&sf_code=\(SFCode)"
+        let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
+        let url = APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKeyWithoutCommas
+        AF.request(url, method: .post, parameters: nil, encoding: URLEncoding.default, headers: nil)
+            .validate(statusCode: 200..<299)
+            .responseJSON { [self] response in
+                switch response.result {
+                case .success(let value):
+                    print(value)
+                    if let json = value as? [String: Any] {
+                        do {
+                            let prettyJsonData = try JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
+                            if let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) {
+                                print(prettyPrintedJson)
+                                
+                                if let jsonObject = try JSONSerialization.jsonObject(with: prettyJsonData, options: []) as? [String: Any]{
+                                    print(jsonObject)
+                                    // attance_flg
+                                    if let attance_flg = jsonObject["attance_flg"] as?  [[String: Any]]{
+                                        print(attance_flg)
+                                        let dateFormatter = DateFormatter()
+                                        dateFormatter.dateFormat = "dd/MM/yyyy"
+                                        let dates = attance_flg.compactMap { dictionary -> Date? in
+                                            guard let dateString = dictionary["pln_date"] as? String else { return nil }
+                                            return dateFormatter.date(from: dateString)
+                                        }
+
+                                        // Generate an array of all dates between the start and end dates
+                                        let startDate = dates.min() ?? Date()
+                                        let endDate = dates.max() ?? Date()
+                                        var allDates = [Date]()
+                                        var currentDate = startDate
+                                        while currentDate <= endDate {
+                                            allDates.append(currentDate)
+                                            currentDate = Calendar.current.date(byAdding: .day, value: 1, to: currentDate)!
+                                        }
+
+                                        // Find the missing date
+                                        let missingDate = allDates.first { !dates.contains($0) }
+
+                                        // Print the result
+                                        print(missingDate)
+                                        if let missingDate = missingDate {
+                                            let formatter = DateFormatter()
+                                            formatter.dateFormat = "dd/MM/yyyy"
+                                            print(missingDate)
+                                            let cell = calendar.cell(for: missingDate, at: .current)
+                                            addLetterA(to: cell, text: "A")
+                                        } else {
+                                            print("No missing date found.")
+                                        }
+                                    }
+                                    // exp_submit
+                                    if let exp_submit = jsonObject["exp_submit"] as? [[String: Any]]{
+                                        print(exp_submit)
+                                        for i in exp_submit {
+                                            if let dateString = i["full_date"] as? String {
+                                                let dateFormatter = DateFormatter()
+                                                dateFormatter.dateFormat = "dd/MM/yyyy"
+                                                
+                                                if let date = dateFormatter.date(from: dateString) {
+                                                    let cell = calendar.cell(for: date, at: .current)
+                                                    addDART(to: cell, text: ".")
+                                                } else {
+                                                    print("Failed to convert \(dateString) to Date.")
+                                                }
+                                            } else {
+                                                print("Date string is nil or not in the expected format.")
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    print("Error: Could not convert JSON to Dictionary or access 'data'")
+                                }
+                            } else {
+                                print("Error: Could not convert JSON to String")
+                            }
+                        } catch {
+                            print("Error: \(error.localizedDescription)")
+                        }
+                    }
+                    
+                case .failure(let error):
+                    Toast.show(message: error.errorDescription ?? "Unknown Error")
+                }
+                
+            }
+    }
+    
     @objc private func GotoHome() {
         self.resignFirstResponder()
    
