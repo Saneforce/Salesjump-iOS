@@ -10,8 +10,7 @@ import FSCalendar
 import Alamofire
 import Foundation
 
-class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, UITableViewDataSource, UITableViewDelegate {
-  
+class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, UITableViewDataSource, UITableViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate {
     @IBOutlet weak var BackBT: UIImageView!
     @IBOutlet weak var calendar: FSCalendar!
     @IBOutlet weak var Selwind: UIView!
@@ -25,6 +24,8 @@ class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, 
     @IBOutlet weak var ClosePopup: UILabel!
     @IBOutlet weak var YearPostion: UILabel!
     @IBOutlet weak var MonthPostion: UILabel!
+    @IBOutlet weak var Collection_Of_Month: UICollectionView!
+    static let shared = Expense_Entry()
     struct PeriodicData:Codable{
         let Division_Code:Int
         let Eff_Month:Int
@@ -45,6 +46,11 @@ class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, 
     var labelsDictionary = [FSCalendarCell: UILabel]()
     var MisDatesDatas:[Date] = []
     var exp_SubitDate:[AnyObject] = []
+    var SelectMonthPostion:String = ""
+    var Monthtext_and_year: [String] = []
+    var SelMod:String = "MON"
+    var selectYear:String = "\(Calendar.current.component(.year, from: Date()))"
+    var SelectMonth:String = "\(Calendar.current.component(.month, from: Date()) - 1)"
     override func viewDidLoad() {
         super.viewDidLoad()
         blureView.bounds = self.view.bounds
@@ -55,6 +61,8 @@ class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, 
         calendar.dataSource=self
         DataTB.dataSource=self
         DataTB.delegate=self
+        Collection_Of_Month.delegate=self
+        Collection_Of_Month.dataSource=self
         periodic()
         BackBT.addTarget(target: self, action: #selector(GotoHome))
         SelPeriod.addTarget(target: self, action: #selector(OpenWindo))
@@ -62,9 +70,9 @@ class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, 
         ClosePopup.addTarget(target: self, action: #selector(ClosePopUP))
         YearPostion.addTarget(target: self, action: #selector(OpenYear))
         MonthPostion.addTarget(target: self, action: #selector(OpenMonth))
-        let monthsView = MonthsView(frame: MonthView.bounds)
-            monthsView.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.97, alpha: 1.00)
-            MonthView.addSubview(monthsView)
+//        let monthsView = MonthsView(frame: MonthView.bounds)
+//            monthsView.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.97, alpha: 1.00)
+//            MonthView.addSubview(monthsView)
     }
     func animateIn(desiredView: UIView){
         let  backGroundView = self.view
@@ -137,7 +145,61 @@ class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, 
          }
          labelsDictionary.removeAll()
      }
-
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return Monthtext_and_year.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell:CollectionCell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! CollectionCell
+        if (SelMod == "MON"){
+            let currentMonthIndex = Calendar.current.component(.month, from: Date()) - 1
+            if indexPath.row == currentMonthIndex || indexPath.row == currentMonthIndex - 1 {
+                cell.lblText.text = Monthtext_and_year[indexPath.row]
+                let attributedText = NSAttributedString(string: cell.lblText?.text ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
+                cell.lblText?.attributedText = attributedText
+            } else {
+                cell.lblText.text = Monthtext_and_year[indexPath.row]
+                let attributedText = NSAttributedString(string: cell.lblText?.text ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
+                cell.lblText?.attributedText = attributedText
+            }
+        }else if (SelMod == "YEAR"){
+            cell.lblText.text = Monthtext_and_year[indexPath.row]
+            let attributedText = NSAttributedString(string: cell.lblText?.text ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
+            cell.lblText?.attributedText = attributedText
+        }
+        
+        return cell
+    }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if (SelMod == "MON"){
+            
+        }else if (SelMod == "YEAR"){
+            let currentMonthIndex = Calendar.current.component(.month, from: Date()) - 1
+            if (currentMonthIndex == 0){
+                
+            }else{
+                
+            }
+        }
+    }
+    func MonthaObj(){
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MMM"
+        Monthtext_and_year = dateFormatter.shortMonthSymbols
+        Collection_Of_Month.reloadData()
+    }
+    func yearobj(){
+        let calendar = Calendar.current
+        let currentYear = calendar.component(.year, from: Date())
+        let previousYear = currentYear - 1
+        let currentMonthIndex = Calendar.current.component(.month, from: Date()) - 1
+        if (currentMonthIndex == 0){
+            Monthtext_and_year = [String(previousYear),String(currentYear)]
+        }else{
+            Monthtext_and_year = [String(currentYear)]
+        }
+        Collection_Of_Month.reloadData()
+    }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return Period.count
     }
@@ -199,8 +261,9 @@ class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, 
        return FDate
     }
     func periodic() {
+        print(Expense_Entry.shared.SelectMonthPostion)
         let axn = "get/periodicWise"
-        let apiKey = "\(axn)&desig=\(Desig)&divisionCode=\(DivCode)&div_code=\(DivCode)&month=03&rSF=\(SFCode)&year=2024&sfCode=\(SFCode)&stateCode=\(StateCode)&sf_code=\(SFCode)"
+        let apiKey = "\(axn)&desig=\(Desig)&divisionCode=\(DivCode)&div_code=\(DivCode)&month=\(SelectMonth)&rSF=\(SFCode)&year=\(selectYear)&sfCode=\(SFCode)&stateCode=\(StateCode)&sf_code=\(SFCode)"
         let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
         let url = APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKeyWithoutCommas
         AF.request(url, method: .post, parameters: nil, encoding: URLEncoding.default, headers: nil)
@@ -254,7 +317,7 @@ class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, 
     
     func expSubmitDates(){
         let axn = "get/expSubmitDates"
-        let apiKey = "\(axn)&desig=\(Desig)&divisionCode=\(DivCode)&from_date=\(period_from_date)&to_date=\(period_to_date)&month=3&rSF=\(SFCode)&year=2024&selected_period=58&sfCode=\(SFCode)&stateCode=\(StateCode)&sf_code=\(SFCode)"
+        let apiKey = "\(axn)&desig=\(Desig)&divisionCode=\(DivCode)&from_date=\(period_from_date)&to_date=\(period_to_date)&month=\(SelectMonth)&rSF=\(SFCode)&year=\(selectYear)&selected_period=58&sfCode=\(SFCode)&stateCode=\(StateCode)&sf_code=\(SFCode)"
         let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
         let url = APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKeyWithoutCommas
         AF.request(url, method: .post, parameters: nil, encoding: URLEncoding.default, headers: nil)
@@ -406,6 +469,7 @@ class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, 
         Selwind.isHidden = false
     }
     @objc private func OpenPopUP() {
+        MonthaObj()
         animateIn(desiredView: blureView)
         animateIn(desiredView: PopUpView)
     }
@@ -413,15 +477,20 @@ class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, 
         animateOut(desiredView:blureView)
         animateOut(desiredView:PopUpView)
     }
-    @objc private func OpenYear() {
-        let yearView = YearView(frame: MonthView.bounds)
-            yearView.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.97, alpha: 1.00)
-            MonthView.addSubview(yearView)
+    @objc  func OpenYear() {
+//        let yearView = YearView(frame: MonthView.bounds)
+//            yearView.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.97, alpha: 1.00)
+//            MonthView.addSubview(yearView)
+        SelMod = "YEAR"
+        yearobj()
     }
-    @objc private func OpenMonth() {
-        let monthsView = MonthsView(frame: MonthView.bounds)
-            monthsView.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.97, alpha: 1.00)
-            MonthView.addSubview(monthsView)
+    @objc func OpenMonth() {
+//        let monthsView = MonthsView(frame: MonthView.bounds)
+//        monthsView.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.97, alpha: 1.00)
+//        MonthView.addSubview(monthsView)
+        SelMod = "MON"
+        MonthaObj()
+        
     }
     
     @IBAction func Closwindo(_ sender: Any) {
@@ -441,6 +510,7 @@ class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, 
         }
         DataTB.reloadData()
     }
+    
 }
 
 class MonthsView: UIView {
@@ -459,6 +529,7 @@ class MonthsView: UIView {
         let monthLabels = dateFormatter.shortMonthSymbols
         let currentMonthIndex = Calendar.current.component(.month, from: Date()) - 1
         print(currentMonthIndex)
+        Expense_Entry.shared.SelectMonthPostion = "0\(currentMonthIndex+1)"
         UserSetup.shared.CurentMonthPostion = currentMonthIndex
         let rows = 3
         let columns = 4
@@ -496,6 +567,9 @@ class MonthsView: UIView {
         guard let index = sender.view?.tag else { return }
         let monthLabels = DateFormatter().monthSymbols
         let selectedMonth = monthLabels![index]
+        let WhichMonth = index + 1
+        Expense_Entry.shared.SelectMonthPostion = "0\(WhichMonth)"
+        Expense_Entry.shared.periodic()
         print("Selected month: \(selectedMonth)")
     }
 }
@@ -561,6 +635,7 @@ class YearView: UIView {
         }
         let selectedMonth = yearsArray[index]
         print("Selected month: \(selectedMonth)")
+       // Expense_Entry.shared.OpenView()
     }
 }
 
