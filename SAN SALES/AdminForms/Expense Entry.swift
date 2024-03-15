@@ -46,11 +46,12 @@ class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, 
     var labelsDictionary = [FSCalendarCell: UILabel]()
     var MisDatesDatas:[Date] = []
     var exp_SubitDate:[AnyObject] = []
+    var attance_flg_L: [[String: Any]] = []
     var SelectMonthPostion:String = ""
     var Monthtext_and_year: [String] = []
     var SelMod:String = "MON"
     var selectYear:String = "\(Calendar.current.component(.year, from: Date()))"
-    var SelectMonth:String = "\(Calendar.current.component(.month, from: Date()) - 1)"
+    var SelectMonth:String = ""
     override func viewDidLoad() {
         super.viewDidLoad()
         blureView.bounds = self.view.bounds
@@ -64,12 +65,17 @@ class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, 
         Collection_Of_Month.delegate=self
         Collection_Of_Month.dataSource=self
         periodic()
+        YearPostion.text = selectYear
+        let Month = Calendar.current.component(.month, from: Date()) - 1
+        let formattedPosition = String(format: "%02d", Month + 1)
+        SelectMonth = formattedPosition
         BackBT.addTarget(target: self, action: #selector(GotoHome))
         SelPeriod.addTarget(target: self, action: #selector(OpenWindo))
         selectmonth.addTarget(target: self, action: #selector(OpenPopUP))
         ClosePopup.addTarget(target: self, action: #selector(ClosePopUP))
         YearPostion.addTarget(target: self, action: #selector(OpenYear))
         MonthPostion.addTarget(target: self, action: #selector(OpenMonth))
+        
 //        let monthsView = MonthsView(frame: MonthView.bounds)
 //            monthsView.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.97, alpha: 1.00)
 //            MonthView.addSubview(monthsView)
@@ -139,6 +145,19 @@ class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, 
         cell?.addSubview(letterLabel)
         labelsDictionary[cell!] = letterLabel
     }
+    
+    func addDART_ORG(to cell: FSCalendarCell?,text:String) {
+        let letterLabel = UILabel()
+        letterLabel.text = text
+        letterLabel.textColor = .orange
+        letterLabel.font = UIFont.boldSystemFont(ofSize: 50)
+        letterLabel.textAlignment = .center
+        letterLabel.frame = CGRect(x: 0, y: 3, width: cell?.bounds.width ?? 0, height: cell?.bounds.height ?? 0)
+        cell?.subviews.filter { $0 is UILabel }.forEach { $0.removeFromSuperview() }
+        cell?.addSubview(letterLabel)
+        labelsDictionary[cell!] = letterLabel
+    }
+    
     func removeLabels(){
          for (_, label) in labelsDictionary {
              label.removeFromSuperview()
@@ -152,15 +171,31 @@ class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell:CollectionCell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! CollectionCell
         if (SelMod == "MON"){
+            let calendar = Calendar.current
+            let currentYear = calendar.component(.year, from: Date())
+            if (selectYear == "\(currentYear)"){
             let currentMonthIndex = Calendar.current.component(.month, from: Date()) - 1
             if indexPath.row == currentMonthIndex || indexPath.row == currentMonthIndex - 1 {
                 cell.lblText.text = Monthtext_and_year[indexPath.row]
+                MonthPostion.text = Monthtext_and_year[indexPath.row]
                 let attributedText = NSAttributedString(string: cell.lblText?.text ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
                 cell.lblText?.attributedText = attributedText
             } else {
                 cell.lblText.text = Monthtext_and_year[indexPath.row]
                 let attributedText = NSAttributedString(string: cell.lblText?.text ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
                 cell.lblText?.attributedText = attributedText
+            }
+            }else{
+                if indexPath.row == 11 {
+                    cell.lblText.text = Monthtext_and_year[indexPath.row]
+                    MonthPostion.text = Monthtext_and_year[11]
+                    let attributedText = NSAttributedString(string: cell.lblText?.text ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
+                    cell.lblText?.attributedText = attributedText
+                } else {
+                    cell.lblText.text = Monthtext_and_year[indexPath.row]
+                    let attributedText = NSAttributedString(string: cell.lblText?.text ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
+                    cell.lblText?.attributedText = attributedText
+                }
             }
         }else if (SelMod == "YEAR"){
             cell.lblText.text = Monthtext_and_year[indexPath.row]
@@ -172,13 +207,44 @@ class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, 
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if (SelMod == "MON"){
-            
+            let item = Monthtext_and_year[indexPath.row]
+            print(item)
+            print(Monthtext_and_year)
+            if let position = Monthtext_and_year.firstIndex(where: { $0 == item }) {
+                let formattedPosition = String(format: "%02d", position + 1)
+                SelectMonth = formattedPosition
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "MM-yyyy"
+                if let date = dateFormatter.date(from: "\(SelectMonth)-\(selectYear)") {
+                    FDate = date
+                    TDate = date
+                }
+                selectmonth.text = "\(item)-\(selectYear)"
+                SelPeriod.text = "Select Period"
+                removeLabels()
+                calendar.reloadData()
+                ClosePopUP()
+            }
         }else if (SelMod == "YEAR"){
             let currentMonthIndex = Calendar.current.component(.month, from: Date()) - 1
             if (currentMonthIndex == 0){
-                
+                let item = Monthtext_and_year[indexPath.row]
+                print(item)
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "MMM"
+                Monthtext_and_year = dateFormatter.shortMonthSymbols
+                selectYear = item
+                SelMod = "MON"
+                YearPostion.text = selectYear
+                Collection_Of_Month.reloadData()
             }else{
-                
+                let item = Monthtext_and_year[indexPath.row]
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "MMM"
+                Monthtext_and_year = dateFormatter.shortMonthSymbols
+                selectYear = item
+                SelMod = "MON"
+                Collection_Of_Month.reloadData()
             }
         }
     }
@@ -217,17 +283,18 @@ class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, 
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
         let From_Date = item.From_Date
-        period_from_date = "2024-03-"+From_Date
-        if let date = dateFormatter.date(from: "2024-03-" + From_Date) {
+        period_from_date = "\(selectYear)-\(SelectMonth)-"+From_Date
+        if let date = dateFormatter.date(from: "\(selectYear)-\(SelectMonth)-" + From_Date) {
             FDate = date
         } else {
             print("Error: Unable to convert string to Date")
         }
         let To_Date = item.To_Date
         if To_Date == "end of month"{
-            let currentDate = Date()
+            let currentDate = FDate
             let calendar = Calendar.current
             if let monthRange = calendar.range(of: .day, in: .month, for: currentDate) {
+                print(monthRange)
                 let lastDayOfMonth = monthRange.upperBound - 1
                 if let lastDateOfMonth = calendar.date(bySetting: .day, value: lastDayOfMonth, of: currentDate) {
                     print("Last date of the month: \(lastDateOfMonth)")
@@ -242,8 +309,8 @@ class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, 
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd"
             let Per_To_Date = To_Date
-            period_to_date = "2024-03-"+To_Date
-            if let date = dateFormatter.date(from: "2024-03-" + Per_To_Date) {
+            period_to_date = "\(selectYear)-\(SelectMonth)-"+To_Date
+            if let date = dateFormatter.date(from: "\(selectYear)-\(SelectMonth)-" + Per_To_Date) {
                 TDate = date
             } else {
                 print("Error: Unable to convert string to Date")
@@ -261,7 +328,6 @@ class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, 
        return FDate
     }
     func periodic() {
-        print(Expense_Entry.shared.SelectMonthPostion)
         let axn = "get/periodicWise"
         let apiKey = "\(axn)&desig=\(Desig)&divisionCode=\(DivCode)&div_code=\(DivCode)&month=\(SelectMonth)&rSF=\(SFCode)&year=\(selectYear)&sfCode=\(SFCode)&stateCode=\(StateCode)&sf_code=\(SFCode)"
         let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
@@ -336,18 +402,36 @@ class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, 
                                     print(jsonObject)
                                     // attance_flg
                                     exp_SubitDate = []
+                                    attance_flg_L = []
                                     if let attance_flg = jsonObject["attance_flg"] as?  [[String: Any]]{
                                         print(attance_flg)
                                         if attance_flg.isEmpty{
                                             MisDatesDatas = []
                                             return
                                         }
+                                        
                                         let dateFormatter = DateFormatter()
                                         dateFormatter.dateFormat = "dd/MM/yyyy"
                                         let dates = attance_flg.compactMap { dictionary -> Date? in
                                             guard let dateString = dictionary["pln_date"] as? String else { return nil }
                                             return dateFormatter.date(from: dateString)
                                         }
+                                        for item in attance_flg{
+                                            let datess = item["pln_date"] as? String
+                                            let Formated_Date = dateFormatter.date(from: datess!)
+                                            let Leave = item["FWFlg"] as? String
+                                            if (Leave == "L"){
+                                                attance_flg_L = attance_flg
+                                                let cell = calendar.cell(for: Formated_Date!, at: .current)
+                                                addLetterA(to: cell, text: "L")
+                                            }
+                                            if (Leave == "H"){
+                                                attance_flg_L = attance_flg
+                                                let cell = calendar.cell(for: Formated_Date!, at: .current)
+                                                addLetterA(to: cell, text: "H")
+                                            }
+                                        }
+                                        
                                         let startDate = dates.min() ?? Date()
                                         let endDate = dates.max() ?? Date()
 
@@ -399,6 +483,43 @@ class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, 
                                             }
                                         }
                                     }
+                                    // srt_end_exp
+                                    if let srt_end_exp = jsonObject["srt_end_exp"] as? [[String: Any]]{
+                                        for i in srt_end_exp {
+                                            if let dateString = i["full_date"] as? String {
+                                                let dateFormatter = DateFormatter()
+                                                dateFormatter.dateFormat = "dd/MM/yyyy"
+                                                
+                                                if let date = dateFormatter.date(from: dateString) {
+                                                    let cell = calendar.cell(for: date, at: .current)
+                                                    addDART_ORG(to: cell, text: ".")
+                                                } else {
+                                                    print("Failed to convert \(dateString) to Date.")
+                                                }
+                                            } else {
+                                                print("Date string is nil or not in the expected format.")
+                                            }
+                                        }
+                                    }
+                                    //rej_exp
+                                    if let rej_exp = jsonObject["rej_exp"] as? [[String: Any]]{
+                                        for i in rej_exp {
+                                            if let dateString = i["full_date"] as? String {
+                                                let dateFormatter = DateFormatter()
+                                                dateFormatter.dateFormat = "dd/MM/yyyy"
+                                                
+                                                if let date = dateFormatter.date(from: dateString) {
+                                                    let cell = calendar.cell(for: date, at: .current)
+                                                    addLetterA(to: cell, text: "R")
+                                                } else {
+                                                    print("Failed to convert \(dateString) to Date.")
+                                                }
+                                            } else {
+                                                print("Date string is nil or not in the expected format.")
+                                            }
+                                        }
+                                    }
+                                    
                                 } else {
                                     print("Error: Could not convert JSON to Dictionary or access 'data'")
                                 }
@@ -437,6 +558,12 @@ class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, 
         self.present(alert, animated: true)
     }
     func validateForm(Seldate: Date) -> Bool {
+        
+        let currentDate = Date()
+          if Seldate > currentDate {
+              return false
+          }
+        
         for item in MisDatesDatas {
             if item == Seldate {
                 Toast.show(message: "Please Select a Valid Date")
@@ -455,6 +582,27 @@ class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, 
                 }
             }
         }
+        for item in attance_flg_L{
+            let dates = item["pln_date"] as? String
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "dd/MM/yyyy"
+            if item["FWFlg"] as? String == "L"{
+                if let dateString = dates, let exdate = dateFormatter.date(from: dateString) {
+                    if exdate == Seldate {
+                        Toast.show(message: "Please Select a Valid Date")
+                        return false
+                    }
+                }
+            }
+            if item["FWFlg"] as? String == "H"{
+                if let dateString = dates, let exdate = dateFormatter.date(from: dateString) {
+                    if exdate == Seldate {
+                        Toast.show(message: "Please Select a Valid Date")
+                        return false
+                    }
+                }
+            }
+        }
         
         return true
     }
@@ -470,6 +618,11 @@ class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, 
     }
     @objc private func OpenPopUP() {
         MonthaObj()
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MMM"
+       let Month = dateFormatter.shortMonthSymbols
+        let currentMonthIndex = Calendar.current.component(.month, from: Date()) - 1
+        MonthPostion.text = Month![currentMonthIndex]
         animateIn(desiredView: blureView)
         animateIn(desiredView: PopUpView)
     }
