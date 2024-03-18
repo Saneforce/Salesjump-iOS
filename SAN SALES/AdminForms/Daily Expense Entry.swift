@@ -7,7 +7,7 @@
 
 import UIKit
 
-class Daily_Expense_Entry: UIViewController {
+class Daily_Expense_Entry: IViewController {
 
     @IBOutlet weak var ButtonBack: UIImageView!
     
