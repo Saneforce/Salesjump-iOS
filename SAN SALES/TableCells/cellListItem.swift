@@ -76,6 +76,10 @@ class cellListItem:UITableViewCell{
     
     @IBOutlet weak var EditBton: UIButton!
     @IBOutlet weak var Viewbt: UIButton!
+    @IBOutlet weak var Delet_Pho: UIImageView!
+    @IBOutlet weak var Image_View: UIImageView!
+    @IBOutlet weak var Enter_Title: UITextField!
+    @IBOutlet weak var Enter_Rmk: UITextField!
     
     var ischeck = false
 

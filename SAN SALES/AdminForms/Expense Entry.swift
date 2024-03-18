@@ -541,7 +541,6 @@ class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, 
         if validateForm(Seldate: date) == false {
             return
         }
-     
         let alert = UIAlertController(title: "Confirm Selection", message: "Do you want to submit expense ?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Cancel", style: .destructive) { _ in
             return
