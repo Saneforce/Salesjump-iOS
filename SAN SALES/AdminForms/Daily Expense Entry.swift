@@ -7,6 +7,7 @@
 
 import UIKit
 import MobileCoreServices
+import Alamofire
 class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate {
 
     @IBOutlet weak var ButtonBack: UIImageView!
@@ -19,11 +20,27 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
     @IBOutlet weak var paperclip: UIImageView!
     @IBOutlet weak var eye: UIImageView!
     @IBOutlet weak var Photo_List: UITableView!
+    @IBOutlet weak var BUS_IMG: UIImageView!
+    @IBOutlet weak var FOOD_IMG: UIImageView!
+    @IBOutlet weak var SNACKS_IMG: UIImageView!
+    @IBOutlet weak var Bus_Cam: UIImageView!
+    @IBOutlet weak var Food_cam: UIImageView!
+    @IBOutlet weak var Snacks_cam: UIImageView!
+    @IBOutlet var PopUpView2: UIView!
+    @IBOutlet weak var Daily_Exp_Cam: UIImageView!
+    @IBOutlet weak var Daily_Exp_photos: UIImageView!
+    
     var imagePicker = UIImagePickerController()
     var images: [UIImage] = []
-    
+    var bus:[UIImage] = []
+    var food:[UIImage] = []
+    var snk:[UIImage] = []
+    let LocalStoreage = UserDefaults.standard
+    var SFCode: String = "", StateCode: String = "", DivCode: String = "",Desig: String = ""
+    var SelMod = ""
     override func viewDidLoad() {
         super.viewDidLoad()
+        getUserDetails()
         blureView.bounds = self.view.bounds
         PopUpView.bounds = CGRect(x: 0, y: 0, width: self.view.bounds.width * 0.9, height: self.view.bounds.height * 0.2)
         PopUpView.layer.cornerRadius = 10
@@ -35,6 +52,22 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
         camera.addTarget(target: self, action: #selector(Camra))
         paperclip.addTarget(target: self, action: #selector(Add_Pho))
         eye.addTarget(target: self, action: #selector(View_Photo))
+        Bus_Cam.addTarget(target: self, action: #selector(Bus_Bill))
+        Food_cam.addTarget(target: self, action: #selector(Food_Bill))
+        Snacks_cam.addTarget(target: self, action: #selector(Snacks_Bill))
+        //new_DateofExpense()
+    }
+    func getUserDetails(){
+    let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
+    let data = Data(prettyPrintedJson!.utf8)
+    guard let prettyJsonData = try? JSONSerialization.jsonObject(with: data, options:[]) as? [String: Any] else {
+    print("Error: Cannot convert JSON object to Pretty JSON data")
+    return
+    }
+    SFCode = prettyJsonData["sfCode"] as? String ?? ""
+    StateCode = prettyJsonData["State_Code"] as? String ?? ""
+    DivCode = prettyJsonData["divisionCode"] as? String ?? ""
+    Desig=prettyJsonData["desigCode"] as? String ?? ""
     }
     func animateIn(desiredView: UIView){
         let  backGroundView = self.view
@@ -58,6 +91,13 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
             print(pickedImage)
+            if(SelMod == "BUS"){
+                bus.append(pickedImage)
+            }else if (SelMod == "FOOD"){
+                food.append(pickedImage)
+            }else if (SelMod == "SNACKS"){
+                snk.append(pickedImage)
+            }
             images.append(pickedImage)
             Photo_List.reloadData()
             SelWindo.isHidden = false
@@ -92,6 +132,45 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
         return true
     }
     
+    func new_DateofExpense(){
+        let axn = "get/new_DateofExpense"
+        let apiKey = "\(axn)&State_Code=\(StateCode)&desig=\(Desig)&divisionCode=\(DivCode)&Type=1&div_code=\(DivCode)&rSF=\(SFCode)&sfCode=\(SFCode)&stateCode=\(StateCode)&Dateofexp=2024-3-19"
+        let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
+        let url = APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKeyWithoutCommas
+        AF.request(url, method: .post, parameters: nil, encoding: URLEncoding.default, headers: nil)
+            .validate(statusCode: 200..<299)
+            .responseJSON { [self] response in
+                switch response.result {
+                case .success(let value):
+                    print(value)
+                    if let json = value as? [String: Any] {
+                        do {
+                            let prettyJsonData = try JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
+                            if let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) {
+                                print(prettyPrintedJson)
+                                
+                                if let jsonObject = try JSONSerialization.jsonObject(with: prettyJsonData, options: []) as? [String: Any],
+                                   let data = jsonObject["data"] as? [AnyObject] {
+                                    print(data)
+                                } else {
+                                    print("Error: Could not convert JSON to Dictionary or access 'data'")
+                                }
+                            } else {
+                                print("Error: Could not convert JSON to String")
+                            }
+                        } catch {
+                            print("Error: \(error.localizedDescription)")
+                        }
+                    }
+                    
+                case .failure(let error):
+                    Toast.show(message: error.errorDescription ?? "Unknown Error")
+                }
+            }
+    }
+    
+    
+    
     @objc func imageTapped() {
         animateIn(desiredView:blureView)
         animateIn(desiredView:PopUpView)
@@ -99,6 +178,7 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
     @IBAction func ClosePopUP(_ sender: Any) {
         animateOut(desiredView:blureView)
         animateOut(desiredView:PopUpView)
+        animateOut(desiredView:PopUpView2)
     }
     @objc private func Camra(_ sender: Any) {
         let imagePickerController = UIImagePickerController()
@@ -129,6 +209,22 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
         return
        
     }
+    @objc private func Bus_Bill() {
+        SelMod = "BUS"
+        animateIn(desiredView:blureView)
+        animateIn(desiredView:PopUpView2)
+    }
+    @objc private func Food_Bill() {
+        SelMod = "FOOD"
+        animateIn(desiredView:blureView)
+        animateIn(desiredView:PopUpView2)
+    }
+    @objc private func Snacks_Bill() {
+        SelMod = "SNACKS"
+        animateIn(desiredView:blureView)
+        animateIn(desiredView:PopUpView2)
+    }
+    
     @IBAction func Save_Exp(_ sender: Any) {
         self.resignFirstResponder()
    
