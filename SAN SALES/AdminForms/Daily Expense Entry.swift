@@ -41,7 +41,11 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
     @IBOutlet weak var Search_lbl: UITextField!
     @IBOutlet weak var sel_TB: UITableView!
     @IBOutlet weak var Stayingtyp: LabelSelect!
-    
+    struct exData:Codable{
+    let id:String
+    let name:String
+    let newname:String
+    }
     var imagePicker = UIImagePickerController()
     var images: [UIImage] = []
     var bus:[UIImage] = []
@@ -52,6 +56,8 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
     var SelMod = ""
     var day_Plan:[AnyObject]?
     var set_Date:String?
+    var Exp_Data:[exData] = []
+    var Exp_Datas:[exData]=[]
     override func viewDidLoad() {
         super.viewDidLoad()
         getUserDetails()
@@ -160,11 +166,11 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
         if Photo_List == tableView{
             return 100
         }
-        return 0
+        return 50
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if sel_TB == tableView{
-            return 2
+            return Exp_Datas.count
         }
         if Photo_List == tableView{
             return images.count
@@ -181,9 +187,23 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
             cell.Enter_Rmk.delegate = self
             cell.Enter_Title.delegate = self
         }else if (sel_TB == tableView){
-            cell.lblText.text = "Mani"
+            cell.lblText.text = Exp_Datas[indexPath.row].name
+            Search_lbl.returnKeyType = .done
+            Search_lbl.delegate = self
         }
         return cell
+    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let item = Exp_Datas[indexPath.row]
+        print(item)
+        if (SelMod == "Allowance"){
+            Allo_Typ.text = item.name
+        }else if (SelMod == "Staying"){
+            Stayingtyp.text = item.name
+        }
+        Search_lbl.text = ""
+        self.resignFirstResponder()
+        DropDown.isHidden = true
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -250,14 +270,17 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
     @objc private func openAllowance(){
         Drop_Down_Title.text = "Select Allowance Type"
         DropDown.isHidden = false
+        SelMod = "Allowance"
         set_data_TB(openMod: "Allowance")
     }
     @objc private func openStaying_Typ(){
         Drop_Down_Title.text = "Select Staying Type"
         DropDown.isHidden = false
+        SelMod = "Staying"
         set_data_TB(openMod: "Staying")
     }
     func set_data_TB(openMod:String){
+        Exp_Data.removeAll()
         if(openMod == "Allowance"){
             let axn = "get/Allow_Type"
             
@@ -283,7 +306,11 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
                                     print(prettyPrintedJson)
                                     if let jsonObject = try JSONSerialization.jsonObject(with: prettyJsonData, options: []) as? [AnyObject]{
                                         print(jsonObject)
-                                      
+                                        for i in jsonObject{
+                                            Exp_Data.append(exData(id: (i["id"] as? String)!, name: (i["name"] as? String)!, newname: (i["newname"] as? String)!))
+                                        }
+                                        Exp_Datas = Exp_Data
+                                        sel_TB.reloadData()
                                     } else {
                                         print("Error: Could not convert JSON to Dictionary or access 'data'")
                                     }
@@ -300,7 +327,10 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
                 }
             }
         }else if (openMod == "Staying"){
-            
+            Exp_Data.append(exData(id: "1", name:"With Hotel", newname: "With Hotel"))
+            Exp_Data.append(exData(id: "2", name:"Without Hotel", newname: "Without Hotel"))
+            Exp_Datas = Exp_Data
+            sel_TB.reloadData()
         }
     }
     
@@ -311,10 +341,20 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
         return
     }
     @IBAction func Close_Drop(_ sender: Any) {
+        self.resignFirstResponder()
         DropDown.isHidden = true
     }
     
     @IBAction func SearchByText(_ sender: Any) {
-        
+        let txtbx: UITextField = sender as! UITextField
+        if txtbx.text!.isEmpty {
+            Exp_Datas = Exp_Data
+        }else{
+            Exp_Datas = Exp_Data.filter({(product) in
+                let name: String = product.name
+                return name.lowercased().contains(txtbx.text!.lowercased())
+            })
+        }
+        sel_TB.reloadData()
     }
 }
