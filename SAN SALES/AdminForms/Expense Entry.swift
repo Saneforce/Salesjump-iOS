@@ -52,6 +52,8 @@ class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, 
     var SelMod:String = "MON"
     var selectYear:String = "\(Calendar.current.component(.year, from: Date()))"
     var SelectMonth:String = ""
+    var Day_Plan_Data:[AnyObject] = []
+    var Set_Date:String = ""
     override func viewDidLoad() {
         super.viewDidLoad()
         blureView.bounds = self.view.bounds
@@ -120,7 +122,8 @@ class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, 
         if monthPosition == .previous || monthPosition == .next {
             return
         }
-        Nav_Exp_Form(date:date)
+        new_DateofExpense(date: date)
+        
     }
 
     func addLetterA(to cell: FSCalendarCell?, text:String) {
@@ -545,12 +548,14 @@ class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, 
         alert.addAction(UIAlertAction(title: "Cancel", style: .destructive) { _ in
             return
         })
-        alert.addAction(UIAlertAction(title: "OK", style: .destructive) { _ in
+        alert.addAction(UIAlertAction(title: "OK", style: .destructive) { [self] _ in
             self.dismiss(animated: true, completion: nil)
             let storyboard = UIStoryboard(name: "AdminForms", bundle: nil)
             let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
             let RptMnuVc = storyboard.instantiateViewController(withIdentifier: "Expense") as! Expense_Entry
             let myDyPln = storyboard.instantiateViewController(withIdentifier: "Daily_Expense_Entry") as! Daily_Expense_Entry
+            myDyPln.day_Plan = Day_Plan_Data
+            myDyPln.set_Date = Set_Date
             viewController.setViewControllers([RptMnuVc,myDyPln], animated: false)
             (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
         })
@@ -661,6 +666,58 @@ class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, 
             })
         }
         DataTB.reloadData()
+    }
+    func new_DateofExpense(date:Date){
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        let myStringDate = formatter.string(from: date)
+        print(myStringDate)
+        Set_Date = myStringDate
+        let axn = "get/new_DateofExpense"
+        let apiKey = "\(axn)&State_Code=\(StateCode)&desig=\(Desig)&divisionCode=\(DivCode)&Type=1&div_code=\(DivCode)&rSF=\(SFCode)&sfCode=\(SFCode)&stateCode=\(StateCode)&Dateofexp=\(myStringDate)"
+        let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
+        let url = APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKeyWithoutCommas
+        self.ShowLoading(Message: "Loading...")
+        AF.request(url, method: .post, parameters: nil, encoding: URLEncoding.default, headers: nil)
+            .validate(statusCode: 200..<299)
+            .responseJSON { [self] response in
+                switch response.result {
+                case .success(let value):
+                    print(value)
+                    self.LoadingDismiss()
+                    if let json = value as? [String: Any] {
+                        do {
+                            let prettyJsonData = try JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
+                            if let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) {
+                                print(prettyPrintedJson)
+                                
+                                    
+
+                                if let jsonObject = try JSONSerialization.jsonObject(with: prettyJsonData, options: []) as? [String: Any],
+                                   let data = jsonObject["day_plan"] as? [AnyObject] {
+                                    print(data)
+                                    if data.isEmpty{
+                                        Toast.show(message: "Please Select a Valid Date")
+                                        return
+                                    }else{
+                                        Day_Plan_Data = data
+                                        Nav_Exp_Form(date:date)
+                                    }
+                                } else {
+                                    print("Error: Could not convert JSON to Dictionary or access 'data'")
+                                }
+                            } else {
+                                print("Error: Could not convert JSON to String")
+                            }
+                        } catch {
+                            print("Error: \(error.localizedDescription)")
+                        }
+                    }
+                    
+                case .failure(let error):
+                    Toast.show(message: error.errorDescription ?? "Unknown Error")
+            }
+        }
     }
     
 }
@@ -789,5 +846,6 @@ class YearView: UIView {
         print("Selected month: \(selectedMonth)")
        // Expense_Entry.shared.OpenView()
     }
+    
 }
 

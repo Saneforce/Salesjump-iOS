@@ -1067,7 +1067,7 @@
                                                         <color key="textColor" systemColor="systemRedColor"/>
                                                         <color key="highlightedColor" systemColor="systemRedColor"/>
                                                     </label>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Allowance Type" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bvf-rf-Xk1" customClass="LabelSelectWithout" customModule="SAN_SALES" customModuleProvider="target">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Allowance Type" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bvf-rf-Xk1" customClass="LabelSelect" customModule="SAN_SALES" customModuleProvider="target">
                                                         <rect key="frame" x="12" y="34" width="350" height="40"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                         <color key="backgroundColor" red="0.93725490199999995" green="0.95294117649999999" blue="0.98431372549999996" alpha="1" colorSpace="calibratedRGB"/>
@@ -1458,6 +1458,7 @@
                     <size key="freeformSize" width="390" height="1400"/>
                     <connections>
                         <outlet property="Add_Hotal_Bill" destination="0q9-21-Th2" id="dm5-OA-Oqz"/>
+                        <outlet property="Allo_Typ" destination="Bvf-rf-Xk1" id="pNU-Zg-0X6"/>
                         <outlet property="BUS_IMG" destination="VOz-8l-qj6" id="dH2-RV-Ffj"/>
                         <outlet property="Bus_Cam" destination="Rx1-me-Xhu" id="5Fg-0M-sCw"/>
                         <outlet property="ButtonBack" destination="wDm-zw-Ra5" id="wEU-nK-UHa"/>
@@ -1472,11 +1473,14 @@
                         <outlet property="PopUpView2" destination="LFa-IY-kaG" id="XFk-kp-gRO"/>
                         <outlet property="SNACKS_IMG" destination="jDN-ad-dFj" id="G83-Xv-G7t"/>
                         <outlet property="SelWindo" destination="edX-NJ-A2i" id="Idd-sd-p08"/>
+                        <outlet property="SetWork_Typ" destination="E3j-CA-4Qf" id="F0R-cP-v2R"/>
+                        <outlet property="Set_Date" destination="cG2-Kn-MrP" id="AmM-Xg-3Z5"/>
+                        <outlet property="Set_work_plc" destination="x5Y-qZ-SWz" id="CuS-nU-rUg"/>
                         <outlet property="Snacks_cam" destination="Adq-cQ-4OX" id="dLG-vy-CKA"/>
                         <outlet property="blureView" destination="89k-5G-w9o" id="plZ-Cx-3Ao"/>
                         <outlet property="camera" destination="PP9-ji-7uG" id="c8K-bd-yUt"/>
                         <outlet property="eye" destination="RPV-J9-qgb" id="h7k-PL-fxV"/>
-                        <outlet property="imgs" destination="POq-DN-QTp" id="740-xs-NK1"/>
+                        <outlet property="imgs" destination="XbI-eF-8I4" id="wNe-kt-Q5d"/>
                         <outlet property="paperclip" destination="RPV-J9-qgb" id="e3v-3Z-lb8"/>
                     </connections>
                 </viewController>
@@ -1592,33 +1596,33 @@
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="POq-DN-QTp">
-                            <rect key="frame" x="0.0" y="47" width="146" height="124"/>
+                        <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="XbI-eF-8I4">
+                            <rect key="frame" x="16" y="47" width="240" height="128"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                            <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="9cl-xC-zyJ">
-                                <size key="itemSize" width="127" height="120"/>
+                            <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="4eC-j1-DxA">
+                                <size key="itemSize" width="204" height="127"/>
                                 <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                 <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                 <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                             </collectionViewFlowLayout>
                             <cells>
-                                <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Cell" id="BgH-IW-bRC" customClass="CollectionCell" customModule="SAN_SALES" customModuleProvider="target">
-                                    <rect key="frame" x="9.6666666666666661" y="0.0" width="127" height="120"/>
+                                <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Cell" id="kKe-TE-Ly4" customClass="CollectionCell" customModule="SAN_SALES" customModuleProvider="target">
+                                    <rect key="frame" x="18" y="0.0" width="204" height="127"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="EtZ-5p-jWQ">
-                                        <rect key="frame" x="0.0" y="0.0" width="127" height="120"/>
+                                    <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="czA-Fq-Iz6">
+                                        <rect key="frame" x="0.0" y="0.0" width="204" height="127"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <subviews>
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="AdminForms" translatesAutoresizingMaskIntoConstraints="NO" id="2a3-cB-g2I">
-                                                <rect key="frame" x="0.0" y="0.0" width="127" height="120"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="Lsb-Gk-GrP">
+                                                <rect key="frame" x="0.0" y="0.0" width="204" height="127"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                             </imageView>
                                         </subviews>
                                     </collectionViewCellContentView>
-                                    <size key="customSize" width="127" height="120"/>
+                                    <size key="customSize" width="204" height="127"/>
                                     <connections>
-                                        <outlet property="imgProduct" destination="2a3-cB-g2I" id="Twf-ay-dcx"/>
+                                        <outlet property="imgProduct" destination="Lsb-Gk-GrP" id="oVX-7s-d8B"/>
                                     </connections>
                                 </collectionViewCell>
                             </cells>
@@ -1646,7 +1650,6 @@
     </scenes>
     <resources>
         <image name="Achieved 2" width="256" height="256"/>
-        <image name="AdminForms" width="20" height="20"/>
         <image name="EditRetailer" width="20" height="20"/>
         <image name="MenuButton" width="137" height="95"/>
         <image name="Select" width="30" height="30"/>

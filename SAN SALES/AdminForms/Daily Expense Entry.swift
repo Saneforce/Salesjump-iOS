@@ -31,6 +31,10 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
     @IBOutlet var IMG_Scr: UIView!
     @IBOutlet weak var imgs: UICollectionView!
     
+    @IBOutlet weak var Set_Date: LabelSelectWithout!
+    @IBOutlet weak var SetWork_Typ: LabelSelectWithout!
+    @IBOutlet weak var Set_work_plc: LabelSelectWithout!
+    @IBOutlet weak var Allo_Typ: LabelSelect!
     var imagePicker = UIImagePickerController()
     var images: [UIImage] = []
     var bus:[UIImage] = []
@@ -39,6 +43,8 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
     let LocalStoreage = UserDefaults.standard
     var SFCode: String = "", StateCode: String = "", DivCode: String = "",Desig: String = ""
     var SelMod = ""
+    var day_Plan:[AnyObject]?
+    var set_Date:String?
     override func viewDidLoad() {
         super.viewDidLoad()
         getUserDetails()
@@ -60,7 +66,7 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
         Snacks_cam.addTarget(target: self, action: #selector(Snacks_Bill))
         SNACKS_IMG.addTarget(target: self, action: #selector(openImag))
         Daily_Exp_photos.addTarget(target: self, action: #selector(Add_Pho))
-        //new_DateofExpense()
+        set_form()
     }
     func getUserDetails(){
     let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
@@ -73,6 +79,15 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
     StateCode = prettyJsonData["State_Code"] as? String ?? ""
     DivCode = prettyJsonData["divisionCode"] as? String ?? ""
     Desig=prettyJsonData["desigCode"] as? String ?? ""
+    }
+    func set_form(){
+        Set_Date.text = set_Date
+        if let settyp = day_Plan{
+            print(settyp)
+            SetWork_Typ.text = settyp[0]["WorkType"] as? String
+            Set_work_plc.text = settyp[0]["ClstrName"] as? String
+            Allo_Typ.text = settyp[0]["Allowance_Type"] as? String
+        }
     }
     func animateIn(desiredView: UIView){
         let  backGroundView = self.view
@@ -138,6 +153,7 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell:cellListItem = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
+        cell.Image_View.frame = CGRect(x: 0, y: 0, width: 200, height: 200)
         cell.Image_View.image = images[indexPath.row]
         cell.Enter_Rmk.returnKeyType = .done
         cell.Enter_Title.returnKeyType = .done
@@ -145,47 +161,13 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
         cell.Enter_Title.delegate = self
         return cell
     }
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
     }
     
-    func new_DateofExpense(){
-        let axn = "get/new_DateofExpense"
-        let apiKey = "\(axn)&State_Code=\(StateCode)&desig=\(Desig)&divisionCode=\(DivCode)&Type=1&div_code=\(DivCode)&rSF=\(SFCode)&sfCode=\(SFCode)&stateCode=\(StateCode)&Dateofexp=2024-3-19"
-        let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
-        let url = APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKeyWithoutCommas
-        AF.request(url, method: .post, parameters: nil, encoding: URLEncoding.default, headers: nil)
-            .validate(statusCode: 200..<299)
-            .responseJSON { [self] response in
-                switch response.result {
-                case .success(let value):
-                    print(value)
-                    if let json = value as? [String: Any] {
-                        do {
-                            let prettyJsonData = try JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
-                            if let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) {
-                                print(prettyPrintedJson)
-                                
-                                if let jsonObject = try JSONSerialization.jsonObject(with: prettyJsonData, options: []) as? [String: Any],
-                                   let data = jsonObject["data"] as? [AnyObject] {
-                                    print(data)
-                                } else {
-                                    print("Error: Could not convert JSON to Dictionary or access 'data'")
-                                }
-                            } else {
-                                print("Error: Could not convert JSON to String")
-                            }
-                        } catch {
-                            print("Error: \(error.localizedDescription)")
-                        }
-                    }
-                    
-                case .failure(let error):
-                    Toast.show(message: error.errorDescription ?? "Unknown Error")
-            }
-        }
-    }
+
     @objc func imageTapped() {
         animateIn(desiredView:blureView)
         animateIn(desiredView:PopUpView)
