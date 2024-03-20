@@ -78,7 +78,7 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
         eye.addTarget(target: self, action: #selector(View_Photo))
         Bus_Cam.addTarget(target: self, action: #selector(Bus_Bill))
         Food_cam.addTarget(target: self, action: #selector(Food_Bill))
-        Snacks_cam.addTarget(target: self, action: #selector(Snacks_Bill))
+       // Snacks_cam.addTarget(target: self, action: #selector(Snacks_Bill))
         SNACKS_IMG.addTarget(target: self, action: #selector(openImag))
         Daily_Exp_photos.addTarget(target: self, action: #selector(Add_Pho))
         Allo_Typ.addTarget(target: self, action: #selector(openAllowance))

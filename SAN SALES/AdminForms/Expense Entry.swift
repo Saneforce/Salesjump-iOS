@@ -677,14 +677,14 @@ class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, 
         let apiKey = "\(axn)&State_Code=\(StateCode)&desig=\(Desig)&divisionCode=\(DivCode)&Type=1&div_code=\(DivCode)&rSF=\(SFCode)&sfCode=\(SFCode)&stateCode=\(StateCode)&Dateofexp=\(myStringDate)"
         let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
         let url = APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKeyWithoutCommas
-        self.ShowLoading(Message: "Loading...")
+        //self.ShowLoading(Message: "Loading...")
         AF.request(url, method: .post, parameters: nil, encoding: URLEncoding.default, headers: nil)
             .validate(statusCode: 200..<299)
             .responseJSON { [self] response in
                 switch response.result {
                 case .success(let value):
                     print(value)
-                    self.LoadingDismiss()
+                    //self.LoadingDismiss()
                     if let json = value as? [String: Any] {
                         do {
                             let prettyJsonData = try JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
