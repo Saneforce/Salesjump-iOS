@@ -30,11 +30,18 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
     @IBOutlet weak var Daily_Exp_photos: UIImageView!
     @IBOutlet var IMG_Scr: UIView!
     @IBOutlet weak var imgs: UICollectionView!
-    
     @IBOutlet weak var Set_Date: LabelSelectWithout!
     @IBOutlet weak var SetWork_Typ: LabelSelectWithout!
     @IBOutlet weak var Set_work_plc: LabelSelectWithout!
     @IBOutlet weak var Allo_Typ: LabelSelect!
+    @IBOutlet weak var From_Text: EditTextField!
+    @IBOutlet weak var To_Text: EditTextField!
+    @IBOutlet weak var DropDown: UIView!
+    @IBOutlet weak var Drop_Down_Title: UILabel!
+    @IBOutlet weak var Search_lbl: UITextField!
+    @IBOutlet weak var sel_TB: UITableView!
+    @IBOutlet weak var Stayingtyp: LabelSelect!
+    
     var imagePicker = UIImagePickerController()
     var images: [UIImage] = []
     var bus:[UIImage] = []
@@ -53,6 +60,8 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
         PopUpView.layer.cornerRadius = 10
         Photo_List.delegate = self
         Photo_List.dataSource = self
+        sel_TB.delegate = self
+        sel_TB.dataSource = self
         imgs.dataSource = self
         imgs.delegate = self
         ButtonBack.addTarget(target: self, action: #selector(GotoHome))
@@ -66,6 +75,8 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
         Snacks_cam.addTarget(target: self, action: #selector(Snacks_Bill))
         SNACKS_IMG.addTarget(target: self, action: #selector(openImag))
         Daily_Exp_photos.addTarget(target: self, action: #selector(Add_Pho))
+        Allo_Typ.addTarget(target: self, action: #selector(openAllowance))
+        Stayingtyp.addTarget(target: self, action: #selector(openStaying_Typ))
         set_form()
     }
     func getUserDetails(){
@@ -146,19 +157,32 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 100
+        if Photo_List == tableView{
+            return 100
+        }
+        return 0
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return images.count
+        if sel_TB == tableView{
+            return 2
+        }
+        if Photo_List == tableView{
+            return images.count
+        }
+        return 0
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell:cellListItem = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
-        cell.Image_View.frame = CGRect(x: 0, y: 0, width: 200, height: 200)
-        cell.Image_View.image = images[indexPath.row]
-        cell.Enter_Rmk.returnKeyType = .done
-        cell.Enter_Title.returnKeyType = .done
-        cell.Enter_Rmk.delegate = self
-        cell.Enter_Title.delegate = self
+        if Photo_List == tableView{
+            cell.Image_View.frame = CGRect(x: 0, y: 0, width: 200, height: 200)
+            cell.Image_View.image = images[indexPath.row]
+            cell.Enter_Rmk.returnKeyType = .done
+            cell.Enter_Title.returnKeyType = .done
+            cell.Enter_Rmk.delegate = self
+            cell.Enter_Title.delegate = self
+        }else if (sel_TB == tableView){
+            cell.lblText.text = "Mani"
+        }
         return cell
     }
     
@@ -166,8 +190,6 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
         textField.resignFirstResponder()
         return true
     }
-    
-
     @objc func imageTapped() {
         animateIn(desiredView:blureView)
         animateIn(desiredView:PopUpView)
@@ -225,11 +247,74 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
         animateIn(desiredView:blureView)
         animateIn(desiredView:IMG_Scr)
     }
+    @objc private func openAllowance(){
+        Drop_Down_Title.text = "Select Allowance Type"
+        DropDown.isHidden = false
+        set_data_TB(openMod: "Allowance")
+    }
+    @objc private func openStaying_Typ(){
+        Drop_Down_Title.text = "Select Staying Type"
+        DropDown.isHidden = false
+        set_data_TB(openMod: "Staying")
+    }
+    func set_data_TB(openMod:String){
+        if(openMod == "Allowance"){
+            let axn = "get/Allow_Type"
+            
+            let apiKey = "\(axn)&division_code=\(DivCode)"
+            var result = apiKey
+                if let lastCommaIndex = result.lastIndex(of: ",") {
+                    result.remove(at: lastCommaIndex)
+                }
+            let apiKeyWithoutCommas = result.replacingOccurrences(of: ",&", with: "&")
+            let url = APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKeyWithoutCommas
+            self.ShowLoading(Message: "Loading...")
+            AF.request(url, method: .post, parameters: nil, encoding: URLEncoding.default, headers: nil)
+                .validate(statusCode: 200..<299)
+                .responseJSON { [self] response in
+                    switch response.result {
+                    case .success(let value):
+                        print(value)
+                        self.LoadingDismiss()
+                        if let json = value as? [AnyObject] {
+                            do {
+                                let prettyJsonData = try JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
+                                if let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) {
+                                    print(prettyPrintedJson)
+                                    if let jsonObject = try JSONSerialization.jsonObject(with: prettyJsonData, options: []) as? [AnyObject]{
+                                        print(jsonObject)
+                                      
+                                    } else {
+                                        print("Error: Could not convert JSON to Dictionary or access 'data'")
+                                    }
+                                } else {
+                                    print("Error: Could not convert JSON to String")
+                                }
+                            } catch {
+                                print("Error: \(error.localizedDescription)")
+                            }
+                        }
+                        
+                    case .failure(let error):
+                        Toast.show(message: error.errorDescription ?? "Unknown Error")
+                }
+            }
+        }else if (openMod == "Staying"){
+            
+        }
+    }
     
     @IBAction func Save_Exp(_ sender: Any) {
         self.resignFirstResponder()
    
         self.navigationController?.popViewController(animated: true)
         return
+    }
+    @IBAction func Close_Drop(_ sender: Any) {
+        DropDown.isHidden = true
+    }
+    
+    @IBAction func SearchByText(_ sender: Any) {
+        
     }
 }
