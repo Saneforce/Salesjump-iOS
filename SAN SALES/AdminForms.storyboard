@@ -1466,6 +1466,7 @@
                         <outlet property="Daily_Exp_photos" destination="txf-3f-r6E" id="cJa-6c-OBi"/>
                         <outlet property="FOOD_IMG" destination="ANa-nb-CAW" id="Zme-e1-mAZ"/>
                         <outlet property="Food_cam" destination="mOD-1G-ckG" id="fnY-zX-JTQ"/>
+                        <outlet property="IMG_Scr" destination="bYW-eJ-F7Y" id="Wjg-Mr-yqN"/>
                         <outlet property="Photo_List" destination="ss6-dF-Qkd" id="Xkb-4b-ckf"/>
                         <outlet property="PopUpView" destination="0cF-Ak-lPf" id="Vxf-fg-zVE"/>
                         <outlet property="PopUpView2" destination="LFa-IY-kaG" id="XFk-kp-gRO"/>
@@ -1473,9 +1474,10 @@
                         <outlet property="SelWindo" destination="edX-NJ-A2i" id="Idd-sd-p08"/>
                         <outlet property="Snacks_cam" destination="Adq-cQ-4OX" id="dLG-vy-CKA"/>
                         <outlet property="blureView" destination="89k-5G-w9o" id="plZ-Cx-3Ao"/>
-                        <outlet property="camera" destination="PP9-ji-7uG" id="7GA-tI-kd9"/>
+                        <outlet property="camera" destination="PP9-ji-7uG" id="c8K-bd-yUt"/>
                         <outlet property="eye" destination="RPV-J9-qgb" id="h7k-PL-fxV"/>
-                        <outlet property="paperclip" destination="X3l-pn-pWV" id="QtY-es-Zhc"/>
+                        <outlet property="imgs" destination="POq-DN-QTp" id="740-xs-NK1"/>
+                        <outlet property="paperclip" destination="RPV-J9-qgb" id="e3v-3Z-lb8"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lAd-q5-nbP" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -1579,6 +1581,52 @@
                     <viewLayoutGuide key="safeArea" id="0Ls-rT-cDt"/>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                 </view>
+                <view contentMode="scaleToFill" id="bYW-eJ-F7Y">
+                    <rect key="frame" x="0.0" y="0.0" width="322" height="538"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="CLOSE" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LP6-6D-Eff">
+                            <rect key="frame" x="227" y="483" width="73" height="21"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" name="Poppins-SemiBold" family="Poppins" pointSize="15"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="POq-DN-QTp">
+                            <rect key="frame" x="0.0" y="47" width="146" height="124"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="9cl-xC-zyJ">
+                                <size key="itemSize" width="127" height="120"/>
+                                <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                            </collectionViewFlowLayout>
+                            <cells>
+                                <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Cell" id="BgH-IW-bRC" customClass="CollectionCell" customModule="SAN_SALES" customModuleProvider="target">
+                                    <rect key="frame" x="9.6666666666666661" y="0.0" width="127" height="120"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="EtZ-5p-jWQ">
+                                        <rect key="frame" x="0.0" y="0.0" width="127" height="120"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <subviews>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="AdminForms" translatesAutoresizingMaskIntoConstraints="NO" id="2a3-cB-g2I">
+                                                <rect key="frame" x="0.0" y="0.0" width="127" height="120"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            </imageView>
+                                        </subviews>
+                                    </collectionViewCellContentView>
+                                    <size key="customSize" width="127" height="120"/>
+                                    <connections>
+                                        <outlet property="imgProduct" destination="2a3-cB-g2I" id="Twf-ay-dcx"/>
+                                    </connections>
+                                </collectionViewCell>
+                            </cells>
+                        </collectionView>
+                    </subviews>
+                    <viewLayoutGuide key="safeArea" id="wfF-Qu-UFl"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                </view>
             </objects>
             <point key="canvasLocation" x="2229.2307692307691" y="3.5545023696682461"/>
         </scene>
@@ -1598,6 +1646,7 @@
     </scenes>
     <resources>
         <image name="Achieved 2" width="256" height="256"/>
+        <image name="AdminForms" width="20" height="20"/>
         <image name="EditRetailer" width="20" height="20"/>
         <image name="MenuButton" width="137" height="95"/>
         <image name="Select" width="30" height="30"/>

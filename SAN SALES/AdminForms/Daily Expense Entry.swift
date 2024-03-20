@@ -8,8 +8,7 @@
 import UIKit
 import MobileCoreServices
 import Alamofire
-class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate {
-
+class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UICollectionViewDataSource, UICollectionViewDelegate {
     @IBOutlet weak var ButtonBack: UIImageView!
     @IBOutlet weak var Add_Hotal_Bill: UIImageView!
     @IBOutlet var blureView: UIVisualEffectView!
@@ -29,6 +28,8 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
     @IBOutlet var PopUpView2: UIView!
     @IBOutlet weak var Daily_Exp_Cam: UIImageView!
     @IBOutlet weak var Daily_Exp_photos: UIImageView!
+    @IBOutlet var IMG_Scr: UIView!
+    @IBOutlet weak var imgs: UICollectionView!
     
     var imagePicker = UIImagePickerController()
     var images: [UIImage] = []
@@ -46,6 +47,8 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
         PopUpView.layer.cornerRadius = 10
         Photo_List.delegate = self
         Photo_List.dataSource = self
+        imgs.dataSource = self
+        imgs.delegate = self
         ButtonBack.addTarget(target: self, action: #selector(GotoHome))
         Add_Hotal_Bill.addTarget(target: self, action: #selector(imageTapped))
         Close_Sel_Windo.addTarget(target: self, action: #selector(Close_Wind))
@@ -55,6 +58,8 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
         Bus_Cam.addTarget(target: self, action: #selector(Bus_Bill))
         Food_cam.addTarget(target: self, action: #selector(Food_Bill))
         Snacks_cam.addTarget(target: self, action: #selector(Snacks_Bill))
+        SNACKS_IMG.addTarget(target: self, action: #selector(openImag))
+        Daily_Exp_photos.addTarget(target: self, action: #selector(Add_Pho))
         //new_DateofExpense()
     }
     func getUserDetails(){
@@ -97,12 +102,14 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
                 food.append(pickedImage)
             }else if (SelMod == "SNACKS"){
                 snk.append(pickedImage)
+                imgs.reloadData()
+            }else{
+                images.append(pickedImage)
+                Photo_List.reloadData()
+                SelWindo.isHidden = false
+                animateOut(desiredView:blureView)
+                animateOut(desiredView:PopUpView)
             }
-            images.append(pickedImage)
-            Photo_List.reloadData()
-            SelWindo.isHidden = false
-            animateOut(desiredView:blureView)
-            animateOut(desiredView:PopUpView)
         }
         
         dismiss(animated: true, completion: nil)
@@ -111,13 +118,24 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         dismiss(animated: true, completion: nil)
     }
+    
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return snk.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell:CollectionCell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! CollectionCell
+        cell.imgProduct.image = snk[indexPath.row]
+        return cell
+    }
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 100
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return images.count
     }
-    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell:cellListItem = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
         cell.Image_View.image = images[indexPath.row]
@@ -165,12 +183,9 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
                     
                 case .failure(let error):
                     Toast.show(message: error.errorDescription ?? "Unknown Error")
-                }
             }
+        }
     }
-    
-    
-    
     @objc func imageTapped() {
         animateIn(desiredView:blureView)
         animateIn(desiredView:PopUpView)
@@ -187,7 +202,7 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
         present(imagePickerController, animated: true, completion: nil)
     }
     
-    @objc private func Add_Pho(_ sender: Any) {
+    @objc private func Add_Pho(){
         let imagePickerController = UIImagePickerController()
         imagePickerController.delegate = self
         imagePickerController.sourceType = .photoLibrary
@@ -223,6 +238,10 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
         SelMod = "SNACKS"
         animateIn(desiredView:blureView)
         animateIn(desiredView:PopUpView2)
+    }
+    @objc private func openImag() {
+        animateIn(desiredView:blureView)
+        animateIn(desiredView:IMG_Scr)
     }
     
     @IBAction func Save_Exp(_ sender: Any) {
