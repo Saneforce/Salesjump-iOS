@@ -64,6 +64,12 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
     let name:String
     let newname:String
     }
+    struct Pho_ND:Codable{
+        let ID : Int
+        let Name:String
+        let Photo_Mandatory:Int
+        let Photo_Nd:Int
+    }
     var imagePicker = UIImagePickerController()
     var images: [UIImage] = []
     var bus:[UIImage] = []
@@ -76,6 +82,7 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
     var set_Date:String?
     var Exp_Data:[exData] = []
     var Exp_Datas:[exData]=[]
+    var Needs_Entry:[Pho_ND]=[]
     var scroll_hig:Double = 0
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -105,6 +112,7 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
         Stayingtyp.addTarget(target: self, action: #selector(openStaying_Typ))
         set_form()
         travel_data(date: set_Date!)
+        DAExp_ND()
         Enter_KM.isHidden = true
         Enter_KM_hig.constant = 0
         let Enter_KM_h = Enter_KM.frame.size.height
@@ -291,7 +299,6 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
                 scroll_hig = scroll_hig - (Bill_Amount_view_h + Hotal_Bill_Img_View_h)
                 Scrollview_Height.constant = scroll_hig
             }
-            
             Stayingtyp.text = item.name
         }
         Search_lbl.text = ""
@@ -543,5 +550,51 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
             }
         }
         
+    }
+    
+    func DAExp_ND(){
+   
+        let axn = "get/DAExp"
+        let apiKey = "\(axn)&State_Code=\(StateCode)&desig=\(Desig)&divisionCode=\(DivCode)&rSF=\(SFCode)&sfCode=\(SFCode)&stateCode=\(StateCode)"
+        let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
+        let url = APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKeyWithoutCommas
+        AF.request(url, method: .post, parameters: nil, encoding: URLEncoding.default, headers: nil)
+            .validate(statusCode: 200..<299)
+            .responseJSON { [self] response in
+                switch response.result {
+                case .success(let value):
+                    if let json = value as? [String:Any] {
+                        do {
+                            let prettyJsonData = try JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
+                            if let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) {
+                               
+                                print(prettyPrintedJson)
+                                if let jsonObject = try JSONSerialization.jsonObject(with: prettyJsonData, options: []) as? [String:Any]{
+                                    print(jsonObject)
+                                    if let ExpenseWeb = jsonObject["ExpenseWeb"] as? [AnyObject]{
+                                        print(ExpenseWeb)
+                                        for i in ExpenseWeb{
+                                            Needs_Entry.append(Pho_ND(ID: (i["ID"] as? Int)!, Name: (i["Name"] as? String)!, Photo_Mandatory: (i["Photo_Mandatory"] as? Int)!, Photo_Nd: (i["Photo_Nd"] as? Int)!))
+                                        }
+                                        print("yes")
+                                        print(Needs_Entry)
+                                       
+                                    }
+                                 
+                                } else {
+                                    print("Error: Could not convert JSON to Dictionary or access 'data'")
+                                }
+                            } else {
+                                print("Error: Could not convert JSON to String")
+                            }
+                        } catch {
+                            print("Error: \(error.localizedDescription)")
+                        }
+                    }
+                    
+                case .failure(let error):
+                    Toast.show(message: error.errorDescription ?? "Unknown Error")
+            }
+        }
     }
 }
