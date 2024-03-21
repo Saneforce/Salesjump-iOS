@@ -1682,30 +1682,41 @@
                     <connections>
                         <outlet property="Add_Hotal_Bill" destination="0q9-21-Th2" id="dm5-OA-Oqz"/>
                         <outlet property="Allo_Typ" destination="Bvf-rf-Xk1" id="pNU-Zg-0X6"/>
+                        <outlet property="Allowance_type" destination="OWu-P3-zpD" id="OlJ-4Y-A0f"/>
                         <outlet property="BUS_IMG" destination="VOz-8l-qj6" id="dH2-RV-Ffj"/>
+                        <outlet property="Bill_Amount_view" destination="0TV-Aa-Za8" id="xNg-vP-fTa"/>
                         <outlet property="Bus_Cam" destination="Rx1-me-Xhu" id="5Fg-0M-sCw"/>
+                        <outlet property="Bus_Far_View" destination="b7e-sD-xSQ" id="MtY-k9-UOd"/>
                         <outlet property="ButtonBack" destination="wDm-zw-Ra5" id="wEU-nK-UHa"/>
                         <outlet property="Close_Sel_Windo" destination="HNz-qs-oz6" id="6in-Ok-FSg"/>
+                        <outlet property="Daily_EX_Head" destination="6Cp-Za-3UG" id="Cih-Ky-J10"/>
                         <outlet property="Daily_Exp_Cam" destination="52r-Sl-WtP" id="bPU-k8-hCM"/>
                         <outlet property="Daily_Exp_photos" destination="txf-3f-r6E" id="cJa-6c-OBi"/>
                         <outlet property="DropDown" destination="T7q-Ud-P5f" id="oHb-BQ-QzT"/>
                         <outlet property="Drop_Down_Title" destination="gwg-46-uvX" id="K6S-Pi-hXc"/>
+                        <outlet property="Enter_KM" destination="Ffj-f6-pHS" id="E6Q-X1-CMw"/>
                         <outlet property="FOOD_IMG" destination="ANa-nb-CAW" id="Zme-e1-mAZ"/>
+                        <outlet property="Food_Allowance_View" destination="m68-TA-EE9" id="Yb1-EX-pSf"/>
                         <outlet property="Food_cam" destination="mOD-1G-ckG" id="fnY-zX-JTQ"/>
                         <outlet property="From_Text" destination="L8i-JI-uaf" id="s5f-eY-eLo"/>
+                        <outlet property="Hotal_Bill_Img_View" destination="o53-VC-xQ3" id="wcw-mV-Ga4"/>
                         <outlet property="IMG_Scr" destination="bYW-eJ-F7Y" id="Wjg-Mr-yqN"/>
                         <outlet property="Photo_List" destination="ss6-dF-Qkd" id="Xkb-4b-ckf"/>
                         <outlet property="PopUpView" destination="0cF-Ak-lPf" id="Vxf-fg-zVE"/>
                         <outlet property="PopUpView2" destination="LFa-IY-kaG" id="XFk-kp-gRO"/>
                         <outlet property="SNACKS_IMG" destination="jDN-ad-dFj" id="G83-Xv-G7t"/>
+                        <outlet property="Scrollview" destination="UAA-4j-2vy" id="WsU-La-Wgb"/>
                         <outlet property="Search_lbl" destination="cYx-HF-MWW" id="WGH-09-oJf"/>
                         <outlet property="SelWindo" destination="edX-NJ-A2i" id="Idd-sd-p08"/>
                         <outlet property="SetWork_Typ" destination="E3j-CA-4Qf" id="F0R-cP-v2R"/>
                         <outlet property="Set_Date" destination="cG2-Kn-MrP" id="AmM-Xg-3Z5"/>
                         <outlet property="Set_work_plc" destination="x5Y-qZ-SWz" id="CuS-nU-rUg"/>
+                        <outlet property="Snacks_Bill_View" destination="oWO-1D-eHf" id="01U-Mu-XDi"/>
                         <outlet property="Snacks_cam" destination="Adq-cQ-4OX" id="dLG-vy-CKA"/>
+                        <outlet property="Staying_typ" destination="LkG-Gp-uAP" id="dNA-Su-fJa"/>
                         <outlet property="Stayingtyp" destination="xyH-VQ-5K6" id="dC9-Fa-ZLb"/>
                         <outlet property="To_Text" destination="OmL-dP-rkE" id="Wvi-I9-PqB"/>
+                        <outlet property="Travel_Det" destination="aTM-hd-2rR" id="csQ-Nt-EVv"/>
                         <outlet property="blureView" destination="89k-5G-w9o" id="plZ-Cx-3Ao"/>
                         <outlet property="camera" destination="PP9-ji-7uG" id="c8K-bd-yUt"/>
                         <outlet property="eye" destination="RPV-J9-qgb" id="h7k-PL-fxV"/>
@@ -1887,7 +1898,7 @@
         <image name="camera.fill" catalog="system" width="128" height="93"/>
         <image name="eye.circle.fill" catalog="system" width="128" height="123"/>
         <image name="geoTagMarker" width="30" height="30"/>
-        <image name="multiply.circle.fill" catalog="system" width="32" height="32"/>
+        <image name="multiply.circle.fill" catalog="system" width="128" height="123"/>
         <image name="paperclip" catalog="system" width="121" height="128"/>
         <image name="photo.on.rectangle.angled" catalog="system" width="128" height="98"/>
         <image name="trash.fill" catalog="system" width="119" height="128"/>

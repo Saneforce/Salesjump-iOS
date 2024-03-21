@@ -41,6 +41,17 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
     @IBOutlet weak var Search_lbl: UITextField!
     @IBOutlet weak var sel_TB: UITableView!
     @IBOutlet weak var Stayingtyp: LabelSelect!
+    @IBOutlet weak var Scrollview: UIScrollView!
+    @IBOutlet weak var Travel_Det: UIView!
+    @IBOutlet weak var Allowance_type: UIView!
+    @IBOutlet weak var Enter_KM: UIView!
+    @IBOutlet weak var Staying_typ: UIView!
+    @IBOutlet weak var Bill_Amount_view: UIView!
+    @IBOutlet weak var Hotal_Bill_Img_View: UIView!
+    @IBOutlet weak var Daily_EX_Head: UILabel!
+    @IBOutlet weak var Bus_Far_View: UIView!
+    @IBOutlet weak var Food_Allowance_View: UIView!
+    @IBOutlet weak var Snacks_Bill_View: UIView!
     struct exData:Codable{
     let id:String
     let name:String
@@ -98,6 +109,37 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
     DivCode = prettyJsonData["divisionCode"] as? String ?? ""
     Desig=prettyJsonData["desigCode"] as? String ?? ""
     }
+    func calculateTotalVisibleHeight() -> CGFloat {
+          var totalHeight: CGFloat = 0.0
+          
+          // Array to hold all the views
+          let views: [UIView] = [Travel_Det, Allowance_type, Enter_KM, Staying_typ, Bill_Amount_view, Hotal_Bill_Img_View, Daily_EX_Head, Bus_Far_View, Food_Allowance_View, Snacks_Bill_View]
+          
+          for view in views {
+              // Check if the view is hidden
+              if !view.isHidden {
+                  totalHeight += view.frame.size.height
+              }
+          }
+          
+          return totalHeight
+      }
+    func adjustScrollViewContentSize() {
+            let totalHeight = calculateTotalVisibleHeight()
+        Scrollview.contentSize = CGSize(width: Scrollview.frame.size.width, height: totalHeight)
+        }
+        
+        // Function to hide a view and readjust content size
+        func hideView(_ view: UIView) {
+            view.isHidden = true
+            adjustScrollViewContentSize()
+        }
+        
+        // Function to show a view and readjust content size
+        func showView(_ view: UIView) {
+            view.isHidden = false
+            adjustScrollViewContentSize()
+        }
     func set_form(){
         Set_Date.text = set_Date
         if let settyp = day_Plan{
@@ -356,7 +398,23 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
                                 print(prettyPrintedJson)
                                 if let jsonObject = try JSONSerialization.jsonObject(with: prettyJsonData, options: []) as? [String:Any]{
                                     print(jsonObject)
-                                 
+                                    if  let travel_data = jsonObject["travel_data"] as? [AnyObject]{
+                                        print(travel_data)
+                                        if travel_data.isEmpty{
+//                                            Travel_Det.isHidden = true
+//                                            if let superView = Travel_Det.superview {
+//                                                let currentFrame = superView.convert(Travel_Det.frame, to: nil)
+//                                                let yPosition = currentFrame.origin.y
+//                                                print("Current Y position: \(yPosition)")
+//                                                Allowance_type.frame.origin.y = yPosition
+//                                            }
+                                        }else{
+                                            From_Text.text = travel_data[0]["From_Place"] as? String
+                                            To_Text.text = travel_data[0]["To_Place"] as? String
+                                            From_Text.isEnabled = false
+                                            To_Text.isEnabled = false
+                                        }
+                                    }
                                 } else {
                                     print("Error: Could not convert JSON to Dictionary or access 'data'")
                                 }
