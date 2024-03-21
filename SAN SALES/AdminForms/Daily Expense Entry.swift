@@ -42,7 +42,10 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
     @IBOutlet weak var sel_TB: UITableView!
     @IBOutlet weak var Stayingtyp: LabelSelect!
     @IBOutlet weak var Scrollview: UIScrollView!
+    @IBOutlet weak var Scrollview_Height: NSLayoutConstraint!
+    @IBOutlet weak var sub_Scrollview: UIView!
     @IBOutlet weak var Travel_Det: UIView!
+    @IBOutlet weak var Travel_Det_Height: NSLayoutConstraint!
     @IBOutlet weak var Allowance_type: UIView!
     @IBOutlet weak var Enter_KM: UIView!
     @IBOutlet weak var Staying_typ: UIView!
@@ -111,35 +114,28 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
     }
     func calculateTotalVisibleHeight() -> CGFloat {
           var totalHeight: CGFloat = 0.0
-          
-          // Array to hold all the views
           let views: [UIView] = [Travel_Det, Allowance_type, Enter_KM, Staying_typ, Bill_Amount_view, Hotal_Bill_Img_View, Daily_EX_Head, Bus_Far_View, Food_Allowance_View, Snacks_Bill_View]
           
           for view in views {
-              // Check if the view is hidden
               if !view.isHidden {
                   totalHeight += view.frame.size.height
               }
           }
-          
           return totalHeight
       }
     func adjustScrollViewContentSize() {
             let totalHeight = calculateTotalVisibleHeight()
         Scrollview.contentSize = CGSize(width: Scrollview.frame.size.width, height: totalHeight)
         }
-        
-        // Function to hide a view and readjust content size
         func hideView(_ view: UIView) {
             view.isHidden = true
             adjustScrollViewContentSize()
         }
-        
-        // Function to show a view and readjust content size
         func showView(_ view: UIView) {
             view.isHidden = false
             adjustScrollViewContentSize()
         }
+    
     func set_form(){
         Set_Date.text = set_Date
         if let settyp = day_Plan{
@@ -240,6 +236,9 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
         let item = Exp_Datas[indexPath.row]
         print(item)
         if (SelMod == "Allowance"){
+            if item.name == "OS" || item.name == "EX" {
+                print("Yes")
+            }
             Allo_Typ.text = item.name
         }else if (SelMod == "Staying"){
             Stayingtyp.text = item.name
@@ -378,7 +377,6 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
     }
     
     func travel_data(date:String){
-
         let axn = "get/travel_data"
         let apiKey = "\(axn)&date=\(date)&desig=\(Desig)&divisionCode=\(DivCode)&div_code=\(DivCode)&rSF=\(SFCode)&dsg_code=547&sfCode=\(SFCode)&stateCode=\(StateCode)&state_code=\(StateCode)&sf_code=\(SFCode)"
         let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
@@ -401,13 +399,11 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
                                     if  let travel_data = jsonObject["travel_data"] as? [AnyObject]{
                                         print(travel_data)
                                         if travel_data.isEmpty{
-//                                            Travel_Det.isHidden = true
-//                                            if let superView = Travel_Det.superview {
-//                                                let currentFrame = superView.convert(Travel_Det.frame, to: nil)
-//                                                let yPosition = currentFrame.origin.y
-//                                                print("Current Y position: \(yPosition)")
-//                                                Allowance_type.frame.origin.y = yPosition
-//                                            }
+                                            Travel_Det.isHidden = true
+                                            let viewHeight = Travel_Det.frame.size.height
+                                            let scroll_hig = sub_Scrollview.frame.size.height
+                                            Travel_Det_Height.constant = 0
+                                            Scrollview_Height.constant = scroll_hig - viewHeight
                                         }else{
                                             From_Text.text = travel_data[0]["From_Place"] as? String
                                             To_Text.text = travel_data[0]["To_Place"] as? String
