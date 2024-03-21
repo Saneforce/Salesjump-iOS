@@ -1350,13 +1350,13 @@
                                                 </constraints>
                                             </view>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Daily Expense" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Cp-Za-3UG">
-                                                <rect key="frame" x="24" y="1156" width="342" height="23"/>
+                                                <rect key="frame" x="24" y="1156" width="342" height="22.666666666666742"/>
                                                 <fontDescription key="fontDescription" name="Poppins-SemiBold" family="Poppins" pointSize="16"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="b7e-sD-xSQ">
-                                                <rect key="frame" x="8" y="1185" width="374" height="100"/>
+                                                <rect key="frame" x="8" y="1184.6666666666667" width="374" height="100"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Bus Fare" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mFN-Ls-29B">
                                                         <rect key="frame" x="16" y="9" width="65" height="21"/>
@@ -1395,7 +1395,7 @@
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="m68-TA-EE9">
-                                                <rect key="frame" x="8" y="1293" width="374" height="100"/>
+                                                <rect key="frame" x="8" y="1292.6666666666667" width="374" height="100"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Food Allowance" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2c5-u3-AVo">
                                                         <rect key="frame" x="16" y="9" width="121" height="21"/>
@@ -1434,7 +1434,7 @@
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oWO-1D-eHf">
-                                                <rect key="frame" x="8" y="1401" width="374" height="100"/>
+                                                <rect key="frame" x="8" y="1400.6666666666667" width="374" height="100"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Snacks bill" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VRU-FU-1aS">
                                                         <rect key="frame" x="16" y="9" width="82" height="21"/>
@@ -1771,6 +1771,7 @@
                         <outlet property="Allowance_type" destination="OWu-P3-zpD" id="OlJ-4Y-A0f"/>
                         <outlet property="BUS_IMG" destination="VOz-8l-qj6" id="dH2-RV-Ffj"/>
                         <outlet property="Bill_Amount_view" destination="0TV-Aa-Za8" id="xNg-vP-fTa"/>
+                        <outlet property="Bill_Amount_view_hig" destination="utw-Ad-sWU" id="wOy-Mi-0Dh"/>
                         <outlet property="Bus_Cam" destination="Rx1-me-Xhu" id="5Fg-0M-sCw"/>
                         <outlet property="Bus_Far_View" destination="b7e-sD-xSQ" id="MtY-k9-UOd"/>
                         <outlet property="ButtonBack" destination="wDm-zw-Ra5" id="wEU-nK-UHa"/>
@@ -1781,11 +1782,13 @@
                         <outlet property="DropDown" destination="T7q-Ud-P5f" id="oHb-BQ-QzT"/>
                         <outlet property="Drop_Down_Title" destination="gwg-46-uvX" id="K6S-Pi-hXc"/>
                         <outlet property="Enter_KM" destination="Ffj-f6-pHS" id="E6Q-X1-CMw"/>
+                        <outlet property="Enter_KM_hig" destination="wWz-fB-Fvl" id="7B6-8O-eXO"/>
                         <outlet property="FOOD_IMG" destination="ANa-nb-CAW" id="Zme-e1-mAZ"/>
                         <outlet property="Food_Allowance_View" destination="m68-TA-EE9" id="Yb1-EX-pSf"/>
                         <outlet property="Food_cam" destination="mOD-1G-ckG" id="fnY-zX-JTQ"/>
                         <outlet property="From_Text" destination="L8i-JI-uaf" id="s5f-eY-eLo"/>
                         <outlet property="Hotal_Bill_Img_View" destination="o53-VC-xQ3" id="wcw-mV-Ga4"/>
+                        <outlet property="Hotal_Bill_Img_View_hig" destination="6ge-0A-Tac" id="SyU-QR-edu"/>
                         <outlet property="IMG_Scr" destination="bYW-eJ-F7Y" id="Wjg-Mr-yqN"/>
                         <outlet property="Photo_List" destination="ss6-dF-Qkd" id="Xkb-4b-ckf"/>
                         <outlet property="PopUpView" destination="0cF-Ak-lPf" id="Vxf-fg-zVE"/>
@@ -1801,6 +1804,7 @@
                         <outlet property="Snacks_Bill_View" destination="oWO-1D-eHf" id="01U-Mu-XDi"/>
                         <outlet property="Snacks_cam" destination="Adq-cQ-4OX" id="dLG-vy-CKA"/>
                         <outlet property="Staying_typ" destination="LkG-Gp-uAP" id="dNA-Su-fJa"/>
+                        <outlet property="Staying_typ_hig" destination="HUE-pn-NJf" id="OjI-uf-3Ri"/>
                         <outlet property="Stayingtyp" destination="xyH-VQ-5K6" id="dC9-Fa-ZLb"/>
                         <outlet property="To_Text" destination="OmL-dP-rkE" id="Wvi-I9-PqB"/>
                         <outlet property="Travel_Det" destination="aTM-hd-2rR" id="csQ-Nt-EVv"/>

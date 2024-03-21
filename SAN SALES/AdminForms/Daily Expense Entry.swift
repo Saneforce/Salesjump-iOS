@@ -48,9 +48,13 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
     @IBOutlet weak var Travel_Det_Height: NSLayoutConstraint!
     @IBOutlet weak var Allowance_type: UIView!
     @IBOutlet weak var Enter_KM: UIView!
+    @IBOutlet weak var Enter_KM_hig: NSLayoutConstraint!
     @IBOutlet weak var Staying_typ: UIView!
+    @IBOutlet weak var Staying_typ_hig: NSLayoutConstraint!
     @IBOutlet weak var Bill_Amount_view: UIView!
+    @IBOutlet weak var Bill_Amount_view_hig: NSLayoutConstraint!
     @IBOutlet weak var Hotal_Bill_Img_View: UIView!
+    @IBOutlet weak var Hotal_Bill_Img_View_hig: NSLayoutConstraint!
     @IBOutlet weak var Daily_EX_Head: UILabel!
     @IBOutlet weak var Bus_Far_View: UIView!
     @IBOutlet weak var Food_Allowance_View: UIView!
@@ -72,6 +76,7 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
     var set_Date:String?
     var Exp_Data:[exData] = []
     var Exp_Datas:[exData]=[]
+    var scroll_hig:Double = 0
     override func viewDidLoad() {
         super.viewDidLoad()
         getUserDetails()
@@ -84,6 +89,7 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
         sel_TB.dataSource = self
         imgs.dataSource = self
         imgs.delegate = self
+        scroll_hig =  sub_Scrollview.frame.size.height
         ButtonBack.addTarget(target: self, action: #selector(GotoHome))
         Add_Hotal_Bill.addTarget(target: self, action: #selector(imageTapped))
         Close_Sel_Windo.addTarget(target: self, action: #selector(Close_Wind))
@@ -99,6 +105,20 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
         Stayingtyp.addTarget(target: self, action: #selector(openStaying_Typ))
         set_form()
         travel_data(date: set_Date!)
+        Enter_KM.isHidden = true
+        Enter_KM_hig.constant = 0
+        let Enter_KM_h = Enter_KM.frame.size.height
+        Staying_typ.isHidden = true
+        Staying_typ_hig.constant = 0
+        let Staying_typ_h = Staying_typ.frame.size.height
+        Bill_Amount_view.isHidden = true
+        Bill_Amount_view_hig.constant = 0
+        let Bill_Amount_view_h = Bill_Amount_view.frame.size.height
+        Hotal_Bill_Img_View.isHidden = true
+        Hotal_Bill_Img_View_hig.constant = 0
+        let Hotal_Bill_Img_View_h = Hotal_Bill_Img_View.frame.size.height
+        scroll_hig = scroll_hig - (Enter_KM_h + Staying_typ_h + Bill_Amount_view_h + Hotal_Bill_Img_View_h)
+        Scrollview_Height.constant = scroll_hig
     }
     func getUserDetails(){
     let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
@@ -182,15 +202,11 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
                 animateOut(desiredView:PopUpView)
             }
         }
-        
         dismiss(animated: true, completion: nil)
     }
-    
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         dismiss(animated: true, completion: nil)
     }
-    
-    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return snk.count
     }
@@ -237,10 +253,45 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
         print(item)
         if (SelMod == "Allowance"){
             if item.name == "OS" || item.name == "EX" {
-                print("Yes")
+                Staying_typ.isHidden = false
+                Staying_typ_hig.constant = 80
+                scroll_hig = scroll_hig + 80
+                Scrollview_Height.constant = scroll_hig
+                
+            }else{
+                Staying_typ.isHidden = true
+                Staying_typ_hig.constant = 0
+                let Staying_typ_h = Staying_typ.frame.size.height
+                Bill_Amount_view.isHidden = true
+                Bill_Amount_view_hig.constant = 0
+                let Bill_Amount_view_h = Bill_Amount_view.frame.size.height
+                Hotal_Bill_Img_View.isHidden = true
+                Hotal_Bill_Img_View_hig.constant = 0
+                let Hotal_Bill_Img_View_h = Hotal_Bill_Img_View.frame.size.height
+                scroll_hig = scroll_hig - (Staying_typ_h + Bill_Amount_view_h + Hotal_Bill_Img_View_h)
+                Scrollview_Height.constant = scroll_hig
             }
             Allo_Typ.text = item.name
         }else if (SelMod == "Staying"){
+            if item.name == "With Hotel" {
+                Bill_Amount_view.isHidden = false
+                Bill_Amount_view_hig.constant = 80
+                scroll_hig = scroll_hig + 80
+                Hotal_Bill_Img_View.isHidden = false
+                Hotal_Bill_Img_View_hig.constant = 80
+                scroll_hig = scroll_hig + 80
+                Scrollview_Height.constant = scroll_hig
+            }else{
+                Bill_Amount_view.isHidden = true
+                Bill_Amount_view_hig.constant = 0
+                let Bill_Amount_view_h = Bill_Amount_view.frame.size.height
+                Hotal_Bill_Img_View.isHidden = true
+                Hotal_Bill_Img_View_hig.constant = 0
+                let Hotal_Bill_Img_View_h = Hotal_Bill_Img_View.frame.size.height
+                scroll_hig = scroll_hig - (Bill_Amount_view_h + Hotal_Bill_Img_View_h)
+                Scrollview_Height.constant = scroll_hig
+            }
+            
             Stayingtyp.text = item.name
         }
         Search_lbl.text = ""
@@ -333,14 +384,14 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
                 }
             let apiKeyWithoutCommas = result.replacingOccurrences(of: ",&", with: "&")
             let url = APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKeyWithoutCommas
-            self.ShowLoading(Message: "Loading...")
+           // self.ShowLoading(Message: "Loading...")
             AF.request(url, method: .post, parameters: nil, encoding: URLEncoding.default, headers: nil)
                 .validate(statusCode: 200..<299)
                 .responseJSON { [self] response in
                     switch response.result {
                     case .success(let value):
                         print(value)
-                        self.LoadingDismiss()
+                        //self.LoadingDismiss()
                         if let json = value as? [AnyObject] {
                             do {
                                 let prettyJsonData = try JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
@@ -401,9 +452,10 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
                                         if travel_data.isEmpty{
                                             Travel_Det.isHidden = true
                                             let viewHeight = Travel_Det.frame.size.height
-                                            let scroll_hig = sub_Scrollview.frame.size.height
+                                            scroll_hig = sub_Scrollview.frame.size.height
                                             Travel_Det_Height.constant = 0
-                                            Scrollview_Height.constant = scroll_hig - viewHeight
+                                            scroll_hig = scroll_hig - viewHeight
+                                            Scrollview_Height.constant = scroll_hig
                                         }else{
                                             From_Text.text = travel_data[0]["From_Place"] as? String
                                             To_Text.text = travel_data[0]["To_Place"] as? String
