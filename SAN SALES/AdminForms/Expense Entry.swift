@@ -37,7 +37,7 @@ class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, 
         let dis_Rank:String
     }
     let LocalStoreage = UserDefaults.standard
-    var SFCode: String = "", StateCode: String = "", DivCode: String = "",Desig: String = ""
+    var SFCode: String = "", StateCode: String = "", DivCode: String = "",Desig: String = "",SF_type: String = ""
     var Period:[PeriodicData] = []
     var lstOfPeriod:[PeriodicData] = []
     var FDate: Date = Date(),TDate: Date = Date()
@@ -112,6 +112,7 @@ class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, 
     StateCode = prettyJsonData["State_Code"] as? String ?? ""
     DivCode = prettyJsonData["divisionCode"] as? String ?? ""
     Desig=prettyJsonData["desigCode"] as? String ?? ""
+    SF_type=prettyJsonData["SF_type"] as? String ?? ""
     }
     
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
@@ -674,7 +675,7 @@ class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, 
         print(myStringDate)
         Set_Date = myStringDate
         let axn = "get/new_DateofExpense"
-        let apiKey = "\(axn)&State_Code=\(StateCode)&desig=\(Desig)&divisionCode=\(DivCode)&Type=1&div_code=\(DivCode)&rSF=\(SFCode)&sfCode=\(SFCode)&stateCode=\(StateCode)&Dateofexp=\(myStringDate)"
+        let apiKey = "\(axn)&State_Code=\(StateCode)&desig=\(Desig)&divisionCode=\(DivCode)&Type=\(SF_type)&div_code=\(DivCode)&rSF=\(SFCode)&sfCode=\(SFCode)&stateCode=\(StateCode)&Dateofexp=\(myStringDate)"
         let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
         let url = APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKeyWithoutCommas
         //self.ShowLoading(Message: "Loading...")
@@ -690,43 +691,6 @@ class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, 
                             let prettyJsonData = try JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
                             if let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) {
                                 print(prettyPrintedJson)
-                                
-                                let axnex = "get/DateofExpense"
-                                let apiKey = "\(axnex)&State_Code=\(StateCode)&desig=\(Desig)&divisionCode=\(DivCode)&Type=1&div_code=\(DivCode)&rSF=\(SFCode)&sfCode=\(SFCode)&stateCode=\(StateCode)&Dateofexp=\(myStringDate)"
-                                let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
-                                let url = APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKeyWithoutCommas
-                               // self.ShowLoading(Message: "Loading...")
-                                AF.request(url, method: .post, parameters: nil, encoding: URLEncoding.default, headers: nil)
-                                    .validate(statusCode: 200..<299)
-                                    .responseJSON { [self] response in
-                                        switch response.result {
-                                        case .success(let value):
-                                            print(value)
-                                           // self.LoadingDismiss()
-                                            if let json = value as? [String:Any] {
-                                                do {
-                                                    let prettyJsonData = try JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
-                                                    if let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) {
-                                                        print(prettyPrintedJson)
-                                                        if let jsonObject = try JSONSerialization.jsonObject(with: prettyJsonData, options: []) as? [String:Any]{
-                                                            print(jsonObject)
-                                                         
-                                                        } else {
-                                                            print("Error: Could not convert JSON to Dictionary or access 'data'")
-                                                        }
-                                                    } else {
-                                                        print("Error: Could not convert JSON to String")
-                                                    }
-                                                } catch {
-                                                    print("Error: \(error.localizedDescription)")
-                                                }
-                                            }
-                                            
-                                        case .failure(let error):
-                                            Toast.show(message: error.errorDescription ?? "Unknown Error")
-                                    }
-                                }
-                                
                                 if let jsonObject = try JSONSerialization.jsonObject(with: prettyJsonData, options: []) as? [String: Any],
                                    let data = jsonObject["day_plan"] as? [AnyObject] {
                                     print(data)

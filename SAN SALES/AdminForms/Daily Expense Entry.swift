@@ -19,12 +19,6 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
     @IBOutlet weak var paperclip: UIImageView!
     @IBOutlet weak var eye: UIImageView!
     @IBOutlet weak var Photo_List: UITableView!
-    @IBOutlet weak var BUS_IMG: UIImageView!
-    @IBOutlet weak var FOOD_IMG: UIImageView!
-    @IBOutlet weak var SNACKS_IMG: UIImageView!
-    @IBOutlet weak var Bus_Cam: UIImageView!
-    @IBOutlet weak var Food_cam: UIImageView!
-    @IBOutlet weak var Snacks_cam: UIImageView!
     @IBOutlet var PopUpView2: UIView!
     @IBOutlet weak var Daily_Exp_Cam: UIImageView!
     @IBOutlet weak var Daily_Exp_photos: UIImageView!
@@ -56,9 +50,9 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
     @IBOutlet weak var Hotal_Bill_Img_View: UIView!
     @IBOutlet weak var Hotal_Bill_Img_View_hig: NSLayoutConstraint!
     @IBOutlet weak var Daily_EX_Head: UILabel!
-    @IBOutlet weak var Bus_Far_View: UIView!
-    @IBOutlet weak var Food_Allowance_View: UIView!
-    @IBOutlet weak var Snacks_Bill_View: UIView!
+    @IBOutlet weak var Daily_Expense_TB: UITableView!
+    @IBOutlet weak var Daily_Expense_TB_hig: NSLayoutConstraint!
+    
     struct exData:Codable{
     let id:String
     let name:String
@@ -68,7 +62,7 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
         let ID : Int
         let Name:String
         let Photo_Mandatory:Int
-        let Photo_Nd:Int
+        var Photo_Nd:Int
     }
     var imagePicker = UIImagePickerController()
     var images: [UIImage] = []
@@ -92,6 +86,8 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
         PopUpView.layer.cornerRadius = 10
         Photo_List.delegate = self
         Photo_List.dataSource = self
+        Daily_Expense_TB.delegate = self
+        Daily_Expense_TB.dataSource = self
         sel_TB.delegate = self
         sel_TB.dataSource = self
         imgs.dataSource = self
@@ -103,10 +99,10 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
         camera.addTarget(target: self, action: #selector(Camra))
         paperclip.addTarget(target: self, action: #selector(Add_Pho))
         eye.addTarget(target: self, action: #selector(View_Photo))
-        Bus_Cam.addTarget(target: self, action: #selector(Bus_Bill))
-        Food_cam.addTarget(target: self, action: #selector(Food_Bill))
+        //Bus_Cam.addTarget(target: self, action: #selector(Bus_Bill))
+        //Food_cam.addTarget(target: self, action: #selector(Food_Bill))
        // Snacks_cam.addTarget(target: self, action: #selector(Snacks_Bill))
-        SNACKS_IMG.addTarget(target: self, action: #selector(openImag))
+       // SNACKS_IMG.addTarget(target: self, action: #selector(openImag))
         Daily_Exp_photos.addTarget(target: self, action: #selector(Add_Pho))
         Allo_Typ.addTarget(target: self, action: #selector(openAllowance))
         Stayingtyp.addTarget(target: self, action: #selector(openStaying_Typ))
@@ -140,29 +136,6 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
     DivCode = prettyJsonData["divisionCode"] as? String ?? ""
     Desig=prettyJsonData["desigCode"] as? String ?? ""
     }
-    func calculateTotalVisibleHeight() -> CGFloat {
-          var totalHeight: CGFloat = 0.0
-          let views: [UIView] = [Travel_Det, Allowance_type, Enter_KM, Staying_typ, Bill_Amount_view, Hotal_Bill_Img_View, Daily_EX_Head, Bus_Far_View, Food_Allowance_View, Snacks_Bill_View]
-          
-          for view in views {
-              if !view.isHidden {
-                  totalHeight += view.frame.size.height
-              }
-          }
-          return totalHeight
-      }
-    func adjustScrollViewContentSize() {
-            let totalHeight = calculateTotalVisibleHeight()
-        Scrollview.contentSize = CGSize(width: Scrollview.frame.size.width, height: totalHeight)
-        }
-        func hideView(_ view: UIView) {
-            view.isHidden = true
-            adjustScrollViewContentSize()
-        }
-        func showView(_ view: UIView) {
-            view.isHidden = false
-            adjustScrollViewContentSize()
-        }
     
     func set_form(){
         Set_Date.text = set_Date
@@ -228,6 +201,8 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if Photo_List == tableView{
             return 100
+        }else if (Daily_Expense_TB == tableView){
+            return 100
         }
         return 50
     }
@@ -237,6 +212,9 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
         }
         if Photo_List == tableView{
             return images.count
+        }
+        if Daily_Expense_TB == tableView {
+            return Needs_Entry.count
         }
         return 0
     }
@@ -253,6 +231,22 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
             cell.lblText.text = Exp_Datas[indexPath.row].name
             Search_lbl.returnKeyType = .done
             Search_lbl.delegate = self
+        }else if (Daily_Expense_TB == tableView){
+            let item = Needs_Entry[indexPath.row]
+            print(item)
+            cell.lblText.text = Needs_Entry[indexPath.row].Name
+            if item.Photo_Nd == 0 {
+                cell.Cam.isHidden = true
+            }
+            cell.Enter_Rmk.addTarget(self, action: #selector(self.Rem_Text(_:)), for: .editingChanged)
+            cell.Enter_Rmk.returnKeyType = .done
+            cell.Enter_Rmk.delegate = self
+            cell.Enter_Rmk.addTarget(self, action: #selector(self.Amt_Text(_:)), for: .editingChanged)
+            cell.Ent_Amt.returnKeyType = .done
+            cell.Ent_Amt.delegate = self
+            //cell.Cam.image =
+            //cell.Image_View.image =
+            
         }
         return cell
     }
@@ -305,7 +299,17 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
         self.resignFirstResponder()
         DropDown.isHidden = true
     }
-    
+ 
+    @objc private func Rem_Text(_ txtQty: UITextField){
+        let cell: cellListItem = GlobalFunc.getTableViewCell(view: txtQty) as! cellListItem
+        let Remark: String = cell.Enter_Rmk.text ?? ""
+        print(Remark)
+    }
+    @objc private func Amt_Text(_ txtQty: UITextField){
+        let cell: cellListItem = GlobalFunc.getTableViewCell(view: txtQty) as! cellListItem
+        let Amt: String = cell.Ent_Amt.text ?? ""
+        print(Amt)
+    }
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
@@ -573,12 +577,18 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
                                     print(jsonObject)
                                     if let ExpenseWeb = jsonObject["ExpenseWeb"] as? [AnyObject]{
                                         print(ExpenseWeb)
+                                        var Tab_Hig = 0.0
+                                        var scrol = 0.0
                                         for i in ExpenseWeb{
+                                            Tab_Hig = Tab_Hig+100
+                                            scrol = scrol+70
                                             Needs_Entry.append(Pho_ND(ID: (i["ID"] as? Int)!, Name: (i["Name"] as? String)!, Photo_Mandatory: (i["Photo_Mandatory"] as? Int)!, Photo_Nd: (i["Photo_Nd"] as? Int)!))
                                         }
-                                        print("yes")
+                                        scroll_hig = scroll_hig+scrol
+                                        Daily_Expense_TB_hig.constant = Tab_Hig
+                                        Scrollview_Height.constant = scroll_hig
                                         print(Needs_Entry)
-                                       
+                                        Daily_Expense_TB.reloadData()
                                     }
                                  
                                 } else {

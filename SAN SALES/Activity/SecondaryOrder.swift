@@ -856,15 +856,13 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         lblSelTitle.text="Select the UOM"
         openWin(Mode: "UOM")
     }
-    @objc private func changeQty(_ txtQty: UITextField)
-    
-    {
+    @objc private func changeQty(_ txtQty: UITextField){
         let cell:cellListItem = GlobalFunc.getTableViewCell(view: txtQty) as! cellListItem
         let tbView:UITableView = GlobalFunc.getTableView(view: txtQty) as! UITableView
         let indxPath: IndexPath = tbView.indexPath(for: cell)!
         
         var sQty: Int =  integer(from: cell.txtQty)
-        
+        print(sQty)
         let id: String
         let lProdItem:[String: Any]
         lstPrvOrder = VisitData.shared.ProductCart
