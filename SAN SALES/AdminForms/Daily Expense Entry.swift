@@ -58,11 +58,14 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
     let name:String
     let newname:String
     }
-    struct Pho_ND:Codable{
+    struct Pho_ND:Any{
         let ID : Int
         let Name:String
         let Photo_Mandatory:Int
         var Photo_Nd:Int
+        var remark:String
+        var amount:String
+        var image:[UIImage]
     }
     var imagePicker = UIImagePickerController()
     var images: [UIImage] = []
@@ -78,6 +81,7 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
     var Exp_Datas:[exData]=[]
     var Needs_Entry:[Pho_ND]=[]
     var scroll_hig:Double = 0
+    var Select_index_row:Int = 0
     override func viewDidLoad() {
         super.viewDidLoad()
         getUserDetails()
@@ -167,21 +171,15 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
     }
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-            print(pickedImage)
-            if(SelMod == "BUS"){
-                bus.append(pickedImage)
-            }else if (SelMod == "FOOD"){
-                food.append(pickedImage)
-            }else if (SelMod == "SNACKS"){
-                snk.append(pickedImage)
-                imgs.reloadData()
-            }else{
-                images.append(pickedImage)
-                Photo_List.reloadData()
-                SelWindo.isHidden = false
-                animateOut(desiredView:blureView)
-                animateOut(desiredView:PopUpView)
-            }
+            images = Needs_Entry[Select_index_row].image
+            images.append(pickedImage)
+            Needs_Entry[Select_index_row].image = images
+//                images.append(pickedImage)
+//                Photo_List.reloadData()
+//                SelWindo.isHidden = false
+//                animateOut(desiredView:blureView)
+//                animateOut(desiredView:PopUpView)
+            
         }
         dismiss(animated: true, completion: nil)
     }
@@ -241,14 +239,41 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
             cell.Enter_Rmk.addTarget(self, action: #selector(self.Rem_Text(_:)), for: .editingChanged)
             cell.Enter_Rmk.returnKeyType = .done
             cell.Enter_Rmk.delegate = self
-            cell.Enter_Rmk.addTarget(self, action: #selector(self.Amt_Text(_:)), for: .editingChanged)
+            cell.Ent_Amt.addTarget(self, action: #selector(self.Amt_Text(_:)), for: .editingChanged)
+            cell.Ent_Amt.keyboardType = UIKeyboardType.numberPad
             cell.Ent_Amt.returnKeyType = .done
             cell.Ent_Amt.delegate = self
-            //cell.Cam.image =
-            //cell.Image_View.image =
+            cell.Cam.tag = indexPath.row
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(alertClicked(sender:)))
+            cell.Cam.isUserInteractionEnabled = true
+            cell.Cam.addGestureRecognizer(tapGesture)
+
             
         }
         return cell
+    }
+    @objc private func Rem_Text(_ txtQty: UITextField){
+        let cell: cellListItem = GlobalFunc.getTableViewCell(view: txtQty) as! cellListItem
+        let tbView:UITableView = GlobalFunc.getTableView(view: txtQty)
+        let indxPath: IndexPath = tbView.indexPath(for: cell)!
+        let Remark: String = cell.Enter_Rmk.text ?? ""
+        Needs_Entry[indxPath.row].remark = Remark
+    }
+    @objc private func Amt_Text(_ txtQty: UITextField){
+        let cell: cellListItem = GlobalFunc.getTableViewCell(view: txtQty) as! cellListItem
+        let tbView:UITableView = GlobalFunc.getTableView(view: txtQty)
+        let indxPath: IndexPath = tbView.indexPath(for: cell)!
+        let Amt: String = cell.Ent_Amt.text ?? ""
+        Needs_Entry[indxPath.row].amount = Amt
+        print(Needs_Entry)
+    }
+    @objc func alertClicked(sender: UITapGestureRecognizer) {
+        guard let view = sender.view else {
+            return
+        }
+        print(view.tag)
+        Select_index_row = view.tag
+        OpenpopUp()
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let item = Exp_Datas[indexPath.row]
@@ -300,16 +325,6 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
         DropDown.isHidden = true
     }
  
-    @objc private func Rem_Text(_ txtQty: UITextField){
-        let cell: cellListItem = GlobalFunc.getTableViewCell(view: txtQty) as! cellListItem
-        let Remark: String = cell.Enter_Rmk.text ?? ""
-        print(Remark)
-    }
-    @objc private func Amt_Text(_ txtQty: UITextField){
-        let cell: cellListItem = GlobalFunc.getTableViewCell(view: txtQty) as! cellListItem
-        let Amt: String = cell.Ent_Amt.text ?? ""
-        print(Amt)
-    }
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
@@ -352,18 +367,7 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
         return
        
     }
-    @objc private func Bus_Bill() {
-        SelMod = "BUS"
-        animateIn(desiredView:blureView)
-        animateIn(desiredView:PopUpView2)
-    }
-    @objc private func Food_Bill() {
-        SelMod = "FOOD"
-        animateIn(desiredView:blureView)
-        animateIn(desiredView:PopUpView2)
-    }
-    @objc private func Snacks_Bill() {
-        SelMod = "SNACKS"
+    @objc private func OpenpopUp() {
         animateIn(desiredView:blureView)
         animateIn(desiredView:PopUpView2)
     }
@@ -581,8 +585,8 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
                                         var scrol = 0.0
                                         for i in ExpenseWeb{
                                             Tab_Hig = Tab_Hig+100
-                                            scrol = scrol+70
-                                            Needs_Entry.append(Pho_ND(ID: (i["ID"] as? Int)!, Name: (i["Name"] as? String)!, Photo_Mandatory: (i["Photo_Mandatory"] as? Int)!, Photo_Nd: (i["Photo_Nd"] as? Int)!))
+                                            scrol = scrol+65
+                                            Needs_Entry.append(Pho_ND(ID: (i["ID"] as? Int)!, Name: (i["Name"] as? String)!, Photo_Mandatory: (i["Photo_Mandatory"] as? Int)!, Photo_Nd: (i["Photo_Nd"] as? Int)!,remark: "",amount: "", image: []))
                                         }
                                         scroll_hig = scroll_hig+scrol
                                         Daily_Expense_TB_hig.constant = Tab_Hig
