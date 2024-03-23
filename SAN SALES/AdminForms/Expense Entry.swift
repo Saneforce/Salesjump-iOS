@@ -9,7 +9,16 @@ import UIKit
 import FSCalendar
 import Alamofire
 import Foundation
-
+struct PeriodicData:Codable{
+    let Division_Code:Int
+    let Eff_Month:Int
+    let Eff_Year:Int
+    let From_Date:String
+    let Period_Id:String
+    let Period_Name:String
+    let To_Date:String
+    let dis_Rank:String
+}
 class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, UITableViewDataSource, UITableViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate {
     @IBOutlet weak var BackBT: UIImageView!
     @IBOutlet weak var calendar: FSCalendar!
@@ -26,16 +35,7 @@ class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, 
     @IBOutlet weak var MonthPostion: UILabel!
     @IBOutlet weak var Collection_Of_Month: UICollectionView!
     static let shared = Expense_Entry()
-    struct PeriodicData:Codable{
-        let Division_Code:Int
-        let Eff_Month:Int
-        let Eff_Year:Int
-        let From_Date:String
-        let Period_Id:String
-        let Period_Name:String
-        let To_Date:String
-        let dis_Rank:String
-    }
+
     let LocalStoreage = UserDefaults.standard
     var SFCode: String = "", StateCode: String = "", DivCode: String = "",Desig: String = "",SF_type: String = ""
     var Period:[PeriodicData] = []
@@ -54,8 +54,13 @@ class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, 
     var SelectMonth:String = ""
     var Day_Plan_Data:[AnyObject] = []
     var Set_Date:String = ""
+    var Nav_PeriodicData:[AnyObject] = []
     override func viewDidLoad() {
         super.viewDidLoad()
+        YearPostion.text = selectYear
+        let Month = Calendar.current.component(.month, from: Date()) - 1
+        let formattedPosition = String(format: "%02d", Month + 1)
+        SelectMonth = formattedPosition
         blureView.bounds = self.view.bounds
         PopUpView.bounds = CGRect(x: 0, y: 0, width: self.view.bounds.width * 0.9, height: self.view.bounds.height * 0.4)
         PopUpView.layer.cornerRadius = 10
@@ -67,10 +72,6 @@ class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, 
         Collection_Of_Month.delegate=self
         Collection_Of_Month.dataSource=self
         periodic()
-        YearPostion.text = selectYear
-        let Month = Calendar.current.component(.month, from: Date()) - 1
-        let formattedPosition = String(format: "%02d", Month + 1)
-        SelectMonth = formattedPosition
         BackBT.addTarget(target: self, action: #selector(GotoHome))
         SelPeriod.addTarget(target: self, action: #selector(OpenWindo))
         selectmonth.addTarget(target: self, action: #selector(OpenPopUP))
@@ -282,6 +283,8 @@ class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, 
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let item = Period[indexPath.row]
+        Nav_PeriodicData = [item as AnyObject]
+        print(Nav_PeriodicData)
         removeLabels()
         SelPeriod.text = item.Period_Name
         let dateFormatter = DateFormatter()
@@ -332,6 +335,7 @@ class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, 
        return FDate
     }
     func periodic() {
+        Period.removeAll()
         let axn = "get/periodicWise"
         let apiKey = "\(axn)&desig=\(Desig)&divisionCode=\(DivCode)&div_code=\(DivCode)&month=\(SelectMonth)&rSF=\(SFCode)&year=\(selectYear)&sfCode=\(SFCode)&stateCode=\(StateCode)&sf_code=\(SFCode)"
         let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
@@ -557,6 +561,7 @@ class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, 
             let myDyPln = storyboard.instantiateViewController(withIdentifier: "Daily_Expense_Entry") as! Daily_Expense_Entry
             myDyPln.day_Plan = Day_Plan_Data
             myDyPln.set_Date = Set_Date
+            myDyPln.PeriodicData = Nav_PeriodicData
             viewController.setViewControllers([RptMnuVc,myDyPln], animated: false)
             (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
         })
