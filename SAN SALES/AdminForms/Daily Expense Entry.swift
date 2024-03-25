@@ -53,6 +53,19 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
     @IBOutlet weak var Daily_Expense_TB: UITableView!
     @IBOutlet weak var Daily_Expense_TB_hig: NSLayoutConstraint!
     @IBOutlet weak var CloseBt: UILabel!
+    @IBOutlet weak var Travemoad_View: UIView!
+    @IBOutlet weak var Sta_Km_View: UIView!
+    @IBOutlet weak var Tot_Km_View: UIView!
+    @IBOutlet weak var Calim_Km_View: UIView!
+    @IBOutlet weak var Calim_Amt_View: UIView!
+    @IBOutlet weak var Travel_Mod: UILabel!
+    @IBOutlet weak var Starting_KM: UILabel!
+    @IBOutlet weak var eND_KM: UILabel!
+    @IBOutlet weak var Tota_KM: UILabel!
+    @IBOutlet weak var Per_KM: UILabel!
+    @IBOutlet weak var cALIM_KM: UILabel!
+    @IBOutlet weak var Pers_KM: UILabel!
+    @IBOutlet weak var Claim_Amt: UILabel!
     
     struct exData:Codable{
     let id:String
@@ -642,13 +655,28 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
                                             scroll_hig = scroll_hig - viewHeight
                                             Scrollview_Height.constant = scroll_hig
                                         }else{
-                                            
                                             print(travel_data)
                                             if travel_data[0]["StEndNeed"] as? String == "0" {
                                                 Travel_Det_Height.constant = 35
-                                                scroll_hig = scroll_hig + 35
+                                                scroll_hig = scroll_hig - 200
                                                 Scrollview_Height.constant = scroll_hig
+                                                Sta_Km_View.isHidden = true
+                                                Tot_Km_View.isHidden = true
+                                                Calim_Km_View.isHidden = true
+                                                Calim_Amt_View.isHidden = true
                                             }
+                                            Travel_Mod.text = travel_data[0]["MOT_Name"] as? String
+                                            Starting_KM.text = travel_data[0]["Start_Km"] as? String
+                                            eND_KM.text = travel_data[0]["Start_Km"] as? String
+                                            Tota_KM.text = travel_data[0]["End_Km"] as? String
+                                            if let personalKm = travel_data.first?["Personal_Km"] as? Int {
+                                                Per_KM.text = String(personalKm)
+                                            } else {
+                                                Per_KM.text = "0"
+                                            }
+                                            cALIM_KM.text = "0"//travel_data[0]["Personal_Km"] as? String
+                                            Pers_KM.text = String((travel_data[0]["Fuel_Charge"] as? Int)!)
+                                            Claim_Amt.text = "00.0"
                                             
                                             From_Text.text = travel_data[0]["From_Place"] as? String
                                             To_Text.text = travel_data[0]["To_Place"] as? String
@@ -680,8 +708,11 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
     }
     
     @IBAction func Save_Exp(_ sender: Any) {
-       
         
+        let alert = UIAlertController(title: "Confirmation", message: "Do you want to submit this Visit Without Order ?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { [self] _ in
+        
+        self.ShowLoading(Message: "Data Submitting Please wait...")
         Expense_data[0].Routename = From_Text.text!
         Expense_data[0].Toworkplace = To_Text.text!
         let axn = "dcr/save"
@@ -748,6 +779,7 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
             self.LoadingDismiss()
             switch AFdata.result {
             case .success(let value):
+                self.LoadingDismiss()
                 if let json = value as? [ String:AnyObject] {
                     guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
                         print("Error: Cannot convert JSON object to Pretty JSON data")
@@ -757,16 +789,23 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
                         print("Error: Could print JSON in String")
                         return
                     }
-                    
                     print(prettyPrintedJson)
-                        self.resignFirstResponder()
-                        self.navigationController?.popViewController(animated: true)
+                    self.resignFirstResponder()
+                    self.navigationController?.popViewController(animated: true)
+                    Toast.show(message: "submitted successfully", controller: self)
                         }
             case .failure(let error):
                 Toast.show(message: error.errorDescription!)
             }
             
         }
+        }
+        
+        )
+        alert.addAction(UIAlertAction(title: "Cancel", style: .destructive) { _ in
+            return
+        })
+        self.present(alert, animated: true)
     }
     @IBAction func Close_Drop(_ sender: Any) {
         self.resignFirstResponder()
