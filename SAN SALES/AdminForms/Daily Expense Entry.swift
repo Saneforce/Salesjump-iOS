@@ -52,6 +52,7 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
     @IBOutlet weak var Daily_EX_Head: UILabel!
     @IBOutlet weak var Daily_Expense_TB: UITableView!
     @IBOutlet weak var Daily_Expense_TB_hig: NSLayoutConstraint!
+    @IBOutlet weak var CloseBt: UILabel!
     
     struct exData:Codable{
     let id:String
@@ -119,6 +120,7 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
     var Select_index_row:Int = 0
     var Bill_photo_Ned:[Bill_Photo] = []
     var Expense_data:[Expense_New] = []
+    var Select_index_Del:Int = 0
     override func viewDidLoad() {
         super.viewDidLoad()
         Expense_data.append(Expense_New(WorkType: "", mydayplanWorkPlace: "", Routename: "", Enterdate: "", KM: "", Billamount: "", HQ: "", stayingtype: 0, MOT: "", mot_id: "", st_endNeed: "", max_km: "", fuel_charge: 0, exp_km: "", exp_amount: "", TotalAmount: "", Toworkplace: "", period_name: "", period_id: "", from_date: "", to_date: "", srt_km: "", end_km: "", exp_auto: "", exp_process_type: ""))
@@ -126,6 +128,7 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
         blureView.bounds = self.view.bounds
         PopUpView.bounds = CGRect(x: 0, y: 0, width: self.view.bounds.width * 0.9, height: self.view.bounds.height * 0.2)
         PopUpView.layer.cornerRadius = 10
+    
         Photo_List.delegate = self
         Photo_List.dataSource = self
         Daily_Expense_TB.delegate = self
@@ -148,6 +151,7 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
         Daily_Exp_photos.addTarget(target: self, action: #selector(Add_Pho))
         Allo_Typ.addTarget(target: self, action: #selector(openAllowance))
         Stayingtyp.addTarget(target: self, action: #selector(openStaying_Typ))
+        CloseBt.addTarget(target: self, action: #selector(CloseImag))
         set_form()
         travel_data(date: set_Date!)
         DAExp_ND()
@@ -179,6 +183,16 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
                 Expense_data[0].period_name = periodicData.Period_Name
             }
         }
+        
+        
+//        // Assuming you have already set the delegate and data source of the collection view
+//         let layout = self.imgs.collectionViewLayout as! UICollectionViewFlowLayout
+//         layout.sectionInset = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
+//         layout.minimumInteritemSpacing = 5
+//
+//         // Adjust item size to fit two items in each row
+//         let width = (self.imgs.frame.size.width - 20 - layout.minimumInteritemSpacing) / 2
+//         layout.itemSize = CGSize(width: width, height: self.imgs.frame.size.height / 3)
     }
     func getUserDetails(){
     let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
@@ -264,9 +278,22 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
         let cell:CollectionCell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! CollectionCell
         print(snk)
         cell.imgProduct.image = snk[indexPath.row]
+        cell.Del_Img.tag = indexPath.row
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(Delet_Img(sender:)))
+        cell.Del_Img.isUserInteractionEnabled = true
+        cell.Del_Img.addGestureRecognizer(tapGesture)
         return cell
     }
     
+    @objc func Delet_Img(sender: UITapGestureRecognizer) {
+        guard let view = sender.view else {
+            return
+        }
+        snk.remove(at: view.tag)
+        Needs_Entry[Select_index_Del].image = snk
+        imgs.reloadData()
+    }
+ 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if Photo_List == tableView{
             return 100
@@ -379,6 +406,7 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
         guard let view = sender.view else {
             return
         }
+        Select_index_Del = view.tag
         snk=Needs_Entry[view.tag].image
         imgs.reloadData()
         openImag()
@@ -508,6 +536,11 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
         animateIn(desiredView:blureView)
         animateIn(desiredView:IMG_Scr)
     }
+    @objc private func CloseImag() {
+        Daily_Expense_TB.reloadData()
+        animateOut(desiredView:blureView )
+        animateOut(desiredView:IMG_Scr)
+    }
     @objc private func openAllowance(){
         Drop_Down_Title.text = "Select Allowance Type"
         DropDown.isHidden = false
@@ -574,7 +607,6 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
             sel_TB.reloadData()
         }
     }
-    
     func travel_data(date:String){
         let axn = "get/travel_data"
         let apiKey = "\(axn)&date=\(date)&desig=\(Desig)&divisionCode=\(DivCode)&div_code=\(DivCode)&rSF=\(SFCode)&dsg_code=547&sfCode=\(SFCode)&stateCode=\(StateCode)&state_code=\(StateCode)&sf_code=\(SFCode)"
@@ -610,6 +642,14 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
                                             scroll_hig = scroll_hig - viewHeight
                                             Scrollview_Height.constant = scroll_hig
                                         }else{
+                                            
+                                            print(travel_data)
+                                            if travel_data[0]["StEndNeed"] as? String == "0" {
+                                                Travel_Det_Height.constant = 35
+                                                scroll_hig = scroll_hig + 35
+                                                Scrollview_Height.constant = scroll_hig
+                                            }
+                                            
                                             From_Text.text = travel_data[0]["From_Place"] as? String
                                             To_Text.text = travel_data[0]["To_Place"] as? String
                                             From_Text.isEnabled = false
