@@ -1386,16 +1386,16 @@
                                                                     <textInputTraits key="textInputTraits"/>
                                                                 </textField>
                                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="camera.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="Jnd-Zu-Hei">
-                                                                    <rect key="frame" x="288" y="15.333333333333334" width="25" height="18.999999999999993"/>
+                                                                    <rect key="frame" x="288" y="15.333333333333336" width="25" height="18.999999999999986"/>
                                                                     <color key="tintColor" red="0.062745098040000002" green="0.67843137249999996" blue="0.76078431369999999" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="width" constant="25" id="l5j-MQ-OVN"/>
                                                                     </constraints>
                                                                 </imageView>
                                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Outbox" translatesAutoresizingMaskIntoConstraints="NO" id="4yR-ux-2Py">
-                                                                    <rect key="frame" x="321" y="11.333333333333336" width="20" height="28"/>
+                                                                    <rect key="frame" x="321" y="0.0" width="46" height="39.333333333333336"/>
                                                                     <constraints>
-                                                                        <constraint firstAttribute="width" constant="20" id="cGh-ee-IKZ"/>
+                                                                        <constraint firstAttribute="width" constant="46" id="cGh-ee-IKZ"/>
                                                                     </constraints>
                                                                 </imageView>
                                                                 <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Remarks" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="IG2-UO-V44">
@@ -1411,9 +1411,9 @@
                                                             <constraints>
                                                                 <constraint firstItem="NmN-9Z-JuA" firstAttribute="leading" secondItem="T2c-lE-Wgf" secondAttribute="trailing" constant="7.6666666666666572" id="0cW-Tr-79m"/>
                                                                 <constraint firstItem="Jnd-Zu-Hei" firstAttribute="leading" secondItem="NmN-9Z-JuA" secondAttribute="trailing" constant="6.3333333333332575" id="6h5-zo-ymv"/>
-                                                                <constraint firstAttribute="trailingMargin" secondItem="4yR-ux-2Py" secondAttribute="trailing" constant="13" id="6l6-pK-VL9"/>
+                                                                <constraint firstAttribute="trailingMargin" secondItem="4yR-ux-2Py" secondAttribute="trailing" constant="-13" id="6l6-pK-VL9"/>
                                                                 <constraint firstItem="IG2-UO-V44" firstAttribute="top" secondItem="NmN-9Z-JuA" secondAttribute="bottom" constant="5.6699999999999999" id="8f6-0V-C7X"/>
-                                                                <constraint firstItem="4yR-ux-2Py" firstAttribute="top" secondItem="cav-hu-vUr" secondAttribute="topMargin" constant="0.33000000000000002" id="AXK-Ec-pPe"/>
+                                                                <constraint firstItem="4yR-ux-2Py" firstAttribute="top" secondItem="cav-hu-vUr" secondAttribute="topMargin" constant="-11" id="AXK-Ec-pPe"/>
                                                                 <constraint firstItem="Jnd-Zu-Hei" firstAttribute="top" secondItem="cav-hu-vUr" secondAttribute="topMargin" constant="3.3300000000000001" id="IWJ-tL-73r"/>
                                                                 <constraint firstItem="NmN-9Z-JuA" firstAttribute="top" secondItem="cav-hu-vUr" secondAttribute="topMargin" constant="0.33000000000000002" id="LsU-Fz-46r"/>
                                                                 <constraint firstAttribute="bottom" secondItem="IG2-UO-V44" secondAttribute="bottom" constant="15" id="NeV-Bf-ogo"/>
@@ -1788,7 +1788,7 @@
                         <outlet property="blureView" destination="89k-5G-w9o" id="plZ-Cx-3Ao"/>
                         <outlet property="camera" destination="PP9-ji-7uG" id="c8K-bd-yUt"/>
                         <outlet property="eye" destination="RPV-J9-qgb" id="h7k-PL-fxV"/>
-                        <outlet property="imgs" destination="XbI-eF-8I4" id="wNe-kt-Q5d"/>
+                        <outlet property="imgs" destination="7UY-t0-xtE" id="bVH-Up-nmm"/>
                         <outlet property="paperclip" destination="X3l-pn-pWV" id="zoI-3H-H9k"/>
                         <outlet property="sel_TB" destination="gdU-rx-iwm" id="6JW-KM-XrY"/>
                         <outlet property="sub_Scrollview" destination="hyU-Fa-opJ" id="8qo-bq-iir"/>
@@ -1896,43 +1896,42 @@
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                 </view>
                 <view contentMode="scaleToFill" id="bYW-eJ-F7Y">
-                    <rect key="frame" x="0.0" y="0.0" width="322" height="538"/>
+                    <rect key="frame" x="0.0" y="0.0" width="367" height="642"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="CLOSE" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LP6-6D-Eff">
-                            <rect key="frame" x="227" y="483" width="73" height="21"/>
+                            <rect key="frame" x="272" y="587" width="73" height="21"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" name="Poppins-SemiBold" family="Poppins" pointSize="15"/>
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="XbI-eF-8I4">
-                            <rect key="frame" x="16" y="47" width="240" height="128"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="7UY-t0-xtE">
+                            <rect key="frame" x="16" y="47" width="132" height="123"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                            <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="4eC-j1-DxA">
-                                <size key="itemSize" width="204" height="127"/>
+                            <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="x9n-IC-6li">
+                                <size key="itemSize" width="128" height="128"/>
                                 <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                 <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                 <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                             </collectionViewFlowLayout>
                             <cells>
-                                <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Cell" id="kKe-TE-Ly4" customClass="CollectionCell" customModule="SAN_SALES" customModuleProvider="target">
-                                    <rect key="frame" x="18" y="0.0" width="204" height="127"/>
+                                <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Cell" id="8Yg-EC-fQC" customClass="CollectionCell" customModule="SAN_SALES" customModuleProvider="target">
+                                    <rect key="frame" x="2" y="0.0" width="128" height="128"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="czA-Fq-Iz6">
-                                        <rect key="frame" x="0.0" y="0.0" width="204" height="127"/>
+                                    <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="yup-kb-yWr" customClass="CollectionCell" customModule="SAN_SALES" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <subviews>
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="Lsb-Gk-GrP">
-                                                <rect key="frame" x="0.0" y="0.0" width="204" height="127"/>
-                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zMi-Dk-KYR">
+                                                <rect key="frame" x="0.0" y="0.0" width="128" height="120"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             </imageView>
                                         </subviews>
                                     </collectionViewCellContentView>
-                                    <size key="customSize" width="204" height="127"/>
                                     <connections>
-                                        <outlet property="imgProduct" destination="Lsb-Gk-GrP" id="oVX-7s-d8B"/>
+                                        <outlet property="imgProduct" destination="zMi-Dk-KYR" id="xty-JL-YA6"/>
                                     </connections>
                                 </collectionViewCell>
                             </cells>
