@@ -196,16 +196,7 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
                 Expense_data[0].period_name = periodicData.Period_Name
             }
         }
-        
-        
-//        // Assuming you have already set the delegate and data source of the collection view
-//         let layout = self.imgs.collectionViewLayout as! UICollectionViewFlowLayout
-//         layout.sectionInset = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
-//         layout.minimumInteritemSpacing = 5
-//
-//         // Adjust item size to fit two items in each row
-//         let width = (self.imgs.frame.size.width - 20 - layout.minimumInteritemSpacing) / 2
-//         layout.itemSize = CGSize(width: width, height: self.imgs.frame.size.height / 3)
+
     }
     func getUserDetails(){
     let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
@@ -349,20 +340,24 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
             Search_lbl.delegate = self
         }else if (Daily_Expense_TB == tableView){
             let item = Needs_Entry[indexPath.row]
-            print(item)
             cell.lblText.text = Needs_Entry[indexPath.row].Name
+            print(Needs_Entry)
             if item.Photo_Nd == 0 {
                 cell.Cam.isHidden = true
+            }else{
+                cell.Cam.isHidden = false
             }
             if item.remark == "" {
                 cell.Enter_Rmk.placeholder = "Remarks"
             }else{
+                print(item.remark)
                 cell.Enter_Rmk.text = item.remark
             }
             if item.amount == "" {
-                cell.Enter_Rmk.placeholder = "Amount"
+                cell.Ent_Amt.placeholder = "Amount"
             }else{
-                cell.Enter_Rmk.text = item.amount
+                print(item.amount)
+                cell.Ent_Amt.text = item.amount
             }
             if item.image.isEmpty{
                 cell.Image_View.isHidden = true
@@ -658,7 +653,7 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
                                             print(travel_data)
                                             if travel_data[0]["StEndNeed"] as? String == "0" {
                                                 Travel_Det_Height.constant = 35
-                                                scroll_hig = scroll_hig - 200
+                                                scroll_hig = scroll_hig - 250
                                                 Scrollview_Height.constant = scroll_hig
                                                 Sta_Km_View.isHidden = true
                                                 Tot_Km_View.isHidden = true
@@ -720,43 +715,41 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
         let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
         let url = APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKeyWithoutCommas
         print(Needs_Entry)
-        var Activity_img_url:[String]=[]
         var Activity_img_url2:String = ""
-        var CamItem: String = ""
-        for i in Needs_Entry {
-            CamItem += "{"
-            CamItem += " \"ID\": \"" + String(i.ID) + "\","
-            CamItem += " \"Name\": \"" + i.Name + "\","
-            CamItem += " \"amt\": \"" + i.amount + "\","
-            CamItem += " \"exp_remarks\": \"" + i.remark + "\","
-            if !i.image.isEmpty {
-                CamItem += " \"imgData\": ["
-                for (index, image) in i.image_name.enumerated() {
-                    Activity_img_url2 = Activity_img_url2 + image + ","
-                    CamItem += "\"" + image.description + "\""
-                    if index < i.image_name.count - 1 {
-                        CamItem += ","
+            var CamItem: String = ""
+            for i in Needs_Entry {
+                CamItem += "{"
+                CamItem += " \"ID\": " + String(i.ID) + ","
+                CamItem += " \"Name\": \"" + i.Name + "\","
+                CamItem += " \"amt\": \"" + i.amount + "\","
+                CamItem += " \"exp_remarks\": \"" + i.remark + "\","
+                if !i.image.isEmpty {
+                    CamItem += " \"imgData\": \""
+                    for (index, image) in i.image_name.enumerated() {
+                        Activity_img_url2 = Activity_img_url2 + image + ","
+                        CamItem += image.description
+                        if index < i.image_name.count - 1 {
+                            CamItem += ","
+                        }
                     }
-                }
-                CamItem += "],"
-                
-                CamItem += " \"prvImage\": ["
-                for (index, image) in i.image_name.enumerated() {
-                    CamItem += "\"" + image.description + "\""
-                    if index < i.image_name.count - 1 {
-                        CamItem += ","
+                    CamItem += "\","
+                    
+                    CamItem += " \"prvImage\": \""
+                    for (index, image) in i.image_name.enumerated() {
+                        CamItem += image.description
+                        if index < i.image_name.count - 1 {
+                            CamItem += ","
+                        }
                     }
+                    CamItem += "\","
+                } else {
+                    CamItem += " \"imgData\": \"\","
+                    CamItem += " \"prvImage\": \"\","
                 }
-                CamItem += "],"
-            } else {
-                CamItem += " \"imgData\": [],"
-                CamItem += " \"prvImage\": [],"
+                CamItem += " \"Photo_Nd\": " + String(i.Photo_Nd) + ""
+                CamItem += "},"
             }
-            CamItem += " \"Photo_Nd\": \"" + String(i.Photo_Nd) + "\""
-            CamItem += "},"
-        }
-        CamItem = String(CamItem.dropLast())
-        
+            CamItem = String(CamItem.dropLast())
         var Bill_Det = ""
         for B in Bill_photo_Ned {
             Activity_img_url2 = Activity_img_url2 + B.imgurl + ","
@@ -767,7 +760,7 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
         Bill_Det = String(Bill_Det.dropLast())
         Activity_img_url2 = String(Activity_img_url2.dropLast())
         print(Activity_img_url2)
-        let jsonString = "[{\"dailyExpenseNew\":[" + CamItem + "]},{\"EA\":{\"MOT\":\"\(Expense_data[0].MOT)\"}},{\"ActivityCaptures\":[{\"imgurl\":"+Activity_img_url2+"}]},{\"Expense_New\":{\"WorkType\":\"\(Expense_data[0].WorkType)\",\"mydayplanWorkPlace\":\"\(Expense_data[0].mydayplanWorkPlace)\",\"Routename\":\"\(Expense_data[0].Routename)\",\"Enterdate\":\"\(Expense_data[0].Enterdate)\",\"KM\":\(Expense_data[0].KM),\"Billamount\":\(Expense_data[0].Billamount),\"HQ\":\"\(Expense_data[0].HQ)\",\"stayingtype\":\(Expense_data[0].stayingtype),\"MOT\":\"\(Expense_data[0].MOT)\",\"mot_id\":\"\(Expense_data[0].mot_id)\",\"st_endNeed\":\"\(Expense_data[0].st_endNeed)\",\"max_km\":\"\(Expense_data[0].max_km)\",\"fuel_charge\":\"\(Expense_data[0].fuel_charge)\",\"exp_km\":\"\(Expense_data[0].exp_km)\",\"exp_amount\":\"\(Expense_data[0].exp_amount)\",\"TotalAmount\":\"\(Expense_data[0].TotalAmount)\",\"Toworkplace\":\"\(Expense_data[0].Toworkplace)\",\"period_name\":\"\(Expense_data[0].period_name)\",\"period_id\":\"\(Expense_data[0].period_id)\",\"from_date\":\"\(Expense_data[0].from_date)\",\"to_date\":\"\(Expense_data[0].to_date)\",\"srt_km\":\"\(Expense_data[0].srt_km)\",\"end_km\":\"\(Expense_data[0].end_km)\",\"exp_auto\":\(Expense_data[0].exp_auto),\"exp_process_type\":\(Expense_data[0].exp_process_type)}},{\"HotelBillAttachment\":[" + Bill_Det + "]}]"
+        let jsonString = "[{\"dailyExpenseNew\":[" + CamItem + "]},{\"EA\":{\"MOT\":\"\(Expense_data[0].MOT)\"}},{\"ActivityCaptures\":[{\"imgurl\":\""+Activity_img_url2+"\"}]},{\"Expense_New\":{\"WorkType\":\"\(Expense_data[0].WorkType)\",\"mydayplanWorkPlace\":\"\(Expense_data[0].mydayplanWorkPlace)\",\"Routename\":\"\(Expense_data[0].Routename)\",\"Enterdate\":\"\(Expense_data[0].Enterdate)\",\"KM\":0.0,\"Billamount\":0.0,\"HQ\":\"\(Expense_data[0].HQ)\",\"stayingtype\":\(Expense_data[0].stayingtype),\"MOT\":\"\(Expense_data[0].MOT)\",\"mot_id\":\"\(Expense_data[0].mot_id)\",\"st_endNeed\":\"\(Expense_data[0].st_endNeed)\",\"max_km\":\"\(Expense_data[0].max_km)\",\"fuel_charge\":\"\(Expense_data[0].fuel_charge)\",\"exp_km\":\"\(Expense_data[0].exp_km)\",\"exp_amount\":\"\(Expense_data[0].exp_amount)\",\"TotalAmount\":\"\(Expense_data[0].TotalAmount)\",\"Toworkplace\":\"\(Expense_data[0].Toworkplace)\",\"period_name\":\"\(Expense_data[0].period_name)\",\"period_id\":\"\(Expense_data[0].period_id)\",\"from_date\":\"\(Expense_data[0].from_date)\",\"to_date\":\"\(Expense_data[0].to_date)\",\"srt_km\":\"\(Expense_data[0].srt_km)\",\"end_km\":\"\(Expense_data[0].end_km)\",\"exp_auto\":0,\"exp_process_type\":0}},{\"HotelBillAttachment\":[" + Bill_Det + "]}]"
         
         let params: Parameters = [
             "data": jsonString
@@ -797,7 +790,6 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
             case .failure(let error):
                 Toast.show(message: error.errorDescription!)
             }
-            
         }
         }
         

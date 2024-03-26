@@ -1416,7 +1416,7 @@
                                                                     <textInputTraits key="textInputTraits"/>
                                                                 </textField>
                                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="camera.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="Jnd-Zu-Hei">
-                                                                    <rect key="frame" x="288" y="15.333333333333334" width="25" height="18.999999999999993"/>
+                                                                    <rect key="frame" x="288" y="15.333333333333336" width="25" height="18.999999999999986"/>
                                                                     <color key="tintColor" red="0.062745098040000002" green="0.67843137249999996" blue="0.76078431369999999" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="width" constant="25" id="l5j-MQ-OVN"/>
@@ -1915,7 +1915,6 @@
                             <state key="normal" image="multiply.circle.fill" catalog="system"/>
                             <connections>
                                 <action selector="ClosePopUP:" destination="sHQ-z5-EOE" eventType="touchUpInside" id="EFi-hk-23r"/>
-                                <action selector="Closwindo:" destination="Sut-if-AhS" eventType="touchUpInside" id="g4F-Sk-LtU"/>
                             </connections>
                         </button>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Select Image from ?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hdj-ff-hEo">
