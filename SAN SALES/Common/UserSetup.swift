@@ -33,6 +33,8 @@ class UserSetup{
     var OrderMode: item = item()
     var Division_SName:String = ""
     var CurentMonthPostion:Int = 0
+    var exp_auto:Int = 0
+    var exp_process_type:Int = 0
     func initUserSetup(){
         let SetupStoreage = UserDefaults.standard
         let SetupData: String=SetupStoreage.string(forKey: "UserSetup")!
@@ -59,6 +61,8 @@ class UserSetup{
         Mandator = lstSetups[0]["Mandatory"] as? String ?? ""
         Phone_Country_Length = lstSetups[0]["Phone_Country_Length"] as? String ?? ""
         Division_SName = lstSetups[0]["Division_SName"] as? String ?? ""
+        exp_auto = lstSetups[0]["exp_auto"] as? Int ?? 0
+        exp_process_type = lstSetups[0]["exp_process_type"] as? Int ?? 0
         print(UserSetup.shared.Phone_Country_Length)
         if(lstSetups[0]["Geo_Fencing"] as? Int == 1){
             Fenching = true

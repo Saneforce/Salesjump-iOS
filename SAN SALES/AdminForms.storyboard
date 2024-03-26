@@ -1797,6 +1797,8 @@
                         <outlet property="Daily_Expense_TB_hig" destination="hOH-FJ-42g" id="lLI-25-Afn"/>
                         <outlet property="DropDown" destination="T7q-Ud-P5f" id="oHb-BQ-QzT"/>
                         <outlet property="Drop_Down_Title" destination="gwg-46-uvX" id="K6S-Pi-hXc"/>
+                        <outlet property="EnterKM" destination="ncf-QY-itd" id="Zjz-be-gVE"/>
+                        <outlet property="Enter_Bill_Amount" destination="6FJ-hC-9wS" id="LB4-cq-RPf"/>
                         <outlet property="Enter_KM" destination="Ffj-f6-pHS" id="E6Q-X1-CMw"/>
                         <outlet property="Enter_KM_hig" destination="wWz-fB-Fvl" id="7B6-8O-eXO"/>
                         <outlet property="From_Text" destination="L8i-JI-uaf" id="s5f-eY-eLo"/>
