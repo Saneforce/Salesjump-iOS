@@ -722,7 +722,12 @@ class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, 
             }
         }
     }
-    
+    func send_forApproval_periodic(){
+        let axn = "send_forApproval_periodic"
+        let apiKey = "\(axn)&desig=\(Desig)&divisionCode=\(DivCode)&month=03&from_date=2024-03-15&to_date=2024-03-21&rSF=\(SFCode)&year=2024&sfCode=\(SFCode)&stateCode=\(StateCode)&period_id=59&sf_code=\(SFCode)"
+        let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
+        let url = APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKeyWithoutCommas
+    }
 }
 
 class MonthsView: UIView {

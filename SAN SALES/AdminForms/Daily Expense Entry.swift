@@ -714,6 +714,11 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
     }
     
     @IBAction func Save_Exp(_ sender: Any) {
+        
+        if validateForm() == false {
+            return
+        }
+        
         var KM =  EnterKM.text
         if KM == ""{
             Expense_data[0].KM = "0"
@@ -885,7 +890,6 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
     }
     
     func DAExp_ND(){
-   
         let axn = "get/DAExp"
         let apiKey = "\(axn)&State_Code=\(StateCode)&desig=\(Desig)&divisionCode=\(DivCode)&rSF=\(SFCode)&sfCode=\(SFCode)&stateCode=\(StateCode)"
         let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
@@ -934,5 +938,32 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
                     Toast.show(message: error.errorDescription ?? "Unknown Error")
             }
         }
+    }
+    func validateForm() -> Bool {
+
+        if (From_Text.text == "") {
+            Toast.show(message: "Enter From")
+            return false
+        }else if (To_Text.text == ""){
+            Toast.show(message: "Enter To")
+            return false
+        }else if (Allo_Typ.text == "Allowance Type"){
+            Toast.show(message: "Select Allowance Type")
+            return false
+        }else if (Allo_Typ.text == "OS" || Allo_Typ.text == "EX"){
+            if (Stayingtyp.text == "Select Type"){
+                Toast.show(message: "Select Staying Type")
+                return false
+            }else if(Stayingtyp.text == "With Hotel"){
+                if (Enter_Bill_Amount.text == "") {
+                    Toast.show(message: "Enter the Bill Amount")
+                    return false
+                }else if (Bill_photo_Ned.count == 0){
+                    Toast.show(message: "Please Select Hotel expense Photo")
+                    return false
+            }
+            }
+        }
+        return true
     }
 }
