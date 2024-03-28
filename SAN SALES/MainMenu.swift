@@ -87,6 +87,8 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
         if (UserSetup.shared.AddDistibutor_Nd == 1){
             strMasList.append(mnuItem.init(MasId:14, MasName: "Add \(UserSetup.shared.StkCap)", MasImage: "AdminForms"))
         }
+        strMasList.append(mnuItem.init(MasId:15, MasName: "Start Expense", MasImage: "Start_Expense"))
+        strMasList.append(mnuItem.init(MasId:16, MasName: "End Expense", MasImage: "Day_End"))
         menuClose.addTarget(target: self, action: #selector(closeMenuWin))
         tbMenuDetail.delegate=self
         tbMenuDetail.dataSource=self
@@ -324,6 +326,12 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
             viewController.setViewControllers([myDyPln], animated: false)
         }else if lItm.MasId == 14{
             let myDyPln = storyboard.instantiateViewController(withIdentifier: "AddDistributor") as! Add_Distributor
+            viewController.setViewControllers([myDyPln], animated: false)
+        }else if lItm.MasId == 15{
+            let myDyPln = storyboard.instantiateViewController(withIdentifier: "Start_Expense") as! Start_Expense
+            viewController.setViewControllers([myDyPln], animated: false)
+        }else if lItm.MasId == 16{
+            let myDyPln = storyboard.instantiateViewController(withIdentifier: "End_Expense") as! End_Expense
             viewController.setViewControllers([myDyPln], animated: false)
         }
         (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)

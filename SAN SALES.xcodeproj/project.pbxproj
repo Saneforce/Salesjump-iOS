@@ -17,6 +17,8 @@
 		386A43952A1CC63100CE1833 /* PrimarySubmittedDCR.swift in Sources */ = {isa = PBXBuildFile; fileRef = 386A43942A1CC63100CE1833 /* PrimarySubmittedDCR.swift */; };
 		3883A09C2A176B6300B858CF /* SubmittedCalls.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3883A09B2A176B6300B858CF /* SubmittedCalls.swift */; };
 		3894BC5D2B919A0E0019B40A /* Add Route.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3894BC5C2B919A0E0019B40A /* Add Route.swift */; };
+		38A1859D2BB53D4700E01407 /* Start Expense.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38A1859C2BB53D4700E01407 /* Start Expense.swift */; };
+		38A1859F2BB53D5D00E01407 /* End Expense.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38A1859E2BB53D5D00E01407 /* End Expense.swift */; };
 		38A2E9B22A0E1B940061B854 /* Brand Availability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38A2E9B12A0E1B940061B854 /* Brand Availability.swift */; };
 		38B05F502B04CAE50025D4C0 /* ManagerDashboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 38B05F4F2B04CAE50025D4C0 /* ManagerDashboard.storyboard */; };
 		38B05F542B05D7040025D4C0 /* ManagerDashboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38B05F532B05D7040025D4C0 /* ManagerDashboard.swift */; };
@@ -110,6 +112,8 @@
 		386A43942A1CC63100CE1833 /* PrimarySubmittedDCR.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimarySubmittedDCR.swift; sourceTree = "<group>"; };
 		3883A09B2A176B6300B858CF /* SubmittedCalls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmittedCalls.swift; sourceTree = "<group>"; };
 		3894BC5C2B919A0E0019B40A /* Add Route.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Add Route.swift"; sourceTree = "<group>"; };
+		38A1859C2BB53D4700E01407 /* Start Expense.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Start Expense.swift"; sourceTree = "<group>"; };
+		38A1859E2BB53D5D00E01407 /* End Expense.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "End Expense.swift"; sourceTree = "<group>"; };
 		38A2E9B12A0E1B940061B854 /* Brand Availability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Brand Availability.swift"; sourceTree = "<group>"; };
 		38B05F4F2B04CAE50025D4C0 /* ManagerDashboard.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ManagerDashboard.storyboard; sourceTree = "<group>"; };
 		38B05F532B05D7040025D4C0 /* ManagerDashboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagerDashboard.swift; sourceTree = "<group>"; };
@@ -287,6 +291,8 @@
 				38D0F76729BB2447003EEB03 /* BrandReviewVisit.swift */,
 				3894BC5C2B919A0E0019B40A /* Add Route.swift */,
 				38C5A97F2B958AFB00EF4584 /* Add Distributor.swift */,
+				38A1859C2BB53D4700E01407 /* Start Expense.swift */,
+				38A1859E2BB53D5D00E01407 /* End Expense.swift */,
 			);
 			path = Activity;
 			sourceTree = "<group>";
@@ -597,6 +603,7 @@
 				3F2F811F27D0E7430015E1CA /* HomePageViewController.swift in Sources */,
 				38A2E9B22A0E1B940061B854 /* Brand Availability.swift in Sources */,
 				3F0861BF2801D589006A30FB /* CollectionCell.swift in Sources */,
+				38A1859D2BB53D4700E01407 /* Start Expense.swift in Sources */,
 				3F06352E283BF36A0027842E /* FlowLayout.swift in Sources */,
 				3F06352A283A8C920027842E /* ColorTheme.swift in Sources */,
 				38D0F76829BB2447003EEB03 /* BrandReviewVisit.swift in Sources */,
@@ -649,6 +656,7 @@
 				3F0861C328053B3A006A30FB /* UserSetup.swift in Sources */,
 				38F6F5AF2B19D2ED007090BF /* Location.swift in Sources */,
 				3F2F810B27CEB30C0015E1CA /* AppDelegate.swift in Sources */,
+				38A1859F2BB53D5D00E01407 /* End Expense.swift in Sources */,
 				382103F52BA16B83005C02CD /* Expense Entry.swift in Sources */,
 				3F063530283E04580027842E /* PrimaryVisit.swift in Sources */,
 				3F2F810D27CEB30C0015E1CA /* SceneDelegate.swift in Sources */,
