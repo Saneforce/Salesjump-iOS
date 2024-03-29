@@ -87,7 +87,8 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
     public static var SfidString: String=""
     var leavWorktype: String = ""
     let LocalStoreage = UserDefaults.standard
-    
+    var exp_Need:String = ""
+    var lstPlnDetail: [AnyObject] = []
     override func viewDidLoad() {
         super.viewDidLoad()
         txRem.text = "Enter the Remarks"
@@ -376,6 +377,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         let item: [String: Any]=lObjSel[indexPath.row] as! [String : Any]
         let name=item["name"] as! String
         print(item)
+        exp_Need = (item["exp_needed"] as? String)!
         var id = ""
         if let ids=item["id"] as? String {
             id = ids
@@ -991,15 +993,30 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                                        print("Error: Could print JSON in String")
                                        return
                                    }
-
                                    print(prettyPrintedJson)
+                                let PlnDets: String=LocalStoreage.string(forKey: "Mydayplan")!
+                                if let list = GlobalFunc.convertToDictionary(text: PlnDets) as? [AnyObject] {
+                                    lstPlnDetail = list;
+                                }
                                    let LocalStoreage = UserDefaults.standard
                                    LocalStoreage.set(prettyPrintedJson, forKey: "Mydayplan")
-                                
+                                 print(LocalStoreage)
+                                print(self.exp_Need)
+                                self.exp_Need = "2"
+                                if (self.exp_Need == "1") {
+                               // Naviagte To Strat Expense
+                                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                                let viewControllers = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
+                                let myDyPln = storyboard.instantiateViewController(withIdentifier: "Start_Expense") as! Start_Expense
+                                 myDyPln.Screan_Heding = "My day plan"
+                                 myDyPln.Show_Date = true
+                                viewControllers.setViewControllers([myDyPln], animated: false)
+                                (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewControllers)
+                                }else{
                                     let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
                                     UIApplication.shared.windows.first?.rootViewController = viewController
                                     UIApplication.shared.windows.first?.makeKeyAndVisible()
-                                
+                                }
                                     Toast.show(message: "My day plan submitted successfully", controller: self)
                                case .failure(let error):
                                    print(error.errorDescription!)

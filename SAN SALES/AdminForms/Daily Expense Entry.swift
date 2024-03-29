@@ -850,7 +850,6 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
     
     
     func DateofExpense(){
-        
         let axnex = "get/DateofExpense"
         let apiKey = "\(axnex)&State_Code=\(StateCode)&desig=\(Desig)&divisionCode=\(DivCode)&Type=1&div_code=\(DivCode)&rSF=\(SFCode)&sfCode=\(SFCode)&stateCode=\(StateCode)&Dateofexp=2024-3-18"
         let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
