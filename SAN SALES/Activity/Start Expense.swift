@@ -356,6 +356,9 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
     func save_data(lat:String,log:String){
         print(lat)
         print(log)
+        let currentTimeAndMilliseconds = getCurrentTimeAndMilliseconds()
+        print("Current Time: \(currentTimeAndMilliseconds.time)")
+        print("Milliseconds: \(currentTimeAndMilliseconds.milliseconds)")
         var fullid = ""
         if(PhotosCollection.shared.PhotoList.count>0){
         for i in 0...PhotosCollection.shared.PhotoList.count-1{
@@ -373,7 +376,7 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
         let apiKey = "\(axn)&update=0&divisionCode=\(DivCode)&sfCode=\(SFCode)&State_Code=\(StateCode)&desig=\(Desig)"
         let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
         let url = APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKeyWithoutCommas
-        let jsonString = "[{\"New_TP_Attendance\":{\"lat\":\"'\(lat)'\",\"long\":\"'\(log)'\",\"date_time\":\"'2024-03-08 17:01:21'\",\"date\":\"'2024-03-08'\",\"time\":\"17:01:21\",\"milli_sec\":\"1711711929513\",\"day_start_km\":\"50\",\"imgurl\":\"\(fullid)\",\"mode_name\":\"Car\",\"mod_id\":\"1\",\"daily_allowance\":\"OS\",\"from_place\":\"Chennai \",\"to_place\":\"ADYAR\",\"to_placeID\":\"114728\",\"stEndNeed\":\"1\",\"srtEntry\":1,\"attach_need\":\"0\",\"division_code\":\"29\",\"driver_allowance\":\"true\"}}]"
+        let jsonString = "[{\"New_TP_Attendance\":{\"lat\":\"'\(lat)'\",\"long\":\"'\(log)'\",\"date_time\":\"'2024-03-08 17:01:21'\",\"date\":\"'2024-03-08'\",\"time\":\"\(currentTimeAndMilliseconds.time)\",\"milli_sec\":\"\(currentTimeAndMilliseconds.milliseconds)\",\"day_start_km\":\"50\",\"imgurl\":\"\(fullid)\",\"mode_name\":\"Car\",\"mod_id\":\"1\",\"daily_allowance\":\"OS\",\"from_place\":\"Chennai \",\"to_place\":\"ADYAR\",\"to_placeID\":\"114728\",\"stEndNeed\":\"1\",\"srtEntry\":1,\"attach_need\":\"0\",\"division_code\":\"29\",\"driver_allowance\":\"true\"}}]"
 
         let params: Parameters = [
             "data": jsonString
@@ -405,7 +408,16 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
             }
         }
     }
-    
+    func getCurrentTimeAndMilliseconds() -> (time: String, milliseconds: Int) {
+        let currentTime = Date()
+        let calendar = Calendar.current
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "HH:mm:ss"
+        let timeString = dateFormatter.string(from: currentTime)
+        let milliseconds = calendar.component(.nanosecond, from: currentTime) / 1_000_000
+
+        return (time: timeString, milliseconds: milliseconds)
+    }
     @objc private func openCamera(){
         let vc=self.storyboard?.instantiateViewController(withIdentifier: "PhotoGallary") as!  PhotoGallary
         //let vc=self.storyboard?.instantiateViewController(withIdentifier: "CameraVwCtrl") as!  CameraService
