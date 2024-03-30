@@ -1008,8 +1008,13 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
                                 let viewControllers = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
                                 let myDyPln = storyboard.instantiateViewController(withIdentifier: "Start_Expense") as! Start_Expense
+                                let dateFormatter = DateFormatter()
+                                dateFormatter.dateFormat = "yyyy-MM-dd"
+                                let currentDate = Date()
+                                let formattedDate = dateFormatter.string(from: currentDate)
                                  myDyPln.Screan_Heding = "My day plan"
                                  myDyPln.Show_Date = true
+                                 myDyPln.Curent_Date = formattedDate
                                 viewControllers.setViewControllers([myDyPln], animated: false)
                                 (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewControllers)
                                 }else{

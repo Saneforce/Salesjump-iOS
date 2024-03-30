@@ -331,6 +331,7 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
             let myDyPln = storyboard.instantiateViewController(withIdentifier: "Start_Expense") as! Start_Expense
              myDyPln.Screan_Heding = "Start Expense"
              myDyPln.Show_Date = false
+             myDyPln.Curent_Date = ""
             viewController.setViewControllers([myDyPln], animated: false)
         }else if lItm.MasId == 16{
             let myDyPln = storyboard.instantiateViewController(withIdentifier: "End_Expense") as! End_Expense
