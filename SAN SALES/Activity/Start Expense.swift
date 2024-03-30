@@ -58,6 +58,7 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
         let DriverNeed:Int
     }
     var expsub_Date:[String]=[]
+    var expsub_Dates:[Date]=[]
     var Only_Exp_Date:[Int]=[]
     var SFCode: String = "", StateCode: String = "", DivCode: String = "",Desig: String = "",SF_type: String = ""
     let LocalStoreage = UserDefaults.standard
@@ -77,7 +78,10 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
     var AllRout:[Rout_list] = []
     var lstrout:[Rout_list] = []
     var checked = false
-    var StarKmNeed = false
+    var StarKmNeed:Int = 0
+    var Mod_Id = ""
+    var to_place = ""
+    var To_Place_id = ""
     override func viewDidLoad(){
         super.viewDidLoad()
         getUserDetails()
@@ -161,6 +165,7 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
         }else if (SelMod == "Travel"){
             let item = Trave_Dets[indexPath.row]
             print(item)
+            //Mod_Id
             Mode_Of_Travel.text = item.name
             
             //Need Driver
@@ -175,20 +180,23 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
             }
             
             //Need Strat KM
+            StarKmNeed = item.StEndNeed
             if (item.StEndNeed == 0){
                 Starting_View.isHidden = true
-                StarKmNeed = false
             }else{
                 Starting_View.isHidden = false
-                StarKmNeed = true
             }
         } else if(SelMod == "TO"){
             let item = lstrout[indexPath.row]
+            print(item)
             Select_To.text = item.name
             if item.name == "others"{
+                To_Place_id = ""
                 Enter_To.isHidden = false
                 To_Height.constant = 130
             }else{
+                to_place = item.name
+                To_Place_id = item.id
                 Enter_To.isHidden = true
                 To_Height.constant = 80
             }
@@ -196,11 +204,12 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
         Close_Allowance()
     }
     
+    
     func expSubmitDates(){
         let dateFormatter = DateFormatter()
         let date = Date()
-        dateFormatter.dateFormat = "dd-MM-yyyy"
-        
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+    
         //  Start of Month
         let comp: DateComponents = Calendar.current.dateComponents([.year, .month], from: date)
         let startOfMonth = Calendar.current.date(from: comp)!
@@ -236,9 +245,14 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
                         for item in srt_exp {
                             print(item)
                             expsub_Date.append((item["full_date"] as? String)!)
+                            let dateFormatter = DateFormatter()
+                            dateFormatter.dateFormat = "dd/MM/yyyy"
+                            expsub_Dates.append(dateFormatter.date(from: (item["full_date"] as? String)!)!)
                             Only_Exp_Date.append(Int((item["only_date"] as? Int)!))
                         }
                     }
+                    print(expsub_Dates)
+                    calendar.reloadData()
                     
                 }
             case .failure(let error):
@@ -246,6 +260,7 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
             }
         }
     }
+    
     func getallowns(){
         Exp_Data.removeAll()
         Trave_Det.removeAll()
@@ -382,7 +397,7 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
                     }
                     if (OrderSub == "OD"){
                        print(sLocation)
-                       // self.save_data(lat:location.coordinate.latitude.description,log:location.coordinate.longitude.description)
+                        self.save_data(lat:location.coordinate.latitude.description,log:location.coordinate.longitude.description)
                         OrderSub  = ""
                        
                     }else{
@@ -401,7 +416,9 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
   
     }
     func save_data(lat:String,log:String){
-        
+        if Select_To.text == "others"{
+            to_place=Enter_To.text!
+        }
         print(lat)
         print(log)
         let currentTimeAndMilliseconds = getCurrentTimeAndMilliseconds()
@@ -409,23 +426,39 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
         print("Milliseconds: \(currentTimeAndMilliseconds.milliseconds)")
         var fullid = ""
         if(PhotosCollection.shared.PhotoList.count>0){
-        for i in 0...PhotosCollection.shared.PhotoList.count-1{
-            let item: [String: Any] = PhotosCollection.shared.PhotoList[i] as! [String : Any]
-            if i > 0 { self.sImgItems = self.sImgItems + "," }
-            let sep = item["FileName"]  as! String
-            let fullNameArr = sep.components(separatedBy: "_")
-            
-            let phono = fullNameArr[2]
-            fullid = "_\(phono)"
-            print(fullid)
+            for i in 0...PhotosCollection.shared.PhotoList.count-1{
+                let item: [String: Any] = PhotosCollection.shared.PhotoList[i] as! [String : Any]
+                if i > 0 { self.sImgItems = self.sImgItems + "," }
+                let sep = item["FileName"]  as! String
+                let fullNameArr = sep.components(separatedBy: "_")
+                
+                let phono = fullNameArr[2]
+                fullid = "_\(phono)"
+                print(fullid)
+            }
         }
-    }
+        var date = ""
+        var day_start_km = ""
+        var mode_name = ""
+        var from_place = ""
+      if let dates = Select_Date.text {
+            date = dates
+        }
+        if let mode_names = Mode_Of_Travel.text{
+            mode_name = mode_names
+        }
+        if let day_start_kms = Start_Km.text{
+            day_start_km = day_start_kms
+        }
+        
+        if let from_places = Enter_From.text{
+            from_place = from_places
+        }
         let axn = "dcr/save"
         let apiKey = "\(axn)&update=0&divisionCode=\(DivCode)&sfCode=\(SFCode)&State_Code=\(StateCode)&desig=\(Desig)"
         let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
         let url = APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKeyWithoutCommas
-        let jsonString = "[{\"New_TP_Attendance\":{\"lat\":\"'\(lat)'\",\"long\":\"'\(log)'\",\"date_time\":\"'\(select_date + currentTimeAndMilliseconds.time)'\",\"date\":\"'\(select_date)'\",\"time\":\"\(currentTimeAndMilliseconds.time)\",\"milli_sec\":\"\(currentTimeAndMilliseconds.milliseconds)\",\"day_start_km\":\"50\",\"imgurl\":\"\(fullid)\",\"mode_name\":\"Car\",\"mod_id\":\"1\",\"daily_allowance\":\"OS\",\"from_place\":\"Chennai \",\"to_place\":\"ADYAR\",\"to_placeID\":\"114728\",\"stEndNeed\":\"1\",\"srtEntry\":1,\"attach_need\":\"0\",\"division_code\":\"\(DivCode)\",\"driver_allowance\":\"\(checked)\"}}]"
-
+        let jsonString = "[{\"New_TP_Attendance\":{\"lat\":\"'\(lat)'\",\"long\":\"'\(log)'\",\"date_time\":\"'\(Select_Date.text! + " " + currentTimeAndMilliseconds.time)'\",\"date\":\"'\(date)'\",\"time\":\"\(currentTimeAndMilliseconds.time)\",\"milli_sec\":\"\(currentTimeAndMilliseconds.milliseconds)\",\"day_start_km\":\"\(day_start_km)\",\"imgurl\":\"\(fullid)\",\"mode_name\":\"\(mode_name)\",\"mod_id\":\"1\",\"daily_allowance\":\"\(String(describing: Daily_Allowance.text))\",\"from_place\":\"\(from_place) \",\"to_place\":\"\(to_place)\",\"to_placeID\":\"\(To_Place_id)\",\"stEndNeed\":\"\(StarKmNeed)\",\"srtEntry\":1,\"attach_need\":\"0\",\"division_code\":\"\(DivCode)\",\"driver_allowance\":\"\(checked)\"}}]"
         let params: Parameters = [
             "data": jsonString
         ]
@@ -490,7 +523,7 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
         }
         //Start_Km Validation
         if Start_Km.text == "" {
-            if StarKmNeed == true {
+            if StarKmNeed == 1 {
                 Toast.show(message: "Enter Start KM", controller: self)
                 return false
             }
@@ -578,6 +611,15 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
                 Trave_Dets = Trave_Det
             }else{
                 Trave_Dets = Trave_Det.filter({(product) in
+                    let name: String = product.name
+                    return name.lowercased().contains(txtbx.text!.lowercased())
+                })
+            }
+        }else if (SelMod == "TO"){
+            if txtbx.text!.isEmpty {
+                lstrout = AllRout
+            }else{
+                lstrout = AllRout.filter({(product) in
                     let name: String = product.name
                     return name.lowercased().contains(txtbx.text!.lowercased())
                 })

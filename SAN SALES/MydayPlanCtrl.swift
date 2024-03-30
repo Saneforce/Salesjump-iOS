@@ -87,7 +87,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
     public static var SfidString: String=""
     var leavWorktype: String = ""
     let LocalStoreage = UserDefaults.standard
-    var exp_Need:String = ""
+    var exp_Need:Int = 0
     var lstPlnDetail: [AnyObject] = []
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -377,7 +377,9 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         let item: [String: Any]=lObjSel[indexPath.row] as! [String : Any]
         let name=item["name"] as! String
         print(item)
-        exp_Need = (item["exp_needed"] as? String)!
+        if let need = item["exp_needed"] as? Int{
+            exp_Need = need
+        }
         var id = ""
         if let ids=item["id"] as? String {
             id = ids
@@ -1002,8 +1004,8 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                                    LocalStoreage.set(prettyPrintedJson, forKey: "Mydayplan")
                                  print(LocalStoreage)
                                 print(self.exp_Need)
-                                self.exp_Need = "2"
-                                if (self.exp_Need == "1") {
+                                //self.exp_Need = 2
+                                if (self.exp_Need == 1) {
                                // Naviagte To Strat Expense
                                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
                                 let viewControllers = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
