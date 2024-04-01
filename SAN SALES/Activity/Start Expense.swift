@@ -203,8 +203,19 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
         }
         Close_Allowance()
     }
-    
-    
+    func maximumDate(for calendar: FSCalendar) -> Date {
+        return Date()
+    }
+    func calendar(_ calendar: FSCalendar, shouldSelect date: Date, at monthPosition: FSCalendarMonthPosition) -> Bool {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        guard let disabledDate = dateFormatter.date(from: "2024-03-02") else {
+            return true
+        }
+        let calendar = Calendar.current
+        return !calendar.isDate(date, inSameDayAs: disabledDate)
+    }
+
     func expSubmitDates(){
         let dateFormatter = DateFormatter()
         let date = Date()
@@ -251,9 +262,6 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
                             Only_Exp_Date.append(Int((item["only_date"] as? Int)!))
                         }
                     }
-                    print(expsub_Dates)
-                    calendar.reloadData()
-                    
                 }
             case .failure(let error):
                 Toast.show(message: error.errorDescription!)
@@ -564,7 +572,7 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
         Drop_Down_Sc.isHidden = true
     }
     @objc private func Open_Calender() {
-        calendar.reloadData()
+        self.calendar.reloadData()
         calendar_view.isHidden = false
     }
     @objc private func Clos_Calender() {

@@ -335,6 +335,9 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
             viewController.setViewControllers([myDyPln], animated: false)
         }else if lItm.MasId == 16{
             let myDyPln = storyboard.instantiateViewController(withIdentifier: "End_Expense") as! End_Expense
+            myDyPln.End_exp_title = "End Expense"
+            myDyPln.Date_Nd = false
+            myDyPln.Date = ""
             viewController.setViewControllers([myDyPln], animated: false)
         }
         (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
