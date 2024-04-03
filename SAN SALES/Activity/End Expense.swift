@@ -7,7 +7,9 @@
 
 import UIKit
 import Alamofire
-
+import FSCalendar
+import Foundation
+import CoreLocation
 class End_Expense:IViewController {
     
     @IBOutlet weak var Calender_View: UIView!
@@ -28,14 +30,28 @@ class End_Expense:IViewController {
     
     //views
     @IBOutlet weak var Date_View: UIView!
+    @IBOutlet weak var End_Attachment: UIView!
+    //Hight
     @IBOutlet weak var Date_View_Hight: NSLayoutConstraint!
+    @IBOutlet weak var End_Attachmeni_Height: NSLayoutConstraint!
+    
+    struct End_exData:Codable{
+        let From:String
+        let To_Plce:String
+        let Start_KM:String
+        let Mode_Of_Travel:String
+    }
     
     var SelMod:String = ""
     var End_exp_title:String?
     var Date_Nd:Bool?
     var Date:String?
+    var SFCode: String = "", StateCode: String = "", DivCode: String = "",Desig: String = "",SF_type: String = ""
+    let LocalStoreage = UserDefaults.standard
+    var end_Exp_Datas:[End_exData]=[]
     override func viewDidLoad() {
         super.viewDidLoad()
+        getUserDetails()
         End_Expense_Scr.text = End_exp_title
         if Date_Nd == true{
         Date_View.isHidden = true
@@ -55,7 +71,23 @@ class End_Expense:IViewController {
         Mode_OF_Trav.text = "no data"
         if Date != ""{
             Select_Date.text = Date
+            srtExpenseData(Select_date:Date!)
         }
+        End_exp_date()
+        //srtExpenseData()
+    }
+    func getUserDetails(){
+    let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
+    let data = Data(prettyPrintedJson!.utf8)
+    guard let prettyJsonData = try? JSONSerialization.jsonObject(with: data, options:[]) as? [String: Any] else {
+    print("Error: Cannot convert JSON object to Pretty JSON data")
+    return
+    }
+    SFCode = prettyJsonData["sfCode"] as? String ?? ""
+    StateCode = prettyJsonData["State_Code"] as? String ?? ""
+    DivCode = prettyJsonData["divisionCode"] as? String ?? ""
+    Desig=prettyJsonData["desigCode"] as? String ?? ""
+    SF_type=prettyJsonData["SF_type"] as? String ?? ""
     }
     @objc private func GotoHome() {
         if (End_exp_title == "Day End Plan"){
@@ -117,7 +149,120 @@ class End_Expense:IViewController {
         if validate() == false {
             return
         }
+        
+        let axn = "post/endDayExpense"
+        let apiKey = "\(axn)&date=2024-4-1&desig=\(Desig)&fare=&rSF=\(SFCode)&endRemarks=&divisionCode=\(DivCode)&date_time=2024-04-01%2011%3A15%3A24&imageUrl=&sfCode=\(SFCode)&stateCode=\(StateCode)&personalKM=&endModID=Car&sf_code=\(SFCode)&endEntry=1&endKM=58"
+        let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
+        let url = APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKeyWithoutCommas
+        AF.request(url, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self] response in
+            switch response.result {
+            case .success(let value):
+                if let json = value as? [[String: Any]] {
+                    guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
+                        print("Error: Cannot convert JSON object to Pretty JSON data")
+                        return
+                    }
+                    guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+                        print("Error: Could not print JSON in String")
+                        return
+                    }
+                    print(prettyPrintedJson)
+                }
+            case .failure(let error):
+                Toast.show(message: error.errorDescription!)
+            }
+        }
         Toast.show(message:"No data" )
     }
     
+    func End_exp_date(){
+        let dateFormatter = DateFormatter()
+        let date = Foundation.Date()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+    
+        //  Start of Month
+        let comp: DateComponents = Calendar.current.dateComponents([.year, .month], from: date)
+        let startOfMonth = Calendar.current.date(from: comp)!
+        print(dateFormatter.string(from: startOfMonth))
+        
+        //  End of Month
+        var comps2 = DateComponents()
+        comps2.month = 1
+        comps2.day = -1
+        let endOfMonth = Calendar.current.date(byAdding: comps2, to: startOfMonth)
+        print(dateFormatter.string(from: endOfMonth!))
+        let axn = "get/expSubmitDates"
+        let apiKey = "\(axn)&from_date=\(dateFormatter.string(from: startOfMonth))&to_date=\(dateFormatter.string(from: endOfMonth!))&selected_period=null&sf_code=\(SFCode)"
+        
+        let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
+        let url = APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKeyWithoutCommas
+        AF.request(url, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self] response in
+            switch response.result {
+            case .success(let value):
+                if let json = value as? [String: Any] {
+                    guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
+                        print("Error: Cannot convert JSON object to Pretty JSON data")
+                        return
+                    }
+                    guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+                        print("Error: Could not print JSON in String")
+                        return
+                    }
+                    print(prettyPrintedJson)
+                }
+            case .failure(let error):
+                Toast.show(message: error.errorDescription!)
+            }
+        }
+    }
+    
+func srtExpenseData(Select_date:String){
+        let axn = "get/srtExpenseData"
+        let apiKey = "\(axn)&date=\(Select_date)&sf_code=\(SFCode)"
+        
+        let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
+        let url = APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKeyWithoutCommas
+        AF.request(url, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self] response in
+            switch response.result {
+            case .success(let value):
+                if let json = value as? [[String: Any]] {
+                    guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
+                        print("Error: Cannot convert JSON object to Pretty JSON data")
+                        return
+                    }
+                    guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+                        print("Error: Could not print JSON in String")
+                        return
+                    }
+                    print(prettyPrintedJson)
+                    if let firstItem = json.first {
+                        print(firstItem["NeedAttachment"] as? Int as Any)
+                        if let NeedAttachment = firstItem["NeedAttachment"] as? Int, NeedAttachment == 0{
+                            End_Attachment.isHidden = true
+                            End_Attachmeni_Height.constant = 0
+                        }else if let NeedAttachment = firstItem["NeedAttachment"] as? Int, NeedAttachment == 1{
+                            End_Attachment.isHidden = false
+                            End_Attachmeni_Height.constant = 80
+                        }else{
+                            End_Attachment.isHidden = true
+                            End_Attachmeni_Height.constant = 0
+                        }
+                        if let from = firstItem["From_Place"] as? String {
+                            let to = firstItem["To_Place"] as? String
+                            let Star_KM = firstItem["Start_Km"] as? String
+                            let Mode_Of_Travel = firstItem["MOT_Name"] as? String
+                            From_plc.text = from
+                            To_plc.text = to
+                            Start_KM.text = Star_KM
+                            Mode_OF_Trav.text = Mode_Of_Travel
+                            end_Exp_Datas.append(End_exData(From: from, To_Plce: to!, Start_KM: Star_KM!, Mode_Of_Travel: Mode_Of_Travel!))
+                        }
+                    }
+                }
+            case .failure(let error):
+                Toast.show(message: error.errorDescription!)
+            }
+        }
+    }
+
 }

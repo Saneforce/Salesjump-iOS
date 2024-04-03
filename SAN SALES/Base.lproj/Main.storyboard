@@ -1801,7 +1801,7 @@
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Select" translatesAutoresizingMaskIntoConstraints="NO" id="dX4-Hq-D3n">
-                                                            <rect key="frame" x="10" y="-27" width="20" height="0.0"/>
+                                                            <rect key="frame" x="10" y="-28" width="20" height="1"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         </imageView>
                                                     </subviews>
@@ -2329,10 +2329,10 @@
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <prototypes>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" id="Ylu-mC-XjK" customClass="cellListItem" customModule="SAN_SALES" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="50" width="399" height="18"/>
+                                                <rect key="frame" x="0.0" y="50" width="399" height="19"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Ylu-mC-XjK" id="C3f-WU-CHp">
-                                                    <rect key="frame" x="0.0" y="0.0" width="399" height="18"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="399" height="19"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AeK-fS-OgB">
@@ -2343,7 +2343,7 @@
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Select" translatesAutoresizingMaskIntoConstraints="NO" id="F7w-CK-MG7">
-                                                            <rect key="frame" x="9" y="-22" width="21" height="0.0"/>
+                                                            <rect key="frame" x="9" y="-22" width="21" height="1"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         </imageView>
                                                     </subviews>
@@ -4041,7 +4041,7 @@
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
                                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Select" translatesAutoresizingMaskIntoConstraints="NO" id="ZtE-Af-8A6">
-                                                                    <rect key="frame" x="9" y="-34" width="18" height="1"/>
+                                                                    <rect key="frame" x="9" y="-34" width="18" height="0.0"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                 </imageView>
                                                             </subviews>
@@ -7473,7 +7473,7 @@
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bZk-VU-Rlz">
                                                         <rect key="frame" x="16" y="37" width="150" height="21"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="15"/>
+                                                        <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="14"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
@@ -7487,7 +7487,7 @@
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DkA-2D-MTw">
                                                         <rect key="frame" x="223" y="37" width="150" height="21"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                        <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="14"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
@@ -7510,7 +7510,7 @@
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kDV-gG-NVv">
                                                         <rect key="frame" x="16" y="37" width="150" height="21"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="15"/>
+                                                        <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="14"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
@@ -7524,7 +7524,7 @@
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IH6-xE-dz0">
                                                         <rect key="frame" x="223" y="37" width="150" height="21"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                        <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="14"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
@@ -7754,6 +7754,8 @@
                         <outlet property="Calender_View" destination="gbp-Od-Yrq" id="l7z-Ni-oBG"/>
                         <outlet property="Date_View" destination="uvA-Ev-Mqf" id="8MC-3t-WQR"/>
                         <outlet property="Date_View_Hight" destination="Wqd-xi-Zf5" id="lbP-1d-Vye"/>
+                        <outlet property="End_Attachmeni_Height" destination="srs-R9-Taz" id="a3B-Q3-B9q"/>
+                        <outlet property="End_Attachment" destination="OpQ-g2-n6G" id="9zW-ec-u6F"/>
                         <outlet property="End_Expense_Scr" destination="dfp-sF-2fj" id="GIu-l7-lPb"/>
                         <outlet property="Ending_Fare" destination="ijB-PA-S51" id="qyq-KC-srw"/>
                         <outlet property="Ending_fare_Photo" destination="LcD-BV-1T4" id="YFa-Yn-O6C"/>
