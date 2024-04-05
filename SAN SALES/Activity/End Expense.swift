@@ -10,7 +10,7 @@ import Alamofire
 import FSCalendar
 import Foundation
 import CoreLocation
-class End_Expense:IViewController {
+class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource {
     
     @IBOutlet weak var Calender_View: UIView!
     
@@ -19,6 +19,7 @@ class End_Expense:IViewController {
     @IBOutlet weak var Select_Date: LabelSelect!
     @IBOutlet weak var From_plc: UILabel!
     @IBOutlet weak var To_plc: UILabel!
+    @IBOutlet weak var Start_Km_Hed: UILabel!
     @IBOutlet weak var Start_KM: UILabel!
     @IBOutlet weak var Mode_OF_Trav: UILabel!
     @IBOutlet weak var Start_Text_KM: EditTextField!
@@ -28,12 +29,19 @@ class End_Expense:IViewController {
     @IBOutlet weak var Ending_rmk: UITextView!
     @IBOutlet weak var Per_KM: EditTextField!
     
+    //calender
+    @IBOutlet weak var calendar: FSCalendar!
     //views
+    @IBOutlet weak var EndKm_View: UIView!
     @IBOutlet weak var Date_View: UIView!
     @IBOutlet weak var End_Attachment: UIView!
+    @IBOutlet weak var Personal_Km_View: UIView!
+    
     //Hight
     @IBOutlet weak var Date_View_Hight: NSLayoutConstraint!
     @IBOutlet weak var End_Attachmeni_Height: NSLayoutConstraint!
+    @IBOutlet weak var End_Km_Hig: NSLayoutConstraint!
+    @IBOutlet weak var Personal_Km_Hig: NSLayoutConstraint!
     
     struct End_exData:Codable{
         let From:String
@@ -49,6 +57,8 @@ class End_Expense:IViewController {
     var SFCode: String = "", StateCode: String = "", DivCode: String = "",Desig: String = "",SF_type: String = ""
     let LocalStoreage = UserDefaults.standard
     var end_Exp_Datas:[End_exData]=[]
+    var Attach_Need = 1
+    var StrEnd_Need = 1
     override func viewDidLoad() {
         super.viewDidLoad()
         getUserDetails()
@@ -57,6 +67,8 @@ class End_Expense:IViewController {
         Date_View.isHidden = true
         Date_View_Hight.constant = 0
         }
+        calendar.delegate = self
+        calendar.dataSource = self
         BT_Back.addTarget(target: self, action: #selector(GotoHome))
         Select_Date.addTarget(target: self, action: #selector(Opencalender))
         Start_Photo.addTarget(target: self, action: #selector(openCamera_Km))
@@ -65,6 +77,9 @@ class End_Expense:IViewController {
         Start_Photo.layer.masksToBounds = true
         Ending_fare_Photo.layer.cornerRadius = 5
         Ending_fare_Photo.layer.masksToBounds = true
+        Start_Text_KM.keyboardType = UIKeyboardType.numberPad
+        Ending_Fare.keyboardType = UIKeyboardType.numberPad
+        Per_KM.keyboardType = UIKeyboardType.numberPad
         From_plc.text = "no data"
         To_plc.text = "no data"
         Start_KM.text = "no data"
@@ -73,8 +88,7 @@ class End_Expense:IViewController {
             Select_Date.text = Date
             srtExpenseData(Select_date:Date!)
         }
-        End_exp_date()
-        //srtExpenseData()
+        End_exp_date() 
     }
     func getUserDetails(){
     let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
@@ -88,6 +102,21 @@ class End_Expense:IViewController {
     DivCode = prettyJsonData["divisionCode"] as? String ?? ""
     Desig=prettyJsonData["desigCode"] as? String ?? ""
     SF_type=prettyJsonData["SF_type"] as? String ?? ""
+    }
+    func maximumDate(for calendar: FSCalendar) -> Date {
+        return Foundation.Date()
+    }
+    
+    func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
+        if monthPosition == .previous || monthPosition == .next {
+            return
+        }
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        let myStringDate = formatter.string(from: date)
+        Select_Date.text = myStringDate
+        srtExpenseData(Select_date:myStringDate)
+        Calender_View.isHidden = true
     }
     @objc private func GotoHome() {
         if (End_exp_title == "Day End Plan"){
@@ -121,25 +150,28 @@ class End_Expense:IViewController {
             Toast.show(message: "Select Date", controller: self)
             return false
         }
-        
-        if Start_Text_KM.text == ""{
-            Toast.show(message: "Enter Starting KM", controller: self)
-            return false
+        if StrEnd_Need == 1{
+            if Start_Text_KM.text == ""{
+                Toast.show(message: "Enter Starting KM", controller: self)
+                return false
+            }
         }
-        
-        if Ending_Fare.text == "" {
-            Toast.show(message: "Enter Ending Fare", controller: self)
-            return false
+        if Attach_Need == 1{
+            if Ending_Fare.text == "" {
+                Toast.show(message: "Enter Ending Fare", controller: self)
+                return false
+            }
         }
     
         if Ending_rmk.text == ""{
             Toast.show(message: "Enter Ending Remarks", controller: self)
             return false
         }
-        
-        if Per_KM.text == ""{
-            Toast.show(message: "Enter Personal KM", controller: self)
-            return false
+        if StrEnd_Need == 1{
+            if Per_KM.text == ""{
+                Toast.show(message: "Enter Personal KM", controller: self)
+                return false
+            }
         }
         
         return true
@@ -149,14 +181,51 @@ class End_Expense:IViewController {
         if validate() == false {
             return
         }
+        self.ShowLoading(Message: "Loading...")
+        var EndKM = ""
+        var PerKOM = ""
+        var EndRmk = ""
+        var endModID = ""
+        var date_time = ""
+        var Date = ""
+        var EndFar = ""
+        if let endKM = Start_Text_KM.text{
+            EndKM = endKM
+        }
+        if let perkm = Per_KM.text{
+            PerKOM = perkm
+        }
+        if let endRmk = Ending_rmk.text{
+            EndRmk = endRmk.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+        }
+        let endMod = end_Exp_Datas[0].Mode_Of_Travel
+        endModID = endMod.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+        
+        let currentTimeAndMilliseconds = getCurrentTimeAndMilliseconds()
+        
+        if let Date_time = Select_Date.text{
+            date_time = Date_time+""+currentTimeAndMilliseconds.time
+            date_time = date_time.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+        }
+        
+        if let date = Select_Date.text{
+            Date = date.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+        }
+        
+        if let EndFars = Ending_Fare.text{
+            EndFar = EndFars
+        }
         
         let axn = "post/endDayExpense"
-        let apiKey = "\(axn)&date=2024-4-1&desig=\(Desig)&fare=&rSF=\(SFCode)&endRemarks=&divisionCode=\(DivCode)&date_time=2024-04-01%2011%3A15%3A24&imageUrl=&sfCode=\(SFCode)&stateCode=\(StateCode)&personalKM=&endModID=Car&sf_code=\(SFCode)&endEntry=1&endKM=58"
+        let apiKey = "\(axn)&date=\(Date)&desig=\(Desig)&fare=\(EndFar)&rSF=\(SFCode)&endRemarks=\(EndRmk)&divisionCode=\(DivCode)&date_time=\(date_time)&imageUrl=&sfCode=\(SFCode)&stateCode=\(StateCode)&personalKM=\(PerKOM)&endModID=\(endModID)&sf_code=\(SFCode)&endEntry=1&endKM=\(EndKM)"
         let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
         let url = APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKeyWithoutCommas
         AF.request(url, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self] response in
             switch response.result {
             case .success(let value):
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                    self.LoadingDismiss()
+                }
                 if let json = value as? [[String: Any]] {
                     guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
                         print("Error: Cannot convert JSON object to Pretty JSON data")
@@ -166,13 +235,25 @@ class End_Expense:IViewController {
                         print("Error: Could not print JSON in String")
                         return
                     }
+                    
                     print(prettyPrintedJson)
+                    Toast.show(message: "submitted successfully", controller: self)
+                    GlobalFunc.movetoHomePage()
                 }
             case .failure(let error):
                 Toast.show(message: error.errorDescription!)
             }
         }
-        Toast.show(message:"No data" )
+    }
+    func getCurrentTimeAndMilliseconds() -> (time: String, milliseconds: Int) {
+        let currentTime = Foundation.Date()
+        let calendar = Calendar.current
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "HH:mm:ss"
+        let timeString = dateFormatter.string(from: currentTime)
+        let milliseconds = calendar.component(.nanosecond, from: currentTime) / 1_000_000
+
+        return (time: timeString, milliseconds: milliseconds)
     }
     
     func End_exp_date(){
@@ -237,17 +318,49 @@ func srtExpenseData(Select_date:String){
                     print(prettyPrintedJson)
                     if let firstItem = json.first {
                         print(firstItem["NeedAttachment"] as? Int as Any)
+                            // NeedAttachment
                         if let NeedAttachment = firstItem["NeedAttachment"] as? Int, NeedAttachment == 0{
+                            Attach_Need = 0
                             End_Attachment.isHidden = true
                             End_Attachmeni_Height.constant = 0
                         }else if let NeedAttachment = firstItem["NeedAttachment"] as? Int, NeedAttachment == 1{
+                            Attach_Need = 1
                             End_Attachment.isHidden = false
                             End_Attachmeni_Height.constant = 80
                         }else{
+                            Attach_Need = 0
                             End_Attachment.isHidden = true
                             End_Attachmeni_Height.constant = 0
                         }
-                        if let from = firstItem["From_Place"] as? String {
+                        // StEndNeed
+                        if let StEndNeed = firstItem["StEndNeed"] as? Int,StEndNeed == 0{
+                            StrEnd_Need = 0
+                            Start_Km_Hed.isHidden = true
+                            Start_KM.isHidden = true
+                            EndKm_View.isHidden = true
+                            Personal_Km_View.isHidden = true
+                            End_Km_Hig.constant = 0
+                            Personal_Km_Hig.constant = 0
+                        }else if let StEndNeed = firstItem["StEndNeed"] as? Int,StEndNeed == 1{
+                            StrEnd_Need = 1
+                            Start_Km_Hed.isHidden = false
+                            Start_KM.isHidden = false
+                            EndKm_View.isHidden = false
+                            Personal_Km_View.isHidden = false
+                            End_Km_Hig.constant = 80
+                            Personal_Km_Hig.constant = 80
+
+                        }else{
+                            StrEnd_Need = 0
+                            Start_Km_Hed.isHidden = true
+                            Start_KM.isHidden = true
+                            EndKm_View.isHidden = true
+                            Personal_Km_View.isHidden = true
+                            End_Km_Hig.constant = 0
+                            Personal_Km_Hig.constant = 0
+                        }
+                        
+                        if let from = firstItem["From_Place"] as? String{
                             let to = firstItem["To_Place"] as? String
                             let Star_KM = firstItem["Start_Km"] as? String
                             let Mode_Of_Travel = firstItem["MOT_Name"] as? String

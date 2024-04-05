@@ -119,6 +119,10 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
         }
         Enter_To.isHidden = true
         To_Height.constant = 80
+        
+        Check_Box.isHidden = true
+        Driver_Need.isHidden = true
+        Mod_Of_Tra_Height.constant = 80
     }
     func getUserDetails(){
     let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
@@ -206,14 +210,15 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
     func maximumDate(for calendar: FSCalendar) -> Date {
         return Date()
     }
-    func calendar(_ calendar: FSCalendar, shouldSelect date: Date, at monthPosition: FSCalendarMonthPosition) -> Bool {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        guard let disabledDate = dateFormatter.date(from: "2024-03-02") else {
-            return true
+    func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
+        if monthPosition == .previous || monthPosition == .next {
+            return
         }
-        let calendar = Calendar.current
-        return !calendar.isDate(date, inSameDayAs: disabledDate)
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        let myStringDate = formatter.string(from: date)
+        Select_Date.text = myStringDate
+        Clos_Calender()
     }
 
     func expSubmitDates(){
@@ -500,10 +505,10 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
     
     func validate() -> Bool {
         // Date Validation
-//        if (Select_Date.text == "Select Date"){
-//            Toast.show(message: "Select Date", controller: self)
-//            return false
-//        }
+        if (Select_Date.text == "Select Date"){
+            Toast.show(message: "Select Date", controller: self)
+            return false
+        }
         // Allowance Validation
         if Daily_Allowance.text == "Select  Daily Allowance" {
             Toast.show(message: "Select  Daily Allowance", controller: self)
@@ -562,10 +567,14 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
         Drop_Down_Sc.isHidden = false
     }
     @objc private func Open_Mod_of_Travel() {
-        SelMod = "Travel"
-        Drop_Down_Head.text = "Mode of Travel"
-        travelmode()
-        Drop_Down_Sc.isHidden = false
+        if Daily_Allowance.text == "Select  Daily Allowance"{
+            Toast.show(message: "Select  Daily Allowance", controller: self)
+        }else{
+            SelMod = "Travel"
+            Drop_Down_Head.text = "Mode of Travel"
+            travelmode()
+            Drop_Down_Sc.isHidden = false
+        }
     }
     @objc private func Close_Allowance() {
         Text_Serch.text = ""
