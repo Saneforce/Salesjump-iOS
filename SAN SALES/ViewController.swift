@@ -213,7 +213,7 @@ class ViewController: IViewController {
                         "BaseURL": APIClient.shared.BaseURL,
                         "DBURL": APIClient.shared.DBURL1
                     ]
-                    
+                    print(prettyPrintedJson)
                     let jsonData = try? JSONSerialization.data(withJSONObject: AppConfig, options: [])
                     let jsonString = String(data: jsonData!, encoding: .utf8)!
                     LocalStoreage.set(jsonString, forKey: "APPConfig")

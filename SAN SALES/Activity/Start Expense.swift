@@ -57,7 +57,11 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
         let StEndNeed:Int
         let DriverNeed:Int
     }
-    var expsub_Date:[String]=[]
+    struct Expsub_Date:Codable{
+        let Dates:String
+        let Text:String
+    }
+    var expsub_Date:[Expsub_Date]=[]
     var expsub_Dates:[Date]=[]
     var Only_Exp_Date:[Int]=[]
     var SFCode: String = "", StateCode: String = "", DivCode: String = "",Desig: String = "",SF_type: String = ""
@@ -255,18 +259,33 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
                         return
                     }
                     print(prettyPrintedJson)
-                    
-                    if let srt_exp = json["srt_exp"] as? [AnyObject] {
-                        print(srt_exp)
-                        for item in srt_exp {
-                            print(item)
-                            expsub_Date.append((item["full_date"] as? String)!)
-                            let dateFormatter = DateFormatter()
-                            dateFormatter.dateFormat = "dd/MM/yyyy"
-                            expsub_Dates.append(dateFormatter.date(from: (item["full_date"] as? String)!)!)
-                            Only_Exp_Date.append(Int((item["only_date"] as? Int)!))
+                    if let attance_flg = json["attance_flg"] as? [AnyObject] {
+                        for item in attance_flg{
+                            if let Flf = item["FWFlg"] as? String, Flf == "F"||Flf=="H"||Flf=="W"{
+                                print(item)
+                                expsub_Date.append(Expsub_Date(Dates: (item["pln_date"] as? String)!, Text: (item["FWFlg"] as? String)!))
+                            }
                         }
                     }
+                    if let srt_exp = json["srt_exp"] as? [AnyObject] {
+                        for item in srt_exp {
+                            for filter_Sub in expsub_Date{
+                                if (filter_Sub.Dates != item["full_date"] as? String){
+                                    expsub_Date.append(Expsub_Date(Dates: (item["full_date"] as? String)!, Text: "sub"))
+                                }
+                            }
+                        }
+                    }
+                    if let srt_end_exp = json["srt_end_exp"] as? [AnyObject] {
+                        for item in srt_end_exp{
+                            for filter_Sub in expsub_Date{
+                                if (filter_Sub.Dates != item["full_date"] as? String){
+                                    expsub_Date.append(Expsub_Date(Dates: (item["full_date"] as? String)!, Text: "sub"))
+                                }
+                            }
+                        }
+                    }
+                    print(expsub_Date)
                 }
             case .failure(let error):
                 Toast.show(message: error.errorDescription!)
