@@ -400,13 +400,11 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
         let indxPath: IndexPath = tbView.indexPath(for: cell)!
         let Amt: String = cell.Ent_Amt.text ?? ""
         Needs_Entry[indxPath.row].amount = Amt
-        print(Needs_Entry)
     }
     @objc func alertClicked(sender: UITapGestureRecognizer) {
         guard let view = sender.view else {
             return
         }
-        print(view.tag)
         SelMod = "Cam"
         Select_index_row = view.tag
         OpenpopUp()

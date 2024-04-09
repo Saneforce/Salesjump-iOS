@@ -86,6 +86,7 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
     var Mod_Id = ""
     var to_place = ""
     var To_Place_id = ""
+    var labelsDictionary = [FSCalendarCell: UILabel]()
     override func viewDidLoad(){
         super.viewDidLoad()
         getUserDetails()
@@ -214,15 +215,33 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
     func maximumDate(for calendar: FSCalendar) -> Date {
         return Date()
     }
+    func minimumDate(for calendar: FSCalendar) -> Date {
+        let currentDate = Date()
+        let calendar = Calendar.current
+        let components = calendar.dateComponents([.year, .month], from: currentDate)
+        guard let firstDayOfMonth = calendar.date(from: components) else {
+            return currentDate
+        }
+        return firstDayOfMonth
+    }
+
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
         if monthPosition == .previous || monthPosition == .next {
             return
         }
         let formatter = DateFormatter()
+        let dateFormatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
+        dateFormatter.dateFormat = "dd/MM/yyyy"
         let myStringDate = formatter.string(from: date)
-        Select_Date.text = myStringDate
-        Clos_Calender()
+        let Match_Date = dateFormatter.string(from: date)
+        if expsub_Date.contains(where: { $0.Dates == Match_Date }) {
+            Select_Date.text = myStringDate
+            Clos_Calender()
+        } else {
+            Toast.show(message: "Please Select a Valid Date", controller: self)
+            return
+        }
     }
 
     func expSubmitDates(){
@@ -269,28 +288,44 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
                     }
                     if let srt_exp = json["srt_exp"] as? [AnyObject] {
                         for item in srt_exp {
-                            for filter_Sub in expsub_Date{
-                                if (filter_Sub.Dates != item["full_date"] as? String){
-                                    expsub_Date.append(Expsub_Date(Dates: (item["full_date"] as? String)!, Text: "sub"))
-                                }
+                            if let full_date = item["full_date"] as? String{
+                                expsub_Date = expsub_Date.filter { $0.Dates != full_date }
                             }
                         }
                     }
                     if let srt_end_exp = json["srt_end_exp"] as? [AnyObject] {
                         for item in srt_end_exp{
-                            for filter_Sub in expsub_Date{
-                                if (filter_Sub.Dates != item["full_date"] as? String){
-                                    expsub_Date.append(Expsub_Date(Dates: (item["full_date"] as? String)!, Text: "sub"))
-                                }
+                            if let full_date = item["full_date"] as? String{
+                                expsub_Date = expsub_Date.filter { $0.Dates != full_date }
                             }
                         }
                     }
                     print(expsub_Date)
+//
+//                    for Letter in expsub_Date{
+//                        let datess = Letter.Dates
+//                        let dateFormatter = DateFormatter()
+//                        dateFormatter.dateFormat = "dd/MM/yyyy"
+//                        let Formated_Date = dateFormatter.date(from: datess)
+//                        let cell = calendar.cell(for: Formated_Date!, at: .current)
+//                        addLetter(to: cell, text: Letter.Text)
+//                    }
                 }
             case .failure(let error):
                 Toast.show(message: error.errorDescription!)
             }
         }
+    }
+    func addLetter(to cell: FSCalendarCell?, text:String) {
+        let letterLabel = UILabel()
+        letterLabel.text = text
+        letterLabel.textColor = .red
+        letterLabel.font = UIFont.boldSystemFont(ofSize: 14)
+        letterLabel.textAlignment = .center
+        letterLabel.frame = CGRect(x: 0, y: 15, width: cell?.bounds.width ?? 0, height: cell?.bounds.height ?? 0)
+        cell?.subviews.filter { $0 is UILabel }.forEach { $0.removeFromSuperview() }
+        cell?.addSubview(letterLabel)
+        labelsDictionary[cell!] = letterLabel
     }
     
     func getallowns(){

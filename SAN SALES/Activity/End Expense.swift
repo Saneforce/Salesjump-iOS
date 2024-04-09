@@ -49,7 +49,11 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource {
         let Start_KM:String
         let Mode_Of_Travel:String
     }
-    
+    struct Endsub_Date:Codable{
+        let Dates:String
+        let Text:String
+    }
+    var expsub_Date:[Endsub_Date]=[]
     var SelMod:String = ""
     var End_exp_title:String?
     var Date_Nd:Bool?
@@ -106,17 +110,36 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource {
     func maximumDate(for calendar: FSCalendar) -> Date {
         return Foundation.Date()
     }
-    
+    func minimumDate(for calendar: FSCalendar) -> Date {
+        let currentDate = Foundation.Date()
+        let calendar = Calendar.current
+        let components = calendar.dateComponents([.year, .month], from: currentDate)
+        guard let firstDayOfMonth = calendar.date(from: components) else {
+            return currentDate
+        }
+        return firstDayOfMonth
+    }
+
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
         if monthPosition == .previous || monthPosition == .next {
             return
         }
         let formatter = DateFormatter()
+        let dateFormatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
+        dateFormatter.dateFormat = "dd/MM/yyyy"
         let myStringDate = formatter.string(from: date)
-        Select_Date.text = myStringDate
-        srtExpenseData(Select_date:myStringDate)
-        Calender_View.isHidden = true
+        let Match_Date = dateFormatter.string(from: date)
+        print(expsub_Date)
+        print(Match_Date)
+        if expsub_Date.contains(where: { $0.Dates == Match_Date }){
+            Toast.show(message: "Please Select a Valid Date", controller: self)
+            return
+        }else{
+            Select_Date.text = myStringDate
+            srtExpenseData(Select_date:myStringDate)
+            Calender_View.isHidden = true
+        }
     }
     @objc private func GotoHome() {
         if (End_exp_title == "Day End Plan"){
@@ -290,6 +313,21 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource {
                         return
                     }
                     print(prettyPrintedJson)
+                    if let attance_flg = json["attance_flg"] as? [AnyObject] {
+                        for item in attance_flg{
+                            if let Flf = item["FWFlg"] as? String, Flf == "F"||Flf=="H"||Flf=="W"{
+                                print(item)
+                                expsub_Date.append(Endsub_Date(Dates: (item["pln_date"] as? String)!, Text: (item["FWFlg"] as? String)!))
+                            }
+                        }
+                    }
+                    if let srt_exp = json["srt_exp"] as? [AnyObject] {
+                        for item in srt_exp {
+                            if let full_date = item["full_date"] as? String{
+                                expsub_Date = expsub_Date.filter { $0.Dates != full_date }
+                            }
+                        }
+                    }
                 }
             case .failure(let error):
                 Toast.show(message: error.errorDescription!)
