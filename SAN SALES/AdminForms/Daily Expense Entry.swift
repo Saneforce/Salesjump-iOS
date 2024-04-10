@@ -712,11 +712,31 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
     }
     
     @IBAction func Save_Exp(_ sender: Any) {
-        
         if validateForm() == false {
             return
         }
         
+        print(Bill_photo_Ned)
+        print(Needs_Entry)
+        
+        // Upload Bill img
+        for BillUpolad in Bill_photo_Ned{
+           // self.ShowLoading(Message: "uploading photos Please wait...")
+            ImageUploader().uploadImage(SFCode: self.SFCode, image: BillUpolad.img, fileName: BillUpolad.imgurl)
+        }
+        // Upload cust img
+        for imgUpol in Needs_Entry {
+           // self.ShowLoading(Message: "uploading photos Please wait...")
+            // Ensure images and image names have the same count
+            guard imgUpol.image.count == imgUpol.image_name.count else {
+                // Handle the case where the counts don't match
+                print("Error: Image count does not match image name count")
+                continue
+            }
+            for (img, name) in zip(imgUpol.image, imgUpol.image_name) {
+                ImageUploader().uploadImage(SFCode: self.SFCode, image: img, fileName: name)
+            }
+        }
         var KM =  EnterKM.text
         if KM == ""{
             Expense_data[0].KM = "0"
@@ -740,7 +760,6 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
         let apiKey = "\(axn)&State_Code=\(StateCode)&desig=\(Desig)&divisionCode=\(DivCode)&rSF=\(SFCode)&sfCode=\(SFCode)&stateCode=\(StateCode)"
         let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
         let url = APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKeyWithoutCommas
-        print(Needs_Entry)
         var Activity_img_url2:String = ""
             var CamItem: String = ""
             var Totalamt:Double = 0.0
@@ -812,9 +831,12 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
                         return
                     }
                     print(prettyPrintedJson)
-                    self.resignFirstResponder()
-                    self.navigationController?.popViewController(animated: true)
-                    Toast.show(message: "submitted successfully", controller: self)
+                    if let Msg = prettyPrintedJson["msg"] as? String{
+                        Toast.show(message:Msg, controller: self)
+                    }else{
+                        GlobalFunc.movetoHomePage()
+                        Toast.show(message: "submitted successfully", controller: self)
+                    }
                         }
             case .failure(let error):
                 Toast.show(message: error.errorDescription!)
