@@ -159,10 +159,6 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
         camera.addTarget(target: self, action: #selector(Camra))
         paperclip.addTarget(target: self, action: #selector(Add_Pho))
         eye.addTarget(target: self, action: #selector(View_Photo))
-        //Bus_Cam.addTarget(target: self, action: #selector(Bus_Bill))
-        //Food_cam.addTarget(target: self, action: #selector(Food_Bill))
-       // Snacks_cam.addTarget(target: self, action: #selector(Snacks_Bill))
-       // SNACKS_IMG.addTarget(target: self, action: #selector(openImag))
         Daily_Exp_photos.addTarget(target: self, action: #selector(Add_Pho))
         Allo_Typ.addTarget(target: self, action: #selector(openAllowance))
         Stayingtyp.addTarget(target: self, action: #selector(openStaying_Typ))
@@ -356,6 +352,7 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
                 cell.Enter_Rmk.text = item.remark
             }
             if item.amount == "" {
+                cell.Ent_Amt.text = "0"
                 cell.Ent_Amt.placeholder = "Amount"
             }else{
                 print(item.amount)
@@ -722,7 +719,7 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
         // Upload Bill img
         for BillUpolad in Bill_photo_Ned{
            // self.ShowLoading(Message: "uploading photos Please wait...")
-            ImageUploader().uploadImage(SFCode: self.SFCode, image: BillUpolad.img, fileName: BillUpolad.imgurl)
+            ImageUploader().uploadImage(SFCode: self.SFCode, image: BillUpolad.img, fileName: "__\(BillUpolad.imgurl)")
         }
         // Upload cust img
         for imgUpol in Needs_Entry {
@@ -734,7 +731,7 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
                 continue
             }
             for (img, name) in zip(imgUpol.image, imgUpol.image_name) {
-                ImageUploader().uploadImage(SFCode: self.SFCode, image: img, fileName: name)
+                ImageUploader().uploadImage(SFCode: self.SFCode, image: img, fileName: "__\(name)")
             }
         }
         var KM =  EnterKM.text
@@ -752,18 +749,23 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
         
         let alert = UIAlertController(title: "Confirmation", message: "Do you want to submit?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { [self] _ in
-        
-        self.ShowLoading(Message: "Data Submitting Please wait...")
-        Expense_data[0].Routename = From_Text.text!
-        Expense_data[0].Toworkplace = To_Text.text!
-        let axn = "dcr/save"
-        let apiKey = "\(axn)&State_Code=\(StateCode)&desig=\(Desig)&divisionCode=\(DivCode)&rSF=\(SFCode)&sfCode=\(SFCode)&stateCode=\(StateCode)"
-        let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
-        let url = APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKeyWithoutCommas
-        var Activity_img_url2:String = ""
+            
+            self.ShowLoading(Message: "Data Submitting Please wait...")
+            Expense_data[0].Routename = From_Text.text!
+            Expense_data[0].Toworkplace = To_Text.text!
+            let axn = "dcr/save"
+            let apiKey = "\(axn)&State_Code=\(StateCode)&desig=\(Desig)&divisionCode=\(DivCode)&rSF=\(SFCode)&sfCode=\(SFCode)&stateCode=\(StateCode)"
+            let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
+            let url = APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKeyWithoutCommas
+            var Activity_img_url2:String = ""
             var CamItem: String = ""
             var Totalamt:Double = 0.0
+            if Needs_Entry.isEmpty{
+             print("No Data")
+            }else{
             for i in Needs_Entry {
+                print(Needs_Entry)
+                print(i.amount)
                 Totalamt = Totalamt + Double(i.amount)!
                 CamItem += "{"
                 CamItem += " \"ID\": " + String(i.ID) + ","
@@ -796,6 +798,7 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
                 CamItem += " \"Photo_Nd\": " + String(i.Photo_Nd) + ""
                 CamItem += "},"
             }
+        }
             CamItem = String(CamItem.dropLast())
             Expense_data[0].TotalAmount = String(format: "%.2f", Totalamt)
         var Bill_Det = ""

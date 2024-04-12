@@ -3,4 +3,98 @@
    uuid = "54681D1F-53B2-4C65-AC0A-2D1267C6A881"
    type = "0"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "46E75071-4E2D-4519-99A7-DCFE27A4E66E"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SAN SALES/AdminForms/Expense Entry.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "749"
+            endingLineNumber = "749"
+            landmarkName = "send_forApproval_periodic(Period_Id:Eff_Month:Eff_Year:From_Date:To_Date:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "46E75071-4E2D-4519-99A7-DCFE27A4E66E - d27f18d5ede3aab7"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "SAN_SALES.MonthsView.__deallocating_deinit"
+                  moduleName = "SAN SALES"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/saneforce/Documents/Salesjump-iOS/SAN%20SALES/AdminForms/Expense%20Entry.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0">
+               </Location>
+               <Location
+                  uuid = "46E75071-4E2D-4519-99A7-DCFE27A4E66E - 154311b1d1e559de"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.Expense_Entry.send_forApproval_periodic(Period_Id: Swift.String, Eff_Month: Swift.String, Eff_Year: Swift.String, From_Date: Swift.String, To_Date: Swift.String) -&gt; ()"
+                  moduleName = "SAN SALES"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/saneforce/Documents/Salesjump-iOS/SAN%20SALES/AdminForms/Expense%20Entry.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "749"
+                  endingLineNumber = "749">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "78C5CB48-1984-4F6A-B439-3B215567155E"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SAN SALES/AdminForms/Expense Entry.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "743"
+            endingLineNumber = "743"
+            landmarkName = "send_forApproval_periodic(Period_Id:Eff_Month:Eff_Year:From_Date:To_Date:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "78C5CB48-1984-4F6A-B439-3B215567155E - 6e6cdb8516b88466"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "SAN_SALES.Expense_Entry.send_forApproval_periodic(Period_Id: Swift.String, Eff_Month: Swift.String, Eff_Year: Swift.String, From_Date: Swift.String, To_Date: Swift.String) -&gt; ()"
+                  moduleName = "SAN SALES"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/saneforce/Documents/Salesjump-iOS/SAN%20SALES/AdminForms/Expense%20Entry.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "743"
+                  endingLineNumber = "743">
+               </Location>
+               <Location
+                  uuid = "78C5CB48-1984-4F6A-B439-3B215567155E - 154311b1d1e55814"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.Expense_Entry.send_forApproval_periodic(Period_Id: Swift.String, Eff_Month: Swift.String, Eff_Year: Swift.String, From_Date: Swift.String, To_Date: Swift.String) -&gt; ()"
+                  moduleName = "SAN SALES"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/saneforce/Documents/Salesjump-iOS/SAN%20SALES/AdminForms/Expense%20Entry.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "743"
+                  endingLineNumber = "743">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>

@@ -283,6 +283,7 @@ class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, 
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let item = Period[indexPath.row]
+        print(item)
         Nav_PeriodicData = [item as AnyObject]
         print(Nav_PeriodicData)
         removeLabels()
@@ -323,6 +324,7 @@ class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, 
                 print("Error: Unable to convert string to Date")
             }
         }
+        send_forApproval_periodic(Period_Id: item.Period_Id, Eff_Month: String(item.Eff_Month), Eff_Year: String(item.Eff_Year), From_Date: item.From_Date, To_Date:item.To_Date)
         expSubmitDates()
         calendar.reloadData()
         TextSeh.text = ""
@@ -722,11 +724,41 @@ class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, 
             }
         }
     }
-    func send_forApproval_periodic(){
+    func send_forApproval_periodic(Period_Id:String,Eff_Month:String,Eff_Year:String,From_Date:String,To_Date:String){
+        let Month = String(format: "%02d",Int(Eff_Month)!)
+        let FromDate = String(format: "%02d",Int(From_Date)!)
+        let ToDate = String(format: "%02d",Int(To_Date)!)
+        let From_Date = "\(Eff_Year)-\(Month)-\(FromDate)"
+        let To_Date = "\(Eff_Year)-\(Month)-\(ToDate)"
         let axn = "send_forApproval_periodic"
-        let apiKey = "\(axn)&desig=\(Desig)&divisionCode=\(DivCode)&month=03&from_date=2024-03-15&to_date=2024-03-21&rSF=\(SFCode)&year=2024&sfCode=\(SFCode)&stateCode=\(StateCode)&period_id=59&sf_code=\(SFCode)"
+        let apiKey = "\(axn)&desig=\(Desig)&divisionCode=\(DivCode)&month=\(Month)&from_date=\(From_Date)&to_date=\(To_Date)&rSF=\(SFCode)&year=\(Eff_Year)&sfCode=\(SFCode)&stateCode=\(StateCode)&period_id=\(Period_Id)&sf_code=\(SFCode)"
         let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
         let url = APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKeyWithoutCommas
+        print(url)
+        AF.request(url, method: .post, parameters: nil, encoding: URLEncoding.default, headers: nil)
+            .validate(statusCode: 200..<299)
+            .responseJSON { [self] response in
+                switch response.result {
+                case .success(let value):
+                    print(value)
+                    //self.LoadingDismiss()
+                    if let json = value as? [String: Any] {
+                        do {
+                            let prettyJsonData = try JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
+                            if let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) {
+                                print(prettyPrintedJson)
+                            } else {
+                                print("Error: Could not convert JSON to String")
+                            }
+                        } catch {
+                            print("Error: \(error.localizedDescription)")
+                        }
+                    }
+                    
+                case .failure(let error):
+                    Toast.show(message: error.errorDescription ?? "Unknown Error")
+            }
+        }
     }
 }
 
