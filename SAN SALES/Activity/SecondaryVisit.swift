@@ -94,6 +94,7 @@ class SecondaryVisit: IViewController, UITableViewDelegate, UITableViewDataSourc
         if let list = GlobalFunc.convertToDictionary(text: PlnDets) as? [AnyObject] {
             lstPlnDetail = list;
         }
+        print(lstPlnDetail)
         DataSF = self.lstPlnDetail[0]["subordinateid"] as! String
         
         if let list = GlobalFunc.convertToDictionary(text: RmkDatas) as? [AnyObject] {

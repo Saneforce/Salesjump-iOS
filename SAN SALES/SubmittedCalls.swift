@@ -101,6 +101,16 @@ class SubmittedCalls: UIViewController, UITableViewDelegate, UITableViewDataSour
             viewController.setViewControllers([SubCalls,PSUBDCR], animated: false)
             (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
         }
+        
+        if lItm.MasId == 3 {
+            let SubCalls = storyboardMain.instantiateViewController(withIdentifier: "SubmittedCalls") as! SubmittedCalls
+            let ssoDCR = storyboard.instantiateViewController(withIdentifier: "SuperStockistOrderSubmittedDetails") as! SuperStockistOrderSubmittedDetails
+            viewController.setViewControllers([SubCalls,ssoDCR], animated: false)
+            (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
+            
+//            
+            
+        }
         (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
         print(strMasList[indexPath.row].MasName)
     }
@@ -141,6 +151,7 @@ class SubmittedCalls: UIViewController, UITableViewDelegate, UITableViewDataSour
                     print(prettyPrintedJson)
                     var Secondary_order_Count = 0
                     var Primary_Order_Count = 0
+                    var Super_Stockist_Order_Count = 0
                    if  let secondary = json["data"] as? [[String: Any]]{
                     
                     for dictionary in secondary {
@@ -151,11 +162,19 @@ class SubmittedCalls: UIViewController, UITableViewDelegate, UITableViewDataSour
                         if let stockistCount = dictionary["stockist_count"] as? Int {
                             Primary_Order_Count = stockistCount
                         }
+                        
+                        if let superStockistCount = dictionary["SuperStokit"] as? Int {
+                            Super_Stockist_Order_Count = superStockistCount
+                        }
                     }
                 }
 
                         strMasList.append(mnuItem.init(MasId: 1, MasName: "Secondary Order", MasImage: "SwitchRoute",BTC: String(Secondary_order_Count)))
                         strMasList.append(mnuItem.init(MasId: 2, MasName: "Primary Order", MasImage: "SwitchRoute",BTC: String(Primary_Order_Count)))
+                        if (UserSetup.shared.SuperStockistNeed == 1) {
+                            strMasList.append(mnuItem.init(MasId: 3, MasName: "Super Stockist Order", MasImage: "SwitchRoute",BTC: String(Super_Stockist_Order_Count)))
+                        }
+                        
 
                     self.SubmittedcallsTB.reloadData()
                     

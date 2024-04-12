@@ -45,6 +45,7 @@ import BackgroundTasks
          
          let SFCode: String=prettyJsonData["sfCode"] as? String ?? ""
          let StateCode: String=prettyJsonData["State_Code"] as? String ?? ""
+         let desigCode : String = prettyJsonData["desigCode"] as? String ?? ""
          
          strMasList.append(mnuItem.init(MasId: 1, MasName: "Headquarters", MasImage: "mnuPrimary",StoreKey: "HQ_Master", ApiKey: "get/subordinate&divisionCode="+(prettyJsonData["divisionCode"] as? String ?? "")+"&rSF="+SFCode+"&sfCode="+SFCode,fromData: ["tableName":"subordinate_master","coloumns":"[\"sf_code as id\", \"sf_name as name\"]","orderBy":"[\"name asc\"]","desig":"mgr"
          ]))
@@ -72,7 +73,7 @@ import BackgroundTasks
          strMasList.append(mnuItem.init(MasId: 6, MasName: "Tax Details", MasImage: "mnuPrimary",StoreKey: "Tax_Master", ApiKey: "table/list&divisionCode="+(prettyJsonData["divisionCode"] as? String ?? "")+"&rSF="+SFCode+"&sfCode="+SFCode,fromData: [
              "tableName":"TaxMaster","coloumns":"[*]","orderBy":"[\"name asc\"]","desig":"mgr"
          ]))
-         strMasList.append(mnuItem.init(MasId: 7, MasName: "Productwise Tax Details", MasImage: "mnuPrimary",StoreKey: "ProductTax_Master", ApiKey: "table/list&divisionCode="+(prettyJsonData["divisionCode"] as? String ?? "")+"&rSF="+SFCode+"&sfCode="+SFCode,fromData: [
+         strMasList.append(mnuItem.init(MasId: 7, MasName: "Productwise Tax Details", MasImage: "mnuPrimary",StoreKey: "ProductTax_Master", ApiKey: "table/list&divisionCode="+(prettyJsonData["divisionCode"] as? String ?? "")+"&rSF="+SFCode+"&sfCode="+SFCode+"&State_Code="+StateCode,fromData: [
              "tableName":"ProdTaxDets","coloumns":"[*]","orderBy":"[\"name asc\"]","desig":"mgr"
          ]))
          
@@ -151,7 +152,17 @@ import BackgroundTasks
             "orderBy":"[\"name asc\"]","desig":"mgr"
          ]))
          
-    
+         strMasList.append(mnuItem.init(MasId: 27, MasName: "Stockist Schemes", MasImage: "mnuPrimary",StoreKey: "Stockist_Schemes", ApiKey: "get/StockistScheme&divisionCode="+(prettyJsonData["divisionCode"] as? String ?? "")+"&rSF="+SFCode+"&sfCode="+SFCode+"&State_Code="+StateCode+"&desig="+desigCode,fromData: [
+            "orderBy":"[\"name asc\"]","desig":"mgr"
+         ]))
+         
+         strMasList.append(mnuItem.init(MasId: 28, MasName: "Random Number", MasImage: "mnuPrimary",StoreKey: "Random_Number", ApiKey: "get/Randomnumber&divisionCode="+(prettyJsonData["divisionCode"] as? String ?? "")+"&rSF="+SFCode+"&sfCode="+SFCode+"&State_Code="+StateCode+"&desig="+desigCode,fromData: [
+            "orderBy":"[\"name asc\"]","desig":"mgr"
+         ]))
+         
+         
+         
+ //    http://galpha.salesjump.in/server/native_Db_V13.php?axn=get%2FRandomnumber&divisionCode=258%2C&rSF=GLLMR0020&sfCode=GLLMR0020&State_Code=28&desig=MR
          
          
          btnClearData.addTarget(target: self, action: #selector(clearAllData))
@@ -253,6 +264,8 @@ import BackgroundTasks
          self.SyncKeys = self.SyncKeys.replacingOccurrences(of: ";e:" + aStoreKey + ";", with: "")
          SyncKeys = SyncKeys + ";" + aStoreKey + ";"
          tbMasLists.reloadData()
+         print(APIClient.shared.BaseURL+APIClient.shared.DBURL1+apiKey)
+         print(params)
          AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+apiKey, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
              AFdata in
              switch AFdata.result

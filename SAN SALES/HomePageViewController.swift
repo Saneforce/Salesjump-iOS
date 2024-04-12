@@ -134,6 +134,10 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         if (UserSetup.shared.BrndRvwNd > 0) {
             strMenuList.append(mnuItem.init(MnuId: 3, MenuName: UserSetup.shared.BrandReviewVisit, MenuImage: "mnuPrimary"))
         }
+        if (UserSetup.shared.SuperStockistNeed > 0){
+            strMenuList.append(mnuItem.init(MnuId: 4, MenuName: UserSetup.shared.SuperStockistOrder, MenuImage: "mnuPrimary"))
+        }
+        
         mnulist.constant = CGFloat(87*self.strMenuList.count)
                          self.view.layoutIfNeeded()
         var moveMyPln: Bool=false
@@ -156,10 +160,10 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
                     let strDate: String = formatter.string(from: Date())
                     print(strDate)
                     let calendar = Calendar.current
-                    if(calendar.dateComponents([.day],from: plnDt!,to: Date()).day! > 0){
-                        LocalStoreage.removeObject(forKey: "Mydayplan")
-                        moveMyPln=true
-                    }
+//                    if(calendar.dateComponents([.day],from: plnDt!,to: Date()).day! > 0){
+//                        LocalStoreage.removeObject(forKey: "Mydayplan")
+//                        moveMyPln=true
+//                    }
                     if("\(String(describing: lstMyplnList[0]["tourplanDone"]))" != "Optional(nil)"){
                         let myDyPln = self.storyboard?.instantiateViewController(withIdentifier: "sbMydayplan") as! MydayPlanCtrl
                         self.navigationController?.pushViewController(myDyPln, animated: true)
@@ -541,6 +545,9 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
             self.navigationController?.pushViewController(vc, animated: true)
         case 3:
             let vc=self.storyboard?.instantiateViewController(withIdentifier:"sbbrandReviewVisit") as! BrandReviewVisit
+            self.navigationController?.pushViewController(vc, animated: true)
+        case 4:
+            let vc=self.storyboard?.instantiateViewController(withIdentifier:"superStockistOrder") as! SuperStockistOrder
             self.navigationController?.pushViewController(vc, animated: true)
     
         default:

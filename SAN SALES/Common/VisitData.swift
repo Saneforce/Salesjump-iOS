@@ -33,6 +33,8 @@ class VisitData{
     
     var ProductCart: [AnyObject] = []
     
+    var selectedOrders = [ProductList]()
+    
     func clear(){
         WorkType = ""
         TownCode = ""

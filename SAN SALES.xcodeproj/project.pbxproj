@@ -7,6 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		159D40E62B95972E005B41E1 /* SuperStockistOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159D40E52B95972E005B41E1 /* SuperStockistOrder.swift */; };
+		159D9ABB2BA7F7A800DE3FAA /* CustomAlertVCViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159D9AB92BA7F7A800DE3FAA /* CustomAlertVCViewController.swift */; };
+		159D9ABC2BA7F7A800DE3FAA /* CustomAlertVCViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 159D9ABA2BA7F7A800DE3FAA /* CustomAlertVCViewController.xib */; };
+		15A455452BB3F6A900EAE18C /* ItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A455432BB3F6A900EAE18C /* ItemViewController.swift */; };
+		15A455462BB3F6A900EAE18C /* ItemViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15A455442BB3F6A900EAE18C /* ItemViewController.xib */; };
+		15A5A6932BB6BF90004525FF /* CallPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A5A6922BB6BF90004525FF /* CallPreview.swift */; };
+		15AB96192B96F85500830D1E /* SuperStockistOrderList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15AB96182B96F85500830D1E /* SuperStockistOrderList.swift */; };
+		15B056B02BBE9E0400D5B585 /* SuperStockistOrderSubmittedDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B056AF2BBE9E0400D5B585 /* SuperStockistOrderSubmittedDetails.swift */; };
 		19247A3DB960E114A6C28FB3 /* Pods_SAN_SALES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 448C0B69977667C109C50683 /* Pods_SAN_SALES.framework */; };
 		381EF93D2B19DB9700CED65F /* UI+Constraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 381EF93C2B19DB9700CED65F /* UI+Constraints.swift */; };
 		385ED6042ABAB50400B43564 /* FSCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 385ED6032ABAB50400B43564 /* FSCalendar */; };
@@ -97,6 +105,14 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		159D40E52B95972E005B41E1 /* SuperStockistOrder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuperStockistOrder.swift; sourceTree = "<group>"; };
+		159D9AB92BA7F7A800DE3FAA /* CustomAlertVCViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAlertVCViewController.swift; sourceTree = "<group>"; };
+		159D9ABA2BA7F7A800DE3FAA /* CustomAlertVCViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomAlertVCViewController.xib; sourceTree = "<group>"; };
+		15A455432BB3F6A900EAE18C /* ItemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemViewController.swift; sourceTree = "<group>"; };
+		15A455442BB3F6A900EAE18C /* ItemViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ItemViewController.xib; sourceTree = "<group>"; };
+		15A5A6922BB6BF90004525FF /* CallPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallPreview.swift; sourceTree = "<group>"; };
+		15AB96182B96F85500830D1E /* SuperStockistOrderList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuperStockistOrderList.swift; sourceTree = "<group>"; };
+		15B056AF2BBE9E0400D5B585 /* SuperStockistOrderSubmittedDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuperStockistOrderSubmittedDetails.swift; sourceTree = "<group>"; };
 		3453EBBCA5603BC17DBC6D2A /* Pods-SAN SALES.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SAN SALES.release.xcconfig"; path = "Target Support Files/Pods-SAN SALES/Pods-SAN SALES.release.xcconfig"; sourceTree = "<group>"; };
 		381EF93C2B19DB9700CED65F /* UI+Constraints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UI+Constraints.swift"; sourceTree = "<group>"; };
 		386889E12B1868F90015F20C /* RottPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RottPageViewController.swift; sourceTree = "<group>"; };
@@ -210,6 +226,7 @@
 				3883A09B2A176B6300B858CF /* SubmittedCalls.swift */,
 				386A43902A1CBB0200CE1833 /* SubmittedDCR.swift */,
 				386A43942A1CC63100CE1833 /* PrimarySubmittedDCR.swift */,
+				15B056AF2BBE9E0400D5B585 /* SuperStockistOrderSubmittedDetails.swift */,
 			);
 			name = SubmittedCalls;
 			sourceTree = "<group>";
@@ -275,6 +292,13 @@
 				3F063531283F5FEF0027842E /* PrimaryOrder.swift */,
 				3F7CCF0228F14CA3002A7C03 /* GEOTagging.swift */,
 				38D0F76729BB2447003EEB03 /* BrandReviewVisit.swift */,
+				159D40E52B95972E005B41E1 /* SuperStockistOrder.swift */,
+				15AB96182B96F85500830D1E /* SuperStockistOrderList.swift */,
+				15A5A6922BB6BF90004525FF /* CallPreview.swift */,
+				159D9AB92BA7F7A800DE3FAA /* CustomAlertVCViewController.swift */,
+				15A455432BB3F6A900EAE18C /* ItemViewController.swift */,
+				15A455442BB3F6A900EAE18C /* ItemViewController.xib */,
+				159D9ABA2BA7F7A800DE3FAA /* CustomAlertVCViewController.xib */,
 			);
 			path = Activity;
 			sourceTree = "<group>";
@@ -356,7 +380,6 @@
 				3F619F3A27EAED9000F3D05F /* Service */,
 				3FBF387327E4480E00900007 /* Common */,
 				3F28CC1227DC96C300B95964 /* TableCells */,
-				3F28CC0D27D74D3B00B95964 /* UI */,
 				3F28CBE627D3927E00B95964 /* Fonts */,
 				3F2F810A27CEB30C0015E1CA /* AppDelegate.swift */,
 				3F2F810C27CEB30C0015E1CA /* SceneDelegate.swift */,
@@ -367,6 +390,7 @@
 				3F2F811E27D0E7430015E1CA /* HomePageViewController.swift */,
 				3F2F812027D0E9670015E1CA /* RootViewController.swift */,
 				3F28CC0B27D5302100B95964 /* MydayPlanCtrl.swift */,
+				3F28CC0D27D74D3B00B95964 /* UI */,
 				3F2F811327CEB30D0015E1CA /* Assets.xcassets */,
 				3F06352B283BC9790027842E /* PhotoGallary.swift */,
 				3F28CC1027DC856400B95964 /* MasterSync.swift */,
@@ -509,6 +533,7 @@
 				3F28CC0227D3927E00B95964 /* Poppins-BlackItalic.ttf in Resources */,
 				3F28CC0827D3927E00B95964 /* Poppins-SemiBold.ttf in Resources */,
 				3F28CC0527D3927E00B95964 /* Poppins-Bold.ttf in Resources */,
+				15A455462BB3F6A900EAE18C /* ItemViewController.xib in Resources */,
 				3F28CBF927D3927E00B95964 /* Poppins-ExtraLight.ttf in Resources */,
 				3F28CBFC27D3927E00B95964 /* Poppins-BoldItalic.ttf in Resources */,
 				3F28CBFD27D3927E00B95964 /* Poppins-Light.ttf in Resources */,
@@ -519,6 +544,7 @@
 				3F28CC0027D3927E00B95964 /* Poppins-ExtraBoldItalic.ttf in Resources */,
 				3F28CC0327D3927E00B95964 /* Poppins-Regular.ttf in Resources */,
 				38B05F502B04CAE50025D4C0 /* ManagerDashboard.storyboard in Resources */,
+				159D9ABC2BA7F7A800DE3FAA /* CustomAlertVCViewController.xib in Resources */,
 				386A43932A1CC3E000CE1833 /* Submittedcalls.storyboard in Resources */,
 				3F28CBFA27D3927E00B95964 /* Poppins-ThinItalic.ttf in Resources */,
 				3F28CBFE27D3927E00B95964 /* Poppins-Medium.ttf in Resources */,
@@ -580,11 +606,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				3F619F3E27EB275000F3D05F /* CLocationService.swift in Sources */,
+				15A455452BB3F6A900EAE18C /* ItemViewController.swift in Sources */,
+				15A5A6932BB6BF90004525FF /* CallPreview.swift in Sources */,
 				3F619F3C27EAEDC000F3D05F /* LocationService.swift in Sources */,
 				3F2F812127D0E9670015E1CA /* RootViewController.swift in Sources */,
 				3F2F811F27D0E7430015E1CA /* HomePageViewController.swift in Sources */,
 				38A2E9B22A0E1B940061B854 /* Brand Availability.swift in Sources */,
 				3F0861BF2801D589006A30FB /* CollectionCell.swift in Sources */,
+				159D40E62B95972E005B41E1 /* SuperStockistOrder.swift in Sources */,
+				159D9ABB2BA7F7A800DE3FAA /* CustomAlertVCViewController.swift in Sources */,
 				3F06352E283BF36A0027842E /* FlowLayout.swift in Sources */,
 				3F06352A283A8C920027842E /* ColorTheme.swift in Sources */,
 				38D0F76829BB2447003EEB03 /* BrandReviewVisit.swift in Sources */,
@@ -600,6 +630,7 @@
 				381EF93D2B19DB9700CED65F /* UI+Constraints.swift in Sources */,
 				3F3D4DDB27E810880063E271 /* GlobalFunc.swift in Sources */,
 				3F06353728421D870027842E /* ImageUploader.swift in Sources */,
+				15B056B02BBE9E0400D5B585 /* SuperStockistOrderSubmittedDetails.swift in Sources */,
 				3F28CC0F27D74D7200B95964 /* LabelSelect.swift in Sources */,
 				3F4CC197287B297A00BA2B4E /* NetworkMonitor.swift in Sources */,
 				38F6F5B12B19D305007090BF /* Coverage.swift in Sources */,
@@ -632,6 +663,7 @@
 				386A43912A1CBB0200CE1833 /* SubmittedDCR.swift in Sources */,
 				3F7CCF0328F14CA3002A7C03 /* GEOTagging.swift in Sources */,
 				3F0861C328053B3A006A30FB /* UserSetup.swift in Sources */,
+				15AB96192B96F85500830D1E /* SuperStockistOrderList.swift in Sources */,
 				38F6F5AF2B19D2ED007090BF /* Location.swift in Sources */,
 				3F2F810B27CEB30C0015E1CA /* AppDelegate.swift in Sources */,
 				3F063530283E04580027842E /* PrimaryVisit.swift in Sources */,
@@ -786,7 +818,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = N89SJ534H4;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "SAN SALES/Info.plist";
@@ -823,7 +855,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = N89SJ534H4;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "SAN SALES/Info.plist";

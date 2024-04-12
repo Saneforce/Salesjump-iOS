@@ -102,7 +102,7 @@ class IViewController: UIViewController, UITextFieldDelegate{
            return
         }
         do {
-            let currFrame: CGRect =  (UIResponder.currentFirstResponder!.globalFrame ?? CGRect.zero)
+            let currFrame: CGRect =  (UIResponder.currentFirstResponder?.globalFrame ?? CGRect.zero)
             let textFieldBottomLine: CGFloat = (currFrame.origin.y) + currFrame.height + LITTLE_SPACE
             let viewRect: CGRect = self.view.bounds //(self.view.window?.convert(self.view.bounds, to: self.view))!
             var isTextFieldHidden: Bool = false

@@ -37,6 +37,17 @@ public class LocationService: NSObject, CLLocationManagerDelegate{
         locationManager.stopUpdatingLocation()
         locationManager.stopMonitoringSignificantLocationChanges()
     }
+    
+    func isLocationPermissionEnable() -> Bool{
+        switch CLLocationManager.authorizationStatus() {
+        case .notDetermined, .restricted, .denied:
+            return false
+        case .authorizedAlways, .authorizedWhenInUse:
+            return true
+        @unknown default:
+            return true
+        }
+    }
     public func getNewLocation(location: ((CLLocation) -> Void)?,error: ((String) -> Void)?) {
         self.requestNewLocation = location
         self.ErrorLocation = error

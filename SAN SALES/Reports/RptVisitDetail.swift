@@ -51,8 +51,14 @@ class RptVisitDetail: IViewController, UITableViewDelegate, UITableViewDataSourc
         return 42
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if tableView==tbVstDetail { return RptVisitDetail.objVstDetail.count }
-        if tableView==tbItemSumry { return RptVisitDetail.objItmSmryDetail.count }
+        if tableView==tbVstDetail {
+            vstHeight.constant = self.tbVstDetail.contentSize.height
+            return RptVisitDetail.objVstDetail.count
+        }
+        if tableView==tbItemSumry {
+            itmSmryHeight.constant = self.tbItemSumry.contentSize.height
+            return RptVisitDetail.objItmSmryDetail.count
+        }
         return 0
     }
     
@@ -105,8 +111,17 @@ class RptVisitDetail: IViewController, UITableViewDelegate, UITableViewDataSourc
             "data": jsonString
         ]
         
-        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+        
+        print(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey)
+        
+        let url = "http://fmcg.sanfmcg.com/server/native_Db_V13_nagaprasath.php?axn=get/vwiOSVstDet&divisionCode=\(DivCode),&rSF=\(SFCode)&rptDt=\(StrRptDt)&sfCode=\(SFCode)&State_Code=\(StateCode)&Mode=VstPSuperStk"
+        
+        self.ShowLoading(Message: "Loading...")
+        AF.request(url, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
             AFdata in
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                self.LoadingDismiss()
+            }
             switch AFdata.result
             {
                
@@ -127,6 +142,11 @@ class RptVisitDetail: IViewController, UITableViewDelegate, UITableViewDataSourc
                             return Bool(fitem["OrdVal"] as! Double > 0)
                             
                         })
+                    }else if (StrMode == "VstPSuperStk"){
+                        RptVisitDetail.objVstDetail = json.filter({(fitem) in
+                            return Bool(fitem["OrdVal"] as! Double > 0)
+                            
+                        })
                     }else{
                         RptVisitDetail.objVstDetail = json
                         print(RptVisitDetail.objVstDetail)
@@ -134,7 +154,8 @@ class RptVisitDetail: IViewController, UITableViewDelegate, UITableViewDataSourc
                     tbVstDetail.reloadData()
                     vstHeight.constant = CGFloat(70*RptVisitDetail.objVstDetail.count)
                     self.view.layoutIfNeeded()
-                    ContentHeight.constant = 100+CGFloat(55*RptVisitDetail.objVstDetail.count)+CGFloat(42*RptVisitDetail.objItmSmryDetail.count)
+                 //   ContentHeight.constant = 100+CGFloat(55*RptVisitDetail.objVstDetail.count)+CGFloat(42*RptVisitDetail.objItmSmryDetail.count)
+                    ContentHeight.constant = 100+CGFloat(tbVstDetail.contentSize.height)+CGFloat(tbItemSumry.contentSize.height)
                     self.view.layoutIfNeeded()
                 }
                case .failure(let error):
@@ -156,9 +177,19 @@ class RptVisitDetail: IViewController, UITableViewDelegate, UITableViewDataSourc
             "data": jsonString
         ]
         
-        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+        print(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey)
+        
+        let url = "http://fmcg.sanfmcg.com/server/native_Db_V13_nagaprasath.php?axn=get/vwItemSummmary&divisionCode=\(DivCode),&rSF=\(SFCode)&rptDt=\(StrRptDt)&sfCode=\(SFCode)&State_Code=\(StateCode)&Mode=VstSuperStk"
+        
+        self.ShowLoading(Message: "Loading...")
+        AF.request(url, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
             AFdata in
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                self.LoadingDismiss()
+            }
             switch AFdata.result
+            
+            
             {
                
                 case .success(let value):
@@ -179,6 +210,7 @@ class RptVisitDetail: IViewController, UITableViewDelegate, UITableViewDataSourc
                     itmSmryHeight.constant = CGFloat(42*RptVisitDetail.objItmSmryDetail.count)
                     self.view.layoutIfNeeded()
                     ContentHeight.constant = 100+CGFloat(55*RptVisitDetail.objVstDetail.count)+CGFloat(42*RptVisitDetail.objItmSmryDetail.count)
+                    ContentHeight.constant = 100+CGFloat(self.tbVstDetail.contentSize.height)+CGFloat(self.tbItemSumry.contentSize.height)
                     self.view.layoutIfNeeded()
                     print(ContentHeight.constant)
                     print(tbItemSumry)
