@@ -20,6 +20,10 @@ class SuperStockistOrderSubmittedDetails : UIViewController , UITableViewDelegat
     @IBOutlet weak var detailsTableView: UITableView!
     
     
+    
+    @IBOutlet weak var scrollView: UIScrollView!
+    
+    
     @IBOutlet weak var imgBack: UIImageView!
     
     
@@ -43,6 +47,10 @@ class SuperStockistOrderSubmittedDetails : UIViewController , UITableViewDelegat
     
     
     @IBOutlet weak var detailsTableViewHeigthConstraint: NSLayoutConstraint!
+    
+    
+    @IBOutlet weak var scrollViewHeightConstraint: NSLayoutConstraint!
+    
     
     
     var SFCode: String = "", StateCode: String = "", DivCode: String = "",Desig: String="", rSF: String = ""
@@ -79,6 +87,7 @@ class SuperStockistOrderSubmittedDetails : UIViewController , UITableViewDelegat
         getTransSlNo()
         
         
+        
     }
     
     func getUserDetails(){
@@ -101,11 +110,15 @@ class SuperStockistOrderSubmittedDetails : UIViewController , UITableViewDelegat
             return lstSuperStockistDetails.count
         }
         if tableView == orderProductListTableView {
-          //  orderProductListTableViewHeightConstraint.constant = orderProductListTableView.contentSize.height + 20
+            orderProductListTableViewHeightConstraint.constant = CGFloat(View.count * 50)
             return View.count
         }
         if tableView == detailsTableView {
-           // detailsTableViewHeigthConstraint.constant = detailsTableView.contentSize.height + 20
+            detailsTableViewHeigthConstraint.constant = CGFloat(Input.count * 50) //detailsTableView.contentSize.height + 20
+          //  scrollViewHeightConstraint.constant = 220+CGFloat(View.count * 50)+CGFloat(Input.count * 50)
+            
+            let height = 280+CGFloat(View.count * 50)+CGFloat(Input.count * 50)
+            scrollView.contentSize = CGSize(width: self.view.frame.size.width, height: height)
             return Input.count
         }
         return 0
@@ -303,31 +316,22 @@ class SuperStockistOrderSubmittedDetails : UIViewController , UITableViewDelegat
                 
                 View.append(Viewval(Product:productDatas[0] , qty: Int(price1)!, value: Double(price)!))
                 print(View)
+                orderProductListTableViewHeightConstraint.constant = CGFloat(View.count * 50)
                 orderProductListTableView.reloadData()
                 
             }
         }
-//        if (View.count == 0){
-//            OrderHig.constant = 10
-//        }else if (10 < View.count){
-//            OrderHig.constant = 100 + CGFloat(35*self.View.count)
-//        }
-//        else{
-//            OrderHig.constant = 100 + CGFloat(25*self.View.count)
-//        }
-//        print(OrderHig.constant)
-//            self.view.layoutIfNeeded()
-//        if ( 10 < View.count){
-//            ScHig.constant = 120 + CGFloat(55*self.View.count)+CGFloat(45*self.Input.count)
-//        }else{
-//            ScHig.constant = 100 + CGFloat(40*self.View.count)+CGFloat(35*self.Input.count)
-//        }
+
+        detailsTableViewHeigthConstraint.constant = CGFloat(Input.count * 50)
         
-        self.orderProductListTableViewHeightConstraint.constant = self.orderProductListTableView.contentSize.height + 50
+        orderProductListTableViewHeightConstraint.constant = CGFloat(View.count * 50)
+        let height = 220+CGFloat(View.count * 50)+CGFloat(Input.count * 50)
+        scrollView.contentSize = CGSize(width: self.view.frame.size.width, height: height)
+        
+        print(height)
+        print(CGFloat(View.count * 50))
         self.orderProductListTableView.reloadData()
-        self.detailsTableViewHeigthConstraint.constant = self.detailsTableView.contentSize.height + 20
         self.detailsTableView.reloadData()
-        
         self.view.layoutIfNeeded()
         
     }

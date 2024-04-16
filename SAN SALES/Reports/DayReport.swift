@@ -80,12 +80,6 @@ class DayReport:IViewController,UICollectionViewDelegate,UICollectionViewDataSou
             superStockViewTitleHeightConstraint.constant = 0
             superStockViewOrderListHeightConstraints.constant = 0
         }
-//        else {
-//            vwSuperStockistList.isHidden = true
-//            vwSuperStockistTitle.isHidden = true
-//            superStockViewTitleHeightConstraint.constant = 0
-//            superStockViewOrderListHeightConstraints.constant = 0
-//        }
         
     }
     
@@ -131,7 +125,7 @@ class DayReport:IViewController,UICollectionViewDelegate,UICollectionViewDataSou
         SFCode = prettyJsonData["sfCode"] as? String ?? ""
         StateCode = prettyJsonData["State_Code"] as? String ?? ""
         DivCode = prettyJsonData["divisionCode"] as? String ?? ""
-        StrRptDt=GlobalFunc.getCurrDateAsString().replacingOccurrences(of: " ", with: "%20")
+        StrRptDt = Date().toString(format: "yyyy-MM-dd") // GlobalFunc.getCurrDateAsString().replacingOccurrences(of: " ", with: "%20")
     }
     
     func getDayReport(){
@@ -154,9 +148,9 @@ class DayReport:IViewController,UICollectionViewDelegate,UICollectionViewDataSou
         print(url)
         print(params)
         self.ShowLoading(Message: "Loading...")
-        AF.request(url, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
             AFdata in
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+            DispatchQueue.main.asyncAfter(deadline: .now()) {
                 self.LoadingDismiss()
             }
             

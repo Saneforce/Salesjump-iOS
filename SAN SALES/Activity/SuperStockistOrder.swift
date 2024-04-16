@@ -131,6 +131,7 @@ class SuperStockistOrder : IViewController {
             VisitData.shared.cOutTime = GlobalFunc.getCurrDateAsString()
             var isRequestSent = false
             if !isRequestSent {
+                var isSubmit = false
                 LocationService.sharedInstance.getNewLocation(location: { location in
                     let sLocation: String = location.coordinate.latitude.description + ":" + location.coordinate.longitude.description
                     lazy var geocoder = CLGeocoder()
@@ -158,8 +159,10 @@ class SuperStockistOrder : IViewController {
                         
                         sessionManager.session.configuration.httpMaximumConnectionsPerHost = 1
                         
-                        self.submitWithoutOrder()
-                        
+                        if isSubmit == false {
+                            isSubmit.toggle()
+                            self.submitWithoutOrder()
+                        }
                     }
                     
                 }, error:{ errMsg in
@@ -194,9 +197,9 @@ class SuperStockistOrder : IViewController {
         
         let date = Date().toString(format: "yyyy-MM-dd hh:mm:ss")
         
-        print(date)
+        print(date) // worked_with_code
         
-        let jsonString = "[{\"Activity_Report_APP\":{\"Worktype_code\":\"\'" + (lstPlnDetail[0]["worktype"] as! String) + "\'\",\"Town_code\":\"\'" + (lstPlnDetail[0]["ClstrName"] as! String) + "\'\",\"Territory_code\":\"\'\'\",\"area_name\":\"\'\'\",\"RateEditable\":\"\'\'\",\"dcr_activity_date\":\"\'" + VisitData.shared.cInTime + "\'\",\"Daywise_Remarks\":\"" + VisitData.shared.VstRemarks.name.trimmingCharacters(in: .whitespacesAndNewlines) + "\",\"eKey\":\"" + self.eKey + "\",\"rx\":\"\'\'\",\"rx_t\":\"\'\'\",\"DataSF\":\"\'" + self.DataSF + "\'\"}},{\"Activity_Stockist_Report\":{\"Stockist_POB\":\"\",\"Worked_With\":\"\'\'\",\"location\":\"\'" + sLocation + "\'\",\"geoaddress\":\"" + sAddress + "\",\"stockist_code\":\"\'" + VisitData.shared.CustID + "\'\",\"superstockistid\":\"\'\'\",\"stockist_name\":\"\'" + VisitData.shared.CustName + "\'\",\"version\":8,\"doctor_id\":\"\'" + VisitData.shared.CustID + "\'\",\"Stk_Meet_Time\":\"\'" + VisitData.shared.cInTime + "\'\",\"modified_time\":\"\'" + VisitData.shared.cInTime + "\'\",\"date_of_intrument\":\"\",\"intrumenttype\":\"\",\"orderValue\":0,\"Aob\":0,\"CheckinTime\":\"" + VisitData.shared.cInTime + "\",\"CheckoutTime\":\"" + VisitData.shared.cInTime + "\",\"audioFileName\":\"\'\'\",\"audioFilePath\":\"\'\'\",\"PhoneOrderTypes\":1,\"f_key\":{\"Activity_Report_Code\":\"\'Activity_Report_APP\'\"}}},{\"Activity_Stk_POB_Report\":[]},{\"Activity_Stk_Sample_Report\":[]},{\"Activity_Event_Captures\":[]},{\"PENDING_Bills\":[]},{\"Compititor_Product\":[]},{\"Activity_Event_Captures_Call\":[]}]"
+        let jsonString = "[{\"Activity_Report_APP\":{\"Worktype_code\":\"\'" + (lstPlnDetail[0]["worktype"] as! String) + "\'\",\"Town_code\":\"\'" + (lstPlnDetail[0]["ClstrName"] as! String) + "\'\",\"Territory_code\":\"\'\'\",\"area_name\":\"\'\'\",\"RateEditable\":\"\'\'\",\"dcr_activity_date\":\"\'" + VisitData.shared.cInTime + "\'\",\"Daywise_Remarks\":\"" + VisitData.shared.VstRemarks.name.trimmingCharacters(in: .whitespacesAndNewlines) + "\",\"eKey\":\"" + self.eKey + "\",\"rx\":\"\'\'\",\"rx_t\":\"\'\'\",\"DataSF\":\"\'" + self.DataSF + "\'\"}},{\"Activity_Stockist_Report\":{\"Stockist_POB\":\"\",\"Worked_With\":\"\'" + (lstPlnDetail[0]["worked_with_code"] as! String) + "\'\",\"location\":\"\'" + sLocation + "\'\",\"geoaddress\":\"" + sAddress + "\",\"stockist_code\":\"\'" + VisitData.shared.CustID + "\'\",\"superstockistid\":\"\'\'\",\"stockist_name\":\"\'" + VisitData.shared.CustName + "\'\",\"version\":8,\"doctor_id\":\"\'" + VisitData.shared.CustID + "\'\",\"Stk_Meet_Time\":\"\'" + VisitData.shared.cInTime + "\'\",\"modified_time\":\"\'" + VisitData.shared.cInTime + "\'\",\"date_of_intrument\":\"\",\"intrumenttype\":\"\",\"orderValue\":0,\"Aob\":0,\"CheckinTime\":\"" + VisitData.shared.cInTime + "\",\"CheckoutTime\":\"" + VisitData.shared.cInTime + "\",\"audioFileName\":\"\'\'\",\"audioFilePath\":\"\'\'\",\"PhoneOrderTypes\":1,\"f_key\":{\"Activity_Report_Code\":\"\'Activity_Report_APP\'\"}}},{\"Activity_Stk_POB_Report\":[]},{\"Activity_Stk_Sample_Report\":[]},{\"Activity_Event_Captures\":[]},{\"PENDING_Bills\":[]},{\"Compititor_Product\":[]},{\"Activity_Event_Captures_Call\":[]}]"
         
         
         let params: Parameters = [

@@ -49,6 +49,9 @@ class SuperStockistOrderList : IViewController , UITableViewDelegate, UITableVie
     @IBOutlet weak var freeQtyTableView: UITableView!
     
     
+    
+    @IBOutlet weak var scrollView: UIScrollView!
+    
     @IBOutlet weak var selectedTableViewHeightConstraint: NSLayoutConstraint!
     
     
@@ -460,9 +463,9 @@ class SuperStockistOrderList : IViewController , UITableViewDelegate, UITableVie
         
         let subTotal = totalAmountRound - taxAmountRound
         
-        print("Ekey===\(self.eKey)")
+        print("Ekey===\(self.eKey)") // worked_with_code
         
-        let jsonString = "[{\"Activity_Report_APP\":{\"Worktype_code\":\"\'" + (lstPlnDetail[0]["worktype"] as! String) + "\'\",\"Town_code\":\"\'" + (lstPlnDetail[0]["ClstrName"] as! String) + "\'\",\"RateEditable\":\"\'\'\",\"dcr_activity_date\":\"\'" + VisitData.shared.cInTime + "\'\",\"Daywise_Remarks\":\" " + VisitData.shared.VstRemarks.name.trimmingCharacters(in: .whitespacesAndNewlines) + " \",\"eKey\":\"" + self.eKey + "\",\"rx\":\"\'\'\",\"rx_t\":\"\'\'\",\"DataSF\":\"\'" + self.DataSF + "\'\"}},{\"Activity_Stockist_Report\":{\"Stockist_POB\":\"\",\"Worked_With\":\"\'\'\",\"location\":\"\'" + sLocation + "\'\",\"geoaddress\":\"" + sAddress + " \",\"superstockistid\":\"\'\'\",\"Stk_Meet_Time\":\"\'" + VisitData.shared.cInTime + "\'\",\"modified_time\":\"\'" + VisitData.shared.cInTime + "\'\",\"date_of_intrument\":\"\",\"intrumenttype\":\"\",\"orderValue\":\"\(totalAmountRound)\",\"Aob\":0,\"CheckinTime\":\"" + VisitData.shared.cInTime + "\",\"CheckoutTime\":\"" + VisitData.shared.cInTime + "\",\"taxTotalValue\":\"\(taxAmountRound)\",\"discTotalValue\":\"\(discountAmountRound)\",\"subTotal\":\"\(subTotal)\",\"No_Of_items\":\"\(selectedProducts.count)\",\"PhoneOrderTypes\":1,\"doctor_id\":\"\'" + VisitData.shared.CustID + "\'\",\"stockist_code\":\"\'" + VisitData.shared.CustID + "\'\",\"version\":8,\"stockist_name\":\"\'" + VisitData.shared.CustName + " \'\",\"f_key\":{\"Activity_Report_Code\":\"\'Activity_Report_APP\'\"}}},{\"Activity_Stk_POB_Report\":[\(productString)]},{\"Activity_Stk_Sample_Report\":[]},{\"Activity_Event_Captures\":[]},{\"PENDING_Bills\":[]},{\"Compititor_Product\":[]},{\"Activity_Event_Captures_Call\":[]}]"
+        let jsonString = "[{\"Activity_Report_APP\":{\"Worktype_code\":\"\'" + (lstPlnDetail[0]["worktype"] as! String) + "\'\",\"Town_code\":\"\'" + (lstPlnDetail[0]["ClstrName"] as! String) + "\'\",\"RateEditable\":\"\'\'\",\"dcr_activity_date\":\"\'" + VisitData.shared.cInTime + "\'\",\"Daywise_Remarks\":\" " + VisitData.shared.VstRemarks.name.trimmingCharacters(in: .whitespacesAndNewlines) + " \",\"eKey\":\"" + self.eKey + "\",\"rx\":\"\'\'\",\"rx_t\":\"\'\'\",\"DataSF\":\"\'" + self.DataSF + "\'\"}},{\"Activity_Stockist_Report\":{\"Stockist_POB\":\"\",\"Worked_With\":\"\'" + (lstPlnDetail[0]["worked_with_code"] as! String) + "\'\",\"location\":\"\'" + sLocation + "\'\",\"geoaddress\":\"" + sAddress + " \",\"superstockistid\":\"\'\'\",\"Stk_Meet_Time\":\"\'" + VisitData.shared.cInTime + "\'\",\"modified_time\":\"\'" + VisitData.shared.cInTime + "\'\",\"date_of_intrument\":\"\",\"intrumenttype\":\"\",\"orderValue\":\"\(totalAmountRound)\",\"Aob\":0,\"CheckinTime\":\"" + VisitData.shared.cInTime + "\",\"CheckoutTime\":\"" + VisitData.shared.cInTime + "\",\"taxTotalValue\":\"\(taxAmountRound)\",\"discTotalValue\":\"\(discountAmountRound)\",\"subTotal\":\"\(subTotal)\",\"No_Of_items\":\"\(selectedProducts.count)\",\"PhoneOrderTypes\":1,\"doctor_id\":\"\'" + VisitData.shared.CustID + "\'\",\"stockist_code\":\"\'" + VisitData.shared.CustID + "\'\",\"version\":8,\"stockist_name\":\"\'" + VisitData.shared.CustName + " \'\",\"f_key\":{\"Activity_Report_Code\":\"\'Activity_Report_APP\'\"}}},{\"Activity_Stk_POB_Report\":[\(productString)]},{\"Activity_Stk_Sample_Report\":[]},{\"Activity_Event_Captures\":[]},{\"PENDING_Bills\":[]},{\"Compititor_Product\":[]},{\"Activity_Event_Captures_Call\":[]}]"
         
         print(jsonString)
         
@@ -499,7 +502,7 @@ class SuperStockistOrderList : IViewController , UITableViewDelegate, UITableVie
 //                    
 //                }
 //            }
-            DispatchQueue.main.asyncAfter(deadline: .now()) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
                 
                 let vc=self.storyboard?.instantiateViewController(withIdentifier: "sbCallPreview") as!  CallPreview
                 vc.eKey = self.eKey
@@ -561,13 +564,15 @@ class SuperStockistOrderList : IViewController , UITableViewDelegate, UITableVie
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView == selectedListTableView {
-            freeQtyTableViewHeightConstraint.constant = CGFloat(selectedProducts.count * 125)
+            selectedTableViewHeightConstraint.constant = CGFloat(selectedProducts.count * 115)
             return self.selectedProducts.count
         }else if tableView == self.tableView {
             return self.products.count
         }else {
             let freeQtyCount = self.allProducts.filter{$0.freeCount != 0}
-            freeQtyTableViewHeightConstraint.constant = CGFloat(freeQtyCount.count * 50) + 20
+            freeQtyTableViewHeightConstraint.constant = CGFloat(freeQtyCount.count * 55) + 20
+            let height = CGFloat(selectedProducts.count * 120) + CGFloat(freeQtyCount.count * 60) + 350
+            scrollView.contentSize = CGSize(width: self.view.frame.size.width, height: height)
             return freeQtyCount.count
         }
     }
@@ -743,7 +748,7 @@ class SuperStockistOrderList : IViewController , UITableViewDelegate, UITableVie
         let unitCount = cell.product.unitCount
         let rate = cell.product.rate
         let sQty = Int(cell.product.sampleQty) ?? 0
-        
+        print("QTYYYY \(sQty)")
         if cell.product.isMultiSchemeActive == true {
             let totalQty = unitCount * sQty
             let scheme = self.nextLessThanValue(in: cell.product.multiScheme, comparedTo: totalQty)
@@ -774,12 +779,17 @@ class SuperStockistOrderList : IViewController , UITableViewDelegate, UITableVie
                         cell.product.offerProductCode = scheme!.offerProductCode
                         cell.product.offerProductName = scheme!.offerProductName
                         
+                    }else {
+                        cell.product.freeCount = 0
                     }
                 }else {
                     
                     let schQty = cell.product.scheme
                     let value = Double(totalQty) /  Double(schQty)
-                    cell.product.freeCount = Int(value * Double(cell.product.offerAvailableCount))
+                    if Double(totalQty) >  Double(schQty) {
+                        cell.product.freeCount = Int(value * Double(cell.product.offerAvailableCount))
+                    }
+                    
                 }
             }else {
                 if cell.product.isMultiSchemeActive == true {
@@ -792,10 +802,15 @@ class SuperStockistOrderList : IViewController , UITableViewDelegate, UITableVie
                         cell.product.scheme = scheme!.scheme
                         cell.product.offerProductCode = scheme!.offerProductCode
                         cell.product.offerProductName = scheme!.offerProductName
+                    }else {
+                        cell.product.freeCount = 0
                     }
                 }else {
                     let schemeQty = totalQty / cell.product.scheme
-                    cell.product.freeCount = schemeQty * cell.product.offerAvailableCount
+                    if totalQty >= cell.product.scheme{
+                        cell.product.freeCount = schemeQty * cell.product.offerAvailableCount
+                    }
+                    
                 }
                 
             }
@@ -1059,11 +1074,16 @@ class SuperStockistOrderList : IViewController , UITableViewDelegate, UITableVie
                         let schQty = scheme!.scheme
                         let value = Double(totalQty) /  Double(schQty)
                         cell.product.freeCount = Int(value * Double(scheme!.offerAvailableCount))
+                    }else{
+                        cell.product.freeCount = 0
                     }
                 }else {
                     let schQty = cell.product.scheme
                     let value = Double(totalQty) /  Double(schQty)
-                    cell.product.freeCount = Int(value * Double(cell.product.offerAvailableCount))
+                    if Double(totalQty) >= Double(schQty){
+                        cell.product.freeCount = Int(value * Double(cell.product.offerAvailableCount))
+                    }
+                    
                 }
             }else {
                 if cell.product.isMultiSchemeActive == true {
@@ -1072,10 +1092,15 @@ class SuperStockistOrderList : IViewController , UITableViewDelegate, UITableVie
                     if scheme != nil {
                         let schemeQty = totalQty / scheme!.scheme
                         cell.product.freeCount = schemeQty * scheme!.offerAvailableCount //  Int(value * Double(scheme!.offerAvailableCount))
+                    }else{
+                        cell.product.freeCount = 0
                     }
                 }else {
                     let schemeQty = totalQty / cell.product.scheme
-                    cell.product.freeCount = schemeQty * cell.product.offerAvailableCount
+                    if totalQty >= cell.product.scheme{
+                        cell.product.freeCount = schemeQty * cell.product.offerAvailableCount
+                    }
+                    
                 }
                 
             }
@@ -1107,11 +1132,11 @@ class SuperStockistOrderList : IViewController , UITableViewDelegate, UITableVie
         }){
             self.allProducts[index] = cell.product
         }
-//        if let index = self.products.firstIndex(where: { (productInfo) -> Bool in
-//            return cell.product.productId == productInfo.productId
-//        }){
-//            self.products[index] = cell.product
-//        }
+        if let index = self.products.firstIndex(where: { (productInfo) -> Bool in
+            return cell.product.productId == productInfo.productId
+        }){
+            self.products[index] = cell.product
+        }
         self.updateTotal()
     }
     

@@ -46,6 +46,8 @@ class CallPreview : UIViewController , UITableViewDataSource,UITableViewDelegate
     @IBOutlet weak var freeQtyTableView: UITableView!
     
     
+    @IBOutlet weak var scrollView: UIScrollView!
+    
     @IBOutlet weak var OrderDetailsTableViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var freeQtyTableViewHeightConstraint: NSLayoutConstraint!
     
@@ -87,8 +89,6 @@ class CallPreview : UIViewController , UITableViewDataSource,UITableViewDelegate
         
         self.getOrderNo()
         
-        freeQtyTableViewHeightConstraint.constant = 300
-        OrderDetailsTableViewHeightConstraint.constant = 300
         
         let lstDistData: String = LocalStoreage.string(forKey: "Supplier_Master_"+SFCode)!
         if let list = GlobalFunc.convertToDictionary(text: lstDistData) as? [AnyObject] {
@@ -255,11 +255,6 @@ class CallPreview : UIViewController , UITableViewDataSource,UITableViewDelegate
         self.ShowLoading(Message: "Loading...")
         AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"dcr/save&divisionCode=" + self.DivCode + "&sfCode=" + self.SFCode + "&desig=" + self.Desig, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseData {
         AFdata in
-        
-//        DispatchQueue.main.async {
-//            self.LoadingDismiss()
-//        }
-            
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
             self.LoadingDismiss()
         }
@@ -300,12 +295,14 @@ class CallPreview : UIViewController , UITableViewDataSource,UITableViewDelegate
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         if tableView == orderDetailsTableView {
-            OrderDetailsTableViewHeightConstraint.constant = orderDetailsTableView.contentSize.height + 20
+            OrderDetailsTableViewHeightConstraint.constant = CGFloat(orders.count * 70)
             return orders.count
             
         }else{
             let freeQtyCount = self.orders.filter{$0.freeCount != 0}
-            freeQtyTableViewHeightConstraint.constant = freeQtyTableView.contentSize.height + 20
+            freeQtyTableViewHeightConstraint.constant = CGFloat(freeQtyCount.count * 55)
+            let height = CGFloat(orders.count * 70) + CGFloat(freeQtyCount.count * 55) + 500
+            scrollView.contentSize = CGSize(width: self.view.frame.size.width, height: height)
             return freeQtyCount.count
         }
     }
@@ -338,14 +335,15 @@ class CallPreview : UIViewController , UITableViewDataSource,UITableViewDelegate
             
             return Cell
         }
-        
-        
     }
     
     
     func generatePDF() -> Data {
+        
+        
+            let height = 650 + (self.orders.count * 110)
             
-            let pageSize = CGSize(width: 612, height: 2400)
+            let pageSize = CGSize(width: 612, height: height)
             let renderer = UIGraphicsPDFRenderer(bounds: CGRect(origin: .zero, size: pageSize))
             
             let pdfData = renderer.pdfData { (context) in
@@ -589,6 +587,8 @@ class CallPreview : UIViewController , UITableViewDataSource,UITableViewDelegate
                 
                 
             }
+        
+            
             return pdfData
         }
         func saveAndSharePDF(_ data: Data) {

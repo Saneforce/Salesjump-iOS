@@ -1538,7 +1538,7 @@
                                                             <constraint firstAttribute="height" constant="36" id="w9W-77-bx4"/>
                                                         </constraints>
                                                     </view>
-                                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="bRa-Q4-cum">
+                                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" scrollEnabled="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="bRa-Q4-cum">
                                                         <rect key="frame" x="5" y="166" width="383" height="200"/>
                                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                         <constraints>
@@ -1754,6 +1754,7 @@
                         <outlet property="orderProductListTableView" destination="bRa-Q4-cum" id="IVe-kM-XYq"/>
                         <outlet property="orderProductListTableViewHeightConstraint" destination="44E-zW-6XA" id="duF-Gb-IRb"/>
                         <outlet property="ordetListTableView" destination="Jh8-Ev-hwx" id="AQq-Tr-Uvu"/>
+                        <outlet property="scrollView" destination="5ge-lw-gcf" id="Tdh-bQ-Kys"/>
                         <outlet property="vwProductList" destination="Tn6-kA-8Gl" id="0y5-WY-jo1"/>
                     </connections>
                 </viewController>

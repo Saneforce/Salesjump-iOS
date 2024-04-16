@@ -92,11 +92,11 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if tbOrderDetail == tableView {
-            OrdHeight.constant = self.tbOrderDetail.contentSize.height + 50
+           // OrdHeight.constant = self.tbOrderDetail.contentSize.height + 50
             return 55
         }
         if tbZeroOrd == tableView {
-            OfferHeight.constant = self.tbZeroOrd.contentSize.height + 50
+         //   OfferHeight.constant = self.tbZeroOrd.contentSize.height + 50
             return 24
         }
         return 42
@@ -106,8 +106,17 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
         print(detail.count)
         print(objOrderDetail)
         print(detail)
-        if tableView==tbOrderDetail {return detail.count}
-        if tableView==tbZeroOrd { return objOfferDetail.count }
+        if tableView==tbOrderDetail {
+            OrdHeight.constant = CGFloat(self.detail.count * 60) // self.tbOrderDetail.contentSize.height + 30
+            ContentHeight.constant = CGFloat(400+(CGFloat(self.detail.count * 60))+(self.tbZeroOrd.contentSize.height))
+            return detail.count
+            
+        }
+        if tableView==tbZeroOrd {
+            OfferHeight.constant = self.tbZeroOrd.contentSize.height + 30
+            ContentHeight.constant = CGFloat(400+(CGFloat(self.detail.count * 60))+(self.tbZeroOrd.contentSize.height))
+            return objOfferDetail.count
+        }
         return 0
     }
     
@@ -189,7 +198,7 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
         
         let url = "http://fmcg.sanfmcg.com/server/native_Db_V13_nagaprasath.php?axn=get/vwOrderDet&divisionCode=\(DivCode),&rSF=\(SFCode)&rptDt=\(StrRptDt)&CusCd=\(CusCd)&sfCode=\(SFCode)&State_Code=\(StateCode)&Mode=\(StrMode)"
         self.ShowLoading(Message: "Loading...")
-        AF.request(url, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
             AFdata in
             DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
                 self.LoadingDismiss()
@@ -420,7 +429,7 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                             OrdHeight.constant = self.tbOrderDetail.contentSize.height + 50 //40+CGFloat(55*detail.count)
                             self.view.layoutIfNeeded()
                             let newHeight = 100 + CGFloat(75 * detail.count) + CGFloat(2 * detail.count)
-                            ContentHeight.constant = newHeight
+                          //  ContentHeight.constant = newHeight
                             ContentHeight.constant = CGFloat(800+(self.tbOrderDetail.contentSize.height)+(self.tbZeroOrd.contentSize.height))
                             self.view.layoutIfNeeded()
                         }
@@ -512,7 +521,7 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                             OrdHeight.constant = self.tbOrderDetail.contentSize.height + 50 //40+CGFloat(55*detail.count)
                             self.view.layoutIfNeeded()
                             let newHeight = 100 + CGFloat(75 * detail.count) + CGFloat(7 * detail.count)
-                            ContentHeight.constant = newHeight
+                     //       ContentHeight.constant = newHeight
                             ContentHeight.constant = CGFloat(800+(self.tbOrderDetail.contentSize.height)+(self.tbZeroOrd.contentSize.height))
                             print(newHeight)
                             self.view.layoutIfNeeded()
@@ -608,7 +617,7 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                             OrdHeight.constant = self.tbOrderDetail.contentSize.height + 50 // 40+CGFloat(55*detail.count)
                             self.view.layoutIfNeeded()
                             let newHeight = 100 + CGFloat(75 * detail.count) + CGFloat(7 * detail.count)
-                            ContentHeight.constant = newHeight
+                   //         ContentHeight.constant = newHeight
                             ContentHeight.constant = CGFloat(800+(self.tbOrderDetail.contentSize.height)+(self.tbZeroOrd.contentSize.height))
                             print(newHeight)
                             self.view.layoutIfNeeded()
