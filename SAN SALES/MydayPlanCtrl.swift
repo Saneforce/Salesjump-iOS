@@ -89,6 +89,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
     let LocalStoreage = UserDefaults.standard
     var exp_Need:Int = 0
     var lstPlnDetail: [AnyObject] = []
+    var attendanceView:Int = 0
     override func viewDidLoad() {
         super.viewDidLoad()
         txRem.text = "Enter the Remarks"
@@ -120,7 +121,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         SFCode = prettyJsonData["sfCode"] as? String ?? ""
         DivCode = prettyJsonData["divisionCode"] as? String ?? ""
         let SFName: String=prettyJsonData["sfName"] as? String ?? ""
-        
+        attendanceView = prettyJsonData["attendanceView"] as? Int ?? 0
       //  let WorkTypeData: String=LocalStoreage.string(forKey: "Worktype_Master")!
        // let HQData: String=LocalStoreage.string(forKey: "HQ_Master")!
         //let DistData: String=LocalStoreage.string(forKey: "Distributors_Master_"+SFCode)!
@@ -1005,7 +1006,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                                  print(LocalStoreage)
                                 print(self.exp_Need)
                                 //self.exp_Need = 2
-                                if (self.exp_Need == 1) {
+                                if (self.attendanceView == 1) {
                                // Naviagte To Strat Expense
                                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
                                 let viewControllers = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController

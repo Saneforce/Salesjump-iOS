@@ -573,20 +573,23 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         UIApplication.shared.windows.first?.rootViewController = navigationController
     }
     @objc func OpenDayEndView(){
-       // DayEndView.isHidden = false
-        
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        let currentDate = Date()
-        let formattedDate = dateFormatter.string(from: currentDate)
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
-        let myDyPln = storyboard.instantiateViewController(withIdentifier: "End_Expense") as! End_Expense
-        myDyPln.End_exp_title = "Day End Plan"
-        myDyPln.Date_Nd = true
-        myDyPln.Date = formattedDate
-        viewController.setViewControllers([myDyPln], animated: false)
-        (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
+       
+        if UserSetup.shared.SrtEndKMNd == 1 ||  UserSetup.shared.SrtEndKMNd == 2{
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd"
+            let currentDate = Date()
+            let formattedDate = dateFormatter.string(from: currentDate)
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
+            let myDyPln = storyboard.instantiateViewController(withIdentifier: "End_Expense") as! End_Expense
+            myDyPln.End_exp_title = "Day End Plan"
+            myDyPln.Date_Nd = true
+            myDyPln.Date = formattedDate
+            viewController.setViewControllers([myDyPln], animated: false)
+            (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
+        }else{
+             DayEndView.isHidden = false
+        }
     }
     
     @IBAction func DayEndView(_ sender: Any) {

@@ -747,6 +747,8 @@ class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, 
                             let prettyJsonData = try JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
                             if let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) {
                                 print(prettyPrintedJson)
+                                Toast.show(message: "submitted successfully", controller: self)
+                                GlobalFunc.movetoHomePage()
                             } else {
                                 print("Error: Could not convert JSON to String")
                             }
