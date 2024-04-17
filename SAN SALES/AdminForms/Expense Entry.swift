@@ -19,7 +19,7 @@ struct PeriodicData:Codable{
     let To_Date:String
     let dis_Rank:String
 }
-class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, UITableViewDataSource, UITableViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate {
+class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource, UITableViewDataSource, UITableViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate {
     @IBOutlet weak var BackBT: UIImageView!
     @IBOutlet weak var calendar: FSCalendar!
     @IBOutlet weak var Selwind: UIView!
@@ -34,12 +34,23 @@ class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, 
     @IBOutlet weak var YearPostion: UILabel!
     @IBOutlet weak var MonthPostion: UILabel!
     @IBOutlet weak var Collection_Of_Month: UICollectionView!
+    @IBOutlet weak var Sent_apr_bt: UIButton!
     static let shared = Expense_Entry()
 
+    
+    struct Apr_Data:Codable{
+    let Period_Id: String
+    let Eff_Month: String
+    let Eff_Year: String
+    let From_Date: String
+    let To_Date:String
+    }
+    
     let LocalStoreage = UserDefaults.standard
     var SFCode: String = "", StateCode: String = "", DivCode: String = "",Desig: String = "",SF_type: String = ""
     var Period:[PeriodicData] = []
     var lstOfPeriod:[PeriodicData] = []
+    var Sent_Apr_Det:[Apr_Data] = []
     var FDate: Date = Date(),TDate: Date = Date()
     var period_from_date = ""
     var period_to_date = ""
@@ -55,6 +66,8 @@ class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, 
     var Day_Plan_Data:[AnyObject] = []
     var Set_Date:String = ""
     var Nav_PeriodicData:[AnyObject] = []
+    var No_Of_Days_In_Perio = 0
+    var Allow_Apr:Bool = false
     override func viewDidLoad() {
         super.viewDidLoad()
         YearPostion.text = selectYear
@@ -116,7 +129,7 @@ class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, 
     SF_type=prettyJsonData["SF_type"] as? String ?? ""
     }
     
-    func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
+    func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition){
         if (SelPeriod.text == "Select Period"){
             Toast.show(message: "Select Period")
             return
@@ -125,7 +138,6 @@ class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, 
             return
         }
         new_DateofExpense(date: date)
-        
     }
 
     func addLetterA(to cell: FSCalendarCell?, text:String) {
@@ -282,6 +294,7 @@ class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, 
         return cell
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        Sent_Apr_Det.removeAll()
         let item = Period[indexPath.row]
         print(item)
         Nav_PeriodicData = [item as AnyObject]
@@ -324,12 +337,32 @@ class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, 
                 print("Error: Unable to convert string to Date")
             }
         }
-        send_forApproval_periodic(Period_Id: item.Period_Id, Eff_Month: String(item.Eff_Month), Eff_Year: String(item.Eff_Year), From_Date: item.From_Date, To_Date:item.To_Date)
+        let dateFormatterss = DateFormatter()
+        dateFormatterss.dateFormat = "yyyy-MM-dd"
+        let From = dateFormatterss.string(from: FDate)
+        let To = dateFormatterss.string(from: TDate)
+        // Convert string dates to Date objects
+        if let startDate = dateFormatterss.date(from: From),
+           let endDate = dateFormatterss.date(from: To) {
+            let days = daysBetweenDates(startDate, endDate)
+            print("Number of days between the two dates: \(days)")
+            No_Of_Days_In_Perio = days + 1
+        } else {
+            print("Invalid date format")
+        }
+        
+        Sent_Apr_Det.append(Apr_Data(Period_Id: item.Period_Id, Eff_Month: String(item.Eff_Month), Eff_Year: String(item.Eff_Year), From_Date: item.From_Date, To_Date: item.To_Date))
         expSubmitDates()
         calendar.reloadData()
         TextSeh.text = ""
         Selwind.isHidden = true
     }
+    func daysBetweenDates(_ startDate: Date, _ endDate: Date) -> Int {
+        let calendar = Calendar.current
+        let components = calendar.dateComponents([.day], from: startDate, to: endDate)
+        return components.day ?? 0
+    }
+
     func maximumDate(for calendar: FSCalendar) -> Date {
         return TDate
     }
@@ -407,7 +440,7 @@ class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, 
                             let prettyJsonData = try JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
                             if let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) {
                                 print(prettyPrintedJson)
-                                
+                                var count = 0
                                 if let jsonObject = try JSONSerialization.jsonObject(with: prettyJsonData, options: []) as? [String: Any]{
                                     print(jsonObject)
                                     // attance_flg
@@ -431,11 +464,13 @@ class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, 
                                             let Formated_Date = dateFormatter.date(from: datess!)
                                             let Leave = item["FWFlg"] as? String
                                             if (Leave == "L"){
+                                                count = count + 1
                                                 attance_flg_L = attance_flg
                                                 let cell = calendar.cell(for: Formated_Date!, at: .current)
                                                 addLetterA(to: cell, text: "L")
                                             }
                                             if (Leave == "H"){
+                                                count = count + 1
                                                 attance_flg_L = attance_flg
                                                 let cell = calendar.cell(for: Formated_Date!, at: .current)
                                                 addLetterA(to: cell, text: "H")
@@ -529,7 +564,13 @@ class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, 
                                             }
                                         }
                                     }
-                                    
+                                    let Tot = count+MisDatesDatas.count+exp_SubitDate.count
+                                    if (No_Of_Days_In_Perio == Tot){
+                                        Allow_Apr = false
+                                    }else{
+                                        Allow_Apr = true
+                                    }
+                                    print(Allow_Apr)
                                 } else {
                                     print("Error: Could not convert JSON to Dictionary or access 'data'")
                                 }
@@ -762,6 +803,25 @@ class Expense_Entry: IViewController, FSCalendarDelegate, FSCalendarDataSource, 
             }
         }
     }
+    @IBAction func Send_Apr(_ sender: Any) {
+        if validateForm() == false {
+            return
+        }
+        print(Sent_Apr_Det)
+        send_forApproval_periodic(Period_Id: Sent_Apr_Det[0].Period_Id, Eff_Month: Sent_Apr_Det[0].Eff_Month, Eff_Year: Sent_Apr_Det[0].Eff_Year, From_Date: Sent_Apr_Det[0].From_Date, To_Date:Sent_Apr_Det[0].To_Date)
+    }
+    func validateForm() -> Bool {
+        if (SelPeriod.text=="Select Period"){
+            Toast.show(message: "Select Period")
+            return false
+        }
+        
+        if ( Allow_Apr == false){
+            Toast.show(message: "Approval already Sent")
+            return false
+        }
+        return true
+    }
 }
 
 class MonthsView: UIView {
@@ -888,6 +948,5 @@ class YearView: UIView {
         print("Selected month: \(selectedMonth)")
        // Expense_Entry.shared.OpenView()
     }
-    
 }
 

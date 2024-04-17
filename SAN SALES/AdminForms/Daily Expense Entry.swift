@@ -138,7 +138,7 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
     var Select_index_Del:Int = 0
     override func viewDidLoad() {
         super.viewDidLoad()
-        Expense_data.append(Expense_New(WorkType: "", mydayplanWorkPlace: "", Routename: "", Enterdate: "", KM: "", Billamount: "", HQ: "", stayingtype: "", MOT: "", mot_id: "", st_endNeed: "", max_km: "", fuel_charge: 0, exp_km: "", exp_amount: "", TotalAmount: "", Toworkplace: "", period_name: "", period_id: "", from_date: "", to_date: "", srt_km: "", end_km: "", exp_auto: UserSetup.shared.exp_auto, exp_process_type: "\(UserSetup.shared.exp_process_type)"))
+        Expense_data.append(Expense_New(WorkType: "", mydayplanWorkPlace: "", Routename: "", Enterdate: "", KM: "", Billamount: "", HQ: "", stayingtype: "0", MOT: "", mot_id: "", st_endNeed: "", max_km: "", fuel_charge: 0, exp_km: "", exp_amount: "", TotalAmount: "", Toworkplace: "", period_name: "", period_id: "", from_date: "", to_date: "", srt_km: "", end_km: "", exp_auto: UserSetup.shared.exp_auto, exp_process_type: "\(UserSetup.shared.exp_process_type)"))
         getUserDetails()
         blureView.bounds = self.view.bounds
         PopUpView.bounds = CGRect(x: 0, y: 0, width: self.view.bounds.width * 0.9, height: self.view.bounds.height * 0.2)
@@ -152,11 +152,26 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
         sel_TB.dataSource = self
         imgs.dataSource = self
         imgs.delegate = self
+        
+        From_Text.returnKeyType = .done
+        To_Text.returnKeyType = .done
+        From_Text.delegate = self
+        To_Text.delegate = self
+    
+        EnterKM.keyboardType = UIKeyboardType.numberPad
+        EnterKM.returnKeyType = .done
+        EnterKM.delegate = self
+    
+        Enter_Bill_Amount.keyboardType = UIKeyboardType.numberPad
+        Enter_Bill_Amount.returnKeyType = .done
+        Enter_Bill_Amount.delegate = self
+        
         scroll_hig =  sub_Scrollview.frame.size.height
         ButtonBack.addTarget(target: self, action: #selector(GotoHome))
         Add_Hotal_Bill.addTarget(target: self, action: #selector(imageTapped))
         Close_Sel_Windo.addTarget(target: self, action: #selector(Close_Wind))
         camera.addTarget(target: self, action: #selector(Camra))
+        Daily_Exp_Cam.addTarget(target: self, action: #selector(Camra))
         paperclip.addTarget(target: self, action: #selector(Add_Pho))
         eye.addTarget(target: self, action: #selector(View_Photo))
         Daily_Exp_photos.addTarget(target: self, action: #selector(Add_Pho))
@@ -443,10 +458,9 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let item = Exp_Datas[indexPath.row]
         print(item)
-        Expense_data[0].HQ = item.newname
         if (SelMod == "Allowance"){
             print(item)
-            
+            Expense_data[0].HQ = item.newname
             if item.name == "OS" || item.name == "EX" {
                 Staying_typ.isHidden = false
                 Staying_typ_hig.constant = 80
@@ -469,7 +483,7 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
             Allo_Typ.text = item.name
         }else if (SelMod == "Staying"){
              Expense_data[0].stayingtype = item.id
-            if item.name == "With Hotel" {
+            if item.name == "With Hotel"{
                 Bill_Amount_view.isHidden = false
                 Bill_Amount_view_hig.constant = 80
                 scroll_hig = scroll_hig + 80
@@ -742,7 +756,7 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
         }
         var bill_amt = Enter_Bill_Amount.text
         if bill_amt == "" {
-            Expense_data[0].Billamount = ""
+            Expense_data[0].Billamount = "0"
         }else{
             Expense_data[0].Billamount = bill_amt!
         }
@@ -761,63 +775,62 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
             var CamItem: String = ""
             var Totalamt:Double = 0.0
             if Needs_Entry.isEmpty{
-             print("No Data")
+                print("No Data")
             }else{
-            for i in Needs_Entry {
-                print(Needs_Entry)
-                print(i.amount)
-                Totalamt = Totalamt + Double(i.amount)!
-                CamItem += "{"
-                CamItem += " \"ID\": " + String(i.ID) + ","
-                CamItem += " \"Name\": \"" + i.Name + "\","
-                CamItem += " \"amt\": \"" + i.amount + "\","
-                CamItem += " \"exp_remarks\": \"" + i.remark + "\","
-                if !i.image.isEmpty {
-                    CamItem += " \"imgData\": \""
-                    for (index, image) in i.image_name.enumerated() {
-                        Activity_img_url2 = Activity_img_url2 + image + ","
-                        CamItem += image.description
-                        if index < i.image_name.count - 1 {
-                            CamItem += ","
+                for i in Needs_Entry {
+                    print(Needs_Entry)
+                    print(i.amount)
+                    Totalamt = Totalamt + Double(i.amount)!
+                    CamItem += "{"
+                    CamItem += " \"ID\": " + String(i.ID) + ","
+                    CamItem += " \"Name\": \"" + i.Name + "\","
+                    CamItem += " \"amt\": \"" + i.amount + "\","
+                    CamItem += " \"exp_remarks\": \"" + i.remark + "\","
+                    if !i.image.isEmpty {
+                        CamItem += " \"imgData\": \""
+                        for (index, image) in i.image_name.enumerated() {
+                            Activity_img_url2 = Activity_img_url2 + image + ","
+                            CamItem += image.description
+                            if index < i.image_name.count - 1 {
+                                CamItem += ","
+                            }
                         }
-                    }
-                    CamItem += "\","
-                    
-                    CamItem += " \"prvImage\": \""
-                    for (index, image) in i.image_name.enumerated() {
-                        CamItem += image.description
-                        if index < i.image_name.count - 1 {
-                            CamItem += ","
+                        CamItem += "\","
+                        
+                        CamItem += " \"prvImage\": \""
+                        for (index, image) in i.image_name.enumerated() {
+                            CamItem += image.description
+                            if index < i.image_name.count - 1 {
+                                CamItem += ","
+                            }
                         }
+                        CamItem += "\","
+                    } else {
+                        CamItem += " \"imgData\": \"\","
+                        CamItem += " \"prvImage\": \"\","
                     }
-                    CamItem += "\","
-                } else {
-                    CamItem += " \"imgData\": \"\","
-                    CamItem += " \"prvImage\": \"\","
+                    CamItem += " \"Photo_Nd\": " + String(i.Photo_Nd) + ""
+                    CamItem += "},"
                 }
-                CamItem += " \"Photo_Nd\": " + String(i.Photo_Nd) + ""
-                CamItem += "},"
             }
-        }
             CamItem = String(CamItem.dropLast())
             Expense_data[0].TotalAmount = String(format: "%.2f", Totalamt)
-        var Bill_Det = ""
-        for B in Bill_photo_Ned {
-            Activity_img_url2 = Activity_img_url2 + B.imgurl + ","
-            Bill_Det += "{\"imgurl\": \"\(B.imgurl)\","
-            Bill_Det += " \"title\": \"\(B.title)\","
-            Bill_Det += " \"remarks\": \"\(B.remarks)\"},"
-        }
-        Bill_Det = String(Bill_Det.dropLast())
-        Activity_img_url2 = String(Activity_img_url2.dropLast())
-        print(Activity_img_url2)
-        let jsonString = "[{\"dailyExpenseNew\":[" + CamItem + "]},{\"EA\":{\"MOT\":\"\(Expense_data[0].MOT)\"}},{\"ActivityCaptures\":[{\"imgurl\":\""+Activity_img_url2+"\"}]},{\"Expense_New\":{\"WorkType\":\"\(Expense_data[0].WorkType)\",\"mydayplanWorkPlace\":\"\(Expense_data[0].mydayplanWorkPlace)\",\"Routename\":\"\(Expense_data[0].Routename)\",\"Enterdate\":\"\(Expense_data[0].Enterdate)\",\"KM\":\(Expense_data[0].KM),\"Billamount\":\( Expense_data[0].Billamount),\"HQ\":\"\(Expense_data[0].HQ)\",\"stayingtype\":\(Expense_data[0].stayingtype),\"MOT\":\"\(Expense_data[0].MOT)\",\"mot_id\":\"\(Expense_data[0].MOT)\",\"st_endNeed\":\"\(Expense_data[0].st_endNeed)\",\"max_km\":\"\(Expense_data[0].max_km)\",\"fuel_charge\":\"\(Expense_data[0].fuel_charge)\",\"exp_km\":\"0.0\",\"exp_amount\":\"\(Expense_data[0].exp_amount)\",\"TotalAmount\":\"\(Expense_data[0].TotalAmount)\",\"Toworkplace\":\"\(Expense_data[0].Toworkplace)\",\"period_name\":\"\(Expense_data[0].period_name)\",\"period_id\":\"\(Expense_data[0].period_id)\",\"from_date\":\"\(Expense_data[0].from_date)\",\"to_date\":\"\(Expense_data[0].to_date)\",\"srt_km\":\"\(Expense_data[0].srt_km)\",\"end_km\":\"\(Expense_data[0].end_km)\",\"exp_auto\":2,\"exp_process_type\":0}},{\"HotelBillAttachment\":[" + Bill_Det + "]}]"
-        
-        let params: Parameters = [
-            "data": jsonString
-        ]
-        print(params)
-        
+            var Bill_Det = ""
+            for B in Bill_photo_Ned {
+                Activity_img_url2 = Activity_img_url2 + B.imgurl + ","
+                Bill_Det += "{\"imgurl\": \"\(B.imgurl)\","
+                Bill_Det += " \"title\": \"\(B.title)\","
+                Bill_Det += " \"remarks\": \"\(B.remarks)\"},"
+            }
+            Bill_Det = String(Bill_Det.dropLast())
+            Activity_img_url2 = String(Activity_img_url2.dropLast())
+            print(Activity_img_url2)
+            let jsonString = "[{\"dailyExpenseNew\":[" + CamItem + "]},{\"EA\":{\"MOT\":\"\(Expense_data[0].MOT)\"}},{\"ActivityCaptures\":[{\"imgurl\":\""+Activity_img_url2+"\"}]},{\"Expense_New\":{\"WorkType\":\"\(Expense_data[0].WorkType)\",\"mydayplanWorkPlace\":\"\(Expense_data[0].mydayplanWorkPlace)\",\"Routename\":\"\(Expense_data[0].Routename)\",\"Enterdate\":\"\(Expense_data[0].Enterdate)\",\"KM\":\(Expense_data[0].KM),\"Billamount\":\( Expense_data[0].Billamount),\"HQ\":\"\(Expense_data[0].HQ)\",\"stayingtype\":\(Expense_data[0].stayingtype),\"MOT\":\"\(Expense_data[0].MOT)\",\"mot_id\":\"\(Expense_data[0].MOT)\",\"st_endNeed\":\"\(Expense_data[0].st_endNeed)\",\"max_km\":\"\(Expense_data[0].max_km)\",\"fuel_charge\":\"\(Expense_data[0].fuel_charge)\",\"exp_km\":\"0.0\",\"exp_amount\":\"\(Expense_data[0].exp_amount)\",\"TotalAmount\":\"\(Expense_data[0].TotalAmount)\",\"Toworkplace\":\"\(Expense_data[0].Toworkplace)\",\"period_name\":\"\(Expense_data[0].period_name)\",\"period_id\":\"\(Expense_data[0].period_id)\",\"from_date\":\"\(Expense_data[0].from_date)\",\"to_date\":\"\(Expense_data[0].to_date)\",\"srt_km\":\"\(Expense_data[0].srt_km)\",\"end_km\":\"\(Expense_data[0].end_km)\",\"exp_auto\":2,\"exp_process_type\":0}},{\"HotelBillAttachment\":[" + Bill_Det + "]}]"
+            
+            let params: Parameters = [
+                "data": jsonString
+            ]
+            print(params)
         AF.request(url, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
             AFdata in
             self.LoadingDismiss()
@@ -836,9 +849,9 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
                     print(prettyPrintedJson)
                     if let Msg = prettyPrintedJson["msg"] as? String{
                         Toast.show(message:Msg, controller: self)
-                    }else{
+                    }else if(prettyPrintedJson["msg"] as? String == "Expense Submitted Successfully"){
                         GlobalFunc.movetoHomePage()
-                        Toast.show(message: "submitted successfully", controller: self)
+                        Toast.show(message: (prettyPrintedJson["msg"] as? String)!, controller: self)
                     }
                         }
             case .failure(let error):
@@ -846,7 +859,6 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
             }
         }
         }
-        
         )
         alert.addAction(UIAlertAction(title: "Cancel", style: .destructive) { _ in
             return
@@ -870,11 +882,9 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
         }
         sel_TB.reloadData()
     }
-    
-    
     func DateofExpense(){
         let axnex = "get/DateofExpense"
-        let apiKey = "\(axnex)&State_Code=\(StateCode)&desig=\(Desig)&divisionCode=\(DivCode)&Type=1&div_code=\(DivCode)&rSF=\(SFCode)&sfCode=\(SFCode)&stateCode=\(StateCode)&Dateofexp=2024-3-18"
+        let apiKey = "\(axnex)&State_Code=\(StateCode)&desig=\(Desig)&divisionCode=\(DivCode)&Type=1&div_code=\(DivCode)&rSF=\(SFCode)&sfCode=\(SFCode)&stateCode=\(StateCode)&Dateofexp=2024-4-17"
         let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
         let url = APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKeyWithoutCommas
         self.ShowLoading(Message: "Loading...")
