@@ -816,8 +816,12 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
             return false
         }
         
-        if ( Allow_Apr == false){
-            Toast.show(message: "Approval already Sent")
+//        if ( Allow_Apr == false){
+//            Toast.show(message: "Approval already Sent")
+//            return false
+//        }
+        if ( Allow_Apr == true){
+            Toast.show(message: "Complete this period expense")
             return false
         }
         return true

@@ -8,7 +8,7 @@
 import UIKit
 import MobileCoreServices
 import Alamofire
-class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UICollectionViewDataSource, UICollectionViewDelegate {
+class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource, UICollectionViewDataSource, UICollectionViewDelegate {
     @IBOutlet weak var ButtonBack: UIImageView!
     @IBOutlet weak var Add_Hotal_Bill: UIImageView!
     @IBOutlet var blureView: UIVisualEffectView!
@@ -431,8 +431,6 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
         imgs.reloadData()
         openImag()
     }
-    
-    
     @objc private func Rem_Tit_Bill(_ txtQty: UITextField){
         let cell: cellListItem = GlobalFunc.getTableViewCell(view: txtQty) as! cellListItem
         let tbView:UITableView = GlobalFunc.getTableView(view: txtQty)
@@ -508,10 +506,6 @@ class Daily_Expense_Entry: UIViewController, UIImagePickerControllerDelegate, UI
         DropDown.isHidden = true
     }
  
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
-    }
     @objc func imageTapped() {
         SelMod = "Bill_Pho"
         animateIn(desiredView:blureView)

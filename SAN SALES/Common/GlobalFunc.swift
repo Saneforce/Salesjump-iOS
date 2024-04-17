@@ -96,8 +96,8 @@ class IViewController: UIViewController, UITextFieldDelegate{
     @objc func dismissMyKeyboard(){
         self.view.endEditing(true)
     }
-    
-    @objc func keyboardWillShow(notification: NSNotification) {
+    //Old
+    /*@objc func keyboardWillShow(notification: NSNotification) {
         guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else {
            return
         }
@@ -115,7 +115,37 @@ class IViewController: UIViewController, UITextFieldDelegate{
             print(error.localizedDescription)
         }
         
+    }*/
+    
+    // New
+    @objc func keyboardWillShow(notification: NSNotification) {
+        guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else {
+            return
+        }
+        
+        guard let responder = UIResponder.currentFirstResponder else {
+            print("Current first responder is nil")
+            return
+        }
+        
+        let currFrame: CGRect = (responder.globalFrame ?? CGRect.zero)
+        let textFieldBottomLine: CGFloat = (currFrame.origin.y) + currFrame.height + LITTLE_SPACE
+        let viewRect: CGRect = self.view.bounds
+        
+        var isTextFieldHidden: Bool = false
+        if textFieldBottomLine > (viewRect.size.height - keyboardSize.height) {
+            isTextFieldHidden = true
+        } else {
+            isTextFieldHidden = false
+        }
+        
+        if isTextFieldHidden {
+            let animatedDistance: CGFloat = textFieldBottomLine - (viewRect.size.height - keyboardSize.height)
+            self.view.frame.origin.y = self.view.frame.origin.y - animatedDistance
+        }
     }
+    
+    
     @objc func keyboardWillHide(notification: NSNotification) {
         self.view.frame.origin.y = 0
     }

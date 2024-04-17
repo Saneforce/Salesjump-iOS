@@ -128,6 +128,8 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
         Check_Box.isHidden = true
         Driver_Need.isHidden = true
         Mod_Of_Tra_Height.constant = 80
+        
+        Start_Km.keyboardType = UIKeyboardType.numberPad
     }
     func getUserDetails(){
     let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
