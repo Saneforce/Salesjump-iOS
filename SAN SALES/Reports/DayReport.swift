@@ -182,9 +182,9 @@ class DayReport:IViewController,UICollectionViewDelegate,UICollectionViewDataSou
                         self.lblDyStTM.text=String(format: "%@", todayData["StartTime"] as! String)
                         self.lblDyEnTM.text=String(format: "%@:00", todayData["secFC"] as! String)
                         
-                        self.lblSuperStkCnt.text = String(format: "%i", todayData["stkVC"] as! Int)
-                        self.lblSuperStkOrdCnt.text = String(format: "%i", todayData["stkPC"] as! Int)
-                        self.lblSuperStkVal.text = String(format: "%.02f", todayData["stkoVal"] as! Double)
+                        self.lblSuperStkCnt.text = String(format: "%i", todayData["stkVC"] as? Int ?? 0)
+                        self.lblSuperStkOrdCnt.text = String(format: "%i", todayData["stkPC"] as? Int ?? 0)
+                        self.lblSuperStkVal.text = String(format: "%.02f", todayData["stkoVal"] as? Double ?? 0)
                         if let endTime = todayData["EndTime"] as? String, !endTime.isEmpty {
                             self.lblFCTM.text = endTime
                         } else {

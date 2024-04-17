@@ -653,10 +653,10 @@
             </objects>
             <point key="canvasLocation" x="1576.9230769230769" y="3.5545023696682461"/>
         </scene>
-        <!--View Controller-->
+        <!--Tour Plan Single Entry-->
         <scene sceneID="FQw-id-ZYS">
             <objects>
-                <viewController id="2Rz-gO-xfQ" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="sbTourPlanSingleEntry" id="2Rz-gO-xfQ" customClass="TourPlanSingleEntry" customModule="SAN_SALES" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="FZs-Kb-NL1">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -740,14 +740,14 @@
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2T3-PU-tlA">
                                                 <rect key="frame" x="15" y="110" width="360" height="80"/>
                                                 <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Worktype" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FqZ-Nz-XFo">
-                                                        <rect key="frame" x="24" y="8" width="75" height="21"/>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Headquarter" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FqZ-Nz-XFo">
+                                                        <rect key="frame" x="24" y="8" width="98" height="21"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                         <fontDescription key="fontDescription" name="Poppins-SemiBold" family="Poppins" pointSize="15"/>
                                                         <color key="textColor" red="0.40061411200000002" green="0.39668652269999999" blue="0.39668652269999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Select the Worktype" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Nog-3w-pVv" customClass="LabelSelect" customModule="SAN_SALES" customModuleProvider="target">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Select the Headquarter" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Nog-3w-pVv" customClass="LabelSelect" customModule="SAN_SALES" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="34" width="360" height="40"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                         <color key="backgroundColor" red="0.93725490199999995" green="0.95294117649999999" blue="0.98431372549999996" alpha="1" colorSpace="calibratedRGB"/>
@@ -764,14 +764,14 @@
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mHC-ih-9WM">
                                                 <rect key="frame" x="15" y="205" width="360" height="80"/>
                                                 <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Headquarter" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ULm-VR-HmA">
-                                                        <rect key="frame" x="24" y="8" width="98" height="21"/>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Distributor" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ULm-VR-HmA">
+                                                        <rect key="frame" x="24" y="8" width="81" height="21"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                         <fontDescription key="fontDescription" name="Poppins-SemiBold" family="Poppins" pointSize="15"/>
                                                         <color key="textColor" red="0.40061411200000002" green="0.39668652269999999" blue="0.39668652269999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Select the Headquarter" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="p36-K0-EHh" customClass="LabelSelect" customModule="SAN_SALES" customModuleProvider="target">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Select the Distributor" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="p36-K0-EHh" customClass="LabelSelect" customModule="SAN_SALES" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="34" width="360" height="40"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                         <color key="backgroundColor" red="0.93725490199999995" green="0.95294117649999999" blue="0.98431372549999996" alpha="1" colorSpace="calibratedRGB"/>
@@ -788,14 +788,14 @@
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wRF-qO-U7M">
                                                 <rect key="frame" x="15" y="300" width="360" height="80"/>
                                                 <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Distributor" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Gta-yQ-c88">
-                                                        <rect key="frame" x="24" y="8" width="81" height="21"/>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Route" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Gta-yQ-c88">
+                                                        <rect key="frame" x="24" y="8" width="45" height="21"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                         <fontDescription key="fontDescription" name="Poppins-SemiBold" family="Poppins" pointSize="15"/>
                                                         <color key="textColor" red="0.40061411200000002" green="0.39668652269999999" blue="0.39668652269999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Select the Distributor" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uZ9-4D-1w6" customClass="LabelSelect" customModule="SAN_SALES" customModuleProvider="target">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Select the Route" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uZ9-4D-1w6" customClass="LabelSelect" customModule="SAN_SALES" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="34" width="360" height="40"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                         <color key="backgroundColor" red="0.93725490199999995" green="0.95294117649999999" blue="0.98431372549999996" alpha="1" colorSpace="calibratedRGB"/>
@@ -816,7 +816,7 @@
                                                         <rect key="frame" x="0.0" y="0.0" width="360" height="50"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Joint Work" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lzd-UT-Ngx">
-                                                                <rect key="frame" x="24" y="8" width="100" height="21"/>
+                                                                <rect key="frame" x="24" y="8" width="99" height="21"/>
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                                 <fontDescription key="fontDescription" name="Poppins-SemiBold" family="Poppins" pointSize="15"/>
                                                                 <color key="textColor" red="0.40061411200000002" green="0.39668652269999999" blue="0.39668652269999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
@@ -906,7 +906,7 @@
                                                     </label>
                                                     <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Ibx-M2-TYh">
                                                         <rect key="frame" x="0.0" y="34" width="360" height="34"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                         <color key="backgroundColor" red="0.93725490199999995" green="0.95294117649999999" blue="0.98431372549999996" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                         <textInputTraits key="textInputTraits"/>
@@ -929,7 +929,7 @@
                                                     </label>
                                                     <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ayy-7h-qLK">
                                                         <rect key="frame" x="0.0" y="34" width="360" height="34"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                         <color key="backgroundColor" red="0.93725490199999995" green="0.95294117649999999" blue="0.98431372549999996" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                         <textInputTraits key="textInputTraits"/>
@@ -1029,24 +1029,46 @@
                         </constraints>
                     </view>
                     <size key="freeformSize" width="390" height="844"/>
+                    <connections>
+                        <outlet property="imgBack" destination="khe-zf-u4D" id="ae2-AL-lW9"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0eS-tX-0Uy" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2458" y="9"/>
         </scene>
-        <!--View Controller-->
+        <!--Tour Plan Calender Screen-->
         <scene sceneID="WvV-vS-vLr">
             <objects>
-                <viewController id="nkc-qf-Cas" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="sbTourPlanCalenderScreen" id="nkc-qf-Cas" customClass="TourPlanCalenderScreen" customModule="SAN_SALES" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="x7B-4V-zgR">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lQz-1s-egb">
                                 <rect key="frame" x="0.0" y="30" width="390" height="50"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="backsmall" translatesAutoresizingMaskIntoConstraints="NO" id="bzc-q9-sO5">
+                                        <rect key="frame" x="0.0" y="3" width="36" height="47"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="47" id="4lo-YO-5Xs"/>
+                                            <constraint firstAttribute="width" constant="36" id="jc2-A4-J5h"/>
+                                        </constraints>
+                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add TP Entry" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l0Y-oD-JV9">
+                                        <rect key="frame" x="41" y="14" width="128.33333333333334" height="28"/>
+                                        <fontDescription key="fontDescription" name="Poppins-Bold" family="Poppins" pointSize="20"/>
+                                        <color key="textColor" red="0.21176470589999999" green="0.20784313730000001" blue="0.20784313730000001" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
+                                    <constraint firstItem="bzc-q9-sO5" firstAttribute="top" secondItem="lQz-1s-egb" secondAttribute="top" constant="3" id="Dwd-5o-HrE"/>
+                                    <constraint firstItem="bzc-q9-sO5" firstAttribute="leading" secondItem="lQz-1s-egb" secondAttribute="leading" id="GJH-9b-Pvg"/>
                                     <constraint firstAttribute="height" constant="50" id="IiG-GG-BrZ"/>
+                                    <constraint firstItem="l0Y-oD-JV9" firstAttribute="top" secondItem="lQz-1s-egb" secondAttribute="top" constant="14" id="K9x-QX-kpT"/>
+                                    <constraint firstItem="l0Y-oD-JV9" firstAttribute="leading" secondItem="bzc-q9-sO5" secondAttribute="trailing" constant="5" id="Xlc-rH-fHi"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Q0F-P4-gLe">
@@ -1058,11 +1080,25 @@
                                             <constraint firstAttribute="height" constant="150" id="fpz-35-qIM"/>
                                         </constraints>
                                     </stackView>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3Pz-UM-9DP" customClass="FSCalendar">
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3Pz-UM-9DP">
                                         <rect key="frame" x="8" y="166" width="374" height="350"/>
+                                        <subviews>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="a2e-e5-vOb" customClass="FSCalendar">
+                                                <rect key="frame" x="10" y="10" width="354" height="330"/>
+                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                <connections>
+                                                    <outlet property="dataSource" destination="nkc-qf-Cas" id="ZJj-c5-ZGQ"/>
+                                                    <outlet property="delegate" destination="nkc-qf-Cas" id="pTH-Pz-npa"/>
+                                                </connections>
+                                            </view>
+                                        </subviews>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
+                                            <constraint firstItem="a2e-e5-vOb" firstAttribute="top" secondItem="3Pz-UM-9DP" secondAttribute="top" constant="10" id="2G5-n9-TaT"/>
+                                            <constraint firstItem="a2e-e5-vOb" firstAttribute="leading" secondItem="3Pz-UM-9DP" secondAttribute="leading" constant="10" id="IXs-hr-9qs"/>
                                             <constraint firstAttribute="height" constant="350" id="VD4-sj-0cO"/>
+                                            <constraint firstAttribute="bottom" secondItem="a2e-e5-vOb" secondAttribute="bottom" constant="10" id="Y22-c7-Fsi"/>
+                                            <constraint firstAttribute="trailing" secondItem="a2e-e5-vOb" secondAttribute="trailing" constant="10" id="ZBR-CJ-pLA"/>
                                         </constraints>
                                     </view>
                                 </subviews>
@@ -1089,6 +1125,9 @@
                             <constraint firstItem="lQz-1s-egb" firstAttribute="top" secondItem="x7B-4V-zgR" secondAttribute="top" constant="30" id="uap-Dz-anf"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="imgBack" destination="bzc-q9-sO5" id="oTz-bb-Bvv"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ovm-l6-mWS" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

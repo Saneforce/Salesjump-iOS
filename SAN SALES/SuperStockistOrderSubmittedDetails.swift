@@ -32,6 +32,8 @@ class SuperStockistOrderSubmittedDetails : UIViewController , UITableViewDelegat
     
     
     @IBOutlet weak var lblDistributorsName: UILabel!
+    
+    
     @IBOutlet weak var lblRoute: UILabel!
     
     
@@ -85,8 +87,6 @@ class SuperStockistOrderSubmittedDetails : UIViewController , UITableViewDelegat
         imgBack.addTarget(target: self, action: #selector(backVC))
         
         getTransSlNo()
-        
-        
         
     }
     

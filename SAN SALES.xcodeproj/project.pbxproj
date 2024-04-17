@@ -10,6 +10,8 @@
 		159D40E62B95972E005B41E1 /* SuperStockistOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159D40E52B95972E005B41E1 /* SuperStockistOrder.swift */; };
 		159D9ABB2BA7F7A800DE3FAA /* CustomAlertVCViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159D9AB92BA7F7A800DE3FAA /* CustomAlertVCViewController.swift */; };
 		159D9ABC2BA7F7A800DE3FAA /* CustomAlertVCViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 159D9ABA2BA7F7A800DE3FAA /* CustomAlertVCViewController.xib */; };
+		15A27B702BCE871D00BEF060 /* TourPlanCalenderScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A27B6F2BCE871D00BEF060 /* TourPlanCalenderScreen.swift */; };
+		15A27B722BCE8D0F00BEF060 /* TourPlanSingleEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A27B712BCE8D0F00BEF060 /* TourPlanSingleEntry.swift */; };
 		15A455452BB3F6A900EAE18C /* ItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A455432BB3F6A900EAE18C /* ItemViewController.swift */; };
 		15A455462BB3F6A900EAE18C /* ItemViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15A455442BB3F6A900EAE18C /* ItemViewController.xib */; };
 		15A5A6932BB6BF90004525FF /* CallPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A5A6922BB6BF90004525FF /* CallPreview.swift */; };
@@ -108,6 +110,8 @@
 		159D40E52B95972E005B41E1 /* SuperStockistOrder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuperStockistOrder.swift; sourceTree = "<group>"; };
 		159D9AB92BA7F7A800DE3FAA /* CustomAlertVCViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAlertVCViewController.swift; sourceTree = "<group>"; };
 		159D9ABA2BA7F7A800DE3FAA /* CustomAlertVCViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomAlertVCViewController.xib; sourceTree = "<group>"; };
+		15A27B6F2BCE871D00BEF060 /* TourPlanCalenderScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TourPlanCalenderScreen.swift; sourceTree = "<group>"; };
+		15A27B712BCE8D0F00BEF060 /* TourPlanSingleEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TourPlanSingleEntry.swift; sourceTree = "<group>"; };
 		15A455432BB3F6A900EAE18C /* ItemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemViewController.swift; sourceTree = "<group>"; };
 		15A455442BB3F6A900EAE18C /* ItemViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ItemViewController.xib; sourceTree = "<group>"; };
 		15A5A6922BB6BF90004525FF /* CallPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallPreview.swift; sourceTree = "<group>"; };
@@ -268,6 +272,8 @@
 			children = (
 				3F0822BC29000872009C33EA /* AdminMenus.swift */,
 				3F0822BE29000D65009C33EA /* LeaveForm.swift */,
+				15A27B6F2BCE871D00BEF060 /* TourPlanCalenderScreen.swift */,
+				15A27B712BCE8D0F00BEF060 /* TourPlanSingleEntry.swift */,
 			);
 			path = AdminForms;
 			sourceTree = "<group>";
@@ -635,6 +641,7 @@
 				3F4CC197287B297A00BA2B4E /* NetworkMonitor.swift in Sources */,
 				38F6F5B12B19D305007090BF /* Coverage.swift in Sources */,
 				3F5816F0281172C400659510 /* MainMenu.swift in Sources */,
+				15A27B702BCE871D00BEF060 /* TourPlanCalenderScreen.swift in Sources */,
 				38F6F5A92B19D2AC007090BF /* Attendance.swift in Sources */,
 				3F97F9F8283216BD0097166D /* EditTextField.swift in Sources */,
 				3F063527283A8C070027842E /* CardView.swift in Sources */,
@@ -643,6 +650,7 @@
 				3F8BF29D27E99CCA00E1C41B /* CameraService.swift in Sources */,
 				38F6F5AD2B19D2DA007090BF /* Performance.swift in Sources */,
 				3F9F379A285B5FBA002CC408 /* ReportMenu.swift in Sources */,
+				15A27B722BCE8D0F00BEF060 /* TourPlanSingleEntry.swift in Sources */,
 				3F0861BC28019419006A30FB /* SecondaryOrder.swift in Sources */,
 				3FF57C1D286C4A76009E3FE5 /* RptVisitDetail.swift in Sources */,
 				3F5B297828891D5C002D226C /* CheckPermissions.swift in Sources */,
