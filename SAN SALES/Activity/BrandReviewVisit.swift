@@ -10,7 +10,7 @@ import UIKit
 import Alamofire
 import CoreLocation
 
-class BrandReviewVisit: IViewController, UITableViewDataSource, UITableViewDelegate {
+class BrandReviewVisit: IViewController, UITableViewDataSource, UITableViewDelegate, UITextViewDelegate  {
     @IBOutlet weak var btrmktp: UIButton!
     @IBOutlet weak var txvRmks: UITextView!
     @IBOutlet weak var lblSelTitle: UILabel!
@@ -28,7 +28,7 @@ class BrandReviewVisit: IViewController, UITableViewDataSource, UITableViewDeleg
     @IBOutlet weak var textField: UITextField!
     
     
-    let product:[String] = ["Start Time","Customer Channel","Address","GST"]
+    let product:[String] = ["Start Time","Retailer Channel","Address","GST"]
     
     struct SVCallRevw: Codable {
         let svCallRevw: SVCallRevwDetails
@@ -105,7 +105,9 @@ class BrandReviewVisit: IViewController, UITableViewDataSource, UITableViewDeleg
             print("Error: Cannot convert JSON object to Pretty JSON data")
             return
         }
-        
+        txvRmks.text = "Enter the Remarks"
+        txvRmks.returnKeyType = .done
+        txvRmks.delegate = self
         SFCode = prettyJsonData["sfCode"] as? String ?? ""
         DivCode = prettyJsonData["divisionCode"] as? String ?? ""
         eKey = String(format: "EK%@-%i", SFCode,Int(Date().timeIntervalSince1970))
@@ -187,7 +189,24 @@ class BrandReviewVisit: IViewController, UITableViewDataSource, UITableViewDeleg
         
         // Do any additional setup after loading the view.
     }
-    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.text == "Enter the Remarks"{
+            textView.text = ""
+            textView.textColor = .black
+        }
+    }
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool{
+        if text == "\n"{
+            textView.resignFirstResponder()
+        }
+        return true
+    }
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text == ""{
+            textView.text = "Enter the Remarks"
+            textView.textColor = UIColor.lightGray
+        }
+    }
 
     @objc private func selRmksTemp() {
         //isDate = false
@@ -225,7 +244,9 @@ class BrandReviewVisit: IViewController, UITableViewDataSource, UITableViewDeleg
             //let productitem: [String: Any]=lstAllProducts[indexPath.row] as! [String : Any]
             cell.imgSelect.addTarget(target: self, action: #selector(self.checkboxTappedAvl(_:)))
             cell.imgSelect2.addTarget(target: self, action: #selector(self.checkboxTappedEc(_:)))
-            cell.lblText?.text = item["name"] as? String
+            let proName = item["name"] as? String
+            let uppercasedProName = proName?.uppercased()
+            cell.lblText?.text = uppercasedProName
             // cell.lblText?.text = productitem["name"] as? String
             cell.imgSelect.image = UIImage(named:"uncheckbox")
             cell.selectionStyle = .none
@@ -282,6 +303,11 @@ class BrandReviewVisit: IViewController, UITableViewDataSource, UITableViewDeleg
     
     func validateForm() -> Bool {
         VisitData.shared.VstRemarks.name = txvRmks.text
+        if txvRmks.text == "Enter the Remarks" {
+            VisitData.shared.VstRemarks.name = ""
+        }
+        
+        
 //        if VisitData.shared.AV.id == "" {
 //            Toast.show(message: "Click Checkbox", controller: self)
 //            return false
@@ -302,7 +328,7 @@ class BrandReviewVisit: IViewController, UITableViewDataSource, UITableViewDeleg
         }
       
         if VisitData.shared.VstRemarks.name == "" {
-            Toast.show(message: "Select the Reason", controller: self)
+            Toast.show(message: "Please Enter or Select the Remarks", controller: self)
             return
         }
         if(NetworkMonitor.Shared.isConnected != true){
@@ -450,15 +476,12 @@ class BrandReviewVisit: IViewController, UITableViewDataSource, UITableViewDeleg
        }
         
         brndlst = String(brndlst.dropLast())
+        print(VisitData.shared.VstRemarks.name)
+        if (VisitData.shared.VstRemarks.name == "Enter the Remarks"){
+            VisitData.shared.VstRemarks.name = ""
+        }
+        let jsonString = "[{\"svCallRevw\":{\"worktype\":\"" + (self.lstPlnDetail[0]["worktype"] as! String) + "\",\"entryDate\":\"" + VisitData.shared.cInTime + "\",\"eDt\":\"" + VisitData.shared.cInTime + "\",\"subordinate\":\"MR4126\",\"stockist\":\"32539\",\"cluster\":\"114727\",\"clusterNm\":\"SAIDAPET\",\"doctorid\":\"" + VisitData.shared.CustID + "\",\"remarks\":\"" + VisitData.shared.VstRemarks.name.trimmingCharacters(in: .whitespacesAndNewlines) + "\",\"BrandList\":\"[" + brndlst + "]\",\"photosList\":\"[" + sImgItems + "]\"}}]";
         
-        let jsonString = "[{\"svCallRevw\":{\"worktype\":\"" + (self.lstPlnDetail[0]["worktype"] as! String) + "\",\"entryDate\":\"" + VisitData.shared.cInTime + "\",\"eDt\":\"" + VisitData.shared.cInTime + "\",\"subordinate\":\"MR4126\",\"stockist\":\"32539\",\"cluster\":\"114727\",\"clusterNm\":\"SAIDAPET\",\"doctorid\":\"" + VisitData.shared.CustID + "\",\"remarks\":\"" + VisitData.shared.VstRemarks.name + "\",\"BrandList\":\"[" + brndlst + "]\",\"photosList\":\"[" + sImgItems + "]\"}}]";
-        
-//                print("____________")
-//                let jsonString = "[{\"svCallRevw\":{\"worktype\":\"1386\",\"entryDate\":\"2023-07-19 16:32:47\",\"eDt\":\"2023-07-19 00:00:00\",\"subordinate\":\"MR4126\",\"stockist\":\"32538\",\"cluster\":\"114726\",\"clusterNm\":\"SAIDAPET\",\"doctorid\":\"2372978\",\"remarks\":\"NOT INTERESTED\",\"BrandList\":\"[{\\\"id\\\":\\\"1698\\\",\\\"name\\\":\\\"Palkova\\\",\\\"Avai\\\":true,\\\"EC\\\":false},{\\\"id\\\":\\\"1649\\\",\\\"name\\\":\\\"Prestige Cooker\\\",\\\"Avai\\\":false,\\\"EC\\\":true}]\",\"photosList\":\"[{\\\"imgurl\\\":\\\"'_1689760957.jpg'\\\",\\\"title\\\":\\\"''\\\",\\\"remarks\\\":\\\"''\\\"}]\"}}]"
-        
-        
-//                let jsonString = "[{\"svCallRevw\":{\"worktype\":\"1386\",\"entryDate\":\"2023-04-27 10:48:21\",\"eDt\":\"2023-04-27 00:00:00\",\"subordinate\":\"mgr1018\",\"stockist\":\"32538\",\"cluster\":\"114726\",\"clusterNm\":\"SAIDAPET\",\"doctorid\":\"2051498\",\"remarks\":\"OWNER NOT AVAILABLE\",\"BrandList\":\"[{\\\"id\\\":\\\"1658\\\",\\\"name\\\":\\\"Brittania\\\",\\\"Avai\\\":false,\\\"EC\\\":true},{\\\"id\\\":\\\"909\\\",\\\"name\\\":\\\"BUTTERFLY FAN\\\",\\\"Avai\\\":true,\\\"EC\\\":false}]\",\"photosList\":\"[]\"}}]";
-//                print(jsonString)
     
         let params: Parameters = [
             "data": jsonString
@@ -490,7 +513,7 @@ class BrandReviewVisit: IViewController, UITableViewDataSource, UITableViewDeleg
     func selectcustomer(mslno : String , sfcode : String ){
         let apiKey: String = "\(axn)&divisionCode=\(DivCode)&Msl_No=\(mslno)&sfCode=\(SFCode)&Mode=\(StrMode)"
 
-        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
             AFdata in
             switch AFdata.result
             {
@@ -509,17 +532,10 @@ class BrandReviewVisit: IViewController, UITableViewDataSource, UITableViewDeleg
                       strMasList=[]
                     if(json.count>1){
                         strMasList.append(mnuItem.init(MasId: 1, MasName: "Start Time", MasLbl:VisitData.shared.cInTime))
-                        strMasList.append(mnuItem.init(MasId: 2, MasName: "Customer Channel", MasLbl:json["DrSpl"] as! String))//Doc_Spec_ShortName
+                        strMasList.append(mnuItem.init(MasId: 2, MasName: "Retailer Channel", MasLbl:json["DrSpl"] as! String))//Doc_Spec_ShortName
                         strMasList.append(mnuItem.init(MasId: 3, MasName: "Address", MasLbl:json["Address"] as! String))
                         strMasList.append(mnuItem.init(MasId: 4, MasName: "GST", MasLbl:json["GST"] as! String))
-                        strMasList.append(mnuItem(MasId:5, MasName: "Last Order Date", MasLbl: json["Last_Order_Date"] as! String))
-                        // strMasList.append(mnuItem.init(MasId: 5, MasName: "Potential", MasLbl:"-"))
-                        //trMasList.append(mnuItem.init(MasId: 6, MasName: "Monthly Order Value", MasLbl:"-"))
-                        //strMasList.append(mnuItem.init(MasId: 7, MasName: "Last Order Amount", MasLbl:"-"))
-                        //strMasList.append(mnuItem.init(MasId: 8, MasName: "Last Order Date", MasLbl:"-"))
-                        //strMasList.append(mnuItem.init(MasId: 9, MasName: "Last Visted", MasLbl:"-"))
-                        //strMasList.append(mnuItem.init(MasId: 10, MasName: "Remark", MasLbl:"-"))
-                        //strMasList.append(mnuItem.init(MasId: 11, MasName: "Mobile Number", MasLbl:"-")) //Mobile_Number
+                       // strMasList.append(mnuItem(MasId:5, MasName: "Last Order Date", MasLbl: json["Last_Order_Date"] as! String))
                         
 
                     }

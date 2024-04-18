@@ -37,6 +37,8 @@ class AddNewCustomer: IViewController, UITableViewDelegate, UITableViewDataSourc
     @IBOutlet weak var lblSelTitle: UILabel!
     @IBOutlet weak var tbDataSelect: UITableView!
     
+    @IBOutlet weak var SetSalValu: UIButton!
+    
     struct lItem: Any {
         let id: String
         let name: String
@@ -63,13 +65,13 @@ class AddNewCustomer: IViewController, UITableViewDelegate, UITableViewDataSourc
         vwScroll.contentSize = CGSize(width: view.frame.width, height: vwContent.frame.height)
         btnBack.addTarget(target: self, action: #selector(GotoHome))
         imgOutlet.addTarget(target: self, action: #selector(takePhoto))
+        SetSalValu.isHidden = true
         DispatchQueue.global(qos: .userInitiated).async {
             DispatchQueue.main.async { [self] in
                 setOutletLocation()
             }
         }
-        
-        
+        imgOutlet.image = UIImage(named: "camera")
         let LocalStoreage = UserDefaults.standard
         let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
         let data = Data(prettyPrintedJson!.utf8)
@@ -261,7 +263,7 @@ class AddNewCustomer: IViewController, UITableViewDelegate, UITableViewDataSourc
         lObjSel=lstRoutes
         openWin(Mode: "RUT")
         tbDataSelect.reloadData()
-        lblSelTitle.text="Select the Routes"
+        lblSelTitle.text="Select the Route"
     }
     @objc private func selCats() {
         isDate=false
@@ -368,13 +370,14 @@ class AddNewCustomer: IViewController, UITableViewDelegate, UITableViewDataSourc
     }
     @objc private func GotoHome() {
         self.dismiss(animated: true, completion: nil)
-        GlobalFunc.movetoHomePage()
+        GlobalFunc.MovetoMainMenu()
     }
     @objc private func takePhoto() {
         let vc=self.storyboard?.instantiateViewController(withIdentifier: "CameraVwCtrl") as!  CameraService
         vc.modalPresentationStyle = .overCurrentContext
         vc.callback = { (photo, fileName) -> Void in
             print("callback")
+            print(photo)
             self.imgOutlet.image = photo
             NewOutlet.shared.Image = photo
             NewOutlet.shared.ImgFileName = fileName
@@ -402,6 +405,27 @@ class AddNewCustomer: IViewController, UITableViewDelegate, UITableViewDataSourc
         }
         if(NewOutlet.shared.ImgFileName == ""){
             Toast.show(message: "Take Retailer Photo", controller: self)
+            return false
+        }
+        if NewOutlet.shared.OwnerName == "" {
+            Toast.show(message: "Enter the Owner Name", controller: self)
+            return false
+        }
+        
+        if NewOutlet.shared.Address == "" {
+            Toast.show(message: "Enter the Address", controller: self)
+            return false
+        }
+        if NewOutlet.shared.Street == "" {
+            Toast.show(message: "Enter the Street", controller: self)
+            return false
+        }
+        if NewOutlet.shared.City == ""{
+            Toast.show(message: "Enter the City", controller: self)
+            return false
+        }
+        if NewOutlet.shared.Pincode == "" {
+            Toast.show(message: "Enter the Pincode", controller: self)
             return false
         }
         
@@ -470,7 +494,7 @@ class AddNewCustomer: IViewController, UITableViewDelegate, UITableViewDataSourc
             "data": jsonString //"["+jsonString+"]"//
         ]
         print(params)
-        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+"dcr/save&divisionCode=" + self.DivCode +  "&rSF="+self.SFCode+"&sfCode="+self.SFCode, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"dcr/save&divisionCode=" + self.DivCode +  "&rSF="+self.SFCode+"&sfCode="+self.SFCode, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
             AFdata in
             self.LoadingDismiss()
             switch AFdata.result
@@ -504,7 +528,7 @@ class AddNewCustomer: IViewController, UITableViewDelegate, UITableViewDataSourc
         let params: Parameters = [
             "data": jsonString
         ]
-        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+apiKey, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
             AFdata in
             switch AFdata.result
             {
@@ -528,3 +552,4 @@ class AddNewCustomer: IViewController, UITableViewDelegate, UITableViewDataSourc
         }
     }
 }
+

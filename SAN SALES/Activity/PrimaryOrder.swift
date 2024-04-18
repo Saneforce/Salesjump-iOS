@@ -131,6 +131,7 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
         }
         if let list = GlobalFunc.convertToDictionary(text: lstProdData) as? [AnyObject] {
             lstAllProducts = list;
+            print(lstAllProducts)
         }
         if let list = GlobalFunc.convertToDictionary(text: lstUnitData) as? [AnyObject] {
             lstAllUnitList = list;
@@ -637,6 +638,7 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
             }
             return false
         })
+        print(lstPrvOrder.count)
         if(lstPrvOrder.count<1){
             Toast.show(message: "Cart is Empty.") //, controller: self
             return false
@@ -644,14 +646,35 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
         return true
     }
     @IBAction func openPreview(_ sender: Any) {
-        if validateForm() {
+        
+        VisitData.shared.ProductCart = VisitData.shared.ProductCart.filter ({ (Cart) in
             
+            if (Cart["SalQty"] as! Double) > 0 {
+                return true
+            }
+            return false
+        })
+        if validateForm() {
+            lstPrvOrder = VisitData.shared.ProductCart.filter ({ (Cart) in
+                
+                if (Cart["SalQty"] as! Double) > 0 {
+                    return true
+                }
+                return false
+            })
             tbPrvOrderProduct.reloadData()
             vwPrvOrderCtrl.isHidden = false
             tbProduct.isHidden = true
         }
     }
     @IBAction func closePreview(_ sender: Any) {
+        VisitData.shared.ProductCart = VisitData.shared.ProductCart.filter ({ (Cart) in
+            
+            if (Cart["SalQty"] as! Double) > 0 {
+                return true
+            }
+            return false
+        })
         vwPrvOrderCtrl.isHidden = true
         tbProduct.isHidden = false
         tbProduct.reloadData()
@@ -758,6 +781,7 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
         updateSchme(cell: cell, id: id)
     }
     @objc private func addQty(_ sender: UITapGestureRecognizer) {
+        var Refresh = 1
         let cell:cellListItem = GlobalFunc.getTableViewCell(view: sender.view!) as! cellListItem
         let tbView:UITableView = GlobalFunc.getTableView(view: sender.view!) as! UITableView
         let indxPath: IndexPath = tbView.indexPath(for: cell)!
@@ -796,7 +820,10 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
             selNetWt=String(format: "%@", lstProducts[indxPath.row]["product_netwt"] as! CVarArg)
         }
         cell.txtQty.text = String(sQty)
-        updateQty(id: id, sUom: selUOM, sUomNm: selUOMNm, sUomConv: selUOMConv,sNetUnt: selNetWt, sQty: String(sQty),ProdItem: lProdItem,refresh: 2)
+        if (sQty == 0){
+            Refresh = 2
+        }
+        updateQty(id: id, sUom: selUOM, sUomNm: selUOMNm, sUomConv: selUOMConv,sNetUnt: selNetWt, sQty: String(sQty),ProdItem: lProdItem,refresh: Refresh)
         //tbView.reloadRows(at: [indxPath], with: .fade)
     }
     
@@ -866,6 +893,7 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
     }
     
     func updateQty(id: String,sUom: String,sUomNm: String,sUomConv: String,sNetUnt: String,sQty: String,ProdItem:[String: Any],refresh: Int) {
+        var ReFresh:Int =  refresh
         let items: [AnyObject] = VisitData.shared.ProductCart.filter ({ (item) in
             if item["id"] as! String == id {
                 return true
@@ -885,6 +913,10 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
             }
             return false
         })
+        if Schemes.isEmpty{
+            print("No Schem")
+            ReFresh = 3
+        }
         var Scheme: Double = 0
         var FQ : Int32 = 0
         var OffQty: Int = 0
@@ -949,9 +981,10 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
             
         }
         print(VisitData.shared.ProductCart)
-        updateOrderValues(refresh: refresh)
+        updateOrderValues(refresh: ReFresh)
     }
     @objc private func deleteItem(_ sender: UITapGestureRecognizer) {
+        var totAmt: Double = 0
         let cell:cellListItem = GlobalFunc.getTableViewCell(view: sender.view!) as! cellListItem
         let tbView:UITableView = GlobalFunc.getTableView(view: sender.view!) as! UITableView
         let indxPath: IndexPath = tbView.indexPath(for: cell)!
@@ -960,22 +993,6 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
         VisitData.shared.ProductCart.removeAll(where: { (item) in
             if item["id"] as! String == id {
                 return true
-            }
-            return false
-        })
-        updateOrderValues(refresh: 1)
-    }
-    func updateOrderValues(refresh: Int){
-        var totAmt: Double = 0
-        var Upadet_table = 0
-        lstPrvOrder = VisitData.shared.ProductCart.filter ({ (Cart) in
-            
-            if (Cart["SalQty"] as! Double) > 0 {
-                return true
-            }else{
-                Upadet_table = 2
-   
-                print("No data")
             }
             return false
         })
@@ -994,21 +1011,73 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
         
         lblTotItem.text = String(format: "%i",  lstPrvOrder.count)
         lblPrvTotItem.text = String(format: "%i",  lstPrvOrder.count)
-        if (refresh == 1 || Upadet_table == 2){
+        tbPrvOrderProduct.reloadData()
+       // updateOrderValues(refresh: 1)
+    }
+    func updateOrderValues(refresh: Int){
+        var totAmt: Double = 0
+        var Upadet_table = 0
+        var lstPrvOrders: [AnyObject] = []
+        lstPrvOrder = VisitData.shared.ProductCart.filter ({ (Cart) in
+            
+            if (Cart["SalQty"] as! Double) > 0 {
+                if (refresh == 1 || refresh == 3){
+                    tbPrvOrderProduct.reloadData()
+                }
+                return true
+            }else{
+                Upadet_table = 2
+   
+                print("No data")
+            }
+            return false
+        })
+        lstPrvOrders = VisitData.shared.ProductCart.filter ({ (Cart) in
+            
+            if (Cart["SalQty"] as! Double) > 0 {
+                return true
+            }
+            return false
+        })
+        lstPrvOrder = VisitData.shared.ProductCart
+        if lstPrvOrders.count>0 {
+            for i in 0...lstPrvOrders.count-1 {
+                let item: AnyObject = lstPrvOrders[i]
+                totAmt = totAmt + (item["NetVal"] as! Double)
+                //(item["SalQty"] as! NSString).doubleValue
+                
+            }
+        }
+        lblTotAmt.text = String(format: "Rs. %.02f", totAmt)
+        lblPrvTotAmt.text = String(format: "Rs. %.02f", totAmt)
+        print(totAmt)
+        TotaAmout = String(totAmt)
+        
+        lblTotItem.text = String(format: "%i",  lstPrvOrders.count)
+        lblPrvTotItem.text = String(format: "%i",  lstPrvOrders.count)
+        if (refresh == 1 || Upadet_table == 2 || refresh == 3){
             tbProduct.reloadData()
         }
         
         
-        if (refresh == 1 ){
-            tbPrvOrderProduct.reloadData()
-        }
+//        if (refresh == 1 ){
+//            tbPrvOrderProduct.reloadData()
+//        }
       
     }
     
     @IBAction func SubmitCall(_ sender: Any) {
         var OrderSub = "OD"
         var Count = 0
+        lstPrvOrder = VisitData.shared.ProductCart.filter ({ (Cart) in
+            
+            if (Cart["SalQty"] as! Double) > 0 {
+                return true
+            }
+            return false
+        })
         if validateForm() == false {
+            lstPrvOrder = VisitData.shared.ProductCart
             return
         }
         let alert = UIAlertController(title: "Confirmation", message: "Do you want to submit order?", preferredStyle: .alert)
@@ -1062,13 +1131,7 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
         var NetQty = 0.0
         var net_weight_data2 = 0.0
         print(lstPrvOrder.count)
-        lstPrvOrder = VisitData.shared.ProductCart.filter ({ (Cart) in
-            
-            if (Cart["SalQty"] as! Double) > 0 {
-                return true
-            }
-            return false
-        })
+  
         print(VisitData.shared.ProductCart.count)
         print(lstPrvOrder.count)
         self.ShowLoading(Message: "Data Submitting Please wait...")
@@ -1135,7 +1198,13 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
             for i in 0...PhotosCollection.shared.PhotoList.count-1{
                 let item: [String: Any] = PhotosCollection.shared.PhotoList[i] as! [String : Any]
                 if i > 0 { sImgItems = sImgItems + "," }
-                sImgItems = sImgItems + "{\"imgurl\":\"'" + (item["FileName"]  as! String) + "'\",\"title\":\"''\",\"remarks\":\"''\"}"
+                let sep = item["FileName"]  as! String
+                let fullNameArr = sep.components(separatedBy: "_")
+                
+                let phono = fullNameArr[2]
+                var fullid = "_\(phono)"
+                print(fullid)
+                sImgItems = sImgItems + "{\"imgurl\":\"'" + fullid + "'\",\"title\":\"''\",\"remarks\":\"''\",\"f_key\":{\"Activity_Report_Code\":\"Activity_Report_APP\"}}"
             }
         }
         // Thise Old
@@ -1245,7 +1314,10 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
         }
    
     }else{
-        let jsonString =  "[{\"Activity_Report_APP\":{\"Worktype_code\":\"'" + (self.lstPlnDetail[0]["worktype"] as! String) + "'\",\"Town_code\":\"'" + (self.lstPlnDetail[0]["clusterid"] as! String) + "'\",\"RateEditable\":\"''\",\"dcr_activity_date\":\"'" + VisitData.shared.cInTime + "'\",\"Daywise_Remarks\":\"" + VisitData.shared.VstRemarks.name.trimmingCharacters(in: .whitespacesAndNewlines) + "\",\"eKey\":\"" + self.eKey + "\",\"rx\":\"'1'\",\"rx_t\":\"''\",\"DataSF\":\"'" + DataSF + "'\"}},{\"Activity_Stockist_Report\":{\"Stockist_POB\":\"" + VisitData.shared.PayValue + "\",\"Worked_With\":\"'"+Join_Works+"'\",\"location\":\"'" + sLocation + "'\",\"geoaddress\":\"" + sAddress + "\",\"superstockistid\":\"''\",\"Stk_Meet_Time\":\"'" + VisitData.shared.cInTime + "'\",\"modified_time\":\"'" + VisitData.shared.cInTime + "'\",\"date_of_intrument\":\"" + VisitData.shared.DOP.id + "\",\"intrumenttype\":\""+VisitData.shared.PayType.id+"\",\"orderValue\":\"" + (lblTotAmt.text!).replacingOccurrences(of: "Rs. ", with: "") + "\",\"Aob\":0,\"CheckinTime\":\"" + VisitData.shared.cInTime + "\",\"CheckoutTime\":\"" + VisitData.shared.cOutTime + "\",\"PhoneOrderTypes\":" + VisitData.shared.OrderMode.id + ",\"Super_Stck_code\":\"'\(VisitData.shared.Dist.id)'\",\"stockist_code\":\"'" + VisitData.shared.CustID + "'\",\"stockist_name\":\"''\",\"f_key\":{\"Activity_Report_Code\":\"'Activity_Report_APP'\"}}},{\"Activity_Stk_POB_Report\":[" + sPItems +  "]},{\"Activity_Stk_Sample_Report\":[]},{\"Activity_Event_Captures\":[]},{\"PENDING_Bills\":[]},{\"Compititor_Product\":[]},{\"Activity_Event_Captures_Call\":[]}]"
+        if (VisitData.shared.VstRemarks.name == "Enter the Remarks"){
+            VisitData.shared.VstRemarks.name = ""
+        }
+        let jsonString =  "[{\"Activity_Report_APP\":{\"Worktype_code\":\"'" + (self.lstPlnDetail[0]["worktype"] as! String) + "'\",\"Town_code\":\"'" + (self.lstPlnDetail[0]["clusterid"] as! String) + "'\",\"RateEditable\":\"''\",\"dcr_activity_date\":\"'" + VisitData.shared.cInTime + "'\",\"Daywise_Remarks\":\"" + VisitData.shared.VstRemarks.name.trimmingCharacters(in: .whitespacesAndNewlines) + "\",\"eKey\":\"" + self.eKey + "\",\"rx\":\"'1'\",\"rx_t\":\"''\",\"DataSF\":\"'" + DataSF + "'\"}},{\"Activity_Stockist_Report\":{\"Stockist_POB\":\"" + VisitData.shared.PayValue + "\",\"Worked_With\":\"'"+Join_Works+"'\",\"location\":\"'" + sLocation + "'\",\"geoaddress\":\"" + sAddress + "\",\"superstockistid\":\"''\",\"Stk_Meet_Time\":\"'" + VisitData.shared.cInTime + "'\",\"modified_time\":\"'" + VisitData.shared.cInTime + "'\",\"date_of_intrument\":\"" + VisitData.shared.DOP.id + "\",\"intrumenttype\":\""+VisitData.shared.PayType.id+"\",\"orderValue\":\"" + (lblTotAmt.text!).replacingOccurrences(of: "Rs. ", with: "") + "\",\"Aob\":0,\"CheckinTime\":\"" + VisitData.shared.cInTime + "\",\"CheckoutTime\":\"" + VisitData.shared.cOutTime + "\",\"PhoneOrderTypes\":" + VisitData.shared.OrderMode.id + ",\"Super_Stck_code\":\"'\(VisitData.shared.Dist.id)'\",\"stockist_code\":\"'" + VisitData.shared.CustID + "'\",\"stockist_name\":\"''\",\"f_key\":{\"Activity_Report_Code\":\"'Activity_Report_APP'\"}}},{\"Activity_Stk_POB_Report\":[" + sPItems +  "]},{\"Activity_Stk_Sample_Report\":[]},{\"Activity_Event_Captures\":[" + sImgItems +  "]},{\"PENDING_Bills\":[]},{\"Compititor_Product\":[]},{\"Activity_Event_Captures_Call\":[]}]"
         
         
         print(objcallsprimary)
@@ -1293,7 +1365,7 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
             vwPrvOrderCtrl.isHidden = true
             tbProduct.isHidden = false
         }else{
-            let alert = UIAlertController(title: "Confirmation", message: "Do you want cancel this order draft", preferredStyle: .alert)
+            let alert = UIAlertController(title: "Confirmation", message: "Do you want to cancel this order draft ?", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
                 VisitData.shared.ProductCart=[]
                 self.navigationController?.popViewController(animated: true)
@@ -1329,7 +1401,7 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
             let apiKey: String = "\(axnEdit)&State_Code=\(StateCode)&Trans_Detail_SlNo=\(unwrappedProduct)&Order_No=\(unwrappedProduct2)"
             
             
-            AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+            AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
                 AFdata in
                 switch AFdata.result
                 {
@@ -1538,7 +1610,3 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
     
     
 }
-
-
-
-

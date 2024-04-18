@@ -120,6 +120,7 @@ class ViewController: IViewController {
             return
         }
         let CompDet:[String] = (txUsrNm.text?.components(separatedBy: "-"))!
+        print(CompDet)
         let LocalStoreage = UserDefaults.standard
         self.ShowLoading(Message: "Please wait...")
         let Conf=LocalStoreage.string(forKey: "APPConfig")
@@ -130,8 +131,9 @@ class ViewController: IViewController {
                 {
                 case .success(let value):
                     if let json = value as? [String: Any] {
-                        let CompSH: String = CompDet[0] as! String
-                        let config:[String:Any] = json[CompSH.uppercased()] as? [String: Any] ?? [:]
+                        let uppercaseCompSH = CompDet[0] as! String
+                        let CompSH: String = uppercaseCompSH.uppercased()
+                        let config:[String:Any] = json[CompSH] as? [String: Any] ?? [:]
                         if config.count > 0 {
                             APIClient.shared.BaseURL = config["base_url"] as! String ?? APIClient.shared.BaseURL
                         }
@@ -209,9 +211,9 @@ class ViewController: IViewController {
                     let LocalStoreage = UserDefaults.standard
                     let AppConfig: [String: Any]=[
                         "BaseURL": APIClient.shared.BaseURL,
-                        "DBURL": APIClient.shared.DBURL
+                        "DBURL": APIClient.shared.DBURL1
                     ]
-                    
+                    print(prettyPrintedJson)
                     let jsonData = try? JSONSerialization.data(withJSONObject: AppConfig, options: [])
                     let jsonString = String(data: jsonData!, encoding: .utf8)!
                     LocalStoreage.set(jsonString, forKey: "APPConfig")
@@ -247,7 +249,6 @@ class ViewController: IViewController {
                              if( self.lstPlnDets.isEmpty || self.lstPlnDets.count<1){ myDyPlFl=true }
                              
                              }*/
-                            
                             if myDyPlFl==true {
                                 let vc=self.storyboard?.instantiateViewController(withIdentifier: "sbMydayplan") as!  MydayPlanCtrl
                                 vc.modalPresentationStyle = .overCurrentContext
@@ -311,7 +312,7 @@ class ViewController: IViewController {
             "data": "[]"
         ]
         
-        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+"get/setup&divisionCode="+(prettyJsonData["divisionCode"] as? String ?? "")+"&rSF="+SFCode+"&sfCode="+SFCode, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"get/setup&divisionCode="+(prettyJsonData["divisionCode"] as? String ?? "")+"&rSF="+SFCode+"&sfCode="+SFCode, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
             AFdata in
             switch AFdata.result
             {
@@ -379,4 +380,3 @@ class ViewController: IViewController {
         }
     }
 }
-

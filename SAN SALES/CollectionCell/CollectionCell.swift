@@ -15,6 +15,8 @@ class CollectionCell: UICollectionViewCell{
     @IBOutlet weak var vwContent: UIView!
     @IBOutlet weak var vwBtnDel: UIView!
     @IBOutlet weak var Test: UILabel!
+    
+    @IBOutlet weak var Del_Img: UIView!
     deinit{
         imgProduct = nil
     }

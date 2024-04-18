@@ -11,9 +11,6 @@ import MapKit
 
 
 class HomePageViewController: IViewController, UITableViewDelegate, UITableViewDataSource, UITextViewDelegate{
-   
-    
-   // @IBOutlet weak var mnulistHeight: NSLayoutConstraint!
     
     @IBOutlet weak var ScrolHight: NSLayoutConstraint!
     @IBOutlet weak var hightMnth: NSLayoutConstraint!
@@ -69,11 +66,12 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
     let LocalStoreage = UserDefaults.standard
     
     override func viewDidLoad() {
-        
         AutoLogOut()
         DashBoradTB.delegate=self
         DashBoradTB.dataSource=self
-        
+        EndRmk.text = "Enter the Remarks"
+        EndRmk.returnKeyType = .done
+        EndRmk.delegate = self
         
         Managerdas.layer.cornerRadius = 20
         Managerdas.layer.borderWidth = 3.0
@@ -93,14 +91,12 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         EndRmk.layer.borderWidth = 2.0
         EndRmk.layer.borderColor = UIColor.gray.cgColor
         EndRmk.layer.cornerRadius = 5
+        EndRmk.returnKeyType = .done
         
         EndRmk.delegate = self
-
               // Add a UITapGestureRecognizer to dismiss the keyboard when tapping outside the UITextView
               let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
               view.addGestureRecognizer(tapGesture)
-        
-        
         DayendBT.layer.cornerRadius = 5
         DayendBT.addTarget(target: self, action: #selector(ClikDayEnd))
         
@@ -192,6 +188,7 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
                             return
                         }
                     }else{
+                        self.Managerdas.isHidden = true
                         let myDyPln = self.storyboard?.instantiateViewController(withIdentifier: "sbMydayplan") as! MydayPlanCtrl
                         self.navigationController?.pushViewController(myDyPln, animated: true)
                         return
@@ -207,7 +204,25 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         DashboardNew()
         LOG_OUTMODE()
     }
-  
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.text == "Enter the Remarks"{
+            textView.text = ""
+            textView.textColor = .black
+        }
+    }
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool{
+        if text == "\n"{
+            textView.resignFirstResponder()
+        }
+        return true
+    }
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text == ""{
+            textView.text = "Enter the Remarks"
+            textView.textColor = UIColor.lightGray
+        }
+    }
+    
     func getUserDetails(){
         let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
         let data = Data(prettyPrintedJson!.utf8)
@@ -235,13 +250,10 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
     }
     func DashboardNew(){
         let apiKey: String = "\(axn)&divisionCode=\(DivCode)&rSF=\(SFCode)&sfCode=\(SFCode)&vanWorkFlag=&State_Code=\(StateCode)"
-        
-        
         AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
             AFdata in
             switch AFdata.result
             {
-                
             case .success(let value):
                 //print(value)
                 if let json = value as? [String:AnyObject] {
@@ -263,12 +275,11 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
                             let totalcalls = (item["RCCOUNT"] as! Int) - (item["calls"] as! Int)
                             print(totalcalls)
                             
-                            TodayDetls.append(Todaydate(id: 1, Route: item["RouteName"] as! String, AC: "AC", ACvalue: item["RCCOUNT"] as! Int, TC: "TC", TCvalue: item["calls"] as! Int, PC: "PC", PCvalue: item["order"] as! Int, BAC: "BAC", BACvalue: totalcalls, valuesTotal: item["orderVal"] as! String))
+                            TodayDetls.append(Todaydate(id: 1, Route: item["RouteName"] as? String ?? "", AC: "AC", ACvalue: item["RCCOUNT"] as! Int, TC: "TC", TCvalue: item["calls"] as! Int, PC: "PC", PCvalue: item["order"] as! Int, BAC: "BAC", BACvalue: totalcalls, valuesTotal: item["orderVal"] as! String))
                             
                             self.currentdate.text = item["Adate"] as? String
                         }
                     }
-
 //                    mnulistHeight.constant = CGFloat(70*self.strMenuList.count)
 //                    self.view.layoutIfNeeded()
                     self.DashBoradTB.reloadData()
@@ -381,11 +392,11 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
                         TAmt = "0"
                     }
                     //let AAmt = MonthData["orderVal"] as! Double ?? 0
-                    x = self.addMonthVstDetControl(aY: x, h: 20, Caption: "Visited", text: String(format: "%i", Mcalls),textAlign: .right)
-                    x = self.addMonthVstDetControl(aY: x, h: 20, Caption: "Ordered", text: String(format: "%i", PMcalls),textAlign: .right)
-                    x = self.addMonthVstDetControl(aY: x, h: 20, Caption: "Order Value", text: String(format: "%.02f", OAmt),textAlign: .right)
-                    x = self.addMonthVstDetControl(aY: x, h: 20, Caption: "Target", text: String(TAmt),textAlign: .right)
-                    x = self.addMonthVstDetControl(aY: x, h: 20, Caption: "Achieve", text: String(format: "%.02f", OAmt),textAlign: .right)
+                    x = self.addMonthVstDetControl(aY: x, h: 25, Caption: "Visited", text: String(format: "%i", Mcalls),textAlign: .right)
+                    x = self.addMonthVstDetControl(aY: x, h: 25, Caption: "Ordered", text: String(format: "%i", PMcalls),textAlign: .right)
+                    x = self.addMonthVstDetControl(aY: x, h: 25, Caption: "Order Value", text: String(format: "%.02f", OAmt),textAlign: .right)
+                    x = self.addMonthVstDetControl(aY: x, h: 25, Caption: "Target", text: String(TAmt),textAlign: .right)
+                    x = self.addMonthVstDetControl(aY: x, h: 25, Caption: "Achieve", text: String(format: "%.02f", OAmt),textAlign: .right)
                 }
                case .failure(let error):
                    print(error.errorDescription!)
@@ -477,7 +488,7 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
             let lblCap: UILabel! = UILabel(frame: CGRect(x: 10, y: aY, width: 180, height: h))
             lblCap.font = UIFont(name: "Poppins-Regular", size: 13)
             lblCap.text = Caption
-            let lblAdd: UILabel! = UILabel(frame: CGRect(x: 110, y: aY, width: 80, height: h))
+            let lblAdd: UILabel! = UILabel(frame: CGRect(x: 190, y: aY, width: 80, height: h))
             lblAdd.font = UIFont(name: "Poppins-Regular", size: 13)
             lblAdd.textAlignment = textAlign
             //lblAdd.backgroundColor = UIColor.orange
@@ -569,7 +580,23 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         UIApplication.shared.windows.first?.rootViewController = navigationController
     }
     @objc func OpenDayEndView(){
-        DayEndView.isHidden = false
+       
+        if UserSetup.shared.SrtEndKMNd == 1 ||  UserSetup.shared.SrtEndKMNd == 2{
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd"
+            let currentDate = Date()
+            let formattedDate = dateFormatter.string(from: currentDate)
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
+            let myDyPln = storyboard.instantiateViewController(withIdentifier: "End_Expense") as! End_Expense
+            myDyPln.End_exp_title = "Day End Plan"
+            myDyPln.Date_Nd = true
+            myDyPln.Date = formattedDate
+            viewController.setViewControllers([myDyPln], animated: false)
+            (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
+        }else{
+             DayEndView.isHidden = false
+        }
     }
     
     @IBAction func DayEndView(_ sender: Any) {
@@ -635,20 +662,22 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
          
          
          print(VisitData.shared.cInTime)
+        if EndRmk.text == "Enter the Remarks" {
+            EndRmk.text = ""
+        }
          var Remardata = ""
          if let Reamrk = EndRmk.text{
              print(Reamrk)
              Remardata = Reamrk
          }
         if Remardata == "" {
-            Toast.show(message: "Select the Reason", controller: self)
+            Toast.show(message: "Enter the Remarks", controller: self)
             return
         }
    
         var location_lat = Loction.coordinate.latitude.description
         var location_log = Loction.coordinate.longitude.description
-         let jsonString = "{\"Lattitude\":\"\(location_lat)\",\"Langitude\":\"\(location_log)\",\"StartTime\":0,\"currentTime\":\"\(VisitData.shared.cInTime)\",\"date_time\":\"'\(VisitData.shared.cInTime)'\",\"date\":\"'\(date)'\",\"time\":\"\(time)\",\"remarks\":\"\(Remardata)\",\"day_end_km\":\"\"}"
-        
+    
         let jsonString2 = "{\"Lattitude\":\"\(location_lat)\",\"Langitude\":\"\(location_log)\",\"currentTime\":\"\(VisitData.shared.cInTime)\",\"date_time\":\"'\(VisitData.shared.cInTime)'\",\"date\":\"'\(date)'\",\"time\":\"\(time)\",\"remarks\":\"\(Remardata)\"}"
          
              let params: Parameters = [
@@ -674,13 +703,6 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
              }
     }
   
-    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-            if text == "\n" {
-                textView.resignFirstResponder()
-                return false
-            }
-            return true
-        }
 
         @objc func dismissKeyboard() {
             view.endEditing(true)
@@ -695,9 +717,14 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
                     logOutMod = cnt
                     print(logOutMod)
                     DayEnd.isHidden = true
-                    if (logOutMod == 0){
-                        DayEnd.isHidden = false
+                    if (self.lstMyplnList.count>0){
+                        if (logOutMod == 0){
+                            DayEnd.isHidden = false
+                        }
+                    }else{
+                        self.Managerdas.isHidden = true
                     }
+                   
                 } else {
                     print("Invalid response format")
                 }
@@ -731,7 +758,8 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         }
 
     }
-
+    
+    
 }
 
 //Username: Sankafo2,aachi-testso2

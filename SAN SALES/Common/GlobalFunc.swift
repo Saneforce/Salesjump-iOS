@@ -96,8 +96,8 @@ class IViewController: UIViewController, UITextFieldDelegate{
     @objc func dismissMyKeyboard(){
         self.view.endEditing(true)
     }
-    
-    @objc func keyboardWillShow(notification: NSNotification) {
+    //Old
+    /*@objc func keyboardWillShow(notification: NSNotification) {
         guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else {
            return
         }
@@ -115,12 +115,41 @@ class IViewController: UIViewController, UITextFieldDelegate{
             print(error.localizedDescription)
         }
         
+    }*/
+    
+    // New
+    @objc func keyboardWillShow(notification: NSNotification) {
+        guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else {
+            return
+        }
+        
+        guard let responder = UIResponder.currentFirstResponder else {
+            print("Current first responder is nil")
+            return
+        }
+        
+        let currFrame: CGRect = (responder.globalFrame ?? CGRect.zero)
+        let textFieldBottomLine: CGFloat = (currFrame.origin.y) + currFrame.height + LITTLE_SPACE
+        let viewRect: CGRect = self.view.bounds
+        
+        var isTextFieldHidden: Bool = false
+        if textFieldBottomLine > (viewRect.size.height - keyboardSize.height) {
+            isTextFieldHidden = true
+        } else {
+            isTextFieldHidden = false
+        }
+        
+        if isTextFieldHidden {
+            let animatedDistance: CGFloat = textFieldBottomLine - (viewRect.size.height - keyboardSize.height)
+            self.view.frame.origin.y = self.view.frame.origin.y - animatedDistance
+        }
     }
+    
+    
     @objc func keyboardWillHide(notification: NSNotification) {
         self.view.frame.origin.y = 0
     }
     
-
     func getVisibleViewController(_ rootViewController: UIViewController?) -> UIViewController? {
         
         var rootVC = rootViewController
@@ -262,6 +291,13 @@ class GlobalFunc{
         UIApplication.shared.windows.first?.rootViewController = viewController
         UIApplication.shared.windows.first?.makeKeyAndVisible()
     }
+    static func MovetoMainMenu(){
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let viewController = storyboard.instantiateViewController(withIdentifier: "sbMainmnu") as! MainMenu;()
+        UIApplication.shared.windows.first?.rootViewController = viewController
+        UIApplication.shared.windows.first?.makeKeyAndVisible()
+    }
+    
     static func FieldMasterSync(SFCode: String,completion: (() -> Void)? = nil){
         
         struct mnuItem: Any {
@@ -314,7 +350,7 @@ class GlobalFunc{
             let params: Parameters = [
                 "data": jsonString
             ]
-            AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
+            AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+apiKey, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
                 AFdata in
                 switch AFdata.result
                 {

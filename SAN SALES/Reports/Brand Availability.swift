@@ -150,10 +150,11 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
                 //lblHQ.addTarget(target: self, action: #selector(selHeadquaters))
             }
         }
-        // Do any additional setup after loading the view.
         Ret_and_img_Hed.isHidden = true
     }
-
+    func maximumDate(for calendar: FSCalendar) -> Date {
+        return Date()
+    }
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
         let formatter = DateFormatter()
         formatter.dateFormat = "dd/MM/yyyy"
@@ -250,74 +251,7 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
          }
      }
 
-    func setTodayPlan(){
-        var lstPlnDetail: [AnyObject] = []
-        if self.LocalStoreage.string(forKey: "Mydayplan") == nil { return }
-        let PlnDets: String=LocalStoreage.string(forKey: "Mydayplan")!
-        if let list = GlobalFunc.convertToDictionary(text: PlnDets) as? [AnyObject] {
-            lstPlnDetail = list;
-        }
-        if(lstPlnDetail.count < 1){ return }
-        let wtid=String(format: "%@", lstPlnDetail[0]["worktype"] as! CVarArg)
-        if let indexToDelete = lstWType.firstIndex(where: { String(format: "%@", $0["id"] as! CVarArg) == wtid }) {
 
-            let typ: String = lstWType[indexToDelete]["FWFlg"] as! String
-            let id=String(format: "%@", lstWType[indexToDelete]["id"] as! CVarArg)
-            let name: String = lstWType[indexToDelete]["name"] as! String
-            
-            vwHQCtrl.isHidden=false
-
-            if typ != "F" {
-                vwHQCtrl.isHidden=true
-               
-            }else{
-                
-                let sfid=String(format: "%@", lstPlnDetail[0]["subordinateid"] as! CVarArg)
-                if let indexToDelete = lstHQs.firstIndex(where: { String(format: "%@", $0["id"] as! CVarArg) == sfid }) {
-                    lblHQ.text = lstHQs[indexToDelete]["name"] as? String
-                    let sfname: String = lstHQs[indexToDelete]["name"] as! String
-                    //new
-                    if let DistData = LocalStoreage.string(forKey: "Distributors_Master_"+sfid),
-                       let list = GlobalFunc.convertToDictionary(text:  DistData) as? [AnyObject] {
-                        lstDist = list
-                    }
-                    if let RouteData = LocalStoreage.string(forKey: "Route_Master_"+sfid),
-                       let list = GlobalFunc.convertToDictionary(text:  RouteData) as? [AnyObject] {
-                        lstAllRoutes = list
-                        lstRoutes = list
-                    }
-                    
-                    
-                    myDyTp.updateValue(lItem(id: sfid, name: sfname,FWFlg: ""), forKey: "HQ")
-                }
-                let stkid=String(format: "%@", lstPlnDetail[0]["stockistid"] as! CVarArg)
-                let rtid=String(format: "%@", lstPlnDetail[0]["clusterid"] as! CVarArg)
-                if let indexToDelete = lstRoutes.firstIndex(where: { String(format: "%@", $0["id"] as! CVarArg) == rtid }) {
-                    let rtname: String = lstRoutes[indexToDelete]["name"] as! String
-                    
-                    myDyTp.updateValue(lItem(id: rtid, name: rtname,FWFlg: ""), forKey: "RUT")
-                }
-                let jwids=(String(format: "%@", lstPlnDetail[0]["worked_with_code"] as! CVarArg)).replacingOccurrences(of: ",", with: ";")
-                    .components(separatedBy: ";")
-                for k in 0...jwids.count-1 {
-                    if let indexToDelete = lstJoint.firstIndex(where: { String(format: "%@", $0["id"] as! CVarArg) == jwids[k] }) {
-                        let jwid: String = lstJoint[indexToDelete]["id"] as! String
-                        let jwname: String = lstJoint[indexToDelete]["name"] as! String
-                        
-                        strJWCd += jwid+";"
-                        strJWNm += jwname+";"
-                        let jitm: AnyObject = lstJoint[indexToDelete] as AnyObject
-                        lstJWNms.append(jitm)
-                    }
-                }
-            }
-            
-            myDyTp.updateValue(lItem(id: id, name: name,FWFlg: typ), forKey: "WT")
-        }else{
-            print(" No Data")
-        }
-        
-    }
     @objc private func selHeadquaters() {
         calendar.isHidden = true
         HeadquarterTable.isHidden = false
@@ -342,6 +276,8 @@ class Brand_Availability: IViewController, UITableViewDelegate, UITableViewDataS
     }
     
     func Brandavailability(){
+        imagevw.removeAll()
+        BrandList.removeAll()
         let Date  = StrRptDt
 print(Date)
         let productArray = Date.components(separatedBy: "%")
@@ -352,7 +288,7 @@ print(Date)
 
 
         
-        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
             AFdata in
             switch AFdata.result
             {
@@ -370,21 +306,13 @@ print(Date)
                     }
                     print(prettyPrintedJson)
                     self.LoadingDismiss()
-                    // let Brand:[String: Any] = json["value"] as! [String: Any]
-                    // self.objcalls = json
-                    
-                    //                    let value = json["value"] as? [[String : Any]]
-                    //                    print(value)
-                    
-                    //var BrandList = [Brand_Availability.BrandAvil]()
-                    // if let imgevent = event as? [AnyObject], !imgevent.isEmpty {
-                    
                     if !json.isEmpty{
                     
                     event = json[0]["event"] as! [AnyObject]
                     
+                        print(event)
                     
-                    
+        
                     let jsonArray = json as? [[String: Any]]
                     let branddata = jsonArray?[0]["value"] as! [[String : Any]]
                     print(branddata)
@@ -402,25 +330,15 @@ print(Date)
                         self.BrandAV.reloadData()
                     }
                     }else{
+                        event = []
                         BrandList.removeAll()
                         BrandAV.reloadData()
-
+                        ImgViewtb.reloadData()
                         Toast.show(message: "No calls on this date.")
                     }
-//                    CallesTbHig.constant = 100+CGFloat(200*BrandList.count)
-//                    self.view.layoutIfNeeded()
-//                    print(CallesTbHig.constant)
                     updateTableViewAndSubview()
-                    
-
-            
-                    
-                    
-                    
+                 
                     EvenCap((Any).self)
-//                    vstHeight.constant = CGFloat(55*self.objcalls.count)
-//                    self.view.layoutIfNeeded()
-                    
                 }
                case .failure(let error):
                 Toast.show(message: error.errorDescription!)  //, controller: self
@@ -428,47 +346,28 @@ print(Date)
         }
     }
     func updateTableViewAndSubview() {
-        // Step 1: Calculate the new height for the tableView
         let tableViewHeight = 100 + CGFloat(45 * BrandList.count)
-
-        // Assuming you have a reference to your tableView and viewBelowTableView
-        // Replace 'YourTableView' and 'YourViewBelowTableView' with the appropriate class names.
         guard let tableView = BrandAV,
               let viewBelowTableView = Ret_and_img_Hed else {
             return
         }
-
-        // Step 2: Calculate the new frame for the view below the tableView
         let viewBelowTableViewY = tableView.frame.origin.y + tableViewHeight
         let viewBelowTableViewNewFrame = CGRect(x: viewBelowTableView.frame.origin.x,
                                                 y: viewBelowTableViewY,
                                                 width: viewBelowTableView.frame.size.width,
                                                 height: viewBelowTableView.frame.size.height)
 
-        // Step 3: Update the tableView height and view's frame
         UIView.animate(withDuration: 0.3) {
-            // Update tableView height
             tableView.frame = CGRect(x: tableView.frame.origin.x,
                                      y: tableView.frame.origin.y,
                                      width: tableView.frame.size.width,
                                      height: tableViewHeight)
 
-            // Update the view below tableView's frame
             viewBelowTableView.frame = viewBelowTableViewNewFrame
-
-            // Make sure other UI elements are updated correctly
             self.view.layoutIfNeeded()
         }
     }
     func EvenCap(_ sender: Any){
-        //let imgevent = event
-        //print(imgevent)
-        
-//        if let cusMobile = list[0]["CusMobile"] as? String {
-//            self.lblFrmMob.text = cusMobile
-//        } else {
-//            self.lblFrmMob.text = ""
-//        }
         self.ShowLoading(Message: "    Loading...")
         print(event)
         if let imgevent = event as? [AnyObject], !imgevent.isEmpty {
@@ -494,10 +393,11 @@ print(Date)
                     ImgViewtb.isHidden=false
                     imagevw.append(imgcp(Ret:img["ListedDr_Name"] as! String , Img: image!, Rmks: img["Rmks"] as! String))
                     
-                    
+                    print(imagevw)
                     ImgViewtb.reloadData()
                 }else{
                     imagevw.append(imgcp(Ret:img["ListedDr_Name"] as! String , Img: UIImage(named:"no-image-available")!, Rmks: img["Rmks"] as! String))
+                    print(imagevw)
                     ImgViewtb.reloadData()
                 }
                 

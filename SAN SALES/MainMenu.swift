@@ -47,14 +47,29 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
             print("Error: Cannot convert JSON object to Pretty JSON data")
             return
         }
-        
+        print(prettyJsonData)
         let SFName: String=prettyJsonData["sfName"] as? String ?? ""
         let Desig: String=prettyJsonData["desigCode"] as? String ?? ""
         lblSFName.text = SFName
-        lblDesig.text = Desig
+        lblDesig.text = UserSetup.shared.Desig
         imgProf.layer.cornerRadius = 10
-        
-        strMasList.append(mnuItem.init(MasId: 1, MasName: "Switch Route", MasImage: "SwitchRoute"))
+        let ImgUrl = prettyJsonData["Profile_Pic"] as? String ?? ""
+        if (ImgUrl == ""){
+            imgProf.image = UIImage(named: "profile-picture")
+        }else{
+            let url = URL(string: ImgUrl)
+            if let imageUrl = url {
+                let data = try? Data(contentsOf: imageUrl)
+                if let imageData = data {
+                    let image = UIImage(data: imageData)
+                    imgProf.image = image
+                    imgProf.contentMode = .scaleToFill
+                }
+            }
+            
+        }
+
+        strMasList.append(mnuItem.init(MasId: 1, MasName: "Switch \(UserSetup.shared.StkRoute)", MasImage: "SwitchRoute"))
         strMasList.append(mnuItem.init(MasId: 2, MasName: "Add New Retailer", MasImage: "NewRetailer"))
        /* strMasList.append(mnuItem.init(MasId: 3, MasName: "Edit Retailer", MasImage: "EditRetailer"))
         strMasList.append(mnuItem.init(MasId: 4, MasName: "Submitted Calls", MasImage: "SubmittedCalls"))
@@ -65,8 +80,15 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
         strMasList.append(mnuItem.init(MasId: 9, MasName: "GEO Tagging", MasImage: "GEOTag"))/*
         strMasList.append(mnuItem.init(MasId: 10, MasName: "Closing Stock Entry", MasImage: "ClosingStock"))*/
         strMasList.append(mnuItem.init(MasId: 11, MasName: "Master Sync", MasImage: "MasterSync"))
-        strMasList.append(mnuItem(MasId:12, MasName: "Submitted Calls", MasImage: "SubmittedCalls"))
-        
+        strMasList.append(mnuItem.init(MasId:12, MasName: "Submitted Calls", MasImage: "SubmittedCalls"))
+        if (UserSetup.shared.AddRoute_Nd == 1){
+        strMasList.append(mnuItem.init(MasId:13, MasName: "Add \(UserSetup.shared.StkRoute)", MasImage: "AdminForms"))
+        }
+        if (UserSetup.shared.AddDistibutor_Nd == 1){
+            strMasList.append(mnuItem.init(MasId:14, MasName: "Add \(UserSetup.shared.StkCap)", MasImage: "AdminForms"))
+        }
+        strMasList.append(mnuItem.init(MasId:15, MasName: "Start Expense", MasImage: "Start_Expense"))
+        strMasList.append(mnuItem.init(MasId:16, MasName: "End Expense", MasImage: "Day_End"))
         menuClose.addTarget(target: self, action: #selector(closeMenuWin))
         tbMenuDetail.delegate=self
         tbMenuDetail.dataSource=self
@@ -118,7 +140,7 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
         
         
         
-        let alert = UIAlertController(title: "Confirmation", message: "Do you want Logout ?", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Confirmation", message: "Do you want to Logout ?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
             
             print(self.lat)
@@ -274,6 +296,10 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
             if let list = GlobalFunc.convertToDictionary(text: PlnDets) as? [AnyObject] {
                 lstPlnDetail = list;
             }
+            if (lstPlnDetail.isEmpty){
+                Toast.show(message: "You haven't submitted my day plan.", controller: self)
+                return
+            }
             let typ: String = lstPlnDetail[0]["FWFlg"] as! String
             if(typ != "F"){
                 Toast.show(message: "Your are submitted 'Non - Field Work'. kindly use switch route", controller: self)
@@ -286,19 +312,42 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
                 
                 //viewController.navigationController?.pushViewController(myDyPln, animated: true)
             }
+        }else if lItm.MasId == 13 {
+            var lstPlnDetail: [AnyObject] = []
+            let PlnDets: String=LocalStoreage.string(forKey: "Mydayplan")!
+            if let list = GlobalFunc.convertToDictionary(text: PlnDets) as? [AnyObject] {
+                lstPlnDetail = list;
+            }
+            if (lstPlnDetail.isEmpty){
+                Toast.show(message: "You haven't submitted my day plan.", controller: self)
+                return
+            }
+            let myDyPln = storyboard.instantiateViewController(withIdentifier: "AddRoute") as! Add_Route
+            viewController.setViewControllers([myDyPln], animated: false)
+        }else if lItm.MasId == 14{
+            let myDyPln = storyboard.instantiateViewController(withIdentifier: "AddDistributor") as! Add_Distributor
+            viewController.setViewControllers([myDyPln], animated: false)
+        }else if lItm.MasId == 15{
+            let myDyPln = storyboard.instantiateViewController(withIdentifier: "Start_Expense") as! Start_Expense
+             myDyPln.Screan_Heding = "Start Expense"
+             myDyPln.Show_Date = false
+             myDyPln.Curent_Date = ""
+            viewController.setViewControllers([myDyPln], animated: false)
+        }else if lItm.MasId == 16{
+            let myDyPln = storyboard.instantiateViewController(withIdentifier: "End_Expense") as! End_Expense
+            myDyPln.End_exp_title = "End Expense"
+            myDyPln.Date_Nd = false
+            myDyPln.Date = ""
+            viewController.setViewControllers([myDyPln], animated: false)
         }
         (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
         print(strMasList[indexPath.row].MasName)
     }
-    
     @objc func closeMenuWin(){
         dismiss(animated: false)
-        
+        GlobalFunc.movetoHomePage()
     }
-    
-    
     func selectedid(){
-        
         
         var lstPlnDetail: [AnyObject] = []
         if self.LocalStoreage.string(forKey: "Mydayplan") == nil { return }

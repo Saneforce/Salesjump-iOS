@@ -291,20 +291,18 @@ class Summary: IViewController,FSCalendarDelegate,FSCalendarDataSource, UITableV
             switch AFdata.result {
             case .success(let value):
                 print(value)
-                self.LoadingDismiss()
                 if let json = value as? [String: AnyObject] {
                     guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
                         print("Error: Cannot convert JSON object to Pretty JSON data")
                         return
                     }
-                    
                     guard let prettyPrintedJson = try? JSONSerialization.jsonObject(with: prettyJsonData, options: []) as? [String: Any] else {
                         print("Error: Could not convert Pretty JSON data to Dictionary")
                         return
                     }
-                    
-                    print(prettyPrintedJson)
-                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                        self.LoadingDismiss()
+                    }
                     if let Secon_Det = prettyPrintedJson["SEC"] as? [[String: Any]] {
                         var Total_Call = 0
                         var Productive_Call = 0

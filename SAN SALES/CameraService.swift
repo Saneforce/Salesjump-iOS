@@ -66,6 +66,8 @@ class CameraService: IViewController , AVCapturePhotoCaptureDelegate{
     @IBOutlet weak var btOk: UIButton!
     @IBOutlet weak var btRetry: UIButton!
     
+    @IBOutlet weak var Cam_back_and_Front_bt: UIImageView!
+    
     var SFCode: String = ""
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -98,6 +100,7 @@ class CameraService: IViewController , AVCapturePhotoCaptureDelegate{
         btOk.isHidden = true
         btRetry.isHidden = true
         imgCamImage.isHidden=true
+        Cam_back_and_Front_bt.addTarget(target: self, action: #selector(CamFrontandBack))
         
         
     }
@@ -252,7 +255,7 @@ class CameraService: IViewController , AVCapturePhotoCaptureDelegate{
                 print("Error setting up camera: \(error.localizedDescription)")
             }
         }
-    @IBAction func CamFrontandBack(_ sender: UIButton) {
+    @objc private func CamFrontandBack(){
         guard let currentCameraInput = session.inputs.first as? AVCaptureDeviceInput else {
             print("No camera input found")
             return
@@ -273,7 +276,5 @@ class CameraService: IViewController , AVCapturePhotoCaptureDelegate{
         } catch {
             print("Error switching camera: \(error.localizedDescription)")
         }
-
     }
-    
 }

@@ -18,6 +18,11 @@ class RptVisitDetail: IViewController, UITableViewDelegate, UITableViewDataSourc
     @IBOutlet weak var itmSmryHeight: NSLayoutConstraint!
     @IBOutlet weak var ContentHeight: NSLayoutConstraint!
     @IBOutlet weak var btnBack: UIImageView!
+    @IBOutlet var blureView: UIVisualEffectView!
+    @IBOutlet var PopUpView: UIView!
+    @IBOutlet weak var PopUpRmkView3: UIView!
+    
+    @IBOutlet weak var FullRemlbl: UILabel!
     //@IBOutlet weak var LBLRemarkHeight: NSLayoutConstraint!
     var RptDate: String = ""
     var RptCode: String = ""
@@ -30,19 +35,50 @@ class RptVisitDetail: IViewController, UITableViewDelegate, UITableViewDataSourc
     let LocalStoreage = UserDefaults.standard
     
     public static var objVstDetail: [AnyObject]=[]
-    public static var objItmSmryDetail: [AnyObject]=[]
+    struct ItemSumary: Any {
+        let Qty: String
+        let PCode: String
+        let PName: String
+        let Val: String
+    }
+    public static var objItmSmryDetail: [ItemSumary]=[]
     
     override func viewDidLoad() {
+        super.viewDidLoad()
+        blureView.bounds = self.view.bounds
+        PopUpView.bounds = CGRect(x: 0, y: 0, width: self.view.bounds.width * 0.9, height: self.view.bounds.height * 0.4)
+        PopUpView.layer.cornerRadius = 10
+        PopUpRmkView3.layer.cornerRadius = 10
+        PopUpRmkView3.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
         lblDate.text = RptDate
         lblCusCnt.text = CusCount
         getUserDetails()
         getVisitDetail()
-      //  getItemSummary()
+        getItemSummary()
         btnBack.addTarget(target: self, action: #selector(GotoHome))
         tbVstDetail.delegate = self
         tbVstDetail.dataSource = self
         tbItemSumry.delegate = self
         tbItemSumry.dataSource = self
+    }
+    func animateIn(desiredView: UIView){
+        let  backGroundView = self.view
+        backGroundView?.addSubview(desiredView)
+        desiredView.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
+        desiredView.alpha = 0
+        desiredView.center=backGroundView!.center
+        UIView.animate(withDuration: 0.3, animations: {
+            desiredView.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
+            desiredView.alpha = 1
+        })
+    }
+    func animateOut(desiredView:UIView){
+        UIView.animate(withDuration: 0.3, animations: {
+            desiredView.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
+            desiredView.alpha = 0
+        },completion: { _ in
+            desiredView.removeFromSuperview()
+        })
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -51,14 +87,8 @@ class RptVisitDetail: IViewController, UITableViewDelegate, UITableViewDataSourc
         return 42
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if tableView==tbVstDetail {
-            vstHeight.constant = self.tbVstDetail.contentSize.height
-            return RptVisitDetail.objVstDetail.count
-        }
-        if tableView==tbItemSumry {
-            itmSmryHeight.constant = self.tbItemSumry.contentSize.height
-            return RptVisitDetail.objItmSmryDetail.count
-        }
+        if tableView==tbVstDetail { return RptVisitDetail.objVstDetail.count }
+        if tableView==tbItemSumry { return RptVisitDetail.objItmSmryDetail.count }
         return 0
     }
     
@@ -73,17 +103,48 @@ class RptVisitDetail: IViewController, UITableViewDelegate, UITableViewDataSourc
             cell.lblTime?.text = item["VstTime"] as? String
             cell.lblActRate?.text = String(format: "Rs. %.02f", item["OrdVal"] as! Double)
             cell.lblremark?.text = item["Activity_Remarks"] as? String
+            cell.lblremark.addTarget(target: self, action: #selector(ShowPopUp(_:)))
             //cell.btnViewDet.addTarget(target: self, action:  )
             cell.btnViewDet.isHidden = true
             if item["OrdVal"] as! Double > 0 { cell.btnViewDet.isHidden = false }
             cell.btnViewDet.addTarget(target: self, action: #selector(ShowOrderDet(_:)))
         }
+            var ItmSumCount = 0
         if tbItemSumry == tableView {
-            let item: [String: Any] = RptVisitDetail.objItmSmryDetail[indexPath.row] as! [String : Any]
-            cell.lblText?.text = item["PName"] as? String
-            cell.lblQty?.text = String(format: "%i", item["Qty"] as! Int)
-            cell.lblActRate?.text = String(format: "Rs. %.02f", item["Val"] as! Double)
-            
+//            let item: [String: Any] = RptVisitDetail.objItmSmryDetail[indexPath.row] as! [String : Any]
+//            cell.lblText?.text = item["PName"] as? String
+//            cell.lblQty?.text = String(format: "%i", item["Qty"] as! Int)
+//            cell.lblActRate?.text = String(format: "Rs. %.02f", item["Val"] as! Double)
+//
+//            cell.lblText?.text = RptVisitDetail.objItmSmryDetail[indexPath.row].PName
+//            cell.lblQty?.text = RptVisitDetail.objItmSmryDetail[indexPath.row].Qty
+//            cell.lblActRate?.text = RptVisitDetail.objItmSmryDetail[indexPath.row].Val
+                        
+            if RptVisitDetail.objItmSmryDetail[indexPath.row].PName == "TOTAL" {
+                // Set the text properties first
+                cell.lblText?.text = RptVisitDetail.objItmSmryDetail[indexPath.row].PName
+                cell.lblQty?.text = RptVisitDetail.objItmSmryDetail[indexPath.row].Qty
+                cell.lblActRate?.text = RptVisitDetail.objItmSmryDetail[indexPath.row].Val
+
+                // Apply attributed text (font color in this case)
+                let attributedText = NSAttributedString(string: cell.lblText?.text ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor.red])
+                let attributedqty = NSAttributedString(string: cell.lblQty?.text ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor.red])
+                let attributedRate = NSAttributedString(string: cell.lblActRate?.text ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor.red])
+                cell.lblText?.attributedText = attributedText
+                cell.lblQty?.attributedText = attributedqty
+                cell.lblActRate?.attributedText = attributedRate
+            } else {
+                cell.lblText?.text = RptVisitDetail.objItmSmryDetail[indexPath.row].PName
+                cell.lblQty?.text = RptVisitDetail.objItmSmryDetail[indexPath.row].Qty
+                cell.lblActRate?.text = RptVisitDetail.objItmSmryDetail[indexPath.row].Val
+                let attributedText = NSAttributedString(string: cell.lblText?.text ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
+                let attributedqty = NSAttributedString(string: cell.lblQty?.text ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
+                let attributedRate = NSAttributedString(string: cell.lblActRate?.text ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
+                cell.lblText?.attributedText = attributedText
+                cell.lblQty?.attributedText = attributedqty
+                cell.lblActRate?.attributedText = attributedRate
+                
+            }
         }
         return cell
     }
@@ -111,23 +172,13 @@ class RptVisitDetail: IViewController, UITableViewDelegate, UITableViewDataSourc
             "data": jsonString
         ]
         
-        
-        print(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey)
-        
-        let url = "http://fmcg.sanfmcg.com/server/native_Db_V13_nagaprasath.php?axn=get/vwiOSVstDet&divisionCode=\(DivCode),&rSF=\(SFCode)&rptDt=\(StrRptDt)&sfCode=\(SFCode)&State_Code=\(StateCode)&Mode=\(StrMode)"
-        
-      //  self.ShowLoading(Message: "Loading...")
-        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
             AFdata in
-//            DispatchQueue.main.asyncAfter(deadline: .now()) {
-//                self.LoadingDismiss()
-//            }
             switch AFdata.result
             {
                
                 case .success(let value):
                 if let json = value as? [AnyObject] {
-                    self.getItemSummary()
                     guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
                         print("Error: Cannot convert JSON object to Pretty JSON data")
                         return
@@ -143,21 +194,14 @@ class RptVisitDetail: IViewController, UITableViewDelegate, UITableViewDataSourc
                             return Bool(fitem["OrdVal"] as! Double > 0)
                             
                         })
-                    }else if (StrMode == "VstPSuperStk"){
-                        RptVisitDetail.objVstDetail = json.filter({(fitem) in
-                            return Bool(fitem["OrdVal"] as! Double > 0)
-                            
-                        })
                     }else{
                         RptVisitDetail.objVstDetail = json
-                        print("555")
                         print(RptVisitDetail.objVstDetail)
                     }
                     tbVstDetail.reloadData()
                     vstHeight.constant = CGFloat(70*RptVisitDetail.objVstDetail.count)
                     self.view.layoutIfNeeded()
-                 //   ContentHeight.constant = 100+CGFloat(55*RptVisitDetail.objVstDetail.count)+CGFloat(42*RptVisitDetail.objItmSmryDetail.count)
-                    ContentHeight.constant = 200+CGFloat(tbVstDetail.contentSize.height)+CGFloat(tbItemSumry.contentSize.height)
+                    ContentHeight.constant = 100+CGFloat(55*RptVisitDetail.objVstDetail.count)+CGFloat(42*RptVisitDetail.objItmSmryDetail.count)
                     self.view.layoutIfNeeded()
                 }
                case .failure(let error):
@@ -167,6 +211,7 @@ class RptVisitDetail: IViewController, UITableViewDelegate, UITableViewDataSourc
     }
     
     func getItemSummary(){
+        RptVisitDetail.objItmSmryDetail.removeAll()
         let apiKey: String = "\(axnsumry)&divisionCode=\(DivCode)&rSF=\(SFCode)&rptDt=\(StrRptDt)&sfCode=\(SFCode)&State_Code=\(StateCode)&Mode=\(StrMode)"
         let aFormData: [String: Any] = [
            "tableName":"vwMyDayPlan","coloumns":"[\"worktype\",\"FWFlg\",\"sf_member_code as subordinateid\",\"cluster as clusterid\",\"ClstrName\",\"remarks\",\"stockist as stockistid\",\"worked_with_code\",\"worked_with_name\",\"dcrtype\",\"location\",\"name\",\"Sprstk\",\"Place_Inv\",\"WType_SName\",\"convert(varchar,Pln_date,20) plnDate\"]","desig":"mgr"
@@ -179,16 +224,9 @@ class RptVisitDetail: IViewController, UITableViewDelegate, UITableViewDataSourc
             "data": jsonString
         ]
         
-        print(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey)
-        
-        let url = "http://fmcg.sanfmcg.com/server/native_Db_V13_nagaprasath.php?axn=get/vwItemSummmary&divisionCode=\(DivCode),&rSF=\(SFCode)&rptDt=\(StrRptDt)&sfCode=\(SFCode)&State_Code=\(StateCode)&Mode=\(StrMode)"
-        
-      //  self.ShowLoading(Message: "Loading...")
-        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
             AFdata in
             switch AFdata.result
-            
-            
             {
                
                 case .success(let value):
@@ -203,25 +241,40 @@ class RptVisitDetail: IViewController, UITableViewDelegate, UITableViewDataSourc
                     }
                  
                     print(prettyPrintedJson)
-                    
-                    RptVisitDetail.objItmSmryDetail = json
+                    var ToatQty = 0
+                    var TotVal = 0.0
+                    do {
+                        if let jsonData = prettyPrintedJson.data(using: .utf8) {
+                            if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
+                                for item in jsonArray {
+                                    
+                                    RptVisitDetail.objItmSmryDetail.append(ItemSumary(Qty: String(format: "%i", item["Qty"] as! Int), PCode: (item["PCode"] as? String)!, PName: (item["PName"] as? String)!, Val: String(format: "Rs. %.02f", item["Val"] as! Double)))
+                                    ToatQty += item["Qty"] as! Int
+                                    TotVal += item["Val"] as! Double
+                                }
+                            } else {
+                                print("Error: Could not convert JSON string to array of dictionaries.")
+                            }
+                        } else {
+                            print("Error: Could not convert JSON string to data.")
+                        }
+                    } catch {
+                        print("Error: \(error.localizedDescription)")
+                    }
+                    if (RptVisitDetail.objItmSmryDetail.count != 0){
+                        RptVisitDetail.objItmSmryDetail.append(ItemSumary(Qty: String(ToatQty), PCode:"" , PName: "TOTAL", Val: String(format: "Rs. %.02f",TotVal)))
+                    }
+                    //RptVisitDetail.objItmSmryDetail = json
                     tbItemSumry.reloadData()
                     itmSmryHeight.constant = CGFloat(42*RptVisitDetail.objItmSmryDetail.count)
                     self.view.layoutIfNeeded()
-               //     ContentHeight.constant = 100+CGFloat(55*RptVisitDetail.objVstDetail.count)+CGFloat(42*RptVisitDetail.objItmSmryDetail.count)
-                    ContentHeight.constant = 200+CGFloat(self.tbVstDetail.contentSize.height)+CGFloat(self.tbItemSumry.contentSize.height)
+                    ContentHeight.constant = 100+CGFloat(55*RptVisitDetail.objVstDetail.count)+CGFloat(42*RptVisitDetail.objItmSmryDetail.count)
                     self.view.layoutIfNeeded()
                     print(ContentHeight.constant)
                     print(tbItemSumry)
-                    DispatchQueue.main.asyncAfter(deadline: .now()) {
-                        self.LoadingDismiss()
-                    }
                 }
                case .failure(let error):
-                Toast.show(message: error.errorDescription!)  //, controller: self
-                DispatchQueue.main.asyncAfter(deadline: .now()) {
-                    self.LoadingDismiss()
-                }
+                Toast.show(message: error.errorDescription!)
             }
         }
     }
@@ -247,4 +300,19 @@ class RptVisitDetail: IViewController, UITableViewDelegate, UITableViewDataSourc
         navigationController?.popViewController(animated: true)
     }
     
+    @objc private func ShowPopUp(_ sender: UITapGestureRecognizer) {
+        let cell:cellListItem = GlobalFunc.getTableViewCell(view: sender.view!) as! cellListItem
+        let tbView: UITableView = GlobalFunc.getTableView(view: sender.view!)
+        let indx:NSIndexPath = tbView.indexPath(for: cell)! as NSIndexPath
+        let item: [String: Any] = RptVisitDetail.objVstDetail[indx.row] as! [String : Any]
+        FullRemlbl.text = item["Activity_Remarks"] as? String
+        if (item["Activity_Remarks"] as? String != ""){
+            animateIn(desiredView: blureView)
+            animateIn(desiredView: PopUpView)
+        }
+    }
+    @IBAction func ClosPopUp(_ sender: Any) {
+        animateOut(desiredView:blureView)
+        animateOut(desiredView:PopUpView)
+    }
 }

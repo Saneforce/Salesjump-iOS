@@ -10,7 +10,7 @@ import UIKit
 import Alamofire
 import CoreLocation
 
-class SecondaryVisit: IViewController, UITableViewDelegate, UITableViewDataSource {
+class SecondaryVisit: IViewController, UITableViewDelegate, UITableViewDataSource, UITextViewDelegate {
     @IBOutlet weak var lcLastvistHeight: NSLayoutConstraint!
     @IBOutlet weak var lcContentHeight: NSLayoutConstraint!
     
@@ -34,6 +34,8 @@ class SecondaryVisit: IViewController, UITableViewDelegate, UITableViewDataSourc
     
     @IBOutlet weak var vwBtnOrder: RoundedCornerView!
     @IBOutlet weak var vwBtnCam: RoundedCornerView!
+    
+    @IBOutlet weak var SetVal: UIButton!
     
     struct lItem: Any {
         let id: String
@@ -69,10 +71,14 @@ class SecondaryVisit: IViewController, UITableViewDelegate, UITableViewDataSourc
     var sAddress: String = ""
     let LocalStoreage = UserDefaults.standard
     override func viewDidLoad() {
+        SetVal.isHidden = true
         lcLastvistHeight.constant = 0
         //lcContentHeight.constant = -400
+        txvRmks.text = "Enter the Remarks"
+        txvRmks.textColor = UIColor.lightGray
+        txvRmks.returnKeyType = .done
+        txvRmks.delegate = self
         loadViewIfNeeded()
-        
         let LocalStoreage = UserDefaults.standard
         let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
         let data = Data(prettyPrintedJson!.utf8)
@@ -133,7 +139,24 @@ class SecondaryVisit: IViewController, UITableViewDelegate, UITableViewDataSourc
         tbJWKSelect.delegate=self
         tbJWKSelect.dataSource=self
     }
-    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.text == "Enter the Remarks"{
+            textView.text = ""
+            textView.textColor = .black
+        }
+    }
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool{
+        if text == "\n"{
+            textView.resignFirstResponder()
+        }
+        return true
+    }
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text == ""{
+            textView.text = "Enter the Remarks"
+            textView.textColor = UIColor.lightGray
+        }
+    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView==tbJWKSelect { return lstJWNms.count }
@@ -211,9 +234,9 @@ class SecondaryVisit: IViewController, UITableViewDelegate, UITableViewDataSourc
                 lblRetailNm.text = name
                 
                 var yAx: Double = 0
-                yAx = addVstDetControl(aY: yAx, h: 30, Caption: "Address", text: item["ListedDr_Address1"] as! String)
-                yAx = addVstDetControl(aY: yAx, h: 30, Caption: "Contact Person", text: item["ContactPersion"] as! String)
-                yAx = addVstDetControl(aY: yAx, h: 30, Caption: "Mobile", text: item["Mobile_Number"] as! String)
+                yAx = addVstDetControl(aY: yAx, h: 30, Caption: "Address:", text: item["ListedDr_Address1"] as! String)
+                yAx = addVstDetControl(aY: yAx, h: 30, Caption: "Contact Person:", text: item["ContactPersion"] as! String)
+                yAx = addVstDetControl(aY: yAx, h: 30, Caption: "Mobile:", text: item["Mobile_Number"] as! String)
                 
                 vwVstDetCtrl.addSubview(vwVstContainer)
                 
@@ -230,16 +253,19 @@ class SecondaryVisit: IViewController, UITableViewDelegate, UITableViewDataSourc
             vstDets.updateValue(lItem(id: id, name: name), forKey: SelMode)
             closeWin(self)
         }
-    
     }
     func addVstDetControl(aY: Double, h: Double, Caption: String, text: String) -> Double {
         if text != "" {
-            let lblCap: UILabel! = UILabel(frame: CGRect(x: 10, y: aY, width: vwVstDetCtrl.frame.width, height: 10))
-            lblCap.font = UIFont(name: "Poppins-Regular", size: 10)
+            let lblCap: UILabel! = UILabel(frame: CGRect(x: 10, y: aY-5, width: vwVstDetCtrl.frame.width, height: 12))
+            lblCap.font = UIFont(name: "Poppins-SemiBold", size: 14)
             lblCap.text = Caption
             let lblAdd: UILabel! = UILabel(frame: CGRect(x: 10, y: aY+5, width: vwVstDetCtrl.frame.width, height: h))
             lblAdd.font = UIFont(name: "Poppins-Regular", size: 13)
             lblAdd.text = text
+            lblAdd.numberOfLines = 0
+            lblAdd.lineBreakMode = .byWordWrapping
+            lblAdd.sizeToFit()
+
             vwVstContainer.addSubview(lblCap)
             vwVstContainer.addSubview(lblAdd)
             
@@ -260,12 +286,17 @@ class SecondaryVisit: IViewController, UITableViewDelegate, UITableViewDataSourc
         return true
     }
     @IBAction func SubmitCall(_ sender: Any) {
+        var OrderSub = "NOD"
+        var Count = 0
         if validateForm() == false {
             return
         }
+        if (VisitData.shared.VstRemarks.name == "Enter the Remarks"){
+            VisitData.shared.VstRemarks.name = ""
+        }
         
         if VisitData.shared.VstRemarks.name == "" {
-            Toast.show(message: "Select the Reason", controller: self)
+            Toast.show(message: "Please Enter or Select the Remarks", controller: self)
             return
         }
         if(NetworkMonitor.Shared.isConnected != true){
@@ -287,8 +318,6 @@ class SecondaryVisit: IViewController, UITableViewDelegate, UITableViewDataSourc
             let sLocation: String = location.coordinate.latitude.description + ":" + location.coordinate.longitude.description
             lazy var geocoder = CLGeocoder()
             self.Location = sLocation
-         
-      
             geocoder.reverseGeocodeLocation(location ) { (placemarks, error) in
                
                 if(placemarks != nil){
@@ -318,20 +347,36 @@ class SecondaryVisit: IViewController, UITableViewDelegate, UITableViewDataSourc
                 //let DataSF: String = self.lstPlnDetail[0]["subordinateid"] as! String
                 
               
-                if(PhotosCollection.shared.PhotoList.count>0){
-                    for i in 0...PhotosCollection.shared.PhotoList.count-1{
-                        let item: [String: Any] = PhotosCollection.shared.PhotoList[i] as! [String : Any]
-                        if i > 0 { self.sImgItems = self.sImgItems + "," }
-                        self.sImgItems = self.sImgItems + "{\"imgurl\":\"'" + (item["FileName"]  as! String) + "'\",\"title\":\"''\",\"remarks\":\"''\",\"f_key\":{\"Activity_Report_Code\":\"Activity_Report_APP\"}}"
-                    }
-                }
-  
+         
                 let sessionManager = Session(configuration: URLSessionConfiguration.default)
 
                 sessionManager.session.configuration.httpMaximumConnectionsPerHost = 1
                 
-                self.subcall()
+               
                    
+            }
+            if(PhotosCollection.shared.PhotoList.count>0){
+                for i in 0...PhotosCollection.shared.PhotoList.count-1{
+                    let item: [String: Any] = PhotosCollection.shared.PhotoList[i] as! [String : Any]
+                    if i > 0 { self.sImgItems = self.sImgItems + "," }
+                    let sep = item["FileName"]  as! String
+                    let fullNameArr = sep.components(separatedBy: "_")
+                    
+                    let phono = fullNameArr[2]
+                    let fullid = "_\(phono)"
+                    print(fullid)
+                    self.sImgItems = self.sImgItems + "{\"imgurl\":\"'" + fullid + "'\",\"title\":\"''\",\"remarks\":\"''\",\"f_key\":{\"Activity_Report_Code\":\"Activity_Report_APP\"}}"
+                }
+            }
+
+            
+            Count = Count+1
+            if (OrderSub == "NOD"){
+                self.subcall()
+                OrderSub  = ""
+                print(Count)
+            }else{
+                print(Count)
             }
        
         }, error:{ errMsg in
@@ -406,7 +451,9 @@ class SecondaryVisit: IViewController, UITableViewDelegate, UITableViewDataSourc
             Join_Works.removeLast()
             print(Join_Works)
         }
-        
+        if (VisitData.shared.VstRemarks.name == "Enter the Remarks"){
+            VisitData.shared.VstRemarks.name = ""
+        }
         let jsonString = "[{\"Activity_Report_APP\":{\"dcr_activity_date\":\"\'" + VisitData.shared.cInTime + "\'\",\"rx\":\"\'1\'\",\"rx_t\":\"\'\'\",\"Daywise_Remarks\":\"" + VisitData.shared.VstRemarks.name.trimmingCharacters(in: .whitespacesAndNewlines) + "\",\"RateEditable\":\"\'\'\",\"Worktype_code\":\"\'" + (self.lstPlnDetail[0]["worktype"] as! String) + "\'\",\"Town_code\":\"\'" + (self.lstPlnDetail[0]["clusterid"] as! String) + "\'\",\"DataSF\":\"\'" + self.DataSF + "\'\",\"eKey\":\"" + self.eKey + "\"}},{\"Activity_Doctor_Report\":{\"modified_time\":\"\'" + VisitData.shared.cInTime + "\'\",\"CheckinTime\":\"" + VisitData.shared.cInTime + "\",\"rateMode\":\"Nil\",\"visit_name\":\"\'\'\",\"CheckoutTime\":\"" + VisitData.shared.cOutTime + "\",\"Order_No\":\"\'0\'\",\"Doc_Meet_Time\":\"\'" + VisitData.shared.cInTime + "\'\",\"Worked_With\":\"'"+Join_Works+"'\",\"discount_price\":\"0\",\"Discountpercent\":\"0\",\"PhoneOrderTypes\":\"" + VisitData.shared.OrderMode.id + "\",\"net_weight_value\":\"0\",\"stockist_name\":\"\'\'\",\"location\":\"\'" + sLocation + "\'\",\"stockist_code\":\"\'\'\",\"Order_Stk\":\"\'\'\",\"superstockistid\":\"\'\'\",\"geoaddress\":\"" + sAddress + "\",\"f_key\":{\"Activity_Report_Code\":\"\'Activity_Report_APP\'\"},\"doctor_name\":\"\'" + self.vstDets["RET"]!.name + "\'\",\"visit_id\":\"\'\'\",\"Doctor_POB\":\"0\",\"doctor_code\":\"\'" + self.vstDets["RET"]!.id + "\'\"}},{\"Activity_Sample_Report\":[]},{\"Trans_Order_Details\":[]},{\"Activity_Event_Captures\":[" + sImgItems +  "]},{\"Activity_Input_Report\":[]},{\"Compititor_Product\":[]},{\"PENDING_Bills\":[]}]"
         
       
@@ -415,7 +462,7 @@ class SecondaryVisit: IViewController, UITableViewDelegate, UITableViewDataSourc
             ]
         print(params)
         
-        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+"dcr/save&divisionCode=" + self.DivCode + "&rSF="+self.SFCode+"&sfCode="+self.SFCode, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"dcr/save&divisionCode=" + self.DivCode + "&rSF="+self.SFCode+"&sfCode="+self.SFCode, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
             AFdata in
             self.LoadingDismiss()
             switch AFdata.result

@@ -15,5 +15,6 @@ class APIClient{
     var DBURL1="/server/native_Db_V13.php?axn="
     var DBURL2="/server/native_Db_V13-Mani2.php?axn="
     var imgurl="http://fmcg.sanfmcg.com/Photos/"
+    var CustomFieldDB="/server/native_Db_V13_1.php?axn="
     
 }

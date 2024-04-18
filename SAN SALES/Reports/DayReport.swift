@@ -29,24 +29,7 @@ class DayReport:IViewController,UICollectionViewDelegate,UICollectionViewDataSou
     @IBOutlet weak var clvwBrandSal: UICollectionView!
     @IBOutlet weak var lblSelTitle: UILabel!
     
-    
-    @IBOutlet weak var lblSuperStkCnt: UILabel!
-    @IBOutlet weak var lblSuperStkOrdCnt: UILabel!
-    @IBOutlet weak var lblSuperStkVal: UILabel!
-    
     @IBOutlet weak var vwSelWindow: UIView!
-    
-    
-    @IBOutlet weak var vwSuperStockistTitle: UIStackView!
-    
-    
-    @IBOutlet weak var vwSuperStockistList: UIStackView!
-    
-    @IBOutlet weak var superStockViewTitleHeightConstraint: NSLayoutConstraint!
-    
-    
-    @IBOutlet weak var superStockViewOrderListHeightConstraints: NSLayoutConstraint!
-    
     var objBrnd: [AnyObject]=[]
     
     let axn="get/iOSDayReport"
@@ -71,34 +54,34 @@ class DayReport:IViewController,UICollectionViewDelegate,UICollectionViewDataSou
         calendar.dataSource=self
         calendar.delegate=self
         clvwBrandSal.collectionViewLayout = layBranswsSal()
-        
-        
-        
-        if (UserSetup.shared.SuperStockistNeed == 0){
-            vwSuperStockistList.isHidden = true
-            vwSuperStockistTitle.isHidden = true
-            superStockViewTitleHeightConstraint.constant = 0
-            superStockViewOrderListHeightConstraints.constant = 0
-        }
-        
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return objBrnd.count
+        if (objBrnd.count == 0){
+            return 1
+        }else{
+            return objBrnd.count
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         autoreleasepool {
             let cell:CollectionCell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! CollectionCell
-            let item: [String: Any]=objBrnd[indexPath.row] as! [String : Any]
-            
-            cell.lblCap.text = item["product_brd_name"] as? String
-            cell.lblText.text = String(format: "%i",item["RetailCount"] as! Int)
-                
+            print(objBrnd)
+            if objBrnd.isEmpty{
+                cell.lblCap.text = "No data available"
+                cell.lblText.text = ""
+            }else{
+                let item: [String: Any]=objBrnd[indexPath.row] as! [String : Any]
+                cell.lblCap.text = item["product_brd_name"] as? String
+                cell.lblText.text = String(format: "%i",item["RetailCount"] as! Int)
+            }
             return cell
         }
     }
-    
+    func maximumDate(for calendar: FSCalendar) -> Date {
+        return Date()
+    }
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
         let formatter = DateFormatter()
         formatter.dateFormat = "dd/MM/yyyy"
@@ -125,7 +108,7 @@ class DayReport:IViewController,UICollectionViewDelegate,UICollectionViewDataSou
         SFCode = prettyJsonData["sfCode"] as? String ?? ""
         StateCode = prettyJsonData["State_Code"] as? String ?? ""
         DivCode = prettyJsonData["divisionCode"] as? String ?? ""
-        StrRptDt = Date().toString(format: "yyyy-MM-dd") // GlobalFunc.getCurrDateAsString().replacingOccurrences(of: " ", with: "%20")
+        StrRptDt=GlobalFunc.getCurrDateAsString().replacingOccurrences(of: " ", with: "%20")
     }
     
     func getDayReport(){
@@ -139,21 +122,8 @@ class DayReport:IViewController,UICollectionViewDelegate,UICollectionViewDataSou
             "data": jsonString
         ]
         
-        print(APIClient.shared.BaseURL+APIClient.shared.DBURL1+apiKey)
-        
-        let url = "http://fmcg.sanfmcg.com/server/native_Db_V13_nagaprasath.php?axn=get/iOSDayReport&divisionCode=\(DivCode),&rSF=\(SFCode)&rptDt=\(StrRptDt)&sfCode=\(SFCode)&State_Code=\(StateCode)";
-        
-        let urlS =
-        
-        print(url)
-        print(params)
-        self.ShowLoading(Message: "Loading...")
         AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
             AFdata in
-            DispatchQueue.main.asyncAfter(deadline: .now()) {
-                self.LoadingDismiss()
-            }
-            
             switch AFdata.result
             {
                
@@ -180,11 +150,11 @@ class DayReport:IViewController,UICollectionViewDelegate,UICollectionViewDataSou
                         self.lblPriVal.text=String(format: "%.02f", todayData["prioVal"] as! Double)
                         self.lblAttnTM.text=String(format: "%@", todayData["attTM"] as! String)
                         self.lblDyStTM.text=String(format: "%@", todayData["StartTime"] as! String)
-                        self.lblDyEnTM.text=String(format: "%@:00", todayData["secFC"] as! String)
-                        
-                        self.lblSuperStkCnt.text = String(format: "%i", todayData["stkVC"] as? Int ?? 0)
-                        self.lblSuperStkOrdCnt.text = String(format: "%i", todayData["stkPC"] as? Int ?? 0)
-                        self.lblSuperStkVal.text = String(format: "%.02f", todayData["stkoVal"] as? Double ?? 0)
+                        if todayData["secFC"] as! String == "-"{
+                            self.lblDyEnTM.text = (todayData["secFC"] as! String)
+                        }else{
+                            self.lblDyEnTM.text=String(format: "%@:00", todayData["secFC"] as! String)
+                        }
                         if let endTime = todayData["EndTime"] as? String, !endTime.isEmpty {
                             self.lblFCTM.text = endTime
                         } else {
@@ -195,8 +165,6 @@ class DayReport:IViewController,UICollectionViewDelegate,UICollectionViewDataSou
                         self.lblRetOrdCnt.addTarget(target: self, action: #selector(ShowPVstRet))
                         self.lblDistCnt.addTarget(target: self, action: #selector(ShowVstDis))
                         self.lblDistOrdCnt.addTarget(target: self, action: #selector(ShowPVstDis))
-                        self.lblSuperStkCnt.addTarget(target: self, action: #selector(showSuperStk))
-                        self.lblSuperStkOrdCnt.addTarget(target: self, action: #selector(showPSuperStk))
                         
                         /*
                          self.lblWorkTyp.text = String(format: "%@", todayData[0]["wtype"] as! String)
@@ -230,12 +198,6 @@ class DayReport:IViewController,UICollectionViewDelegate,UICollectionViewDataSou
     }
     @objc private func ShowPVstDis() {
         openVstDetail(Mode: "VstPDis",Cnt: self.lblDistOrdCnt.text!)
-    }
-    @objc private func showSuperStk(){
-        openVstDetail(Mode: "VstSuperStk", Cnt: self.lblSuperStkCnt.text!)
-    }
-    @objc private func showPSuperStk(){
-        openVstDetail(Mode: "VstPSuperStk", Cnt: self.lblSuperStkOrdCnt.text!)
     }
     @objc private func selDORpt() {
         isDate = true

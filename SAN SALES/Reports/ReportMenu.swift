@@ -114,7 +114,7 @@ class ReportMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
     }
     
     @objc func closeMenuWin(){
-        GlobalFunc.movetoHomePage()
+        GlobalFunc.MovetoMainMenu()
         
     }
 }

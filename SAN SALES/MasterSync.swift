@@ -144,7 +144,7 @@ import BackgroundTasks
             "tableName":"PendingBils","coloumns":"[*]","orderBy":"[\"name asc\"]","desig":"mgr"
          ]))
          
-         strMasList.append(mnuItem.init(MasId: 25, MasName: "Unit Conversion", MasImage: "mnuPrimary",StoreKey: "UnitConversion", ApiKey: "get/UnitConversion&divisionCode="+(prettyJsonData["divisionCode"] as? String ?? "")+"&rSF="+SFCode+"&sfCode="+SFCode,fromData: [
+         strMasList.append(mnuItem.init(MasId: 25, MasName: "Unit   Conversion", MasImage: "mnuPrimary",StoreKey: "UnitConversion", ApiKey: "get/UnitConversion&divisionCode="+(prettyJsonData["divisionCode"] as? String ?? "")+"&rSF="+SFCode+"&sfCode="+SFCode,fromData: [
             "tableName":"unitConversion","coloumns":"[*]","orderBy":"[\"name asc\"]","desig":"mgr"
          ]))
          
@@ -226,7 +226,7 @@ import BackgroundTasks
         }
      }
      @objc func clearAllData(){
-        let alert = UIAlertController(title: "Confirmation", message: "Are sure do you want to clear all data?", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Confirmation", message: "Do you want to clear all data?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
             self.clearData()
             return

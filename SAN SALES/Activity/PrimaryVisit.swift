@@ -11,7 +11,7 @@ import FSCalendar
 import Alamofire
 import CoreLocation
 
-class PrimaryVisit: IViewController, UITableViewDelegate, UITableViewDataSource,FSCalendarDelegate,FSCalendarDataSource {
+class PrimaryVisit: IViewController, UITableViewDelegate, UITableViewDataSource,FSCalendarDelegate,FSCalendarDataSource, UITextViewDelegate {
     @IBOutlet weak var lcLastvistHeight: NSLayoutConstraint!
     @IBOutlet weak var lcContentHeight: NSLayoutConstraint!
     
@@ -78,6 +78,11 @@ class PrimaryVisit: IViewController, UITableViewDelegate, UITableViewDataSource,
     var sAddress: String = ""
     let LocalStoreage = UserDefaults.standard
     override func viewDidLoad() {
+        
+        txvRmks.text = "Enter the Remarks"
+        txvRmks.textColor = UIColor.lightGray
+        txvRmks.returnKeyType = .done
+        txvRmks.delegate = self
         
         let LocalStoreage = UserDefaults.standard
         let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
@@ -147,7 +152,27 @@ class PrimaryVisit: IViewController, UITableViewDelegate, UITableViewDataSource,
         tbJWKSelect.delegate=self
         tbJWKSelect.dataSource=self
     }
-    
+    func maximumDate(for calendar: FSCalendar) -> Date {
+        return Date()
+    }
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.text == "Enter the Remarks"{
+            textView.text = ""
+            textView.textColor = .black
+        }
+    }
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool{
+        if text == "\n"{
+            textView.resignFirstResponder()
+        }
+        return true
+    }
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text == ""{
+            textView.text = "Enter the Remarks"
+            textView.textColor = UIColor.lightGray
+        }
+    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView==tbJWKSelect { return lstJWNms.count }
@@ -280,11 +305,17 @@ class PrimaryVisit: IViewController, UITableViewDelegate, UITableViewDataSource,
         return true
     }
     @IBAction func SubmitCall(_ sender: Any) {
+        
+        var OrderSub = "NOD"
+        var Count = 0
         if validateForm() == false {
             return
         }
+        if (VisitData.shared.VstRemarks.name == "Enter the Remarks"){
+            VisitData.shared.VstRemarks.name = ""
+        }
         if VisitData.shared.VstRemarks.name == "" {
-            Toast.show(message: "Select the Reason", controller: self)
+            Toast.show(message: "Please Enter or Select the Remarks", controller: self)
             return
         }
         
@@ -329,15 +360,29 @@ class PrimaryVisit: IViewController, UITableViewDelegate, UITableViewDataSource,
                     }
                     self.ShowLoading(Message: "Data Submitting Please wait...")
                     //DataSF = self.lstPlnDetail[0]["subordinateid"] as! String
-                    var sImgItems:String = ""
-                    if(PhotosCollection.shared.PhotoList.count>0){
-                        for i in 0...PhotosCollection.shared.PhotoList.count-1{
-                            let item: [String: Any] = PhotosCollection.shared.PhotoList[i] as! [String : Any]
-                            if i > 0 { sImgItems = sImgItems + "," }
-                            sImgItems = sImgItems + "{\"imgurl\":\"'" + (item["FileName"]  as! String) + "'\",\"title\":\"''\",\"remarks\":\"''\",\"f_key\":{\"Activity_Report_Code\":\"Activity_Report_APP\"}}"
-                        }
+                        
+                }
+                if(PhotosCollection.shared.PhotoList.count>0){
+                    for i in 0...PhotosCollection.shared.PhotoList.count-1{
+                        let item: [String: Any] = PhotosCollection.shared.PhotoList[i] as! [String : Any]
+                        if i > 0 { self.sImgItems = self.sImgItems + "," }
+                        let sep = item["FileName"]  as! String
+                        let fullNameArr = sep.components(separatedBy: "_")
+                        
+                        let phono = fullNameArr[2]
+                        let fullid = "_\(phono)"
+                        print(fullid)
+                        self.sImgItems = self.sImgItems + "{\"imgurl\":\"'" + fullid + "'\",\"title\":\"''\",\"remarks\":\"''\",\"f_key\":{\"Activity_Report_Code\":\"Activity_Report_APP\"}}"
                     }
-                        self.subcall()
+                }
+                
+                Count = Count+1
+                if (OrderSub == "NOD"){
+                    self.subcall()
+                    OrderSub  = ""
+                    print(Count)
+                }else{
+                    print(Count)
                 }
             }, error:{ errMsg in
                 self.LoadingDismiss()
@@ -391,6 +436,7 @@ class PrimaryVisit: IViewController, UITableViewDelegate, UITableViewDataSource,
             Join_Works.removeLast()
             print(Join_Works)
         }
+       
         
         let jsonString = "[{\"Activity_Report_APP\":{\"Worktype_code\":\"'" + (self.lstPlnDetail[0]["worktype"] as! String) + "'\",\"Town_code\":\"'" + (self.lstPlnDetail[0]["clusterid"] as! String) + "'\",\"RateEditable\":\"''\",\"dcr_activity_date\":\"'" + VisitData.shared.cInTime + "'\",\"Daywise_Remarks\":\"" + VisitData.shared.VstRemarks.name.trimmingCharacters(in: .whitespacesAndNewlines) + "\",\"eKey\":\"" + self.eKey + "\",\"rx\":\"'1'\",\"rx_t\":\"''\",\"DataSF\":\"'" + self.DataSF + "'\"}},{\"Activity_Stockist_Report\":{\"Stockist_POB\":\"" + VisitData.shared.PayValue + "\",\"Worked_With\":\"'"+Join_Works+"'\",\"location\":\"'" + sLocation + "'\",\"geoaddress\":\"" + sAddress + "\",\"stockist_code\":\"'" + VisitData.shared.CustID + "'\",\"superstockistid\":\"''\",\"Stk_Meet_Time\":\"'" + VisitData.shared.cInTime + "'\",\"modified_time\":\"'" + VisitData.shared.cInTime + "'\",\"date_of_intrument\":\"" + VisitData.shared.DOP.id + "\",\"intrumenttype\":\"" + VisitData.shared.PayType.id + "\",\"orderValue\":\"0\",\"Aob\":0,\"CheckinTime\":\"" + VisitData.shared.cInTime + "\",\"CheckoutTime\":\"" + VisitData.shared.cOutTime + "\",\"f_key\":{\"Activity_Report_Code\":\"'Activity_Report_APP'\"},\"PhoneOrderTypes\":" + VisitData.shared.OrderMode.id + "}},{\"Activity_Stk_POB_Report\":[]},{\"Activity_Stk_Sample_Report\":[]},{\"Activity_Event_Captures\":[" + sImgItems +  "]},{\"PENDING_Bills\":[]},{\"Compititor_Product\":[]}]"
         
@@ -405,7 +451,7 @@ class PrimaryVisit: IViewController, UITableViewDelegate, UITableViewDataSource,
             sessionManager.session.configuration.httpMaximumConnectionsPerHost = 1
             
         
-        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+"dcr/save&divisionCode="+self.DivCode+"&rSF="+self.SFCode+"&sfCode="+self.SFCode, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"dcr/save&divisionCode="+self.DivCode+"&rSF="+self.SFCode+"&sfCode="+self.SFCode, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
             AFdata in
             self.LoadingDismiss()
             switch AFdata.result
@@ -552,9 +598,9 @@ class PrimaryVisit: IViewController, UITableViewDelegate, UITableViewDataSource,
         tbDataSelect.isHidden = false
         txSearchSel.isHidden = false
         if isDate == true {
-            calendar.isHidden = false
-            tbDataSelect.isHidden = true
-            txSearchSel.isHidden = true
+        calendar.isHidden = false
+        tbDataSelect.isHidden = true
+        txSearchSel.isHidden = true
         }
         vwSelWindow.isHidden=false
         

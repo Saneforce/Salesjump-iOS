@@ -27,17 +27,17 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
     
     @IBOutlet weak var lblTotAmt: UILabel!
     
-    
-    @IBOutlet weak var lblTo: UILabel!
-    
     @IBOutlet weak var tbOrderDetail: UITableView!
     @IBOutlet weak var tbZeroOrd: UITableView!
     
     @IBOutlet weak var OrdHeight: NSLayoutConstraint!
     @IBOutlet weak var OfferHeight: NSLayoutConstraint!
     @IBOutlet weak var ContentHeight: NSLayoutConstraint!
+    @IBOutlet weak var ListOforderTB: UITableView!
     
+    @IBOutlet weak var TotalOrderView: UIView!
     
+    @IBOutlet weak var BackTotalOrder: UIImageView!
     
     struct viewDet: Codable {
         let Prname: String
@@ -50,10 +50,15 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
         let value: Double
         let Product_Code:String
        }
-       
-       var detail: [viewDet] = []
-
-    
+    struct NoOfOrder:Codable{
+        let OrderId:String
+        let TotAmt:String
+        let Date:String
+        let Rmk:String
+        let OrdFlg:Int
+    }
+    var TotaOrderDet:[NoOfOrder] = []
+    var detail: [viewDet] = []
     var RptDate: String = ""
     var RptCode: String = ""
     var CusCount: String = ""
@@ -75,7 +80,8 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
     let LocalStoreage = UserDefaults.standard
     
     override func viewDidLoad() {
-        btnBack.addTarget(target: self, action: #selector(GotoHome))
+        btnBack.addTarget(target: self, action: #selector(CloseWindo))
+        BackTotalOrder.addTarget(target: self, action: #selector(GotoHome))
         lblDate.text = RptDate
         getUserDetails()
         getOrderDetail()
@@ -83,6 +89,8 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
         tbOrderDetail.dataSource=self
         tbZeroOrd.delegate=self
         tbZeroOrd.dataSource=self
+        ListOforderTB.delegate=self
+        ListOforderTB.dataSource=self
         
        // super.viewDidLayoutSubviews()
        // adjustScrollViewContentSize()
@@ -91,14 +99,9 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
   
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if tbOrderDetail == tableView {
-           // OrdHeight.constant = self.tbOrderDetail.contentSize.height + 50
-            return 55
-        }
-        if tbZeroOrd == tableView {
-         //   OfferHeight.constant = self.tbZeroOrd.contentSize.height + 50
-            return 24
-        }
+        if tbOrderDetail == tableView { return 55}
+        if tbZeroOrd == tableView { return 24 }
+        if ListOforderTB == tableView {return 80}
         return 42
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -106,17 +109,9 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
         print(detail.count)
         print(objOrderDetail)
         print(detail)
-        if tableView==tbOrderDetail {
-            OrdHeight.constant = CGFloat(self.detail.count * 60) // self.tbOrderDetail.contentSize.height + 30
-            ContentHeight.constant = CGFloat(400+(CGFloat(self.detail.count * 60))+(self.tbZeroOrd.contentSize.height))
-            return detail.count
-            
-        }
-        if tableView==tbZeroOrd {
-            OfferHeight.constant = self.tbZeroOrd.contentSize.height + 30
-            ContentHeight.constant = CGFloat(400+(CGFloat(self.detail.count * 60))+(self.tbZeroOrd.contentSize.height))
-            return objOfferDetail.count
-        }
+        if tableView==tbOrderDetail {return detail.count}
+        if tableView==tbZeroOrd { return objOfferDetail.count }
+        if tableView==ListOforderTB{return TotaOrderDet.count}
         return 0
     }
     
@@ -124,6 +119,15 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
         
         autoreleasepool {
             let cell:cellListItem = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
+            if ListOforderTB == tableView{
+                cell.lblText.text = TotaOrderDet[indexPath.row].OrderId
+                cell.lblAmt.text = "Rs. "+TotaOrderDet[indexPath.row].TotAmt
+                cell.ordertime.text = TotaOrderDet[indexPath.row].Date
+                cell.btnViewDet.addTarget(target: self, action: #selector(ShowOrderDet(_:)))
+                if (TotaOrderDet[indexPath.row].OrdFlg == 1){
+                    cell.btnViewDet.isHidden = true
+                }
+            }
             if tbOrderDetail == tableView {
                 let Pro_ID = detail[indexPath.row].Product_Code
                 let filterData = objOrderDetail.filter { $0["PCode"] as? String == Pro_ID }
@@ -161,8 +165,7 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                 cell.lblQty?.text = String(format: "%i", item["offQty"] as! Int)
                 
                 let newHeight = 100 + CGFloat(55 * objOfferDetail.count)
-              //  ContentHeight.constant = newHeight
-                ContentHeight.constant = CGFloat(800+(self.tbOrderDetail.contentSize.height)+(self.tbZeroOrd.contentSize.height))
+                ContentHeight.constant = newHeight
                 print(newHeight)
             }
             //ContentHeight.constant = tbZeroOrd.frame.height + tbZeroOrd.frame.origin.y + 10
@@ -170,6 +173,7 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
         return cell
     }
     }
+    
     func getUserDetails(){
         let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
         let data = Data(prettyPrintedJson!.utf8)
@@ -194,15 +198,8 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
             "data": jsonString
         ]
         
-        print(APIClient.shared.BaseURL+APIClient.shared.DBURL1+apiKey)
-        
-        let url = "http://fmcg.sanfmcg.com/server/native_Db_V13_nagaprasath.php?axn=get/vwOrderDet&divisionCode=\(DivCode),&rSF=\(SFCode)&rptDt=\(StrRptDt)&CusCd=\(CusCd)&sfCode=\(SFCode)&State_Code=\(StateCode)&Mode=\(StrMode)"
-        self.ShowLoading(Message: "Loading...")
         AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
             AFdata in
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-                self.LoadingDismiss()
-            }
             switch AFdata.result
             {
                
@@ -216,29 +213,29 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                         print("Error: Could print JSON in String")
                         return
                     }
+                    print(prettyPrintedJson)
                     if let list = GlobalFunc.convertToDictionary(text: prettyPrintedJson) as? [AnyObject] {
                         self.objOrderDetails = list;
-                        print(list)
-                    print(list)
                         self.lblOrderNo.text=String(format: "%@", list[0]["Trans_Sl_No"] as! String)
                         self.lblOrderType.text=String(format: "%@", list[0]["OrderTypeNm"] as! String)
                         self.lblFrmCus.text=String(format: "%@", list[0]["StkName"] as! CVarArg)
                         self.lblFrmAdd.text=String(format: "%@", list[0]["StkAddr"] as! CVarArg)
  
-                        
-                        if let cusMobile = list[0]["StkMob"] as? String {
-                            self.lblFrmMob.text = cusMobile
+                        if let stkMob = list[0]["StkMob"] as? String, stkMob != "<null>" {
+                           // self.lblFrmMob.text = stkMob
+                            self.lblFrmMob.text = stkMob
+                            print(stkMob)
                         } else {
                             self.lblFrmMob.text = ""
                         }
+
                         
                         self.lblToCus.text=String(format: "%@", list[0]["CusName"] as! String)
-                        self.lblToAdd.text=String(format: "%@", list[0]["CusAddr"] as? String ?? "")
+                        self.lblToAdd.text=String(format: "%@", list[0]["CusAddr"] as! String)
                         
-                        
-                        if let StkMob = list[0]["CusMobile"] as? String{
+                        if let StkMob = list[0]["CusMobile"] as? String, StkMob != "<null>"{
                             self.lblToMob.text=StkMob
-                        }else{
+                        } else {
                             self.lblToMob.text=""
                         }
                         RefreshData(indx: 0)
@@ -252,10 +249,6 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                             self.ShowLoading(Message: "Loading...")
                             viewprimary()
                         }
-                        if (StrMode == "VstSuperStk" || StrMode == "VstPSuperStk"){
-                          //  self.ShowLoading(Message: "Loading...")
-                            viewSuperStockist()
-                        }
                         Trans_Sl_No = String(format: "%@", list[0]["Trans_Sl_No"] as! String)
                     }
              
@@ -263,27 +256,32 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                 Toast.show(message: error.errorDescription!, controller: self)
             }
         }
-        
-       
-    
     }
     func RefreshData(indx: Int){
         
         if self.objOrderDetails.count < 1 { return }
         let todayData:[String: Any] = self.objOrderDetails[indx] as! [String: Any]
         if(todayData.count>0){
-            self.lblOrderNo.text=String(format: "%@", todayData["Trans_Sl_No"] as? String ?? "")
-            self.lblOrderType.text=String(format: "%@", todayData["OrderTypeNm"] as? String ?? "")
-            self.lblFrmCus.text=String(format: "%@", todayData["CusName"] as? String ?? "")
-            self.lblFrmAdd.text=String(format: "%@", todayData["CusAddr"] as? String ?? "")
-            self.lblFrmMob.text=String(format: "%@", todayData["CusMobile"] as? CVarArg ?? "")
-
-            self.lblToCus.text=String(format: "%@", todayData["StkName"] as! CVarArg)
-            self.lblToAdd.text=String(format: "%@", todayData["StkAddr"] as! CVarArg)
-            self.lblToMob.text=String(format: "%@", todayData["StkMob"] as! CVarArg)
-            print(todayData)
+            self.lblOrderNo.text=String(format: "%@", todayData["Trans_Sl_No"] as! String)
+            self.lblOrderType.text=String(format: "%@", todayData["OrderTypeNm"] as! String)
+            self.lblToCus.text=String(format: "%@", todayData["CusName"] as! String)
+            self.lblToAdd.text=String(format: "%@", todayData["CusAddr"] as! String)
+            //self.lblFrmMob.text=String(format: "%@", todayData["CusMobile"] as! CVarArg)
+            if let stkMob = todayData["CusMobile"] as? String, stkMob != "<null>" {
+                self.lblToMob.text = stkMob
+            } else {
+                self.lblToMob.text = ""
+            }
+            self.lblFrmCus.text=String(format: "%@", todayData["StkName"] as! CVarArg)
+            self.lblFrmAdd.text=String(format: "%@", todayData["StkAddr"] as! CVarArg)
+            //self.lblToMob.text=String(format: "%@", todayData["StkMob"] as! CVarArg)
+            if let stkMob = todayData["StkMob"] as? String, stkMob != "<null>" {
+                //self.lblFrmMob.text = stkMob
+                self.lblFrmMob.text = stkMob
+            } else {
+                self.lblFrmMob.text = ""
+            }
             self.objOrderDetail = todayData["Items"] as! [AnyObject]
-            print(objOrderDetail)
             var totAmt: Double = 0
 //            for i in 0...objOrderDetail.count-1 {
 //                let item: [String: Any] = objOrderDetail[i] as! [String : Any]
@@ -296,7 +294,7 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
             self.lblTotAmt.text=String(format: "Rs. %.02f", totAmt)
 
            // tbOrderDetail.reloadData()
-            OrdHeight.constant = self.tbOrderDetail.contentSize.height + 50 //CGFloat(55 * self.objOrderDetail.count)
+            OrdHeight.constant = CGFloat(55 * self.objOrderDetail.count)
 
 
             objOfferDetail = objOrderDetail.filter({(fitem) in
@@ -304,8 +302,9 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
             })
             tbZeroOrd.reloadData()
             OfferHeight.constant = CGFloat(24 * self.objOrderDetail.count)
-          //  ContentHeight.constant = CGFloat(800+(60 * self.objOrderDetail.count)+(30 * self.objOfferDetail.count))
-            ContentHeight.constant = CGFloat(800+(self.tbOrderDetail.contentSize.height)+(self.tbZeroOrd.contentSize.height))
+            ContentHeight.constant = CGFloat(800+(60 * self.objOrderDetail.count
+                                         )+(30 * self.objOfferDetail.count
+                                           ))
         }
     }
     
@@ -362,6 +361,8 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
 //        }
 //    }
     func ViewOrder(){
+        TotaOrderDet.removeAll()
+        detail.removeAll()
         let item = RptVisitDetail.objVstDetail
         print(item)
         
@@ -373,29 +374,22 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
         } else {
             items = "0"
         }
-        //print(Acdid as Any)
-        print(items)
-
+       let apiKey: String = "\(axbDet)&desig=\(Desig)&divisionCode=\(DivCode)&ACd=\(items)&rSF=\(SFCode)&typ=1&sfCode=\(SFCode)&State_Code=\(StateCode)"
         
-                let apiKey: String = "\(axbDet)&desig=\(Desig)&divisionCode=\(DivCode)&ACd=\(items)&rSF=\(SFCode)&typ=1&sfCode=\(SFCode)&State_Code=\(StateCode)"
-
-            
             let aFormData: [String: Any] = [
                 "orderBy":"[\"name asc\"]","desig":"mgr"
             ]
-           // print(aFormData)
             let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
             let jsonString = String(data: jsonData!, encoding: .utf8)!
             let params: Parameters = [
                 "data": jsonString
             ]
-            self.ShowLoading(Message: "Loading...")
-            AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+            
+            AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
                 AFdata in
                 self.LoadingDismiss()
                 switch AFdata.result
                 {
-                    
                 case .success(let value):
                     print(value)
                     if let json = value as? [AnyObject] {
@@ -407,61 +401,56 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                             print("Error: Could print JSON in String")
                             return
                         }
+                        print(prettyPrintedJson)
+                        
                         if let indexToDelete = json.firstIndex(where: { String(format: "%@", $0["Order_No"] as! CVarArg) == Trans_Sl_No }) {
-//                            let ihi =  json[indexToDelete]["productList"] as? String
-//                            print(ihi as Any)
-                            
+                            if let orderid = json[indexToDelete]["id"] as? String{
+                                let filteredData = json.filter { $0["id"] as? String == orderid }
+                                for iteminFilter in filteredData{
+                                    print(iteminFilter)
+                                    let Order_No = iteminFilter["Order_No"] as? String
+                                    let TotalAmt = iteminFilter["finalNetAmnt"] as? String
+                                    let date = iteminFilter["Order_date"] as? String
+                                    let Rmk = iteminFilter["remarks"] as? String
+                                    var Prod_Flg = 0
+                                    var ProList = iteminFilter["productList"] as! [AnyObject]
+                                    if (ProList.isEmpty){
+                                        Prod_Flg = 1
+                                    }
+                                    TotaOrderDet.append(NoOfOrder.init(OrderId:Order_No! , TotAmt: TotalAmt!, Date: date!, Rmk: Rmk!,OrdFlg:Prod_Flg))
+                                }
+                            }
                             let Additional_Prod_Dtls = json[indexToDelete]["productList"] as! [AnyObject]
-                            // self.lblTotAmt.text = String(detail[IndexPath].OrderVal as! Int)
-                            //dayrepDict = json["dayrep"] as! [AnyObject]
                             for Item2 in Additional_Prod_Dtls {
-                                print(Item2)
-                                
                                 detail.append(viewDet(Prname: Item2["Product_Name"] as! String, rate: Item2["Rate"] as! Double, Cl: Item2["Product_Unit_Name"] as! String, Free:Item2["discount"] as! Int, Disc: Item2["discount"] as! Int, Tax: Int(Item2["taxval"] as! Double), qty: Item2["Quantity"] as! Int, value: Item2["sub_total"] as! Double,Product_Code: Item2["Product_Code"] as! String))
                                 self.lblTotAmt.text = String(Item2["OrderVal"] as! Double)
-                                print(detail)
-                                
-                                //                            let contentSize = CGSize(width: ScrollViewsize.bounds.width, height: ScrollViewsize.bounds.height)
-                                //                            ScrollViewsize.contentSize = contentSize
                             }
-                            print(detail)
                             tbOrderDetail.reloadData()
-                            OrdHeight.constant = self.tbOrderDetail.contentSize.height + 50 //40+CGFloat(55*detail.count)
+                            ListOforderTB.reloadData()
+                            OrdHeight.constant = 40+CGFloat(55*detail.count)
                             self.view.layoutIfNeeded()
                             let newHeight = 100 + CGFloat(75 * detail.count) + CGFloat(2 * detail.count)
-                          //  ContentHeight.constant = newHeight
-                            ContentHeight.constant = CGFloat(800+(self.tbOrderDetail.contentSize.height)+(self.tbZeroOrd.contentSize.height))
+                            ContentHeight.constant = newHeight
                             self.view.layoutIfNeeded()
                         }
-//                        OrdHeight.constant = 100+CGFloat(55*detail.count)
-//                        self.view.layoutIfNeeded()
-//                        OrdHeight.constant = CGFloat(60*self.detail.count)
-//                        self.view.layoutIfNeeded()
                     }
                 case .failure(let error):
-                    Toast.show(message: error.errorDescription!)  //, controller: self
+                    Toast.show(message: error.errorDescription!)
                 }
             }
     }
     
     func viewprimary(){
+        TotaOrderDet.removeAll()
+        detail.removeAll()
         let item = RptVisitDetail.objVstDetail
-        print(item)
-        
         var items = ""
-   
         if let Acdid = item[0]["ACD"] {
 
             items = Acdid as! String
         } else {
             items = "0"
         }
-        //print(Acdid as Any)
-        print(items)
-
-        
-               // let apiKey: String = "\(axbDet)&desig=\(Desig)&divisionCode=\(DivCode)&ACd=\(items)&rSF=\(SFCode)&typ=1&sfCode=\(SFCode)&State_Code=\(StateCode)"
-
         let apiKey: String = "\(axnprimary)&desig=\(Desig)&divisionCode=\(DivCode)&ACd=\(items)&rSF=\(SFCode)&typ=3&sfCode=\(SFCode)&State_Code=\(StateCode)"
 
             let aFormData: [String: Any] = [
@@ -474,7 +463,7 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                 "data": jsonString
             ]
             
-            AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+            AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
                 AFdata in
                 self.LoadingDismiss()
                 switch AFdata.result
@@ -496,146 +485,75 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                         print(Trans_Sl_No)
                         if let indexToDelete = json.firstIndex(where: { String(format: "%@", $0["Order_No"] as! CVarArg) == Trans_Sl_No }) {
                             print(indexToDelete)
-//                            let ihi =  json[indexToDelete]["productList"] as? String
-//                            print(ihi as Any)
                             
+                            if let orderid = json[indexToDelete]["Trans_Detail_Slno"] as? String{
+                                let filteredData = json.filter { $0["Trans_Detail_Slno"] as? String == orderid }
+                                for iteminFilter in filteredData{
+                                    print(iteminFilter)
+                                    let Order_No = iteminFilter["Order_No"] as? String
+                                    let TotalAmt = String((iteminFilter["orderValue"] as? Int)!)
+                                    let date = iteminFilter["Order_date"] as? String
+                                    let Rmk = iteminFilter["remarks"] as? String
+                                    var Prod_Flg = 0
+                                    var ProList = iteminFilter["productList"] as! [AnyObject]
+                                    if (ProList.isEmpty){
+                                        Prod_Flg = 1
+                                    }
+                                    TotaOrderDet.append(NoOfOrder.init(OrderId:Order_No! , TotAmt: TotalAmt, Date: date!, Rmk: Rmk!, OrdFlg :Prod_Flg))
+                                }
+                            }
+                            print(TotaOrderDet)
                             let Additional_Prod_Dtls = json[indexToDelete]["productList"] as! [AnyObject]
-                            // self.lblTotAmt.text = String(detail[IndexPath].OrderVal as! Int)
-                            //dayrepDict = json["dayrep"] as! [AnyObject]
                             print(Additional_Prod_Dtls)
                             for Item2 in Additional_Prod_Dtls {
-                                print(Item2)
-                                
                                 if let clBalString = Item2["Product_Unit_Name"] as? String {
-                                   
                                 detail.append(viewDet(Prname: Item2["Product_Name"] as! String, rate: Item2["Rate"] as! Double, Cl:clBalString, Free:Item2["discount"] as! Int, Disc: Item2["discount"] as! Int, Tax: Int(Item2["taxval"] as! Double), qty: Item2["Quantity"] as! Int, value: Item2["sub_total"] as! Double,Product_Code: Item2["Product_Code"] as! String))
-                                        
-                                        print(ContentHeight as Any)
-                                   
                                 } else {
                                     print("Error: 'Cl_bal' key not found in the dictionary.")
                                 }
                                 self.lblTotAmt.text = String(Item2["OrderVal"] as! Double)
                             }
                            
-                            OrdHeight.constant = self.tbOrderDetail.contentSize.height + 50 //40+CGFloat(55*detail.count)
+                            OrdHeight.constant = 40+CGFloat(55*detail.count)
                             self.view.layoutIfNeeded()
                             let newHeight = 100 + CGFloat(75 * detail.count) + CGFloat(7 * detail.count)
-                     //       ContentHeight.constant = newHeight
-                            ContentHeight.constant = CGFloat(800+(self.tbOrderDetail.contentSize.height)+(self.tbZeroOrd.contentSize.height))
+                            ContentHeight.constant = newHeight
                             print(newHeight)
                             self.view.layoutIfNeeded()
                             tbOrderDetail.reloadData()
-                          
-                        }
-                        
-//                        OrdHeight.constant = CGFloat(60*self.detail.count)
-//                        self.view.layoutIfNeeded()
-                        
-                        
-                        
-                    }
-                case .failure(let error):
-                    Toast.show(message: error.errorDescription!)  //, controller: self
-                }
-            }
-    }
-    
-    
-    func viewSuperStockist() {
-        let item = RptVisitDetail.objVstDetail
-        print(item)
-        
-        var items = ""
-   
-        if let Acdid = item[0]["ACD"] {
-
-            items = Acdid as! String
-        } else {
-            items = "0"
-        }
-        print(items)
-
-
-        let apiKey: String = "\(axnprimary)&desig=\(Desig)&divisionCode=\(DivCode)&ACd=\(items)&rSF=\(SFCode)&typ=8&sfCode=\(SFCode)&State_Code=\(StateCode)"
-
-            let aFormData: [String: Any] = [
-                "orderBy":"[\"name asc\"]","desig":"mgr"
-            ]
-           // print(aFormData)
-            let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
-            let jsonString = String(data: jsonData!, encoding: .utf8)!
-            let params: Parameters = [
-                "data": jsonString
-            ]
-            
-            AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
-                AFdata in
-                self.LoadingDismiss()
-                switch AFdata.result
-                {
-                    
-                case .success(let value):
-                    print(value)
-                    if let json = value as? [AnyObject] {
-                        guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
-                            print("Error: Cannot convert JSON object to Pretty JSON data")
-                            return
-                        }
-                        guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
-                            print("Error: Could print JSON in String")
-                            return
-                        }
-                        print(prettyPrintedJson)
-                        print(json)
-                        print(Trans_Sl_No)
-                        self.lblOrderType.isHidden = true
-                        self.lblTo.isHidden = true
-                        if let indexToDelete = json.firstIndex(where: { String(format: "%@", $0["Order_No"] as! CVarArg) == Trans_Sl_No }) {
-                            print(indexToDelete)
-
-                            
-                            let Additional_Prod_Dtls = json[indexToDelete]["productList"] as! [AnyObject]
-                            // self.lblTotAmt.text = String(detail[IndexPath].OrderVal as! Int)
-                            //dayrepDict = json["dayrep"] as! [AnyObject]
-                            print(Additional_Prod_Dtls)
-                            for Item2 in Additional_Prod_Dtls {
-                                print(Item2)
-                                
-                                if let clBalString = Item2["Product_Unit_Name"] as? String {
-                                   
-                                detail.append(viewDet(Prname: Item2["Product_Name"] as! String, rate: Item2["Rate"] as! Double, Cl:clBalString, Free:Item2["discount"] as! Int, Disc: Item2["discount"] as! Int, Tax: Int(Item2["taxval"] as! Double), qty: Item2["Quantity"] as! Int, value: Item2["sub_total"] as! Double,Product_Code: Item2["Product_Code"] as! String))
-                                        
-                                        print(ContentHeight as Any)
-                                   
-                                } else {
-                                    print("Error: 'Cl_bal' key not found in the dictionary.")
-                                }
-                                self.lblTotAmt.text = String(Item2["OrderVal"] as! Double)
-                            }
-                           
-                            OrdHeight.constant = self.tbOrderDetail.contentSize.height + 50 // 40+CGFloat(55*detail.count)
-                            self.view.layoutIfNeeded()
-                            let newHeight = 100 + CGFloat(75 * detail.count) + CGFloat(7 * detail.count)
-                   //         ContentHeight.constant = newHeight
-                            ContentHeight.constant = CGFloat(800+(self.tbOrderDetail.contentSize.height)+(self.tbZeroOrd.contentSize.height))
-                            print(newHeight)
-                            self.view.layoutIfNeeded()
-                            tbOrderDetail.reloadData()
+                            ListOforderTB.reloadData()
                           
                         }
                     }
                 case .failure(let error):
-                    Toast.show(message: error.errorDescription!)  //, controller: self
+                    Toast.show(message: error.errorDescription!)
                 }
             }
     }
-    
-   
     @objc private func GotoHome() {
         navigationController?.popViewController(animated: true)
     }
-    
+    @objc private func CloseWindo() {
+        TotalOrderView.isHidden = false
+    }
+    @objc private func ShowOrderDet(_ sender: UITapGestureRecognizer) {
+        print(TotaOrderDet)
+        let cell:cellListItem = GlobalFunc.getTableViewCell(view: sender.view!) as! cellListItem
+        let tbView: UITableView = GlobalFunc.getTableView(view: sender.view!)
+        let indx:NSIndexPath = tbView.indexPath(for: cell)! as NSIndexPath
+        Trans_Sl_No = TotaOrderDet[indx.row].OrderId
+        if let indexTo = objOrderDetails.firstIndex(where: { String(format: "%@", $0["Trans_Sl_No"] as! CVarArg) == Trans_Sl_No }){
+        RefreshData(indx: indexTo)
+        }
+        if (StrMode == "VstPRet" || StrMode == "VstRet"){
+            ViewOrder()
+        }
+        if (StrMode == "VstPDis" || StrMode == "VstDis"){
+            self.ShowLoading(Message: "Loading...")
+            viewprimary()
+        }
+        TotalOrderView.isHidden = true
+    }
 }
 
 

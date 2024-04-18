@@ -19,7 +19,7 @@ extension UIView {
     isUserInteractionEnabled = true
   }
 }
-class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource {
+class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource, UITextViewDelegate {
     @IBOutlet weak var vwMainScroll: UIScrollView!
     @IBOutlet weak var vwContent: UIView!
     
@@ -44,6 +44,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
     @IBOutlet weak var vwRouteCtrl: UIView!
     @IBOutlet weak var vwJointCtrl: UIView!
     @IBOutlet weak var vwRmksCtrl: UIView!
+    @IBOutlet weak var Setval: UIButton!
     
     
     
@@ -86,10 +87,16 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
     public static var SfidString: String=""
     var leavWorktype: String = ""
     let LocalStoreage = UserDefaults.standard
-    
+    var exp_Need:Int = 0
+    var lstPlnDetail: [AnyObject] = []
+    var attendanceView:Int = 0
     override func viewDidLoad() {
         super.viewDidLoad()
-        vwMainScroll.contentSize = CGSize(width:view.frame.width, height: vwContent.frame.height)
+        txRem.text = "Enter the Remarks"
+       // txRem.textColor = UIColor.lightGray
+        txRem.returnKeyType = .done
+        txRem.delegate = self
+        txRem.contentSize = CGSize(width:view.frame.width, height: vwContent.frame.height)
         
         Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(TimeDisplay), userInfo: nil, repeats: true)
         
@@ -114,7 +121,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         SFCode = prettyJsonData["sfCode"] as? String ?? ""
         DivCode = prettyJsonData["divisionCode"] as? String ?? ""
         let SFName: String=prettyJsonData["sfName"] as? String ?? ""
-        
+        attendanceView = prettyJsonData["attendanceView"] as? Int ?? 0
       //  let WorkTypeData: String=LocalStoreage.string(forKey: "Worktype_Master")!
        // let HQData: String=LocalStoreage.string(forKey: "HQ_Master")!
         //let DistData: String=LocalStoreage.string(forKey: "Distributors_Master_"+SFCode)!
@@ -242,6 +249,9 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         print(UserSetup.shared.DistBased)
         if UserSetup.shared.DistBased == 0 {
             self.vwDistCtrl.isHidden = true
+            self.vwRouteCtrl.frame.origin.y = vwRouteCtrl.frame.origin.y+vwRouteCtrl.frame.height-160
+            self.vwJointCtrl.frame.origin.y = vwJointCtrl.frame.origin.y+vwJointCtrl.frame.height-300
+            self.vwRmksCtrl.frame.origin.y = vwRmksCtrl.frame.origin.y+vwRmksCtrl.frame.height-155
                }
         if (UserSetup.shared.DistBased == 1){
             vwDistCtrl.isHidden = false
@@ -254,10 +264,26 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         
         setTodayPlan()
        //selectedid()
-        
-        
+
     }
-    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.text == "Enter the Remarks"{
+            textView.text = ""
+            textView.textColor = .black
+        }
+    }
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool{
+        if text == "\n"{
+            textView.resignFirstResponder()
+        }
+        return true
+    }
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text == ""{
+            textView.text = "Enter the Remarks"
+            textView.textColor = UIColor.lightGray
+        }
+    }
 //
     func selectedid(){
 
@@ -267,12 +293,9 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         if let list = GlobalFunc.convertToDictionary(text: PlnDets) as? [AnyObject] {
             lstPlnDetail = list;
         }
-
-
         let sfid=String(format: "%@", lstPlnDetail[0]["subordinateid"] as! CVarArg)
         //MydayPlanCtrl.SfidString = sfid
         print(sfid)
-
        // print(MydayPlanCtrl.SfidString)
         var DistData: String=""
         if(LocalStoreage.string(forKey: "Distributors_Master_"+sfid)==nil){
@@ -303,14 +326,9 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                 }
             }
         }
-
         if(UserSetup.shared.DistBased == 1){
-
         }
     }
-    
-    
-    
     @objc func levedata () {
         let vc=self.storyboard?.instantiateViewController(withIdentifier: "sbMainmnu") as!  MainMenu
         vc.modalPresentationStyle = .overCurrentContext
@@ -359,9 +377,20 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let item: [String: Any]=lObjSel[indexPath.row] as! [String : Any]
         let name=item["name"] as! String
-        let id=String(format: "%@", item["id"] as! CVarArg)
-        print(id)
-        Leaveid = id
+        print(item)
+        if let need = item["exp_needed"] as? Int{
+            exp_Need = need
+        }
+        var id = ""
+        if let ids=item["id"] as? String {
+            id = ids
+        }else{
+            id = String((item["id"] as? Int)!)
+        }
+        if let Flg_id = item["FWFlg"] as? String{
+            Leaveid = Flg_id
+        }
+        
         var typ: String = ""
         if isMulti==true {
             if SelMode == "JWK" {
@@ -397,7 +426,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                    // vwDistCtrl.isHidden=true
                     vwRouteCtrl.isHidden=true
                     vwJointCtrl.isHidden=true
-                    
+        
                     self.vwRmksCtrl.frame.origin.y = vwWTCtrl.frame.origin.y+vwWTCtrl.frame.height+8
                     
                 }
@@ -464,9 +493,9 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
             }
             
             myDyTp.updateValue(lItem(id: id, name: name,FWFlg: typ), forKey: SelMode)
+            print(myDyTp)
             closeWin(self)
         }
-    
     }
    /* func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let item: [String: Any]=lObjSel[indexPath.row] as! [String : Any]
@@ -512,16 +541,18 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         if let list = GlobalFunc.convertToDictionary(text: PlnDets) as? [AnyObject] {
             lstPlnDetail = list;
         }
+        print(lstPlnDetail)
         if(lstPlnDetail.count < 1){ return }
         let wtid=String(format: "%@", lstPlnDetail[0]["worktype"] as! CVarArg)
         if let indexToDelete = lstWType.firstIndex(where: { String(format: "%@", $0["id"] as! CVarArg) == wtid }) {
-            print(indexToDelete)
-            print(lstWType)
+           // print(indexToDelete)
+            //print(lstWType)
 
             let typ: String = lstWType[indexToDelete]["FWFlg"] as! String
             lblWorktype.text = lstWType[indexToDelete]["name"] as? String
             leavWorktype = lstWType[indexToDelete]["name"] as! String
-            print(leavWorktype)
+            //print(leavWorktype)
+            Leaveid = typ
             let id=String(format: "%@", lstWType[indexToDelete]["id"] as! CVarArg)
             let name: String = lstWType[indexToDelete]["name"] as! String
             
@@ -533,7 +564,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
             self.vwRmksCtrl.frame.origin.y = vwJointCtrl.frame.origin.y+vwJointCtrl.frame.height+8
             if typ != "F" {
                 vwHQCtrl.isHidden=true
-               //vwDistCtrl.isHidden=true
+                vwDistCtrl.isHidden=true
                 vwRouteCtrl.isHidden=true
                 vwJointCtrl.isHidden=true
                 
@@ -541,6 +572,8 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
             }else{
                 
                 let sfid=String(format: "%@", lstPlnDetail[0]["subordinateid"] as! CVarArg)
+                print(lstPlnDetail)
+                print(sfid)
                 MydayPlanCtrl.SfidString = sfid
                 if let indexToDelete = lstHQs.firstIndex(where: { String(format: "%@", $0["id"] as! CVarArg) == sfid }) {
                     lblHQ.text = lstHQs[indexToDelete]["name"] as? String
@@ -549,7 +582,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                     if let DistData = LocalStoreage.string(forKey: "Distributors_Master_"+sfid),
                        let list = GlobalFunc.convertToDictionary(text:  DistData) as? [AnyObject] {
                         lstDist = list
-                        print(DistData)
+                        //print(DistData)
                     }
                     
                     
@@ -557,7 +590,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                        let list = GlobalFunc.convertToDictionary(text:  RouteData) as? [AnyObject] {
                          lstAllRoutes = list
                         lstRoutes = list
-                        print(RouteData)
+                        //print(RouteData)
                     }
                     //new
         
@@ -572,8 +605,12 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
 //                    }
                     
                     myDyTp.updateValue(lItem(id: sfid, name: sfname,FWFlg: ""), forKey: "HQ")
+                    print(myDyTp)
                 }
                 let stkid=String(format: "%@", lstPlnDetail[0]["stockistid"] as! CVarArg)
+                print(lstPlnDetail)
+                print(stkid)
+                print(lstDist)
                 if let indexToDelete = lstDist.firstIndex(where: { String(format: "%@", $0["id"] as! CVarArg) == stkid }) {
                     lblDist.text = lstDist[indexToDelete]["name"] as? String
                     let stkname: String = lstDist[indexToDelete]["name"] as! String
@@ -584,14 +621,19 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                         //return Bool(StkId.range(of: String(format: ",%@,", id))?.lowerBound != nil )
                     })
                     myDyTp.updateValue(lItem(id: stkid, name: stkname,FWFlg: ""), forKey: "DIS")
+                    print(myDyTp)
                 }
                 let rtid=String(format: "%@", lstPlnDetail[0]["clusterid"] as! CVarArg)
+                print(lstPlnDetail)
+                print(rtid)
+                print(lstRoutes)
                 if let indexToDelete = lstRoutes.firstIndex(where: { String(format: "%@", $0["id"] as! CVarArg) == rtid }) {
                     lblRoute.text = lstRoutes[indexToDelete]["name"] as? String
                     HomePageViewController.selfieLoginActive = 0
                     let rtname: String = lstRoutes[indexToDelete]["name"] as! String
                     print(rtname)
                    myDyTp.updateValue(lItem(id: rtid, name: rtname,FWFlg: ""), forKey: "RUT")
+                    print(myDyTp)
                 }
                 let jwids=(String(format: "%@", lstPlnDetail[0]["worked_with_code"] as! CVarArg)).replacingOccurrences(of: "$$", with: ";")
                     .replacingOccurrences(of: "$", with: ";")
@@ -602,7 +644,8 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                         print(lstJoint)
                         let jwid: String = lstJoint[indexToDelete]["id"] as! String
                         let jwname: String = lstJoint[indexToDelete]["name"] as! String
-                        
+                        print(lstJoint)
+                        print(jwid)
                         strJWCd += jwid+";"
                         strJWNm += jwname+";"
                         let jitm: AnyObject = lstJoint[indexToDelete] as AnyObject
@@ -610,10 +653,12 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                     }
                 }
                 print(lstJWNms)
+                myDyTp.updateValue(lItem(id: id, name: name,FWFlg: typ), forKey: "WT")
+                print(myDyTp)
                 tbJWKSelect.reloadData()
             }
             
-            myDyTp.updateValue(lItem(id: id, name: name,FWFlg: typ), forKey: "WT")
+            
         }else{
             print(" No Data")
         }
@@ -621,7 +666,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
     }
     @objc private func GotoHome() {
         self.dismiss(animated: true, completion: nil)
-        GlobalFunc.movetoHomePage()
+        GlobalFunc.MovetoMainMenu()
     }
     @IBAction func setSelValues(_ sender: Any) {
         strJWCd=strSelJWCd
@@ -663,7 +708,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         isMulti=false
         lObjSel=lstRoutes
         tbDataSelect.reloadData()
-        lblSelTitle.text="Select the Routes"
+        lblSelTitle.text="Select the Route"
         openWin(Mode: "RUT")
     }
     @objc private func selJointWK() {
@@ -699,6 +744,10 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         SelMode=Mode
         lAllObjSel = lObjSel
         txSearchSel.text = ""
+        Setval.isHidden = true
+        if (Mode == "JWK"){
+            Setval.isHidden = false
+        }
         vwSelWindow.isHidden=false
         
     }
@@ -769,7 +818,10 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                print("In Data")
             }else{
                 if UserSetup.shared.Selfie == 1{
-                    if Leaveid != "9999"{
+                    if Leaveid != "L"{
+                        if validateForm() == false {
+                            return
+                        }
                         openCamera()
                     }
                    
@@ -778,7 +830,6 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                     getLocatio()
                 }
             }
-            
                 if(PhotosCollection.shared.PhotoList.count>0){
                     for i in 0...PhotosCollection.shared.PhotoList.count-1{
                         let item: [String: Any] = PhotosCollection.shared.PhotoList[i] as! [String : Any]
@@ -794,21 +845,17 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                 
                     }
                 }
-               
-            if (Leaveid == "9999" && PhotosCollection.shared.PhotoList.count == 0 ){
+            
+            if (Leaveid == "L" && PhotosCollection.shared.PhotoList.count == 0 ){
                 getLocatio()
             }
                 print("My Day Plan Not Sumbite")
-            
-            
-
         }else{
            //openCamera()
+            print(Leaveid)
             getLocatio()
             print("My Day Plan Sumbite")
         }
-        
-        
        /* */
     }
     func getLocatio(){
@@ -817,7 +864,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         var Leavtyp = leavWorktype
         print(Leavtyp)
  print(Leaveid)
-        if Leaveid != "9999"{
+        if Leaveid != "L"{
             if validateForm() == false {
                 return
             }
@@ -861,7 +908,9 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
     
     
     func saveDayTP(location: CLLocation){
-        
+        if (VisitData.shared.VstRemarks.name == "Enter the Remarks"){
+            VisitData.shared.VstRemarks.name = ""
+        }
         let dateString = GlobalFunc.getCurrDateAsString()
         lazy var geocoder = CLGeocoder()
         var sAddress: String = ""
@@ -900,6 +949,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
             } else {
                 
             }
+            print(myDyTp)
             let jsonString = "[{\"tbMyDayPlan\":{\"wtype\":\"'" + (myDyTp["WT"]?.id ?? "") + "'\",\"sf_member_code\":\"'" + (myDyTp["HQ"]?.id ?? SFCode) + "'\",\"stockist\":\"'" + (myDyTp["DIS"]?.id ?? "") + "'\",\"stkName\":\"" + (myDyTp["DIS"]?.name ?? "") + "\",\"dcrtype\":\"App\",\"cluster\":\"'" + (myDyTp["RUT"]?.id ?? "") + "'\",\"custid\":\"" + (myDyTp["RUT"]?.id ?? "") + "\",\"custName\":\"" + (myDyTp["RUT"]?.name ?? "") + "\",\"address\":\"" + sAddress + "\",\"remarks\":\"'" + (remarks) + "'\",\"OtherWors\":\"\",\"FWFlg\":\"'" + (myDyTp["WT"]?.FWFlg ?? "") + "'\",\"SundayWorkigFlag\":\"''\",\"Place_Inv\":\"\",\"WType_SName\":\"" + (myDyTp["WT"]?.name ?? "") + "\",\"ClstrName\":\"'" + (myDyTp["RUT"]?.name ?? "") + "'\",\"AppVersion\":\"Vi_\(Bundle.main.appVersionLong).\(Bundle.main.appBuild)\",\"self\":1,\"location\":\"" + slocation + "\",\"dcr_activity_date\":\"'" + dateString + "'\",\"worked_with\":\"'\(Join_Works)'\"\(ImgName)}}]"
        // let jsonString: String = ""
         //AppVersion\":\"Vi1.1.0\
@@ -946,15 +996,35 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                                        print("Error: Could print JSON in String")
                                        return
                                    }
-
                                    print(prettyPrintedJson)
+                                let PlnDets: String=LocalStoreage.string(forKey: "Mydayplan")!
+                                if let list = GlobalFunc.convertToDictionary(text: PlnDets) as? [AnyObject] {
+                                    lstPlnDetail = list;
+                                }
                                    let LocalStoreage = UserDefaults.standard
                                    LocalStoreage.set(prettyPrintedJson, forKey: "Mydayplan")
-                                
+                                 print(LocalStoreage)
+                                print(self.exp_Need)
+                                //self.exp_Need = 2
+                                if (self.attendanceView == 1) {
+                               // Naviagte To Strat Expense
+                                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                                let viewControllers = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
+                                let myDyPln = storyboard.instantiateViewController(withIdentifier: "Start_Expense") as! Start_Expense
+                                let dateFormatter = DateFormatter()
+                                dateFormatter.dateFormat = "yyyy-MM-dd"
+                                let currentDate = Date()
+                                let formattedDate = dateFormatter.string(from: currentDate)
+                                 myDyPln.Screan_Heding = "My day plan"
+                                 myDyPln.Show_Date = true
+                                 myDyPln.Curent_Date = formattedDate
+                                viewControllers.setViewControllers([myDyPln], animated: false)
+                                (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewControllers)
+                                }else{
                                     let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
                                     UIApplication.shared.windows.first?.rootViewController = viewController
                                     UIApplication.shared.windows.first?.makeKeyAndVisible()
-                                
+                                }
                                     Toast.show(message: "My day plan submitted successfully", controller: self)
                                case .failure(let error):
                                    print(error.errorDescription!)
@@ -979,4 +1049,3 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         self.present(vc, animated: true, completion: nil)
     }
 }
-

@@ -38,9 +38,9 @@ class AdminMenus: IViewController, UITableViewDelegate, UITableViewDataSource  {
         }
         
         strMasList.append(mnuItem.init(MasId: 1, MasName: "Apply Leave", MasImage: "SwitchRoute"))
+        strMasList.append(mnuItem.init(MasId: 2, MasName: "Expense Entry", MasImage: "SwitchRoute"))
         //strMasList.append(mnuItem.init(MasId: 2, MasName: "Add New Retailer", MasImage: "NewRetailer"))
         //strMasList.append(mnuItem.init(MasId: 11, MasName: "Master Sync", MasImage: "MasterSync"))
-        strMasList.append(mnuItem.init(MasId: 5, MasName: "Tour Plan Entry", MasImage: "SwitchRoute"))
         
         btnBack.addTarget(target: self, action: #selector(closeMenuWin))
         menuClose.addTarget(target: self, action: #selector(closeMenuWin))
@@ -79,45 +79,22 @@ class AdminMenus: IViewController, UITableViewDelegate, UITableViewDataSource  {
         let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
         if lItm.MasId == 1 {
             
-//            let RptMnuVc = storyboard.instantiateViewController(withIdentifier: "sbAdminMnu") as! AdminMenus
-//            let myDyPln = storyboard.instantiateViewController(withIdentifier: "sbLeaveFrm") as! LeaveForm
-//            viewController.setViewControllers([RptMnuVc,myDyPln], animated: false)
-//            //viewController.navigationController?.pushViewController(myDyPln, animated: true)
-//            (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
-        }/*else if lItm.MasId == 2 {
-            let Homevc = storyboard.instantiateViewController(withIdentifier: "HomePageVwControl") as! HomePageViewController
-            let addCus = storyboard.instantiateViewController(withIdentifier: "AddNewRetailer") as! AddNewCustomer
-            viewController.setViewControllers([Homevc, addCus], animated: false)
+            let RptMnuVc = storyboard.instantiateViewController(withIdentifier: "sbAdminMnu") as! AdminMenus
+            let myDyPln = storyboard.instantiateViewController(withIdentifier: "sbLeaveFrm") as! LeaveForm
+            viewController.setViewControllers([RptMnuVc,myDyPln], animated: false)
             //viewController.navigationController?.pushViewController(myDyPln, animated: true)
-        }else if lItm.MasId == 11 {
-            let MasSync = storyboard.instantiateViewController(withIdentifier: "MasterSyncVwControl") as! MasterSync
-            MasSync.AutoSync = false
-            viewController.setViewControllers([MasSync], animated: false)
+            (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
+        }else if lItm.MasId == 2 {
+            let RptMnuVc = storyboard.instantiateViewController(withIdentifier: "sbAdminMnu") as! AdminMenus
+            let myDyPln = storyboard.instantiateViewController(withIdentifier: "Expense") as! Expense_Entry
+            viewController.setViewControllers([RptMnuVc,myDyPln], animated: false)
             //viewController.navigationController?.pushViewController(myDyPln, animated: true)
-        }*/
-       // (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
-        
-        switch lItm.MasId {
-            case 1:
-                let RptMnuVc = storyboard.instantiateViewController(withIdentifier: "sbAdminMnu") as! AdminMenus
-                let myDyPln = storyboard.instantiateViewController(withIdentifier: "sbLeaveFrm") as! LeaveForm
-                viewController.setViewControllers([RptMnuVc,myDyPln], animated: false)
-                //viewController.navigationController?.pushViewController(myDyPln, animated: true)
-                (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
-            case 5:
-                let RptMnuVc = storyboard.instantiateViewController(withIdentifier: "sbAdminMnu") as! AdminMenus
-                let trPln = storyboard.instantiateViewController(withIdentifier: "sbTourPlanCalenderScreen") as! TourPlanCalenderScreen
-                viewController.setViewControllers([RptMnuVc,trPln], animated: false)
-                //viewController.navigationController?.pushViewController(myDyPln, animated: true)
-                (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
-            default:
-                break
+            (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
         }
         print(strMasList[indexPath.row].MasName)
     }
     
     @objc func closeMenuWin(){
-        GlobalFunc.movetoHomePage()
-        
+        GlobalFunc.MovetoMainMenu()
     }
 }
