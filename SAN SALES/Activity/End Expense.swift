@@ -54,6 +54,7 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource {
         let Text:String
     }
     var expsub_Date:[Endsub_Date]=[]
+    var labelsDictionary = [FSCalendarCell: UILabel]()
     var SelMod:String = ""
     var End_exp_title:String?
     var Date_Nd:Bool?
@@ -249,7 +250,7 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                     self.LoadingDismiss()
                 }
-                if let json = value as? [[String: Any]] {
+                if let json = value as? [ String:AnyObject] {
                     guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
                         print("Error: Cannot convert JSON object to Pretty JSON data")
                         return
@@ -324,6 +325,11 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource {
                     if let srt_exp = json["srt_exp"] as? [AnyObject] {
                         for item in srt_exp {
                             if let full_date = item["full_date"] as? String{
+                                let dateFormatter = DateFormatter()
+                                dateFormatter.dateFormat = "dd/MM/yyyy"
+                                let Formated_Date = dateFormatter.date(from: full_date)
+                                let cell = calendar.cell(for: Formated_Date!, at: .current)
+                                addLetter(to: cell, text: ".")
                                 expsub_Date = expsub_Date.filter { $0.Dates != full_date }
                             }
                         }
@@ -334,7 +340,17 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource {
             }
         }
     }
-    
+    func addLetter(to cell: FSCalendarCell?, text:String) {
+        let letterLabel = UILabel()
+        letterLabel.text = text
+        letterLabel.textColor = .red
+        letterLabel.font = UIFont.boldSystemFont(ofSize: 50)
+        letterLabel.textAlignment = .center
+        letterLabel.frame = CGRect(x: 0, y: 3, width: cell?.bounds.width ?? 0, height: cell?.bounds.height ?? 0)
+        cell?.subviews.filter { $0 is UILabel }.forEach { $0.removeFromSuperview() }
+        cell?.addSubview(letterLabel)
+        labelsDictionary[cell!] = letterLabel
+    }
 func srtExpenseData(Select_date:String){
         let axn = "get/srtExpenseData"
         let apiKey = "\(axn)&date=\(Select_date)&sf_code=\(SFCode)"

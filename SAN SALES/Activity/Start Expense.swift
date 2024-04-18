@@ -302,16 +302,15 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
                             }
                         }
                     }
-                    print(expsub_Date)
-//
-//                    for Letter in expsub_Date{
-//                        let datess = Letter.Dates
-//                        let dateFormatter = DateFormatter()
-//                        dateFormatter.dateFormat = "dd/MM/yyyy"
-//                        let Formated_Date = dateFormatter.date(from: datess)
-//                        let cell = calendar.cell(for: Formated_Date!, at: .current)
-//                        addLetter(to: cell, text: Letter.Text)
-//                    }
+                    
+                    if let exp_submit = json["exp_submit"] as? [AnyObject] {
+                        
+                        for item in exp_submit{
+                            if let full_date = item["full_date"] as? String{
+                                expsub_Date = expsub_Date.filter { $0.Dates != full_date }
+                            }
+                        }
+                    }
                 }
             case .failure(let error):
                 Toast.show(message: error.errorDescription!)
@@ -322,9 +321,9 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
         let letterLabel = UILabel()
         letterLabel.text = text
         letterLabel.textColor = .red
-        letterLabel.font = UIFont.boldSystemFont(ofSize: 14)
+        letterLabel.font = UIFont.boldSystemFont(ofSize: 50)
         letterLabel.textAlignment = .center
-        letterLabel.frame = CGRect(x: 0, y: 15, width: cell?.bounds.width ?? 0, height: cell?.bounds.height ?? 0)
+        letterLabel.frame = CGRect(x: 0, y: 3, width: cell?.bounds.width ?? 0, height: cell?.bounds.height ?? 0)
         cell?.subviews.filter { $0 is UILabel }.forEach { $0.removeFromSuperview() }
         cell?.addSubview(letterLabel)
         labelsDictionary[cell!] = letterLabel
@@ -510,6 +509,7 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
         var day_start_km = ""
         var mode_name = ""
         var from_place = ""
+        var daily_allowance = ""
       if let dates = Select_Date.text {
             date = dates
         }
@@ -523,11 +523,16 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
         if let from_places = Enter_From.text{
             from_place = from_places
         }
+        if let daily_allow = Daily_Allowance.text{
+            daily_allowance = daily_allow
+        }
         let axn = "dcr/save"
         let apiKey = "\(axn)&update=0&divisionCode=\(DivCode)&sfCode=\(SFCode)&State_Code=\(StateCode)&desig=\(Desig)"
         let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
+        var Div = DivCode
+        Div = Div.replacingOccurrences(of: ",", with: "")
         let url = APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKeyWithoutCommas
-        let jsonString = "[{\"New_TP_Attendance\":{\"lat\":\"'\(lat)'\",\"long\":\"'\(log)'\",\"date_time\":\"'\(Select_Date.text! + " " + currentTimeAndMilliseconds.time)'\",\"date\":\"'\(date)'\",\"time\":\"\(currentTimeAndMilliseconds.time)\",\"milli_sec\":\"\(currentTimeAndMilliseconds.milliseconds)\",\"day_start_km\":\"\(day_start_km)\",\"imgurl\":\"\(fullid)\",\"mode_name\":\"\(mode_name)\",\"mod_id\":\"1\",\"daily_allowance\":\"\(String(describing: Daily_Allowance.text))\",\"from_place\":\"\(from_place) \",\"to_place\":\"\(to_place)\",\"to_placeID\":\"\(To_Place_id)\",\"stEndNeed\":\"\(StarKmNeed)\",\"srtEntry\":1,\"attach_need\":\"0\",\"division_code\":\"\(DivCode)\",\"driver_allowance\":\"\(checked)\"}}]"
+        let jsonString = "[{\"New_TP_Attendance\":{\"lat\":\"'\(lat)'\",\"long\":\"'\(log)'\",\"date_time\":\"'\(Select_Date.text! + " " + currentTimeAndMilliseconds.time)'\",\"date\":\"'\(date)'\",\"time\":\"\(currentTimeAndMilliseconds.time)\",\"milli_sec\":\"\(currentTimeAndMilliseconds.milliseconds)\",\"day_start_km\":\"\(day_start_km)\",\"imgurl\":\"\(fullid)\",\"mode_name\":\"\(mode_name)\",\"mod_id\":\"1\",\"daily_allowance\":\"\(daily_allowance)\",\"from_place\":\"\(from_place) \",\"to_place\":\"\(to_place)\",\"to_placeID\":\"\(To_Place_id)\",\"stEndNeed\":\"\(StarKmNeed)\",\"srtEntry\":1,\"attach_need\":\"0\",\"division_code\":\"\(Div)\",\"driver_allowance\":\"\(checked)\"}}]"
         let params: Parameters = [
             "data": jsonString
         ]
@@ -637,7 +642,14 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
         Drop_Down_Sc.isHidden = true
     }
     @objc private func Open_Calender() {
-        self.calendar.reloadData()
+        for Letter in expsub_Date{
+            let datess = Letter.Dates
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "dd/MM/yyyy"
+            let Formated_Date = dateFormatter.date(from: datess)
+            let cell = calendar.cell(for: Formated_Date!, at: .current)
+            addLetter(to: cell, text: ".")
+        }
         calendar_view.isHidden = false
     }
     @objc private func Clos_Calender() {
