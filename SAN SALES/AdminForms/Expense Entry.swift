@@ -827,129 +827,129 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
     }
 }
 
-class MonthsView: UIView {
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupMonthsView()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        setupMonthsView()
-    }
-    private func setupMonthsView(){
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MMM"
-        let monthLabels = dateFormatter.shortMonthSymbols
-        let currentMonthIndex = Calendar.current.component(.month, from: Date()) - 1
-        print(currentMonthIndex)
-        Expense_Entry.shared.SelectMonthPostion = "0\(currentMonthIndex+1)"
-        UserSetup.shared.CurentMonthPostion = currentMonthIndex
-        let rows = 3
-        let columns = 4
-        let labelWidth = bounds.width / CGFloat(columns)
-        let labelHeight = bounds.height / CGFloat(rows)
-        
-        for (index, month) in monthLabels!.enumerated() {
-            let row = index / columns
-            let column = index % columns
-            
-            let label = UILabel()
-            label.text = month
-            label.textAlignment = .center
-            label.isUserInteractionEnabled = true
-            label.translatesAutoresizingMaskIntoConstraints = false
-            addSubview(label)
-            
-            label.topAnchor.constraint(equalTo: topAnchor, constant: CGFloat(row) * labelHeight).isActive = true
-            label.leadingAnchor.constraint(equalTo: leadingAnchor, constant: CGFloat(column) * labelWidth).isActive = true
-            label.widthAnchor.constraint(equalToConstant: labelWidth).isActive = true
-            label.heightAnchor.constraint(equalToConstant: labelHeight).isActive = true
-            
-            if index == currentMonthIndex || index == currentMonthIndex - 1 {
-                label.textColor = .black
-                let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(monthTapped(_:)))
-                label.addGestureRecognizer(tapGestureRecognizer)
-                label.tag = index
-            } else {
-                label.textColor = .lightGray
-            }
-        }
-    }
-    
-    @objc private func monthTapped(_ sender: UITapGestureRecognizer) {
-        guard let index = sender.view?.tag else { return }
-        let monthLabels = DateFormatter().monthSymbols
-        let selectedMonth = monthLabels![index]
-        let WhichMonth = index + 1
-        Expense_Entry.shared.SelectMonthPostion = "0\(WhichMonth)"
-        Expense_Entry.shared.periodic()
-        print("Selected month: \(selectedMonth)")
-    }
-}
-
-class YearView: UIView {
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupYearView()
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        setupYearView()
-    }
-    private func setupYearView(){
-        let calendar = Calendar.current
-        let currentYear = calendar.component(.year, from: Date())
-        let previousYear = currentYear - 1
-        let rows = 3
-        let columns = 4
-        let labelWidth = bounds.width / CGFloat(columns)
-        let labelHeight = bounds.height / CGFloat(rows)
-        let yearsArray: [String]
-        
-        if (UserSetup.shared.CurentMonthPostion == 0) {
-            yearsArray = [String(previousYear), String(currentYear)]
-        } else {
-            yearsArray = [String(currentYear)]
-        }
-        
-        for (index, year) in yearsArray.enumerated() {
-            let row = index / columns
-            let column = index % columns
-            
-            let label = UILabel()
-            label.text = year
-            label.textAlignment = .center
-            label.isUserInteractionEnabled = true
-            label.translatesAutoresizingMaskIntoConstraints = false
-            addSubview(label)
-            
-            // Constraints
-            label.topAnchor.constraint(equalTo: topAnchor, constant: CGFloat(row) * labelHeight).isActive = true
-            label.leadingAnchor.constraint(equalTo: leadingAnchor, constant: CGFloat(column) * labelWidth).isActive = true
-            label.widthAnchor.constraint(equalToConstant: labelWidth).isActive = true
-            label.heightAnchor.constraint(equalToConstant: labelHeight).isActive = true
-            
-            let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(YearTapped(_:)))
-            label.addGestureRecognizer(tapGestureRecognizer)
-            label.tag = index
-        }
-    }
-    @objc private func YearTapped(_ sender: UITapGestureRecognizer) {
-        guard let index = sender.view?.tag else { return }
-        let calendar = Calendar.current
-        let currentYear = calendar.component(.year, from: Date())
-        let previousYear = currentYear - 1
-        let yearsArray: [String]
-        if (UserSetup.shared.CurentMonthPostion == 0) {
-            yearsArray = [String(previousYear), String(currentYear)]
-        } else {
-            yearsArray = [String(currentYear)]
-        }
-        let selectedMonth = yearsArray[index]
-        print("Selected month: \(selectedMonth)")
-       // Expense_Entry.shared.OpenView()
-    }
-}
-
+//class MonthsView: UIView {
+//    override init(frame: CGRect) {
+//        super.init(frame: frame)
+//        setupMonthsView()
+//    }
+//    
+//    required init?(coder aDecoder: NSCoder) {
+//        super.init(coder: aDecoder)
+//        setupMonthsView()
+//    }
+//    private func setupMonthsView(){
+//        let dateFormatter = DateFormatter()
+//        dateFormatter.dateFormat = "MMM"
+//        let monthLabels = dateFormatter.shortMonthSymbols
+//        let currentMonthIndex = Calendar.current.component(.month, from: Date()) - 1
+//        print(currentMonthIndex)
+//        Expense_Entry.shared.SelectMonthPostion = "0\(currentMonthIndex+1)"
+//        UserSetup.shared.CurentMonthPostion = currentMonthIndex
+//        let rows = 3
+//        let columns = 4
+//        let labelWidth = bounds.width / CGFloat(columns)
+//        let labelHeight = bounds.height / CGFloat(rows)
+//        
+//        for (index, month) in monthLabels!.enumerated() {
+//            let row = index / columns
+//            let column = index % columns
+//            
+//            let label = UILabel()
+//            label.text = month
+//            label.textAlignment = .center
+//            label.isUserInteractionEnabled = true
+//            label.translatesAutoresizingMaskIntoConstraints = false
+//            addSubview(label)
+//            
+//            label.topAnchor.constraint(equalTo: topAnchor, constant: CGFloat(row) * labelHeight).isActive = true
+//            label.leadingAnchor.constraint(equalTo: leadingAnchor, constant: CGFloat(column) * labelWidth).isActive = true
+//            label.widthAnchor.constraint(equalToConstant: labelWidth).isActive = true
+//            label.heightAnchor.constraint(equalToConstant: labelHeight).isActive = true
+//            
+//            if index == currentMonthIndex || index == currentMonthIndex - 1 {
+//                label.textColor = .black
+//                let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(monthTapped(_:)))
+//                label.addGestureRecognizer(tapGestureRecognizer)
+//                label.tag = index
+//            } else {
+//                label.textColor = .lightGray
+//            }
+//        }
+//    }
+//    
+//    @objc private func monthTapped(_ sender: UITapGestureRecognizer) {
+//        guard let index = sender.view?.tag else { return }
+//        let monthLabels = DateFormatter().monthSymbols
+//        let selectedMonth = monthLabels![index]
+//        let WhichMonth = index + 1
+//        Expense_Entry.shared.SelectMonthPostion = "0\(WhichMonth)"
+//        Expense_Entry.shared.periodic()
+//        print("Selected month: \(selectedMonth)")
+//    }
+//}
+//
+//class YearView: UIView {
+//    override init(frame: CGRect) {
+//        super.init(frame: frame)
+//        setupYearView()
+//    }
+//
+//    required init?(coder aDecoder: NSCoder) {
+//        super.init(coder: aDecoder)
+//        setupYearView()
+//    }
+//    private func setupYearView(){
+//        let calendar = Calendar.current
+//        let currentYear = calendar.component(.year, from: Date())
+//        let previousYear = currentYear - 1
+//        let rows = 3
+//        let columns = 4
+//        let labelWidth = bounds.width / CGFloat(columns)
+//        let labelHeight = bounds.height / CGFloat(rows)
+//        let yearsArray: [String]
+//        
+//        if (UserSetup.shared.CurentMonthPostion == 0) {
+//            yearsArray = [String(previousYear), String(currentYear)]
+//        } else {
+//            yearsArray = [String(currentYear)]
+//        }
+//        
+//        for (index, year) in yearsArray.enumerated() {
+//            let row = index / columns
+//            let column = index % columns
+//            
+//            let label = UILabel()
+//            label.text = year
+//            label.textAlignment = .center
+//            label.isUserInteractionEnabled = true
+//            label.translatesAutoresizingMaskIntoConstraints = false
+//            addSubview(label)
+//            
+//            // Constraints
+//            label.topAnchor.constraint(equalTo: topAnchor, constant: CGFloat(row) * labelHeight).isActive = true
+//            label.leadingAnchor.constraint(equalTo: leadingAnchor, constant: CGFloat(column) * labelWidth).isActive = true
+//            label.widthAnchor.constraint(equalToConstant: labelWidth).isActive = true
+//            label.heightAnchor.constraint(equalToConstant: labelHeight).isActive = true
+//            
+//            let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(YearTapped(_:)))
+//            label.addGestureRecognizer(tapGestureRecognizer)
+//            label.tag = index
+//        }
+//    }
+//    @objc private func YearTapped(_ sender: UITapGestureRecognizer) {
+//        guard let index = sender.view?.tag else { return }
+//        let calendar = Calendar.current
+//        let currentYear = calendar.component(.year, from: Date())
+//        let previousYear = currentYear - 1
+//        let yearsArray: [String]
+//        if (UserSetup.shared.CurentMonthPostion == 0) {
+//            yearsArray = [String(previousYear), String(currentYear)]
+//        } else {
+//            yearsArray = [String(currentYear)]
+//        }
+//        let selectedMonth = yearsArray[index]
+//        print("Selected month: \(selectedMonth)")
+//       // Expense_Entry.shared.OpenView()
+//    }
+//}
+//

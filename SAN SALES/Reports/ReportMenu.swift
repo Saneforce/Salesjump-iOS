@@ -42,6 +42,7 @@ class ReportMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
         if UserSetup.shared.BrndRvwNd > 0{
             strMasList.append(mnuItem.init(MasId: 2, MasName: "Brand Availability", MasImage: "SwitchRoute"))
         }
+        strMasList.append(mnuItem.init(MasId: 3, MasName: "Expense View", MasImage: "SwitchRoute"))
         //strMasList.append(mnuItem.init(MasId: 2, MasName: "Add New Retailer", MasImage: "NewRetailer"))
         //strMasList.append(mnuItem.init(MasId: 11, MasName: "Master Sync", MasImage: "MasterSync"))
         
@@ -92,6 +93,14 @@ class ReportMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
         else if lItm.MasId == 2 {
             let RptMnuVc = storyboard.instantiateViewController(withIdentifier: "sbReportsmnu") as! ReportMenu
             let brandAv = storyboard.instantiateViewController(withIdentifier: "brandAV") as! Brand_Availability
+            
+             viewController.setViewControllers([RptMnuVc,brandAv], animated: false)
+             //viewController.navigationController?.pushViewController(myDyPln, animated: true)
+             (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
+            
+        } else if lItm.MasId == 3 {
+            let RptMnuVc = storyboard.instantiateViewController(withIdentifier: "sbReportsmnu") as! ReportMenu
+            let brandAv = storyboard.instantiateViewController(withIdentifier: "Expenseview") as! Expense_View
             
              viewController.setViewControllers([RptMnuVc,brandAv], animated: false)
              //viewController.navigationController?.pushViewController(myDyPln, animated: true)

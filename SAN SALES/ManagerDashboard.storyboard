@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22684"/>
         <capability name="Map view configurations" minToolsVersion="14.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -18,6 +18,9 @@
         </array>
         <array key="Poppins-SemiBold.ttf">
             <string>Poppins-SemiBold</string>
+        </array>
+        <array key="TimesNewRoman.ttf">
+            <string>.SFUI-Regular</string>
         </array>
     </customFonts>
     <scenes>
@@ -987,7 +990,7 @@
                                                 <rect key="frame" x="17" y="449" width="170" height="60"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Bal to do" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nrG-xR-6jh">
-                                                        <rect key="frame" x="19" y="8" width="53" height="17"/>
+                                                        <rect key="frame" x="19" y="11" width="49" height="14"/>
                                                         <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="12"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
@@ -1584,7 +1587,7 @@
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Total Retailers" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1M4-fM-dFJ">
                                                                 <rect key="frame" x="22" y="10" width="109" height="21"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                                <fontDescription key="fontDescription" name="Poppins-SemiBold" family="Poppins" pointSize="15"/>
+                                                                <fontDescription key="fontDescription" name=".SFUI-Regular" family=".AppleSystemUIFont" pointSize="15"/>
                                                                 <nil key="textColor"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
@@ -1945,22 +1948,22 @@
                                         </constraints>
                                     </view>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="25" translatesAutoresizingMaskIntoConstraints="NO" id="h7Y-aC-Snz">
-                                        <rect key="frame" x="8" y="89" width="171.33333333333334" height="113"/>
+                                        <rect key="frame" x="8" y="89" width="175" height="103"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This month                        " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zgn-yl-ak5">
-                                                <rect key="frame" x="0.0" y="0.0" width="171.33333333333334" height="21"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="175" height="17.666666666666668"/>
                                                 <fontDescription key="fontDescription" name="Poppins-SemiBold" family="Poppins" pointSize="15"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Today                       " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QA7-b4-ZeI">
-                                                <rect key="frame" x="0.0" y="46" width="130" height="21"/>
+                                                <rect key="frame" x="0.0" y="42.666666666666657" width="136" height="17.666666666666671"/>
                                                 <fontDescription key="fontDescription" name="Poppins-SemiBold" family="Poppins" pointSize="15"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="this Week                       " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aoz-VY-YVg">
-                                                <rect key="frame" x="0.0" y="92" width="156.66666666666666" height="21"/>
+                                                <rect key="frame" x="0.0" y="85.333333333333343" width="161" height="17.666666666666671"/>
                                                 <fontDescription key="fontDescription" name="Poppins-SemiBold" family="Poppins" pointSize="15"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -2131,7 +2134,7 @@
         <image name="linkpink" width="512" height="512"/>
         <image name="magnifyingglass" catalog="system" width="128" height="117"/>
         <image name="outlet" width="256" height="256"/>
-        <image name="person.3.fill" catalog="system" width="128" height="61"/>
+        <image name="person.3.fill" catalog="system" width="128" height="66"/>
         <image name="productivity" width="256" height="256"/>
         <systemColor name="opaqueSeparatorColor">
             <color red="0.77647058823529413" green="0.77647058823529413" blue="0.78431372549019607" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

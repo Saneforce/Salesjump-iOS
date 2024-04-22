@@ -846,7 +846,12 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
                     }else if(prettyPrintedJson["msg"] as? String == "Expense Submitted Successfully"){
                         GlobalFunc.movetoHomePage()
                         Toast.show(message: (prettyPrintedJson["msg"] as? String)!, controller: self)
+                    }else{
+                        let mes = prettyPrintedJson["msg"] as? String
+                        GlobalFunc.movetoHomePage()
+                        Toast.show(message:mes!, controller: self)
                     }
+                    GlobalFunc.movetoHomePage()
                         }
             case .failure(let error):
                 Toast.show(message: error.errorDescription!)

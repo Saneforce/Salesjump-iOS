@@ -36,6 +36,7 @@ class UserSetup{
     var exp_auto:Int = 0
     var exp_process_type:Int = 0
     var SrtEndKMNd:Int = 0
+    var sf_emp_id:String = ""
     func initUserSetup(){
         let SetupStoreage = UserDefaults.standard
         let SetupData: String=SetupStoreage.string(forKey: "UserSetup")!
@@ -65,6 +66,7 @@ class UserSetup{
         exp_auto = lstSetups[0]["exp_auto"] as? Int ?? 0
         exp_process_type = lstSetups[0]["exp_process_type"] as? Int ?? 0
         SrtEndKMNd = lstSetups[0]["SrtEndKMNd"] as? Int ?? 0
+        sf_emp_id = lstSetups[0]["sf_emp_id"] as? String ?? ""
         print(UserSetup.shared.Phone_Country_Length)
         if(lstSetups[0]["Geo_Fencing"] as? Int == 1){
             Fenching = true

@@ -81,7 +81,26 @@ class cellListItem:UITableViewCell{
     @IBOutlet weak var Enter_Title: UITextField!
     @IBOutlet weak var Enter_Rmk: UITextField!
     @IBOutlet weak var Ent_Amt: UITextField!
-    
+    @IBOutlet weak var Card_View: UIView!
     @IBOutlet weak var Cam: UIImageView!
+    
+    
+    
+    @IBOutlet weak var Exp_Dis_KM: UILabel!
+    @IBOutlet weak var Exp_Fare: UILabel!
+    @IBOutlet weak var Exp_Date: UILabel!
+    @IBOutlet weak var Exp_Mod: UILabel!
+    @IBOutlet weak var Exp_Work_Typ: UILabel!
+    @IBOutlet weak var Exp_Work_Plc: UILabel!
+    @IBOutlet weak var Exp_From: UILabel!
+    @IBOutlet weak var Exp_To: UILabel!
+    @IBOutlet weak var Exp_Da_Typ: UILabel!
+    @IBOutlet weak var Exp_DA_Exp: UILabel!
+    @IBOutlet weak var Exp_Amount: UILabel!
+    @IBOutlet weak var Exp_DAddi: UILabel!
+    @IBOutlet weak var Exp_Hotal: UILabel!
+    @IBOutlet weak var Exp_Total: UILabel!
+    @IBOutlet weak var Exp_Status: UILabel!
+    
     var ischeck = false
 }
