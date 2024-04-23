@@ -8,7 +8,7 @@
 import UIKit
 import Alamofire
 import FSCalendar
-
+import Foundation
 class Expense_View: UIViewController, UITableViewDelegate, UITableViewDataSource, UICollectionViewDataSource, UICollectionViewDelegate {
     // selection
     @IBOutlet weak var btnBack: UIImageView!
@@ -29,6 +29,7 @@ class Expense_View: UIViewController, UITableViewDelegate, UITableViewDataSource
     // Table View
     @IBOutlet weak var Exp_Report_TB: UITableView!
     @IBOutlet weak var Period_TB: UITableView!
+    @IBOutlet weak var Sum_Exp: UITableView!
     
     // Collection View
     @IBOutlet weak var Collection_Of_Month: UICollectionView!
@@ -57,12 +58,17 @@ class Expense_View: UIViewController, UITableViewDelegate, UITableViewDataSource
         let Fare:String
         let Da_Typ:String
         let DA_Exp:String
-        let Amount:String
+        var Amount:String
         let DAddit:String
         let Hotal_Bill:String
-        let Total:String
+        var Total:String
         let Satus:String
     }
+    struct Exp_Sum:Codable{
+        let Tit:String
+        var Amt:String
+    }
+    var Exp_Summary_Data:[Exp_Sum] = []
     var Exp_Detel_Data:[Exp_Data] = []
     var labelsDictionary = [FSCalendarCell: UILabel]()
     let LocalStoreage = UserDefaults.standard
@@ -113,6 +119,9 @@ class Expense_View: UIViewController, UITableViewDelegate, UITableViewDataSource
         Period_TB.delegate = self
         Period_TB.dataSource = self
         
+        Sum_Exp.delegate = self
+        Sum_Exp.dataSource = self
+        
         Collection_Of_Month.delegate=self
         Collection_Of_Month.dataSource=self
         
@@ -128,6 +137,13 @@ class Expense_View: UIViewController, UITableViewDelegate, UITableViewDataSource
         Close_Pop_Up.addTarget(target: self, action: #selector(ClosePopUP))
         YearPostion.addTarget(target: self, action: #selector(OpenYear))
         MonthPostion.addTarget(target: self, action: #selector(OpenMonth))
+        
+        
+        Exp_Summary_Data.append(Exp_Sum(Tit: "Total Daily Expense", Amt: "-"))
+        Exp_Summary_Data.append(Exp_Sum(Tit: "Total Added (+)", Amt: "-"))
+        Exp_Summary_Data.append(Exp_Sum(Tit: "Total Deducted (-)", Amt: "-"))
+        Exp_Summary_Data.append(Exp_Sum(Tit: "Rejected Expense", Amt: "-"))
+        Exp_Summary_Data.append(Exp_Sum(Tit: "Payable Amount", Amt: "-"))
     }
     func getUserDetails(){
     let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
@@ -274,11 +290,13 @@ class Expense_View: UIViewController, UITableViewDelegate, UITableViewDataSource
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if Exp_Report_TB == tableView {return 450}
         if Period_TB == tableView {return 50}
+        if Sum_Exp == tableView {return 30}
         return 0
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if Exp_Report_TB == tableView{return Exp_Detel_Data.count}
         if Period_TB == tableView {return lstOfPeriod.count}
+        if Sum_Exp == tableView {return Exp_Summary_Data.count}
         return 0
     }
     
@@ -307,6 +325,9 @@ class Expense_View: UIViewController, UITableViewDelegate, UITableViewDataSource
             cell.Exp_Status.text = Exp_Detel_Data[indexPath.row].Satus
         }else if (Period_TB == tableView){
             cell.lblText.text = lstOfPeriod[indexPath.row].Period_Name
+        }else if (Sum_Exp == tableView){
+            cell.lblText.text = Exp_Summary_Data[indexPath.row].Tit
+            cell.lblText2.text = Exp_Summary_Data[indexPath.row].Amt
         }
         return cell
     }
@@ -432,6 +453,11 @@ class Expense_View: UIViewController, UITableViewDelegate, UITableViewDataSource
     
     func ExpenseReportDetails(){
         Exp_Detel_Data.removeAll()
+        Exp_Summary_Data.removeAll()
+        Exp_Summary_Data.append(Exp_Sum(Tit: "Total Daily Expense", Amt: "-"))
+        Exp_Summary_Data.append(Exp_Sum(Tit: "Total Added (+)", Amt: "-"))
+        Exp_Summary_Data.append(Exp_Sum(Tit: "Total Deducted (-)", Amt: "-"))
+        Exp_Summary_Data.append(Exp_Sum(Tit: "Rejected Expense", Amt: "-"))
         var Div = DivCode
         Div = Div.replacingOccurrences(of: ",", with: "")
         let axn = "getExpenseReportDetails"
@@ -449,7 +475,7 @@ class Expense_View: UIViewController, UITableViewDelegate, UITableViewDataSource
                             if let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) {
                                 print(prettyPrintedJson)
                                 if let jsonObject = try JSONSerialization.jsonObject(with: prettyJsonData, options: []) as? [String: Any],
-                                   let data = jsonObject["exp_data"] as? [AnyObject] {
+                                   let data = jsonObject["exp_data"] as? [AnyObject],let data2 = jsonObject["daily_exp"] as? [AnyObject],let data3 = jsonObject["add_sub_exp"] as? [AnyObject], let data4 = jsonObject["sum_add_data"] as? [AnyObject] {
                                     print(data)
                                     for i in data{
                                         let Date = i["ADate"] as? String
@@ -457,7 +483,12 @@ class Expense_View: UIViewController, UITableViewDelegate, UITableViewDataSource
                                         let WType = i["WType"] as? String
                                         let WorkedPlace = i["WorkedPlace"] as? String
                                         let From = i["Town_Name"] as? String
-                                        let To = i["WorkedPlace"] as? String
+                                        var To = ""
+                                        if let TO = i["WorkedPlace"] as? String, TO != ""{
+                                            To = TO
+                                        }else{
+                                            To = "-"
+                                        }
                                         var Dis = ""
                                         if let Diskm = i["ExpDist"] as? String{
                                             Dis = Diskm
@@ -472,8 +503,77 @@ class Expense_View: UIViewController, UITableViewDelegate, UITableViewDataSource
                                         let Hotal_Bill = i["Hotel_Bill_Amt"] as? String
                                         let Total = "0.0"
                                         let status = i["Exp_Status"] as? String
-                                        Exp_Detel_Data.append(Exp_Data(Date: Date!, Mode: Mode!, Wok_Typ: WType!, Wok_plc: WorkedPlace!, From_place: From!, To_place: To!, DisKM: Dis, Fare: Fare!, Da_Typ: DATyp!, DA_Exp: DAExp!, Amount: "0.0", DAddit: "0.0", Hotal_Bill: Hotal_Bill!, Total: Total, Satus: status!))
+                                        var DAdditionalAmnt = "0"
+                                        if let DAdditionalAmt = i["DAdditionalAmnt"] as? String, DAdditionalAmt != ""{
+                                            DAdditionalAmnt = DAdditionalAmt
+                                        }
+                                        Exp_Detel_Data.append(Exp_Data(Date: Date!, Mode: Mode!, Wok_Typ: WType!, Wok_plc: WorkedPlace!, From_place: From!, To_place: To, DisKM: Dis, Fare: Fare!, Da_Typ: DATyp!, DA_Exp: DAExp!, Amount: "0.0", DAddit:DAdditionalAmnt, Hotal_Bill: Hotal_Bill!, Total: Total, Satus: status!))
                                     }
+                                    print(data2)
+                                    var totalAmountByDate: [String: Double] = [:]
+                                    for expense in data2 {
+                                        guard let amt = expense["amt"] as? Int, let edate = expense["edate"] as? String else {
+                                            continue
+                                        }
+                                        if let existingTotal = totalAmountByDate[edate] {
+                                            totalAmountByDate[edate] = existingTotal + Double(amt)
+                                        } else {
+                                            totalAmountByDate[edate] = Double(amt)
+                                        }
+                                    }
+                                    
+                                    for (date, total) in totalAmountByDate {
+                                        print("Total amount for \(date): \(total)")
+                                        for index in 0..<Exp_Detel_Data.count {
+                                            if date == Exp_Detel_Data[index].Date{
+                                               print(Exp_Detel_Data[index].Date)
+                                                let bill = Double(Exp_Detel_Data[index].Hotal_Bill)
+                                                let da_amt = Double(Exp_Detel_Data[index].DA_Exp)
+                                                let Total_Amt = bill! + total + da_amt!
+                                                Exp_Detel_Data[index].Total = String(format: "%.2f", Total_Amt)
+                                                Exp_Detel_Data[index].Amount = String(format: "%.2f", total)
+                                            }
+                                        }
+                                    }
+                                    print(Exp_Detel_Data)
+                                    var SUM_TOTAL = 0.0
+                                    var sum_Total_all = 0.0
+                                    for item in Exp_Detel_Data{
+                                        let amt = Double(item.Total)
+                                        SUM_TOTAL = SUM_TOTAL + amt!
+                                    }
+                                    if SUM_TOTAL == 0.0 {
+                                        Exp_Summary_Data[0].Amt = "-"
+                                    }else{
+                                        Exp_Summary_Data[0].Amt = String(format: "%.2f",SUM_TOTAL)
+                                    }
+                                    print(data3)
+                                    if (data.count > 0){
+                                        if(data3.count > 0){
+                                            
+                                        }else{
+                                            Exp_Summary_Data[1].Amt = "0"
+                                            Exp_Summary_Data[2].Amt = "0"
+                                            Exp_Summary_Data[3].Amt = "0.0"
+                                        }
+                                    }else{
+                                        
+                                        Exp_Summary_Data[1].Amt = "-"
+                                        Exp_Summary_Data[2].Amt = "-"
+                                        Exp_Summary_Data[3].Amt = "-"
+                                    }
+                                    for datas in data4{
+                                        print(datas)
+                                        if let id = datas["Type"] as? Int, id == 2{
+                                            let name = datas["Name"] as? String
+                                            let amt = Double((datas["Amt"] as? String)!)
+                                            sum_Total_all = sum_Total_all + amt!
+                                            Exp_Summary_Data.append(Exp_Sum(Tit: name!, Amt: String(format: "%.2f",amt!)))
+                                        }
+                                    }
+                                    sum_Total_all = sum_Total_all + SUM_TOTAL
+                                    Exp_Summary_Data.append(Exp_Sum(Tit: "Payable Amount", Amt: String(format: "%.2f",sum_Total_all)))
+                                    Sum_Exp.reloadData()
                                     Exp_Report_TB.reloadData()
                                 } else {
                                     print("Error: Could not convert JSON to Dictionary or access 'data'")
@@ -490,6 +590,14 @@ class Expense_View: UIViewController, UITableViewDelegate, UITableViewDataSource
                     Toast.show(message: error.errorDescription ?? "Unknown Error")
                 }
         }
+    }
+    func findPosition(for date: String, in dataArray: [String]) -> Int? {
+        for (index, element) in dataArray.enumerated() {
+            if element.contains("Date: \"\(date)\"") {
+                return index
+            }
+        }
+        return nil
     }
     
     @objc private func GotoHome() {
