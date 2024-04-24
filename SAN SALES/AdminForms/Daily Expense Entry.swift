@@ -52,6 +52,12 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
     @IBOutlet weak var Daily_EX_Head: UILabel!
     @IBOutlet weak var Daily_Expense_TB: UITableView!
     @IBOutlet weak var Daily_Expense_TB_hig: NSLayoutConstraint!
+    
+    
+    @IBOutlet weak var Mod_Of_Travel: UIView!
+    @IBOutlet weak var Mod_of_travel_height: NSLayoutConstraint!
+    @IBOutlet weak var Select_Mod_of_Travel: LabelSelect!
+    
     @IBOutlet weak var CloseBt: UILabel!
     @IBOutlet weak var Travemoad_View: UIView!
     @IBOutlet weak var Sta_Km_View: UIView!
@@ -136,6 +142,7 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
     var Bill_photo_Ned:[Bill_Photo] = []
     var Expense_data:[Expense_New] = []
     var Select_index_Del:Int = 0
+    var select_allow:String = ""
     override func viewDidLoad() {
         super.viewDidLoad()
         Expense_data.append(Expense_New(WorkType: "", mydayplanWorkPlace: "", Routename: "", Enterdate: "", KM: "", Billamount: "", HQ: "", stayingtype: "0", MOT: "", mot_id: "", st_endNeed: "", max_km: "", fuel_charge: 0, exp_km: "", exp_amount: "", TotalAmount: "", Toworkplace: "", period_name: "", period_id: "", from_date: "", to_date: "", srt_km: "", end_km: "", exp_auto: UserSetup.shared.exp_auto, exp_process_type: "\(UserSetup.shared.exp_process_type)"))
@@ -176,6 +183,9 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
         eye.addTarget(target: self, action: #selector(View_Photo))
         Daily_Exp_photos.addTarget(target: self, action: #selector(Add_Pho))
         Allo_Typ.addTarget(target: self, action: #selector(openAllowance))
+        
+        Select_Mod_of_Travel.addTarget(target: self, action: #selector(open_Mod_Of_Travel))
+        
         Stayingtyp.addTarget(target: self, action: #selector(openStaying_Typ))
         CloseBt.addTarget(target: self, action: #selector(CloseImag))
         set_form()
@@ -193,9 +203,14 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
         Hotal_Bill_Img_View.isHidden = true
         Hotal_Bill_Img_View_hig.constant = 0
         let Hotal_Bill_Img_View_h = Hotal_Bill_Img_View.frame.size.height
-        scroll_hig = scroll_hig - (Staying_typ_h + Bill_Amount_view_h + Hotal_Bill_Img_View_h)
+        let Mod_Of_Travel_h = Mod_Of_Travel.frame.size.height
+        scroll_hig = scroll_hig - (Staying_typ_h + Bill_Amount_view_h + Hotal_Bill_Img_View_h + Mod_Of_Travel_h)
         Scrollview_Height.constant = scroll_hig
         
+        if (UserSetup.shared.SrtEndKMNd > 0){
+            Mod_of_travel_height.constant = 0
+            Mod_Of_Travel.isHidden = true
+        }
         
         if let data = PeriodicData as? [PeriodicData] {
             print(data)
@@ -233,7 +248,7 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
             Expense_data[0].WorkType = (settyp[0]["WorkType"] as? String)!
             Expense_data[0].mydayplanWorkPlace = (settyp[0]["ClstrName"] as? String)!
             Expense_data[0].Enterdate = set_Date!
-            Allo_Typ.text = settyp[0]["Allowance_Type"] as? String
+            //Allo_Typ.text = settyp[0]["Allowance_Type"] as? String
         }
     }
     func animateIn(desiredView: UIView){
@@ -334,6 +349,7 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell:cellListItem = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
         if Photo_List == tableView{
+            print(Bill_photo_Ned)
             cell.Image_View.frame = CGRect(x: 0, y: 0, width: 200, height: 200)
             cell.Image_View.image = Bill_photo_Ned[indexPath.row].img
             cell.Enter_Rmk.returnKeyType = .done
@@ -458,6 +474,7 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
         print(item)
         if (SelMod == "Allowance"){
             print(item)
+            select_allow = item.name
             Expense_data[0].HQ = item.newname
             if item.name == "OS" || item.name == "EX" {
                 Staying_typ.isHidden = false
@@ -500,6 +517,10 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
                 Scrollview_Height.constant = scroll_hig
             }
             Stayingtyp.text = item.name
+        }else if (SelMod == "Travel"){
+            Select_Mod_of_Travel.text = item.name
+            Expense_data[0].MOT = item.name
+            Expense_data[0].mot_id = item.id
         }
         Search_lbl.text = ""
         self.resignFirstResponder()
@@ -564,6 +585,13 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
         SelMod = "Allowance"
         set_data_TB(openMod: "Allowance")
     }
+    @objc private func open_Mod_Of_Travel(){
+        Drop_Down_Title.text = "Select Mode of Travel"
+        DropDown.isHidden = false
+        SelMod = "Allowance"
+        set_data_TB(openMod: "Travel")
+    }
+    
     @objc private func openStaying_Typ(){
         Drop_Down_Title.text = "Select Staying Type"
         DropDown.isHidden = false
@@ -622,6 +650,52 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
             Exp_Data.append(exData(id: "2", name:"Without Hotel", newname: "Without Hotel"))
             Exp_Datas = Exp_Data
             sel_TB.reloadData()
+        }else if (openMod == "Travel"){
+            let axn = "get/travelmode"
+            let apiKey = "\(axn)&State_Code=\(StateCode)&Division_Code=\(DivCode)"
+            var result = apiKey
+            if let lastCommaIndex = result.lastIndex(of: ",") {
+                result.remove(at: lastCommaIndex)
+            }
+            let apiKeyWithoutCommas = result.replacingOccurrences(of: ",&", with: "&")
+            let url = APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKeyWithoutCommas
+            AF.request(url, method: .post, parameters: nil, encoding: URLEncoding.default, headers: nil)
+                .validate(statusCode: 200..<299)
+                .responseJSON { [self] response in
+                    switch response.result {
+                    case .success(let value):
+                        print(value)
+                        if let json = value as? [AnyObject] {
+                            do {
+                                let prettyJsonData = try JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
+                                if let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) {
+                                    print(prettyPrintedJson)
+                                    if let jsonObject = try JSONSerialization.jsonObject(with: prettyJsonData, options: []) as? [AnyObject]{
+                                        print(jsonObject)
+                                        for item in jsonObject{
+                                            let Alw_Eligibilty = item["Alw_Eligibilty"] as? String
+                                            let spriteArray = Alw_Eligibilty!.components(separatedBy: ",")
+                                            if spriteArray.contains(select_allow) {
+                                                Exp_Data.append(exData(id: String((item["Sl_No"] as? Int)!), name:(item["MOT"] as? String)!, newname: (item["MOT"] as? String)!))
+                                            }
+                                        }
+                                        Exp_Datas = Exp_Data
+                                        sel_TB.reloadData()
+                                    } else {
+                                        print("Error: Could not convert JSON to Dictionary or access 'data'")
+                                    }
+                                } else {
+                                    print("Error: Could not convert JSON to String")
+                                }
+                            } catch {
+                                print("Error: \(error.localizedDescription)")
+                            }
+                        }
+                        
+                    case .failure(let error):
+                        Toast.show(message: error.errorDescription ?? "Unknown Error")
+                    }
+                }
         }
     }
     func travel_data(date:String){
@@ -944,9 +1018,10 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
                                         var scrol = 0.0
                                         for i in ExpenseWeb{
                                             Tab_Hig = Tab_Hig+100
-                                            scrol = scrol+65
+                                            //scrol = scrol+65
                                             Needs_Entry.append(Pho_ND(ID: (i["ID"] as? Int)!, Name: (i["Name"] as? String)!, Photo_Mandatory: (i["Photo_Mandatory"] as? Int)!, Photo_Nd: (i["Photo_Nd"] as? Int)!,remark: "",amount: "", image: [], image_name: []))
                                         }
+                                        scrol = Double(Needs_Entry.count * 83)
                                         scroll_hig = scroll_hig+scrol
                                         Daily_Expense_TB_hig.constant = Tab_Hig
                                         Scrollview_Height.constant = scroll_hig
@@ -978,6 +1053,11 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
         }else if (To_Text.text == ""){
             Toast.show(message: "Enter To")
             return false
+        }else if (Select_Mod_of_Travel.text == "Select Mode of Travel"){
+            if (UserSetup.shared.SrtEndKMNd == 0){
+                Toast.show(message: "Select Mode of Travel")
+                return false
+            }
         }else if (Allo_Typ.text == "Allowance Type"){
             Toast.show(message: "Select Allowance Type")
             return false
