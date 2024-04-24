@@ -588,7 +588,7 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
     @objc private func open_Mod_Of_Travel(){
         Drop_Down_Title.text = "Select Mode of Travel"
         DropDown.isHidden = false
-        SelMod = "Allowance"
+        SelMod = "Travel"
         set_data_TB(openMod: "Travel")
     }
     
