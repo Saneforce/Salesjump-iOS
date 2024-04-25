@@ -893,7 +893,7 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
             Bill_Det = String(Bill_Det.dropLast())
             Activity_img_url2 = String(Activity_img_url2.dropLast())
             print(Activity_img_url2)
-            let jsonString = "[{\"dailyExpenseNew\":[" + CamItem + "]},{\"EA\":{\"MOT\":\"\(Expense_data[0].MOT)\"}},{\"ActivityCaptures\":[{\"imgurl\":\""+Activity_img_url2+"\"}]},{\"Expense_New\":{\"WorkType\":\"\(Expense_data[0].WorkType)\",\"mydayplanWorkPlace\":\"\(Expense_data[0].mydayplanWorkPlace)\",\"Routename\":\"\(Expense_data[0].Routename)\",\"Enterdate\":\"\(Expense_data[0].Enterdate)\",\"KM\":\(Expense_data[0].KM),\"Billamount\":\( Expense_data[0].Billamount),\"HQ\":\"\(Expense_data[0].HQ)\",\"stayingtype\":\(Expense_data[0].stayingtype),\"MOT\":\"\(Expense_data[0].MOT)\",\"mot_id\":\"\(Expense_data[0].MOT)\",\"st_endNeed\":\"\(Expense_data[0].st_endNeed)\",\"max_km\":\"\(Expense_data[0].max_km)\",\"fuel_charge\":\"\(Expense_data[0].fuel_charge)\",\"exp_km\":\"0.0\",\"exp_amount\":\"\(Expense_data[0].exp_amount)\",\"TotalAmount\":\"\(Expense_data[0].TotalAmount)\",\"Toworkplace\":\"\(Expense_data[0].Toworkplace)\",\"period_name\":\"\(Expense_data[0].period_name)\",\"period_id\":\"\(Expense_data[0].period_id)\",\"from_date\":\"\(Expense_data[0].from_date)\",\"to_date\":\"\(Expense_data[0].to_date)\",\"srt_km\":\"\(Expense_data[0].srt_km)\",\"end_km\":\"\(Expense_data[0].end_km)\",\"exp_auto\":2,\"exp_process_type\":0}},{\"HotelBillAttachment\":[" + Bill_Det + "]}]"
+            let jsonString = "[{\"dailyExpenseNew\":[" + CamItem + "]},{\"EA\":{\"MOT\":\"\(Expense_data[0].MOT)\"}},{\"ActivityCaptures\":[{\"imgurl\":\""+Activity_img_url2+"\"}]},{\"Expense_New\":{\"WorkType\":\"\(Expense_data[0].WorkType)\",\"mydayplanWorkPlace\":\"\(Expense_data[0].mydayplanWorkPlace)\",\"Routename\":\"\(Expense_data[0].Routename)\",\"Enterdate\":\"\(Expense_data[0].Enterdate)\",\"KM\":\(Expense_data[0].KM),\"Billamount\":\( Expense_data[0].Billamount),\"HQ\":\"\(Expense_data[0].HQ)\",\"stayingtype\":\(Expense_data[0].stayingtype),\"MOT\":\"\(Expense_data[0].MOT)\",\"mot_id\":\"\(Expense_data[0].mot_id)\",\"st_endNeed\":\"\(Expense_data[0].st_endNeed)\",\"max_km\":\"\(Expense_data[0].max_km)\",\"fuel_charge\":\"\(Expense_data[0].fuel_charge)\",\"exp_km\":\"0.0\",\"exp_amount\":\"\(Expense_data[0].exp_amount)\",\"TotalAmount\":\"\(Expense_data[0].TotalAmount)\",\"Toworkplace\":\"\(Expense_data[0].Toworkplace)\",\"period_name\":\"\(Expense_data[0].period_name)\",\"period_id\":\"\(Expense_data[0].period_id)\",\"from_date\":\"\(Expense_data[0].from_date)\",\"to_date\":\"\(Expense_data[0].to_date)\",\"srt_km\":\"\(Expense_data[0].srt_km)\",\"end_km\":\"\(Expense_data[0].end_km)\",\"exp_auto\":2,\"exp_process_type\":0}},{\"HotelBillAttachment\":[" + Bill_Det + "]}]"
             
             let params: Parameters = [
                 "data": jsonString
@@ -923,7 +923,7 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
                     }else{
                         let mes = prettyPrintedJson["msg"] as? String
                         GlobalFunc.movetoHomePage()
-                        Toast.show(message:mes!, controller: self)
+                        Toast.show(message:"Expense Submitted Successfully", controller: self)
                     }
                     GlobalFunc.movetoHomePage()
                         }

@@ -7,32 +7,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "B76D628F-6898-4C6B-A205-93473B5CEBAA"
+            uuid = "EAE702E3-283D-4851-A0DA-D4C2C4E972F8"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "SAN SALES/AdminForms/Daily Expense Entry.swift"
+            filePath = "SAN SALES/Reports/Expense View.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "352"
-            endingLineNumber = "352"
-            landmarkName = "tableView(_:cellForRowAt:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "F1ED08FB-73E9-401A-B3CC-3CDE6627040E"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "SAN SALES/AdminForms/Daily Expense Entry.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1005"
-            endingLineNumber = "1005"
-            landmarkName = "DAExp_ND()"
+            startingLineNumber = "477"
+            endingLineNumber = "477"
+            landmarkName = "ExpenseReportDetails()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

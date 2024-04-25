@@ -452,6 +452,7 @@ class Expense_View: UIViewController, UITableViewDelegate, UITableViewDataSource
     }
     
     func ExpenseReportDetails(){
+        self.ShowLoading(Message: "Loading...")
         Exp_Detel_Data.removeAll()
         Exp_Summary_Data.removeAll()
         Exp_Summary_Data.append(Exp_Sum(Tit: "Total Daily Expense", Amt: "-"))
@@ -575,6 +576,7 @@ class Expense_View: UIViewController, UITableViewDelegate, UITableViewDataSource
                                     Exp_Summary_Data.append(Exp_Sum(Tit: "Payable Amount", Amt: String(format: "%.2f",sum_Total_all)))
                                     Sum_Exp.reloadData()
                                     Exp_Report_TB.reloadData()
+                                    self.LoadingDismiss()
                                 } else {
                                     print("Error: Could not convert JSON to Dictionary or access 'data'")
                                 }
