@@ -7,16 +7,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "EAE702E3-283D-4851-A0DA-D4C2C4E972F8"
+            uuid = "BCF46228-79EF-4488-A569-6186E21247C1"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "SAN SALES/Reports/Expense View.swift"
+            filePath = "SAN SALES/Approvals/New Expense Approval.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "477"
-            endingLineNumber = "477"
-            landmarkName = "ExpenseReportDetails()"
+            startingLineNumber = "523"
+            endingLineNumber = "523"
+            landmarkName = "ExpenseDetails(mon:year:sfcode:trans_sl_no:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

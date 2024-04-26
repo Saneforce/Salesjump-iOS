@@ -85,7 +85,7 @@ class cellListItem:UITableViewCell{
     @IBOutlet weak var Cam: UIImageView!
     
     
-    
+    // Expense View
     @IBOutlet weak var Exp_Dis_KM: UILabel!
     @IBOutlet weak var Exp_Fare: UILabel!
     @IBOutlet weak var Exp_Date: UILabel!
@@ -101,6 +101,36 @@ class cellListItem:UITableViewCell{
     @IBOutlet weak var Exp_Hotal: UILabel!
     @IBOutlet weak var Exp_Total: UILabel!
     @IBOutlet weak var Exp_Status: UILabel!
+    
+    
+    // Expense Approval
+    @IBOutlet weak var Apr_Date: UILabel!
+    @IBOutlet weak var Apr_Work_Typ: UILabel!
+    @IBOutlet weak var Apr_Plc: UILabel!
+    @IBOutlet weak var Apr_Dis: UILabel!
+    @IBOutlet weak var Apr_Rem: UILabel!
+    @IBOutlet weak var Apr_Tot: UILabel!
+    @IBOutlet weak var Apr_Reject: UILabel!
+    
+    // New Expense Approval
+    @IBOutlet weak var Sf_Name: UILabel!
+    @IBOutlet weak var Date_Sf: UILabel!
+    @IBOutlet weak var new_Exp_Tot: UILabel!
+    @IBOutlet weak var New_Exp_View_Bt: UIButton!
+    
+    @IBOutlet weak var DATE: UILabel!
+    @IBOutlet weak var NA_Name: UILabel!
+    @IBOutlet weak var NA_fROM: UILabel!
+    @IBOutlet weak var NA_To: UILabel!
+    @IBOutlet weak var NA_WORK: UILabel!
+    @IBOutlet weak var NA_Work: UILabel!
+    @IBOutlet weak var NA_Daily: UILabel!
+    @IBOutlet weak var NA_DAdd: UILabel!
+    @IBOutlet weak var NA_Hotal_Bill: UILabel!
+    @IBOutlet weak var NA_Travel: UILabel!
+    @IBOutlet weak var NA_Addit: UILabel!
+    @IBOutlet weak var NA_Total: UILabel!
+    @IBOutlet weak var NA_Reject_BT: UIButton!
     
     var ischeck = false
 }

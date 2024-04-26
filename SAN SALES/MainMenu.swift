@@ -89,6 +89,7 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
         }
         strMasList.append(mnuItem.init(MasId:15, MasName: "Start Expense", MasImage: "Start_Expense"))
         strMasList.append(mnuItem.init(MasId:16, MasName: "End Expense", MasImage: "Day_End"))
+        strMasList.append(mnuItem.init(MasId:17, MasName: "Approvals", MasImage: "AdminForms"))
         menuClose.addTarget(target: self, action: #selector(closeMenuWin))
         tbMenuDetail.delegate=self
         tbMenuDetail.dataSource=self
@@ -339,6 +340,10 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
             myDyPln.Date_Nd = false
             myDyPln.Date = ""
             viewController.setViewControllers([myDyPln], animated: false)
+        }else if lItm.MasId == 17{
+            let rptstoryboard = UIStoryboard(name: "Approval", bundle: nil)
+            let RptMnuVc = rptstoryboard.instantiateViewController(withIdentifier: "ApprovalMenu") as! Approval_Menu
+            viewController.setViewControllers([RptMnuVc], animated: false)
         }
         (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
         print(strMasList[indexPath.row].MasName)
