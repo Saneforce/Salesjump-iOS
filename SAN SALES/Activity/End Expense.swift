@@ -228,7 +228,7 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource {
         let currentTimeAndMilliseconds = getCurrentTimeAndMilliseconds()
         
         if let Date_time = Select_Date.text{
-            date_time = Date_time+""+currentTimeAndMilliseconds.time
+            date_time = Date_time+" "+currentTimeAndMilliseconds.time
             date_time = date_time.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
         }
         
