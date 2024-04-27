@@ -23,7 +23,7 @@ class Approval_Menu: UIViewController, UITableViewDelegate, UITableViewDataSourc
         super.viewDidLoad()
         btnBack.addTarget(target: self, action: #selector(closeMenuWin))
         menuClose.addTarget(target: self, action: #selector(closeMenuWin))
-        strMasList.append(mnuItem.init(MasId: 1, MasName: "Expense Approval", MasImage: "SwitchRoute"))
+        //strMasList.append(mnuItem.init(MasId: 1, MasName: "Expense Approval", MasImage: "SwitchRoute"))
         strMasList.append(mnuItem.init(MasId: 2, MasName: "New Expense Approval", MasImage: "SwitchRoute"))
         tbMenuDetail.delegate=self
         tbMenuDetail.dataSource=self
@@ -45,7 +45,7 @@ class Approval_Menu: UIViewController, UITableViewDelegate, UITableViewDataSourc
         self.dismiss(animated: true, completion: nil)
         let storyboard = UIStoryboard(name: "Approval", bundle: nil)
         let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
-        if lItm.MasId == 1 {
+        if lItm.MasId == 1{
             
             let RptMnuVc = storyboard.instantiateViewController(withIdentifier: "ApprovalMenu") as! Approval_Menu
             let myDyPln = storyboard.instantiateViewController(withIdentifier: "ExpenseApproval") as! Expense_Approval

@@ -131,6 +131,6 @@ class cellListItem:UITableViewCell{
     @IBOutlet weak var NA_Addit: UILabel!
     @IBOutlet weak var NA_Total: UILabel!
     @IBOutlet weak var NA_Reject_BT: UIButton!
-    
+    @IBOutlet weak var NA_Approve_BT: UIButton!
     var ischeck = false
 }

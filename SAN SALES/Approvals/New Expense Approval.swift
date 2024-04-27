@@ -8,6 +8,7 @@
 import UIKit
 import FSCalendar
 import Alamofire
+import Foundation
 class New_Expense_Approval: UIViewController, UITableViewDataSource, UITableViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate {
     
 // label Sel
@@ -46,6 +47,9 @@ class New_Expense_Approval: UIViewController, UITableViewDataSource, UITableView
     @IBOutlet weak var Approve_bt: UIButton!
     @IBOutlet weak var Apr_View_TB: UITableView!
     @IBOutlet weak var Summary_TB: UITableView!
+    @IBOutlet weak var Approve_View: UIView!
+    @IBOutlet weak var Approve_All: UILabel!
+    @IBOutlet weak var Reject_All: UILabel!
     
     struct PeriodicDatas:Codable{
         let Division_Code:Int
@@ -72,7 +76,7 @@ class New_Expense_Approval: UIViewController, UITableViewDataSource, UITableView
         let SF_Code:String
     }
     var AllExpenses:[AllExpenseDatas] = []
-    
+    var Exp_approv_item:Int = 0
     struct Exp_Sum:Codable{
         let Tit:String
         var Amt:String
@@ -97,6 +101,7 @@ class New_Expense_Approval: UIViewController, UITableViewDataSource, UITableView
         let DAdditionalAmnt:String
     }
     var ExpenseDetail_data:[ExpenseDetails_data] = []
+    
     var Monthtext_and_year: [String] = []
     var selectYear:String = "\(Calendar.current.component(.year, from: Date()))"
     var SelMod:String = "MON"
@@ -111,6 +116,7 @@ class New_Expense_Approval: UIViewController, UITableViewDataSource, UITableView
     var period_from_date = ""
     var period_to_date = ""
     var period_id = ""
+    var Emp_Id = ""
     override func viewDidLoad() {
         super.viewDidLoad()
         let Month = Calendar.current.component(.month, from: Date()) - 1
@@ -127,7 +133,7 @@ class New_Expense_Approval: UIViewController, UITableViewDataSource, UITableView
         Sel_Period.addTarget(target: self, action: #selector(Open_Drop_Down_View))
         Close_Drop_Down.addTarget(target: self, action: #selector(Close_Drop_Down_View))
         Close_Apr_SC.addTarget(target: self, action: #selector(Closs_approve_Sc))
-        
+        Approve_All.addTarget(target: self, action: #selector(Approve_Expense_BT))
         
         blureView.bounds = self.view.bounds
         PopUpView.bounds = CGRect(x: 0, y: 0, width: self.view.bounds.width * 0.9, height: self.view.bounds.height * 0.4)
@@ -138,7 +144,13 @@ class New_Expense_Approval: UIViewController, UITableViewDataSource, UITableView
         Sel_Date_View.CornerRadius(cornerRadius: 10, shadowColor: UIColor.black, shadowOpacity: 0.5, shadowOffset: CGSize(width: 0, height: 2), shadowRadius: 4)
         Select_Period_View.CornerRadius(cornerRadius: 10, shadowColor: UIColor.black, shadowOpacity: 0.5, shadowOffset: CGSize(width: 0, height: 2), shadowRadius: 4)
         Exp_Summary.CornerRadius(cornerRadius: 10, shadowColor: UIColor.black, shadowOpacity: 0.5, shadowOffset: CGSize(width: 0, height: 2), shadowRadius: 4)
-        Approve_bt.CornerRadius(cornerRadius: 10, shadowColor: UIColor.black, shadowOpacity: 0.5, shadowOffset: CGSize(width: 0, height: 2), shadowRadius: 4)
+        
+        Approve_View.CornerRadius(cornerRadius: 10, shadowColor: UIColor.black, shadowOpacity: 0.5, shadowOffset: CGSize(width: 0, height: 2), shadowRadius: 4)
+        
+        Approve_All.layer.cornerRadius = 10
+        Approve_All.layer.masksToBounds = true
+        Reject_All.layer.cornerRadius = 10
+        Reject_All.layer.masksToBounds = true
         
         eXP_Data.dataSource = self
         eXP_Data.delegate = self
@@ -299,6 +311,13 @@ class New_Expense_Approval: UIViewController, UITableViewDataSource, UITableView
             }else if(Apr_View_TB == tableView){
                 cell.NA_Reject_BT.layer.cornerRadius = 10
                 cell.NA_Reject_BT.layer.masksToBounds = true
+                cell.NA_Approve_BT.layer.cornerRadius = 10
+                cell.NA_Approve_BT.layer.masksToBounds = true
+                cell.NA_Reject_BT.tag = indexPath.row
+                cell.NA_Reject_BT.addTarget(self, action: #selector(Rj_Exp(_:)), for: .touchUpInside)
+                cell.NA_Approve_BT.tag = indexPath.row
+                cell.NA_Approve_BT.addTarget(self, action: #selector(Apr_Exp(_:)), for: .touchUpInside)
+                
                 cell.Card_View.CornerRadius(cornerRadius: 10, shadowColor: UIColor.black, shadowOpacity: 0.5, shadowOffset: CGSize(width: 0, height: 2), shadowRadius: 4)
                 print(ExpenseDetail_data[indexPath.row])
                 
@@ -393,6 +412,8 @@ class New_Expense_Approval: UIViewController, UITableViewDataSource, UITableView
         print(sender.tag)
        let item = AllExpenses[sender.tag]
         print(item)
+        Exp_approv_item = sender.tag
+        Emp_Id = item.Emp_ID
         ExpenseDetails(mon: item.Expense_Month, year: item.Expense_Year, sfcode: item.SF_Code, trans_sl_no: item.Trans_Sl_No)
         Approval_Scr.isHidden = false
     }
@@ -434,6 +455,9 @@ class New_Expense_Approval: UIViewController, UITableViewDataSource, UITableView
                                     }
                                     eXP_Data.reloadData()
                                     self.LoadingDismiss()
+                                    if AllExpenses.count == 0 {
+                                        Toast.show(message:"No Data Available")
+                                    }
                                 }else {
                                     print("Error: Some key in the data is nil or has the wrong type")
                                 }
@@ -581,6 +605,91 @@ class New_Expense_Approval: UIViewController, UITableViewDataSource, UITableView
                 }
         }
     }
+    
+    
+    @objc private func Approve_Expense_BT() {
+        let item = AllExpenses[Exp_approv_item]
+        print(item)
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        let currentDate = Date()
+        let formattedDate = dateFormatter.string(from: currentDate)
+        Approve_Expense(date:formattedDate,month:item.Expense_Month,year:item.Expense_Year,period_id:period_id,sf_code:item.SF_Code,trans_slno:item.Trans_Sl_No)
+    }
+    
+    func Approve_Expense(date:String,month:Int,year:Int,period_id:String,sf_code:String,trans_slno:Int){
+        let axn = "Approve_Expense"
+    let apiKey = "\(axn)&date=\(date)&approve_code=\(SFCode)&month=\(month)&year=\(year)&period_id=\(period_id)&sf_code=\(sf_code)&trans_slno=\(trans_slno)"
+        let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
+        let url = APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKeyWithoutCommas
+        AF.request(url, method: .post, parameters: nil, encoding: URLEncoding.default, headers: nil)
+            .validate(statusCode: 200..<299)
+            .responseJSON { [self] response in
+                switch response.result {
+                case .success(let value):
+                    if let json = value as? [String: Any] {
+                        do {
+                            let prettyJsonData = try JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
+                            if let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) {
+                                print(prettyPrintedJson)
+                            } else {
+                                print("Error: Could not convert JSON to String")
+                            }
+                        } catch {
+                            print("Error: \(error.localizedDescription)")
+                        }
+                    }
+                case .failure(let error):
+                    Toast.show(message: error.errorDescription ?? "Unknown Error")
+                }
+        }
+    }
+    
+    @objc func Rj_Exp(_ sender: UIButton) {
+    let item = ExpenseDetail_data[sender.tag]
+    print(item)
+    let components = item.full_date.components(separatedBy: "/")
+    print(components)
+    let mon = components[1]
+    let year = components[2]
+    let Sel_Date = item.full_date
+    let axn = "rejectExpense"
+        let apiKey = "\(axn)&month=\(mon)&year=\(year)&selected_date=\(Sel_Date)&rej_sf_code=\(SFCode)&rej_type=0&period_id=\(period_id)&sf_code=\(item.sf_code)&remarks=xjdd&emp_id=\(Emp_Id)"
+    let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
+    let url = APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKeyWithoutCommas
+        print(url)
+        AF.request(url, method: .post, parameters: nil, encoding: URLEncoding.default, headers: nil)
+            .validate(statusCode: 200..<299)
+            .responseJSON { [self] response in
+                switch response.result {
+                case .success(let value):
+                    if let json = value as? [String: Any] {
+                        do {
+                            let prettyJsonData = try JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
+                            if let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) {
+                                print(prettyPrintedJson)
+                                Toast.show(message: "Deleted successfully")
+                                ExpenseDetail_data.remove(at:sender.tag )
+                                Apr_View_TB.reloadData()
+                            } else {
+                                print("Error: Could not convert JSON to String")
+                            }
+                        } catch {
+                            print("Error: \(error.localizedDescription)")
+                        }
+                    }
+                case .failure(let error):
+                    Toast.show(message: error.errorDescription ?? "Unknown Error")
+                }
+        }
+    }
+    
+    @objc func Apr_Exp(_ sender: UIButton) {
+    let indexPath = IndexPath(row: sender.tag, section: 0)
+    
+    }
+
+    
     
     @objc  func OpenYear() {
         SelMod = "YEAR"
