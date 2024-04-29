@@ -101,7 +101,6 @@ class New_Expense_Approval: UIViewController, UITableViewDataSource, UITableView
         let DAdditionalAmnt:String
     }
     var ExpenseDetail_data:[ExpenseDetails_data] = []
-    
     var Monthtext_and_year: [String] = []
     var selectYear:String = "\(Calendar.current.component(.year, from: Date()))"
     var SelMod:String = "MON"
@@ -412,6 +411,7 @@ class New_Expense_Approval: UIViewController, UITableViewDataSource, UITableView
         print(sender.tag)
        let item = AllExpenses[sender.tag]
         print(item)
+        print(AllExpenses)
         Exp_approv_item = sender.tag
         Emp_Id = item.Emp_ID
         ExpenseDetails(mon: item.Expense_Month, year: item.Expense_Year, sfcode: item.SF_Code, trans_sl_no: item.Trans_Sl_No)
@@ -450,7 +450,6 @@ class New_Expense_Approval: UIViewController, UITableViewDataSource, UITableView
                                         let Expense_Month = i["Expense_Month"] as? Int
                                         let Expense_Year = i["Expense_Year"] as? Int
                                         let SF_Code = i["SF_Code"] as? String
-                                        
                                         AllExpenses.append(AllExpenseDatas(SF_Name: SF_Name!, Expense_Amt: Expense_Amt, Pri_FrmDt: Pri_FrmDt!, Pri_ToDt: Pri_ToDt!, Trans_Sl_No: Trans_Sl_No!, Emp_ID: Emp_ID!, Expense_Month: Expense_Month!, Expense_Year: Expense_Year!, SF_Code: SF_Code!))
                                     }
                                     eXP_Data.reloadData()
@@ -475,8 +474,7 @@ class New_Expense_Approval: UIViewController, UITableViewDataSource, UITableView
             }
     }
     
-    
-    func periodic() {
+    func periodic(){
         Period.removeAll()
         let axn = "get/periodicWise"
         let apiKey = "\(axn)&desig=\(Desig)&divisionCode=\(DivCode)&div_code=\(DivCode)&month=\(SelectMonth)&rSF=\(SFCode)&year=\(selectYear)&sfCode=\(SFCode)&stateCode=\(StateCode)&sf_code=\(SFCode)"
@@ -546,7 +544,8 @@ class New_Expense_Approval: UIViewController, UITableViewDataSource, UITableView
                             if let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) {
                                 print(prettyPrintedJson)
                                 if let jsonObject = try JSONSerialization.jsonObject(with: prettyJsonData, options: []) as? [String: Any],
-                                   let data = jsonObject["data"] as? [AnyObject], let data2 = jsonObject["additional_data"] as? [AnyObject], let data3 = jsonObject["add_sub_exp"] as? [AnyObject], let data4 = jsonObject["sum_add_data"] as? [AnyObject]  {
+                                   let data = jsonObject["data"] as? [AnyObject], let data2 = jsonObject["additional_data"] as? [AnyObject], let data3 = jsonObject["add_sub_exp"] as? [AnyObject], let data4 = jsonObject["sum_add_data"] as? [AnyObject] {
+                                    print(data2,data3,data4)
                                     for i in data{
                                         print(i)
                                         let sf_code = i["sf_code"] as? String
@@ -622,6 +621,7 @@ class New_Expense_Approval: UIViewController, UITableViewDataSource, UITableView
     let apiKey = "\(axn)&date=\(date)&approve_code=\(SFCode)&month=\(month)&year=\(year)&period_id=\(period_id)&sf_code=\(sf_code)&trans_slno=\(trans_slno)"
         let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
         let url = APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKeyWithoutCommas
+        print(url)
         AF.request(url, method: .post, parameters: nil, encoding: URLEncoding.default, headers: nil)
             .validate(statusCode: 200..<299)
             .responseJSON { [self] response in
@@ -644,6 +644,8 @@ class New_Expense_Approval: UIViewController, UITableViewDataSource, UITableView
                 }
         }
     }
+    
+ 
     
     @objc func Rj_Exp(_ sender: UIButton) {
     let item = ExpenseDetail_data[sender.tag]
