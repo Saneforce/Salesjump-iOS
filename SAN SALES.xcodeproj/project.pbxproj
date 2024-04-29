@@ -10,6 +10,10 @@
 		19247A3DB960E114A6C28FB3 /* Pods_SAN_SALES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 448C0B69977667C109C50683 /* Pods_SAN_SALES.framework */; };
 		381EF93D2B19DB9700CED65F /* UI+Constraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 381EF93C2B19DB9700CED65F /* UI+Constraints.swift */; };
 		382103F52BA16B83005C02CD /* Expense Entry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 382103F42BA16B83005C02CD /* Expense Entry.swift */; };
+		384E56BA2BDB664B00B2E8A5 /* Expense Approval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384E56B92BDB664B00B2E8A5 /* Expense Approval.swift */; };
+		384E56BC2BDB669F00B2E8A5 /* Approval.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 384E56BB2BDB669F00B2E8A5 /* Approval.storyboard */; };
+		384E56BF2BDB674700B2E8A5 /* Approval Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384E56BE2BDB674700B2E8A5 /* Approval Menu.swift */; };
+		384E56C12BDB7ABF00B2E8A5 /* New Expense Approval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384E56C02BDB7ABF00B2E8A5 /* New Expense Approval.swift */; };
 		385ED6042ABAB50400B43564 /* FSCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 385ED6032ABAB50400B43564 /* FSCalendar */; };
 		386889E22B1868F90015F20C /* RottPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 386889E12B1868F90015F20C /* RottPageViewController.swift */; };
 		386A43912A1CBB0200CE1833 /* SubmittedDCR.swift in Sources */ = {isa = PBXBuildFile; fileRef = 386A43902A1CBB0200CE1833 /* SubmittedDCR.swift */; };
@@ -117,6 +121,10 @@
 		3453EBBCA5603BC17DBC6D2A /* Pods-SAN SALES.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SAN SALES.release.xcconfig"; path = "Target Support Files/Pods-SAN SALES/Pods-SAN SALES.release.xcconfig"; sourceTree = "<group>"; };
 		381EF93C2B19DB9700CED65F /* UI+Constraints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UI+Constraints.swift"; sourceTree = "<group>"; };
 		382103F42BA16B83005C02CD /* Expense Entry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Expense Entry.swift"; sourceTree = "<group>"; };
+		384E56B92BDB664B00B2E8A5 /* Expense Approval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Expense Approval.swift"; sourceTree = "<group>"; };
+		384E56BB2BDB669F00B2E8A5 /* Approval.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Approval.storyboard; sourceTree = "<group>"; };
+		384E56BE2BDB674700B2E8A5 /* Approval Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Approval Menu.swift"; sourceTree = "<group>"; };
+		384E56C02BDB7ABF00B2E8A5 /* New Expense Approval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "New Expense Approval.swift"; sourceTree = "<group>"; };
 		386889E12B1868F90015F20C /* RottPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RottPageViewController.swift; sourceTree = "<group>"; };
 		386A43902A1CBB0200CE1833 /* SubmittedDCR.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmittedDCR.swift; sourceTree = "<group>"; };
 		386A43922A1CC3E000CE1833 /* Submittedcalls.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Submittedcalls.storyboard; sourceTree = "<group>"; };
@@ -238,6 +246,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		384E56B82BDB660E00B2E8A5 /* Approvals */ = {
+			isa = PBXGroup;
+			children = (
+				384E56BE2BDB674700B2E8A5 /* Approval Menu.swift */,
+				384E56B92BDB664B00B2E8A5 /* Expense Approval.swift */,
+				384E56C02BDB7ABF00B2E8A5 /* New Expense Approval.swift */,
+			);
+			path = Approvals;
+			sourceTree = "<group>";
+		};
 		386A43872A1B223400CE1833 /* SubmittedCalls */ = {
 			isa = PBXGroup;
 			children = (
@@ -397,6 +415,7 @@
 			children = (
 				38B05F4E2B04C9F30025D4C0 /* Manager_Dashboard */,
 				3F9F379628593C73002CC408 /* Reports */,
+				384E56B82BDB660E00B2E8A5 /* Approvals */,
 				386A43872A1B223400CE1833 /* SubmittedCalls */,
 				3F0822BB29000842009C33EA /* AdminForms */,
 				3F0635332841710F0027842E /* Model */,
@@ -427,6 +446,7 @@
 				3F0822B928FE721A009C33EA /* AdminForms.storyboard */,
 				386A43922A1CC3E000CE1833 /* Submittedcalls.storyboard */,
 				38B05F4F2B04CAE50025D4C0 /* ManagerDashboard.storyboard */,
+				384E56BB2BDB669F00B2E8A5 /* Approval.storyboard */,
 			);
 			path = "SAN SALES";
 			sourceTree = "<group>";
@@ -559,6 +579,7 @@
 				3F28CC0727D3927E00B95964 /* Poppins-Thin.ttf in Resources */,
 				3F28CC0227D3927E00B95964 /* Poppins-BlackItalic.ttf in Resources */,
 				388CD9232BDA3A3D003A06F9 /* ItemViewController.xib in Resources */,
+				384E56BC2BDB669F00B2E8A5 /* Approval.storyboard in Resources */,
 				3F28CC0827D3927E00B95964 /* Poppins-SemiBold.ttf in Resources */,
 				3F28CC0527D3927E00B95964 /* Poppins-Bold.ttf in Resources */,
 				3F28CBF927D3927E00B95964 /* Poppins-ExtraLight.ttf in Resources */,
@@ -651,7 +672,9 @@
 				3F5B2FC3284B59E400574D7C /* MsgLoader.swift in Sources */,
 				38DDD8492BA1D8120074AEF1 /* Daily Expense Entry.swift in Sources */,
 				3F9F379C28631F2C002CC408 /* layBranswsSal.swift in Sources */,
+				384E56BF2BDB674700B2E8A5 /* Approval Menu.swift in Sources */,
 				3F28CC0C27D5302100B95964 /* MydayPlanCtrl.swift in Sources */,
+				384E56C12BDB7ABF00B2E8A5 /* New Expense Approval.swift in Sources */,
 				3F0822BF29000D65009C33EA /* LeaveForm.swift in Sources */,
 				386889E22B1868F90015F20C /* RottPageViewController.swift in Sources */,
 				3FBF387527E4488100900007 /* APIClient.swift in Sources */,
@@ -673,6 +696,7 @@
 				3F8BF29D27E99CCA00E1C41B /* CameraService.swift in Sources */,
 				3894BC5D2B919A0E0019B40A /* Add Route.swift in Sources */,
 				388CD9242BDA3A3D003A06F9 /* CallPreview.swift in Sources */,
+				384E56BA2BDB664B00B2E8A5 /* Expense Approval.swift in Sources */,
 				38C5A9802B958AFB00EF4584 /* Add Distributor.swift in Sources */,
 				38F6F5AD2B19D2DA007090BF /* Performance.swift in Sources */,
 				38FBAA2C2BD6279D00E36C0D /* Expense View.swift in Sources */,

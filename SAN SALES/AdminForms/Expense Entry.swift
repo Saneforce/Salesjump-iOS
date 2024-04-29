@@ -68,6 +68,7 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
     var Nav_PeriodicData:[AnyObject] = []
     var No_Of_Days_In_Perio = 0
     var Allow_Apr:Bool = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         YearPostion.text = selectYear
@@ -350,6 +351,7 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
         } else {
             print("Invalid date format")
         }
+        print(item.Eff_Month)
         
         Sent_Apr_Det.append(Apr_Data(Period_Id: item.Period_Id, Eff_Month: String(item.Eff_Month), Eff_Year: String(item.Eff_Year), From_Date: item.From_Date, To_Date: item.To_Date))
         expSubmitDates()
@@ -772,7 +774,7 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
         let From_Date = "\(Eff_Year)-\(Month)-\(FromDate)"
         let To_Date = "\(Eff_Year)-\(Month)-\(ToDate)"
         let axn = "send_forApproval_periodic"
-        let apiKey = "\(axn)&desig=\(Desig)&divisionCode=\(DivCode)&month=\(Month)&from_date=\(From_Date)&to_date=\(To_Date)&rSF=\(SFCode)&year=\(Eff_Year)&sfCode=\(SFCode)&stateCode=\(StateCode)&period_id=\(Period_Id)&sf_code=\(SFCode)"
+        let apiKey = "\(axn)&desig=\(Desig)&divisionCode=\(DivCode)&month=\(SelectMonth)&from_date=\(From_Date)&to_date=\(To_Date)&rSF=\(SFCode)&year=\(Eff_Year)&sfCode=\(SFCode)&stateCode=\(StateCode)&period_id=\(Period_Id)&sf_code=\(SFCode)"
         let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
         let url = APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKeyWithoutCommas
         print(url)

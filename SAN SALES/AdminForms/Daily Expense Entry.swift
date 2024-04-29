@@ -586,6 +586,10 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
         set_data_TB(openMod: "Allowance")
     }
     @objc private func open_Mod_Of_Travel(){
+        if (Allo_Typ.text == "Allowance Type"){
+            Toast.show(message: "Select Allowance Type")
+            return
+        }
         Drop_Down_Title.text = "Select Mode of Travel"
         DropDown.isHidden = false
         SelMod = "Travel"
@@ -1019,7 +1023,7 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
                                         for i in ExpenseWeb{
                                             Tab_Hig = Tab_Hig+100
                                             //scrol = scrol+65
-                                            Needs_Entry.append(Pho_ND(ID: (i["ID"] as? Int)!, Name: (i["Name"] as? String)!, Photo_Mandatory: (i["Photo_Mandatory"] as? Int)!, Photo_Nd: (i["Photo_Nd"] as? Int)!,remark: "",amount: "", image: [], image_name: []))
+                                            Needs_Entry.append(Pho_ND(ID: (i["ID"] as? Int)!, Name: (i["Name"] as? String)!, Photo_Mandatory: (i["Photo_Mandatory"] as? Int)!, Photo_Nd: (i["Photo_Nd"] as? Int)!,remark: "",amount: "0", image: [], image_name: []))
                                         }
                                         scrol = Double(Needs_Entry.count * 83)
                                         scroll_hig = scroll_hig+scrol
@@ -1046,7 +1050,6 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
         }
     }
     func validateForm() -> Bool {
-
         if (From_Text.text == "") {
             Toast.show(message: "Enter From")
             return false
