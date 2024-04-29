@@ -145,7 +145,7 @@ class ItemViewController <Item, Cell : UITableViewCell> : UIViewController ,UITa
 //        headerView.translatesAutoresizingMaskIntoConstraints = false
 //        headerView.frame = CGRect(x: 0, y: 0, width: view.frame.size.width, height: 90)
 //        headerView.backgroundColor = .white
-//                
+//
 //        let lbl = UILabel()
 //        lbl.translatesAutoresizingMaskIntoConstraints = false
 //        lbl.text = title
@@ -153,14 +153,14 @@ class ItemViewController <Item, Cell : UITableViewCell> : UIViewController ,UITa
 //        lbl.textColor  = UIColor(cgColor: CGColor(red: 54/255, green: 53/255, blue: 53/255, alpha: 1.0))
 //        lbl.backgroundColor = .white
 //        lbl.frame = CGRect(x: 10, y: 5, width: view.frame.size.width - 50, height: 40)
-//        
-//        
+//
+//
 //        let btn = UIButton()
 //        btn.frame = CGRect(x: view.frame.size.width - 30, y: 10, width: 20, height: 20)
 //        btn.addTarget(self, action: #selector(closeAction), for: .touchUpInside)
 //        btn.setImage(UIImage(named: "CloseRed"), for: .normal)
-//        
-//        
+//
+//
 //        let txtSearch = UITextField()
 //        txtSearch.frame =  CGRect(x: 10, y: 50, width: view.frame.size.width - 20, height: 34)
 //        txtSearch.placeholder = "Search"
@@ -168,14 +168,14 @@ class ItemViewController <Item, Cell : UITableViewCell> : UIViewController ,UITa
 //        txtSearch.backgroundColor = UIColor(cgColor: CGColor(red: 239/255, green: 243/255, blue: 251/255, alpha: 1.0))
 //        txtSearch.addTarget(self, action: #selector(filterList), for: .editingChanged)
 //        txtSearch.borderStyle = .roundedRect
-//        
+//
 //        headerView.addSubview(lbl)
 //        headerView.addSubview(btn)
 //        headerView.addSubview(txtSearch)
-//        
+//
 //        return headerView
 //    }
-//    
+//
 //    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
 //        return 90
 //    }

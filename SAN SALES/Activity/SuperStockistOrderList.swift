@@ -276,8 +276,8 @@ class SuperStockistOrderList : IViewController , UITableViewDelegate, UITableVie
 //            let productQty = Int(product.sampleQty) ?? 0
 //            return productQty > 0
 //        })
-//        
-//        
+//
+//
 //        let vc=self.storyboard?.instantiateViewController(withIdentifier: "sbCallPreview") as!  CallPreview
 //        vc.eKey = self.eKey
 //        self.navigationController?.pushViewController(vc, animated: true)
@@ -499,7 +499,7 @@ class SuperStockistOrderList : IViewController , UITableViewDelegate, UITableVie
             
 //            if  AFdata.response?.statusCode == 200 {
 //                if isSubmit == false{
-//                    
+//
 //                }
 //            }
             DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
@@ -518,7 +518,7 @@ class SuperStockistOrderList : IViewController , UITableViewDelegate, UITableVie
 //            let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
 //            UIApplication.shared.windows.first?.rootViewController = viewController
 //            UIApplication.shared.windows.first?.makeKeyAndVisible()
-//            
+//
 //            VisitData.shared.clear()
             
         case .failure(let error):
@@ -1378,7 +1378,7 @@ class SuperStockistOrderListTableViewCell : UITableViewCell {
             txtTaxPer.text = "\(product.taxper)"
             txtTaxAmt.text = "\(product.taxAmount)"
             
-            txtFreeQty.text = "\(product.freeCount)" 
+            txtFreeQty.text = "\(product.freeCount)"
             
             lblRate.text = "\(product.rate) X ( \(product.unitCount) X \(product.sampleQty == "" ? "0" : product.sampleQty) ) = \(product.totalCount) "
             
