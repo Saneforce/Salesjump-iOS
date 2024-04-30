@@ -173,6 +173,7 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
                 }else{
                     HomePageViewController.selfieLoginActive = 1
                     let lstMyPlnData: String = self.LocalStoreage.string(forKey: "Mydayplan")!
+                    print(lstMyPlnData)
                     if let list = GlobalFunc.convertToDictionary(text: lstMyPlnData) as? [AnyObject] {
                         self.lstMyplnList = list;
                         
@@ -508,7 +509,7 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
             "data": jsonString
         ]
         
-        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+apiKey, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
             AFdata in
             switch AFdata.result
             {
@@ -526,6 +527,7 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
                    LocalStoreage.set(prettyPrintedJson, forKey: "Mydayplan")
                 Validate?()
                case .failure(let error):
+                print(error)
                 Toast.show(message: error.errorDescription!, controller: self)
             }
         }
