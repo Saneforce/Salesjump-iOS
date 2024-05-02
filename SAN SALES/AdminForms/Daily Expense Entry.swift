@@ -74,11 +74,16 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
     @IBOutlet weak var Claim_Amt: UILabel!
     @IBOutlet weak var EnterKM: EditTextField!
     @IBOutlet weak var Enter_Bill_Amount: EditTextField!
+    @IBOutlet weak var KM_TIT: UILabel!
+    
+    
     
     struct exData:Codable{
     let id:String
     let name:String
     let newname:String
+    let StEndNeed:Int
+    let farset:Int
     }
     struct Pho_ND:Any{
         let ID : Int
@@ -122,6 +127,7 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
         var end_km:String
         var exp_auto:Int
         var exp_process_type:String
+        var fare:String
     }
     var imagePicker = UIImagePickerController()
     var images: [UIImage] = []
@@ -143,9 +149,11 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
     var Expense_data:[Expense_New] = []
     var Select_index_Del:Int = 0
     var select_allow:String = ""
+    var StEndNeed:Int = 0
+    var farset:Int = 0
     override func viewDidLoad() {
         super.viewDidLoad()
-        Expense_data.append(Expense_New(WorkType: "", mydayplanWorkPlace: "", Routename: "", Enterdate: "", KM: "", Billamount: "", HQ: "", stayingtype: "0", MOT: "", mot_id: "", st_endNeed: "", max_km: "", fuel_charge: 0, exp_km: "", exp_amount: "", TotalAmount: "", Toworkplace: "", period_name: "", period_id: "", from_date: "", to_date: "", srt_km: "", end_km: "", exp_auto: UserSetup.shared.exp_auto, exp_process_type: "\(UserSetup.shared.exp_process_type)"))
+        Expense_data.append(Expense_New(WorkType: "", mydayplanWorkPlace: "", Routename: "", Enterdate: "", KM: "0", Billamount: "", HQ: "", stayingtype: "0", MOT: "", mot_id: "", st_endNeed: "", max_km: "", fuel_charge: 0, exp_km: "", exp_amount: "", TotalAmount: "", Toworkplace: "", period_name: "", period_id: "", from_date: "", to_date: "", srt_km: "", end_km: "", exp_auto: UserSetup.shared.exp_auto, exp_process_type: "\(UserSetup.shared.exp_process_type)",fare:"0"))
         getUserDetails()
         blureView.bounds = self.view.bounds
         PopUpView.bounds = CGRect(x: 0, y: 0, width: self.view.bounds.width * 0.9, height: self.view.bounds.height * 0.2)
@@ -188,12 +196,13 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
         
         Stayingtyp.addTarget(target: self, action: #selector(openStaying_Typ))
         CloseBt.addTarget(target: self, action: #selector(CloseImag))
+        EnterKM.addTarget(self, action: #selector(self.changeQty(_:)), for: .editingChanged)
         set_form()
         travel_data(date: set_Date!)
         DAExp_ND()
-        Enter_KM.isHidden = true
-        Enter_KM_hig.constant = 0
-        let Enter_KM_h = Enter_KM.frame.size.height
+//        Enter_KM.isHidden = true
+//        Enter_KM_hig.constant = 0
+        //let Enter_KM_h = Enter_KM.frame.size.height
         Staying_typ.isHidden = true
         Staying_typ_hig.constant = 0
         let Staying_typ_h = Staying_typ.frame.size.height
@@ -243,6 +252,7 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
         Set_Date.text = set_Date
         if let settyp = day_Plan{
             print(Expense_data)
+            print(settyp)
             SetWork_Typ.text = settyp[0]["WorkType"] as? String
             Set_work_plc.text = settyp[0]["ClstrName"] as? String
             Expense_data[0].WorkType = (settyp[0]["WorkType"] as? String)!
@@ -383,7 +393,7 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
                 cell.Enter_Rmk.text = item.remark
             }
             if item.amount == "" {
-                cell.Ent_Amt.text = "0"
+                //cell.Ent_Amt.text = "0"
                 cell.Ent_Amt.placeholder = "Amount"
             }else{
                 print(item.amount)
@@ -518,9 +528,20 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
             }
             Stayingtyp.text = item.name
         }else if (SelMod == "Travel"){
+            print(item)
             Select_Mod_of_Travel.text = item.name
             Expense_data[0].MOT = item.name
             Expense_data[0].mot_id = item.id
+            StEndNeed = item.StEndNeed
+            farset = item.farset
+            if (item.StEndNeed == 1){
+                EnterKM.placeholder = "Enter the KM"
+                KM_TIT.text = "KM"
+            }else if (item.StEndNeed == 0){
+                EnterKM.placeholder = "Enter the fare amount"
+                KM_TIT.text = "Fare"
+            }
+            EnterKM.text = ""
         }
         Search_lbl.text = ""
         self.resignFirstResponder()
@@ -551,6 +572,10 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
         present(imagePickerController, animated: true, completion: nil)
     }
     @objc private func View_Photo(_ sender: Any) {
+        if Bill_photo_Ned.isEmpty{
+            Toast.show(message: "Please Select Hotel Bill")
+            return
+        }
         SelWindo.isHidden = false
         animateOut(desiredView:blureView)
         animateOut(desiredView:PopUpView)
@@ -583,6 +608,7 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
         Drop_Down_Title.text = "Select Allowance Type"
         DropDown.isHidden = false
         SelMod = "Allowance"
+        Select_Mod_of_Travel.text = "Select Mode of Travel"
         set_data_TB(openMod: "Allowance")
     }
     @objc private func open_Mod_Of_Travel(){
@@ -630,7 +656,7 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
                                     if let jsonObject = try JSONSerialization.jsonObject(with: prettyJsonData, options: []) as? [AnyObject]{
                                         print(jsonObject)
                                         for i in jsonObject{
-                                            Exp_Data.append(exData(id: (i["id"] as? String)!, name: (i["name"] as? String)!, newname: (i["newname"] as? String)!))
+                                            Exp_Data.append(exData(id: (i["id"] as? String)!, name: (i["name"] as? String)!, newname: (i["newname"] as? String)!,StEndNeed: 0,farset: 0))
                                         }
                                         Exp_Datas = Exp_Data
                                         sel_TB.reloadData()
@@ -650,8 +676,8 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
                 }
             }
         }else if (openMod == "Staying"){
-            Exp_Data.append(exData(id: "1", name:"With Hotel", newname: "With Hotel"))
-            Exp_Data.append(exData(id: "2", name:"Without Hotel", newname: "Without Hotel"))
+            Exp_Data.append(exData(id: "1", name:"With Hotel", newname: "With Hotel",StEndNeed: 0,farset: 0))
+            Exp_Data.append(exData(id: "2", name:"Without Hotel", newname: "Without Hotel",StEndNeed: 0,farset: 0))
             Exp_Datas = Exp_Data
             sel_TB.reloadData()
         }else if (openMod == "Travel"){
@@ -680,7 +706,7 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
                                             let Alw_Eligibilty = item["Alw_Eligibilty"] as? String
                                             let spriteArray = Alw_Eligibilty!.components(separatedBy: ",")
                                             if spriteArray.contains(select_allow) {
-                                                Exp_Data.append(exData(id: String((item["Sl_No"] as? Int)!), name:(item["MOT"] as? String)!, newname: (item["MOT"] as? String)!))
+                                                Exp_Data.append(exData(id: String((item["Sl_No"] as? Int)!), name:(item["MOT"] as? String)!, newname: (item["MOT"] as? String)!,StEndNeed:(item["StEndNeed"] as? Int)!,farset:(item["MaxKm"] as? Int)!))
                                             }
                                         }
                                         Exp_Datas = Exp_Data
@@ -798,7 +824,13 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
         if validateForm() == false {
             return
         }
-        
+        if EnterKM.text == ""{
+            if StEndNeed == 1{
+                return Toast.show(message: "Enter the KM")
+            }else  if StEndNeed == 0{
+                return Toast.show(message: "Enter the fare")
+            }
+        }
         print(Bill_photo_Ned)
         print(Needs_Entry)
         
@@ -821,11 +853,21 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
             }
         }
         var KM =  EnterKM.text
-        if KM == ""{
-            Expense_data[0].KM = "0"
-        }else{
-            Expense_data[0].KM = KM!
+        if StEndNeed == 1 {
+            if KM == ""{
+                Expense_data[0].KM = "0"
+            }else{
+                Expense_data[0].KM = KM!
+            }
+        }else if StEndNeed == 0 {
+            if KM == ""{
+                Expense_data[0].fare = "0"
+            }else{
+                Expense_data[0].fare = KM!
+            }
         }
+        
+        
         var bill_amt = Enter_Bill_Amount.text
         if bill_amt == "" {
             Expense_data[0].Billamount = "0"
@@ -852,7 +894,14 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
                 for i in Needs_Entry {
                     print(Needs_Entry)
                     print(i.amount)
-                    Totalamt = Totalamt + Double(i.amount)!
+                    var amount:Double = 0
+                    if (i.amount == ""){
+                        amount = 0
+                    }else{
+                        amount = Double(i.amount)!
+                    }
+                    
+                    Totalamt = Totalamt + amount
                     CamItem += "{"
                     CamItem += " \"ID\": " + String(i.ID) + ","
                     CamItem += " \"Name\": \"" + i.Name + "\","
@@ -885,6 +934,7 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
                     CamItem += "},"
                 }
             }
+            print(Totalamt)
             CamItem = String(CamItem.dropLast())
             Expense_data[0].TotalAmount = String(format: "%.2f", Totalamt)
             var Bill_Det = ""
@@ -897,7 +947,7 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
             Bill_Det = String(Bill_Det.dropLast())
             Activity_img_url2 = String(Activity_img_url2.dropLast())
             print(Activity_img_url2)
-            let jsonString = "[{\"dailyExpenseNew\":[" + CamItem + "]},{\"EA\":{\"MOT\":\"\(Expense_data[0].MOT)\"}},{\"ActivityCaptures\":[{\"imgurl\":\""+Activity_img_url2+"\"}]},{\"Expense_New\":{\"WorkType\":\"\(Expense_data[0].WorkType)\",\"mydayplanWorkPlace\":\"\(Expense_data[0].mydayplanWorkPlace)\",\"Routename\":\"\(Expense_data[0].Routename)\",\"Enterdate\":\"\(Expense_data[0].Enterdate)\",\"KM\":\(Expense_data[0].KM),\"Billamount\":\( Expense_data[0].Billamount),\"HQ\":\"\(Expense_data[0].HQ)\",\"stayingtype\":\(Expense_data[0].stayingtype),\"MOT\":\"\(Expense_data[0].MOT)\",\"mot_id\":\"\(Expense_data[0].mot_id)\",\"st_endNeed\":\"\(Expense_data[0].st_endNeed)\",\"max_km\":\"\(Expense_data[0].max_km)\",\"fuel_charge\":\"\(Expense_data[0].fuel_charge)\",\"exp_km\":\"0.0\",\"exp_amount\":\"\(Expense_data[0].exp_amount)\",\"TotalAmount\":\"\(Expense_data[0].TotalAmount)\",\"Toworkplace\":\"\(Expense_data[0].Toworkplace)\",\"period_name\":\"\(Expense_data[0].period_name)\",\"period_id\":\"\(Expense_data[0].period_id)\",\"from_date\":\"\(Expense_data[0].from_date)\",\"to_date\":\"\(Expense_data[0].to_date)\",\"srt_km\":\"\(Expense_data[0].srt_km)\",\"end_km\":\"\(Expense_data[0].end_km)\",\"exp_auto\":2,\"exp_process_type\":0}},{\"HotelBillAttachment\":[" + Bill_Det + "]}]"
+            let jsonString = "[{\"dailyExpenseNew\":[" + CamItem + "]},{\"EA\":{\"MOT\":\"\(Expense_data[0].MOT)\"}},{\"ActivityCaptures\":[{\"imgurl\":\""+Activity_img_url2+"\"}]},{\"Expense_New\":{\"WorkType\":\"\(Expense_data[0].WorkType)\",\"mydayplanWorkPlace\":\"\(Expense_data[0].mydayplanWorkPlace)\",\"Routename\":\"\(Expense_data[0].Routename)\",\"Enterdate\":\"\(Expense_data[0].Enterdate)\",\"KM\":\(Expense_data[0].KM),\"Billamount\":\( Expense_data[0].Billamount),\"HQ\":\"\(Expense_data[0].HQ)\",\"stayingtype\":\(Expense_data[0].stayingtype),\"MOT\":\"\(Expense_data[0].MOT)\",\"mot_id\":\"\(Expense_data[0].mot_id)\",\"st_endNeed\":\"\(Expense_data[0].st_endNeed)\",\"max_km\":\"\(Expense_data[0].max_km)\",\"fuel_charge\":\"\(Expense_data[0].fuel_charge)\",\"exp_km\":\"0.0\",\"exp_amount\":\"\(Expense_data[0].exp_amount)\",\"TotalAmount\":\"\(Expense_data[0].TotalAmount)\",\"Toworkplace\":\"\(Expense_data[0].Toworkplace)\",\"period_name\":\"\(Expense_data[0].period_name)\",\"period_id\":\"\(Expense_data[0].period_id)\",\"from_date\":\"\(Expense_data[0].from_date)\",\"to_date\":\"\(Expense_data[0].to_date)\",\"srt_km\":\"\(Expense_data[0].srt_km)\",\"end_km\":\"\(Expense_data[0].end_km)\",\"exp_auto\":2,\"exp_process_type\":0,\"fare_amt\":\"\(Expense_data[0].fare)\"}},{\"HotelBillAttachment\":[" + Bill_Det + "]}]"
             
             let params: Parameters = [
                 "data": jsonString
@@ -1023,7 +1073,7 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
                                         for i in ExpenseWeb{
                                             Tab_Hig = Tab_Hig+100
                                             //scrol = scrol+65
-                                            Needs_Entry.append(Pho_ND(ID: (i["ID"] as? Int)!, Name: (i["Name"] as? String)!, Photo_Mandatory: (i["Photo_Mandatory"] as? Int)!, Photo_Nd: (i["Photo_Nd"] as? Int)!,remark: "",amount: "0", image: [], image_name: []))
+                                            Needs_Entry.append(Pho_ND(ID: (i["ID"] as? Int)!, Name: (i["Name"] as? String)!, Photo_Mandatory: (i["Photo_Mandatory"] as? Int)!, Photo_Nd: (i["Photo_Nd"] as? Int)!,remark: "",amount: "", image: [], image_name: []))
                                         }
                                         scrol = Double(Needs_Entry.count * 83)
                                         scroll_hig = scroll_hig+scrol
@@ -1078,6 +1128,27 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
             }
             }
         }
+        
+      
         return true
+    }
+    
+    @IBAction func Photo_Sub_BT(_ sender: Any) {
+        view.endEditing(true)
+        SelWindo.isHidden = true
+    }
+    
+    @objc private func changeQty(_ txtQty: UITextField){
+        if StEndNeed == 0{
+            if let amount = EnterKM.text{
+                if amount != ""{
+                let Amt = Int(amount)
+                if Amt! >= farset{
+                    EnterKM.text?.removeLast()
+                    return Toast.show(message: "Enter less then \(farset)")
+                }
+            }
+            }
+        }
     }
 }

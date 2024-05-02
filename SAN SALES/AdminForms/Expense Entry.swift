@@ -75,6 +75,11 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
         let Month = Calendar.current.component(.month, from: Date()) - 1
         let formattedPosition = String(format: "%02d", Month + 1)
         SelectMonth = formattedPosition
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MMM-yyyy"
+        let currentDate = Date()
+        let formattedDate = dateFormatter.string(from: currentDate)
+        selectmonth.text = formattedDate
         blureView.bounds = self.view.bounds
         PopUpView.bounds = CGRect(x: 0, y: 0, width: self.view.bounds.width * 0.9, height: self.view.bounds.height * 0.4)
         PopUpView.layer.cornerRadius = 10
@@ -92,7 +97,6 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
         ClosePopup.addTarget(target: self, action: #selector(ClosePopUP))
         YearPostion.addTarget(target: self, action: #selector(OpenYear))
         MonthPostion.addTarget(target: self, action: #selector(OpenMonth))
-        
 //        let monthsView = MonthsView(frame: MonthView.bounds)
 //            monthsView.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.97, alpha: 1.00)
 //            MonthView.addSubview(monthsView)
@@ -391,20 +395,19 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
 
                                 if let jsonObject = try JSONSerialization.jsonObject(with: prettyJsonData, options: []) as? [String: Any],
                                    let data = jsonObject["data"] as? [AnyObject] {
+                                    print(data)
                                     for i in data {
-                                        if let divisionCode = i["Division_Code"] as? Int,
-                                           let effMonth = i["Eff_Month"] as? Int,
+                                         //let divisionCode = i["Division_Code"] as? Int
+                                           if let effMonth = i["Eff_Month"] as? Int,
                                            let effYear = i["Eff_Year"] as? Int,
                                            let fromDate = i["From_Date"] as? String,
                                            let periodId = i["Period_Id"] as? String,
                                            let periodName = i["Period_Name"] as? String,
                                            let toDate = i["To_Date"] as? String,
-                                           let disRank = i["dis_Rank"] as? String {
-                                            
-                                            Period.append(PeriodicData(Division_Code: divisionCode, Eff_Month: effMonth, Eff_Year: effYear, From_Date: fromDate, Period_Id: periodId, Period_Name: periodName, To_Date: toDate, dis_Rank: disRank))
-                                        } else {
-                                            print("Error: Some key in the data is nil or has the wrong type")
-                                        }
+                                                let disRank = i["dis_Rank"] as? String{
+                                               
+                                               Period.append(PeriodicData(Division_Code: 0, Eff_Month: effMonth, Eff_Year: effYear, From_Date: fromDate, Period_Id: periodId, Period_Name: periodName, To_Date: toDate, dis_Rank: disRank))
+                                           }
                                     }
                                     lstOfPeriod = Period
                                     DataTB.reloadData()
@@ -768,9 +771,24 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
         }
     }
     func send_forApproval_periodic(Period_Id:String,Eff_Month:String,Eff_Year:String,From_Date:String,To_Date:String){
+        
+        var end_Todate = ""
+        if To_Date == "end of month"{
+            let currentDate = FDate
+            let calendar = Calendar.current
+            if let monthRange = calendar.range(of: .day, in: .month, for: currentDate) {
+                let lastDayOfMonth = monthRange.upperBound - 1
+                if let lastDateOfMonth = calendar.date(bySetting: .day, value: lastDayOfMonth, of: currentDate) {
+                    let formatters = DateFormatter()
+                    formatters.dateFormat = "dd"
+                    end_Todate = formatters.string(from: lastDateOfMonth)
+                }
+            }
+        }
+        
         let Month = String(format: "%02d",Int(Eff_Month)!)
         let FromDate = String(format: "%02d",Int(From_Date)!)
-        let ToDate = String(format: "%02d",Int(To_Date)!)
+        let ToDate = String(format: "%02d",Int(end_Todate)!)
         let From_Date = "\(Eff_Year)-\(Month)-\(FromDate)"
         let To_Date = "\(Eff_Year)-\(Month)-\(ToDate)"
         let axn = "send_forApproval_periodic"
