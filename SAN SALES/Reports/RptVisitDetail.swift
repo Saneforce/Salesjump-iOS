@@ -54,7 +54,7 @@ class RptVisitDetail: IViewController, UITableViewDelegate, UITableViewDataSourc
         lblCusCnt.text = CusCount
         getUserDetails()
         getVisitDetail()
-        getItemSummary()
+     //   getItemSummary()
         btnBack.addTarget(target: self, action: #selector(GotoHome))
         tbVstDetail.delegate = self
         tbVstDetail.dataSource = self
@@ -87,8 +87,14 @@ class RptVisitDetail: IViewController, UITableViewDelegate, UITableViewDataSourc
         return 42
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if tableView==tbVstDetail { return RptVisitDetail.objVstDetail.count }
-        if tableView==tbItemSumry { return RptVisitDetail.objItmSmryDetail.count }
+        if tableView==tbVstDetail {
+            vstHeight.constant = self.tbVstDetail.contentSize.height
+            return RptVisitDetail.objVstDetail.count
+        }
+        if tableView==tbItemSumry { 
+            itmSmryHeight.constant = self.tbItemSumry.contentSize.height
+            return RptVisitDetail.objItmSmryDetail.count
+        }
         return 0
     }
     
@@ -172,13 +178,14 @@ class RptVisitDetail: IViewController, UITableViewDelegate, UITableViewDataSourc
             "data": jsonString
         ]
         
-        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
             AFdata in
             switch AFdata.result
             {
                
                 case .success(let value):
                 if let json = value as? [AnyObject] {
+                    self.getItemSummary()
                     guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
                         print("Error: Cannot convert JSON object to Pretty JSON data")
                         return
@@ -194,6 +201,11 @@ class RptVisitDetail: IViewController, UITableViewDelegate, UITableViewDataSourc
                             return Bool(fitem["OrdVal"] as! Double > 0)
                             
                         })
+                    }else if (StrMode == "VstPSuperStk"){
+                        RptVisitDetail.objVstDetail = json.filter({(fitem) in
+                            return Bool(fitem["OrdVal"] as! Double > 0)
+                            
+                        })
                     }else{
                         RptVisitDetail.objVstDetail = json
                         print(RptVisitDetail.objVstDetail)
@@ -201,7 +213,8 @@ class RptVisitDetail: IViewController, UITableViewDelegate, UITableViewDataSourc
                     tbVstDetail.reloadData()
                     vstHeight.constant = CGFloat(70*RptVisitDetail.objVstDetail.count)
                     self.view.layoutIfNeeded()
-                    ContentHeight.constant = 100+CGFloat(55*RptVisitDetail.objVstDetail.count)+CGFloat(42*RptVisitDetail.objItmSmryDetail.count)
+         //           ContentHeight.constant = 100+CGFloat(55*RptVisitDetail.objVstDetail.count)+CGFloat(42*RptVisitDetail.objItmSmryDetail.count)
+                    ContentHeight.constant = 225+CGFloat(tbVstDetail.contentSize.height)+CGFloat(tbItemSumry.contentSize.height)
                     self.view.layoutIfNeeded()
                 }
                case .failure(let error):
@@ -224,7 +237,7 @@ class RptVisitDetail: IViewController, UITableViewDelegate, UITableViewDataSourc
             "data": jsonString
         ]
         
-        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
             AFdata in
             switch AFdata.result
             {
@@ -268,13 +281,20 @@ class RptVisitDetail: IViewController, UITableViewDelegate, UITableViewDataSourc
                     tbItemSumry.reloadData()
                     itmSmryHeight.constant = CGFloat(42*RptVisitDetail.objItmSmryDetail.count)
                     self.view.layoutIfNeeded()
-                    ContentHeight.constant = 100+CGFloat(55*RptVisitDetail.objVstDetail.count)+CGFloat(42*RptVisitDetail.objItmSmryDetail.count)
+                  //  ContentHeight.constant = 100+CGFloat(55*RptVisitDetail.objVstDetail.count)+CGFloat(42*RptVisitDetail.objItmSmryDetail.count)
+                    ContentHeight.constant = 225+CGFloat(self.tbVstDetail.contentSize.height)+CGFloat(self.tbItemSumry.contentSize.height)
                     self.view.layoutIfNeeded()
                     print(ContentHeight.constant)
                     print(tbItemSumry)
+                    DispatchQueue.main.asyncAfter(deadline: .now()) {
+                        self.LoadingDismiss()
+                    }
                 }
                case .failure(let error):
                 Toast.show(message: error.errorDescription!)
+                DispatchQueue.main.asyncAfter(deadline: .now()) {
+                    self.LoadingDismiss()
+                }
             }
         }
     }
@@ -290,6 +310,7 @@ class RptVisitDetail: IViewController, UITableViewDelegate, UITableViewDataSourc
         let vc=self.storyboard?.instantiateViewController(withIdentifier: "OrderDetailView") as!  OrderDetailView
         vc.RptDate = lblDate.text!
         vc.StrRptDt = StrRptDt
+        print(item)
         vc.CusCd=(item["OutletCode"] as? String)!
         vc.StrMode = Mode
        // vc.CusCount = Cnt

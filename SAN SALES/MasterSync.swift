@@ -151,7 +151,6 @@ import BackgroundTasks
          strMasList.append(mnuItem.init(MasId: 26, MasName: "Payment Modes", MasImage: "mnuPrimary",StoreKey: "Pay_Types", ApiKey: "get/mas_payment&divisionCode="+(prettyJsonData["divisionCode"] as? String ?? "")+"&rSF="+SFCode+"&sfCode="+SFCode,fromData: [
             "orderBy":"[\"name asc\"]","desig":"mgr"
          ]))
-         
          strMasList.append(mnuItem.init(MasId: 27, MasName: "Stockist Schemes", MasImage: "mnuPrimary",StoreKey: "Stockist_Schemes", ApiKey: "get/StockistScheme&divisionCode="+(prettyJsonData["divisionCode"] as? String ?? "")+"&rSF="+SFCode+"&sfCode="+SFCode+"&State_Code="+StateCode+"&desig="+desigCode,fromData: [
             "orderBy":"[\"name asc\"]","desig":"mgr"
          ]))
@@ -159,10 +158,7 @@ import BackgroundTasks
          strMasList.append(mnuItem.init(MasId: 28, MasName: "Random Number", MasImage: "mnuPrimary",StoreKey: "Random_Number", ApiKey: "get/Randomnumber&divisionCode="+(prettyJsonData["divisionCode"] as? String ?? "")+"&rSF="+SFCode+"&sfCode="+SFCode+"&State_Code="+StateCode+"&desig="+desigCode,fromData: [
             "orderBy":"[\"name asc\"]","desig":"mgr"
          ]))
-         
-         
-         
- //    http://galpha.salesjump.in/server/native_Db_V13.php?axn=get%2FRandomnumber&divisionCode=258%2C&rSF=GLLMR0020&sfCode=GLLMR0020&State_Code=28&desig=MR
+    
          
          
          btnClearData.addTarget(target: self, action: #selector(clearAllData))

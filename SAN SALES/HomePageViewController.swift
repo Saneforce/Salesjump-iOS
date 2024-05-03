@@ -133,7 +133,6 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         if (UserSetup.shared.SuperStockistNeed > 0){
             strMenuList.append(mnuItem.init(MnuId: 4, MenuName: UserSetup.shared.SuperStockistOrder, MenuImage: "mnuPrimary"))
         }
-        
         mnulist.constant = CGFloat(87*self.strMenuList.count)
                          self.view.layoutIfNeeded()
         var moveMyPln: Bool=false
@@ -560,7 +559,6 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         case 4:
             let vc=self.storyboard?.instantiateViewController(withIdentifier:"superStockistOrder") as! SuperStockistOrder
             self.navigationController?.pushViewController(vc, animated: true)
-    
         default:
             return
         }

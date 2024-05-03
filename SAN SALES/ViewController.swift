@@ -230,9 +230,11 @@ class ViewController: IViewController {
                         let sWTDets=LocalStoreage.string(forKey: "Worktype_Master")
                         LocalStoreage.set(true, forKey: "UserLogged")
                         if sWTDets==nil {
-                            let vc=self.storyboard?.instantiateViewController(withIdentifier: "MasterSyncVwControl") as!  MasterSync
-                            vc.modalPresentationStyle = .overCurrentContext
-                            self.present(vc, animated: true, completion: nil)
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                                let vc=self.storyboard?.instantiateViewController(withIdentifier: "MasterSyncVwControl") as!  MasterSync
+                                vc.modalPresentationStyle = .overCurrentContext
+                                self.present(vc, animated: true, completion: nil)
+                            }
                         } else {
                             let sDyPlnDets=LocalStoreage.string(forKey: "Mydayplan")?.replacingOccurrences(of: "\n", with: "")
                             var myDyPlFl:Bool=false
