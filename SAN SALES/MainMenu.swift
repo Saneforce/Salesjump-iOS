@@ -88,11 +88,9 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
             strMasList.append(mnuItem.init(MasId:14, MasName: "Add \(UserSetup.shared.StkCap)", MasImage: "AdminForms"))
         }
         if (UserSetup.shared.SrtEndKMNd != 0 && UserSetup.shared.exp_auto != 2 ){
-            
             strMasList.append(mnuItem.init(MasId:15, MasName: "Start Expense", MasImage: "Start_Expense"))
             strMasList.append(mnuItem.init(MasId:16, MasName: "End Expense", MasImage: "Day_End"))
         }
-        
         if(UserSetup.shared.SF_type == 2){
             strMasList.append(mnuItem.init(MasId:17, MasName: "Approvals", MasImage: "AdminForms"))
         }

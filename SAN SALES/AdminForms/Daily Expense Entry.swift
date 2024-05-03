@@ -917,7 +917,6 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
                             }
                         }
                         CamItem += "\","
-                        
                         CamItem += " \"prvImage\": \""
                         for (index, image) in i.image_name.enumerated() {
                             CamItem += image.description
@@ -979,7 +978,10 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
                         GlobalFunc.movetoHomePage()
                         Toast.show(message:"Expense Submitted Successfully", controller: self)
                     }
-                    GlobalFunc.movetoHomePage()
+                    let storyboard = UIStoryboard(name: "AdminForms", bundle: nil)
+                    let viewController = storyboard.instantiateViewController(withIdentifier: "Expense") as! Expense_Entry;()
+                    UIApplication.shared.windows.first?.rootViewController = viewController
+                    UIApplication.shared.windows.first?.makeKeyAndVisible()
                         }
             case .failure(let error):
                 Toast.show(message: error.errorDescription!)
