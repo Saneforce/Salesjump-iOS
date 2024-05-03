@@ -27,6 +27,9 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
     
     @IBOutlet weak var lblTotAmt: UILabel!
     
+    
+    @IBOutlet weak var lblTo: UILabel!
+    
     @IBOutlet weak var tbOrderDetail: UITableView!
     @IBOutlet weak var tbZeroOrd: UITableView!
     
@@ -83,8 +86,8 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
         btnBack.addTarget(target: self, action: #selector(CloseWindo))
         BackTotalOrder.addTarget(target: self, action: #selector(GotoHome))
         lblDate.text = RptDate
-        getUserDetails()
-        getOrderDetail()
+        
+        
         tbOrderDetail.delegate=self
         tbOrderDetail.dataSource=self
         tbZeroOrd.delegate=self
@@ -92,8 +95,13 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
         ListOforderTB.delegate=self
         ListOforderTB.dataSource=self
         
+        detail.removeAll()
+        tbOrderDetail.reloadData()
+        getUserDetails()
+        getOrderDetail()
        // super.viewDidLayoutSubviews()
        // adjustScrollViewContentSize()
+        
        
     }
   
@@ -109,8 +117,16 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
         print(detail.count)
         print(objOrderDetail)
         print(detail)
-        if tableView==tbOrderDetail {return detail.count}
-        if tableView==tbZeroOrd { return objOfferDetail.count }
+        if tableView==tbOrderDetail {
+            OrdHeight.constant = CGFloat(self.detail.count * 60) // self.tbOrderDetail.contentSize.height + 30
+            ContentHeight.constant = CGFloat(400+(CGFloat(self.detail.count * 60))+(self.tbZeroOrd.contentSize.height))
+            return detail.count
+        }
+        if tableView==tbZeroOrd {
+            OfferHeight.constant = self.tbZeroOrd.contentSize.height + 30
+            ContentHeight.constant = CGFloat(400+(CGFloat(self.detail.count * 60))+(self.tbZeroOrd.contentSize.height))
+            return objOfferDetail.count
+        }
         if tableView==ListOforderTB{return TotaOrderDet.count}
         return 0
     }
@@ -129,6 +145,8 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                 }
             }
             if tbOrderDetail == tableView {
+                print(detail.count)
+                print(indexPath.row)
                 let Pro_ID = detail[indexPath.row].Product_Code
                 let filterData = objOrderDetail.filter { $0["PCode"] as? String == Pro_ID }
                 var Dis_Amt = 0.0
@@ -165,7 +183,8 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                 cell.lblQty?.text = String(format: "%i", item["offQty"] as! Int)
                 
                 let newHeight = 100 + CGFloat(55 * objOfferDetail.count)
-                ContentHeight.constant = newHeight
+             //   ContentHeight.constant = newHeight
+                ContentHeight.constant = CGFloat(800+(self.tbOrderDetail.contentSize.height)+(self.tbZeroOrd.contentSize.height))
                 print(newHeight)
             }
             //ContentHeight.constant = tbZeroOrd.frame.height + tbZeroOrd.frame.origin.y + 10
@@ -197,14 +216,20 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
         let params: Parameters = [
             "data": jsonString
         ]
-        
+   //     self.ShowLoading(Message: "Loading...")
         AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
             AFdata in
+            DispatchQueue.main.asyncAfter(deadline: .now()) {
+                self.LoadingDismiss()
+            }
             switch AFdata.result
             {
                
                 case .success(let value):
                 print(value)
+                DispatchQueue.main.asyncAfter(deadline: .now()) {
+                    self.LoadingDismiss()
+                }
                     guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
                         print("Error: Cannot convert JSON object to Pretty JSON data")
                         return
@@ -230,8 +255,8 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                         }
 
                         
-                        self.lblToCus.text=String(format: "%@", list[0]["CusName"] as! String)
-                        self.lblToAdd.text=String(format: "%@", list[0]["CusAddr"] as! String)
+                        self.lblToCus.text=String(format: "%@", list[0]["CusName"] as? String ?? "")
+                        self.lblToAdd.text=String(format: "%@", list[0]["CusAddr"] as? String ?? "")
                         
                         if let StkMob = list[0]["CusMobile"] as? String, StkMob != "<null>"{
                             self.lblToMob.text=StkMob
@@ -249,11 +274,18 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                             self.ShowLoading(Message: "Loading...")
                             viewprimary()
                         }
+                        if (StrMode == "VstSuperStk" || StrMode == "VstPSuperStk"){
+                          //  self.ShowLoading(Message: "Loading...")
+                            viewSuperStockist()
+                        }
                         Trans_Sl_No = String(format: "%@", list[0]["Trans_Sl_No"] as! String)
                     }
              
                case .failure(let error):
                 Toast.show(message: error.errorDescription!, controller: self)
+                DispatchQueue.main.asyncAfter(deadline: .now()) {
+                    self.LoadingDismiss()
+                }
             }
         }
     }
@@ -262,10 +294,10 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
         if self.objOrderDetails.count < 1 { return }
         let todayData:[String: Any] = self.objOrderDetails[indx] as! [String: Any]
         if(todayData.count>0){
-            self.lblOrderNo.text=String(format: "%@", todayData["Trans_Sl_No"] as! String)
-            self.lblOrderType.text=String(format: "%@", todayData["OrderTypeNm"] as! String)
-            self.lblToCus.text=String(format: "%@", todayData["CusName"] as! String)
-            self.lblToAdd.text=String(format: "%@", todayData["CusAddr"] as! String)
+            self.lblOrderNo.text=String(format: "%@", todayData["Trans_Sl_No"] as? String ?? "")
+            self.lblOrderType.text=String(format: "%@", todayData["OrderTypeNm"] as? String ?? "")
+            self.lblToCus.text=String(format: "%@", todayData["CusName"] as? String ?? "")
+            self.lblToAdd.text=String(format: "%@", todayData["CusAddr"] as? String ?? "")
             //self.lblFrmMob.text=String(format: "%@", todayData["CusMobile"] as! CVarArg)
             if let stkMob = todayData["CusMobile"] as? String, stkMob != "<null>" {
                 self.lblToMob.text = stkMob
@@ -302,9 +334,10 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
             })
             tbZeroOrd.reloadData()
             OfferHeight.constant = CGFloat(24 * self.objOrderDetail.count)
-            ContentHeight.constant = CGFloat(800+(60 * self.objOrderDetail.count
-                                         )+(30 * self.objOfferDetail.count
-                                           ))
+//            ContentHeight.constant = CGFloat(800+(60 * self.objOrderDetail.count
+//                                         )+(30 * self.objOfferDetail.count
+//                                           ))
+            ContentHeight.constant = CGFloat(800+(self.tbOrderDetail.contentSize.height)+(self.tbZeroOrd.contentSize.height))
         }
     }
     
@@ -430,7 +463,8 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                             OrdHeight.constant = 40+CGFloat(55*detail.count)
                             self.view.layoutIfNeeded()
                             let newHeight = 100 + CGFloat(75 * detail.count) + CGFloat(2 * detail.count)
-                            ContentHeight.constant = newHeight
+                          //  ContentHeight.constant = newHeight
+                            ContentHeight.constant = CGFloat(800+(self.tbOrderDetail.contentSize.height)+(self.tbZeroOrd.contentSize.height))
                             self.view.layoutIfNeeded()
                         }
                     }
@@ -465,7 +499,9 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
             
             AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
                 AFdata in
-                self.LoadingDismiss()
+                DispatchQueue.main.asyncAfter(deadline: .now()) {
+                    self.LoadingDismiss()
+                }
                 switch AFdata.result
                 {
                     
@@ -491,7 +527,7 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                                 for iteminFilter in filteredData{
                                     print(iteminFilter)
                                     let Order_No = iteminFilter["Order_No"] as? String
-                                    let TotalAmt = String((iteminFilter["orderValue"] as? Int)!)
+                                    let TotalAmt = String((iteminFilter["orderValue"] as? Double ?? 0)!)
                                     let date = iteminFilter["Order_date"] as? String
                                     let Rmk = iteminFilter["remarks"] as? String
                                     var Prod_Flg = 0
@@ -517,7 +553,8 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                             OrdHeight.constant = 40+CGFloat(55*detail.count)
                             self.view.layoutIfNeeded()
                             let newHeight = 100 + CGFloat(75 * detail.count) + CGFloat(7 * detail.count)
-                            ContentHeight.constant = newHeight
+                          //  ContentHeight.constant = newHeight
+                            ContentHeight.constant = CGFloat(800+(self.tbOrderDetail.contentSize.height)+(self.tbZeroOrd.contentSize.height))
                             print(newHeight)
                             self.view.layoutIfNeeded()
                             tbOrderDetail.reloadData()
@@ -527,6 +564,110 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                     }
                 case .failure(let error):
                     Toast.show(message: error.errorDescription!)
+                }
+            }
+    }
+    func viewSuperStockist() {
+        let item = RptVisitDetail.objVstDetail
+        print(item)
+  //      TotalOrderView.isHidden = true
+        var items = ""
+        if let Acdid = item[0]["ACD"] {
+
+            items = Acdid as! String
+        } else {
+            items = "0"
+        }
+        print(items)
+
+
+        let apiKey: String = "\(axnprimary)&desig=\(Desig)&divisionCode=\(DivCode)&ACd=\(items)&rSF=\(SFCode)&typ=8&sfCode=\(SFCode)&State_Code=\(StateCode)"
+
+            let aFormData: [String: Any] = [
+                "orderBy":"[\"name asc\"]","desig":"mgr"
+            ]
+           // print(aFormData)
+            let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
+            let jsonString = String(data: jsonData!, encoding: .utf8)!
+            let params: Parameters = [
+                "data": jsonString
+            ]
+            
+            AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+                AFdata in
+                self.LoadingDismiss()
+                switch AFdata.result
+                {
+                    
+                case .success(let value):
+                    print(value)
+                    if let json = value as? [AnyObject] {
+                        guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
+                            print("Error: Cannot convert JSON object to Pretty JSON data")
+                            return
+                        }
+                        guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+                            print("Error: Could print JSON in String")
+                            return
+                        }
+                        print(prettyPrintedJson)
+                        print(json)
+                        print(Trans_Sl_No)
+                        self.lblOrderType.isHidden = true
+                        self.lblTo.isHidden = true
+                        if let indexToDelete = json.firstIndex(where: { String(format: "%@", $0["Order_No"] as! CVarArg) == Trans_Sl_No }) {
+                            print(indexToDelete)
+                            TotaOrderDet.removeAll()
+                            if let orderid = json[indexToDelete]["Trans_Detail_Slno"] as? String{
+                                let filteredData = json.filter { $0["Trans_Detail_Slno"] as? String == orderid }
+                                for iteminFilter in filteredData{
+                                    print(iteminFilter)
+                                    let Order_No = iteminFilter["Order_No"] as? String
+                                    let TotalAmt = String((iteminFilter["orderValue"] as? Double) ?? 0)
+                                    let date = iteminFilter["Order_date"] as? String
+                                    let Rmk = iteminFilter["remarks"] as? String
+                                    var Prod_Flg = 0
+                                    var ProList = iteminFilter["productList"] as! [AnyObject]
+                                    if (ProList.isEmpty){
+                                        Prod_Flg = 1
+                                    }
+                                    TotaOrderDet.append(NoOfOrder.init(OrderId:Order_No! , TotAmt: TotalAmt, Date: date!, Rmk: Rmk!, OrdFlg :Prod_Flg))
+                                }
+                            }
+                            print(TotaOrderDet)
+                            detail.removeAll()
+                            let Additional_Prod_Dtls = json[indexToDelete]["productList"] as! [AnyObject]
+                            // self.lblTotAmt.text = String(detail[IndexPath].OrderVal as! Int)
+                            //dayrepDict = json["dayrep"] as! [AnyObject]
+                            print(Additional_Prod_Dtls)
+                            for Item2 in Additional_Prod_Dtls {
+                                print(Item2)
+                                
+                                if let clBalString = Item2["Product_Unit_Name"] as? String {
+                                   
+                                detail.append(viewDet(Prname: Item2["Product_Name"] as! String, rate: Item2["Rate"] as! Double, Cl:clBalString, Free:Item2["discount"] as! Int, Disc: Item2["discount"] as! Int, Tax: Int(Item2["taxval"] as! Double), qty: Item2["Quantity"] as! Int, value: Item2["sub_total"] as! Double,Product_Code: Item2["Product_Code"] as! String))
+                                        
+                                        print(ContentHeight as Any)
+                                   
+                                } else {
+                                    print("Error: 'Cl_bal' key not found in the dictionary.")
+                                }
+                                self.lblTotAmt.text = String(Item2["OrderVal"] as! Double)
+                            }
+                            tbOrderDetail.reloadData()
+                            OrdHeight.constant = self.tbOrderDetail.contentSize.height + 50 // 40+CGFloat(55*detail.count)
+                            self.view.layoutIfNeeded()
+                            let newHeight = 100 + CGFloat(75 * detail.count) + CGFloat(7 * detail.count)
+                   //         ContentHeight.constant = newHeight
+                            ContentHeight.constant = CGFloat(800+(self.tbOrderDetail.contentSize.height)+(self.tbZeroOrd.contentSize.height))
+                            print(newHeight)
+                            self.view.layoutIfNeeded()
+                        //    tbOrderDetail.reloadData()
+                            ListOforderTB.reloadData()
+                        }
+                    }
+                case .failure(let error):
+                    Toast.show(message: error.errorDescription!)  //, controller: self
                 }
             }
     }
@@ -551,6 +692,9 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
         if (StrMode == "VstPDis" || StrMode == "VstDis"){
             self.ShowLoading(Message: "Loading...")
             viewprimary()
+        }
+        if (StrMode == "VstSuperStk" || StrMode == "VstPSuperStk"){
+            viewSuperStockist()
         }
         TotalOrderView.isHidden = true
     }

@@ -87,8 +87,8 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
         if (UserSetup.shared.AddDistibutor_Nd == 1){
             strMasList.append(mnuItem.init(MasId:14, MasName: "Add \(UserSetup.shared.StkCap)", MasImage: "AdminForms"))
         }
-        strMasList.append(mnuItem.init(MasId:15, MasName: "Start Expense", MasImage: "Start_Expense"))
-        strMasList.append(mnuItem.init(MasId:16, MasName: "End Expense", MasImage: "Day_End"))
+        //strMasList.append(mnuItem.init(MasId:15, MasName: "Start Expense", MasImage: "Start_Expense"))
+       // strMasList.append(mnuItem.init(MasId:16, MasName: "End Expense", MasImage: "Day_End"))
         menuClose.addTarget(target: self, action: #selector(closeMenuWin))
         tbMenuDetail.delegate=self
         tbMenuDetail.dataSource=self

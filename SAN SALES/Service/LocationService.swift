@@ -43,6 +43,16 @@ public class LocationService: NSObject, CLLocationManagerDelegate{
         self.locationManager.startUpdatingLocation()
         self.locationManager.startMonitoringSignificantLocationChanges()
     }
+    func isLocationPermissionEnable() -> Bool{
+        switch CLLocationManager.authorizationStatus() {
+        case .notDetermined, .restricted, .denied:
+            return false
+        case .authorizedAlways, .authorizedWhenInUse:
+            return true
+        @unknown default:
+            return true
+        }
+    }
     public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
        // for(int i=0;i<locations.count;i++)
         for i in 0...locations.count-1 {

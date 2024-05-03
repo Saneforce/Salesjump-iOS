@@ -101,6 +101,12 @@ class SubmittedCalls: UIViewController, UITableViewDelegate, UITableViewDataSour
             viewController.setViewControllers([SubCalls,PSUBDCR], animated: false)
             (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
         }
+        if lItm.MasId == 3 {
+            let SubCalls = storyboardMain.instantiateViewController(withIdentifier: "SubmittedCalls") as! SubmittedCalls
+            let ssoDCR = storyboard.instantiateViewController(withIdentifier: "SuperStockistOrderSubmittedDetails") as! SuperStockistOrderSubmittedDetails
+            viewController.setViewControllers([SubCalls,ssoDCR], animated: false)
+            (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
+        }
         (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
         print(strMasList[indexPath.row].MasName)
     }
@@ -121,7 +127,7 @@ class SubmittedCalls: UIViewController, UITableViewDelegate, UITableViewDataSour
         //let apiKey: String = "\(axn)&State_Code=12&desig=MR&divisionCode=\(DivCode)&rSF=MR3533&sfCode=\(SFCode)&stateCode=12"
         let apiKey: String = "\(axn)&divisionCode=\(DivCode)&rSF=\(SFCode)&sfCode=\(SFCode)&State_Code=\(StateCode)"
     
-        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
             AFdata in
             //self.LoadingDismiss()
             switch AFdata.result
@@ -141,6 +147,7 @@ class SubmittedCalls: UIViewController, UITableViewDelegate, UITableViewDataSour
                     print(prettyPrintedJson)
                     var Secondary_order_Count = 0
                     var Primary_Order_Count = 0
+                    var Super_Stockist_Order_Count = 0
                    if  let secondary = json["data"] as? [[String: Any]]{
                     
                     for dictionary in secondary {
@@ -151,11 +158,17 @@ class SubmittedCalls: UIViewController, UITableViewDelegate, UITableViewDataSour
                         if let stockistCount = dictionary["stockist_count"] as? Int {
                             Primary_Order_Count = stockistCount
                         }
+                        if let superStockistCount = dictionary["SuperStokit"] as? Int {
+                            Super_Stockist_Order_Count = superStockistCount
+                        }
                     }
                 }
 
                         strMasList.append(mnuItem.init(MasId: 1, MasName: "Secondary Order", MasImage: "SwitchRoute",BTC: String(Secondary_order_Count)))
                         strMasList.append(mnuItem.init(MasId: 2, MasName: "Primary Order", MasImage: "SwitchRoute",BTC: String(Primary_Order_Count)))
+                        if (UserSetup.shared.SuperStockistNeed == 1) {
+                            strMasList.append(mnuItem.init(MasId: 3, MasName: "Super Stockist Order", MasImage: "SwitchRoute",BTC: String(Super_Stockist_Order_Count)))
+                        }
 
                     self.SubmittedcallsTB.reloadData()
                     

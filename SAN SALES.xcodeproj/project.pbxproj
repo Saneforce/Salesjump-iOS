@@ -7,6 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1514DF6C2BD7839D00E6B45A /* CallPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1514DF692BD7839D00E6B45A /* CallPreview.swift */; };
+		1514DF6D2BD7839D00E6B45A /* CustomAlertVCViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1514DF6A2BD7839D00E6B45A /* CustomAlertVCViewController.swift */; };
+		1514DF6E2BD7839D00E6B45A /* CustomAlertVCViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1514DF6B2BD7839D00E6B45A /* CustomAlertVCViewController.xib */; };
+		1514DF712BD7853B00E6B45A /* ItemViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1514DF6F2BD7853B00E6B45A /* ItemViewController.xib */; };
+		1514DF722BD7853B00E6B45A /* ItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1514DF702BD7853B00E6B45A /* ItemViewController.swift */; };
+		1514DF752BD785D900E6B45A /* SuperStockistOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1514DF732BD785D900E6B45A /* SuperStockistOrder.swift */; };
+		1514DF762BD785D900E6B45A /* SuperStockistOrderList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1514DF742BD785D900E6B45A /* SuperStockistOrderList.swift */; };
+		1514DF782BD786CF00E6B45A /* SuperStockistOrderSubmittedDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1514DF772BD786CF00E6B45A /* SuperStockistOrderSubmittedDetails.swift */; };
 		19247A3DB960E114A6C28FB3 /* Pods_SAN_SALES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 448C0B69977667C109C50683 /* Pods_SAN_SALES.framework */; };
 		381EF93D2B19DB9700CED65F /* UI+Constraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 381EF93C2B19DB9700CED65F /* UI+Constraints.swift */; };
 		382103F52BA16B83005C02CD /* Expense Entry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 382103F42BA16B83005C02CD /* Expense Entry.swift */; };
@@ -103,6 +111,14 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1514DF692BD7839D00E6B45A /* CallPreview.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallPreview.swift; sourceTree = "<group>"; };
+		1514DF6A2BD7839D00E6B45A /* CustomAlertVCViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomAlertVCViewController.swift; sourceTree = "<group>"; };
+		1514DF6B2BD7839D00E6B45A /* CustomAlertVCViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CustomAlertVCViewController.xib; sourceTree = "<group>"; };
+		1514DF6F2BD7853B00E6B45A /* ItemViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ItemViewController.xib; sourceTree = "<group>"; };
+		1514DF702BD7853B00E6B45A /* ItemViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemViewController.swift; sourceTree = "<group>"; };
+		1514DF732BD785D900E6B45A /* SuperStockistOrder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SuperStockistOrder.swift; sourceTree = "<group>"; };
+		1514DF742BD785D900E6B45A /* SuperStockistOrderList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SuperStockistOrderList.swift; sourceTree = "<group>"; };
+		1514DF772BD786CF00E6B45A /* SuperStockistOrderSubmittedDetails.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SuperStockistOrderSubmittedDetails.swift; sourceTree = "<group>"; };
 		3453EBBCA5603BC17DBC6D2A /* Pods-SAN SALES.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SAN SALES.release.xcconfig"; path = "Target Support Files/Pods-SAN SALES/Pods-SAN SALES.release.xcconfig"; sourceTree = "<group>"; };
 		381EF93C2B19DB9700CED65F /* UI+Constraints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UI+Constraints.swift"; sourceTree = "<group>"; };
 		382103F42BA16B83005C02CD /* Expense Entry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Expense Entry.swift"; sourceTree = "<group>"; };
@@ -222,6 +238,7 @@
 				3883A09B2A176B6300B858CF /* SubmittedCalls.swift */,
 				386A43902A1CBB0200CE1833 /* SubmittedDCR.swift */,
 				386A43942A1CC63100CE1833 /* PrimarySubmittedDCR.swift */,
+				1514DF772BD786CF00E6B45A /* SuperStockistOrderSubmittedDetails.swift */,
 			);
 			name = SubmittedCalls;
 			sourceTree = "<group>";
@@ -282,6 +299,13 @@
 		3F14EAE827F73D4500B0997B /* Activity */ = {
 			isa = PBXGroup;
 			children = (
+				1514DF732BD785D900E6B45A /* SuperStockistOrder.swift */,
+				1514DF742BD785D900E6B45A /* SuperStockistOrderList.swift */,
+				1514DF702BD7853B00E6B45A /* ItemViewController.swift */,
+				1514DF6F2BD7853B00E6B45A /* ItemViewController.xib */,
+				1514DF692BD7839D00E6B45A /* CallPreview.swift */,
+				1514DF6A2BD7839D00E6B45A /* CustomAlertVCViewController.swift */,
+				1514DF6B2BD7839D00E6B45A /* CustomAlertVCViewController.xib */,
 				3F14EAE927F73DAD00B0997B /* SecondaryVisit.swift */,
 				3F0861BB28019419006A30FB /* SecondaryOrder.swift */,
 				3F97F9F52831B5950097166D /* AddNewCustomer.swift */,
@@ -527,6 +551,7 @@
 				3F28CC0227D3927E00B95964 /* Poppins-BlackItalic.ttf in Resources */,
 				3F28CC0827D3927E00B95964 /* Poppins-SemiBold.ttf in Resources */,
 				3F28CC0527D3927E00B95964 /* Poppins-Bold.ttf in Resources */,
+				1514DF712BD7853B00E6B45A /* ItemViewController.xib in Resources */,
 				3F28CBF927D3927E00B95964 /* Poppins-ExtraLight.ttf in Resources */,
 				3F28CBFC27D3927E00B95964 /* Poppins-BoldItalic.ttf in Resources */,
 				3F28CBFD27D3927E00B95964 /* Poppins-Light.ttf in Resources */,
@@ -537,6 +562,7 @@
 				3F28CC0027D3927E00B95964 /* Poppins-ExtraBoldItalic.ttf in Resources */,
 				3F28CC0327D3927E00B95964 /* Poppins-Regular.ttf in Resources */,
 				38B05F502B04CAE50025D4C0 /* ManagerDashboard.storyboard in Resources */,
+				1514DF6E2BD7839D00E6B45A /* CustomAlertVCViewController.xib in Resources */,
 				386A43932A1CC3E000CE1833 /* Submittedcalls.storyboard in Resources */,
 				3F28CBFA27D3927E00B95964 /* Poppins-ThinItalic.ttf in Resources */,
 				3F28CBFE27D3927E00B95964 /* Poppins-Medium.ttf in Resources */,
@@ -599,7 +625,9 @@
 			files = (
 				3F619F3E27EB275000F3D05F /* CLocationService.swift in Sources */,
 				3F619F3C27EAEDC000F3D05F /* LocationService.swift in Sources */,
+				1514DF752BD785D900E6B45A /* SuperStockistOrder.swift in Sources */,
 				3F2F812127D0E9670015E1CA /* RootViewController.swift in Sources */,
+				1514DF722BD7853B00E6B45A /* ItemViewController.swift in Sources */,
 				3F2F811F27D0E7430015E1CA /* HomePageViewController.swift in Sources */,
 				38A2E9B22A0E1B940061B854 /* Brand Availability.swift in Sources */,
 				3F0861BF2801D589006A30FB /* CollectionCell.swift in Sources */,
@@ -608,6 +636,7 @@
 				3F06352A283A8C920027842E /* ColorTheme.swift in Sources */,
 				38D0F76829BB2447003EEB03 /* BrandReviewVisit.swift in Sources */,
 				3F97F9F62831B5950097166D /* AddNewCustomer.swift in Sources */,
+				1514DF782BD786CF00E6B45A /* SuperStockistOrderSubmittedDetails.swift in Sources */,
 				3F5B2FC3284B59E400574D7C /* MsgLoader.swift in Sources */,
 				38DDD8492BA1D8120074AEF1 /* Daily Expense Entry.swift in Sources */,
 				3F9F379C28631F2C002CC408 /* layBranswsSal.swift in Sources */,
@@ -618,6 +647,7 @@
 				3F0861BA28001D47006A30FB /* RoundedCornerView.swift in Sources */,
 				3F14EAEA27F73DAD00B0997B /* SecondaryVisit.swift in Sources */,
 				381EF93D2B19DB9700CED65F /* UI+Constraints.swift in Sources */,
+				1514DF6D2BD7839D00E6B45A /* CustomAlertVCViewController.swift in Sources */,
 				3F3D4DDB27E810880063E271 /* GlobalFunc.swift in Sources */,
 				3F06353728421D870027842E /* ImageUploader.swift in Sources */,
 				3F28CC0F27D74D7200B95964 /* LabelSelect.swift in Sources */,
@@ -639,6 +669,7 @@
 				3F5B297828891D5C002D226C /* CheckPermissions.swift in Sources */,
 				3F28CC1127DC856400B95964 /* MasterSync.swift in Sources */,
 				3883A09C2A176B6300B858CF /* SubmittedCalls.swift in Sources */,
+				1514DF762BD785D900E6B45A /* SuperStockistOrderList.swift in Sources */,
 				38F6F5AB2B19D2C2007090BF /* Summary.swift in Sources */,
 				3F28CC1427DC97F000B95964 /* cellListItem.swift in Sources */,
 				3F06352C283BC9790027842E /* PhotoGallary.swift in Sources */,
@@ -648,6 +679,7 @@
 				3F063532283F5FEF0027842E /* PrimaryOrder.swift in Sources */,
 				3F2F810F27CEB30C0015E1CA /* ViewController.swift in Sources */,
 				3FBF387727E4AA8300900007 /* Toast.swift in Sources */,
+				1514DF6C2BD7839D00E6B45A /* CallPreview.swift in Sources */,
 				3F0822BD29000872009C33EA /* AdminMenus.swift in Sources */,
 				3F063535284171800027842E /* NewOutlet.swift in Sources */,
 				386A43952A1CC63100CE1833 /* PrimarySubmittedDCR.swift in Sources */,
@@ -829,7 +861,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.9_V24;
+				MARKETING_VERSION = 2.9;
 				PRODUCT_BUNDLE_IDENTIFIER = com.saneforce.sansales;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -866,7 +898,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.9_V24;
+				MARKETING_VERSION = 2.9;
 				PRODUCT_BUNDLE_IDENTIFIER = com.saneforce.sansales;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
