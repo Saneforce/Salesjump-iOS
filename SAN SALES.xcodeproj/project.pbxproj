@@ -28,13 +28,6 @@
 		386A43932A1CC3E000CE1833 /* Submittedcalls.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 386A43922A1CC3E000CE1833 /* Submittedcalls.storyboard */; };
 		386A43952A1CC63100CE1833 /* PrimarySubmittedDCR.swift in Sources */ = {isa = PBXBuildFile; fileRef = 386A43942A1CC63100CE1833 /* PrimarySubmittedDCR.swift */; };
 		3883A09C2A176B6300B858CF /* SubmittedCalls.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3883A09B2A176B6300B858CF /* SubmittedCalls.swift */; };
-		388CD91C2BDA3A24003A06F9 /* SuperStockistOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 388CD91A2BDA3A24003A06F9 /* SuperStockistOrder.swift */; };
-		388CD91D2BDA3A24003A06F9 /* SuperStockistOrderList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 388CD91B2BDA3A24003A06F9 /* SuperStockistOrderList.swift */; };
-		388CD9232BDA3A3D003A06F9 /* ItemViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 388CD91E2BDA3A3D003A06F9 /* ItemViewController.xib */; };
-		388CD9242BDA3A3D003A06F9 /* CallPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 388CD91F2BDA3A3D003A06F9 /* CallPreview.swift */; };
-		388CD9252BDA3A3D003A06F9 /* CustomAlertVCViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 388CD9202BDA3A3D003A06F9 /* CustomAlertVCViewController.swift */; };
-		388CD9262BDA3A3D003A06F9 /* CustomAlertVCViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 388CD9212BDA3A3D003A06F9 /* CustomAlertVCViewController.xib */; };
-		388CD9272BDA3A3D003A06F9 /* ItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 388CD9222BDA3A3D003A06F9 /* ItemViewController.swift */; };
 		388CD9292BDA3A7C003A06F9 /* SuperStockistOrderSubmittedDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 388CD9282BDA3A7C003A06F9 /* SuperStockistOrderSubmittedDetails.swift */; };
 		388CD92C2BDA3ABE003A06F9 /* TourPlanCalenderScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 388CD92A2BDA3ABE003A06F9 /* TourPlanCalenderScreen.swift */; };
 		388CD92D2BDA3ABE003A06F9 /* TourPlanSingleEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 388CD92B2BDA3ABE003A06F9 /* TourPlanSingleEntry.swift */; };
@@ -146,7 +139,6 @@
 		386A43922A1CC3E000CE1833 /* Submittedcalls.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Submittedcalls.storyboard; sourceTree = "<group>"; };
 		386A43942A1CC63100CE1833 /* PrimarySubmittedDCR.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimarySubmittedDCR.swift; sourceTree = "<group>"; };
 		3883A09B2A176B6300B858CF /* SubmittedCalls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmittedCalls.swift; sourceTree = "<group>"; };
-		388CD91A2BDA3A24003A06F9 /* SuperStockistOrder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SuperStockistOrder.swift; sourceTree = "<group>"; };
 		388CD91B2BDA3A24003A06F9 /* SuperStockistOrderList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SuperStockistOrderList.swift; sourceTree = "<group>"; };
 		388CD91E2BDA3A3D003A06F9 /* ItemViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ItemViewController.xib; sourceTree = "<group>"; };
 		388CD91F2BDA3A3D003A06F9 /* CallPreview.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallPreview.swift; sourceTree = "<group>"; };
@@ -262,6 +254,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		382F3FBB2BE50D6000D935EA /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				388CD91B2BDA3A24003A06F9 /* SuperStockistOrderList.swift */,
+				388CD9202BDA3A3D003A06F9 /* CustomAlertVCViewController.swift */,
+				388CD9222BDA3A3D003A06F9 /* ItemViewController.swift */,
+				388CD91F2BDA3A3D003A06F9 /* CallPreview.swift */,
+				388CD91E2BDA3A3D003A06F9 /* ItemViewController.xib */,
+				388CD9212BDA3A3D003A06F9 /* CustomAlertVCViewController.xib */,
+			);
+			name = "Recovered References";
+			sourceTree = "<group>";
+		};
 		384E56B82BDB660E00B2E8A5 /* Approvals */ = {
 			isa = PBXGroup;
 			children = (
@@ -416,6 +421,7 @@
 				3F2F810827CEB30C0015E1CA /* Products */,
 				803F6CDCDAE2DCEFAE18CD42 /* Pods */,
 				3F3B818C197DE753883A89FB /* Frameworks */,
+				382F3FBB2BE50D6000D935EA /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -595,14 +601,12 @@
 				3F28CC0427D3927E00B95964 /* Poppins-LightItalic.ttf in Resources */,
 				3F28CC0727D3927E00B95964 /* Poppins-Thin.ttf in Resources */,
 				3F28CC0227D3927E00B95964 /* Poppins-BlackItalic.ttf in Resources */,
-				388CD9232BDA3A3D003A06F9 /* ItemViewController.xib in Resources */,
 				384E56BC2BDB669F00B2E8A5 /* Approval.storyboard in Resources */,
 				3F28CC0827D3927E00B95964 /* Poppins-SemiBold.ttf in Resources */,
 				3F28CC0527D3927E00B95964 /* Poppins-Bold.ttf in Resources */,
 				1514DF712BD7853B00E6B45A /* ItemViewController.xib in Resources */,
 				3F28CBF927D3927E00B95964 /* Poppins-ExtraLight.ttf in Resources */,
 				3F28CBFC27D3927E00B95964 /* Poppins-BoldItalic.ttf in Resources */,
-				388CD9262BDA3A3D003A06F9 /* CustomAlertVCViewController.xib in Resources */,
 				3F28CBFD27D3927E00B95964 /* Poppins-Light.ttf in Resources */,
 				3F9F379528593C5A002CC408 /* Reports.storyboard in Resources */,
 				3F28CC0127D3927E00B95964 /* Poppins-ExtraBold.ttf in Resources */,
@@ -672,7 +676,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				388CD91D2BDA3A24003A06F9 /* SuperStockistOrderList.swift in Sources */,
 				388CD92C2BDA3ABE003A06F9 /* TourPlanCalenderScreen.swift in Sources */,
 				3F619F3E27EB275000F3D05F /* CLocationService.swift in Sources */,
 				3F619F3C27EAEDC000F3D05F /* LocationService.swift in Sources */,
@@ -683,7 +686,6 @@
 				38A2E9B22A0E1B940061B854 /* Brand Availability.swift in Sources */,
 				3F0861BF2801D589006A30FB /* CollectionCell.swift in Sources */,
 				38A1859D2BB53D4700E01407 /* Start Expense.swift in Sources */,
-				388CD9252BDA3A3D003A06F9 /* CustomAlertVCViewController.swift in Sources */,
 				3F06352E283BF36A0027842E /* FlowLayout.swift in Sources */,
 				3F06352A283A8C920027842E /* ColorTheme.swift in Sources */,
 				38D0F76829BB2447003EEB03 /* BrandReviewVisit.swift in Sources */,
@@ -705,7 +707,6 @@
 				1514DF6D2BD7839D00E6B45A /* CustomAlertVCViewController.swift in Sources */,
 				3F3D4DDB27E810880063E271 /* GlobalFunc.swift in Sources */,
 				3F06353728421D870027842E /* ImageUploader.swift in Sources */,
-				388CD9272BDA3A3D003A06F9 /* ItemViewController.swift in Sources */,
 				3F28CC0F27D74D7200B95964 /* LabelSelect.swift in Sources */,
 				3F4CC197287B297A00BA2B4E /* NetworkMonitor.swift in Sources */,
 				38F6F5B12B19D305007090BF /* Coverage.swift in Sources */,
@@ -717,7 +718,6 @@
 				38B05F542B05D7040025D4C0 /* ManagerDashboard.swift in Sources */,
 				3F8BF29D27E99CCA00E1C41B /* CameraService.swift in Sources */,
 				3894BC5D2B919A0E0019B40A /* Add Route.swift in Sources */,
-				388CD9242BDA3A3D003A06F9 /* CallPreview.swift in Sources */,
 				384E56BA2BDB664B00B2E8A5 /* Expense Approval.swift in Sources */,
 				38C5A9802B958AFB00EF4584 /* Add Distributor.swift in Sources */,
 				38F6F5AD2B19D2DA007090BF /* Performance.swift in Sources */,
