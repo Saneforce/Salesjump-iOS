@@ -89,7 +89,7 @@ class New_Expense_Approval: UIViewController, UITableViewDataSource, UITableView
         let full_date:String
         let from_place:String
         let to_place:String
-        let amount:String
+        var amount:String
         let work_type:String
         let expense_type:String
         let da_amount:String
@@ -99,6 +99,7 @@ class New_Expense_Approval: UIViewController, UITableViewDataSource, UITableView
         let Hotel_Bill_Amt:String
         let DailyAddDeduct:String
         let DAdditionalAmnt:String
+        var Add_Exp:String
     }
     var ExpenseDetail_data:[ExpenseDetails_data] = []
     var Monthtext_and_year: [String] = []
@@ -122,6 +123,11 @@ class New_Expense_Approval: UIViewController, UITableViewDataSource, UITableView
         let formattedPosition = String(format: "%02d", Month + 1)
         SelectMonth = formattedPosition
         Eff_Month = formattedPosition
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MMM-yyyy"
+        let currentDate = Date()
+        let formattedDate = dateFormatter.string(from: currentDate)
+        Sel_Date.text = formattedDate
         getUserDetails()
         //lbl sel
         btnBack.addTarget(target: self, action: #selector(GotoHome))
@@ -133,6 +139,7 @@ class New_Expense_Approval: UIViewController, UITableViewDataSource, UITableView
         Close_Drop_Down.addTarget(target: self, action: #selector(Close_Drop_Down_View))
         Close_Apr_SC.addTarget(target: self, action: #selector(Closs_approve_Sc))
         Approve_All.addTarget(target: self, action: #selector(Approve_Expense_BT))
+        Reject_All.addTarget(target: self, action: #selector(Rej_All_BT))
         
         blureView.bounds = self.view.bounds
         PopUpView.bounds = CGRect(x: 0, y: 0, width: self.view.bounds.width * 0.9, height: self.view.bounds.height * 0.4)
@@ -308,6 +315,7 @@ class New_Expense_Approval: UIViewController, UITableViewDataSource, UITableView
             }else if (Period_TB == tableView){
             cell.lblText.text = lstOfPeriod[indexPath.row].Period_Name
             }else if(Apr_View_TB == tableView){
+                cell.NA_Reject_BT.isHidden = false
                 cell.NA_Reject_BT.layer.cornerRadius = 10
                 cell.NA_Reject_BT.layer.masksToBounds = true
                 cell.NA_Approve_BT.layer.cornerRadius = 10
@@ -316,10 +324,8 @@ class New_Expense_Approval: UIViewController, UITableViewDataSource, UITableView
                 cell.NA_Reject_BT.addTarget(self, action: #selector(Rj_Exp(_:)), for: .touchUpInside)
                 cell.NA_Approve_BT.tag = indexPath.row
                 cell.NA_Approve_BT.addTarget(self, action: #selector(Apr_Exp(_:)), for: .touchUpInside)
-                
+                cell.NA_Approve_BT.isHidden = true
                 cell.Card_View.CornerRadius(cornerRadius: 10, shadowColor: UIColor.black, shadowOpacity: 0.5, shadowOffset: CGSize(width: 0, height: 2), shadowRadius: 4)
-                print(ExpenseDetail_data[indexPath.row])
-                
                 cell.DATE.text = ExpenseDetail_data[indexPath.row].name
                 cell.NA_Name.text = ExpenseDetail_data[indexPath.row].full_date
                 cell.NA_fROM.text = ExpenseDetail_data[indexPath.row].from_place
@@ -327,11 +333,14 @@ class New_Expense_Approval: UIViewController, UITableViewDataSource, UITableView
                 cell.NA_WORK.text = ExpenseDetail_data[indexPath.row].work_type
                 cell.NA_Work.text = ExpenseDetail_data[indexPath.row].worked_place
                 cell.NA_Daily.text = ExpenseDetail_data[indexPath.row].DailyAddDeduct
-                cell.NA_DAdd.text = ExpenseDetail_data[indexPath.row].DAdditionalAmnt
+                cell.NA_DAdd.text = ExpenseDetail_data[indexPath.row].da_amount
                 cell.NA_Hotal_Bill.text = ExpenseDetail_data[indexPath.row].Hotel_Bill_Amt
-                cell.NA_Travel.text = ExpenseDetail_data[indexPath.row].travel_k
-                cell.NA_Addit.text = ExpenseDetail_data[indexPath.row].DAdditionalAmnt
+                cell.NA_Travel.text = ExpenseDetail_data[indexPath.row].travel_amount
+                cell.NA_Addit.text = ExpenseDetail_data[indexPath.row].Add_Exp
                 cell.NA_Total.text = ExpenseDetail_data[indexPath.row].amount
+                if(ExpenseDetail_data[indexPath.row].amount == "0.00"){
+                    cell.NA_Reject_BT.isHidden = true
+                }
                 
             }else if (Summary_TB == tableView) {
                 cell.lblText.text = Exp_Summary_Data[indexPath.row].Tit
@@ -494,8 +503,8 @@ class New_Expense_Approval: UIViewController, UITableViewDataSource, UITableView
                                 if let jsonObject = try JSONSerialization.jsonObject(with: prettyJsonData, options: []) as? [String: Any],
                                    let data = jsonObject["data"] as? [AnyObject] {
                                     for i in data {
-                                        if let divisionCode = i["Division_Code"] as? Int,
-                                           let effMonth = i["Eff_Month"] as? Int,
+                                        //if let divisionCode = i["Division_Code"] as? Int,
+                                          if let effMonth = i["Eff_Month"] as? Int,
                                            let effYear = i["Eff_Year"] as? Int,
                                            let fromDate = i["From_Date"] as? String,
                                            let periodId = i["Period_Id"] as? String,
@@ -503,7 +512,7 @@ class New_Expense_Approval: UIViewController, UITableViewDataSource, UITableView
                                            let toDate = i["To_Date"] as? String,
                                            let disRank = i["dis_Rank"] as? String {
                                             
-                                            Period.append(PeriodicDatas(Division_Code: divisionCode, Eff_Month: effMonth, Eff_Year: effYear, From_Date: fromDate, Period_Id: periodId, Period_Name: periodName, To_Date: toDate, dis_Rank: disRank))
+                                            Period.append(PeriodicDatas(Division_Code: 0, Eff_Month: effMonth, Eff_Year: effYear, From_Date: fromDate, Period_Id: periodId, Period_Name: periodName, To_Date: toDate, dis_Rank: disRank))
                                         } else {
                                             print("Error: Some key in the data is nil or has the wrong type")
                                         }
@@ -526,6 +535,7 @@ class New_Expense_Approval: UIViewController, UITableViewDataSource, UITableView
         }
     }
     func ExpenseDetails(mon:Int,year:Int,sfcode:String,trans_sl_no:Int){
+        
         self.ShowLoading(Message: "Loading...")
         ExpenseDetail_data.removeAll()
         let axn = "get/ExpenseDetails"
@@ -545,7 +555,7 @@ class New_Expense_Approval: UIViewController, UITableViewDataSource, UITableView
                                 print(prettyPrintedJson)
                                 if let jsonObject = try JSONSerialization.jsonObject(with: prettyJsonData, options: []) as? [String: Any],
                                    let data = jsonObject["data"] as? [AnyObject], let data2 = jsonObject["additional_data"] as? [AnyObject], let data3 = jsonObject["add_sub_exp"] as? [AnyObject], let data4 = jsonObject["sum_add_data"] as? [AnyObject] {
-                                    print(data2,data3,data4)
+                                    print(data2)
                                     for i in data{
                                         print(i)
                                         let sf_code = i["sf_code"] as? String
@@ -553,16 +563,21 @@ class New_Expense_Approval: UIViewController, UITableViewDataSource, UITableView
                                         let full_date = i["full_date"] as? String
                                         let from_place = i["from_place"] as? String
                                         let to_place = i["to_place"] as? String
+                                        var Tot_amt = 0.0
                                         var amount = i["amount"] as? String
                                         if (amount == ""){
                                             amount = "0.00"
                                         }
+                                        let amount2 = Double(amount!)
+                                        Tot_amt = Tot_amt + amount2!
                                         let work_type = i["work_type"] as? String
                                         let expense_type = i["expense_type"] as? String
                                         var da_amount = i["da_amount"] as? String
                                         if (da_amount == ""){
                                             da_amount = "0"
                                         }
+                                        let da_amount2 = Double(da_amount!)
+                                        Tot_amt = Tot_amt + da_amount2!
                                         var travel_k = i["travel_km"] as? String
                                         if (travel_k == ""){
                                             travel_k = "0"
@@ -571,22 +586,72 @@ class New_Expense_Approval: UIViewController, UITableViewDataSource, UITableView
                                         if (travel_amount == ""){
                                             travel_amount = "0"
                                         }
+                                        let travel_amount2 = Double(travel_amount)
+                                        Tot_amt = Tot_amt + travel_amount2!
                                         let worked_place = i["worked_place"] as? String
                                         var Hotel_Bill_Amt = i["Hotel_Bill_Amt"] as? String
                                         if (Hotel_Bill_Amt == ""){
                                             Hotel_Bill_Amt = "0"
                                         }
+                                        let Hotel_Bill_Amt2 = Double(Hotel_Bill_Amt!)
+                                        Tot_amt = Tot_amt + Hotel_Bill_Amt2!
+                                        
                                         var DailyAddDeduct = i["DailyAddDeduct"] as? String
                                         if (DailyAddDeduct == ""){
                                             DailyAddDeduct = "0"
                                         }
+                                        let DailyAddDeduct2 = Double(DailyAddDeduct!)
+                                        Tot_amt = Tot_amt + DailyAddDeduct2!
+                                        
                                         var DAdditionalAmnt = i["DAdditionalAmnt"] as? String
                                         if (DAdditionalAmnt == ""){
                                             DAdditionalAmnt = "0"
                                         }
-                                        ExpenseDetail_data.append(ExpenseDetails_data(sf_code: sf_code!, name: name!, full_date: full_date!, from_place: from_place!, to_place: to_place!, amount: amount!, work_type: work_type!, expense_type: expense_type!, da_amount: da_amount!, travel_k: travel_k!, travel_amount: travel_amount, worked_place: worked_place!, Hotel_Bill_Amt: Hotel_Bill_Amt!, DailyAddDeduct: DailyAddDeduct!, DAdditionalAmnt: DAdditionalAmnt!))
+                                        let DAdditionalAmnt2 = Double(DAdditionalAmnt!)
+                                        Tot_amt = Tot_amt + DAdditionalAmnt2!
+                                        
+                                        
+                                        ExpenseDetail_data.append(ExpenseDetails_data(sf_code: sf_code!, name: name!, full_date: full_date!, from_place: from_place!, to_place: to_place!, amount: String(format: "%.2f",Tot_amt), work_type: work_type!, expense_type: expense_type!, da_amount: da_amount!, travel_k: travel_k!, travel_amount: travel_amount, worked_place: worked_place!, Hotel_Bill_Amt: Hotel_Bill_Amt!, DailyAddDeduct: DailyAddDeduct!, DAdditionalAmnt: DAdditionalAmnt!, Add_Exp: "0"))
                                     }
+                                    
+                                    for i2 in data2{
+                                        print(i2)
+                                        var amt = ""
+                                        var date = ""
+                                        if let amt2 = i2["Amt"] as? Int, let date2 = i2["date"] as? String {
+                                            amt = String(format: "%.2f", Double(amt2))
+                                            date = date2
+                                        }
+                                        var loopCount = 0
+                                        for ExpenseDetai in ExpenseDetail_data {
+                                            print(ExpenseDetai)
+                                            loopCount += 1
+                                            print(date)
+                                            print(ExpenseDetai.full_date)
+                                            if (date == ExpenseDetai.full_date){
+                                               let getdata_count = loopCount - 1
+                                                print(getdata_count)
+                                                ExpenseDetail_data[getdata_count].Add_Exp = amt
+                                               let total_amt =  Double(ExpenseDetail_data[getdata_count].amount)
+                                                let total_additional_amt = Double(amt)
+                                                
+                                                ExpenseDetail_data[getdata_count].amount = String(format: "%.2f",total_amt! + total_additional_amt!)
+                                            }
+                                        }
+                                    }
+                                    var total = 0.0
+                                    for sum_tot in ExpenseDetail_data {
+                                        let amt = Double(sum_tot.amount)
+                                        total = total + amt!
+                                    }
+                                    Exp_Summary_Data.removeAll()
+                                    Exp_Summary_Data.append(Exp_Sum(Tit: "Total Daily Expense", Amt: String(format: "%.2f",total)))
+                                    Exp_Summary_Data.append(Exp_Sum(Tit: "Total Added (+)", Amt: "0"))
+                                    Exp_Summary_Data.append(Exp_Sum(Tit: "Total Deducted (-)", Amt: "0"))
+                                    //Exp_Summary_Data.append(Exp_Sum(Tit: "Rejected Expense", Amt: "-"))
+                                    Exp_Summary_Data.append(Exp_Sum(Tit: "Payable Amount", Amt: String(format: "%.2f",total)))
                                     Apr_View_TB.reloadData()
+                                    Summary_TB.reloadData()
                                     self.LoadingDismiss()
                                 }else{
                                     print("Error: Could not convert JSON to Dictionary or access 'data'")
@@ -632,6 +697,8 @@ class New_Expense_Approval: UIViewController, UITableViewDataSource, UITableView
                             let prettyJsonData = try JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
                             if let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) {
                                 print(prettyPrintedJson)
+                                Toast.show(message:"Submitted Successfully", controller: self)
+                                GlobalFunc.movetoHomePage()
                             } else {
                                 print("Error: Could not convert JSON to String")
                             }
@@ -644,8 +711,46 @@ class New_Expense_Approval: UIViewController, UITableViewDataSource, UITableView
                 }
         }
     }
+    @objc private func Rej_All_BT() {
+        let item = AllExpenses[Exp_approv_item]
+        print(item)
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        let currentDate = Date()
+        let formattedDate = dateFormatter.string(from: currentDate)
+        Reject_all_exp(date:formattedDate,month:item.Expense_Month,year:item.Expense_Year,period_id:period_id,sf_code:item.SF_Code,trans_slno:item.Trans_Sl_No)
+    }
     
- 
+    func Reject_all_exp(date:String,month:Int,year:Int,period_id:String,sf_code:String,trans_slno:Int){
+    let axn = "reject_all_exp_ios"
+    let apiKey = "\(axn)&month=\(month)&year=\(year)&period_id=\(period_id)&approve_code=\(sf_code)"
+        let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
+        let url = APIClient.shared.BaseURL + APIClient.shared.DBURL + apiKeyWithoutCommas
+        print(url)
+        AF.request(url, method: .post, parameters: nil, encoding: URLEncoding.default, headers: nil)
+            .validate(statusCode: 200..<299)
+            .responseJSON { [self] response in
+                switch response.result {
+                case .success(let value):
+                    if let json = value as? [String: Any] {
+                        do {
+                            let prettyJsonData = try JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
+                            if let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) {
+                                print(prettyPrintedJson)
+                                Toast.show(message:"Submitted Successfully", controller: self)
+                                GlobalFunc.movetoHomePage()
+                            } else {
+                                print("Error: Could not convert JSON to String")
+                            }
+                        } catch {
+                            print("Error: \(error.localizedDescription)")
+                        }
+                    }
+                case .failure(let error):
+                    Toast.show(message: error.errorDescription ?? "Unknown Error")
+                }
+        }
+    }
     
     @objc func Rj_Exp(_ sender: UIButton) {
     let item = ExpenseDetail_data[sender.tag]

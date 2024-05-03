@@ -68,13 +68,18 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
     var Nav_PeriodicData:[AnyObject] = []
     var No_Of_Days_In_Perio = 0
     var Allow_Apr:Bool = false
-    
-    override func viewDidLoad() {
+    var selected_period = ""
+    override func viewDidLoad(){
         super.viewDidLoad()
         YearPostion.text = selectYear
         let Month = Calendar.current.component(.month, from: Date()) - 1
         let formattedPosition = String(format: "%02d", Month + 1)
         SelectMonth = formattedPosition
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MMM-yyyy"
+        let currentDate = Date()
+        let formattedDate = dateFormatter.string(from: currentDate)
+        selectmonth.text = formattedDate
         blureView.bounds = self.view.bounds
         PopUpView.bounds = CGRect(x: 0, y: 0, width: self.view.bounds.width * 0.9, height: self.view.bounds.height * 0.4)
         PopUpView.layer.cornerRadius = 10
@@ -92,10 +97,14 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
         ClosePopup.addTarget(target: self, action: #selector(ClosePopUP))
         YearPostion.addTarget(target: self, action: #selector(OpenYear))
         MonthPostion.addTarget(target: self, action: #selector(OpenMonth))
-        
 //        let monthsView = MonthsView(frame: MonthView.bounds)
 //            monthsView.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.97, alpha: 1.00)
 //            MonthView.addSubview(monthsView)
+        
+        if VisitData.shared.Nav_id == 1 {
+            VisitData.shared.Nav_id = 0
+            set_priod_calendar()
+        }
     }
     func animateIn(desiredView: UIView){
         let  backGroundView = self.view
@@ -130,6 +139,71 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
     SF_type=prettyJsonData["SF_type"] as? String ?? ""
     }
     
+    func set_priod_calendar(){
+        if let data = UserDefaults.standard.data(forKey: "periodicData"),
+           let item = try? JSONDecoder().decode(PeriodicData.self, from: data) {
+            Nav_PeriodicData = [item as AnyObject]
+            removeLabels()
+            SelPeriod.text = item.Period_Name
+            selected_period = item.Period_Id
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd"
+            let From_Date = item.From_Date
+            period_from_date = "\(selectYear)-\(SelectMonth)-"+From_Date
+            if let date = dateFormatter.date(from: "\(selectYear)-\(SelectMonth)-" + From_Date) {
+                FDate = date
+            } else {
+                print("Error: Unable to convert string to Date")
+            }
+            let To_Date = item.To_Date
+            if To_Date == "end of month"{
+                let currentDate = FDate
+                let calendar = Calendar.current
+                if let monthRange = calendar.range(of: .day, in: .month, for: currentDate) {
+                    print(monthRange)
+                    let lastDayOfMonth = monthRange.upperBound - 1
+                    if let lastDateOfMonth = calendar.date(bySetting: .day, value: lastDayOfMonth, of: currentDate) {
+                        print("Last date of the month: \(lastDateOfMonth)")
+                        TDate = lastDateOfMonth
+                        print(lastDateOfMonth)
+                        let formatters = DateFormatter()
+                        formatters.dateFormat = "yyyy-MM-dd"
+                        period_to_date = formatters.string(from: lastDateOfMonth)
+                    }
+                }
+            }else{
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "yyyy-MM-dd"
+                let Per_To_Date = To_Date
+                period_to_date = "\(selectYear)-\(SelectMonth)-"+To_Date
+                if let date = dateFormatter.date(from: "\(selectYear)-\(SelectMonth)-" + Per_To_Date) {
+                    TDate = date
+                } else {
+                    print("Error: Unable to convert string to Date")
+                }
+            }
+            let dateFormatterss = DateFormatter()
+            dateFormatterss.dateFormat = "yyyy-MM-dd"
+            let From = dateFormatterss.string(from: FDate)
+            let To = dateFormatterss.string(from: TDate)
+            // Convert string dates to Date objects
+            if let startDate = dateFormatterss.date(from: From),
+               let endDate = dateFormatterss.date(from: To) {
+                let days = daysBetweenDates(startDate, endDate)
+                print("Number of days between the two dates: \(days)")
+                No_Of_Days_In_Perio = days + 1
+            } else {
+                print("Invalid date format")
+            }
+            print(item.Eff_Month)
+            
+            Sent_Apr_Det.append(Apr_Data(Period_Id: item.Period_Id, Eff_Month: String(item.Eff_Month), Eff_Year: String(item.Eff_Year), From_Date: item.From_Date, To_Date: item.To_Date))
+            expSubmitDates()
+            calendar.reloadData()
+            UserDefaults.standard.removeObject(forKey: "periodicData")
+        }
+    }
+    
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition){
         if (SelPeriod.text == "Select Period"){
             Toast.show(message: "Select Period")
@@ -140,7 +214,6 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
         }
         new_DateofExpense(date: date)
     }
-
     func addLetterA(to cell: FSCalendarCell?, text:String) {
         let letterLabel = UILabel()
         letterLabel.text = text
@@ -297,11 +370,14 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         Sent_Apr_Det.removeAll()
         let item = Period[indexPath.row]
-        print(item)
+        let encoder = JSONEncoder()
+        if let encoded = try? encoder.encode(item) {
+            UserDefaults.standard.set(encoded, forKey: "periodicData")
+        }
         Nav_PeriodicData = [item as AnyObject]
-        print(Nav_PeriodicData)
         removeLabels()
         SelPeriod.text = item.Period_Name
+        selected_period = item.Period_Id
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
         let From_Date = item.From_Date
@@ -391,20 +467,19 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
 
                                 if let jsonObject = try JSONSerialization.jsonObject(with: prettyJsonData, options: []) as? [String: Any],
                                    let data = jsonObject["data"] as? [AnyObject] {
+                                    print(data)
                                     for i in data {
-                                        if let divisionCode = i["Division_Code"] as? Int,
-                                           let effMonth = i["Eff_Month"] as? Int,
+                                         //let divisionCode = i["Division_Code"] as? Int
+                                           if let effMonth = i["Eff_Month"] as? Int,
                                            let effYear = i["Eff_Year"] as? Int,
                                            let fromDate = i["From_Date"] as? String,
                                            let periodId = i["Period_Id"] as? String,
                                            let periodName = i["Period_Name"] as? String,
                                            let toDate = i["To_Date"] as? String,
-                                           let disRank = i["dis_Rank"] as? String {
-                                            
-                                            Period.append(PeriodicData(Division_Code: divisionCode, Eff_Month: effMonth, Eff_Year: effYear, From_Date: fromDate, Period_Id: periodId, Period_Name: periodName, To_Date: toDate, dis_Rank: disRank))
-                                        } else {
-                                            print("Error: Some key in the data is nil or has the wrong type")
-                                        }
+                                            let disRank = i["dis_Rank"] as? String{
+                                               
+                                               Period.append(PeriodicData(Division_Code: 0, Eff_Month: effMonth, Eff_Year: effYear, From_Date: fromDate, Period_Id: periodId, Period_Name: periodName, To_Date: toDate, dis_Rank: disRank))
+                                           }
                                     }
                                     lstOfPeriod = Period
                                     DataTB.reloadData()
@@ -428,7 +503,7 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
     
     func expSubmitDates(){
         let axn = "get/expSubmitDates"
-        let apiKey = "\(axn)&desig=\(Desig)&divisionCode=\(DivCode)&from_date=\(period_from_date)&to_date=\(period_to_date)&month=\(SelectMonth)&rSF=\(SFCode)&year=\(selectYear)&selected_period=58&sfCode=\(SFCode)&stateCode=\(StateCode)&sf_code=\(SFCode)"
+        let apiKey = "\(axn)&desig=\(Desig)&divisionCode=\(DivCode)&from_date=\(period_from_date)&to_date=\(period_to_date)&month=\(SelectMonth)&rSF=\(SFCode)&year=\(selectYear)&selected_period=\(selected_period)&sfCode=\(SFCode)&stateCode=\(StateCode)&sf_code=\(SFCode)"
         let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
         let url = APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKeyWithoutCommas
         AF.request(url, method: .post, parameters: nil, encoding: URLEncoding.default, headers: nil)
@@ -604,6 +679,7 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
             let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
             let RptMnuVc = storyboard.instantiateViewController(withIdentifier: "Expense") as! Expense_Entry
             let myDyPln = storyboard.instantiateViewController(withIdentifier: "Daily_Expense_Entry") as! Daily_Expense_Entry
+            VisitData.shared.Nav_id = 1
             myDyPln.day_Plan = Day_Plan_Data
             myDyPln.set_Date = Set_Date
             myDyPln.PeriodicData = Nav_PeriodicData
@@ -768,9 +844,24 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
         }
     }
     func send_forApproval_periodic(Period_Id:String,Eff_Month:String,Eff_Year:String,From_Date:String,To_Date:String){
+        
+        var end_Todate = ""
+        if To_Date == "end of month"{
+            let currentDate = FDate
+            let calendar = Calendar.current
+            if let monthRange = calendar.range(of: .day, in: .month, for: currentDate) {
+                let lastDayOfMonth = monthRange.upperBound - 1
+                if let lastDateOfMonth = calendar.date(bySetting: .day, value: lastDayOfMonth, of: currentDate) {
+                    let formatters = DateFormatter()
+                    formatters.dateFormat = "dd"
+                    end_Todate = formatters.string(from: lastDateOfMonth)
+                }
+            }
+        }
+        
         let Month = String(format: "%02d",Int(Eff_Month)!)
         let FromDate = String(format: "%02d",Int(From_Date)!)
-        let ToDate = String(format: "%02d",Int(To_Date)!)
+        let ToDate = String(format: "%02d",Int(end_Todate)!)
         let From_Date = "\(Eff_Year)-\(Month)-\(FromDate)"
         let To_Date = "\(Eff_Year)-\(Month)-\(ToDate)"
         let axn = "send_forApproval_periodic"

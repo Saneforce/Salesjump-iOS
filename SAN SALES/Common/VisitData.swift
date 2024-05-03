@@ -13,10 +13,13 @@ class VisitData{
         var name: String=""
     }
     
+    
     var WorkType: String = ""
     var TownCode: String = ""
     var ActivityDate: String = ""
     var Remarks: String = ""
+    
+    var Nav_id = 0
     
     
     var CustID: String = ""

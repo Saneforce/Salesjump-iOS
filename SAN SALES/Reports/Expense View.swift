@@ -418,8 +418,8 @@ class Expense_View: UIViewController, UITableViewDelegate, UITableViewDataSource
                                 if let jsonObject = try JSONSerialization.jsonObject(with: prettyJsonData, options: []) as? [String: Any],
                                    let data = jsonObject["data"] as? [AnyObject] {
                                     for i in data {
-                                        if let divisionCode = i["Division_Code"] as? Int,
-                                           let effMonth = i["Eff_Month"] as? Int,
+//                                        if let divisionCode = i["Division_Code"] as? Int,
+                                           if let effMonth = i["Eff_Month"] as? Int,
                                            let effYear = i["Eff_Year"] as? Int,
                                            let fromDate = i["From_Date"] as? String,
                                            let periodId = i["Period_Id"] as? String,
@@ -427,7 +427,7 @@ class Expense_View: UIViewController, UITableViewDelegate, UITableViewDataSource
                                            let toDate = i["To_Date"] as? String,
                                            let disRank = i["dis_Rank"] as? String {
                                             
-                                            Period.append(PeriodicDatas(Division_Code: divisionCode, Eff_Month: effMonth, Eff_Year: effYear, From_Date: fromDate, Period_Id: periodId, Period_Name: periodName, To_Date: toDate, dis_Rank: disRank))
+                                            Period.append(PeriodicDatas(Division_Code: 0, Eff_Month: effMonth, Eff_Year: effYear, From_Date: fromDate, Period_Id: periodId, Period_Name: periodName, To_Date: toDate, dis_Rank: disRank))
                                         } else {
                                             print("Error: Some key in the data is nil or has the wrong type")
                                         }
