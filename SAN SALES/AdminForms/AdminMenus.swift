@@ -42,6 +42,8 @@ class AdminMenus: IViewController, UITableViewDelegate, UITableViewDataSource  {
         //strMasList.append(mnuItem.init(MasId: 2, MasName: "Add New Retailer", MasImage: "NewRetailer"))
         //strMasList.append(mnuItem.init(MasId: 11, MasName: "Master Sync", MasImage: "MasterSync"))
         
+        strMasList.append(mnuItem.init(MasId: 5, MasName: "Tour Plan Entry", MasImage: "SwitchRoute"))
+        
         btnBack.addTarget(target: self, action: #selector(closeMenuWin))
         menuClose.addTarget(target: self, action: #selector(closeMenuWin))
         tbMenuDetail.delegate=self
@@ -89,6 +91,11 @@ class AdminMenus: IViewController, UITableViewDelegate, UITableViewDataSource  {
             let myDyPln = storyboard.instantiateViewController(withIdentifier: "Expense") as! Expense_Entry
             viewController.setViewControllers([RptMnuVc,myDyPln], animated: false)
             //viewController.navigationController?.pushViewController(myDyPln, animated: true)
+            (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
+        }else if lItm.MasId == 5 {
+            let tpMnuVc = storyboard.instantiateViewController(withIdentifier: "sbAdminMnu") as! AdminMenus
+            let trPln = storyboard.instantiateViewController(withIdentifier: "sbTourPlanCalenderScreen") as! TourPlanCalenderScreen
+            viewController.setViewControllers([tpMnuVc,trPln], animated: false)
             (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
         }
         print(strMasList[indexPath.row].MasName)

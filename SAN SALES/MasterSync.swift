@@ -158,6 +158,10 @@ import BackgroundTasks
          strMasList.append(mnuItem.init(MasId: 28, MasName: "Random Number", MasImage: "mnuPrimary",StoreKey: "Random_Number", ApiKey: "get/Randomnumber&divisionCode="+(prettyJsonData["divisionCode"] as? String ?? "")+"&rSF="+SFCode+"&sfCode="+SFCode+"&State_Code="+StateCode+"&desig="+desigCode,fromData: [
             "orderBy":"[\"name asc\"]","desig":"mgr"
          ]))
+         
+         strMasList.append(mnuItem.init(MasId: 29, MasName: "Subordinate", MasImage: "mnuPrimary",StoreKey: "Subordinates", ApiKey: "get/submgr&divisionCode="+(prettyJsonData["divisionCode"] as? String ?? "")+"&rSF="+SFCode+"&sfCode="+SFCode+"&State_Code="+StateCode+"&desig="+desigCode,fromData: [
+            "orderBy":"[\"name asc\"]","desig":"mgr"
+         ]))
     
          
          

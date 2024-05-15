@@ -27,6 +27,9 @@ class UserSetup{
     var offerMode: Int = 0
     var SchemeBased : Int = 0
     var SuperStockistNeed : Int = 0
+    var distributorBased : Int = 0
+    var tpTargetBased : Int = 0
+    var jointWorkNeed : Int = 0
     var Desig:String = ""
     var Sf_HQ:String = ""
     var StkRoute:String = ""
@@ -76,6 +79,9 @@ class UserSetup{
         exp_process_type = lstSetups[0]["exp_process_type"] as? Int ?? 0
         SrtEndKMNd = lstSetups[0]["SrtEndKMNd"] as? Int ?? 0
         sf_emp_id = lstSetups[0]["sf_emp_id"] as? String ?? ""
+        distributorBased = lstSetups[0]["DistBased"] as? Int ?? 0
+        tpTargetBased = lstSetups[0]["TP_Target_Based"] as? Int ?? 0
+        jointWorkNeed = lstSetups[0]["jointwork"] as? Int ?? 0
         print(UserSetup.shared.Phone_Country_Length)
         if(lstSetups[0]["Geo_Fencing"] as? Int == 1){
             Fenching = true

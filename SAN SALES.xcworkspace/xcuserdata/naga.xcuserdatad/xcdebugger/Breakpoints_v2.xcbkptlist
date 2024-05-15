@@ -18,83 +18,6 @@
             endingLineNumber = "560"
             landmarkName = "collectionView(_:didSelectItemAt:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "E5B3E1A3-4642-4981-9CF4-DB2AC97A4222 - f0762aaddc8c6b31"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SAN_SALES.SuperStockistOrderList.collectionView(_: __C.UICollectionView, didSelectItemAt: Foundation.IndexPath) -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Activity/SuperStockistOrderList.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "122"
-                  endingLineNumber = "122"
-                  offsetFromSymbolStart = "1300">
-               </Location>
-               <Location
-                  uuid = "E5B3E1A3-4642-4981-9CF4-DB2AC97A4222 - f0762aaddc8c68ee"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SAN_SALES.SuperStockistOrderList.collectionView(_: __C.UICollectionView, didSelectItemAt: Foundation.IndexPath) -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Activity/SuperStockistOrderList.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "117"
-                  endingLineNumber = "117"
-                  offsetFromSymbolStart = "1228">
-               </Location>
-               <Location
-                  uuid = "E5B3E1A3-4642-4981-9CF4-DB2AC97A4222 - 9aeadd837f8a534d"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (SAN_SALES.ProductList) -&gt; Swift.Bool in SAN_SALES.SuperStockistOrderList.collectionView(_: __C.UICollectionView, didSelectItemAt: Foundation.IndexPath) -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Activity/SuperStockistOrderList.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "117"
-                  endingLineNumber = "117"
-                  offsetFromSymbolStart = "64">
-               </Location>
-               <Location
-                  uuid = "E5B3E1A3-4642-4981-9CF4-DB2AC97A4222 - f0762aaddc8c6b73"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SAN_SALES.SuperStockistOrderList.collectionView(_: __C.UICollectionView, didSelectItemAt: Foundation.IndexPath) -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Activity/SuperStockistOrderList.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "120"
-                  endingLineNumber = "120"
-                  offsetFromSymbolStart = "1228">
-               </Location>
-               <Location
-                  uuid = "E5B3E1A3-4642-4981-9CF4-DB2AC97A4222 - 9aeadd837f8a50d0"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (SAN_SALES.ProductList) -&gt; Swift.Bool in SAN_SALES.SuperStockistOrderList.collectionView(_: __C.UICollectionView, didSelectItemAt: Foundation.IndexPath) -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Activity/SuperStockistOrderList.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "120"
-                  endingLineNumber = "120"
-                  offsetFromSymbolStart = "64">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -127,53 +50,6 @@
             endingLineNumber = "236"
             landmarkName = "updateProduct(products:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "433D89B1-4DB5-4174-A26C-D3C249E745A1 - d67849ba997c2719"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SAN_SALES.SuperStockistOrderList.updateProduct(products: Swift.Array&lt;Swift.AnyObject&gt;) -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Activity/SuperStockistOrderList.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "187"
-                  endingLineNumber = "187"
-                  offsetFromSymbolStart = "8008">
-               </Location>
-               <Location
-                  uuid = "433D89B1-4DB5-4174-A26C-D3C249E745A1 - d67849ba997c2719"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SAN_SALES.SuperStockistOrderList.updateProduct(products: Swift.Array&lt;Swift.AnyObject&gt;) -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Activity/SuperStockistOrderList.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "187"
-                  endingLineNumber = "187"
-                  offsetFromSymbolStart = "8040">
-               </Location>
-               <Location
-                  uuid = "433D89B1-4DB5-4174-A26C-D3C249E745A1 - d67849ba997c2719"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SAN_SALES.SuperStockistOrderList.updateProduct(products: Swift.Array&lt;Swift.AnyObject&gt;) -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Activity/SuperStockistOrderList.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "187"
-                  endingLineNumber = "187"
-                  offsetFromSymbolStart = "8032">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -190,68 +66,6 @@
             endingLineNumber = "170"
             landmarkName = "submitAction(_:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "EE924DB8-17C6-48BB-ACC1-E00E46AA5B84 - 6a8e81f6848481e9"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Optional&lt;Swift.Array&lt;__C.CLPlacemark&gt;&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in closure #1 (__C.CLLocation) -&gt; () in closure #2 (__C.UIAlertAction) -&gt; () in SAN_SALES.SuperStockistOrder.submitAction(__C.UIButton) -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Activity/SuperStockistOrder.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "169"
-                  endingLineNumber = "169"
-                  offsetFromSymbolStart = "2244">
-               </Location>
-               <Location
-                  uuid = "EE924DB8-17C6-48BB-ACC1-E00E46AA5B84 - 53823dabc76e4b07"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #2 (Swift.String) -&gt; () in closure #2 (__C.UIAlertAction) -&gt; () in SAN_SALES.SuperStockistOrder.submitAction(__C.UIButton) -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Activity/SuperStockistOrder.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "169"
-                  endingLineNumber = "169"
-                  offsetFromSymbolStart = "64">
-               </Location>
-               <Location
-                  uuid = "EE924DB8-17C6-48BB-ACC1-E00E46AA5B84 - 53823dabc76e4b59"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #2 (Swift.String) -&gt; () in closure #2 (__C.UIAlertAction) -&gt; () in SAN_SALES.SuperStockistOrder.submitAction(__C.UIButton) -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Activity/SuperStockistOrder.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "167"
-                  endingLineNumber = "167"
-                  offsetFromSymbolStart = "64">
-               </Location>
-               <Location
-                  uuid = "EE924DB8-17C6-48BB-ACC1-E00E46AA5B84 - 53823dabc76e4b24"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #2 (Swift.String) -&gt; () in closure #2 (__C.UIAlertAction) -&gt; () in SAN_SALES.SuperStockistOrder.submitAction(__C.UIButton) -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Activity/SuperStockistOrder.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "170"
-                  endingLineNumber = "170"
-                  offsetFromSymbolStart = "64">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -300,38 +114,6 @@
             endingLineNumber = "223"
             landmarkName = "submitWithoutOrder()"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "9EA342D3-824B-46B2-904B-BCCDEECAE344 - 9b4d7348d9129149"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Foundation.Data, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.SuperStockistOrder.submitWithoutOrder() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Activity/SuperStockistOrder.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "212"
-                  endingLineNumber = "212"
-                  offsetFromSymbolStart = "1980">
-               </Location>
-               <Location
-                  uuid = "9EA342D3-824B-46B2-904B-BCCDEECAE344 - 9b4d7348d9129149"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Foundation.Data, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.SuperStockistOrder.submitWithoutOrder() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Activity/SuperStockistOrder.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "212"
-                  endingLineNumber = "212"
-                  offsetFromSymbolStart = "1528">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -348,113 +130,6 @@
             endingLineNumber = "202"
             landmarkName = "submitWithoutOrder()"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "B7C16119-7DEA-4144-A197-D9810D723D79 - f17bfe3a9291eeed"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SAN_SALES.SuperStockistOrder.submitWithoutOrder() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Activity/SuperStockistOrder.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "202"
-                  endingLineNumber = "202"
-                  offsetFromSymbolStart = "364">
-               </Location>
-               <Location
-                  uuid = "B7C16119-7DEA-4144-A197-D9810D723D79 - f17bfe3a9291ed0e"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SAN_SALES.SuperStockistOrder.submitWithoutOrder() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Activity/SuperStockistOrder.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "201"
-                  endingLineNumber = "201"
-                  offsetFromSymbolStart = "2512">
-               </Location>
-               <Location
-                  uuid = "B7C16119-7DEA-4144-A197-D9810D723D79 - f17bfe3a9291ed0e"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SAN_SALES.SuperStockistOrder.submitWithoutOrder() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Activity/SuperStockistOrder.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "201"
-                  endingLineNumber = "201"
-                  offsetFromSymbolStart = "2452">
-               </Location>
-               <Location
-                  uuid = "B7C16119-7DEA-4144-A197-D9810D723D79 - f17bfe3a9291ed50"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SAN_SALES.SuperStockistOrder.submitWithoutOrder() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Activity/SuperStockistOrder.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "199"
-                  endingLineNumber = "199"
-                  offsetFromSymbolStart = "2512">
-               </Location>
-               <Location
-                  uuid = "B7C16119-7DEA-4144-A197-D9810D723D79 - f17bfe3a9291ed50"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SAN_SALES.SuperStockistOrder.submitWithoutOrder() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Activity/SuperStockistOrder.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "199"
-                  endingLineNumber = "199"
-                  offsetFromSymbolStart = "2452">
-               </Location>
-               <Location
-                  uuid = "B7C16119-7DEA-4144-A197-D9810D723D79 - f17bfe3a9291eeed"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SAN_SALES.SuperStockistOrder.submitWithoutOrder() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Activity/SuperStockistOrder.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "202"
-                  endingLineNumber = "202"
-                  offsetFromSymbolStart = "2456">
-               </Location>
-               <Location
-                  uuid = "B7C16119-7DEA-4144-A197-D9810D723D79 - f17bfe3a9291eeed"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SAN_SALES.SuperStockistOrder.submitWithoutOrder() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Activity/SuperStockistOrder.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "202"
-                  endingLineNumber = "202"
-                  offsetFromSymbolStart = "2532">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -471,38 +146,6 @@
             endingLineNumber = "468"
             landmarkName = "finalSubmit(sLocation:sAddress:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "D04CA115-08A6-4768-86AF-B16ABC381175 - 43fafd3311a1816"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SAN_SALES.SuperStockistOrderList.finalSubmit(sLocation: Swift.String, sAddress: Swift.String) -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Activity/SuperStockistOrderList.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "383"
-                  endingLineNumber = "383"
-                  offsetFromSymbolStart = "10340">
-               </Location>
-               <Location
-                  uuid = "D04CA115-08A6-4768-86AF-B16ABC381175 - 43fafd3311a1816"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SAN_SALES.SuperStockistOrderList.finalSubmit(sLocation: Swift.String, sAddress: Swift.String) -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Activity/SuperStockistOrderList.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "383"
-                  endingLineNumber = "383"
-                  offsetFromSymbolStart = "6464">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -519,68 +162,6 @@
             endingLineNumber = "488"
             landmarkName = "finalSubmit(sLocation:sAddress:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "E566DE2C-80C9-4366-A7BE-73F3B2BA46F6 - 43fafd3311a1180"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SAN_SALES.SuperStockistOrderList.finalSubmit(sLocation: Swift.String, sAddress: Swift.String) -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Activity/SuperStockistOrderList.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "457"
-                  endingLineNumber = "457"
-                  offsetFromSymbolStart = "14244">
-               </Location>
-               <Location
-                  uuid = "E566DE2C-80C9-4366-A7BE-73F3B2BA46F6 - fada26f8dbe62b82"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #7 (Alamofire.DataResponse&lt;Foundation.Data, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.SuperStockistOrderList.finalSubmit(sLocation: Swift.String, sAddress: Swift.String) -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Activity/SuperStockistOrderList.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "459"
-                  endingLineNumber = "459"
-                  offsetFromSymbolStart = "336">
-               </Location>
-               <Location
-                  uuid = "E566DE2C-80C9-4366-A7BE-73F3B2BA46F6 - fada26f8dbe62b21"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #7 (Alamofire.DataResponse&lt;Foundation.Data, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.SuperStockistOrderList.finalSubmit(sLocation: Swift.String, sAddress: Swift.String) -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Activity/SuperStockistOrderList.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "456"
-                  endingLineNumber = "456"
-                  offsetFromSymbolStart = "820">
-               </Location>
-               <Location
-                  uuid = "E566DE2C-80C9-4366-A7BE-73F3B2BA46F6 - fada26f8dbe62b21"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #7 (Alamofire.DataResponse&lt;Foundation.Data, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.SuperStockistOrderList.finalSubmit(sLocation: Swift.String, sAddress: Swift.String) -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Activity/SuperStockistOrderList.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "456"
-                  endingLineNumber = "456"
-                  offsetFromSymbolStart = "824">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -597,38 +178,6 @@
             endingLineNumber = "886"
             landmarkName = "addDiscount(_:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "0EB06A57-BDED-424F-878B-E2415F8C929E - 70ad27f9180a7304"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SAN_SALES.SuperStockistOrderList.addDiscount(__C.UITextField) -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Activity/SuperStockistOrderList.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "679"
-                  endingLineNumber = "679"
-                  offsetFromSymbolStart = "1016">
-               </Location>
-               <Location
-                  uuid = "0EB06A57-BDED-424F-878B-E2415F8C929E - 70ad27f9180a7304"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SAN_SALES.SuperStockistOrderList.addDiscount(__C.UITextField) -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Activity/SuperStockistOrderList.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "679"
-                  endingLineNumber = "679"
-                  offsetFromSymbolStart = "1048">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -693,143 +242,6 @@
             endingLineNumber = "151"
             landmarkName = "getDayReport()"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "56F92536-CDD2-4689-8AE4-40C86C42369A - cc1d61b9648e543d"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.DayReport.getDayReport() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Reports/DayReport.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "120"
-                  endingLineNumber = "120"
-                  offsetFromSymbolStart = "476">
-               </Location>
-               <Location
-                  uuid = "56F92536-CDD2-4689-8AE4-40C86C42369A - cc1d61b9648e543d"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.DayReport.getDayReport() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Reports/DayReport.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "120"
-                  endingLineNumber = "120"
-                  offsetFromSymbolStart = "508">
-               </Location>
-               <Location
-                  uuid = "56F92536-CDD2-4689-8AE4-40C86C42369A - fdc2242510c81c6e"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SAN_SALES.DayReport.getDayReport() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Reports/DayReport.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "120"
-                  endingLineNumber = "120"
-                  offsetFromSymbolStart = "2352">
-               </Location>
-               <Location
-                  uuid = "56F92536-CDD2-4689-8AE4-40C86C42369A - cc1d61b9648e547b"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.DayReport.getDayReport() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Reports/DayReport.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "122"
-                  endingLineNumber = "122"
-                  offsetFromSymbolStart = "440">
-               </Location>
-               <Location
-                  uuid = "56F92536-CDD2-4689-8AE4-40C86C42369A - cc1d61b9648e547b"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.DayReport.getDayReport() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Reports/DayReport.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "122"
-                  endingLineNumber = "122"
-                  offsetFromSymbolStart = "452">
-               </Location>
-               <Location
-                  uuid = "56F92536-CDD2-4689-8AE4-40C86C42369A - cc1d61b9648e5134"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.DayReport.getDayReport() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Reports/DayReport.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "159"
-                  endingLineNumber = "159"
-                  offsetFromSymbolStart = "588">
-               </Location>
-               <Location
-                  uuid = "56F92536-CDD2-4689-8AE4-40C86C42369A - cc1d61b9648e5134"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.DayReport.getDayReport() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Reports/DayReport.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "159"
-                  endingLineNumber = "159"
-                  offsetFromSymbolStart = "620">
-               </Location>
-               <Location
-                  uuid = "56F92536-CDD2-4689-8AE4-40C86C42369A - fdc2242510c818a5"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SAN_SALES.DayReport.getDayReport() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Reports/DayReport.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "157"
-                  endingLineNumber = "157"
-                  offsetFromSymbolStart = "3792">
-               </Location>
-               <Location
-                  uuid = "56F92536-CDD2-4689-8AE4-40C86C42369A - cc1d61b9648e5134"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.DayReport.getDayReport() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Reports/DayReport.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "159"
-                  endingLineNumber = "159"
-                  offsetFromSymbolStart = "552">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -846,83 +258,6 @@
             endingLineNumber = "485"
             landmarkName = "viewprimary()"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "2F34F5F7-433D-4646-A077-84F8A210380A - 2c4d3254495decec"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.OrderDetailView.viewprimary() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Reports/OrderDetailView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "476"
-                  endingLineNumber = "476"
-                  offsetFromSymbolStart = "1532">
-               </Location>
-               <Location
-                  uuid = "2F34F5F7-433D-4646-A077-84F8A210380A - 2c4d3254495decec"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.OrderDetailView.viewprimary() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Reports/OrderDetailView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "476"
-                  endingLineNumber = "476"
-                  offsetFromSymbolStart = "816">
-               </Location>
-               <Location
-                  uuid = "2F34F5F7-433D-4646-A077-84F8A210380A - 2c4d3254495decec"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.OrderDetailView.viewprimary() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Reports/OrderDetailView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "476"
-                  endingLineNumber = "476"
-                  offsetFromSymbolStart = "720">
-               </Location>
-               <Location
-                  uuid = "2F34F5F7-433D-4646-A077-84F8A210380A - 2c4d3254495debd7"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.OrderDetailView.viewprimary() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Reports/OrderDetailView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "485"
-                  endingLineNumber = "485"
-                  offsetFromSymbolStart = "720">
-               </Location>
-               <Location
-                  uuid = "2F34F5F7-433D-4646-A077-84F8A210380A - 2c4d3254495debd7"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.OrderDetailView.viewprimary() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Reports/OrderDetailView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "485"
-                  endingLineNumber = "485"
-                  offsetFromSymbolStart = "816">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -937,175 +272,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "128"
             endingLineNumber = "128"
-            landmarkName = "getVisitDetail()"
+            landmarkName = "tableView(_:cellForRowAt:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "5039160C-FD6F-4788-9A4E-72EC3959F6C9 - 43d84f830063365b"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.RptVisitDetail.getVisitDetail() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Reports/RptVisitDetail.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "118"
-                  endingLineNumber = "118"
-                  offsetFromSymbolStart = "1096">
-               </Location>
-               <Location
-                  uuid = "5039160C-FD6F-4788-9A4E-72EC3959F6C9 - 43d84f830063365b"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.RptVisitDetail.getVisitDetail() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Reports/RptVisitDetail.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "118"
-                  endingLineNumber = "118"
-                  offsetFromSymbolStart = "452">
-               </Location>
-               <Location
-                  uuid = "5039160C-FD6F-4788-9A4E-72EC3959F6C9 - 43d84f830063365b"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.RptVisitDetail.getVisitDetail() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Reports/RptVisitDetail.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "118"
-                  endingLineNumber = "118"
-                  offsetFromSymbolStart = "484">
-               </Location>
-               <Location
-                  uuid = "5039160C-FD6F-4788-9A4E-72EC3959F6C9 - 43d84f8300633911"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.RptVisitDetail.getVisitDetail() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Reports/RptVisitDetail.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "128"
-                  endingLineNumber = "128"
-                  offsetFromSymbolStart = "936">
-               </Location>
-               <Location
-                  uuid = "5039160C-FD6F-4788-9A4E-72EC3959F6C9 - 43d84f8300633911"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.RptVisitDetail.getVisitDetail() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Reports/RptVisitDetail.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "128"
-                  endingLineNumber = "128"
-                  offsetFromSymbolStart = "1104">
-               </Location>
-               <Location
-                  uuid = "5039160C-FD6F-4788-9A4E-72EC3959F6C9 - 43d84f8300633911"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.RptVisitDetail.getVisitDetail() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Reports/RptVisitDetail.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "128"
-                  endingLineNumber = "128"
-                  offsetFromSymbolStart = "968">
-               </Location>
-               <Location
-                  uuid = "5039160C-FD6F-4788-9A4E-72EC3959F6C9 - 43d84f8300633911"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.RptVisitDetail.getVisitDetail() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Reports/RptVisitDetail.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "128"
-                  endingLineNumber = "128"
-                  offsetFromSymbolStart = "1136">
-               </Location>
-               <Location
-                  uuid = "5039160C-FD6F-4788-9A4E-72EC3959F6C9 - 43d84f8300633911"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.RptVisitDetail.getVisitDetail() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Reports/RptVisitDetail.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "128"
-                  endingLineNumber = "128"
-                  offsetFromSymbolStart = "1124">
-               </Location>
-               <Location
-                  uuid = "5039160C-FD6F-4788-9A4E-72EC3959F6C9 - 43d84f8300633911"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.RptVisitDetail.getVisitDetail() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Reports/RptVisitDetail.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "128"
-                  endingLineNumber = "128"
-                  offsetFromSymbolStart = "1156">
-               </Location>
-               <Location
-                  uuid = "5039160C-FD6F-4788-9A4E-72EC3959F6C9 - 43d84f83006338ad"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.RptVisitDetail.getVisitDetail() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Reports/RptVisitDetail.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "132"
-                  endingLineNumber = "132"
-                  offsetFromSymbolStart = "424">
-               </Location>
-               <Location
-                  uuid = "5039160C-FD6F-4788-9A4E-72EC3959F6C9 - 43d84f83006338ad"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.RptVisitDetail.getVisitDetail() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Reports/RptVisitDetail.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "132"
-                  endingLineNumber = "132"
-                  offsetFromSymbolStart = "456">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1120,40 +288,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "195"
             endingLineNumber = "195"
-            landmarkName = "getItemSummary()"
+            landmarkName = "getVisitDetail()"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "3B8FCF74-CEA5-45EC-A89F-4D5B780C7C7B - e8aa174441bc9ba3"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.RptVisitDetail.getItemSummary() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Reports/RptVisitDetail.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "201"
-                  endingLineNumber = "201"
-                  offsetFromSymbolStart = "828">
-               </Location>
-               <Location
-                  uuid = "3B8FCF74-CEA5-45EC-A89F-4D5B780C7C7B - e8aa174441bc9ba3"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.RptVisitDetail.getItemSummary() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Reports/RptVisitDetail.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "201"
-                  endingLineNumber = "201"
-                  offsetFromSymbolStart = "632">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1218,38 +354,6 @@
             endingLineNumber = "230"
             landmarkName = "updateProduct(products:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "1E6E0093-F1EC-4343-AF0E-C1CCBE718059 - d67849ba997c235a"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SAN_SALES.SuperStockistOrderList.updateProduct(products: Swift.Array&lt;Swift.AnyObject&gt;) -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Activity/SuperStockistOrderList.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "216"
-                  endingLineNumber = "216"
-                  offsetFromSymbolStart = "8248">
-               </Location>
-               <Location
-                  uuid = "1E6E0093-F1EC-4343-AF0E-C1CCBE718059 - e3a79fb045c22584"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #4 (Swift.AnyObject) -&gt; Swift.Bool in SAN_SALES.SuperStockistOrderList.updateProduct(products: Swift.Array&lt;Swift.AnyObject&gt;) -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Activity/SuperStockistOrderList.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "217"
-                  endingLineNumber = "217"
-                  offsetFromSymbolStart = "156">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1266,53 +370,6 @@
             endingLineNumber = "249"
             landmarkName = "updateProduct(products:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "B5B365C4-39E7-4344-A868-88EB1C123B29 - d67849ba997c3c42"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SAN_SALES.SuperStockistOrderList.updateProduct(products: Swift.Array&lt;Swift.AnyObject&gt;) -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Activity/SuperStockistOrderList.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "240"
-                  endingLineNumber = "240"
-                  offsetFromSymbolStart = "16328">
-               </Location>
-               <Location
-                  uuid = "B5B365C4-39E7-4344-A868-88EB1C123B29 - d67849ba997c3c63"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SAN_SALES.SuperStockistOrderList.updateProduct(products: Swift.Array&lt;Swift.AnyObject&gt;) -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Activity/SuperStockistOrderList.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "241"
-                  endingLineNumber = "241"
-                  offsetFromSymbolStart = "16320">
-               </Location>
-               <Location
-                  uuid = "B5B365C4-39E7-4344-A868-88EB1C123B29 - d67849ba997c3c63"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SAN_SALES.SuperStockistOrderList.updateProduct(products: Swift.Array&lt;Swift.AnyObject&gt;) -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Activity/SuperStockistOrderList.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "241"
-                  endingLineNumber = "241"
-                  offsetFromSymbolStart = "16312">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1345,53 +402,6 @@
             endingLineNumber = "50"
             landmarkName = "updateList()"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "EA3F183A-45B3-4862-BBDD-5C11C5B5C27C - a111dc84c25fafce"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SAN_SALES.CustomAlertVCViewController.updateList() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Activity/CustomAlertVCViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "59"
-                  endingLineNumber = "59"
-                  offsetFromSymbolStart = "1356">
-               </Location>
-               <Location
-                  uuid = "EA3F183A-45B3-4862-BBDD-5C11C5B5C27C - a111dc84c25fafce"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SAN_SALES.CustomAlertVCViewController.updateList() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Activity/CustomAlertVCViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "59"
-                  endingLineNumber = "59"
-                  offsetFromSymbolStart = "1584">
-               </Location>
-               <Location
-                  uuid = "EA3F183A-45B3-4862-BBDD-5C11C5B5C27C - a111dc84c25fafce"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SAN_SALES.CustomAlertVCViewController.updateList() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Activity/CustomAlertVCViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "59"
-                  endingLineNumber = "59"
-                  offsetFromSymbolStart = "1132">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1424,38 +434,6 @@
             endingLineNumber = "144"
             landmarkName = "getDayReport()"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "155F5A5C-007D-4977-8D30-4B56058BC75A - cc1d61b9648e5324"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.DayReport.getDayReport() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Reports/DayReport.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "143"
-                  endingLineNumber = "143"
-                  offsetFromSymbolStart = "456">
-               </Location>
-               <Location
-                  uuid = "155F5A5C-007D-4977-8D30-4B56058BC75A - fdc2242510c81b77"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SAN_SALES.DayReport.getDayReport() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Reports/DayReport.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "143"
-                  endingLineNumber = "143"
-                  offsetFromSymbolStart = "2712">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1472,38 +450,6 @@
             endingLineNumber = "1258"
             landmarkName = "backVC()"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "37136C94-BD65-4331-AC78-AD981B15877C - 6006eff633dc2a9d"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SAN_SALES.SuperStockistOrderList.backVC() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Activity/SuperStockistOrderList.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "1792"
-                  endingLineNumber = "1792"
-                  offsetFromSymbolStart = "860">
-               </Location>
-               <Location
-                  uuid = "37136C94-BD65-4331-AC78-AD981B15877C - 6006eff633dc2a9d"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SAN_SALES.SuperStockistOrderList.backVC() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Activity/SuperStockistOrderList.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "1792"
-                  endingLineNumber = "1792"
-                  offsetFromSymbolStart = "916">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1518,70 +464,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "120"
             endingLineNumber = "120"
-            landmarkName = "getVisitDetail()"
+            landmarkName = "tableView(_:cellForRowAt:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "08837E41-E7C9-4B65-9F02-5C445540FFBA - 43d84f83006336fe"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.RptVisitDetail.getVisitDetail() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Reports/RptVisitDetail.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "115"
-                  endingLineNumber = "115"
-                  offsetFromSymbolStart = "452">
-               </Location>
-               <Location
-                  uuid = "08837E41-E7C9-4B65-9F02-5C445540FFBA - 43d84f83006336fe"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.RptVisitDetail.getVisitDetail() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Reports/RptVisitDetail.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "115"
-                  endingLineNumber = "115"
-                  offsetFromSymbolStart = "484">
-               </Location>
-               <Location
-                  uuid = "08837E41-E7C9-4B65-9F02-5C445540FFBA - 562b8c965d2a1ba7"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SAN_SALES.RptVisitDetail.getVisitDetail() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Reports/RptVisitDetail.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "113"
-                  endingLineNumber = "113"
-                  offsetFromSymbolStart = "3016">
-               </Location>
-               <Location
-                  uuid = "08837E41-E7C9-4B65-9F02-5C445540FFBA - 43d84f83006336fe"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.RptVisitDetail.getVisitDetail() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Reports/RptVisitDetail.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "115"
-                  endingLineNumber = "115"
-                  offsetFromSymbolStart = "416">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1596,70 +480,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "187"
             endingLineNumber = "187"
-            landmarkName = "getItemSummary()"
+            landmarkName = "getVisitDetail()"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "52B8442B-64D3-42B3-B6CE-CDE5BCFFB5A7 - e8aa174441bc874f"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.RptVisitDetail.getItemSummary() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Reports/RptVisitDetail.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "173"
-                  endingLineNumber = "173"
-                  offsetFromSymbolStart = "444">
-               </Location>
-               <Location
-                  uuid = "52B8442B-64D3-42B3-B6CE-CDE5BCFFB5A7 - e8aa174441bc874f"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.RptVisitDetail.getItemSummary() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Reports/RptVisitDetail.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "173"
-                  endingLineNumber = "173"
-                  offsetFromSymbolStart = "476">
-               </Location>
-               <Location
-                  uuid = "52B8442B-64D3-42B3-B6CE-CDE5BCFFB5A7 - 10bacd6730817bce"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SAN_SALES.RptVisitDetail.getItemSummary() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Reports/RptVisitDetail.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "173"
-                  endingLineNumber = "173"
-                  offsetFromSymbolStart = "3164">
-               </Location>
-               <Location
-                  uuid = "52B8442B-64D3-42B3-B6CE-CDE5BCFFB5A7 - e8aa174441bc8709"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.RptVisitDetail.getItemSummary() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Reports/RptVisitDetail.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "175"
-                  endingLineNumber = "175"
-                  offsetFromSymbolStart = "408">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1674,160 +496,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "201"
             endingLineNumber = "201"
-            landmarkName = "getOrderDetail()"
+            landmarkName = "getUserDetails()"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "7A6EBCAE-5A43-4A7B-85CE-85D9095459CA - d540747c01e4a1ca"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.OrderDetailView.getOrderDetail() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Reports/OrderDetailView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "183"
-                  endingLineNumber = "183"
-                  offsetFromSymbolStart = "452">
-               </Location>
-               <Location
-                  uuid = "7A6EBCAE-5A43-4A7B-85CE-85D9095459CA - d540747c01e4a1ca"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.OrderDetailView.getOrderDetail() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Reports/OrderDetailView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "183"
-                  endingLineNumber = "183"
-                  offsetFromSymbolStart = "484">
-               </Location>
-               <Location
-                  uuid = "7A6EBCAE-5A43-4A7B-85CE-85D9095459CA - 8b1899803c51fa6f"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SAN_SALES.OrderDetailView.getOrderDetail() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Reports/OrderDetailView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "182"
-                  endingLineNumber = "182"
-                  offsetFromSymbolStart = "2984">
-               </Location>
-               <Location
-                  uuid = "7A6EBCAE-5A43-4A7B-85CE-85D9095459CA - d540747c01e4a1eb"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.OrderDetailView.getOrderDetail() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Reports/OrderDetailView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "184"
-                  endingLineNumber = "184"
-                  offsetFromSymbolStart = "416">
-               </Location>
-               <Location
-                  uuid = "7A6EBCAE-5A43-4A7B-85CE-85D9095459CA - 8b1899803c51fa6f"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SAN_SALES.OrderDetailView.getOrderDetail() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Reports/OrderDetailView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "182"
-                  endingLineNumber = "182"
-                  offsetFromSymbolStart = "2988">
-               </Location>
-               <Location
-                  uuid = "7A6EBCAE-5A43-4A7B-85CE-85D9095459CA - 8b1899803c51fa6f"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SAN_SALES.OrderDetailView.getOrderDetail() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Reports/OrderDetailView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "182"
-                  endingLineNumber = "182"
-                  offsetFromSymbolStart = "3008">
-               </Location>
-               <Location
-                  uuid = "7A6EBCAE-5A43-4A7B-85CE-85D9095459CA - d540747c01e4a1eb"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.OrderDetailView.getOrderDetail() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Reports/OrderDetailView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "184"
-                  endingLineNumber = "184"
-                  offsetFromSymbolStart = "512">
-               </Location>
-               <Location
-                  uuid = "7A6EBCAE-5A43-4A7B-85CE-85D9095459CA - 8b1899803c51fa6f"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SAN_SALES.OrderDetailView.getOrderDetail() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Reports/OrderDetailView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "182"
-                  endingLineNumber = "182"
-                  offsetFromSymbolStart = "3868">
-               </Location>
-               <Location
-                  uuid = "7A6EBCAE-5A43-4A7B-85CE-85D9095459CA - 8b1899803c51fa6f"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SAN_SALES.OrderDetailView.getOrderDetail() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Reports/OrderDetailView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "182"
-                  endingLineNumber = "182"
-                  offsetFromSymbolStart = "3864">
-               </Location>
-               <Location
-                  uuid = "7A6EBCAE-5A43-4A7B-85CE-85D9095459CA - 8b1899803c51fa6f"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SAN_SALES.OrderDetailView.getOrderDetail() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Reports/OrderDetailView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "182"
-                  endingLineNumber = "182"
-                  offsetFromSymbolStart = "3844">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1844,38 +514,6 @@
             endingLineNumber = "580"
             landmarkName = "SuperStockistOrderList"
             landmarkType = "3">
-            <Locations>
-               <Location
-                  uuid = "3CD2B7E3-84FC-4C4F-89F9-3464BE6B8238 - 6dd58dfdc814ab3b"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SAN_SALES.SuperStockistOrderList.tableView(_: __C.UITableView, cellForRowAt: Foundation.IndexPath) -&gt; __C.UITableViewCell"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Activity/SuperStockistOrderList.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "543"
-                  endingLineNumber = "543"
-                  offsetFromSymbolStart = "1420">
-               </Location>
-               <Location
-                  uuid = "3CD2B7E3-84FC-4C4F-89F9-3464BE6B8238 - cc4c3c1df99bad80"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SAN_SALES.SuperStockistOrderList.tableView(_: __C.UITableView, heightForRowAt: Foundation.IndexPath) -&gt; CoreGraphics.CGFloat"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Activity/SuperStockistOrderList.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "544"
-                  endingLineNumber = "544"
-                  offsetFromSymbolStart = "36">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1892,38 +530,6 @@
             endingLineNumber = "579"
             landmarkName = "SuperStockistOrderList"
             landmarkType = "3">
-            <Locations>
-               <Location
-                  uuid = "D31F244C-3B5F-4A66-BF52-7630BD6ABBBD - 6dd58dfdc814ab3b"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SAN_SALES.SuperStockistOrderList.tableView(_: __C.UITableView, cellForRowAt: Foundation.IndexPath) -&gt; __C.UITableViewCell"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Activity/SuperStockistOrderList.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "543"
-                  endingLineNumber = "543"
-                  offsetFromSymbolStart = "1420">
-               </Location>
-               <Location
-                  uuid = "D31F244C-3B5F-4A66-BF52-7630BD6ABBBD - cc4c3c1df99bad80"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SAN_SALES.SuperStockistOrderList.tableView(_: __C.UITableView, heightForRowAt: Foundation.IndexPath) -&gt; CoreGraphics.CGFloat"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Activity/SuperStockistOrderList.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "544"
-                  endingLineNumber = "544"
-                  offsetFromSymbolStart = "36">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1940,38 +546,6 @@
             endingLineNumber = "581"
             landmarkName = "SuperStockistOrderList"
             landmarkType = "3">
-            <Locations>
-               <Location
-                  uuid = "CDD8B6C9-089A-4802-9F12-DC51DC5D631B - 6dd58dfdc814ab54"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SAN_SALES.SuperStockistOrderList.tableView(_: __C.UITableView, cellForRowAt: Foundation.IndexPath) -&gt; __C.UITableViewCell"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Activity/SuperStockistOrderList.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "544"
-                  endingLineNumber = "544"
-                  offsetFromSymbolStart = "1872">
-               </Location>
-               <Location
-                  uuid = "CDD8B6C9-089A-4802-9F12-DC51DC5D631B - cc4c3c1df99bad80"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SAN_SALES.SuperStockistOrderList.tableView(_: __C.UITableView, heightForRowAt: Foundation.IndexPath) -&gt; CoreGraphics.CGFloat"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Activity/SuperStockistOrderList.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "544"
-                  endingLineNumber = "544"
-                  offsetFromSymbolStart = "36">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1988,53 +562,6 @@
             endingLineNumber = "171"
             landmarkName = "getDayReport()"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "83B5E06B-80F8-4CC1-9B7A-DFDE99B94A2B - cc1d61b9648e51b0"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.DayReport.getDayReport() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Reports/DayReport.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "163"
-                  endingLineNumber = "163"
-                  offsetFromSymbolStart = "1740">
-               </Location>
-               <Location
-                  uuid = "83B5E06B-80F8-4CC1-9B7A-DFDE99B94A2B - cc1d61b9648e5191"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.DayReport.getDayReport() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Reports/DayReport.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "164"
-                  endingLineNumber = "164"
-                  offsetFromSymbolStart = "1604">
-               </Location>
-               <Location
-                  uuid = "83B5E06B-80F8-4CC1-9B7A-DFDE99B94A2B - cc1d61b9648e5191"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.DayReport.getDayReport() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Reports/DayReport.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "164"
-                  endingLineNumber = "164"
-                  offsetFromSymbolStart = "1720">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2051,53 +578,6 @@
             endingLineNumber = "187"
             landmarkName = "getDayReport()"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "A49865BC-06FC-44D3-941C-D63210309BCE - cc1d61b9648e5fe1"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.DayReport.getDayReport() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Reports/DayReport.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "180"
-                  endingLineNumber = "180"
-                  offsetFromSymbolStart = "9904">
-               </Location>
-               <Location
-                  uuid = "A49865BC-06FC-44D3-941C-D63210309BCE - cc1d61b9648e5fe1"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.DayReport.getDayReport() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Reports/DayReport.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "180"
-                  endingLineNumber = "180"
-                  offsetFromSymbolStart = "8996">
-               </Location>
-               <Location
-                  uuid = "A49865BC-06FC-44D3-941C-D63210309BCE - cc1d61b9648e5fe1"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.DayReport.getDayReport() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Reports/DayReport.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "180"
-                  endingLineNumber = "180"
-                  offsetFromSymbolStart = "9112">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2176,7 +656,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "551"
             endingLineNumber = "551"
-            landmarkName = "viewSuperStockist()"
+            landmarkName = "viewprimary()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -2210,53 +690,6 @@
             endingLineNumber = "266"
             landmarkName = "getOrderNo()"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "F53899BE-9DE8-4CF8-BE16-AB29F56BE2B3 - 4bf2ec2b82ea76f0"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Foundation.Data, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.CallPreview.getOrderNo() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Activity/CallPreview.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "236"
-                  endingLineNumber = "236"
-                  offsetFromSymbolStart = "724">
-               </Location>
-               <Location
-                  uuid = "F53899BE-9DE8-4CF8-BE16-AB29F56BE2B3 - 4bf2ec2b82ea76f0"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Foundation.Data, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.CallPreview.getOrderNo() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Activity/CallPreview.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "236"
-                  endingLineNumber = "236"
-                  offsetFromSymbolStart = "544">
-               </Location>
-               <Location
-                  uuid = "F53899BE-9DE8-4CF8-BE16-AB29F56BE2B3 - 4bf2ec2b82ea766c"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Foundation.Data, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.CallPreview.getOrderNo() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Activity/CallPreview.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "240"
-                  endingLineNumber = "240"
-                  offsetFromSymbolStart = "544">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2273,38 +706,6 @@
             endingLineNumber = "222"
             landmarkName = "getOrderDetail()"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "BE735EAF-2090-41C4-95C0-E35237416DEE - d540747c01e4af5e"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.OrderDetailView.getOrderDetail() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Reports/OrderDetailView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "203"
-                  endingLineNumber = "203"
-                  offsetFromSymbolStart = "4420">
-               </Location>
-               <Location
-                  uuid = "BE735EAF-2090-41C4-95C0-E35237416DEE - d540747c01e4af5e"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.OrderDetailView.getOrderDetail() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Reports/OrderDetailView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "203"
-                  endingLineNumber = "203"
-                  offsetFromSymbolStart = "2048">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2337,38 +738,6 @@
             endingLineNumber = "267"
             landmarkName = "getOrderNo()"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "9F30CC56-64FF-4AC3-8853-561363CEB0B2 - 4bf2ec2b82ea7210"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Foundation.Data, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.CallPreview.getOrderNo() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Activity/CallPreview.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "268"
-                  endingLineNumber = "268"
-                  offsetFromSymbolStart = "1452">
-               </Location>
-               <Location
-                  uuid = "9F30CC56-64FF-4AC3-8853-561363CEB0B2 - 4bf2ec2b82ea7231"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Foundation.Data, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.CallPreview.getOrderNo() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Activity/CallPreview.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "269"
-                  endingLineNumber = "269"
-                  offsetFromSymbolStart = "1044">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2385,53 +754,6 @@
             endingLineNumber = "261"
             landmarkName = "getOrderNo()"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "C5FF0DB6-02FE-4BE3-B09C-049D45B314B2 - 4bf2ec2b82ea7294"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Foundation.Data, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.CallPreview.getOrderNo() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Activity/CallPreview.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "264"
-                  endingLineNumber = "264"
-                  offsetFromSymbolStart = "836">
-               </Location>
-               <Location
-                  uuid = "C5FF0DB6-02FE-4BE3-B09C-049D45B314B2 - 4bf2ec2b82ea7294"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Foundation.Data, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.CallPreview.getOrderNo() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Activity/CallPreview.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "264"
-                  endingLineNumber = "264"
-                  offsetFromSymbolStart = "864">
-               </Location>
-               <Location
-                  uuid = "C5FF0DB6-02FE-4BE3-B09C-049D45B314B2 - 4bf2ec2b82ea757b"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Foundation.Data, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.CallPreview.getOrderNo() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Activity/CallPreview.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "263"
-                  endingLineNumber = "263"
-                  offsetFromSymbolStart = "796">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2448,38 +770,6 @@
             endingLineNumber = "153"
             landmarkName = "updateSummary(OrderNo:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "3FA40D3B-9E4D-4020-A262-FE2FA79E5195 - e66c429112422b56"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SAN_SALES.CallPreview.updateSummary(OrderNo: Swift.String) -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Activity/CallPreview.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "153"
-                  endingLineNumber = "153"
-                  offsetFromSymbolStart = "2020">
-               </Location>
-               <Location
-                  uuid = "3FA40D3B-9E4D-4020-A262-FE2FA79E5195 - e66c429112422b56"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SAN_SALES.CallPreview.updateSummary(OrderNo: Swift.String) -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Activity/CallPreview.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "153"
-                  endingLineNumber = "153"
-                  offsetFromSymbolStart = "1212">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2542,7 +832,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "123"
             endingLineNumber = "123"
-            landmarkName = "getVisitDetail()"
+            landmarkName = "tableView(_:cellForRowAt:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -2558,55 +848,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "140"
             endingLineNumber = "140"
-            landmarkName = "getVisitDetail()"
+            landmarkName = "tableView(_:cellForRowAt:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "C594CADB-D5B4-4507-8D14-396391621FD7 - 43d84f8300633b86"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.RptVisitDetail.getVisitDetail() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Reports/RptVisitDetail.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "139"
-                  endingLineNumber = "139"
-                  offsetFromSymbolStart = "2068">
-               </Location>
-               <Location
-                  uuid = "C594CADB-D5B4-4507-8D14-396391621FD7 - 43d84f8300633b86"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.RptVisitDetail.getVisitDetail() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Reports/RptVisitDetail.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "139"
-                  endingLineNumber = "139"
-                  offsetFromSymbolStart = "2256">
-               </Location>
-               <Location
-                  uuid = "C594CADB-D5B4-4507-8D14-396391621FD7 - 43d84f8300633b02"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.RptVisitDetail.getVisitDetail() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Reports/RptVisitDetail.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "143"
-                  endingLineNumber = "143"
-                  offsetFromSymbolStart = "1556">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2621,7 +864,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "217"
             endingLineNumber = "217"
-            landmarkName = "getItemSummary()"
+            landmarkName = "getVisitDetail()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -2637,7 +880,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "223"
             endingLineNumber = "223"
-            landmarkName = "getItemSummary()"
+            landmarkName = "getVisitDetail()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -2655,53 +898,6 @@
             endingLineNumber = "1076"
             landmarkName = "calculationForOrderCell(cell:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "CEFE72C2-59BB-40C6-81A4-541A966E1E81 - 48f5d8eb4558370c"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SAN_SALES.SuperStockistOrderList.calculationForOrderCell(cell: SAN_SALES.SuperStockistOrderListTableViewCell) -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Activity/SuperStockistOrderList.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "1072"
-                  endingLineNumber = "1072"
-                  offsetFromSymbolStart = "6056">
-               </Location>
-               <Location
-                  uuid = "CEFE72C2-59BB-40C6-81A4-541A966E1E81 - 48f5d8eb45583763"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SAN_SALES.SuperStockistOrderList.calculationForOrderCell(cell: SAN_SALES.SuperStockistOrderListTableViewCell) -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Activity/SuperStockistOrderList.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "1071"
-                  endingLineNumber = "1071"
-                  offsetFromSymbolStart = "4172">
-               </Location>
-               <Location
-                  uuid = "CEFE72C2-59BB-40C6-81A4-541A966E1E81 - 48f5d8eb45583763"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SAN_SALES.SuperStockistOrderList.calculationForOrderCell(cell: SAN_SALES.SuperStockistOrderListTableViewCell) -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS/SAN%20SALES/Activity/SuperStockistOrderList.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "1071"
-                  endingLineNumber = "1071"
-                  offsetFromSymbolStart = "4184">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2718,6 +914,244 @@
             endingLineNumber = "1081"
             landmarkName = "calculationForOrderCell(cell:)"
             landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "E6316FC1-1C0B-4315-9E1D-904A68A90928"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SAN SALES/Approvals/TourPlanApproval.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "95"
+            endingLineNumber = "95"
+            landmarkName = "fetchTpApprovalList()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "B4870960-C9DB-4172-8B3F-BD3E0FC8A42D"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SAN SALES/Approvals/TourPlanApproval.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "100"
+            endingLineNumber = "100"
+            landmarkName = "fetchTpApprovalList()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "38652B18-C115-48E1-AAC0-A0461B4D276C"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SAN SALES/Approvals/TourPlanApproval.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "284"
+            endingLineNumber = "284"
+            landmarkName = "approveAction()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "43B60CC2-7308-4672-A7EB-3C6C73A81540"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SAN SALES/Approvals/RejectReasonViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "100"
+            endingLineNumber = "100"
+            landmarkName = "rejectAction(reason:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "DA71A41D-8230-41B4-AA44-8CB61B78BFF5"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SAN SALES/AdminForms/TourPlanSingleEntry.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "183"
+            endingLineNumber = "183"
+            landmarkName = "TourPlanSingleEntry"
+            landmarkType = "3">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "BC2FA6D2-460A-496C-B9F1-A8C82238863E"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SAN SALES/Reports/TourPlanViewDateWise.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "95"
+            endingLineNumber = "95"
+            landmarkName = "dateAction(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "35D83DE0-7A87-4246-BC88-A4B58AEE0DDE"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SAN SALES/Reports/TourPlanViewDateWise.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "92"
+            endingLineNumber = "92"
+            landmarkName = "dateAction(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "8E89183A-EB16-4D2F-B044-5EC78B4CD9F3"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SAN SALES/Reports/CalendarViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "55"
+            endingLineNumber = "55"
+            landmarkName = "calendar(_:didSelect:at:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "77D92133-1901-48BE-A348-3544CE530EE6"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SAN SALES/MydayPlanCtrl.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "963"
+            endingLineNumber = "963"
+            landmarkName = "saveDayTP(location:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "77D92133-1901-48BE-A348-3544CE530EE6 - d264d27ea3c3643f"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "function signature specialization &lt;Arg[3] = Value Promoted from Box&gt; of closure #1 (Swift.Optional&lt;Swift.Array&lt;__C.CLPlacemark&gt;&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in SAN_SALES.MydayPlanCtrl.saveDayTP(location: __C.CLLocation) -&gt; ()"
+                  moduleName = "SAN SALES"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/naga/Documents/Salesjump-iOS%20New%20Main/SAN%20SALES/MydayPlanCtrl.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "963"
+                  endingLineNumber = "963">
+               </Location>
+               <Location
+                  uuid = "77D92133-1901-48BE-A348-3544CE530EE6 - e274bddb8ef82dc6"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in closure #1 (Swift.Optional&lt;Swift.Array&lt;__C.CLPlacemark&gt;&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in SAN_SALES.MydayPlanCtrl.saveDayTP(location: __C.CLLocation) -&gt; ()"
+                  moduleName = "SAN SALES"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/naga/Documents/Salesjump-iOS%20New%20Main/SAN%20SALES/MydayPlanCtrl.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "965"
+                  endingLineNumber = "965">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "28D90061-5C75-40C1-89AD-E50AACC1A138"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SAN SALES/Common/GlobalFunc.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "301"
+            endingLineNumber = "301"
+            landmarkName = "getCurrDateAsString()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "F4C3999D-9487-45FE-97BF-C459E70696A9"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SAN SALES/Common/GlobalFunc.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "300"
+            endingLineNumber = "300"
+            landmarkName = "getCurrDateAsString()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "9AC03DD3-8BE5-4F6D-9EC0-F4EED76462E7"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SAN SALES/Reports/TourPlanView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "83"
+            endingLineNumber = "83"
+            landmarkName = "hqAction(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "45D3EE44-3445-4B37-B94D-047FB4562612"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SAN SALES/AdminForms/TourPlanSingleEntry.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "184"
+            endingLineNumber = "184"
+            landmarkName = "TourPlanSingleEntry"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

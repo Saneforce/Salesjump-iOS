@@ -16,6 +16,18 @@ extension String {
         let contentSize = tmp.boundingRect(with: limitSize, options: .usesLineFragmentOrigin, context: nil)
         return contentSize.size
     }
+    
+    func toDate(format: String = "yyyy-MM-dd HH:mm:ss") -> Date{
+        let dateformatter = DateFormatter()
+        dateformatter.dateFormat = format
+        return dateformatter.date(from: self) ?? Date()
+    }
+    
+    func changeFormat(from: String = "yyyy-MM-dd HH:mm:ss", to: String = "dd MMM yyyy") -> String{
+        let date = self.toDate(format: from)
+        let dateString = date.toString(format: to)
+        return dateString
+    }
 }
 extension UIFont {
     func sizeOfString (string: String, constrainedToWidth width: Double) -> CGSize {
@@ -282,6 +294,9 @@ class GlobalFunc{
     static func getCurrDateAsString() -> String {
         let dateFormatter : DateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        print(Locale.current.identifier)
+   //     dateFormatter.locale = Locale(identifier: Locale.current.identifier)
+  //      dateFormatter.timeZone = TimeZone(identifier: Locale.current.identifier)
         let date = Date()
         return dateFormatter.string(from: date)
     }
