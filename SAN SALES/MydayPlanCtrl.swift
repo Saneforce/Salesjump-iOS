@@ -959,8 +959,9 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         ]
         print(APIClient.shared.BaseURL+APIClient.shared.DBURL+"dcr/save&divisionCode="+self.DivCode+"&rSF="+self.SFCode+"&sfCode="+self.SFCode)
         print(params)
-            print(self.SFCode)
-        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+"dcr/save&divisionCode="+self.DivCode+"&rSF="+self.SFCode+"&sfCode="+self.SFCode, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
+            print(self.SFCode) // APIClient.shared.BaseURL+APIClient.shared.DBURL+"dcr/save&divisionCode="+self.DivCode+"&rSF="+self.SFCode+"&sfCode="+self.SFCode
+            // http://fmcg.sanfmcg.com/server/native_Db_V13- `  1q.php?axn=dcr/save&divisionCode=29,&rSF=MR4126&sfCode=MR4126
+        AF.request("http://fmcg.sanfmcg.com/server/native_Db_V13-Mani_test.php?axn=dcr/save&divisionCode=29,&rSF=MR4126&sfCode=MR4126", method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
             AFdata in
             self.LoadingDismiss()
             switch AFdata.result

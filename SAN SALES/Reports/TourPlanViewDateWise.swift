@@ -29,6 +29,7 @@ class TourPlanViewDateWise : IViewController, UITableViewDelegate,UITableViewDat
     let LocalStoreage = UserDefaults.standard
     
     var lstTp : [AnyObject] = []
+    var lstHQs : [AnyObject] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,6 +39,11 @@ class TourPlanViewDateWise : IViewController, UITableViewDelegate,UITableViewDat
         
         self.lblDate.text = Date().toString(format: "dd MMM yyyy")
         fetchTp(date: Date().toString(format: "yyyy-MM-dd"))
+        
+        if let HQData = LocalStoreage.string(forKey: "HQ_Master"),
+           let list = GlobalFunc.convertToDictionary(text:  HQData) as? [AnyObject] {
+            lstHQs = list
+        }
         
         vwDate.layer.borderWidth = 2
         vwDate.layer.borderColor = CGColor(red: 54.0/255.0, green: 53.0/255.0, blue: 53.0/255.0, alpha: 0.6)
@@ -102,36 +108,84 @@ class TourPlanViewDateWise : IViewController, UITableViewDelegate,UITableViewDat
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell:TourPlanViewDateWiseTableViewCell = tableView.dequeueReusableCell(withIdentifier: "Cell") as! TourPlanViewDateWiseTableViewCell
-        cell.lblDate.text = lstTp[indexPath.row]["date"] as? String ?? ""
-        cell.lblName.text = lstTp[indexPath.row]["sfName"] as? String ?? ""
-        cell.lblWorkType.text = lstTp[indexPath.row]["wtype"] as? String ?? ""
         
-        let workType = lstTp[indexPath.row]["wtype"] as? String ?? ""
+        let workTypeName = lstTp[indexPath.row]["wtype"] as? String ?? ""
         
-        if workType.caseInsensitiveCompare("field")  == .orderedSame{
-            cell.lblHeadquarters.text = "Headquarter" + "\n\n" + (lstTp[indexPath.row]["HQ_Code"] as? String ?? "")
-            cell.lblDistributor.text = "Distributor" + "\n\n" + (lstTp[indexPath.row]["distributor"] as? String ?? "")
-            cell.lblJointWorks.text = "Jointworks" + "\n\n" + (lstTp[indexPath.row]["JointWork_Name1"] as? String ?? "") + (lstTp[indexPath.row]["JointWork_Name1"] as? String ?? "") + (lstTp[indexPath.row]["JointWork_Name1"] as? String ?? "")
-            cell.lblRoutes.text = "Routes" + "\n\n" + (lstTp[indexPath.row]["towns"] as? String ?? "")
+        
+        if workTypeName.contains("Field Work") || workTypeName.contains("FieldWork") || workTypeName.contains("Fieldwork"){
+            let cell:TourPlanViewDateWiseTableViewCell = tableView.dequeueReusableCell(withIdentifier: "Cell") as! TourPlanViewDateWiseTableViewCell
+            cell.lblDate.text = lstTp[indexPath.row]["date"] as? String ?? ""
+            cell.lblWorkType.text = lstTp[indexPath.row]["wtype"] as? String ?? ""
+            cell.lblName.text = lstTp[indexPath.row]["sfName"] as? String ?? ""
+            cell.lblWorkType.textColor = UIColor.green
+
+            let selectedHQ = lstHQs.filter{(String(format: "%@", $0["id"] as! CVarArg)) == (lstTp[indexPath.row]["HQ_Code"] as? String ?? "")}
+            
+            if !selectedHQ.isEmpty{
+                cell.lblHeadquarters.text = lstHQs.first?["Name"] as? String ?? ""
+            }else{
+                cell.lblHeadquarters.text = ""
+            }
+            
+            let routes = lstTp[indexPath.row]["towns"] as? String ?? ""
+            let jointWorks = lstTp[indexPath.row]["JointWork_Name1"] as? String ?? ""
+            
+            
+            
+            cell.lblDistributor.text = lstTp[indexPath.row]["distributor"] as? String ?? ""
+            cell.lblJointWorks.text = jointWorks.isEmpty ? "" : jointWorks.replacingOccurrences(of: "$$", with: ",")
+
+            
+            cell.lblRoutes.text = routes.isEmpty ? "" : routes.replacingOccurrences(of: "$$", with: ",")
+            cell.lblPob.text = lstTp[indexPath.row]["pob"] as? String ?? "00"
+            cell.lblSob.text = lstTp[indexPath.row]["sob"] as? String ?? "00"
+            cell.lblRemarks.text = lstTp[indexPath.row]["remark"] as? String ?? ""
+            
+            cell.layoutIfNeeded()
+            return cell
+        }else if workTypeName.contains("Distributor") || workTypeName.contains("distributor"){
+            let cell:TourPlanViewDateWiseTableViewCell = tableView.dequeueReusableCell(withIdentifier: "Cell") as! TourPlanViewDateWiseTableViewCell
+            cell.lblDate.text = lstTp[indexPath.row]["date"] as? String ?? ""
+            cell.lblWorkType.text = lstTp[indexPath.row]["wtype"] as? String ?? ""
+            cell.lblName.text = lstTp[indexPath.row]["sfName"] as? String ?? ""
+            cell.lblWorkType.textColor = UIColor.blue
+
+            let selectedHQ = lstHQs.filter{(String(format: "%@", $0["id"] as! CVarArg)) == (lstTp[indexPath.row]["HQ_Code"] as? String ?? "")}
+            
+            if !selectedHQ.isEmpty{
+                cell.lblHeadquarters.text = lstHQs.first?["Name"] as? String ?? ""
+            }else{
+                cell.lblHeadquarters.text = ""
+            }
+            
+            let routes = lstTp[indexPath.row]["towns"] as? String ?? ""
+            let jointWorks = lstTp[indexPath.row]["JointWork_Name1"] as? String ?? ""
+            
+            
+            
+            cell.lblDistributor.text = lstTp[indexPath.row]["distributor"] as? String ?? ""
+            cell.lblJointWorks.text = jointWorks.isEmpty ? "" : jointWorks.replacingOccurrences(of: "$$", with: ",")
+
+            
+            cell.lblRoutes.text = routes.isEmpty ? "" : routes.replacingOccurrences(of: "$$", with: ",")
+            cell.lblPob.text = ""
+            cell.lblSob.text = ""
+            cell.lblRemarks.text = lstTp[indexPath.row]["remark"] as? String ?? ""
+            
+            cell.layoutIfNeeded()
+            return cell
+        }else {
+            let cell:TourPlanViewDateWiseNonFieldWorkTableViewCell = tableView.dequeueReusableCell(withIdentifier: "Cell1") as! TourPlanViewDateWiseNonFieldWorkTableViewCell
+            cell.lblDate.text = lstTp[indexPath.row]["date"] as? String ?? ""
+            cell.lblWorkType.text = lstTp[indexPath.row]["wtype"] as? String ?? ""
+            cell.lblName.text = lstTp[indexPath.row]["sfName"] as? String ?? ""
+            cell.lblWorkType.textColor = UIColor.red
+
+            cell.lblRemarks.text = lstTp[indexPath.row]["remark"] as? String ?? ""
+            
+            cell.layoutIfNeeded()
+            return cell
         }
-        
-//        if workType.contains("fieldwork") {
-//            cell.lblHeadquarters.text = "Headquarter" + "\n" + (lstTp[indexPath.row]["HQ_Code"] as? String ?? "")
-//            cell.lblDistributor.text = "Distributor" + "\n" + (lstTp[indexPath.row]["distributor"] as? String ?? "")
-//            cell.lblJointWorks.text = "Jointworks" + "\n" + (lstTp[indexPath.row]["JointWork_Name1"] as? String ?? "") + (lstTp[indexPath.row]["JointWork_Name1"] as? String ?? "") + (lstTp[indexPath.row]["JointWork_Name1"] as? String ?? "")
-//            cell.lblRoutes.text = "Routes" + "\n" + (lstTp[indexPath.row]["towns"] as? String ?? "")
-//        }else {
-//            
-//        }
-        
-        cell.lblHeadquarters.text = "Headquarter" + "\n\n" + (lstTp[indexPath.row]["HQ_Code"] as? String ?? "")
-        cell.lblDistributor.text = "Distributor" + "\n\n" + (lstTp[indexPath.row]["distributor"] as? String ?? "")
-        cell.lblJointWorks.text = "Jointworks" + "\n\n" + (lstTp[indexPath.row]["JointWork_Name1"] as? String ?? "") + (lstTp[indexPath.row]["JointWork_Name1"] as? String ?? "") + (lstTp[indexPath.row]["JointWork_Name1"] as? String ?? "")
-        cell.lblRoutes.text = "Routes" + "\n\n" + (lstTp[indexPath.row]["towns"] as? String ?? "")
-        
-        cell.lblRemarks.text = "Remarks" + "\n\n" + (lstTp[indexPath.row]["remark"] as? String ?? "")
-        return cell
     }
     
     @objc func backVC() {
@@ -155,7 +209,28 @@ class TourPlanViewDateWiseTableViewCell : UITableViewCell {
     
     
     
+    
+    @IBOutlet weak var lblPob: UILabel!
+    @IBOutlet weak var lblSob: UILabel!
+    
     @IBOutlet weak var lblJointWorks: UILabel!
+    
+    
+    @IBOutlet weak var lblRemarks: UILabel!
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+    }
+}
+
+class TourPlanViewDateWiseNonFieldWorkTableViewCell : UITableViewCell {
+    
+    
+    
+    @IBOutlet weak var lblDate: UILabel!
+    @IBOutlet weak var lblWorkType: UILabel!
+    @IBOutlet weak var lblName: UILabel!
+    
     
     
     @IBOutlet weak var lblRemarks: UILabel!

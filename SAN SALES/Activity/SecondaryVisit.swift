@@ -461,13 +461,14 @@ class SecondaryVisit: IViewController, UITableViewDelegate, UITableViewDataSourc
             "data": jsonString //"["+jsonString+"]"//
             ]
         print(params)
-        
-        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"dcr/save&divisionCode=" + self.DivCode + "&rSF="+self.SFCode+"&sfCode="+self.SFCode, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
+        print(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"dcr/save&divisionCode=" + self.DivCode + "&rSF="+self.SFCode+"&sfCode="+self.SFCode)
+        // native_Db_V13-Mani_test.php
+        print("http://fmcg.sanfmcg.com/server/native_Db_V13-Mani_test.php?axn=dcr/save&divisionCode=29,&rSF=MR4126&sfCode=MR4126")
+        AF.request("http://fmcg.sanfmcg.com/server/native_Db_V13-Mani_test.php?axn=dcr/save&divisionCode=29,&rSF=MR4126&sfCode=MR4126", method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
             AFdata in
             self.LoadingDismiss()
             switch AFdata.result
             {
-                
             case .success(let value):
                 print(value)
                 if let json = value as? [String: Any] {
@@ -487,6 +488,26 @@ class SecondaryVisit: IViewController, UITableViewDelegate, UITableViewDataSourc
                  self.present(alert, animated: true)*/
             }
         }
+        
+//        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+"dcr/save&divisionCode=" + self.DivCode + "&rSF="+self.SFCode+"&sfCode="+self.SFCode, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseData { AFdata in
+//            self.LoadingDismiss()
+//            switch AFdata.result
+//            {
+//                
+//            case .success(let value):
+//                print(value)
+//                let apiResponse = try? JSONSerialization.jsonObject(with: AFdata.data! ,options: JSONSerialization.ReadingOptions.allowFragments)
+//                print(apiResponse as Any)
+//                PhotosCollection.shared.PhotoList = []
+//                VisitData.shared.clear()
+//                Toast.show(message: "Call Visit has been submitted successfully", controller: self)
+//                let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
+//                UIApplication.shared.windows.first?.rootViewController = viewController
+//                UIApplication.shared.windows.first?.makeKeyAndVisible()
+//            case .failure(let error):
+//                Toast.show(message: error.errorDescription ?? "", controller: self)
+//            }
+ //       }
     }
     
     

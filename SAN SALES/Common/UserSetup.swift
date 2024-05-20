@@ -45,6 +45,7 @@ class UserSetup{
     var exp_process_type:Int = 0
     var SrtEndKMNd:Int = 0
     var sf_emp_id:String = ""
+    var employeeId: String = ""
     func initUserSetup(){
         let SetupStoreage = UserDefaults.standard
         let SetupData: String=SetupStoreage.string(forKey: "UserSetup")!
@@ -65,7 +66,7 @@ class UserSetup{
         offerMode = lstSetups[0]["OfferMode"] as? Int ?? 0
         SchemeBased = lstSetups[0]["scheme_based"] as? Int ?? 0
         SuperStockistNeed = lstSetups[0]["MR_SStockist_Nd"] as? Int ?? 0
-        SF_Name = lstSetups[0]["sfName"] as? String ?? ""
+        SF_Name = lstSetups[0]["SF_Name"] as? String ?? ""
         Desig = lstSetups[0]["Desig"] as? String ?? ""
         Sf_HQ = lstSetups[0]["Sf_HQ"] as? String ?? ""
         StkRoute = lstSetups[0]["StkRoute"] as? String ?? ""
@@ -82,6 +83,7 @@ class UserSetup{
         distributorBased = lstSetups[0]["DistBased"] as? Int ?? 0
         tpTargetBased = lstSetups[0]["TP_Target_Based"] as? Int ?? 0
         jointWorkNeed = lstSetups[0]["jointwork"] as? Int ?? 0
+        employeeId = lstSetups[0]["Employee_Id"] as? String ?? ""
         print(UserSetup.shared.Phone_Country_Length)
         if(lstSetups[0]["Geo_Fencing"] as? Int == 1){
             Fenching = true

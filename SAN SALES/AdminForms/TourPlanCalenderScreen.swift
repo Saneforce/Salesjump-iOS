@@ -111,8 +111,11 @@ class TourPlanCalenderScreen : UIViewController, FSCalendarDelegate, FSCalendarD
         divCode = prettyJsonData["divisionCode"] as? String ?? ""
         desig=prettyJsonData["desigCode"] as? String ?? ""
         
-        let sfName = prettyJsonData["SF_Name"] as? String ?? ""
-        let empId = prettyJsonData["Employee_Id"] as? String ?? ""
+        let sfName = UserSetup.shared.SF_Name
+        let empId = UserSetup.shared.employeeId
+        
+        
+        
         
         self.lblName.text = sfName + " - " + empId
        
@@ -158,9 +161,10 @@ class TourPlanCalenderScreen : UIViewController, FSCalendarDelegate, FSCalendarD
     func fetchTotalCommitment() {
         // http://fmcg.salesjump.in/server/native_Db_V13.php?axn=gettour_month_value&divisionCode=29%2C&sfCode=SEFMR0040&TourMont=04&Tyear=2024
         
+       // print(<#T##items: Any...##Any#>)
         print(APIClient.shared.BaseURL+APIClient.shared.DBURL+"gettour_month_value&divisionCode=" + self.divCode + "&sfCode="+self.sfCode + "&TourMont=\(month)" + "&Tyear=\(year)")
         
-        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"gettour_month_value&divisionCode=" + self.divCode + "&sfCode="+self.sfCode + "&TourMont=\(month)" + "&Tyear=\(year)",method : .get,encoding: URLEncoding.httpBody,headers: nil).validate(statusCode: 200..<209).responseData { AFData in
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"gettour_month_value&divisionCode=" + self.divCode + "&sfCode="+self.sfCode + "&TourMont=\(month)" + "&Tyear=\(year)",method : .get,parameters: nil,encoding: URLEncoding.httpBody,headers: nil).validate(statusCode: 200..<209).responseData { AFData in
             DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
                 self.LoadingDismiss()
             }
@@ -170,11 +174,15 @@ class TourPlanCalenderScreen : UIViewController, FSCalendarDelegate, FSCalendarD
                 print(value)
                 let apiResponse = try? JSONSerialization.jsonObject(with: AFData.data! ,options: JSONSerialization.ReadingOptions.allowFragments)
                 
-                
+                print(apiResponse)
                 if let response = apiResponse as? [AnyObject]{
                     print(response)
-                    
-                    self.lblTargetCommitment.text = String(format: "%@", response.first?["MonthTotal"] as! CVarArg) //  response.first?["MonthTotal"] as? String ?? ""
+                    if !response.isEmpty {
+                        self.lblTargetCommitment.text = String(format: "%@", response.first?["MonthTotal"] as! CVarArg)
+                    }else {
+                        self.lblTargetCommitment.text = "00"
+                    }
+                     //  response.first?["MonthTotal"] as? String ?? ""
                 }
                 
                 

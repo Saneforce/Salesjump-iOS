@@ -109,7 +109,7 @@ class TourPlanApproval : IViewController , UITableViewDelegate, UITableViewDataS
     func fetchTpApprovalListView(year : String,month : String,code : String) {
    // http://fmcg.salesjump.in/server/native_Db_V13.php?State_Code=24&desig=MGR&divisionCode=29%2C&code=SEFMR0040&month=5&rSF=MGR1018&year=2024&axn=vwChkTransApprovalOne&sfCode=MGR1018&stateCode=24
         
-        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"vwChkTransApprovalOne&sfCode=\(sfCode)" + "&stateCode=\(stateCode)" + "&rSF=\(sfCode)" + "&divisionCode=\(divCode)" + "&desig=\(desig)" + "&State_Code=\(stateCode)" + "&year=\(year)" + "&code=\(code)" + "&month=\(month)" ,method: .get,encoding: URLEncoding.httpBody).validate(statusCode: 200..<209).responseData { AFData in
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"vwChkTransApprovalOne&sfCode=\(sfCode)" + "&stateCode=\(stateCode)" + "&rSF=\(sfCode)" + "&divisionCode=\(divCode)" + "&desig=\(desig)" + "&State_Code=\(stateCode)" + "&year=\(year)" + "&code=\(code)" + "&month=\(month)" ,method: .get,parameters: nil,encoding: URLEncoding.httpBody).validate(statusCode: 200..<209).responseData { AFData in
             
             switch AFData.result {
                 
@@ -166,72 +166,94 @@ class TourPlanApproval : IViewController , UITableViewDelegate, UITableViewDataS
             cell.ViewButton.addTarget(self, action: #selector(viewPlanList(_:)), for: .touchUpInside)
             return cell
         }else{
-            let cell:TourPlanApprovalListTableViewCell = tableView.dequeueReusableCell(withIdentifier: "Cell") as! TourPlanApprovalListTableViewCell
-            cell.lblDate.text = lstApprovalsView[indexPath.row]["Tour_Date"] as? String ?? ""
-            cell.lblWorkTypeName.text = lstApprovalsView[indexPath.row]["Worktype_Name_B"] as? String ?? ""
             
-            cell.lblWorkTypeName.textColor = UIColor.red
-//            cell.lblWorkTypeName.backgroundColor = UIColor(cgColor: CGColor(red: 0.0, green: 1.0, blue: 0.0, alpha: 0.1))
+            let workTypeName = lstApprovalsView[indexPath.row]["Worktype_Name_B"] as? String ?? ""
             
             
-            let selectedHQ = lstHQs.filter{(String(format: "%@", $0["id"] as! CVarArg)) == (lstApprovalsView[indexPath.row]["HQ_Code"] as? String ?? "")}
-            
-            if !selectedHQ.isEmpty{
-                cell.lblHeadquarters.text = lstHQs.first?["Name"] as? String ?? ""
-            }else{
-                cell.lblHeadquarters.text = ""
+            if workTypeName.contains("Field Work") || workTypeName.contains("FieldWork") || workTypeName.contains("Fieldwork"){
+                let cell:TourPlanApprovalListTableViewCell = tableView.dequeueReusableCell(withIdentifier: "Cell") as! TourPlanApprovalListTableViewCell
+                cell.lblDate.text = lstApprovalsView[indexPath.row]["Tour_Date"] as? String ?? ""
+                cell.lblWorkTypeName.text = lstApprovalsView[indexPath.row]["Worktype_Name_B"] as? String ?? ""
+                
+                cell.lblWorkTypeName.textColor = UIColor.green
+    
+                let selectedHQ = lstHQs.filter{(String(format: "%@", $0["id"] as! CVarArg)) == (lstApprovalsView[indexPath.row]["HQ_Code"] as? String ?? "")}
+                
+                if !selectedHQ.isEmpty{
+                    cell.lblHeadquarters.text = lstHQs.first?["Name"] as? String ?? ""
+                }else{
+                    cell.lblHeadquarters.text = ""
+                }
+                
+                let routes = lstApprovalsView[indexPath.row]["Territory_Code1"] as? String ?? ""
+                let jointWorks = lstApprovalsView[indexPath.row]["JointWork_Name1"] as? String ?? ""
+                
+                
+                
+                cell.lblDistributor.text = lstApprovalsView[indexPath.row]["Worked_With_SF_Name"] as? String ?? ""
+                cell.lblJointWork.text = jointWorks.isEmpty ? "" : jointWorks.replacingOccurrences(of: "$$", with: ",")
+
+                
+                cell.lblRoutes.text = routes.isEmpty ? "" : routes.replacingOccurrences(of: "$$", with: ",")
+                cell.lblPob.text = lstApprovalsView[indexPath.row]["TPOB"] as? String ?? "00"
+                cell.lblSob.text = lstApprovalsView[indexPath.row]["TSOB"] as? String ?? "00"
+                cell.lblRemarks.text = lstApprovalsView[indexPath.row]["Objective"] as? String ?? ""
+                let remarks = lstApprovalsView[indexPath.row]["Objective"] as? String ?? ""
+                
+                cell.layoutIfNeeded()
+                return cell
+            }else if workTypeName.contains("Distributor") || workTypeName.contains("distributor"){
+                let cell:TourPlanApprovalListTableViewCell = tableView.dequeueReusableCell(withIdentifier: "Cell") as! TourPlanApprovalListTableViewCell
+                cell.lblDate.text = lstApprovalsView[indexPath.row]["Tour_Date"] as? String ?? ""
+                cell.lblWorkTypeName.text = lstApprovalsView[indexPath.row]["Worktype_Name_B"] as? String ?? ""
+                
+                cell.lblWorkTypeName.textColor = UIColor.green
+    
+                let selectedHQ = lstHQs.filter{(String(format: "%@", $0["id"] as! CVarArg)) == (lstApprovalsView[indexPath.row]["HQ_Code"] as? String ?? "")}
+                
+                if !selectedHQ.isEmpty{
+                    cell.lblHeadquarters.text = lstHQs.first?["Name"] as? String ?? ""
+                }else{
+                    cell.lblHeadquarters.text = ""
+                }
+                
+                let routes = lstApprovalsView[indexPath.row]["Territory_Code1"] as? String ?? ""
+                let jointWorks = lstApprovalsView[indexPath.row]["JointWork_Name1"] as? String ?? ""
+                
+                
+                
+                cell.lblDistributor.text = lstApprovalsView[indexPath.row]["Worked_With_SF_Name"] as? String ?? ""
+                cell.lblJointWork.text = jointWorks.isEmpty ? "" : jointWorks.replacingOccurrences(of: "$$", with: ",")
+
+                
+                cell.lblRoutes.text = routes.isEmpty ? "" : routes.replacingOccurrences(of: "$$", with: ",")
+                cell.lblPob.text = ""
+                cell.lblSob.text = ""
+                cell.lblRemarks.text = lstApprovalsView[indexPath.row]["Objective"] as? String ?? ""
+                let remarks = lstApprovalsView[indexPath.row]["Objective"] as? String ?? ""
+                
+                cell.layoutIfNeeded()
+                return cell
+            }else {
+                let cell:TourPlanApprovalListNonFieldWorkTableViewCell = tableView.dequeueReusableCell(withIdentifier: "Cell1") as! TourPlanApprovalListNonFieldWorkTableViewCell
+                cell.lblDate.text = lstApprovalsView[indexPath.row]["Tour_Date"] as? String ?? ""
+                cell.lblName.text = lstApprovalsView[indexPath.row]["Worktype_Name_B"] as? String ?? ""
+                
+                cell.lblName.textColor = UIColor.red
+                cell.lblRemarks.text = lstApprovalsView[indexPath.row]["Objective"] as? String ?? ""
+
+                
+                cell.layoutIfNeeded()
+                return cell
             }
             
-            let routes = lstApprovalsView[indexPath.row]["Territory_Code1"] as? String ?? ""
-            let jointWorks = lstApprovalsView[indexPath.row]["JointWork_Name1"] as? String ?? ""
             
-            
-            
-            cell.lblDistributor.text = lstApprovalsView[indexPath.row]["Worked_With_SF_Name"] as? String ?? ""
-            cell.lblJointWork.text = jointWorks.isEmpty ? "" : jointWorks.replacingOccurrences(of: "$$", with: ",")
-
-            
-            cell.lblRoutes.text = routes.isEmpty ? "" : routes.replacingOccurrences(of: "$$", with: ",")
-            cell.lblPob.text = lstApprovalsView[indexPath.row]["TPOB"] as? String ?? "00"
-            cell.lblSob.text = lstApprovalsView[indexPath.row]["TSOB"] as? String ?? "00"
-            cell.lblRemarks.text = lstApprovalsView[indexPath.row]["Objective"] as? String ?? ""
-            let remarks = lstApprovalsView[indexPath.row]["Objective"] as? String ?? ""
-            
-            cell.layoutIfNeeded()
-            return cell
         }
         
     }
     
     
     @IBAction func rejectAction(_ sender: UIButton) {
-//        let alertController = UIAlertController(title: "Add Reason", message: "", preferredStyle: .alert)
-//        
-//        let saveAction = UIAlertAction(title: "REJECT", style: .default, handler: { alert -> Void in
-//            let firstTextField = alertController.textFields![0] as UITextField
-//            print("Reason \(String(describing: firstTextField.text))")
-//            if firstTextField.text!.isEmpty{
-//                // self.showToast(with: "Enter the Reason")
-//            }else{
-//                self.rejectAction(reason: firstTextField.text!)
-//            }
-//        })
-//        saveAction.isEnabled = false
-//        
-//        alertController.addAction(saveAction)
-//        let cancelAction = UIAlertAction(title: "CANCEL", style: .default, handler: { (action : UIAlertAction!) -> Void in })
-//        alertController.addTextField { (textField : UITextField!) -> Void in
-//            textField.placeholder = "Enter the Reason"
-//            
-////            NotificationCenter.default.addObserver(forName: .UITextFieldTextDidChange, object: textField, queue: OperationQueue.main) { (notification) in
-////                saveAction.isEnabled = textField.text?.count ?? 0 > 0
-////            }
-//        }
-//
-//       // alertController.addAction(cancelAction)
-//        alertController.view.tintColor = UIColor.red
-//        self.present(alertController, animated: true, completion: nil)
-        
         
         SelectedData.shared.selectedTp = selectedTp
         let alertview = RejectReasonViewController<Any>()
@@ -375,6 +397,24 @@ class TourPlanApprovalListTableViewCell : UITableViewCell {
     
     
     @IBOutlet weak var lblTitleHeadquarters: UILabel!
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+    }
+}
+
+class TourPlanApprovalListNonFieldWorkTableViewCell : UITableViewCell {
+    
+    
+    
+    @IBOutlet weak var lblDate: UILabel!
+    
+    
+    @IBOutlet weak var lblName: UILabel!
+    
+    
+    @IBOutlet weak var lblRemarks: UILabel!
+    
     
     override func awakeFromNib() {
         super.awakeFromNib()
