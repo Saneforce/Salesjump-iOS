@@ -38,7 +38,7 @@ class AdminMenus: IViewController, UITableViewDelegate, UITableViewDataSource  {
         }
         
         strMasList.append(mnuItem.init(MasId: 1, MasName: "Apply Leave", MasImage: "SwitchRoute"))
-        //strMasList.append(mnuItem.init(MasId: 2, MasName: "Expense Entry", MasImage: "SwitchRoute"))
+        strMasList.append(mnuItem.init(MasId: 2, MasName: "Expense Entry", MasImage: "SwitchRoute"))
         //strMasList.append(mnuItem.init(MasId: 2, MasName: "Add New Retailer", MasImage: "NewRetailer"))
         //strMasList.append(mnuItem.init(MasId: 11, MasName: "Master Sync", MasImage: "MasterSync"))
         

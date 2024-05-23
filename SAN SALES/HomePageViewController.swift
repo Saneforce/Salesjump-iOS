@@ -169,7 +169,7 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         }
         if moveMyPln {
             getMyDayPlan(Validate: {
-                if self.LocalStoreage.string(forKey: "Mydayplan") == nil {
+                if self.LocalStoreage.string(forKey: "Mydayplan") == nil{
                     let myDyPln = self.storyboard?.instantiateViewController(withIdentifier: "sbMydayplan") as! MydayPlanCtrl
                     self.navigationController?.pushViewController(myDyPln, animated: true)
                     return
@@ -592,6 +592,7 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
             myDyPln.End_exp_title = "Day End Plan"
             myDyPln.Date_Nd = true
             myDyPln.Date = formattedDate
+            myDyPln.Exp_Nav = ""
             viewController.setViewControllers([myDyPln], animated: false)
             (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
         }else{

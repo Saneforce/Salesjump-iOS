@@ -63,6 +63,10 @@ class Expense_View: UIViewController, UITableViewDelegate, UITableViewDataSource
         let Hotal_Bill:String
         var Total:String
         let Satus:String
+        let ExpDist:Int
+        var Rej_Amt:String
+        var ClstrName:String
+        var DailyAddDeduct:String
     }
     struct Exp_Sum:Codable{
         let Tit:String
@@ -86,7 +90,7 @@ class Expense_View: UIViewController, UITableViewDelegate, UITableViewDataSource
     var period_to_date = ""
     var period_id = ""
     var Eff_Month="", Eff_Year=0
-    override func viewDidLoad() {
+    override func viewDidLoad(){
         super.viewDidLoad()
         getUserDetails()
         YearPostion.text = selectYear
@@ -94,7 +98,16 @@ class Expense_View: UIViewController, UITableViewDelegate, UITableViewDataSource
         let formattedPosition = String(format: "%02d", Month + 1)
         SelectMonth = formattedPosition
         Eff_Month = formattedPosition
-        
+        let dateFormatter = DateFormatter()
+        let mon_formater =  DateFormatter()
+        mon_formater.dateFormat = "MMM"
+        dateFormatter.dateFormat = "MMM-yyyy"
+        let currentDate = Date()
+        let formattedDate = dateFormatter.string(from: currentDate)
+        let formattedDatemon = mon_formater.string(from: currentDate)
+        print(formattedDatemon)
+        MonthPostion.text = formattedDatemon
+        Sel_Date.text = formattedDate
         Sel_Date_View.layer.cornerRadius = 10
         Sel_Date_View.layer.shadowColor = UIColor.black.cgColor
         Sel_Date_View.layer.shadowOpacity = 0.5
@@ -188,7 +201,7 @@ class Expense_View: UIViewController, UITableViewDelegate, UITableViewDataSource
             let calendar = Calendar.current
             let currentYear = calendar.component(.year, from: Date())
             cell.lblText.text = Monthtext_and_year[indexPath.row]
-            MonthPostion.text = Monthtext_and_year[indexPath.row]
+            //MonthPostion.text = Monthtext_and_year[indexPath.row]
         }else if (SelMod == "YEAR"){
             cell.lblText.text = Monthtext_and_year[indexPath.row]
             let attributedText = NSAttributedString(string: cell.lblText?.text ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
@@ -264,7 +277,7 @@ class Expense_View: UIViewController, UITableViewDelegate, UITableViewDataSource
         dateFormatter.dateFormat = "MMM"
        let Month = dateFormatter.shortMonthSymbols
         let currentMonthIndex = Calendar.current.component(.month, from: Date()) - 1
-        MonthPostion.text = Month![currentMonthIndex]
+       // MonthPostion.text = Month![currentMonthIndex]
         animateIn(desiredView: blureView)
         animateIn(desiredView: PopUpView)
     }
@@ -308,13 +321,14 @@ class Expense_View: UIViewController, UITableViewDelegate, UITableViewDataSource
             cell.Card_View.layer.shadowOpacity = 0.5
             cell.Card_View.layer.shadowOffset = CGSize(width: 0, height: 2)
             cell.Card_View.layer.shadowRadius = 4
+            print(Exp_Detel_Data)
             cell.Exp_Date.text = Exp_Detel_Data[indexPath.row].Date
             cell.Exp_Mod.text = Exp_Detel_Data[indexPath.row].Mode
             cell.Exp_Work_Typ.text = Exp_Detel_Data[indexPath.row].Wok_Typ
-            cell.Exp_Work_Plc.text = Exp_Detel_Data[indexPath.row].Wok_plc
+            cell.Exp_Work_Plc.text = Exp_Detel_Data[indexPath.row].ClstrName
             cell.Exp_From.text = Exp_Detel_Data[indexPath.row].From_place
             cell.Exp_To.text = Exp_Detel_Data[indexPath.row].To_place
-            cell.Exp_Dis_KM.text = Exp_Detel_Data[indexPath.row].DisKM
+            cell.Exp_Dis_KM.text = String(Exp_Detel_Data[indexPath.row].ExpDist)
             cell.Exp_Fare.text = Exp_Detel_Data[indexPath.row].Fare
             cell.Exp_Da_Typ.text = Exp_Detel_Data[indexPath.row].Da_Typ
             cell.Exp_DA_Exp.text = Exp_Detel_Data[indexPath.row].DA_Exp
@@ -419,7 +433,7 @@ class Expense_View: UIViewController, UITableViewDelegate, UITableViewDataSource
                                    let data = jsonObject["data"] as? [AnyObject] {
                                     for i in data {
 //                                        if let divisionCode = i["Division_Code"] as? Int,
-                                           if let effMonth = i["Eff_Month"] as? Int,
+                                           if let effMonth = i["Eff_Month"] as? String,
                                            let effYear = i["Eff_Year"] as? Int,
                                            let fromDate = i["From_Date"] as? String,
                                            let periodId = i["Period_Id"] as? String,
@@ -427,7 +441,7 @@ class Expense_View: UIViewController, UITableViewDelegate, UITableViewDataSource
                                            let toDate = i["To_Date"] as? String,
                                            let disRank = i["dis_Rank"] as? String {
                                             
-                                            Period.append(PeriodicDatas(Division_Code: 0, Eff_Month: effMonth, Eff_Year: effYear, From_Date: fromDate, Period_Id: periodId, Period_Name: periodName, To_Date: toDate, dis_Rank: disRank))
+                                               Period.append(PeriodicDatas(Division_Code: 0, Eff_Month: Int(effMonth)!, Eff_Year: effYear, From_Date: fromDate, Period_Id: periodId, Period_Name: periodName, To_Date: toDate, dis_Rank: disRank))
                                         } else {
                                             print("Error: Some key in the data is nil or has the wrong type")
                                         }
@@ -456,9 +470,7 @@ class Expense_View: UIViewController, UITableViewDelegate, UITableViewDataSource
         Exp_Detel_Data.removeAll()
         Exp_Summary_Data.removeAll()
         Exp_Summary_Data.append(Exp_Sum(Tit: "Total Daily Expense", Amt: "-"))
-        Exp_Summary_Data.append(Exp_Sum(Tit: "Total Added (+)", Amt: "-"))
-        Exp_Summary_Data.append(Exp_Sum(Tit: "Total Deducted (-)", Amt: "-"))
-        Exp_Summary_Data.append(Exp_Sum(Tit: "Rejected Expense", Amt: "-"))
+       
         var Div = DivCode
         Div = Div.replacingOccurrences(of: ",", with: "")
         let axn = "getExpenseReportDetails"
@@ -502,13 +514,18 @@ class Expense_View: UIViewController, UITableViewDelegate, UITableViewDataSource
                                         //let Amount =
                                         //let DAddit =
                                         let Hotal_Bill = i["Hotel_Bill_Amt"] as? String
-                                        let Total = "0.0"
+                                        //let Total = "0.0"
                                         let status = i["Exp_Status"] as? String
                                         var DAdditionalAmnt = "0"
                                         if let DAdditionalAmt = i["DAdditionalAmnt"] as? String, DAdditionalAmt != ""{
                                             DAdditionalAmnt = DAdditionalAmt
                                         }
-                                        Exp_Detel_Data.append(Exp_Data(Date: Date!, Mode: Mode!, Wok_Typ: WType!, Wok_plc: WorkedPlace!, From_place: From!, To_place: To, DisKM: Dis, Fare: Fare!, Da_Typ: DATyp!, DA_Exp: DAExp!, Amount: "0.0", DAddit:DAdditionalAmnt, Hotal_Bill: Hotal_Bill!, Total: Total, Satus: status!))
+                                       let DailyAddDeduct = i["DailyAddDeduct"] as? String
+                                        
+                                        let ExpDist1 = i["ExpDist"] as? Int
+                                        let ClstrName = i["ClstrName"] as? String
+                                        Exp_Detel_Data.append(Exp_Data(Date: Date!, Mode: Mode!, Wok_Typ: WType!, Wok_plc: WorkedPlace!, From_place: From!, To_place: To, DisKM: Dis, Fare: Fare!, Da_Typ: DATyp!, DA_Exp: DAExp!, Amount: "0.0", DAddit:DAdditionalAmnt, Hotal_Bill: Hotal_Bill!, Total: DAExp!, Satus: status!, ExpDist: ExpDist1!,Rej_Amt:"0", ClstrName : ClstrName!,DailyAddDeduct:DailyAddDeduct!))
+                                        
                                     }
                                     print(data2)
                                     var totalAmountByDate: [String: Double] = [:]
@@ -529,18 +546,50 @@ class Expense_View: UIViewController, UITableViewDelegate, UITableViewDataSource
                                             if date == Exp_Detel_Data[index].Date{
                                                print(Exp_Detel_Data[index].Date)
                                                 let bill = Double(Exp_Detel_Data[index].Hotal_Bill)
-                                                let da_amt = Double(Exp_Detel_Data[index].DA_Exp)
-                                                let Total_Amt = bill! + total + da_amt!
-                                                Exp_Detel_Data[index].Total = String(format: "%.2f", Total_Amt)
+                                                let da_amt = Double(Exp_Detel_Data[index].Total)
+                                                let Fare = Double(Exp_Detel_Data[index].Fare)
+                                                let DAddit = Double(Exp_Detel_Data[index].DAddit)
+                                                let DailyAddDeduct = Exp_Detel_Data[index].DailyAddDeduct
+                                                let Total_Amt = bill! + total + Fare!
                                                 Exp_Detel_Data[index].Amount = String(format: "%.2f", total)
                                             }
                                         }
                                     }
-                                    print(Exp_Detel_Data)
+                                    for index in 0..<Exp_Detel_Data.count {
+                                            let bill = Double(Exp_Detel_Data[index].Hotal_Bill)
+                                            let da_amt = Double(Exp_Detel_Data[index].Total)
+                                            let Fare = Double(Exp_Detel_Data[index].Fare)
+                                            let Amount = Double(Exp_Detel_Data[index].Amount)
+                                            
+                                            let status = Exp_Detel_Data[index].Satus
+                                        var Total_Amt = bill! + da_amt! + Fare! + Amount!
+                                        var DAddits = 0.0
+                                        if let DAddit = Double(Exp_Detel_Data[index].DAddit){
+                                            DAddits = DAddits + DAddit
+                                        }
+                                        let DailyAddDeduct = Exp_Detel_Data[index].DailyAddDeduct
+                                        print(DailyAddDeduct)
+                                        print(DAddits)
+                                        print(Total_Amt)
+                                        if DailyAddDeduct == "ADD" || DailyAddDeduct == ""{
+                                            Total_Amt = Total_Amt + DAddits
+                                        }else{
+                                            Total_Amt = Total_Amt - DAddits
+                                        }
+                                            if status == "Rejected"{
+                                                Exp_Detel_Data[index].Rej_Amt = String(format: "%.2f", Total_Amt)
+                                            }
+                                            Exp_Detel_Data[index].Total = String(format: "%.2f", Total_Amt)
+                                    }
+                                    
                                     var SUM_TOTAL = 0.0
                                     var sum_Total_all = 0.0
+                                    var reJ_eXP = 0.0
                                     for item in Exp_Detel_Data{
                                         let amt = Double(item.Total)
+                                        print(item)
+                                        let rej_amt = Double(item.Rej_Amt)
+                                        reJ_eXP =  reJ_eXP + rej_amt!
                                         SUM_TOTAL = SUM_TOTAL + amt!
                                     }
                                     if SUM_TOTAL == 0.0 {
@@ -549,20 +598,39 @@ class Expense_View: UIViewController, UITableViewDelegate, UITableViewDataSource
                                         Exp_Summary_Data[0].Amt = String(format: "%.2f",SUM_TOTAL)
                                     }
                                     print(data3)
+                                    print(data3)
+                                    reJ_eXP = reJ_eXP - sum_Total_all
+                                    Exp_Summary_Data.append(Exp_Sum(Tit: "Rejected Expense", Amt: String(format: "%.2f",reJ_eXP)))
+                                    var total_sum = 0.0
+                                    var total_ded = 0.0
+                                    for item3 in data3{
+                                        print(item3)
+                                        let exp_amnt = Double((item3["exp_amnt"] as? String)!)
+                                        if let add_sub = item3["add_sub"] as? String,add_sub == "+"{
+                                            total_sum = total_sum + exp_amnt!
+                                        }else{
+                                            total_ded = total_ded + exp_amnt!
+                                        }
+                                        
+                                    }
+                                    print(total_sum)
+                                    print(total_ded)
                                     if (data.count > 0){
                                         if(data3.count > 0){
                                             
                                         }else{
-                                            Exp_Summary_Data[1].Amt = "0"
-                                            Exp_Summary_Data[2].Amt = "0"
-                                            Exp_Summary_Data[3].Amt = "0.0"
+                                            print(Exp_Summary_Data.count)
+                                           // Exp_Summary_Data[1].Amt = "0"
+                                           // Exp_Summary_Data[2].Amt = "0"
+                                        
                                         }
                                     }else{
                                         
                                         Exp_Summary_Data[1].Amt = "-"
-                                        Exp_Summary_Data[2].Amt = "-"
-                                        Exp_Summary_Data[3].Amt = "-"
+                                       // Exp_Summary_Data[2].Amt = "-"
                                     }
+                                    Exp_Summary_Data.append(Exp_Sum(Tit: "Total Added (+)", Amt: "\(total_sum)"))
+                                    Exp_Summary_Data.append(Exp_Sum(Tit: "Total Deducted (-)", Amt: "\(total_ded)"))
                                     for datas in data4{
                                         print(datas)
                                         if let id = datas["Type"] as? Int, id == 2{
@@ -573,7 +641,11 @@ class Expense_View: UIViewController, UITableViewDelegate, UITableViewDataSource
                                         }
                                     }
                                     sum_Total_all = sum_Total_all + SUM_TOTAL
+                                    sum_Total_all = sum_Total_all - reJ_eXP
+                                    sum_Total_all = sum_Total_all + total_sum
+                                    sum_Total_all = sum_Total_all - total_ded
                                     Exp_Summary_Data.append(Exp_Sum(Tit: "Payable Amount", Amt: String(format: "%.2f",sum_Total_all)))
+                                    print(Exp_Summary_Data)
                                     Sum_Exp.reloadData()
                                     Exp_Report_TB.reloadData()
                                     self.LoadingDismiss()
@@ -587,7 +659,6 @@ class Expense_View: UIViewController, UITableViewDelegate, UITableViewDataSource
                             print("Error: \(error.localizedDescription)")
                         }
                     }
-                    
                 case .failure(let error):
                     Toast.show(message: error.errorDescription ?? "Unknown Error")
                 }

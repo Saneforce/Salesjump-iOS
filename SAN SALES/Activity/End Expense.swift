@@ -59,6 +59,7 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource {
     var End_exp_title:String?
     var Date_Nd:Bool?
     var Date:String?
+    var Exp_Nav:String?
     var SFCode: String = "", StateCode: String = "", DivCode: String = "",Desig: String = "",SF_type: String = ""
     let LocalStoreage = UserDefaults.standard
     var end_Exp_Datas:[End_exData]=[]
@@ -143,12 +144,16 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource {
         }
     }
     @objc private func GotoHome() {
-        if (End_exp_title == "Day End Plan"){
-            let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
-            UIApplication.shared.windows.first?.rootViewController = viewController
-            UIApplication.shared.windows.first?.makeKeyAndVisible()
-        }else{
-            GlobalFunc.MovetoMainMenu()
+        if let Navdata = Exp_Nav{
+            if (End_exp_title == "Day End Plan"){
+                let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
+                UIApplication.shared.windows.first?.rootViewController = viewController
+                UIApplication.shared.windows.first?.makeKeyAndVisible()
+            }else if (Navdata == "Ex_Ent"){
+              print("Day End")
+            }else{
+                GlobalFunc.MovetoMainMenu()
+            }
         }
     }
     @objc private func Opencalender(){

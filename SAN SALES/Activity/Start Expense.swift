@@ -74,6 +74,7 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
     var Screan_Heding:String?
     var Curent_Date:String?
     var Show_Date:Bool?
+    var Exp_Nav:String?
     var sImgItems:String = ""
     var select_allow:String = ""
     var select_date:String = ""
@@ -621,13 +622,13 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
         vc.modalPresentationStyle = .overCurrentContext
         self.present(vc, animated: true, completion: nil)
     }
-    @objc private func Open_Allowance() {
+    @objc private func Open_Allowance(){
         SelMod = "Allowance"
         Drop_Down_Head.text = "Daily Allowance"
         getallowns()
         Drop_Down_Sc.isHidden = false
     }
-    @objc private func Open_Mod_of_Travel() {
+    @objc private func Open_Mod_of_Travel(){
         if Daily_Allowance.text == "Select  Daily Allowance"{
             Toast.show(message: "Select  Daily Allowance", controller: self)
         }else{
@@ -637,11 +638,11 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
             Drop_Down_Sc.isHidden = false
         }
     }
-    @objc private func Close_Allowance() {
+    @objc private func Close_Allowance(){
         Text_Serch.text = ""
         Drop_Down_Sc.isHidden = true
     }
-    @objc private func Open_Calender() {
+    @objc private func Open_Calender(){
         for Letter in expsub_Date{
             let datess = Letter.Dates
             let dateFormatter = DateFormatter()
@@ -652,11 +653,20 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
         }
         calendar_view.isHidden = false
     }
-    @objc private func Clos_Calender() {
+    @objc private func Clos_Calender(){
         calendar_view.isHidden = true
     }
-    @objc private func GotoHome() {
-        GlobalFunc.MovetoMainMenu()
+    @objc private func GotoHome(){
+        if let NavExp = Exp_Nav{
+            print(NavExp)
+            if (NavExp == "Ex_Ent"){
+              print(NavExp)
+            }else{
+                GlobalFunc.MovetoMainMenu()
+            }
+        }
+        
+        
     }
     @objc private func opento(){
         AllRout.removeAll()
@@ -670,11 +680,11 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
         Drop_Down_TB.reloadData()
         Drop_Down_Sc.isHidden = false
     }
-    @objc private func Box() {
+    @objc private func Box(){
         if checked == false {
             checked = true
             Check_Box.image = UIImage(named: "checkbox")
-        } else {
+        }else{
             checked = false
             Check_Box.image = UIImage(named: "uncheckbox")
         }
@@ -712,5 +722,4 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
         }
         Drop_Down_TB.reloadData()
     }
-    
 }
