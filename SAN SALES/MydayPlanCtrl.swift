@@ -721,13 +721,12 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         lblSelTitle.text="Select the Jointwork"
         openWin(Mode: "JWK")
     }
-    @objc private func delJWK(_ sender: UITapGestureRecognizer) {
+    @objc private func delJWK(_ sender: UITapGestureRecognizer){
         let cell:cellListItem = GlobalFunc.getTableViewCell(view: sender.view!) as! cellListItem
         let tbView: UITableView = GlobalFunc.getTableView(view: sender.view!)
         let indx:NSIndexPath = tbView.indexPath(for: cell)! as NSIndexPath
         removeJWk(indx: indx.row)
      }
-    
     func removeJWk(indx: Int){
         let sItem: [String: Any] = lstJWNms[indx] as! [String: Any]
         
@@ -1004,6 +1003,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                                  print(LocalStoreage)
                                 print(self.exp_Need)
                                 //self.exp_Need = 2
+                                print(attendanceView)
                                 if (self.attendanceView == 1) {
                                // Naviagte To Strat Expense
                                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
@@ -1022,7 +1022,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                                     let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
                                     UIApplication.shared.windows.first?.rootViewController = viewController
                                     UIApplication.shared.windows.first?.makeKeyAndVisible()
-                                }
+                               }
                                     Toast.show(message: "My day plan submitted successfully", controller: self)
                                case .failure(let error):
                                    print(error.errorDescription!)

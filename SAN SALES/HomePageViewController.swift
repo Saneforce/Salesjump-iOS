@@ -169,7 +169,7 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         }
         if moveMyPln {
             getMyDayPlan(Validate: {
-                if self.LocalStoreage.string(forKey: "Mydayplan") == nil {
+                if self.LocalStoreage.string(forKey: "Mydayplan") == nil{
                     let myDyPln = self.storyboard?.instantiateViewController(withIdentifier: "sbMydayplan") as! MydayPlanCtrl
                     self.navigationController?.pushViewController(myDyPln, animated: true)
                     return

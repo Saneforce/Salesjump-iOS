@@ -20,6 +20,8 @@ class VisitData{
     var Remarks: String = ""
     
     var Nav_id = 0
+    var fromdate = ""
+    var Todate = ""
     
     
     var CustID: String = ""
