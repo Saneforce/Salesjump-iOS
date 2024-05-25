@@ -117,12 +117,12 @@ class TourPlanViewDateWise : IViewController, UITableViewDelegate,UITableViewDat
             cell.lblDate.text = lstTp[indexPath.row]["date"] as? String ?? ""
             cell.lblWorkType.text = lstTp[indexPath.row]["wtype"] as? String ?? ""
             cell.lblName.text = lstTp[indexPath.row]["sfName"] as? String ?? ""
-            cell.lblWorkType.textColor = UIColor.green
+            cell.lblWorkType.textColor = UIColor.systemGreen
 
             let selectedHQ = lstHQs.filter{(String(format: "%@", $0["id"] as! CVarArg)) == (lstTp[indexPath.row]["HQ_Code"] as? String ?? "")}
             
             if !selectedHQ.isEmpty{
-                cell.lblHeadquarters.text = lstHQs.first?["Name"] as? String ?? ""
+                cell.lblHeadquarters.text = lstHQs.first?["name"] as? String ?? ""
             }else{
                 cell.lblHeadquarters.text = ""
             }
@@ -153,7 +153,7 @@ class TourPlanViewDateWise : IViewController, UITableViewDelegate,UITableViewDat
             let selectedHQ = lstHQs.filter{(String(format: "%@", $0["id"] as! CVarArg)) == (lstTp[indexPath.row]["HQ_Code"] as? String ?? "")}
             
             if !selectedHQ.isEmpty{
-                cell.lblHeadquarters.text = lstHQs.first?["Name"] as? String ?? ""
+                cell.lblHeadquarters.text = lstHQs.first?["name"] as? String ?? ""
             }else{
                 cell.lblHeadquarters.text = ""
             }

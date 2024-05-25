@@ -32,6 +32,13 @@ class TourPlanSingleEntry : IViewController , UITableViewDataSource,UITableViewD
     @IBOutlet weak var scrollView: UIScrollView!
     
     
+    
+    @IBOutlet weak var lblTitleDistributor: UILabel!
+    
+    
+    @IBOutlet weak var lblRoute: UILabel!
+    
+    
     @IBOutlet weak var vwWorkType: UIView!
     @IBOutlet weak var vwHeadquarter: UIView!
     @IBOutlet weak var vwDistributor: UIView!
@@ -87,6 +94,8 @@ class TourPlanSingleEntry : IViewController , UITableViewDataSource,UITableViewD
     
     var editData : AnyObject!
     
+    var didSelect : (Bool) -> () = { _ in}
+    
     var selectedWorktype : AnyObject! {
         didSet {
             self.lblWorkType.text = selectedWorktype["name"] as? String
@@ -99,7 +108,7 @@ class TourPlanSingleEntry : IViewController , UITableViewDataSource,UITableViewD
             updateRoutes(id: String(format: "%@", selectedHeadquarter["id"] as! CVarArg))
             
             self.selectedDistributor = nil
-            lblDistributor.text = "Select the Distributor"
+            lblDistributor.text = "Select the \(UserSetup.shared.StkCap)"
             self.lstSelectedRoutes.removeAll()
             self.routeTableView.reloadData()
             
@@ -121,6 +130,14 @@ class TourPlanSingleEntry : IViewController , UITableViewDataSource,UITableViewD
         lblWorkType.addTarget(target: self, action: #selector(workTypeSelection))
         lblHeadquarter.addTarget(target: self, action: #selector(headquarterSelection))
         lblDistributor.addTarget(target: self, action: #selector(distributorSelection))
+        
+        lblTitleDistributor.text = UserSetup.shared.StkCap
+        lblDistributor.text = "Select the \(UserSetup.shared.StkCap)"
+        lblRoute.text = UserSetup.shared.StkRoute
+        
+        txtRemarks.delegate = self
+        txtRemarks.text = "Enter the remarks"
+        txtRemarks.textColor = .lightGray
         
         self.updateSetup()
         
@@ -197,11 +214,14 @@ class TourPlanSingleEntry : IViewController , UITableViewDataSource,UITableViewD
             
             
             let selectDistri = lstDist.filter{(String(format: "%@", $0["id"] as! CVarArg)) == (String(format: "%@", editData["Worked_with_Code"] as! CVarArg))}
-            let selectedRoutes = lstRoutes.filter{(editData["RouteCode"] as! String).contains((String(format: "%@", $0["id"] as! CVarArg)))}
+            let selectedRoutes = lstRoutes.filter{(editData["RouteName"] as! String).contains((String(format: "%@", $0["name"] as! CVarArg)))}
             
+            // RouteCode id
             let selectedJW = lstJoint.filter{(editData["JointWork_Name"] as? String ?? "").contains((String(format: "%@", $0["id"] as! CVarArg)))}
             
-            
+            print(editData["RouteCode"] as! String)
+            print(selectedRoutes)
+            print(lstRoutes)
             if !selectedWT.isEmpty {
                 self.selectedWorktype = selectedWT.first
                 
@@ -247,7 +267,17 @@ class TourPlanSingleEntry : IViewController , UITableViewDataSource,UITableViewD
             
             self.txtPob.text = editData["pob"] as? String ?? ""
             self.txtSob.text = editData["sob"] as? String ?? ""
-            self.txtRemarks.text = editData["remarks"] as? String ?? ""
+            
+            
+            let remarks = editData["remarks"] as? String ?? ""
+            
+            if remarks.isEmpty {
+                self.txtRemarks.text = "Enter the remarks"
+                self.txtRemarks.textColor = .lightGray
+            }else{
+                self.txtRemarks.text = remarks
+                self.txtRemarks.textColor = .black
+            }
         }
     }
     
@@ -351,23 +381,32 @@ class TourPlanSingleEntry : IViewController , UITableViewDataSource,UITableViewD
         }
         
         self.vwRoute.isHidden = false
-        self.vwPob.isHidden = false
-        self.vwSob.isHidden = false
+        
         
         self.lstSelectedRoutes.removeAll()
         self.lstSelectedJoints.removeAll()
         
-        self.txtPob.text = ""
-        self.txtSob.text = ""
+        
+        if UserSetup.shared.tpTargetBased != 0 {
+            self.vwPob.isHidden = false
+            self.vwSob.isHidden = false
+            
+            self.txtPob.text = ""
+            self.txtSob.text = ""
+            
+            self.vwSobHeightConstraint.constant = 80
+            self.topVwSobHeightConstraint.constant = 15
+            
+            self.vwPobHeightConstraint.constant = 80
+            self.topVwPobHeightConstraint.constant = 15
+        }
+        
+        
         
         self.vwRouteHeightConstraint.constant = 50
         self.topVwRouteHeightConstraint.constant = 15
         
-        self.vwSobHeightConstraint.constant = 80
-        self.topVwSobHeightConstraint.constant = 15
         
-        self.vwPobHeightConstraint.constant = 80
-        self.topVwPobHeightConstraint.constant = 15
     }
     
     func updateNonFieldWork(){
@@ -518,14 +557,14 @@ class TourPlanSingleEntry : IViewController , UITableViewDataSource,UITableViewD
             
             if UserSetup.shared.distributorBased != 0{
                 if self.selectedDistributor == nil{
-                    Toast.show(message: "Please Select Distributor", controller: self)
+                    Toast.show(message: "Please Select \(UserSetup.shared.StkCap)", controller: self)
                     return true
                 }
             }
             
             
             if self.lstSelectedRoutes.isEmpty {
-                Toast.show(message: "Please Select Routes", controller: self)
+                Toast.show(message: "Please Select \(UserSetup.shared.StkRoute)", controller: self)
                 return true
             }
             
@@ -550,7 +589,7 @@ class TourPlanSingleEntry : IViewController , UITableViewDataSource,UITableViewD
             
             
             if self.lstSelectedRoutes.isEmpty {
-                Toast.show(message: "Please Select Routes", controller: self)
+                Toast.show(message: "Please Select \(UserSetup.shared.StkRoute)", controller: self)
                 return true
             }
         }
@@ -576,7 +615,9 @@ class TourPlanSingleEntry : IViewController , UITableViewDataSource,UITableViewD
         let routeId = self.lstSelectedRoutes.map({($0["id"] as? String ?? "")}).joined(separator: "$$")
         
         
-        let jsonString = "[{\"Tour_Plan\":{\"worktype_code\":\"\'\(String(format: "%@", self.selectedWorktype["id"] as! CVarArg))\'\",\"worktype_name\":\"' \(selectedWorktype["name"] as? String ?? "")'\",\"Worked_with_Code\":\"\'\(disId)\'\",\"Worked_with_Name\":\"\'\(disName)\'\",\"sfName\":\"\'\(self.sfName)\'\",\"Place_Inv\":\"\(selectedWorktype["Place_Involved"] as? String ?? "")\",\"objective\":\"\'\(self.txtRemarks.text!) \'\",\"Tour_Date\":\"\'\(self.date)\'\",\"Multiretailername\":\"\'\'\",\"MultiretailerCode\":\"\'\'\",\"worked_with\":\"\'\(workWithId)\'\",\"HQ_Code\":\"\'\(hqId)\'\",\"HQ_Name\":\"\'\(hqName)\'\",\"SOB\":\"\(self.txtSob.text!)\",\"POB\":\"\(self.txtPob.text!)\",\"AppVersion\":\"\",\"location\":\"0:0\",\"dcr_activity_date\":\"\'\(Date().toString(format: "yyyy-MM-dd HH:mm:ss"))\'\",\"worked_withname\":\"\'\(workWithName)\'\",\"RouteName\":\"\'\(routeName)\'\",\"RouteCode\":\"\'\(routeId)\'\"}}]"
+        let remarks = self.txtRemarks.textColor == .lightGray ? "" : self.txtRemarks.text!
+        
+        let jsonString = "[{\"Tour_Plan\":{\"worktype_code\":\"\'\(String(format: "%@", self.selectedWorktype["id"] as! CVarArg))\'\",\"worktype_name\":\"' \(selectedWorktype["name"] as? String ?? "")'\",\"Worked_with_Code\":\"\'\(disId)\'\",\"Worked_with_Name\":\"\'\(disName)\'\",\"sfName\":\"\'\(self.sfName)\'\",\"Place_Inv\":\"\(selectedWorktype["Place_Involved"] as? String ?? "")\",\"objective\":\"\'\(remarks) \'\",\"Tour_Date\":\"\'\(self.date)\'\",\"Multiretailername\":\"\'\'\",\"MultiretailerCode\":\"\'\'\",\"worked_with\":\"\'\(workWithId)\'\",\"HQ_Code\":\"\'\(hqId)\'\",\"HQ_Name\":\"\'\(hqName)\'\",\"SOB\":\"\(self.txtSob.text!)\",\"POB\":\"\(self.txtPob.text!)\",\"AppVersion\":\"\",\"location\":\"0:0\",\"dcr_activity_date\":\"\'\(Date().toString(format: "yyyy-MM-dd HH:mm:ss"))\'\",\"worked_withname\":\"\'\(workWithName)\'\",\"RouteName\":\"\'\(routeName)\'\",\"RouteCode\":\"\'\(routeId)\'\"}}]"
         
         let params: Parameters = [ "data": jsonString ]
         
@@ -595,6 +636,7 @@ class TourPlanSingleEntry : IViewController , UITableViewDataSource,UITableViewD
                 
                 
                 self.navigationController?.popViewController(animated: true)
+                self.didSelect(true)
             case .failure(let error):
                 Toast.show(message: error.errorDescription ?? "", controller: self)
             }
@@ -626,7 +668,7 @@ class TourPlanSingleEntry : IViewController , UITableViewDataSource,UITableViewD
                 Cell.button.isSelected = false
             }
         })
-        routesVC.title = "Select the Route"
+        routesVC.title = "Select the \(UserSetup.shared.StkRoute)"
         routesVC.didSelect = { selectedItem in
             print(selectedItem)
             
@@ -668,7 +710,7 @@ class TourPlanSingleEntry : IViewController , UITableViewDataSource,UITableViewD
         }
         
         if self.lstSelectedRoutes.isEmpty {
-            Toast.show(message: "Please Select Routes", controller: self)
+            Toast.show(message: "Please Select \(UserSetup.shared.StkRoute)", controller: self)
             return
         }
         
@@ -778,7 +820,7 @@ class TourPlanSingleEntry : IViewController , UITableViewDataSource,UITableViewD
         let distributorVC = ItemViewController(items: lstDist, configure: { (Cell : SingleSelectionTableViewCell, distributor) in
             Cell.textLabel?.text = distributor["name"] as? String
         })
-        distributorVC.title = "Select the Distributor"
+        distributorVC.title = "Select the \(UserSetup.shared.StkCap)"
         distributorVC.didSelect = { selectedDistributor in
             print(selectedDistributor)
             self.selectedDistributor = selectedDistributor
@@ -793,3 +835,18 @@ class TourPlanSingleEntry : IViewController , UITableViewDataSource,UITableViewD
     }
 }
 
+extension TourPlanSingleEntry: UITextViewDelegate{
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.textColor == UIColor.lightGray {
+            textView.text = nil
+            textView.textColor = .black
+        }
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text.isEmpty {
+            textView.text = "Enter the remarks"
+            textView.textColor = UIColor.lightGray
+        }
+    }
+}

@@ -98,6 +98,9 @@ class TourPlanApproval : IViewController , UITableViewDelegate, UITableViewDataS
                 }
                 
                 self.lstApprovals = response
+                if self.lstApprovals.isEmpty {
+                    Toast.show(message: "No Data Available", controller: self)
+                }
                 self.twTourPlanList.reloadData()
             case .failure(let error):
                 Toast.show(message: error.errorDescription ?? "", controller: self)
@@ -175,12 +178,12 @@ class TourPlanApproval : IViewController , UITableViewDelegate, UITableViewDataS
                 cell.lblDate.text = lstApprovalsView[indexPath.row]["Tour_Date"] as? String ?? ""
                 cell.lblWorkTypeName.text = lstApprovalsView[indexPath.row]["Worktype_Name_B"] as? String ?? ""
                 
-                cell.lblWorkTypeName.textColor = UIColor.green
-    
+                cell.lblWorkTypeName.textColor = UIColor.systemGreen
+                print(lstApprovalsView[indexPath.row])
                 let selectedHQ = lstHQs.filter{(String(format: "%@", $0["id"] as! CVarArg)) == (lstApprovalsView[indexPath.row]["HQ_Code"] as? String ?? "")}
                 
                 if !selectedHQ.isEmpty{
-                    cell.lblHeadquarters.text = lstHQs.first?["Name"] as? String ?? ""
+                    cell.lblHeadquarters.text = lstHQs.first?["name"] as? String ?? ""
                 }else{
                     cell.lblHeadquarters.text = ""
                 }
@@ -207,12 +210,12 @@ class TourPlanApproval : IViewController , UITableViewDelegate, UITableViewDataS
                 cell.lblDate.text = lstApprovalsView[indexPath.row]["Tour_Date"] as? String ?? ""
                 cell.lblWorkTypeName.text = lstApprovalsView[indexPath.row]["Worktype_Name_B"] as? String ?? ""
                 
-                cell.lblWorkTypeName.textColor = UIColor.green
+                cell.lblWorkTypeName.textColor = UIColor.systemGreen
     
                 let selectedHQ = lstHQs.filter{(String(format: "%@", $0["id"] as! CVarArg)) == (lstApprovalsView[indexPath.row]["HQ_Code"] as? String ?? "")}
                 
                 if !selectedHQ.isEmpty{
-                    cell.lblHeadquarters.text = lstHQs.first?["Name"] as? String ?? ""
+                    cell.lblHeadquarters.text = lstHQs.first?["name"] as? String ?? ""
                 }else{
                     cell.lblHeadquarters.text = ""
                 }

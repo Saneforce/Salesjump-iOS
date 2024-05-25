@@ -39,6 +39,7 @@ class TourPlanCalenderScreen : UIViewController, FSCalendarDelegate, FSCalendarD
     @IBOutlet weak var vwreasonandTargetCommit: UIView!
     
     
+    @IBOutlet weak var vwTargetCommit: ShadowView!
     
     
     @IBOutlet weak var vwSubmitForApprovalHeightConstraint: NSLayoutConstraint!
@@ -46,6 +47,8 @@ class TourPlanCalenderScreen : UIViewController, FSCalendarDelegate, FSCalendarD
     
     @IBOutlet weak var vwReasonandTargetCommitHeightConstraint: NSLayoutConstraint!
     
+    
+    @IBOutlet weak var vwTargetCommitHeightConstraints: NSLayoutConstraint!
     
     var dates = [Date]()
     
@@ -73,6 +76,11 @@ class TourPlanCalenderScreen : UIViewController, FSCalendarDelegate, FSCalendarD
         
         fetchFullTP()
         
+        if UserSetup.shared.tpTargetBased == 0 {
+            vwTargetCommit.isHidden = true
+            vwTargetCommitHeightConstraints.constant = 0
+        }
+        
         self.calendarView.appearance.titleFont = UIFont(name: "Poppins-Regular", size: 16)!
         self.calendarView.appearance.headerTitleFont = UIFont(name: "Poppins-Bold", size: 18)!
         self.calendarView.appearance.weekdayFont = UIFont(name: "Poppins-SemiBold", size: 16)!
@@ -84,7 +92,7 @@ class TourPlanCalenderScreen : UIViewController, FSCalendarDelegate, FSCalendarD
         self.calendarView.appearance.selectionColor = .clear
         self.calendarView.appearance.titleSelectionColor = .black
         self.calendarView.appearance.titleDefaultColor = .black
-        self.calendarView.appearance.titleTodayColor = .black
+        self.calendarView.appearance.titleTodayColor = .red
         self.calendarView.scope = .month
         self.calendarView.placeholderType = .none
         
@@ -94,10 +102,10 @@ class TourPlanCalenderScreen : UIViewController, FSCalendarDelegate, FSCalendarD
         
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        fetchFullTP()
-    }
+//    override func viewWillAppear(_ animated: Bool) {
+//        super.viewWillAppear(animated)
+//        fetchFullTP()
+//    }
     
     func getUserDetails(){
         let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
@@ -165,7 +173,7 @@ class TourPlanCalenderScreen : UIViewController, FSCalendarDelegate, FSCalendarD
         print(APIClient.shared.BaseURL+APIClient.shared.DBURL+"gettour_month_value&divisionCode=" + self.divCode + "&sfCode="+self.sfCode + "&TourMont=\(month)" + "&Tyear=\(year)")
         
         AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"gettour_month_value&divisionCode=" + self.divCode + "&sfCode="+self.sfCode + "&TourMont=\(month)" + "&Tyear=\(year)",method : .get,parameters: nil,encoding: URLEncoding.httpBody,headers: nil).validate(statusCode: 200..<209).responseData { AFData in
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                 self.LoadingDismiss()
             }
             switch AFData.result {
@@ -200,7 +208,9 @@ class TourPlanCalenderScreen : UIViewController, FSCalendarDelegate, FSCalendarD
         
         self.ShowLoading(Message: "Loading...")
         AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"table/list&divisionCode=" + self.divCode + "&sfCode="+self.sfCode + "&desig=" + self.desig+"State_Code=" + self.stateCode+"&rSF=" + sfCode+"&CMonth=\(month)" + "&stateCode=" + stateCode + "&CYr=\(year)",method : .post,parameters: params,encoding: URLEncoding.httpBody,headers: nil).validate(statusCode: 200..<209).responseData { AFData in
-            self.LoadingDismiss()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                self.LoadingDismiss()
+            }
             switch AFData.result {
             
             case .success(let value):
@@ -216,7 +226,11 @@ class TourPlanCalenderScreen : UIViewController, FSCalendarDelegate, FSCalendarD
                         self.vwSubmitForApprovalHeightConstraint.constant = 0
                         self.calendarView.setCurrentPage(self.date ?? Date(), animated: true)
                         self.lblReason.text = ""
-                        self.vwReasonandTargetCommitHeightConstraint.constant = 40
+                        if UserSetup.shared.tpTargetBased == 0 {
+                            self.vwReasonandTargetCommitHeightConstraint.constant = 0
+                        }else {
+                            self.vwReasonandTargetCommitHeightConstraint.constant = 40
+                        }
                         self.calendarView.reloadData()
                         self.twPlanList.reloadData()
                         return
@@ -233,7 +247,10 @@ class TourPlanCalenderScreen : UIViewController, FSCalendarDelegate, FSCalendarD
                     self.dates = self.lstTourDetails.map{($0["date"] as? String ?? "").toDate(format: "yyyy-MM-dd")}
                     
                     print(self.dates)
-                    self.fetchTotalCommitment()
+                    if UserSetup.shared.tpTargetBased != 0 {
+                        self.fetchTotalCommitment()
+                    }
+                    
                     self.isAllDaysApplied()
                     self.calendarView.setCurrentPage(self.date ?? Date(), animated: true)
                     self.calendarView.reloadData()
@@ -252,7 +269,17 @@ class TourPlanCalenderScreen : UIViewController, FSCalendarDelegate, FSCalendarD
     
     @IBAction func submitAction(_ sender: UIButton) {
         
-        saveFullTP()
+        let alert = UIAlertController(title: "Confirmation", message: "Do you want to Submit?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
+            self.saveFullTP()
+            return
+        }
+                        
+        )
+        alert.addAction(UIAlertAction(title: "Cancel", style: .destructive) { _ in
+            return
+        })
+        self.present(alert, animated: true)
     }
     
     func isAllDaysApplied() {
@@ -272,20 +299,37 @@ class TourPlanCalenderScreen : UIViewController, FSCalendarDelegate, FSCalendarD
         
         if confirmed == "1" {
             self.lblReason.text = "Status: Waiting for Approval"
-            self.vwReasonandTargetCommitHeightConstraint.constant = 100
+            if UserSetup.shared.tpTargetBased == 0{
+                self.vwReasonandTargetCommitHeightConstraint.constant = 60
+            }else {
+                self.vwReasonandTargetCommitHeightConstraint.constant = 100
+            }
         }else if confirmed == "0" {
             let reason = self.lstTourDetails.first?["Rejection_Reason"] as? String ?? ""
             
             if !reason.isEmpty{
-                self.lblReason.text = "Rejected Reasons : " + String(format: "%@", self.lstTourDetails.first?["Rejection_Reason"] as! CVarArg)
-                self.vwReasonandTargetCommitHeightConstraint.constant = 100
+                self.lblReason.text = "Rejected Reason : " + String(format: "%@", self.lstTourDetails.first?["Rejection_Reason"] as! CVarArg)
+                
+                if UserSetup.shared.tpTargetBased == 0{
+                    self.vwReasonandTargetCommitHeightConstraint.constant = 60
+                }else {
+                    self.vwReasonandTargetCommitHeightConstraint.constant = 100
+                }
             }else {
                 self.lblReason.text = ""
-                self.vwReasonandTargetCommitHeightConstraint.constant = 40
+                if UserSetup.shared.tpTargetBased == 0{
+                    self.vwReasonandTargetCommitHeightConstraint.constant = 0
+                }else {
+                    self.vwReasonandTargetCommitHeightConstraint.constant = 40
+                }
             }
             
         }else {
-            self.vwReasonandTargetCommitHeightConstraint.constant = 40
+            if UserSetup.shared.tpTargetBased == 0{
+                self.vwReasonandTargetCommitHeightConstraint.constant = 0
+            }else {
+                self.vwReasonandTargetCommitHeightConstraint.constant = 40
+            }
             self.lblReason.text = ""
         }
         
@@ -326,7 +370,11 @@ class TourPlanCalenderScreen : UIViewController, FSCalendarDelegate, FSCalendarD
         
         let vc=self.storyboard?.instantiateViewController(withIdentifier: "sbTourPlanSingleEntry") as!  TourPlanSingleEntry
         vc.date = date.toString(format: "yyyy-MM-dd")
-        
+        vc.didSelect = { save in
+            if save == true {
+                self.fetchFullTP()
+            }
+        }
         if !editData.isEmpty{
             let confirmed = String(format: "%@", self.lstTourDetails.first?["Confirmed"] as! CVarArg)
             

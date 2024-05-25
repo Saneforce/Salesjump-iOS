@@ -8,7 +8,7 @@
 import UIKit
 import Alamofire
 
-class RejectReasonViewController<Item>: UIViewController,UITextViewDelegate {
+class RejectReasonViewController<Item>: IViewController,UITextViewDelegate {
     
     
     

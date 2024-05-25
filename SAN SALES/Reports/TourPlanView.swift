@@ -22,11 +22,29 @@ class TourPlanView : IViewController, UITableViewDelegate,UITableViewDataSource 
     @IBOutlet weak var vwDate: UIView!
     
     
+    
     @IBOutlet weak var twTpList: UITableView!
     
     @IBOutlet weak var lblName: UILabel!
     
     @IBOutlet weak var lblDate: UILabel!
+    
+    
+    @IBOutlet weak var lblHeadquarter: UILabel!
+    
+    
+    @IBOutlet weak var lblHeadquarterHeightConstraint: NSLayoutConstraint!
+    
+    
+    @IBOutlet weak var vwHqHeightConstraint: NSLayoutConstraint!
+    
+    
+    @IBOutlet weak var viewHead: UIView!
+    
+    
+    @IBOutlet weak var vwHeadHeightConstraint: NSLayoutConstraint!
+    
+    
     
     var sfCode: String = "", stateCode: String = "", divCode: String = "",desig: String="", rSF: String = ""
     let LocalStoreage = UserDefaults.standard
@@ -74,6 +92,16 @@ class TourPlanView : IViewController, UITableViewDelegate,UITableViewDataSource 
         
         self.lblDate.text = Date().toString(format: "dd MMM yyyy")
         self.date = Date().toString(format: "yyyy-MM-dd")
+        
+        if UserSetup.shared.SF_type == 1 {
+            
+            vwHq.isHidden  = true
+            vwHqHeightConstraint.constant = 0
+            lblHeadquarterHeightConstraint.constant = 0
+            vwHeadHeightConstraint.constant = 80
+            self.fetchTourPlanData(code: sfCode, date: date)
+        }
+        
     }
     
     
@@ -95,16 +123,23 @@ class TourPlanView : IViewController, UITableViewDelegate,UITableViewDataSource 
     
     
     @IBAction func dateAction(_ sender: UIButton) {
-        if self.selectedHq == nil{
-            Toast.show(message: "Please Select Headquarter", controller: self)
-            return
+        if UserSetup.shared.SF_type != 1 {
+            if self.selectedHq == nil{
+                Toast.show(message: "Please Select Headquarter", controller: self)
+                return
+            }
         }
+        
         let alertView = CalendarViewController()
         alertView.didSelect = { date in
             print(date)
             self.date = date
             self.lblDate.text = date.changeFormat(from: "yyyy-MM-dd",to: "dd MMM yyyy")
-            self.fetchTourPlanData(code: self.selectedHq["id"] as? String ?? "", date: date)
+            if UserSetup.shared.SF_type == 1 {
+                self.fetchTourPlanData(code: self.sfCode, date: date)
+            }else {
+                self.fetchTourPlanData(code: self.selectedHq["id"] as? String ?? "", date: date)
+            }
             self.dismiss(animated: true)
         }
         alertView.show()
@@ -178,12 +213,13 @@ class TourPlanView : IViewController, UITableViewDelegate,UITableViewDataSource 
             cell.lblDate.text = lstTp[indexPath.row]["date"] as? String ?? ""
             cell.lblWorkType.text = lstTp[indexPath.row]["wtype"] as? String ?? ""
             
-            cell.lblWorkType.textColor = UIColor.green
+            cell.lblWorkType.textColor = UIColor.systemGreen
 
             let selectedHQ = lstHQs.filter{(String(format: "%@", $0["id"] as! CVarArg)) == (lstTp[indexPath.row]["HQ_Code"] as? String ?? "")}
             
+            print(lstTp[indexPath.row])
             if !selectedHQ.isEmpty{
-                cell.lblHeadquarter.text = lstHQs.first?["Name"] as? String ?? ""
+                cell.lblHeadquarter.text = lstHQs.first?["name"] as? String ?? ""
             }else{
                 cell.lblHeadquarter.text = ""
             }
@@ -259,6 +295,7 @@ class TourPlanViewTableViewCell : UITableViewCell {
     @IBOutlet weak var lblWorkType: UILabel!
     
     
+    @IBOutlet weak var lblTitleHeadquartes: UILabel!
     
     @IBOutlet weak var lblHeadquarter: UILabel!
     @IBOutlet weak var lblDistributor: UILabel!
