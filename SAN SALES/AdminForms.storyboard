@@ -1446,7 +1446,7 @@
                                                                     <textInputTraits key="textInputTraits"/>
                                                                 </textField>
                                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="camera.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="Jnd-Zu-Hei">
-                                                                    <rect key="frame" x="288" y="15.333333333333336" width="25" height="18.999999999999986"/>
+                                                                    <rect key="frame" x="288" y="15.333333333333334" width="25" height="18.999999999999993"/>
                                                                     <color key="tintColor" red="0.062745098040000002" green="0.67843137249999996" blue="0.76078431369999999" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="width" constant="25" id="l5j-MQ-OVN"/>
@@ -2092,9 +2092,9 @@
                                         <color key="textColor" red="0.21176470589999999" green="0.20784313730000001" blue="0.20784313730000001" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Yz-cj-jmh">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Yz-cj-jmh">
                                         <rect key="frame" x="211" y="30" width="164" height="35"/>
-                                        <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="16"/>
+                                        <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="15"/>
                                         <color key="textColor" red="0.062745098040000002" green="0.67843137249999996" blue="0.76078431369999999" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
@@ -2105,7 +2105,7 @@
                                     <constraint firstItem="2Yz-cj-jmh" firstAttribute="top" relation="lessThanOrEqual" secondItem="LDS-Mp-UDk" secondAttribute="top" constant="30" id="UQE-FA-Nw0"/>
                                     <constraint firstItem="2Yz-cj-jmh" firstAttribute="leading" secondItem="fIJ-ba-gE4" secondAttribute="trailing" constant="20" id="Yhi-CU-EXn"/>
                                     <constraint firstAttribute="trailing" secondItem="2Yz-cj-jmh" secondAttribute="trailing" constant="15" id="f7C-Q9-Vyz"/>
-                                    <constraint firstAttribute="height" constant="80" id="gi3-XM-xkS"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="80" id="gi3-XM-xkS"/>
                                     <constraint firstItem="95w-fo-Mhc" firstAttribute="leading" secondItem="LDS-Mp-UDk" secondAttribute="leading" id="hVl-7R-UYy"/>
                                     <constraint firstItem="fIJ-ba-gE4" firstAttribute="top" secondItem="LDS-Mp-UDk" secondAttribute="top" constant="34" id="pHz-c3-o9m"/>
                                     <constraint firstItem="95w-fo-Mhc" firstAttribute="top" secondItem="LDS-Mp-UDk" secondAttribute="top" constant="23" id="tyK-Nc-1ze"/>

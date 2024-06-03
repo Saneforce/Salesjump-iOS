@@ -100,6 +100,12 @@ class TourPlanView : IViewController, UITableViewDelegate,UITableViewDataSource 
             lblHeadquarterHeightConstraint.constant = 0
             vwHeadHeightConstraint.constant = 80
             self.fetchTourPlanData(code: sfCode, date: date)
+        }else {
+            let hq = lstSub.filter{($0["id"] as? String ?? "") == sfCode}
+            
+            if !hq.isEmpty{
+                self.selectedHq = hq.first
+            }
         }
         
     }
@@ -167,6 +173,8 @@ class TourPlanView : IViewController, UITableViewDelegate,UITableViewDataSource 
         
 //    http://fmcg.salesjump.in/server/native_Db_V13.php?desig=MR&divisionCode=29%2C&rSF=SEFMR0040&axn=tpview&sfCode=SEFMR0040&stateCode=24
         
+        print(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"tpview&divisionCode=" + self.divCode + "&sfCode="+self.sfCode + "&desig=" + self.desig+"&rSF=" + sfCode + "&stateCode=" + stateCode)
+        print(params)
         self.ShowLoading(Message: "Loading ...")
         AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"tpview&divisionCode=" + self.divCode + "&sfCode="+self.sfCode + "&desig=" + self.desig+"&rSF=" + sfCode + "&stateCode=" + stateCode,method: .post , parameters: params,encoding: URLEncoding.httpBody,headers: nil).validate(statusCode: 200..<209).responseData { AFData in
             DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
@@ -228,7 +236,8 @@ class TourPlanView : IViewController, UITableViewDelegate,UITableViewDataSource 
             let jointWorks = lstTp[indexPath.row]["JointWork_Name1"] as? String ?? ""
             
             
-            
+            cell.lblTitleDistributor.text = UserSetup.shared.StkCap
+            cell.lblTitleRoutes.text = UserSetup.shared.StkRoute
             cell.lblDistributor.text = lstTp[indexPath.row]["distributor"] as? String ?? ""
             cell.lblJointWorks.text = jointWorks.isEmpty ? "" : jointWorks.replacingOccurrences(of: "$$", with: ",")
 
@@ -259,7 +268,8 @@ class TourPlanView : IViewController, UITableViewDelegate,UITableViewDataSource 
             let jointWorks = lstTp[indexPath.row]["JointWork_Name1"] as? String ?? ""
             
             
-            
+            cell.lblTitleDistributor.text = UserSetup.shared.StkCap
+            cell.lblTitleRoutes.text = UserSetup.shared.StkRoute
             cell.lblDistributor.text = lstTp[indexPath.row]["distributor"] as? String ?? ""
             cell.lblJointWorks.text = jointWorks.isEmpty ? "" : jointWorks.replacingOccurrences(of: "$$", with: ",")
 
@@ -306,6 +316,12 @@ class TourPlanViewTableViewCell : UITableViewCell {
 
     @IBOutlet weak var lblJointWorks: UILabel!
     @IBOutlet weak var lblRemarks: UILabel!
+    
+    
+    @IBOutlet weak var lblTitleDistributor: UILabel!
+    
+    
+    @IBOutlet weak var lblTitleRoutes: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()

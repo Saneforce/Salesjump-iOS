@@ -353,6 +353,10 @@ class GlobalFunc{
             "orderBy":"[\"name asc\"]","desig":"mgr"
         ]))
         
+        strMasList.append(mnuItem.init(MasId: 16, MasName: "Jointwork", MasImage: "mnuPrimary",StoreKey: "Jointwork_Master_"+SFCode, ApiKey: "get/jointwork&divisionCode="+(prettyJsonData["divisionCode"] as? String ?? "")+"&rSF="+(prettyJsonData["sfCode"] as? String ?? "")+"&sfCode="+SFCode,fromData: [
+           "tableName":"salesforce_master","coloumns":"[\"sf_code as id\", \"sf_name as name\"]","orderBy":"[\"name asc\"]","desig":"mgr"
+        ]))
+        
         for lItm in strMasList {
             let apiKey: String = lItm.ApiKey
             let aIndex: Any = lItm.MasId

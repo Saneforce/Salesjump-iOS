@@ -105,12 +105,14 @@ class TourPlanSingleEntry : IViewController , UITableViewDataSource,UITableViewD
     var selectedHeadquarter : AnyObject! {
         didSet {
             self.lblHeadquarter.text = selectedHeadquarter["name"] as? String
-            updateRoutes(id: String(format: "%@", selectedHeadquarter["id"] as! CVarArg))
+            // updateRoutes(id: String(format: "%@", selectedHeadquarter["id"] as! CVarArg))
             
             self.selectedDistributor = nil
             lblDistributor.text = "Select the \(UserSetup.shared.StkCap)"
             self.lstSelectedRoutes.removeAll()
             self.routeTableView.reloadData()
+            self.lstSelectedJoints.removeAll()
+            self.jointWorkTableView.reloadData()
             
         }
     }
@@ -208,13 +210,16 @@ class TourPlanSingleEntry : IViewController , UITableViewDataSource,UITableViewD
             let selectedHQ = lstHQs.filter{(String(format: "%@", $0["id"] as! CVarArg)) == (editData["HQ_Code"] as? String)}
             
             
-            if UserSetup.shared.SF_type != 1 {
-                self.updateRoutes(id: (editData["HQ_Code"] as? String ?? ""))
+//            if UserSetup.shared.SF_type != 1 {
+//                self.updateRoutes(id: (editData["HQ_Code"] as? String ?? ""))
+//            }
+            if !selectedHQ.isEmpty {
+                updateRoutes(id: String(format: "%@", selectedHQ.first!["id"] as! CVarArg), isFromEdit: true)
+                self.selectedHeadquarter = selectedHQ.first
             }
             
-            
             let selectDistri = lstDist.filter{(String(format: "%@", $0["id"] as! CVarArg)) == (String(format: "%@", editData["Worked_with_Code"] as! CVarArg))}
-            let selectedRoutes = lstRoutes.filter{(editData["RouteName"] as! String).contains((String(format: "%@", $0["name"] as! CVarArg)))}
+            let selectedRoutes = lstRoutes.filter{(editData["RouteCode"] as! String).contains((String(format: "%@", $0["id"] as! CVarArg)))}
             
             // RouteCode id
             let selectedJW = lstJoint.filter{(editData["JointWork_Name"] as? String ?? "").contains((String(format: "%@", $0["id"] as! CVarArg)))}
@@ -237,9 +242,7 @@ class TourPlanSingleEntry : IViewController , UITableViewDataSource,UITableViewD
                 }
             }
             
-            if !selectedHQ.isEmpty {
-                self.selectedHeadquarter = selectedHQ.first
-            }
+            
             
             if !selectDistri.isEmpty {
                 self.selectedDistributor = selectDistri.first
@@ -281,7 +284,7 @@ class TourPlanSingleEntry : IViewController , UITableViewDataSource,UITableViewD
         }
     }
     
-    func updateRoutes(id : String) {
+    func updateRoutes(id : String , isFromEdit : Bool) {
        // let id: String = sfCode
         if(LocalStoreage.string(forKey: "Distributors_Master_"+id)==nil){
             //Toast.show(message: "No Distributors found. Please will try to sync", controller: self)
@@ -289,6 +292,7 @@ class TourPlanSingleEntry : IViewController , UITableViewDataSource,UITableViewD
             GlobalFunc.FieldMasterSync(SFCode: id){ [self] in
                 let DistData = self.LocalStoreage.string(forKey: "Distributors_Master_"+id)!
                 let RouteData: String=self.LocalStoreage.string(forKey: "Route_Master_"+id)!
+                let jointWorkData : String = self.LocalStoreage.string(forKey: "Jointwork_Master_"+id)!
                 if let list = GlobalFunc.convertToDictionary(text: DistData) as? [AnyObject] {
                     self.lstDist = list;
                 }
@@ -296,11 +300,20 @@ class TourPlanSingleEntry : IViewController , UITableViewDataSource,UITableViewD
                  //   self.lstAllRoutes = list
                     self.lstRoutes = list
                 }
+                if let list  =  GlobalFunc.convertToDictionary(text: jointWorkData) as? [AnyObject] {
+                    self.lstJoint = list
+                }
                 lblDistributor.text = "Select the Distributor"
                 self.lstSelectedRoutes.removeAll()
                 self.routeTableView.reloadData()
-                self.LoadingDismiss()
-                self.navigationController?.popViewController(animated: true)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                    self.LoadingDismiss()
+                    if isFromEdit == false {
+                        self.navigationController?.popViewController(animated: true)
+                    }
+                }
+                
+               // self.navigationController?.popViewController(animated: true)
             }
             
             
@@ -313,6 +326,12 @@ class TourPlanSingleEntry : IViewController , UITableViewDataSource,UITableViewD
                     
                     if let list = GlobalFunc.convertToDictionary(text: RouteData) as? [AnyObject] {
                         lstRoutes = list
+                    }
+                }
+                
+                if let jointWorkData = LocalStoreage.string(forKey: "Jointwork_Master_"+id){
+                    if let list = GlobalFunc.convertToDictionary(text: jointWorkData) as? [AnyObject] {
+                        lstJoint = list
                     }
                 }
             }
@@ -798,6 +817,7 @@ class TourPlanSingleEntry : IViewController , UITableViewDataSource,UITableViewD
         headquarterVC.didSelect = { selectedHeadquarter in
             print(selectedHeadquarter)
             self.selectedHeadquarter = selectedHeadquarter
+            self.updateRoutes(id: selectedHeadquarter["id"] as? String ?? "", isFromEdit: false)
             self.navigationController?.popViewController(animated: true)
         }
         self.navigationController?.pushViewController(headquarterVC, animated: true)

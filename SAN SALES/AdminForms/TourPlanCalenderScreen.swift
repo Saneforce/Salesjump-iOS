@@ -58,7 +58,8 @@ class TourPlanCalenderScreen : UIViewController, FSCalendarDelegate, FSCalendarD
     var lstTourDetails : [AnyObject] = []
     
     var month = "",year = ""
-    var date : Date?
+    var date : Date = Date()
+    var isBackEnabled : Bool = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -71,8 +72,8 @@ class TourPlanCalenderScreen : UIViewController, FSCalendarDelegate, FSCalendarD
         print("Month == \(month)")
         print("Year == \(year)")
         
-        month = Date().toString(format: "MM")
-        year = Date().toString(format: "yyyy")
+        month = date.toString(format: "MM")
+        year = date.toString(format: "yyyy")
         
         fetchFullTP()
         
@@ -80,6 +81,8 @@ class TourPlanCalenderScreen : UIViewController, FSCalendarDelegate, FSCalendarD
             vwTargetCommit.isHidden = true
             vwTargetCommitHeightConstraints.constant = 0
         }
+        
+        btnPrev.isEnabled = false
         
         self.calendarView.appearance.titleFont = UIFont(name: "Poppins-Regular", size: 16)!
         self.calendarView.appearance.headerTitleFont = UIFont(name: "Poppins-Bold", size: 18)!
@@ -97,9 +100,13 @@ class TourPlanCalenderScreen : UIViewController, FSCalendarDelegate, FSCalendarD
         self.calendarView.placeholderType = .none
         
         self.calendarView.scrollEnabled = false
-        self.calendarView.setCurrentPage(date ?? Date(), animated: true)
+        self.calendarView.setCurrentPage(date, animated: true)
         self.calendarView.reloadData()
         
+    }
+    
+    deinit {
+        print("TourPlanCalenderScreen deCollected")
     }
     
 //    override func viewWillAppear(_ animated: Bool) {
@@ -157,6 +164,7 @@ class TourPlanCalenderScreen : UIViewController, FSCalendarDelegate, FSCalendarD
         year = previousMonth!.toString(format: "yyyy")
         sender.isEnabled = (getMonth(actualprevious!).month == getMonth(previousMonth!).month) ? false : true
         self.btnNext.isEnabled = true
+        self.btnPrev.isEnabled = false
         self.lstTourDetails.removeAll()
         self.fetchFullTP()
         
@@ -173,7 +181,7 @@ class TourPlanCalenderScreen : UIViewController, FSCalendarDelegate, FSCalendarD
         print(APIClient.shared.BaseURL+APIClient.shared.DBURL+"gettour_month_value&divisionCode=" + self.divCode + "&sfCode="+self.sfCode + "&TourMont=\(month)" + "&Tyear=\(year)")
         
         AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"gettour_month_value&divisionCode=" + self.divCode + "&sfCode="+self.sfCode + "&TourMont=\(month)" + "&Tyear=\(year)",method : .get,parameters: nil,encoding: URLEncoding.httpBody,headers: nil).validate(statusCode: 200..<209).responseData { AFData in
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
                 self.LoadingDismiss()
             }
             switch AFData.result {
@@ -186,7 +194,10 @@ class TourPlanCalenderScreen : UIViewController, FSCalendarDelegate, FSCalendarD
                 if let response = apiResponse as? [AnyObject]{
                     print(response)
                     if !response.isEmpty {
-                        self.lblTargetCommitment.text = String(format: "%@", response.first?["MonthTotal"] as! CVarArg)
+                        
+                        let target = String(format: "%@", response.first?["MonthTotal"] as! CVarArg)
+                        let targetRound = Double(round(100 * (Double(target) ?? 0)) / 100)
+                        self.lblTargetCommitment.text = "\(targetRound)"
                     }else {
                         self.lblTargetCommitment.text = "00"
                     }
@@ -224,7 +235,7 @@ class TourPlanCalenderScreen : UIViewController, FSCalendarDelegate, FSCalendarD
                         self.lblTargetCommitment.text = "00"
                         self.vwSubmitForApproval.isHidden = true
                         self.vwSubmitForApprovalHeightConstraint.constant = 0
-                        self.calendarView.setCurrentPage(self.date ?? Date(), animated: true)
+                        self.calendarView.setCurrentPage(self.date, animated: true)
                         self.lblReason.text = ""
                         if UserSetup.shared.tpTargetBased == 0 {
                             self.vwReasonandTargetCommitHeightConstraint.constant = 0
@@ -252,7 +263,7 @@ class TourPlanCalenderScreen : UIViewController, FSCalendarDelegate, FSCalendarD
                     }
                     
                     self.isAllDaysApplied()
-                    self.calendarView.setCurrentPage(self.date ?? Date(), animated: true)
+                    self.calendarView.setCurrentPage(self.date, animated: true)
                     self.calendarView.reloadData()
                     self.twPlanList.reloadData()
                 }
@@ -289,9 +300,27 @@ class TourPlanCalenderScreen : UIViewController, FSCalendarDelegate, FSCalendarD
         
         let interval = calendar.dateInterval(of: .month, for: dat)!
         
+        let month = dat.toString(format: "MM")
+        let year = dat.toString(format: "yyyy")
+        
+        let date = Date() // .addingTimeInterval(86400)
+        
+        
         
         var days = 0
-        days = calendar.dateComponents([.day], from: interval.start, to: interval.end).day!
+       // days = calendar.dateComponents([.day], from: interval.start, to: interval.end).day!
+        if month == date.toString(format: "MM") && year == date.toString(format: "yyyy") {
+            let tDays = calendar.dateComponents([.day], from: date, to: interval.end).day!
+            
+            days = tDays + 1
+            print(days)
+            print(self.lstTourDetails.count)
+            print(interval)
+            print(date)
+            print(interval.end)
+        }else {
+            days = calendar.dateComponents([.day], from: interval.start, to: interval.end).day!
+        }
         
         let confirmed = String(format: "%@", self.lstTourDetails.first?["Confirmed"] as! CVarArg) // self.lstTourDetails.first["Confirmed"]
         
@@ -355,13 +384,17 @@ class TourPlanCalenderScreen : UIViewController, FSCalendarDelegate, FSCalendarD
                 
                 print(apiResponse)
                 Toast.show(message: "Tour Plan Submitted Successfully", controller: self)
-                self.navigationController?.popViewController(animated: true)
+                GlobalFunc.movetoHomePage()
+              //  self.navigationController?.popViewController(animated: true)
             case .failure(let error):
                 Toast.show(message: error.errorDescription ?? "", controller: self)
             }
         }
     }
     
+    func minimumDate(for calendar: FSCalendar) -> Date {
+        return Date()
+    }
     
     
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
@@ -438,6 +471,9 @@ class TourPlanCalenderScreen : UIViewController, FSCalendarDelegate, FSCalendarD
     }
     
     @objc func backVC() {
-        self.navigationController?.popViewController(animated: true)
+        if self.isBackEnabled == true {
+            self.navigationController?.popViewController(animated: true)
+        }
+        
     }
 }

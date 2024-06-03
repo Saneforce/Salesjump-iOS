@@ -3468,7 +3468,9 @@
                                                     <outlet property="lblRemarks" destination="SIC-iZ-Log" id="TCq-tI-rbq"/>
                                                     <outlet property="lblRoutes" destination="3H4-b3-5FT" id="yyD-56-1b0"/>
                                                     <outlet property="lblSob" destination="iEm-3O-hIu" id="PNL-J0-t8j"/>
+                                                    <outlet property="lblTitleDistributor" destination="hMb-Xa-DMO" id="D9G-Um-Ltj"/>
                                                     <outlet property="lblTitleHeadquartes" destination="IFJ-zB-ab1" id="JwO-Kq-DLT"/>
+                                                    <outlet property="lblTitleRoutes" destination="BTV-av-Wyq" id="Xbz-OY-jFi"/>
                                                     <outlet property="lblWorkType" destination="kWH-L7-aii" id="2kt-b3-7xx"/>
                                                 </connections>
                                             </tableViewCell>
@@ -4063,6 +4065,8 @@
                                                     <outlet property="lblRemarks" destination="1Pl-xm-4jG" id="cGj-mn-2Lj"/>
                                                     <outlet property="lblRoutes" destination="vY0-l9-dIM" id="i0L-6J-kii"/>
                                                     <outlet property="lblSob" destination="Fdz-sd-G3P" id="3VI-Ud-Q2P"/>
+                                                    <outlet property="lblTitleDistributor" destination="ehb-qp-ahW" id="nJ1-wr-32S"/>
+                                                    <outlet property="lblTitleRoutes" destination="eVV-ps-nri" id="QFx-10-DAx"/>
                                                     <outlet property="lblWorkType" destination="Ucl-MU-F9B" id="39S-G8-aIn"/>
                                                 </connections>
                                             </tableViewCell>

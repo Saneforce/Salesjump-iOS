@@ -130,7 +130,8 @@ class TourPlanViewDateWise : IViewController, UITableViewDelegate,UITableViewDat
             let routes = lstTp[indexPath.row]["towns"] as? String ?? ""
             let jointWorks = lstTp[indexPath.row]["JointWork_Name1"] as? String ?? ""
             
-            
+            cell.lblTitleDistributor.text = UserSetup.shared.StkCap
+            cell.lblTitleRoutes.text = UserSetup.shared.StkRoute
             
             cell.lblDistributor.text = lstTp[indexPath.row]["distributor"] as? String ?? ""
             cell.lblJointWorks.text = jointWorks.isEmpty ? "" : jointWorks.replacingOccurrences(of: "$$", with: ",")
@@ -161,7 +162,8 @@ class TourPlanViewDateWise : IViewController, UITableViewDelegate,UITableViewDat
             let routes = lstTp[indexPath.row]["towns"] as? String ?? ""
             let jointWorks = lstTp[indexPath.row]["JointWork_Name1"] as? String ?? ""
             
-            
+            cell.lblTitleDistributor.text = UserSetup.shared.StkCap
+            cell.lblTitleRoutes.text = UserSetup.shared.StkRoute
             
             cell.lblDistributor.text = lstTp[indexPath.row]["distributor"] as? String ?? ""
             cell.lblJointWorks.text = jointWorks.isEmpty ? "" : jointWorks.replacingOccurrences(of: "$$", with: ",")
@@ -217,6 +219,13 @@ class TourPlanViewDateWiseTableViewCell : UITableViewCell {
     
     
     @IBOutlet weak var lblRemarks: UILabel!
+    
+    
+    
+    @IBOutlet weak var lblTitleDistributor: UILabel!
+    
+    
+    @IBOutlet weak var lblTitleRoutes: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()

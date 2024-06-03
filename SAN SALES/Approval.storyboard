@@ -2005,9 +2005,11 @@
                                                     <outlet property="lblRemarks" destination="Hkl-4S-59v" id="aaa-FB-IwZ"/>
                                                     <outlet property="lblRoutes" destination="aCD-Hn-GjS" id="vZz-7h-E7S"/>
                                                     <outlet property="lblSob" destination="bRU-Ea-3FN" id="Z2z-DS-1Kp"/>
+                                                    <outlet property="lblTitleDistributor" destination="JGK-M5-LdS" id="Svb-s1-2Hg"/>
                                                     <outlet property="lblTitleHeadquarters" destination="MIf-Kl-W92" id="5Nw-Tg-P1g"/>
                                                     <outlet property="lblTitleJointWork" destination="HEo-jo-57r" id="svU-5i-Gdf"/>
                                                     <outlet property="lblTitleRemarks" destination="mCV-ca-VqI" id="leq-Xl-Rgv"/>
+                                                    <outlet property="lblTitleRoute" destination="d0R-Zm-bcu" id="Jfu-0F-emr"/>
                                                     <outlet property="lblWorkTypeName" destination="7dk-V1-213" id="80h-pP-Idd"/>
                                                 </connections>
                                             </tableViewCell>

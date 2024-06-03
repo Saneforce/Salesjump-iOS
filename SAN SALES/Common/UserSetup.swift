@@ -46,6 +46,10 @@ class UserSetup{
     var SrtEndKMNd:Int = 0
     var sf_emp_id:String = ""
     var employeeId: String = ""
+    var tpDcrDeviationNeed: Int = 0
+    var tpNeed: Int = 0
+    var tpRemainderDate: Int = 0
+    var tpMandatoryNeed: Int = 0
     func initUserSetup(){
         let SetupStoreage = UserDefaults.standard
         let SetupData: String=SetupStoreage.string(forKey: "UserSetup")!
@@ -84,6 +88,10 @@ class UserSetup{
         tpTargetBased = lstSetups[0]["TP_Target_Based"] as? Int ?? 0
         jointWorkNeed = lstSetups[0]["jointwork"] as? Int ?? 0
         employeeId = lstSetups[0]["Employee_Id"] as? String ?? ""
+        tpDcrDeviationNeed = lstSetups[0]["TPDCR_Deviation"] as? Int ?? 0
+        tpNeed = lstSetups[0]["TP_ND"] as? Int ?? 0
+        tpRemainderDate = lstSetups[0]["TP_Remainder_Date"] as? Int ?? 0
+        tpMandatoryNeed = lstSetups[0]["TP_Mandatory_ND"] as? Int ?? 0
         print(UserSetup.shared.Phone_Country_Length)
         if(lstSetups[0]["Geo_Fencing"] as? Int == 1){
             Fenching = true

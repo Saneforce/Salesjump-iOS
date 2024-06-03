@@ -196,7 +196,8 @@ class TourPlanApproval : IViewController , UITableViewDelegate, UITableViewDataS
                 cell.lblDistributor.text = lstApprovalsView[indexPath.row]["Worked_With_SF_Name"] as? String ?? ""
                 cell.lblJointWork.text = jointWorks.isEmpty ? "" : jointWorks.replacingOccurrences(of: "$$", with: ",")
 
-                
+                cell.lblTitleDistributor.text = UserSetup.shared.StkCap
+                cell.lblTitleRoute.text = UserSetup.shared.StkRoute
                 cell.lblRoutes.text = routes.isEmpty ? "" : routes.replacingOccurrences(of: "$$", with: ",")
                 cell.lblPob.text = lstApprovalsView[indexPath.row]["TPOB"] as? String ?? "00"
                 cell.lblSob.text = lstApprovalsView[indexPath.row]["TSOB"] as? String ?? "00"
@@ -223,7 +224,8 @@ class TourPlanApproval : IViewController , UITableViewDelegate, UITableViewDataS
                 let routes = lstApprovalsView[indexPath.row]["Territory_Code1"] as? String ?? ""
                 let jointWorks = lstApprovalsView[indexPath.row]["JointWork_Name1"] as? String ?? ""
                 
-                
+                cell.lblTitleDistributor.text = UserSetup.shared.StkCap
+                cell.lblTitleRoute.text = UserSetup.shared.StkRoute
                 
                 cell.lblDistributor.text = lstApprovalsView[indexPath.row]["Worked_With_SF_Name"] as? String ?? ""
                 cell.lblJointWork.text = jointWorks.isEmpty ? "" : jointWorks.replacingOccurrences(of: "$$", with: ",")
@@ -393,6 +395,10 @@ class TourPlanApprovalListTableViewCell : UITableViewCell {
     @IBOutlet weak var lblRemarks: UILabel!
     
     
+    
+    @IBOutlet weak var lblTitleRoute: UILabel!
+    
+    @IBOutlet weak var lblTitleDistributor: UILabel!
     @IBOutlet weak var lblDistributor: UILabel!
     
     @IBOutlet weak var lblTitleRemarks: UILabel!

@@ -100,7 +100,7 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         DayendBT.layer.cornerRadius = 5
         DayendBT.addTarget(target: self, action: #selector(ClikDayEnd))
         
-   
+        
         
         
        // LocalStoreage.removeObject(forKey: "Mydayplan")
@@ -117,6 +117,7 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         
         Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(TimeDisplay), userInfo: nil, repeats: true)
         getUserDetails()
+       // self.tpMandatoryNeed()
         /*if let json = try JSONSerialization.jsonObject(with: prettyPrintedJson!, options: []) as? [String: Any] {
                 // try to read out a string array
                 if let names = json["names"] as? [String] {
@@ -204,6 +205,96 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         DashboardNew()
         LOG_OUTMODE()
     }
+    
+    func tpMandatoryNeed() {
+         // http://fmcg.salesjump.in/server/native_Db_V13.php?State_Code=24&divisionCode=29%2C&rSF=SEFMR0038&axn=get%2Ftpdetails_mand&sfCode=SEFMR0038
+
+        print(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"get/tpdetails_mand&sfCode=\(SFCode)&rSF=\(SFCode)&divisionCode=\(DivCode)&State_Code=\(StateCode)")
+        
+         AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"get/tpdetails_mand&sfCode=\(SFCode)&rSF=\(SFCode)&divisionCode=\(DivCode)&State_Code=\(StateCode)",method: .get,parameters: nil,headers: nil).validate(statusCode: 200..<209).responseData { AFData in
+            
+            switch AFData.result {
+                
+            case .success(let value):
+                print(value)
+                
+                let apiResponse = try? JSONSerialization.jsonObject(with: AFData.data!, options: JSONSerialization.ReadingOptions.allowFragments)
+                
+                print(apiResponse)
+                
+                guard let response = apiResponse as? AnyObject else {
+                    return
+                }
+                print(response)
+                
+                guard let currentResponse = response["current"] as? [AnyObject] else{
+                    return
+                }
+                print(currentResponse)
+                let storyboard = UIStoryboard(name: "AdminForms", bundle: nil)
+                let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
+                if currentResponse.isEmpty {
+                    let tpMnuVc = storyboard.instantiateViewController(withIdentifier: "sbAdminMnu") as! AdminMenus
+                    let trPln = storyboard.instantiateViewController(withIdentifier: "sbTourPlanCalenderScreen") as! TourPlanCalenderScreen
+                    trPln.date = Date()
+                    trPln.isBackEnabled = false
+                    viewController.setViewControllers([tpMnuVc,trPln], animated: false)
+                    (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
+                    return
+                }
+                
+                guard let nextResponse = response["next"] as? [AnyObject] else{
+                    return
+                }
+                print(nextResponse)
+                if nextResponse.isEmpty {
+                    let tpMnuVc = storyboard.instantiateViewController(withIdentifier: "sbAdminMnu") as! AdminMenus
+                    let trPln = storyboard.instantiateViewController(withIdentifier: "sbTourPlanCalenderScreen") as! TourPlanCalenderScreen
+                    let actualNext = Calendar.current.date(byAdding: .month, value: 1, to: Date())
+                    trPln.date = actualNext!
+                    trPln.isBackEnabled = false
+                    viewController.setViewControllers([tpMnuVc,trPln], animated: false)
+                    (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
+                    return
+                }
+                print(nextResponse.isEmpty as Any)
+            //    self.tpDeviation()
+            case .failure(let error):
+                Toast.show(message: error.errorDescription ?? "", controller: self)
+            }
+        }
+        
+    }
+    
+    func tpDeviation() {
+        
+        // http://fmcg.salesjump.in/server/native_Db_V13.php?State_Code=24&divisionCode=29%2C&rSF=SEFMR0040&axn=get%2Ftpdetails&sfCode=SEFMR0040
+        
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"get/tpdetails&sfCode=\(SFCode)&rSF=\(SFCode)&divisionCode=\(DivCode)").validate(statusCode: 200..<209).responseData { AFData in
+            switch AFData.result {
+                
+            case .success(let value):
+                print(value)
+                
+                let apiResponse = try? JSONSerialization.jsonObject(with: AFData.data!, options: JSONSerialization.ReadingOptions.allowFragments)
+                
+                print(apiResponse)
+                
+                guard let response = apiResponse as? AnyObject else {
+                    return
+                }
+                print(response)
+                
+                guard let currentResponse = response["tp"] as? AnyObject else{
+                    return
+                }
+                print(currentResponse)
+            case .failure(let error):
+                Toast.show(message: error.errorDescription ?? "", controller: self)
+            }
+        }
+    }
+    
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.text == "Enter the Remarks"{
             textView.text = ""
