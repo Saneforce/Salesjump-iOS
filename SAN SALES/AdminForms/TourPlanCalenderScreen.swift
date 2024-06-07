@@ -216,7 +216,8 @@ class TourPlanCalenderScreen : UIViewController, FSCalendarDelegate, FSCalendarD
         let jsonString = "{\"tableName\":\"vwTourPlan\",\"coloumns\":\"[\\\"date\\\",\\\"remarks\\\",\\\"worktype_code\\\",\\\"worktype_name\\\",\\\"RouteCode\\\",\\\"RouteName\\\",\\\"Worked_with_Code\\\",\\\"Worked_with_Name\\\",\\\"JointWork_Name\\\",\\\"JointWork_Name1\\\",\\\"Retailer_Code\\\",\\\"Retailer_Name\\\",\\\"Place_Inv\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}"
         
         let params : Parameters = ["data" : jsonString]
-        
+        print(params)
+        print(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"table/list&divisionCode=" + self.divCode + "&sfCode="+self.sfCode + "&desig=" + self.desig+"State_Code=" + self.stateCode+"&rSF=" + sfCode+"&CMonth=\(month)" + "&stateCode=" + stateCode + "&CYr=\(year)")
         self.ShowLoading(Message: "Loading...")
         AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"table/list&divisionCode=" + self.divCode + "&sfCode="+self.sfCode + "&desig=" + self.desig+"State_Code=" + self.stateCode+"&rSF=" + sfCode+"&CMonth=\(month)" + "&stateCode=" + stateCode + "&CYr=\(year)",method : .post,parameters: params,encoding: URLEncoding.httpBody,headers: nil).validate(statusCode: 200..<209).responseData { AFData in
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
@@ -248,12 +249,29 @@ class TourPlanCalenderScreen : UIViewController, FSCalendarDelegate, FSCalendarD
                     }
                     print("Gooo fvjovo")
                 //    self.lstTourDetails = responseArray
-                    
+                    print(responseArray)
                     self.lstTourDetails =  responseArray.sorted(by: { (plan1, plan2) -> Bool in
                         let date1 = (plan1["date"] as? String ?? "").toDate(format: "yyyy-MM-dd") //"yyyy-MM-dd HH:mm:ss"
                         let date2 = (plan2["date"] as? String ?? "").toDate(format: "yyyy-MM-dd")
                         return date1.compare(date2) == .orderedAscending
                     })
+                    
+                
+                    let calendar = Calendar.current
+                  
+                    let dat = self.calendarView.currentPage.addingTimeInterval(86400)
+                    
+                    let interval = calendar.dateInterval(of: .month, for: dat)!
+                    
+                    let month = dat.toString(format: "MM")
+                    let year = dat.toString(format: "yyyy")
+                    
+                    let date = Date()
+                    if month == date.toString(format: "MM") && year == date.toString(format: "yyyy") {
+                        self.lstTourDetails.removeAll{Int(($0["date"] as? String ?? "").changeFormat(from: "yyyy-MM-dd",to: "dd"))! < Int(Date().toString(format: "dd"))!}
+                    }
+                    
+                    
                     
                     self.dates = self.lstTourDetails.map{($0["date"] as? String ?? "").toDate(format: "yyyy-MM-dd")}
                     
@@ -466,6 +484,11 @@ class TourPlanCalenderScreen : UIViewController, FSCalendarDelegate, FSCalendarD
         
         let vc=self.storyboard?.instantiateViewController(withIdentifier: "sbTourPlanSingleEntry") as!  TourPlanSingleEntry
         vc.date = self.lstTourDetails[indexPath.row]["date"] as? String ?? ""
+        vc.didSelect = { save in
+            if save == true {
+                self.fetchFullTP()
+            }
+        }
         vc.editData = self.lstTourDetails[indexPath.row]
         self.navigationController?.pushViewController(vc, animated: true)
     }

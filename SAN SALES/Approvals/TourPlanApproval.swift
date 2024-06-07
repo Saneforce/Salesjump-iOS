@@ -183,7 +183,7 @@ class TourPlanApproval : IViewController , UITableViewDelegate, UITableViewDataS
                 let selectedHQ = lstHQs.filter{(String(format: "%@", $0["id"] as! CVarArg)) == (lstApprovalsView[indexPath.row]["HQ_Code"] as? String ?? "")}
                 
                 if !selectedHQ.isEmpty{
-                    cell.lblHeadquarters.text = lstHQs.first?["name"] as? String ?? ""
+                    cell.lblHeadquarters.text = selectedHQ.first?["name"] as? String ?? ""
                 }else{
                     cell.lblHeadquarters.text = ""
                 }
@@ -216,7 +216,7 @@ class TourPlanApproval : IViewController , UITableViewDelegate, UITableViewDataS
                 let selectedHQ = lstHQs.filter{(String(format: "%@", $0["id"] as! CVarArg)) == (lstApprovalsView[indexPath.row]["HQ_Code"] as? String ?? "")}
                 
                 if !selectedHQ.isEmpty{
-                    cell.lblHeadquarters.text = lstHQs.first?["name"] as? String ?? ""
+                    cell.lblHeadquarters.text = selectedHQ.first?["name"] as? String ?? ""
                 }else{
                     cell.lblHeadquarters.text = ""
                 }

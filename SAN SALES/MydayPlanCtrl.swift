@@ -47,6 +47,8 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
     @IBOutlet weak var Setval: UIButton!
     
     
+    @IBOutlet weak var vwDeviationCtrl: UIView!
+    @IBOutlet weak var switchDeviate: UISwitch!
     
     struct lItem: Any {
         let id: String
@@ -90,6 +92,8 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
     var exp_Need:Int = 0
     var lstPlnDetail: [AnyObject] = []
     var attendanceView:Int = 0
+    
+    var tpData : AnyObject!
     override func viewDidLoad() {
         super.viewDidLoad()
         txRem.text = "Enter the Remarks"
@@ -251,7 +255,13 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
             self.vwDistCtrl.isHidden = true
             self.vwRouteCtrl.frame.origin.y = vwRouteCtrl.frame.origin.y+vwRouteCtrl.frame.height-160
             self.vwJointCtrl.frame.origin.y = vwJointCtrl.frame.origin.y+vwJointCtrl.frame.height-300
-            self.vwRmksCtrl.frame.origin.y = vwRmksCtrl.frame.origin.y+vwRmksCtrl.frame.height-155
+            if UserSetup.shared.tpDcrDeviationNeed == 0 {
+                self.vwDeviationCtrl.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height-155
+                self.vwRmksCtrl.frame.origin.y = vwRmksCtrl.frame.origin.y+vwRmksCtrl.frame.height-95
+            }else {
+                self.vwRmksCtrl.frame.origin.y = vwRmksCtrl.frame.origin.y+vwRmksCtrl.frame.height-155
+            }
+            
                }
         if (UserSetup.shared.DistBased == 1){
             vwDistCtrl.isHidden = false
@@ -265,7 +275,11 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         setTodayPlan()
        //selectedid()
 
+        if UserSetup.shared.tpDcrDeviationNeed == 0 {
+            self.tpDeviation()
+        }
     }
+    
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.text == "Enter the Remarks"{
             textView.text = ""
@@ -420,14 +434,16 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                // vwDistCtrl.isHidden=false
                 vwRouteCtrl.isHidden=false
                 vwJointCtrl.isHidden=false
-                self.vwRmksCtrl.frame.origin.y = vwJointCtrl.frame.origin.y+vwJointCtrl.frame.height+8
+                self.vwDeviationCtrl.frame.origin.y = vwJointCtrl.frame.origin.y+vwJointCtrl.frame.height+8
+                self.vwRmksCtrl.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height+8
                 if typ != "F" {
                     vwHQCtrl.isHidden=true
                    // vwDistCtrl.isHidden=true
                     vwRouteCtrl.isHidden=true
                     vwJointCtrl.isHidden=true
         
-                    self.vwRmksCtrl.frame.origin.y = vwWTCtrl.frame.origin.y+vwWTCtrl.frame.height+8
+                    self.vwDeviationCtrl.frame.origin.y = vwWTCtrl.frame.origin.y+vwWTCtrl.frame.height+8
+                    self.vwRmksCtrl.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height+8
                     
                 }
             } else if SelMode == "DIS" {
@@ -561,14 +577,16 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
            // vwDistCtrl.isHidden=false
             vwRouteCtrl.isHidden=false
             vwJointCtrl.isHidden=false
-            self.vwRmksCtrl.frame.origin.y = vwJointCtrl.frame.origin.y+vwJointCtrl.frame.height+8
+            self.vwDeviationCtrl.frame.origin.y  = vwJointCtrl.frame.origin.y+vwJointCtrl.frame.height+8
+            self.vwRmksCtrl.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height+8
             if typ != "F" {
                 vwHQCtrl.isHidden=true
                 vwDistCtrl.isHidden=true
                 vwRouteCtrl.isHidden=true
                 vwJointCtrl.isHidden=true
                 
-                self.vwRmksCtrl.frame.origin.y = vwWTCtrl.frame.origin.y+vwWTCtrl.frame.height+8
+                self.vwDeviationCtrl.frame.origin.y  = vwWTCtrl.frame.origin.y+vwWTCtrl.frame.height+8
+                self.vwRmksCtrl.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height+8
             }else{
                 
                 let sfid=String(format: "%@", lstPlnDetail[0]["subordinateid"] as! CVarArg)
@@ -677,6 +695,12 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
     }
     @objc private func selWorktype() {
         isMulti=false
+        
+//        if UserSetup.shared.tpDcrDeviationNeed == 0 {
+//            lObjSel=lstWType
+//        }else {
+//            lObjSel=lstWType
+//        }
         lObjSel=lstWType
         tbDataSelect.reloadData()
         lblSelTitle.text="Select the Worktype"
@@ -810,6 +834,17 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         
     }
     
+    
+    @IBAction func deviateAction(_ sender: UISwitch) {
+      //  self.tpDeviation()
+        
+        let vc=self.storyboard?.instantiateViewController(withIdentifier: "sbDeviationRemarks") as!  DeviationRemarks
+        
+        
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    
     @IBAction func SaveMyDayPlan(_ sender: Any) {
         print(HomePageViewController.selfieLoginActive)
         print(PhotosCollection.shared.PhotoList.count)
@@ -906,6 +941,118 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         }
     }
     
+    func tpDeviation() {
+        
+        // http://fmcg.salesjump.in/server/native_Db_V13.php?State_Code=24&divisionCode=29%2C&rSF=SEFMR0040&axn=get%2Ftpdetails&sfCode=SEFMR0040
+        
+        
+//        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"get/tpdetails&sfCode=\(SFCode)&rSF=\(SFCode)&divisionCode=\(DivCode)").validate(statusCode: 200..<209).responseString { AFData in
+//            switch AFData.result {
+//                
+//            case .success(let value):
+//                print(value)
+//                
+//                let object = try JSON(string: AFData.description)
+//                
+//                print(object)
+//                
+//            case .failure(let error):
+//                Toast.show(message: error.errorDescription ?? "", controller: self)
+//            }
+//        }
+        
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"get/tpdetails&sfCode=\(SFCode)&rSF=\(SFCode)&divisionCode=\(DivCode)").validate(statusCode: 200..<209).responseData { AFData in
+            switch AFData.result {
+                
+            case .success(let value):
+                print(value)
+                
+                
+                do {
+                    let objects = try JSON(data: AFData.data!)
+                    
+                    print(objects)
+                
+                    let storyboard = UIStoryboard(name: "AdminForms", bundle: nil)
+                    let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
+                    
+                    if objects.tp.isEmpty && (UserSetup.shared.tpNeed == 1 || UserSetup.shared.tpDcrDeviationNeed == 0){
+                        let tpMnuVc = storyboard.instantiateViewController(withIdentifier: "sbAdminMnu") as! AdminMenus
+                        let trPln = storyboard.instantiateViewController(withIdentifier: "sbTourPlanCalenderScreen") as! TourPlanCalenderScreen
+                        trPln.date = Date()
+                        trPln.isBackEnabled = false
+                        viewController.setViewControllers([tpMnuVc,trPln], animated: false)
+                        (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
+                        return
+                    }
+                    
+                    print(objects.tp.isEmpty)
+                    print(objects.status.isEmpty)
+                    print(objects.status.first?.Status.int)
+                    
+                    var status = 0
+                    if objects.status.isEmpty {
+                        status = 0
+                    }else {
+                        guard let statusVal = objects.status.first?.Status.int else{
+                            return
+                        }
+                        status = statusVal
+                        
+                        if status != 6 {
+                            self.vwDeviationCtrl.isHidden = true
+                        }else {
+                            
+                        }
+                        
+                        if status == 3 {
+                            
+                        }else {
+                            
+                        }
+                    }
+                    
+                    if let status = objects.status.first?.Status.int {
+                        
+                    }
+                    
+                }catch {
+                    print("error")
+                }
+                
+                
+                
+                
+//                let apiResponse = try? JSONSerialization.jsonObject(with: AFData.data!, options: JSONSerialization.ReadingOptions.allowFragments)
+//                
+//                print(apiResponse)
+//                
+//                guard let response = apiResponse as? AnyObject else {
+//                    return
+//                }
+//                print(response)
+//                
+//                guard let tpResponse = response["tp"] as? [AnyObject] else{
+//                    return
+//                }
+//                guard let statusResponse = response["status"] as? [AnyObject] else{
+//                    return
+//                }
+//                print("Ggg")
+//                print(statusResponse)
+//                print("first")
+//                
+//                self.tpData = tpResponse.first
+//                
+//                
+//                print(tpResponse.first)
+//                
+//                print(self.tpData)
+            case .failure(let error):
+                Toast.show(message: error.errorDescription ?? "", controller: self)
+            }
+        }
+    }
     
     func saveDayTP(location: CLLocation){
         if (VisitData.shared.VstRemarks.name == "Enter the Remarks"){

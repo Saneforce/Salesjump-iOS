@@ -117,7 +117,14 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         
         Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(TimeDisplay), userInfo: nil, repeats: true)
         getUserDetails()
-       // self.tpMandatoryNeed()
+        if UserSetup.shared.tpDcrDeviationNeed == 0 && UserSetup.shared.tpNeed == 1 {
+            print(UserSetup.shared.tpDcrDeviationNeed)
+            print(UserSetup.shared.tpNeed)
+            print(UserSetup.shared.tpRemainderDate)
+            print(UserSetup.shared.tpMandatoryNeed)
+            self.tpMandatoryNeed()
+        }
+        
         /*if let json = try JSONSerialization.jsonObject(with: prettyPrintedJson!, options: []) as? [String: Any] {
                 // try to read out a string array
                 if let names = json["names"] as? [String] {
@@ -247,16 +254,21 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
                     return
                 }
                 print(nextResponse)
-                if nextResponse.isEmpty {
-                    let tpMnuVc = storyboard.instantiateViewController(withIdentifier: "sbAdminMnu") as! AdminMenus
-                    let trPln = storyboard.instantiateViewController(withIdentifier: "sbTourPlanCalenderScreen") as! TourPlanCalenderScreen
-                    let actualNext = Calendar.current.date(byAdding: .month, value: 1, to: Date())
-                    trPln.date = actualNext!
-                    trPln.isBackEnabled = false
-                    viewController.setViewControllers([tpMnuVc,trPln], animated: false)
-                    (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
-                    return
+                if UserSetup.shared.tpMandatoryNeed <= Int(Date().toString(format: "dd"))! {
+                    print(UserSetup.shared.tpMandatoryNeed)
+                    print(Int(Date().toString(format: "dd"))!)
+                    if nextResponse.isEmpty {
+                        let tpMnuVc = storyboard.instantiateViewController(withIdentifier: "sbAdminMnu") as! AdminMenus
+                        let trPln = storyboard.instantiateViewController(withIdentifier: "sbTourPlanCalenderScreen") as! TourPlanCalenderScreen
+                        let actualNext = Calendar.current.date(byAdding: .month, value: 1, to: Date())
+                        trPln.date = actualNext!
+                        trPln.isBackEnabled = false
+                        viewController.setViewControllers([tpMnuVc,trPln], animated: false)
+                        (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
+                        return
+                    }
                 }
+                
                 print(nextResponse.isEmpty as Any)
             //    self.tpDeviation()
             case .failure(let error):
@@ -266,34 +278,7 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         
     }
     
-    func tpDeviation() {
-        
-        // http://fmcg.salesjump.in/server/native_Db_V13.php?State_Code=24&divisionCode=29%2C&rSF=SEFMR0040&axn=get%2Ftpdetails&sfCode=SEFMR0040
-        
-        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"get/tpdetails&sfCode=\(SFCode)&rSF=\(SFCode)&divisionCode=\(DivCode)").validate(statusCode: 200..<209).responseData { AFData in
-            switch AFData.result {
-                
-            case .success(let value):
-                print(value)
-                
-                let apiResponse = try? JSONSerialization.jsonObject(with: AFData.data!, options: JSONSerialization.ReadingOptions.allowFragments)
-                
-                print(apiResponse)
-                
-                guard let response = apiResponse as? AnyObject else {
-                    return
-                }
-                print(response)
-                
-                guard let currentResponse = response["tp"] as? AnyObject else{
-                    return
-                }
-                print(currentResponse)
-            case .failure(let error):
-                Toast.show(message: error.errorDescription ?? "", controller: self)
-            }
-        }
-    }
+    
     
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.text == "Enter the Remarks"{

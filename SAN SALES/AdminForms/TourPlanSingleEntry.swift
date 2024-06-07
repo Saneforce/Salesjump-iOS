@@ -310,6 +310,8 @@ class TourPlanSingleEntry : IViewController , UITableViewDataSource,UITableViewD
                     self.LoadingDismiss()
                     if isFromEdit == false {
                         self.navigationController?.popViewController(animated: true)
+                    }else {
+                        self.updateEditData()
                     }
                 }
                 

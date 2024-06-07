@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ItemMultipleSelectionViewController <Item, Cell : UITableViewCell> : UIViewController, UITableViewDelegate,UITableViewDataSource  {
+class ItemMultipleSelectionViewController <Item, Cell : UITableViewCell> : IViewController, UITableViewDelegate,UITableViewDataSource  {
     
     
     var items : [Item] = []

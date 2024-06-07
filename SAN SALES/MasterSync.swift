@@ -237,8 +237,20 @@ import BackgroundTasks
         self.present(alert, animated: true)
      }
      func clearData(){
-        for lItm in strMasList {
-            UserDefaults.standard.removeObject(forKey: lItm.StoreKey)
+//        for lItm in strMasList {
+//            UserDefaults.standard.removeObject(forKey: lItm.StoreKey)
+//        }
+         for lItm in strMasList {
+             let storedname =  lItm.StoreKey
+             let userDefaults = UserDefaults.standard
+             let allItems = userDefaults.dictionaryRepresentation()
+             
+             for (key, _) in allItems {
+                 if key.contains(storedname){
+                     print(key)
+                     UserDefaults.standard.removeObject(forKey: key)
+                 }
+             }
         }
         UserDefaults.standard.removeObject(forKey: "UserLogged")
         UserDefaults.standard.removeObject(forKey: "APPConfig")

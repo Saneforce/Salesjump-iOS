@@ -227,7 +227,7 @@ class TourPlanView : IViewController, UITableViewDelegate,UITableViewDataSource 
             
             print(lstTp[indexPath.row])
             if !selectedHQ.isEmpty{
-                cell.lblHeadquarter.text = lstHQs.first?["name"] as? String ?? ""
+                cell.lblHeadquarter.text = selectedHQ.first?["name"] as? String ?? ""
             }else{
                 cell.lblHeadquarter.text = ""
             }
@@ -259,7 +259,7 @@ class TourPlanView : IViewController, UITableViewDelegate,UITableViewDataSource 
             let selectedHQ = lstHQs.filter{(String(format: "%@", $0["id"] as! CVarArg)) == (lstTp[indexPath.row]["HQ_Code"] as? String ?? "")}
             
             if !selectedHQ.isEmpty{
-                cell.lblHeadquarter.text = lstHQs.first?["Name"] as? String ?? ""
+                cell.lblHeadquarter.text = selectedHQ.first?["Name"] as? String ?? ""
             }else{
                 cell.lblHeadquarter.text = ""
             }
