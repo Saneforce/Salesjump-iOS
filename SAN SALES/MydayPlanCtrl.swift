@@ -48,6 +48,16 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
     
     
     
+    @IBOutlet weak var vwDeviationLock: UIView!
+    
+    @IBOutlet weak var lblRejectReason: UILabel!
+    
+    
+    @IBOutlet weak var vwRejectReason: UIView!
+    
+    @IBOutlet weak var vwDeviationCtrl: UIView!
+    @IBOutlet weak var switchDeviate: UISwitch!
+    
     struct lItem: Any {
         let id: String
         let name: String
@@ -90,6 +100,8 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
     var exp_Need:Int = 0
     var lstPlnDetail: [AnyObject] = []
     var attendanceView:Int = 0
+    
+    var tpDatas : JSON!
     override func viewDidLoad() {
         super.viewDidLoad()
         txRem.text = "Enter the Remarks"
@@ -97,7 +109,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         txRem.returnKeyType = .done
         txRem.delegate = self
         txRem.contentSize = CGSize(width:view.frame.width, height: vwContent.frame.height)
-        
+        self.vwMainScroll.contentSize = CGSize(width: self.vwContent.frame.width, height: 930)
         Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(TimeDisplay), userInfo: nil, repeats: true)
         
         let formatter = DateFormatter()
@@ -251,7 +263,18 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
             self.vwDistCtrl.isHidden = true
             self.vwRouteCtrl.frame.origin.y = vwRouteCtrl.frame.origin.y+vwRouteCtrl.frame.height-160
             self.vwJointCtrl.frame.origin.y = vwJointCtrl.frame.origin.y+vwJointCtrl.frame.height-300
-            self.vwRmksCtrl.frame.origin.y = vwRmksCtrl.frame.origin.y+vwRmksCtrl.frame.height-155
+            if UserSetup.shared.tpDcrDeviationNeed == 0 {
+                
+                self.vwRmksCtrl.frame.origin.y = vwRmksCtrl.frame.origin.y+vwRmksCtrl.frame.height-155
+                self.vwDeviationCtrl.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height-155
+                self.vwRejectReason.frame.origin.y = vwRejectReason.frame.origin.y+vwRejectReason.frame.height-155
+                
+            }else {
+                self.vwRmksCtrl.frame.origin.y = vwRmksCtrl.frame.origin.y+vwRmksCtrl.frame.height-155
+                self.vwDeviationCtrl.isHidden = true
+                self.vwRejectReason.isHidden = true
+            }
+            
                }
         if (UserSetup.shared.DistBased == 1){
             vwDistCtrl.isHidden = false
@@ -265,7 +288,15 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         setTodayPlan()
        //selectedid()
 
+        if UserSetup.shared.tpDcrDeviationNeed == 0 {
+            self.tpDeviation()
+        }else {
+            self.vwDeviationCtrl.isHidden = true
+            self.vwRejectReason.isHidden = true
+            self.vwMainScroll.contentSize = CGSize(width: self.vwContent.frame.width, height: 750)
+        }
     }
+    
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.text == "Enter the Remarks"{
             textView.text = ""
@@ -420,14 +451,20 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                // vwDistCtrl.isHidden=false
                 vwRouteCtrl.isHidden=false
                 vwJointCtrl.isHidden=false
+                
                 self.vwRmksCtrl.frame.origin.y = vwJointCtrl.frame.origin.y+vwJointCtrl.frame.height+8
+                self.vwDeviationCtrl.frame.origin.y = vwRmksCtrl.frame.origin.y+vwRmksCtrl.frame.height+8
+                self.vwRejectReason.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height+8
                 if typ != "F" {
                     vwHQCtrl.isHidden=true
                    // vwDistCtrl.isHidden=true
                     vwRouteCtrl.isHidden=true
                     vwJointCtrl.isHidden=true
         
+                    
                     self.vwRmksCtrl.frame.origin.y = vwWTCtrl.frame.origin.y+vwWTCtrl.frame.height+8
+                    self.vwDeviationCtrl.frame.origin.y = vwRmksCtrl.frame.origin.y+vwRmksCtrl.frame.height+8
+                    self.vwRejectReason.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height+8
                     
                 }
             } else if SelMode == "DIS" {
@@ -561,14 +598,18 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
            // vwDistCtrl.isHidden=false
             vwRouteCtrl.isHidden=false
             vwJointCtrl.isHidden=false
-            self.vwRmksCtrl.frame.origin.y = vwJointCtrl.frame.origin.y+vwJointCtrl.frame.height+8
+            self.vwRmksCtrl.frame.origin.y  = vwJointCtrl.frame.origin.y+vwJointCtrl.frame.height+8
+            self.vwDeviationCtrl.frame.origin.y = vwRmksCtrl.frame.origin.y+vwRmksCtrl.frame.height+8
+            self.vwRejectReason.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height+8
             if typ != "F" {
                 vwHQCtrl.isHidden=true
                 vwDistCtrl.isHidden=true
                 vwRouteCtrl.isHidden=true
                 vwJointCtrl.isHidden=true
                 
-                self.vwRmksCtrl.frame.origin.y = vwWTCtrl.frame.origin.y+vwWTCtrl.frame.height+8
+                self.vwRmksCtrl.frame.origin.y  = vwWTCtrl.frame.origin.y+vwWTCtrl.frame.height+8
+                self.vwDeviationCtrl.frame.origin.y = vwRmksCtrl.frame.origin.y+vwRmksCtrl.frame.height+8
+                self.vwRejectReason.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height+8
             }else{
                 
                 let sfid=String(format: "%@", lstPlnDetail[0]["subordinateid"] as! CVarArg)
@@ -677,7 +718,16 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
     }
     @objc private func selWorktype() {
         isMulti=false
-        lObjSel=lstWType
+        
+        if UserSetup.shared.tpDcrDeviationNeed == 0 && !switchDeviate.isOn {
+            
+            let code = self.tpDatas.tp.first?.worktype_code.int ?? 0
+            
+            lObjSel=lstWType.filter{($0["id"] as? Int ?? 0) == code}
+        }else {
+            lObjSel=lstWType
+        }
+       // lObjSel=lstWType
         tbDataSelect.reloadData()
         lblSelTitle.text="Select the Worktype"
         openWin(Mode: "WT")
@@ -691,14 +741,31 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
     
     @objc private func selHeadquaters() {
         isMulti=false
-        lObjSel=lstHQs
+        
+        if UserSetup.shared.tpDcrDeviationNeed == 0 && !switchDeviate.isOn {
+            
+            let code = self.tpDatas.tp.first?.HQ_Code.string ?? ""
+            
+            lObjSel=lstHQs.filter{($0["id"] as? String ?? "") == code}
+            
+        }else{
+            lObjSel=lstHQs
+        }
+       // lObjSel=lstHQs
         tbDataSelect.reloadData()
         lblSelTitle.text="Select the Headquarter"
         openWin(Mode: "HQ")
     }
     @objc private func selDistributor() {
         isMulti=false
-        lObjSel=lstDist
+        if UserSetup.shared.tpDcrDeviationNeed == 0 && !switchDeviate.isOn{
+            let code = self.tpDatas.tp.first?.Worked_with_Code.string ?? ""
+            
+            lObjSel=lstDist.filter{($0["id"] as? Int ?? 0) == Int(code)}
+        }else {
+            lObjSel=lstDist
+        }
+        
         tbDataSelect.reloadData()
         lblSelTitle.text="Select the Distributor"
         openWin(Mode: "DIS")
@@ -706,14 +773,29 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
     
     @objc private func selRoutes() {
         isMulti=false
-        lObjSel=lstRoutes
+        if UserSetup.shared.tpDcrDeviationNeed == 0 && !switchDeviate.isOn{
+            
+            let code = self.tpDatas.tp.first?.RouteCode.string ?? ""
+            
+            lObjSel = lstRoutes.filter{code.contains((String(format: "%@", $0["id"] as! CVarArg)))}
+        }else {
+            lObjSel=lstRoutes
+        }
+        
         tbDataSelect.reloadData()
         lblSelTitle.text="Select the Route"
         openWin(Mode: "RUT")
     }
     @objc private func selJointWK() {
         isMulti=true
-        lObjSel=lstJoint
+        if UserSetup.shared.tpDcrDeviationNeed == 0 && !switchDeviate.isOn{
+
+            let code = self.tpDatas.tp.first?.JointWork_Name.string ?? ""
+            lObjSel=lstJoint.filter{code.contains((String(format: "%@", $0["id"] as! CVarArg)))}
+        }else {
+            lObjSel=lstJoint
+        }
+        
         strSelJWCd=strJWCd
         strSelJWNm=strJWNm
         lstSelJWNms=lstJWNms
@@ -808,6 +890,24 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         return true
         
     }
+    
+    
+    @IBAction func deviateAction(_ sender: UISwitch) {
+      //  self.tpDeviation()
+        
+        let vc=self.storyboard?.instantiateViewController(withIdentifier: "sbDeviationRemarks") as!  DeviationRemarks
+        vc.tpDatas = self.tpDatas
+        vc.isDeviationOn = { isenabled in
+            self.switchDeviate.isOn = isenabled
+            
+            if isenabled == true {
+                self.tpDeviation()
+            }
+            
+        }
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
     
     @IBAction func SaveMyDayPlan(_ sender: Any) {
         print(HomePageViewController.selfieLoginActive)
@@ -905,6 +1005,125 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         }
     }
     
+    func tpDeviation() {
+        
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"get/tpdetails&sfCode=\(SFCode)&rSF=\(SFCode)&divisionCode=\(DivCode)").validate(statusCode: 200..<209).responseData { AFData in
+            switch AFData.result {
+                
+            case .success(let value):
+                print(value)
+                
+                
+                do {
+                    let objects = try JSON(data: AFData.data!)
+                    
+                    print(objects)
+                
+                    self.tpDatas = objects
+                    let storyboard = UIStoryboard(name: "AdminForms", bundle: nil)
+                    let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
+                    
+                    if objects.tp.isEmpty && (UserSetup.shared.tpNeed == 1 || UserSetup.shared.tpDcrDeviationNeed == 0){
+                        let tpMnuVc = storyboard.instantiateViewController(withIdentifier: "sbAdminMnu") as! AdminMenus
+                        let trPln = storyboard.instantiateViewController(withIdentifier: "sbTourPlanCalenderScreen") as! TourPlanCalenderScreen
+                        trPln.date = Date()
+                        trPln.isBackEnabled = false
+                        viewController.setViewControllers([tpMnuVc,trPln], animated: false)
+                        (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
+                        return
+                    }
+                    
+                    var status = 0
+                    
+                    
+                    
+                    
+                    guard let statusVal = objects.status.first?.Status.int else{
+                        self.vwDeviationCtrl.isHidden = false
+                        self.vwRejectReason.isHidden = true
+                        
+                        self.switchDeviate.isOn = false
+                        self.vwMainScroll.contentSize = CGSize(width: self.vwContent.frame.width, height: 1000)
+                        return
+                    }
+                    status = statusVal
+                    
+                    if status != 6 {
+                        self.vwDeviationCtrl.isHidden = true
+                        self.switchDeviate.isOn = true
+                        self.vwRejectReason.isHidden = true
+                        
+                    }else {
+                        
+                        let reason = (objects.status.first?.reject_reason.string ?? "")
+                        
+                        if reason != ""{
+                            self.lblRejectReason.text = "Reject Reason: " + (objects.status.first?.reject_reason.string ?? "")
+                        }else {
+                            self.lblRejectReason.text = ""
+                        }
+                        
+                      
+                    }
+                    
+                    if objects.status.isEmpty {
+                        status = 0
+                    }
+                    
+                    if status == 3 {
+                        self.vwDeviationLock.isHidden = false
+                        return
+                    }else {
+                        self.vwDeviationLock.isHidden = true
+                       // self.switchDeviate.isOn = true
+                    }
+                    
+                    if !objects.tp.isEmpty && (status == 0 || status == 6){
+                        self.vwDeviationCtrl.isHidden = false
+                        self.vwRejectReason.isHidden = false
+                        self.switchDeviate.isOn = false
+                        self.vwMainScroll.contentSize = CGSize(width: self.vwContent.frame.width, height: 1000)
+                    }else {
+                        self.vwMainScroll.contentSize = CGSize(width: self.vwContent.frame.width, height: 750)
+                    } // || status == 6)
+                    
+                }catch {
+                    print("error")
+                }
+                
+                
+                
+                
+//                let apiResponse = try? JSONSerialization.jsonObject(with: AFData.data!, options: JSONSerialization.ReadingOptions.allowFragments)
+//                
+//                print(apiResponse)
+//                
+//                guard let response = apiResponse as? AnyObject else {
+//                    return
+//                }
+//                print(response)
+//                
+//                guard let tpResponse = response["tp"] as? [AnyObject] else{
+//                    return
+//                }
+//                guard let statusResponse = response["status"] as? [AnyObject] else{
+//                    return
+//                }
+//                print("Ggg")
+//                print(statusResponse)
+//                print("first")
+//                
+//                self.tpData = tpResponse.first
+//                
+//                
+//                print(tpResponse.first)
+//                
+//                print(self.tpData)
+            case .failure(let error):
+                Toast.show(message: error.errorDescription ?? "", controller: self)
+            }
+        }
+    }
     
     func saveDayTP(location: CLLocation){
         if (VisitData.shared.VstRemarks.name == "Enter the Remarks"){
@@ -956,8 +1175,10 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         let params: Parameters = [
             "data": jsonString //"["+jsonString+"]"
         ]
+        print(APIClient.shared.BaseURL+APIClient.shared.DBURL+"dcr/save&divisionCode="+self.DivCode+"&rSF="+self.SFCode+"&sfCode="+self.SFCode)
         print(params)
-            print(self.SFCode)
+            print(self.SFCode) // APIClient.shared.BaseURL+APIClient.shared.DBURL+"dcr/save&divisionCode="+self.DivCode+"&rSF="+self.SFCode+"&sfCode="+self.SFCode
+            // http://fmcg.sanfmcg.com/server/native_Db_V13- `  1q.php?axn=dcr/save&divisionCode=29,&rSF=MR4126&sfCode=MR4126
         AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+"dcr/save&divisionCode="+self.DivCode+"&rSF="+self.SFCode+"&sfCode="+self.SFCode, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
             AFdata in
             self.LoadingDismiss()

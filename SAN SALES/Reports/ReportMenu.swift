@@ -46,6 +46,9 @@ class ReportMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
         //strMasList.append(mnuItem.init(MasId: 2, MasName: "Add New Retailer", MasImage: "NewRetailer"))
         //strMasList.append(mnuItem.init(MasId: 11, MasName: "Master Sync", MasImage: "MasterSync"))
         
+        strMasList.append(mnuItem.init(MasId: 4, MasName: "TP View", MasImage: "SwitchRoute"))
+        strMasList.append(mnuItem.init(MasId: 5, MasName: "TP View Datewise", MasImage: "SwitchRoute"))
+        
         btnBack.addTarget(target: self, action: #selector(closeMenuWin))
         menuClose.addTarget(target: self, action: #selector(closeMenuWin))
         tbMenuDetail.delegate=self
@@ -106,6 +109,18 @@ class ReportMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
              //viewController.navigationController?.pushViewController(myDyPln, animated: true)
              (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
             
+        }else if lItm.MasId == 4 {
+            let RptMnuVc = storyboard.instantiateViewController(withIdentifier: "sbReportsmnu") as! ReportMenu
+            let tpVwVC = storyboard.instantiateViewController(withIdentifier: "sbTourPlanView") as! TourPlanView
+            
+             viewController.setViewControllers([RptMnuVc,tpVwVC], animated: false)
+             (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
+        }else if lItm.MasId == 5 {
+            let RptMnuVc = storyboard.instantiateViewController(withIdentifier: "sbReportsmnu") as! ReportMenu
+            let tpVwDayVC = storyboard.instantiateViewController(withIdentifier: "sbTourPlanViewDateWise") as! TourPlanViewDateWise
+            
+             viewController.setViewControllers([RptMnuVc,tpVwDayVC], animated: false)
+             (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
         }
         /*else if lItm.MasId == 2 {
             let Homevc = storyboard.instantiateViewController(withIdentifier: "HomePageVwControl") as! HomePageViewController

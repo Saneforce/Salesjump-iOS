@@ -25,6 +25,8 @@ class Approval_Menu: UIViewController, UITableViewDelegate, UITableViewDataSourc
         menuClose.addTarget(target: self, action: #selector(closeMenuWin))
         //strMasList.append(mnuItem.init(MasId: 1, MasName: "Expense Approval", MasImage: "SwitchRoute"))
         strMasList.append(mnuItem.init(MasId: 2, MasName: "New Expense Approval", MasImage: "SwitchRoute"))
+        strMasList.append(mnuItem.init(MasId: 3, MasName: "TP Approval", MasImage: "SwitchRoute"))
+        strMasList.append(mnuItem.init(MasId: 4, MasName: "Deviation Approval", MasImage: "SwitchRoute"))
         tbMenuDetail.delegate=self
         tbMenuDetail.dataSource=self
     }
@@ -57,6 +59,16 @@ class Approval_Menu: UIViewController, UITableViewDelegate, UITableViewDataSourc
             let myDyPln = storyboard.instantiateViewController(withIdentifier: "New_Expense_apr") as! New_Expense_Approval
             viewController.setViewControllers([RptMnuVc,myDyPln], animated: false)
             //viewController.navigationController?.pushViewController(myDyPln, animated: true)
+            (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
+        }else if (lItm.MasId == 3) {
+            let tpVc = storyboard.instantiateViewController(withIdentifier: "ApprovalMenu") as! Approval_Menu
+            let tpApproval = storyboard.instantiateViewController(withIdentifier: "sbTourPlanApproval") as! TourPlanApproval
+            viewController.setViewControllers([tpVc,tpApproval], animated: false)
+            (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
+        }else if (lItm.MasId == 4) {
+            let tpVc = storyboard.instantiateViewController(withIdentifier: "ApprovalMenu") as! Approval_Menu
+            let tpDeviationApproval = storyboard.instantiateViewController(withIdentifier: "sbTourPlanDeviationApproval") as! TourPlanDeviationApproval
+            viewController.setViewControllers([tpVc,tpDeviationApproval], animated: false)
             (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
         }
     }

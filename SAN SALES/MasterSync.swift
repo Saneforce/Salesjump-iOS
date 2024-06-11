@@ -158,6 +158,10 @@ import BackgroundTasks
          strMasList.append(mnuItem.init(MasId: 28, MasName: "Random Number", MasImage: "mnuPrimary",StoreKey: "Random_Number", ApiKey: "get/Randomnumber&divisionCode="+(prettyJsonData["divisionCode"] as? String ?? "")+"&rSF="+SFCode+"&sfCode="+SFCode+"&State_Code="+StateCode+"&desig="+desigCode,fromData: [
             "orderBy":"[\"name asc\"]","desig":"mgr"
          ]))
+         
+         strMasList.append(mnuItem.init(MasId: 29, MasName: "Subordinate", MasImage: "mnuPrimary",StoreKey: "Subordinates", ApiKey: "get/submgr&divisionCode="+(prettyJsonData["divisionCode"] as? String ?? "")+"&rSF="+SFCode+"&sfCode="+SFCode+"&State_Code="+StateCode+"&desig="+desigCode,fromData: [
+            "orderBy":"[\"name asc\"]","desig":"mgr"
+         ]))
     
          
          
@@ -233,8 +237,20 @@ import BackgroundTasks
         self.present(alert, animated: true)
      }
      func clearData(){
-        for lItm in strMasList {
-            UserDefaults.standard.removeObject(forKey: lItm.StoreKey)
+//        for lItm in strMasList {
+//            UserDefaults.standard.removeObject(forKey: lItm.StoreKey)
+//        }
+         for lItm in strMasList {
+             let storedname =  lItm.StoreKey
+             let userDefaults = UserDefaults.standard
+             let allItems = userDefaults.dictionaryRepresentation()
+             
+             for (key, _) in allItems {
+                 if key.contains(storedname){
+                     print(key)
+                     UserDefaults.standard.removeObject(forKey: key)
+                 }
+             }
         }
         UserDefaults.standard.removeObject(forKey: "UserLogged")
         UserDefaults.standard.removeObject(forKey: "APPConfig")
