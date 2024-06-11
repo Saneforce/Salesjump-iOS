@@ -403,6 +403,7 @@ class TourPlanCalenderScreen : UIViewController, FSCalendarDelegate, FSCalendarD
                 print(apiResponse)
                 Toast.show(message: "Tour Plan Submitted Successfully", controller: self)
                 GlobalFunc.movetoHomePage()
+              //  GlobalFunc.MovetoMainMenu()
               //  self.navigationController?.popViewController(animated: true)
             case .failure(let error):
                 Toast.show(message: error.errorDescription ?? "", controller: self)
