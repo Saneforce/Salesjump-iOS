@@ -995,25 +995,6 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                                 }
                                    let LocalStoreage = UserDefaults.standard
                                    LocalStoreage.set(prettyPrintedJson, forKey: "Mydayplan")
-                                 print(LocalStoreage)
-                                print(self.exp_Need)
-                                //self.exp_Need = 2
-                                print(attendanceView)
-                                if (self.attendanceView == 1) {
-                               // Naviagte To Strat Expense
-                                let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                                let viewControllers = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
-                                let myDyPln = storyboard.instantiateViewController(withIdentifier: "Start_Expense") as! Start_Expense
-                                let dateFormatter = DateFormatter()
-                                dateFormatter.dateFormat = "yyyy-MM-dd"
-                                let currentDate = Date()
-                                let formattedDate = dateFormatter.string(from: currentDate)
-                                 myDyPln.Screan_Heding = "My day plan"
-                                 myDyPln.Show_Date = true
-                                 myDyPln.Curent_Date = formattedDate
-                                viewControllers.setViewControllers([myDyPln], animated: false)
-                                (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewControllers)
-                                }else{
                                     let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
                                     UIApplication.shared.windows.first?.rootViewController = viewController
                                     UIApplication.shared.windows.first?.makeKeyAndVisible()
