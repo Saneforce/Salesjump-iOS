@@ -658,6 +658,8 @@ class New_Expense_Approval: UIViewController, UITableViewDataSource, UITableView
                                         ExpenseDetail_data.append(ExpenseDetails_data(sf_code: sf_code!, name: name!, full_date: full_date!, from_place: from_place!, to_place: to_place!, amount: String(format: "%.2f",Tot_amt), work_type: work_type!, expense_type: expense_type!, da_amount: da_amount!, travel_k: travel_k, travel_amount: travel_amount, worked_place: worked_place!, Hotel_Bill_Amt: Hotel_Bill_Amt!, DailyAddDeduct: DailyAddDeduct, DAdditionalAmnt: String(format: "%.2f",DAdditionalAmnt!), Add_Exp: "0", DailyAddDeductsymbl: DailyAddDeductsymb))
                                     }
                                     
+                                    
+                                    
                                     for i2 in data2{
                                         print(i2)
                                         var amt = ""

@@ -1007,6 +1007,15 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
                                             
                                         
                                             cALIM_KM.text = String(clam_km)
+                                            Pers_KM.text = String((travel_data[0]["Fuel_Charge"] as? Int)!)
+                                            var claim_amounnt = 0
+                                            if let clamkm = Double(cALIM_KM.text!), let Fuel_Charge = Double(Pers_KM.text!){
+                                                claim_amounnt = Int(clamkm * Fuel_Charge)
+                                            }
+                                            Claim_Amt.text = String(claim_amounnt)
+                                            
+                                        
+                                            cALIM_KM.text = String(clam_km)
                                             EnterKM.text = String(clam_km)
                                             Pers_KM.text = String((travel_data[0]["Fuel_Charge"] as? Double)!)
                                             var claim_amounnt = 0

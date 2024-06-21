@@ -454,6 +454,9 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
                     }
                 }
             }
+            
+            
+          
         }else if (SelMod == "YEAR"){
             let currentMonthIndex = Calendar.current.component(.month, from: Date()) - 1
             if (currentMonthIndex == 0){
@@ -501,6 +504,7 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell:cellListItem = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
         cell.lblText.text = lstOfPeriod[indexPath.row].Period_Name
+        
         return cell
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -674,6 +678,8 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
                                 var count = 0
                                 if let jsonObject = try JSONSerialization.jsonObject(with: prettyJsonData, options: []) as? [String: Any]{
                                     print(jsonObject)
+                                    var exp:Int = 0
+                                    var exp1:Int = 0
                                     // srt_exp
                                     if let srt_exps = jsonObject["srt_exp"] as? [[String: Any]] {
                                         srt_exp = srt_exps
@@ -752,6 +758,9 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
                                                 addLetterA(to: cell, text: "W")
                                             }
                                         }
+                                        
+                                       // let startDate = dates.min() ?? Date()
+                                       // let endDate = dates.max() ?? Date()
                                         
                                         let olDateFormatter = DateFormatter()
                                         olDateFormatter.dateFormat = "yyyy-MM-dd"
@@ -883,6 +892,11 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
                 }
             }
         }
+    
+    func nave_to_start_end_exp(){
+        
+    }
+    
     func Nav_Exp_Form(date:Date){
         if validateForm(Seldate: date) == false {
             return
@@ -901,6 +915,7 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
             myDyPln.day_Plan = Day_Plan_Data
             myDyPln.set_Date = Set_Date
             myDyPln.PeriodicData = Nav_PeriodicData
+            
             let formatters = DateFormatter()
             formatters.dateFormat = "yyyy-MM-dd"
             VisitData.shared.fromdate = formatters.string(from: FDate)
@@ -1135,6 +1150,8 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
                 return
             })
             self.present(alert, animated: true)
+            
+            
         }
     }
     func validateForm() -> Bool {
