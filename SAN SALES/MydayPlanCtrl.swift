@@ -349,6 +349,9 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                     self.lstAllRoutes = list
                     self.lstRoutes = list
                 }
+                if let list  =  GlobalFunc.convertToDictionary(text: jointWorkData) as? [AnyObject] {
+                    self.lstJoint = list
+                }
             }
             return
         }else {
