@@ -117,14 +117,8 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         
         Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(TimeDisplay), userInfo: nil, repeats: true)
         getUserDetails()
-        if UserSetup.shared.tpDcrDeviationNeed == 0 && UserSetup.shared.tpNeed == 1 {
-            print(UserSetup.shared.tpDcrDeviationNeed)
-            print(UserSetup.shared.tpNeed)
-            print(UserSetup.shared.tpRemainderDate)
-            print(UserSetup.shared.tpMandatoryNeed)
-            self.tpMandatoryNeed()
-        }
         
+        self.tpMandatoryNeed()
         /*if let json = try JSONSerialization.jsonObject(with: prettyPrintedJson!, options: []) as? [String: Any] {
                 // try to read out a string array
                 if let names = json["names"] as? [String] {
@@ -229,6 +223,8 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
                 
                 print(apiResponse)
                 
+                
+                
                 guard let response = apiResponse as? AnyObject else {
                     return
                 }
@@ -238,39 +234,53 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
                     return
                 }
                 print(currentResponse)
-                let storyboard = UIStoryboard(name: "AdminForms", bundle: nil)
-                let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
-                if currentResponse.isEmpty {
-                    let tpMnuVc = storyboard.instantiateViewController(withIdentifier: "sbAdminMnu") as! AdminMenus
-                    let trPln = storyboard.instantiateViewController(withIdentifier: "sbTourPlanCalenderScreen") as! TourPlanCalenderScreen
-                    trPln.date = Date()
-                    trPln.isBackEnabled = false
-                    viewController.setViewControllers([tpMnuVc,trPln], animated: false)
-                    (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
-                    return
-                }
                 
                 guard let nextResponse = response["next"] as? [AnyObject] else{
                     return
                 }
                 print(nextResponse)
-                if UserSetup.shared.tpMandatoryNeed <= Int(Date().toString(format: "dd"))! {
+                
+                if (currentResponse.isEmpty || nextResponse.isEmpty) &&  Int(Date().toString(format: "dd"))! >= Int(UserSetup.shared.tpRemainderDate) ?? 0 && Int(Date().toString(format: "dd"))! <= UserSetup.shared.tpMandatoryNeed {
+                    
+                    Toast.show(message: "Reminder Enter the Tour Plan", controller: self)
+                }
+                
+                
+                if UserSetup.shared.tpDcrDeviationNeed == 0 && UserSetup.shared.tpNeed == 1 {
+                    print(UserSetup.shared.tpDcrDeviationNeed)
+                    print(UserSetup.shared.tpNeed)
+                    print(UserSetup.shared.tpRemainderDate)
                     print(UserSetup.shared.tpMandatoryNeed)
-                    print(Int(Date().toString(format: "dd"))!)
-                    if nextResponse.isEmpty {
+                    
+                    let storyboard = UIStoryboard(name: "AdminForms", bundle: nil)
+                    let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
+                    if currentResponse.isEmpty {
                         let tpMnuVc = storyboard.instantiateViewController(withIdentifier: "sbAdminMnu") as! AdminMenus
                         let trPln = storyboard.instantiateViewController(withIdentifier: "sbTourPlanCalenderScreen") as! TourPlanCalenderScreen
-                        let actualNext = Calendar.current.date(byAdding: .month, value: 1, to: Date())
-                        trPln.date = actualNext!
+                        trPln.date = Date()
                         trPln.isBackEnabled = false
                         viewController.setViewControllers([tpMnuVc,trPln], animated: false)
                         (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
                         return
                     }
+                    
+                    
+                    if UserSetup.shared.tpMandatoryNeed <= Int(Date().toString(format: "dd"))! {
+                        print(UserSetup.shared.tpMandatoryNeed)
+                        print(Int(Date().toString(format: "dd"))!)
+                        if nextResponse.isEmpty {
+                            let tpMnuVc = storyboard.instantiateViewController(withIdentifier: "sbAdminMnu") as! AdminMenus
+                            let trPln = storyboard.instantiateViewController(withIdentifier: "sbTourPlanCalenderScreen") as! TourPlanCalenderScreen
+                            let actualNext = Calendar.current.date(byAdding: .month, value: 1, to: Date())
+                            trPln.date = actualNext!
+                            trPln.isBackEnabled = false
+                            viewController.setViewControllers([tpMnuVc,trPln], animated: false)
+                            (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
+                            return
+                        }
+                    }
+                    
                 }
-                
-                print(nextResponse.isEmpty as Any)
-            //    self.tpDeviation()
             case .failure(let error):
                 Toast.show(message: error.errorDescription ?? "", controller: self)
             }

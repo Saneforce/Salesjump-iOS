@@ -48,7 +48,7 @@ class UserSetup{
     var employeeId: String = ""
     var tpDcrDeviationNeed: Int = 0
     var tpNeed: Int = 0
-    var tpRemainderDate: Int = 0
+    var tpRemainderDate: String = ""
     var tpMandatoryNeed: Int = 0
     var Hotel_Bill_Nd:Int = 0
     func initUserSetup(){
@@ -91,7 +91,7 @@ class UserSetup{
         employeeId = lstSetups[0]["Employee_Id"] as? String ?? ""
         tpDcrDeviationNeed = lstSetups[0]["TPDCR_Deviation"] as? Int ?? 0
         tpNeed = lstSetups[0]["TP_ND"] as? Int ?? 0
-        tpRemainderDate = lstSetups[0]["TP_Remainder_Date"] as? Int ?? 0
+        tpRemainderDate = lstSetups[0]["TP_Remainder_Date"] as? String ?? ""
         tpMandatoryNeed = lstSetups[0]["TP_Mandatory_ND"] as? Int ?? 0
         Hotel_Bill_Nd = lstSetups[0]["Hotel_Bill_Nd"] as? Int ?? 0
         print(UserSetup.shared.Phone_Country_Length)

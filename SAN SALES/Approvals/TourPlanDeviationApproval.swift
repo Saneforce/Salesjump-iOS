@@ -164,7 +164,17 @@ class TourPlanDeviationApproval : IViewController, UITableViewDataSource,UITable
         
         let code = self.json?.dev[indexPath.row].sf_code.string
         
-        self.approveApi(slNo: "\(slNo)", code: code ?? "")
+        let alert = UIAlertController(title: "Confirmation", message: "Do you want to Approve Deviation?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
+            self.approveApi(slNo: "\(slNo)", code: code ?? "")
+            return
+        }
+                        
+        )
+        alert.addAction(UIAlertAction(title: "Cancel", style: .destructive) { _ in
+            return
+        })
+        self.present(alert, animated: true)
     }
     
     @objc func backVC() {
