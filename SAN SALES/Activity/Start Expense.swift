@@ -10,7 +10,7 @@ import Alamofire
 import FSCalendar
 import Foundation
 import CoreLocation
-class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UITableViewDataSource, UITableViewDelegate {
+class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UITableViewDataSource, UITableViewDelegate, UIImagePickerControllerDelegate & UINavigationControllerDelegate {
     @IBOutlet weak var BT_Back: UIImageView!
     @IBOutlet weak var Start_Expense_Scr: UILabel!
     @IBOutlet weak var calendar: FSCalendar!
@@ -33,6 +33,7 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
     @IBOutlet weak var Start_Km: EditTextField!
     @IBOutlet weak var Select_To: LabelSelect!
     @IBOutlet weak var Enter_To: EditTextField!
+    @IBOutlet weak var Start_Km_Img: UIImageView!
     
     //Set Height
     @IBOutlet weak var Date_height: NSLayoutConstraint!
@@ -41,6 +42,10 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
     @IBOutlet weak var From_Height: NSLayoutConstraint!
     @IBOutlet weak var To_Height: NSLayoutConstraint!
     @IBOutlet weak var Starting_Height: NSLayoutConstraint!
+    
+    @IBOutlet weak var Str_Km_text_width: NSLayoutConstraint!
+    @IBOutlet weak var Str_Km_with: NSLayoutConstraint!
+    
     
     struct exData:Codable{
     let id:String
@@ -56,6 +61,7 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
         let name:String
         let StEndNeed:Int
         let DriverNeed:Int
+        let Sl_No:Int
     }
     struct Expsub_Date:Codable{
         let Dates:String
@@ -74,6 +80,7 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
     var Screan_Heding:String?
     var Curent_Date:String?
     var Show_Date:Bool?
+    var Exp_Nav:String?
     var sImgItems:String = ""
     var select_allow:String = ""
     var select_date:String = ""
@@ -83,10 +90,13 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
     var lstrout:[Rout_list] = []
     var checked = false
     var StarKmNeed:Int = 0
-    var Mod_Id = ""
+    var Mod_Id = 0
     var to_place = ""
     var To_Place_id = ""
     var labelsDictionary = [FSCalendarCell: UILabel]()
+    var lstWType: [AnyObject] = []
+    var lstDist: [AnyObject] = []
+    var photo_name:String = ""
     override func viewDidLoad(){
         super.viewDidLoad()
         getUserDetails()
@@ -99,11 +109,34 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
         Add_Photo.addTarget(target: self, action: #selector(openCamera))
         Select_To.addTarget(target: self, action: #selector(opento))
         Check_Box.addTarget(target: self, action: #selector(Box))
-        if let RouteData = LocalStoreage.string(forKey: "Route_Master_"+SFCode),
+        
+        
+        if let WorkTypeData = LocalStoreage.string(forKey: "Worktype_Master"),
+           let list = GlobalFunc.convertToDictionary(text:  WorkTypeData) as? [AnyObject] {
+            lstWType = list
+        }
+        
+        var Id:String = ""
+        var subordinateid:String = ""
+        if let PlnDets = LocalStoreage.string(forKey: "Mydayplan"),let list = GlobalFunc.convertToDictionary(text:  PlnDets) as? [AnyObject],list.count != 0 {
+            print(list)
+            Id = (list[0]["stockistid"] as? String)!
+            subordinateid = (list[0]["subordinateid"] as? String)!
+        } else {
+            subordinateid = SFCode
+        }
+       
+        if let RouteData = LocalStoreage.string(forKey: "Route_Master_"+subordinateid),
            let list = GlobalFunc.convertToDictionary(text:  RouteData) as? [AnyObject] {
             lstAllRoutes = list
             lstRoutes = list
+            print(list)
         }
+        lstRoutes = lstAllRoutes.filter({(fitem) in
+            let StkId: String = String(format: ",%@,", fitem["stockist_code"] as! CVarArg)
+            return Bool(StkId.range(of: String(format: ",%@,", Id))?.lowerBound != nil )
+        })
+        
         expSubmitDates()
         calendar.delegate = self
         calendar.dataSource = self
@@ -130,6 +163,9 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
         Mod_Of_Tra_Height.constant = 80
         
         Start_Km.keyboardType = UIKeyboardType.numberPad
+        Str_Km_text_width.constant = 250
+        Str_Km_with.constant = 0
+        Start_Km_Img.isHidden = true
     }
     func getUserDetails(){
     let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
@@ -178,7 +214,7 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
             print(item)
             //Mod_Id
             Mode_Of_Travel.text = item.name
-            
+            Mod_Id = item.Sl_No
             //Need Driver
             if (item.DriverNeed == 0){
                 Check_Box.isHidden = true
@@ -192,6 +228,7 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
             
             //Need Strat KM
             StarKmNeed = item.StEndNeed
+            print(StarKmNeed)
             if (item.StEndNeed == 0){
                 Starting_View.isHidden = true
             }else{
@@ -402,7 +439,8 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
                                         let Alw_Eligibilty = item["Alw_Eligibilty"] as? String
                                         let spriteArray = Alw_Eligibilty!.components(separatedBy: ",")
                                         if spriteArray.contains(select_allow) {
-                                            Trave_Det.append(Trav_Data(name: (item["MOT"] as? String)!, StEndNeed: (item["StEndNeed"] as? Int)!, DriverNeed: (item["DriverNeed"] as? Int)!))
+                                            print(item)
+                                            Trave_Det.append(Trav_Data(name: (item["MOT"] as? String)!, StEndNeed: (item["StEndNeed"] as? Int)!, DriverNeed: (item["DriverNeed"] as? Int)!, Sl_No: (item["Sl_No"] as? Int)!))
                                         }
                                     }
                                     Trave_Dets = Trave_Det
@@ -439,7 +477,7 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
                  self.present(alert, animated: true)
                 return
         }
-            let alert = UIAlertController(title: "Confirmation", message: "Do you want to submit order?", preferredStyle: .alert)
+            let alert = UIAlertController(title: "Confirmation", message: "Do you want to submit the start expense?", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
                 VisitData.shared.cOutTime = GlobalFunc.getCurrDateAsString()
                 self.ShowLoading(Message: "Getting Device Location...")
@@ -461,7 +499,6 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
                                 }
                             }
                         }
-                       
                     }
                     if (OrderSub == "OD"){
                        print(sLocation)
@@ -484,27 +521,13 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
   
     }
     func save_data(lat:String,log:String){
+        
+        print(StarKmNeed)
+        
         if Select_To.text == "others"{
             to_place=Enter_To.text!
         }
-        print(lat)
-        print(log)
         let currentTimeAndMilliseconds = getCurrentTimeAndMilliseconds()
-        print("Current Time: \(currentTimeAndMilliseconds.time)")
-        print("Milliseconds: \(currentTimeAndMilliseconds.milliseconds)")
-        var fullid = ""
-        if(PhotosCollection.shared.PhotoList.count>0){
-            for i in 0...PhotosCollection.shared.PhotoList.count-1{
-                let item: [String: Any] = PhotosCollection.shared.PhotoList[i] as! [String : Any]
-                if i > 0 { self.sImgItems = self.sImgItems + "," }
-                let sep = item["FileName"]  as! String
-                let fullNameArr = sep.components(separatedBy: "_")
-                
-                let phono = fullNameArr[2]
-                fullid = "_\(phono)"
-                print(fullid)
-            }
-        }
         var date = ""
         var day_start_km = ""
         var mode_name = ""
@@ -532,7 +555,7 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
         var Div = DivCode
         Div = Div.replacingOccurrences(of: ",", with: "")
         let url = APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKeyWithoutCommas
-        let jsonString = "[{\"New_TP_Attendance\":{\"lat\":\"'\(lat)'\",\"long\":\"'\(log)'\",\"date_time\":\"'\(Select_Date.text! + " " + currentTimeAndMilliseconds.time)'\",\"date\":\"'\(date)'\",\"time\":\"\(currentTimeAndMilliseconds.time)\",\"milli_sec\":\"\(currentTimeAndMilliseconds.milliseconds)\",\"day_start_km\":\"\(day_start_km)\",\"imgurl\":\"\(fullid)\",\"mode_name\":\"\(mode_name)\",\"mod_id\":\"1\",\"daily_allowance\":\"\(daily_allowance)\",\"from_place\":\"\(from_place) \",\"to_place\":\"\(to_place)\",\"to_placeID\":\"\(To_Place_id)\",\"stEndNeed\":\"\(StarKmNeed)\",\"srtEntry\":1,\"attach_need\":\"0\",\"division_code\":\"\(Div)\",\"driver_allowance\":\"\(checked)\"}}]"
+        let jsonString = "[{\"New_TP_Attendance\":{\"lat\":\"'\(lat)'\",\"long\":\"'\(log)'\",\"date_time\":\"'\(Select_Date.text! + " " + currentTimeAndMilliseconds.time)'\",\"date\":\"'\(date)'\",\"time\":\"\(currentTimeAndMilliseconds.time)\",\"milli_sec\":\"\(currentTimeAndMilliseconds.milliseconds)\",\"day_start_km\":\"\(day_start_km)\",\"imgurl\":\"\(photo_name)\",\"mode_name\":\"\(mode_name)\",\"mod_id\":\"\(Mod_Id)\",\"daily_allowance\":\"\(daily_allowance)\",\"from_place\":\"\(from_place) \",\"to_place\":\"\(to_place)\",\"to_placeID\":\"\(To_Place_id)\",\"stEndNeed\":\"\(StarKmNeed)\",\"srtEntry\":1,\"attach_need\":\"0\",\"division_code\":\"\(Div)\",\"driver_allowance\":\"\(checked)\"}}]"
         let params: Parameters = [
             "data": jsonString
         ]
@@ -553,10 +576,33 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
                         return
                     }
                     print(prettyPrintedJson)
+                    let LocalStoreage = UserDefaults.standard
+                    if let attendanceArray = prettyPrintedJson["Attendance"] as? [[String: Any]] {
+                        if let firstAttendance = attendanceArray.first {
+                            if let msgValue = firstAttendance["msg"] as? String {
+                                LocalStoreage.set(msgValue, forKey: "attendanceView")
+                            } else {
+                                LocalStoreage.set("0", forKey: "attendanceView")
+                            }
+                        } else {
+                            LocalStoreage.set("0", forKey: "attendanceView")
+                        }
+                    } else {
+                        LocalStoreage.set("0", forKey: "attendanceView")
+                    }
+                    
+                    
                     Toast.show(message: "submitted successfully", controller: self)
-                    let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
-                    UIApplication.shared.windows.first?.rootViewController = viewController
-                    UIApplication.shared.windows.first?.makeKeyAndVisible()
+                    if let NavExp = Exp_Nav, NavExp=="Ex_Ent"{
+                            VisitData.shared.Nav_id = 1
+                            let storyboard = UIStoryboard(name: "AdminForms", bundle: nil)
+                            let viewController = storyboard.instantiateViewController(withIdentifier: "Expense") as! Expense_Entry;()
+                            UIApplication.shared.windows.first?.rootViewController = viewController
+                            UIApplication.shared.windows.first?.makeKeyAndVisible()
+                        
+                    }else{
+                        GlobalFunc.movetoHomePage()
+                    }
                         }
             case .failure(let error):
                 Toast.show(message: error.errorDescription!)
@@ -602,6 +648,13 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
                 return false
             }
         }
+        // Start Km Image
+        if Start_Km_Img.isHidden == true {
+            if StarKmNeed == 1 {
+                Toast.show(message: "Add Start KM Photo", controller: self)
+                return false
+            }
+        }
         
         return true
     }
@@ -615,19 +668,35 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
 
         return (time: timeString, milliseconds: milliseconds)
     }
-    @objc private func openCamera(){
-        let vc=self.storyboard?.instantiateViewController(withIdentifier: "PhotoGallary") as!  PhotoGallary
-        //let vc=self.storyboard?.instantiateViewController(withIdentifier: "CameraVwCtrl") as!  CameraService
-        vc.modalPresentationStyle = .overCurrentContext
-        self.present(vc, animated: true, completion: nil)
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            Start_Km_Img.layer.cornerRadius = 10
+            Start_Km_Img.layer.masksToBounds = true
+            Start_Km_Img.image = pickedImage
+            let fileName: String = String(Int(Date().timeIntervalSince1970))
+            let filenameno="\(fileName).jpg"
+            photo_name = "_\(filenameno)"
+            ImageUploader().uploadImage(SFCode: self.SFCode, image: pickedImage, fileName: "__\(filenameno)")
+            Str_Km_text_width.constant = 200
+            Str_Km_with.constant = 60
+            Start_Km_Img.isHidden = false
+        }
+        dismiss(animated: true, completion: nil)
     }
-    @objc private func Open_Allowance() {
+    
+    @objc private func openCamera(){
+        let imagePickerController = UIImagePickerController()
+            imagePickerController.delegate = self
+            imagePickerController.sourceType = .camera
+             present(imagePickerController, animated: true, completion: nil)
+    }
+    @objc private func Open_Allowance(){
         SelMod = "Allowance"
         Drop_Down_Head.text = "Daily Allowance"
         getallowns()
         Drop_Down_Sc.isHidden = false
     }
-    @objc private func Open_Mod_of_Travel() {
+    @objc private func Open_Mod_of_Travel(){
         if Daily_Allowance.text == "Select  Daily Allowance"{
             Toast.show(message: "Select  Daily Allowance", controller: self)
         }else{
@@ -637,11 +706,11 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
             Drop_Down_Sc.isHidden = false
         }
     }
-    @objc private func Close_Allowance() {
+    @objc private func Close_Allowance(){
         Text_Serch.text = ""
         Drop_Down_Sc.isHidden = true
     }
-    @objc private func Open_Calender() {
+    @objc private func Open_Calender(){
         for Letter in expsub_Date{
             let datess = Letter.Dates
             let dateFormatter = DateFormatter()
@@ -652,17 +721,27 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
         }
         calendar_view.isHidden = false
     }
-    @objc private func Clos_Calender() {
+    @objc private func Clos_Calender(){
         calendar_view.isHidden = true
     }
-    @objc private func GotoHome() {
-        GlobalFunc.MovetoMainMenu()
+    @objc private func GotoHome(){
+        if let NavExp = Exp_Nav{
+            if (NavExp == "Ex_Ent"){
+                VisitData.shared.Nav_id = 1
+                let storyboard = UIStoryboard(name: "AdminForms", bundle: nil)
+                let viewController = storyboard.instantiateViewController(withIdentifier: "Expense") as! Expense_Entry;()
+                UIApplication.shared.windows.first?.rootViewController = viewController
+                UIApplication.shared.windows.first?.makeKeyAndVisible()
+            }
+        }else{
+            GlobalFunc.MovetoMainMenu()
+        }
     }
     @objc private func opento(){
         AllRout.removeAll()
         SelMod = "TO"
         print(lstAllRoutes)
-        for items in lstAllRoutes {
+        for items in lstRoutes {
             AllRout.append(Rout_list(id: (items["id"] as? String)!, name: (items["name"] as? String)!, stockist_code: (items["stockist_code"] as? String)!))
         }
         AllRout.append(Rout_list(id:"others", name: "others", stockist_code:"others"))
@@ -670,11 +749,11 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
         Drop_Down_TB.reloadData()
         Drop_Down_Sc.isHidden = false
     }
-    @objc private func Box() {
+    @objc private func Box(){
         if checked == false {
             checked = true
             Check_Box.image = UIImage(named: "checkbox")
-        } else {
+        }else{
             checked = false
             Check_Box.image = UIImage(named: "uncheckbox")
         }
@@ -712,5 +791,4 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
         }
         Drop_Down_TB.reloadData()
     }
-    
 }

@@ -123,7 +123,6 @@ class Attendance: IViewController, UITableViewDelegate,
         AF.request(APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKeyWithoutCommas, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
             AFdata in
             switch AFdata.result {
-                
             case .success(let value):
                 print(value)
                 if let json = value as? [String: AnyObject] {
@@ -168,7 +167,7 @@ class Attendance: IViewController, UITableViewDelegate,
     func maximumDate(for calendar: FSCalendar) -> Date {
         return Date()
     }
-    func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
+    func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition){
         let formatter = DateFormatter()
         let formatters = DateFormatter()
         formatter.dateFormat = "dd/MM/yyyy"
@@ -335,10 +334,9 @@ class Attendance: IViewController, UITableViewDelegate,
     @objc func selDOT(){
         Calender_View.isHidden = false
     }
-    @IBAction func Cancel_BT(_ sender: Any) {
+    @IBAction func Cancel_BT(_ sender: Any){
         Calender_View.isHidden = true
     }
-    
     @IBAction func Close(_ sender: Any) {
         Click_Det.isHidden = true
     }

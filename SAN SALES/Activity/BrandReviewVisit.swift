@@ -106,6 +106,7 @@ class BrandReviewVisit: IViewController, UITableViewDataSource, UITableViewDeleg
             return
         }
         txvRmks.text = "Enter the Remarks"
+        txvRmks.textColor = UIColor.lightGray
         txvRmks.returnKeyType = .done
         txvRmks.delegate = self
         SFCode = prettyJsonData["sfCode"] as? String ?? ""
@@ -193,6 +194,7 @@ class BrandReviewVisit: IViewController, UITableViewDataSource, UITableViewDeleg
         if textView.text == "Enter the Remarks"{
             textView.text = ""
             textView.textColor = .black
+            //textView.textColor = UIColor.lightGray
         }
     }
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool{
@@ -204,7 +206,8 @@ class BrandReviewVisit: IViewController, UITableViewDataSource, UITableViewDeleg
     func textViewDidEndEditing(_ textView: UITextView) {
         if textView.text == ""{
             textView.text = "Enter the Remarks"
-            textView.textColor = UIColor.lightGray
+            //textView.textColor = UIColor.lightGray
+            textView.textColor = .black
         }
     }
 
@@ -219,13 +222,10 @@ class BrandReviewVisit: IViewController, UITableViewDataSource, UITableViewDeleg
     }
     
     func updateData () {
-        
         for brand in lstBrands {
-            
             self.brandListData.append(brandReviewDataList(isSelectedAvail: false, isSelectedEC: false, brandData: brand))
         }
     }
-    
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if Checkboxtable == tableView { return brandListData.count }

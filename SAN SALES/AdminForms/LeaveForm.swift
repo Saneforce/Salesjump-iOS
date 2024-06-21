@@ -549,7 +549,7 @@ class LeaveForm: IViewController, UITableViewDelegate,
 //                    self.NolevPat = String(PatAvil as! Int)
                     //strMasList.append(mnuItem.init(MasId: 1, MasName: "Start Time", MasLbl:VisitData.shared.cInTime))
                     for item in json {
-                        LeveDet.append(mnuItem(levtype: item["Leave_Name"] as! String, Eligibility:item["LeaveValue"] as! Int, Taken: item["LeaveTaken"] as! Int, Available: item["LeaveAvailability"] as! Int))
+                        LeveDet.append(mnuItem(levtype: item["Leave_Name"] as! String, Eligibility:item["LeaveValue"] as! Int, Taken: (item["LeaveTaken"] as! Int), Available: item["LeaveAvailability"] as! Int))
                     }
                     LeaveAvailability.reloadData()
                     Leave_Avaailability_View.isHidden = false

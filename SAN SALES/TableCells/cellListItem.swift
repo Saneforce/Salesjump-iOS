@@ -132,5 +132,7 @@ class cellListItem:UITableViewCell{
     @IBOutlet weak var NA_Total: UILabel!
     @IBOutlet weak var NA_Reject_BT: UIButton!
     @IBOutlet weak var NA_Approve_BT: UIButton!
+    @IBOutlet weak var NA_Daily_Allowance_Heda: UILabel!
+    @IBOutlet weak var NA_Travel_Expense_Head: UILabel!
     var ischeck = false
 }
