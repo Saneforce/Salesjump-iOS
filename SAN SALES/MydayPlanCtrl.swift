@@ -109,6 +109,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         txRem.returnKeyType = .done
         txRem.delegate = self
         txRem.contentSize = CGSize(width:view.frame.width, height: vwContent.frame.height)
+        self.vwContent.frame.size = CGSize(width: self.vwContent.frame.width, height: 930)
         self.vwMainScroll.contentSize = CGSize(width: self.vwContent.frame.width, height: 930)
         Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(TimeDisplay), userInfo: nil, repeats: true)
         
@@ -188,6 +189,12 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                     lstAllRoutes = list
                     lstRoutes = list
                     print("RouteData  ___________________________")                }
+                
+                if let jointWorkData = LocalStoreage.string(forKey: "Jointwork_Master_"+id){
+                    if let list = GlobalFunc.convertToDictionary(text: jointWorkData) as? [AnyObject] {
+                        lstJoint = list
+                    }
+                }
             }
             else
             {
@@ -332,12 +339,16 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
             GlobalFunc.FieldMasterSync(SFCode: sfid){
                 DistData = self.LocalStoreage.string(forKey: "Distributors_Master_"+sfid)!
                 let RouteData: String=self.LocalStoreage.string(forKey: "Route_Master_"+sfid)!
+                let jointWorkData : String = self.LocalStoreage.string(forKey: "Jointwork_Master_"+sfid)!
                 if let list = GlobalFunc.convertToDictionary(text: DistData) as? [AnyObject] {
                     self.lstDist = list;
                 }
                 if let list = GlobalFunc.convertToDictionary(text: RouteData) as? [AnyObject] {
                     self.lstAllRoutes = list
                     self.lstRoutes = list
+                }
+                if let list  =  GlobalFunc.convertToDictionary(text: jointWorkData) as? [AnyObject] {
+                    self.lstJoint = list
                 }
             }
             return
@@ -351,6 +362,12 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                     if let list = GlobalFunc.convertToDictionary(text: RouteData) as? [AnyObject] {
                         lstAllRoutes = list
                         lstRoutes = list
+                    }
+                    
+                    if let jointWorkData = LocalStoreage.string(forKey: "Jointwork_Master_"+sfid){
+                        if let list = GlobalFunc.convertToDictionary(text: jointWorkData) as? [AnyObject] {
+                            lstJoint = list
+                        }
                     }
                 }
             }
@@ -490,9 +507,19 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                             self.lstAllRoutes = list
                             self.lstRoutes = list
                         }
+                        if let jointWorkData = LocalStoreage.string(forKey: "Jointwork_Master_"+id){
+                            if let list = GlobalFunc.convertToDictionary(text: jointWorkData) as? [AnyObject] {
+                                lstJoint = list
+                            }
+                        }
                         lblDist.text = "Select the Distributor"
                         lblRoute.text = "Select the Route"
-                        self.LoadingDismiss()
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                            self.LoadingDismiss()
+                            self.vwSelWindow.isHidden=true
+                         //   self.navigationController?.popViewController(animated: true)
+                            
+                        }
                     }
                     
                 }else {
@@ -507,6 +534,12 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                             if let list = GlobalFunc.convertToDictionary(text: RouteData) as? [AnyObject] {
                                 lstAllRoutes = list
                                 lstRoutes = list
+                            }
+                            
+                            if let jointWorkData = LocalStoreage.string(forKey: "Jointwork_Master_"+id){
+                                if let list = GlobalFunc.convertToDictionary(text: jointWorkData) as? [AnyObject] {
+                                    lstJoint = list
+                                }
                             }
                         }
                     }
@@ -621,19 +654,70 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                     lblHQ.text = lstHQs[indexToDelete]["name"] as? String
                     let sfname: String = lstHQs[indexToDelete]["name"] as! String
                     //new
-                    if let DistData = LocalStoreage.string(forKey: "Distributors_Master_"+sfid),
-                       let list = GlobalFunc.convertToDictionary(text:  DistData) as? [AnyObject] {
-                        lstDist = list
-                        //print(DistData)
+                    
+                    var DistData: String=""
+                    if(LocalStoreage.string(forKey: "Distributors_Master_"+sfid)==nil){
+                        //Toast.show(message: "No Distributors found. Please will try to sync", controller: self)
+                        self.ShowLoading(Message: "       Sync Data Please wait...")
+                        GlobalFunc.FieldMasterSync(SFCode: sfid){ [self] in
+                            DistData = self.LocalStoreage.string(forKey: "Distributors_Master_"+sfid)!
+                            let RouteData: String=self.LocalStoreage.string(forKey: "Route_Master_"+sfid)!
+                            let jointWorkData : String = self.LocalStoreage.string(forKey: "Jointwork_Master_"+sfid)!
+                            if let list = GlobalFunc.convertToDictionary(text: DistData) as? [AnyObject] {
+                                self.lstDist = list;
+                            }
+                            if let list = GlobalFunc.convertToDictionary(text: RouteData) as? [AnyObject] {
+                                self.lstAllRoutes = list
+                                self.lstRoutes = list
+                            }
+                            if let list  =  GlobalFunc.convertToDictionary(text: jointWorkData) as? [AnyObject] {
+                                self.lstJoint = list
+                            }
+//                            lblDist.text = "Select the Distributor"
+//                            lblRoute.text = "Select the Route"
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                                self.LoadingDismiss()
+                                self.vwSelWindow.isHidden = true
+                               // self.navigationController?.popViewController(animated: true)
+                                
+                            }
+                        }
+                        
+                      //  return
+                    }else {
+                        if let DistData = LocalStoreage.string(forKey: "Distributors_Master_" + sfid) {
+                            if let RouteData = LocalStoreage.string(forKey: "Route_Master_" + sfid) {
+                                if let list = GlobalFunc.convertToDictionary(text: DistData) as? [AnyObject] {
+                                    lstDist = list
+                                }
+                                
+                                if let list = GlobalFunc.convertToDictionary(text: RouteData) as? [AnyObject] {
+                                    lstAllRoutes = list
+                                    lstRoutes = list
+                                }
+                                if let jointWorkData = LocalStoreage.string(forKey: "Jointwork_Master_"+sfid){
+                                    if let list = GlobalFunc.convertToDictionary(text: jointWorkData) as? [AnyObject] {
+                                        lstJoint = list
+                                    }
+                                }
+                            }
+                        }
                     }
                     
                     
-                    if let RouteData = LocalStoreage.string(forKey: "Route_Master_"+sfid),
-                       let list = GlobalFunc.convertToDictionary(text:  RouteData) as? [AnyObject] {
-                         lstAllRoutes = list
-                        lstRoutes = list
-                        //print(RouteData)
-                    }
+//                    if let DistData = LocalStoreage.string(forKey: "Distributors_Master_"+sfid),
+//                       let list = GlobalFunc.convertToDictionary(text:  DistData) as? [AnyObject] {
+//                        lstDist = list
+//                        //print(DistData)
+//                    }
+//
+//
+//                    if let RouteData = LocalStoreage.string(forKey: "Route_Master_"+sfid),
+//                       let list = GlobalFunc.convertToDictionary(text:  RouteData) as? [AnyObject] {
+//                         lstAllRoutes = list
+//                        lstRoutes = list
+//                        //print(RouteData)
+//                    }
                     //new
         
 //                    let DistData: String=LocalStoreage.string(forKey: "Distributors_Master_"+sfid)!
@@ -1094,14 +1178,14 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                 
                 
 //                let apiResponse = try? JSONSerialization.jsonObject(with: AFData.data!, options: JSONSerialization.ReadingOptions.allowFragments)
-//                
+//
 //                print(apiResponse)
-//                
+//
 //                guard let response = apiResponse as? AnyObject else {
 //                    return
 //                }
 //                print(response)
-//                
+//
 //                guard let tpResponse = response["tp"] as? [AnyObject] else{
 //                    return
 //                }
@@ -1111,12 +1195,12 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
 //                print("Ggg")
 //                print(statusResponse)
 //                print("first")
-//                
+//
 //                self.tpData = tpResponse.first
-//                
-//                
+//
+//
 //                print(tpResponse.first)
-//                
+//
 //                print(self.tpData)
             case .failure(let error):
                 Toast.show(message: error.errorDescription ?? "", controller: self)

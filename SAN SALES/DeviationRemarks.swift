@@ -56,7 +56,18 @@ class DeviationRemarks : IViewController,UITextViewDelegate {
             Toast.show(message: "Enter the Remarks", controller: self)
             return
         }
-        self.submitDeviation()
+        
+        let alert = UIAlertController(title: "Confirmation", message: "Do you want to submit Deviation?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
+            self.submitDeviation()
+            return
+        }
+                        
+        )
+        alert.addAction(UIAlertAction(title: "Cancel", style: .destructive) { _ in
+            return
+        })
+        self.present(alert, animated: true)
     }
     
     
