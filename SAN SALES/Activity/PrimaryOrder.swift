@@ -12,7 +12,6 @@ import Alamofire
 import CoreLocation
 
 class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource,UICollectionViewDelegateFlowLayout {
-    
     var axnEdit = "get/pmOrderDetails"
     @IBOutlet weak var lcLastvistHeight: NSLayoutConstraint!
     @IBOutlet weak var lcContentHeight: NSLayoutConstraint!
@@ -121,7 +120,6 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
         if let JointWData = LocalStoreage.string(forKey: "Jointwork_Master"),
            let list = GlobalFunc.convertToDictionary(text:  JointWData) as? [AnyObject] {
             lstJoint = list;
-            print("JointWData  ___________________________")
         }
         if let list = GlobalFunc.convertToDictionary(text: PlnDets) as? [AnyObject] {
             lstPlnDetail = list;
@@ -521,6 +519,7 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
             let item: [String: Any]=lObjSel[indexPath.row] as! [String : Any]
             let name=item["name"] as! String
             let id=String(format: "%@", item["id"] as! CVarArg)
+            print(item)
             if SelMode=="DIS" {
                 lblSuppNm.text = name
                 print(name)
@@ -529,8 +528,6 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
                 VisitData.shared.Dist.id = id
                 VisitData.shared.Sup.id = id
                 VisitData.shared.Sup.id = name
-                print(id)
-                print(VisitData.shared.ProductCart)
                 
             }
             else if SelMode=="UOM"
@@ -698,7 +695,6 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
         lAllObjSel = lObjSel
         txSearchSel.text = ""
         vwSelWindow.isHidden=false
-        
     }
     @objc private func selOrdSuppName(){
         isMulti=false
@@ -1104,6 +1100,8 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
                     }
                     print(sLocation)
                     print(sAddress)
+                    Count = Count + 1
+                    print(Count)
                     if (OrderSub == "OD"){
                         self.OrderSubmit(sLocation: sLocation, sAddress: sAddress)
                         OrderSub  = ""
@@ -1270,13 +1268,8 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
             } else {
                 print("Failed to convert the string to a date.")
             }
-            print(Date_Time)
-            print(objcallsprimary)
-            let jsonString2 = "{\"Products\":[" + sPItems3 + "],\"Activity_Event_Captures\":[],\"POB\":\"\(objcallsprimary[0]["POB"] as! Int)\",\"Value\":\"\(TotaAmout)\",\"order_No\":\"\(objcallsprimary[0]["Order_No"] as! String)\",\"DCR_Code\":\"\(objcallsprimary[0]["DCR_Code"] as! String)\",\"Trans_Sl_No\":\"\(objcallsprimary[0]["DCR_Code"] as! String)\",\"Trans_Detail_slNo\":\"\(objcallsprimary[0]["Trans_Detail_SlNo"] as! String)\",\"Route\":\"\",\"net_weight_value\":\"\(net_weight_data)\",\"target\":\"\",\"rateMode\":null,\"Stockist\":\"\(objcallsprimary[0]["stockist_code"] as! String)\",\"RateEditable\":\"\",\"orderValue\":" + (lblTotAmt.text!).replacingOccurrences(of: "Rs. ", with: "") + ",\"Stockist_POB\":\"" + VisitData.shared.PayValue + "\",\"Stk_Meet_Time\":\"\(Date_Time)\",\"modified_time\":\"\(Date_Time)\",\"CheckoutTime\":\"\(Date_Time)\",\"PhoneOrderTypes\":0,\"dcr_activity_date\":\"\(Date_Time)\"}"
+            let jsonString2 = "{\"Products\":[" + sPItems3 + "],\"Activity_Event_Captures\":[],\"POB\":\"\(objcallsprimary[0]["POB"] as! Int)\",\"Value\":\"\(TotaAmout)\",\"order_No\":\"\(objcallsprimary[0]["Order_No"] as! String)\",\"DCR_Code\":\"\(objcallsprimary[0]["DCR_Code"] as! String)\",\"Trans_Sl_No\":\"\(objcallsprimary[0]["DCR_Code"] as! String)\",\"Trans_Detail_slNo\":\"\(objcallsprimary[0]["Trans_Detail_SlNo"] as! String)\",\"Route\":\"\",\"net_weight_value\":\"\(net_weight_data)\",\"target\":\"\",\"rateMode\":null,\"Stockist\":\"\(objcallsprimary[0]["stockist_code"] as! String)\",\"RateEditable\":\"\",\"orderValue\":" + (lblTotAmt.text!).replacingOccurrences(of: "Rs. ", with: "") + ",\"Stockist_POB\":\"" + VisitData.shared.PayValue + "\",\"Stk_Meet_Time\":\"\(Date_Time)\",\"modified_time\":\"\(Date_Time)\",\"CheckoutTime\":\"\(Date_Time)\",\"PhoneOrderTypes\":0,\"dcr_activity_date\":\"\(Date_Time)\",\"Super_Stck_code\":\"\(VisitData.shared.Dist.id)\"}"
             
-
-            
-
             
             let params2: Parameters = [
                 "data": jsonString2 //"["+jsonString+"]"//
@@ -1418,15 +1411,19 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
                             return
                         }
                         print(prettyPrintedJson)
+                        if let Super_Stockist_Code = json[0]["Super_Stockist_Code"] as? String{
+                            let FilterData  = lstSuppList.filter{ ($0["id"] as? String) == Super_Stockist_Code}
+                            lblSuppNm.text = FilterData[0]["name"] as? String ?? ""
+                            VisitData.shared.Dist.name = FilterData[0]["name"] as? String ?? ""
+                            VisitData.shared.Dist.id = FilterData[0]["id"] as? String ?? ""
+                        }
                         self.objcallsprimary = json
-                        //Editoredr()
                         DemoEdite()
                     }
                 case .failure(let error):
                     Toast.show(message: error.errorDescription!)  //, controller: self
                 }
             }
-            
         } else {
             // The optional value is nil
             print("Product is nil")
@@ -1435,58 +1432,24 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
     
     
     func Editoredr(){
-        print(objcallsprimary)
-        print(lstAllProducts)
-        print(lstAllProducts.count)
-        
         let indxPath = lstAllProducts
         print(indxPath)
-//        print(areypostion as Any)
-//        var ary: Int = 0
-//        if let unwrappedProduct = areypostion {
-//            print(unwrappedProduct)
-//            ary = unwrappedProduct
-//        } else {
-//            // The optional value is nil
-//            print("Product is nil")
-//        }
-//        print(objcallsprimary)
-//        let product = objcallsprimary[ary]
-//        print(product)
         let Additional_Prod_Dtls = objcallsprimary[0]["Additional_Prod_Code"] as? String
-        
-        
-        
-        //        let price1 = objcallsprimary[0]["CQty"] as! Int
-        //        for qtys in objcallsprimary["CQty"] {
-        //
-        //        }
-        
-     
+
         for proditem in objcallsprimary{
             let CQty = proditem["CQty"] as! Int
-            print(objcallsprimary)
             let Product_Code = proditem["Product_Code"] as! String
-            print(Product_Code)
-        
-        
         
         let productArray = Additional_Prod_Dtls?.components(separatedBy: "#")
         let filteredArray = productArray?.filter { !$0.isEmpty }
-        print(filteredArray as Any)
-        print(productArray as Any)
         if let products = filteredArray {
             for product in products {
                 let productData = product.components(separatedBy: "~")
                 
                 let trimmedString = productData[0].trimmingCharacters(in: .whitespacesAndNewlines)
-                print(trimmedString)
                 let price = productData[1].components(separatedBy: "$")[0]
-                print(price)
-                
                 
                 let sQty : Int = Int(exactly: CQty)!
-                print(sQty)
                 let id: String
                 let lProdItem:[String: Any]
                 var BasUnitCode: Int = 0
@@ -1607,6 +1570,4 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
             updateQty(id: sUom!, sUom: Uomid2, sUomNm: sUomNm!, sUomConv: sUomConv,sNetUnt: sNetUnt, sQty: String(sQty!),ProdItem: lProdItem,refresh: 1)
         }
     }
-    
-    
 }

@@ -158,6 +158,7 @@ class ViewController: IViewController {
                 
                 APIClient.shared.BaseURL=prettyJsonData["BaseURL"] as? String ?? APIClient.shared.BaseURL
             }
+            APIClient.shared.BaseURL = "http://fmcg.sanfmcg.com"
             userAuth()
         }
         
@@ -185,6 +186,7 @@ class ViewController: IViewController {
         let params: Parameters = [
             "data": jsonString
         ]
+        print(params)
         
         AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"login", method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
             AFdata in
@@ -214,6 +216,15 @@ class ViewController: IViewController {
                         "DBURL": APIClient.shared.DBURL1
                     ]
                     print(prettyPrintedJson)
+                    let data = Data(prettyPrintedJson.utf8)
+                    guard let prettyJsonData = try? JSONSerialization.jsonObject(with: data, options:[]) as? [String: Any] else {
+                        print("Error: Cannot convert JSON object to Pretty JSON data")
+                        return
+                    }
+                    let attenview =  prettyJsonData["attendanceView"] as? Int ?? 0
+                    print(attenview)
+                    LocalStoreage.set(attenview, forKey: "attendanceView")
+                    
                     let jsonData = try? JSONSerialization.data(withJSONObject: AppConfig, options: [])
                     let jsonString = String(data: jsonData!, encoding: .utf8)!
                     LocalStoreage.set(jsonString, forKey: "APPConfig")
@@ -332,7 +343,6 @@ class ViewController: IViewController {
                     let LocalStoreage = UserDefaults.standard
                     LocalStoreage.set(prettyPrintedJson, forKey: "UserSetup")
                     UserSetup.shared.initUserSetup()
-                
                     completion?()
                 case .failure(let error):
                     print(error.errorDescription!)

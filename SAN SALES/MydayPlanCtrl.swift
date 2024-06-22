@@ -105,7 +105,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
     override func viewDidLoad() {
         super.viewDidLoad()
         txRem.text = "Enter the Remarks"
-       // txRem.textColor = UIColor.lightGray
+        txRem.textColor = UIColor.lightGray
         txRem.returnKeyType = .done
         txRem.delegate = self
         txRem.contentSize = CGSize(width:view.frame.width, height: vwContent.frame.height)
@@ -145,8 +145,6 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
            let list = GlobalFunc.convertToDictionary(text:  WorkTypeData) as? [AnyObject] {
             lstWType = list
         }
-        
-        
         
         if let DistData = LocalStoreage.string(forKey: "Distributors_Master_"+SFCode),
            let list = GlobalFunc.convertToDictionary(text:  DistData) as? [AnyObject] {
@@ -497,8 +495,9 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                         self.LoadingDismiss()
                     }
                     
-                    return
                 }else {
+                    self.ShowLoading(Message: "       Sync Data Please wait...")
+                    GlobalFunc.FieldMasterSync(SFCode: id){ [self] in
                     if let DistData = LocalStoreage.string(forKey: "Distributors_Master_" + id) {
                         if let RouteData = LocalStoreage.string(forKey: "Route_Master_" + id) {
                             if let list = GlobalFunc.convertToDictionary(text: DistData) as? [AnyObject] {
@@ -511,6 +510,8 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                             }
                         }
                     }
+                        self.LoadingDismiss()
+                }
                 }
 //                else{
 //                    DistData = LocalStoreage.string(forKey: "Distributors_Master_"+id)!
@@ -960,9 +961,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
     func getLocatio(){
         var OrderSub = "MyDay"
         var Count = 0
-        var Leavtyp = leavWorktype
-        print(Leavtyp)
- print(Leaveid)
+        let Leavtyp = leavWorktype
         if Leaveid != "L"{
             if validateForm() == false {
                 return
@@ -1147,9 +1146,6 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                     }
                 }
             }
-            print(HomePageViewController.selfieLoginActive)
-      print(slocation)
-            print(strJWCd)
             let JointData = strJWCd
             var Join_Works = JointData.replacingOccurrences(of: ";", with: "$$")
             if Join_Works.hasSuffix("$") {
@@ -1164,8 +1160,9 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                 
                 print(trimmedText)
                 remarks = trimmedText
-            } else {
-                
+            }
+            if (remarks == "Enter the Remarks"){
+                remarks = ""
             }
             print(myDyTp)
             let jsonString = "[{\"tbMyDayPlan\":{\"wtype\":\"'" + (myDyTp["WT"]?.id ?? "") + "'\",\"sf_member_code\":\"'" + (myDyTp["HQ"]?.id ?? SFCode) + "'\",\"stockist\":\"'" + (myDyTp["DIS"]?.id ?? "") + "'\",\"stkName\":\"" + (myDyTp["DIS"]?.name ?? "") + "\",\"dcrtype\":\"App\",\"cluster\":\"'" + (myDyTp["RUT"]?.id ?? "") + "'\",\"custid\":\"" + (myDyTp["RUT"]?.id ?? "") + "\",\"custName\":\"" + (myDyTp["RUT"]?.name ?? "") + "\",\"address\":\"" + sAddress + "\",\"remarks\":\"'" + (remarks) + "'\",\"OtherWors\":\"\",\"FWFlg\":\"'" + (myDyTp["WT"]?.FWFlg ?? "") + "'\",\"SundayWorkigFlag\":\"''\",\"Place_Inv\":\"\",\"WType_SName\":\"" + (myDyTp["WT"]?.name ?? "") + "\",\"ClstrName\":\"'" + (myDyTp["RUT"]?.name ?? "") + "'\",\"AppVersion\":\"Vi_\(Bundle.main.appVersionLong).\(Bundle.main.appBuild)\",\"self\":1,\"location\":\"" + slocation + "\",\"dcr_activity_date\":\"'" + dateString + "'\",\"worked_with\":\"'\(Join_Works)'\"\(ImgName)}}]"
@@ -1182,9 +1179,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+"dcr/save&divisionCode="+self.DivCode+"&rSF="+self.SFCode+"&sfCode="+self.SFCode, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
             AFdata in
             self.LoadingDismiss()
-            switch AFdata.result
-            {
-               
+            switch AFdata.result {
             case .success(let value):
                 print(value)
                 if let json = value as? [String: Any] {
@@ -1221,29 +1216,10 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                                 }
                                    let LocalStoreage = UserDefaults.standard
                                    LocalStoreage.set(prettyPrintedJson, forKey: "Mydayplan")
-                                 print(LocalStoreage)
-                                print(self.exp_Need)
-                                //self.exp_Need = 2
-                                print(attendanceView)
-                                if (self.attendanceView == 1) {
-                               // Naviagte To Strat Expense
-                                let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                                let viewControllers = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
-                                let myDyPln = storyboard.instantiateViewController(withIdentifier: "Start_Expense") as! Start_Expense
-                                let dateFormatter = DateFormatter()
-                                dateFormatter.dateFormat = "yyyy-MM-dd"
-                                let currentDate = Date()
-                                let formattedDate = dateFormatter.string(from: currentDate)
-                                 myDyPln.Screan_Heding = "My day plan"
-                                 myDyPln.Show_Date = true
-                                 myDyPln.Curent_Date = formattedDate
-                                viewControllers.setViewControllers([myDyPln], animated: false)
-                                (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewControllers)
-                                }else{
                                     let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
                                     UIApplication.shared.windows.first?.rootViewController = viewController
                                     UIApplication.shared.windows.first?.makeKeyAndVisible()
-                               }
+                               
                                     Toast.show(message: "My day plan submitted successfully", controller: self)
                                case .failure(let error):
                                    print(error.errorDescription!)

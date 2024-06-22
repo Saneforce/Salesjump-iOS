@@ -60,7 +60,7 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
     var axn="get/allcalls"
     var TodayDetls:[Todaydate] = []
     var strMenuList:[mnuItem]=[]
-    var SFCode: String = "", StateCode: String = "", DivCode: String = ""
+    var SFCode: String = "", StateCode: String = "", DivCode: String = "",attendanceView = 0,Desig: String = ""
     public static var selfieLoginActive = 0
     
     let LocalStoreage = UserDefaults.standard
@@ -209,8 +209,18 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
             makeMenuView()
             Dashboard()
         }
+        
+        getUserDetails()
+        
         DashboardNew()
         LOG_OUTMODE()
+        
+        
+        
+        
+        
+        
+        
     }
     
     func tpMandatoryNeed() {
@@ -310,7 +320,69 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         SFCode = prettyJsonData["sfCode"] as? String ?? ""
         StateCode = prettyJsonData["State_Code"] as? String ?? ""
         DivCode = prettyJsonData["divisionCode"] as? String ?? ""
+        Desig=prettyJsonData["desigCode"] as? String ?? ""
+        
+        //Get Design code
+        
+            let apiKey1: String = "get/submgr&divisionCode=\(DivCode)&rSF=\(SFCode)&sfcode=\(SFCode)&stateCode=\(StateCode)&desig=\(Desig)"
+            let apiKeyWithoutCommas = apiKey1.replacingOccurrences(of: ",&", with: "&")
+            
+            AF.request(APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKeyWithoutCommas, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+                AFdata in
+                switch AFdata.result {
+                    
+                case .success(let value):
+                    //print(value)
+                    if let json = value as? [AnyObject]{
+                        guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
+                            print("Error: Cannot convert JSON object to Pretty JSON data")
+                            return
+                        }
+                        guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+                            print("Error: Could print JSON in String")
+                            return
+                        }
+                       
+                            if let jsonData = try? JSONSerialization.data(withJSONObject: value, options: []),
+                               let jsonArray = try? JSONSerialization.jsonObject(with: jsonData) as? [[String: Any]] {
+                                    
+                                let filterid = jsonArray.filter{ $0["id"] as? String == SFCode }
+                                UserSetup.shared.dsg_code = (filterid[0]["dsg_code"] as? Int)!
+                            }else{
+                                print("Error: Unable to parse JSON")
+                            }
+                    }
+                case .failure(let error):
+                    Toast.show(message: error.errorDescription!)  //, controller: self
+                }
+            }
+        
+
+        if (UserSetup.shared.SrtEndKMNd != 0 && UserSetup.shared.exp_auto == 2 ){
+        if let data=LocalStoreage.string(forKey: "Mydayplan"), data != "[\n\n]" {
+            print(data)
+            if let attendanceView=LocalStoreage.string(forKey: "attendanceView") {
+                if (attendanceView == "0") {
+                    // Naviagte To Strat Expense
+                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                    let viewControllers = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
+                    let myDyPln = storyboard.instantiateViewController(withIdentifier: "Start_Expense") as! Start_Expense
+                    let dateFormatter = DateFormatter()
+                    dateFormatter.dateFormat = "yyyy-MM-dd"
+                    let currentDate = Date()
+                    let formattedDate = dateFormatter.string(from: currentDate)
+                    myDyPln.Screan_Heding = "My day plan"
+                    myDyPln.Show_Date = true
+                    myDyPln.Curent_Date = formattedDate
+                    myDyPln.Exp_Nav = ""
+                    viewControllers.setViewControllers([myDyPln], animated: false)
+                    (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewControllers)
+                }
+            }
+        }
     }
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         VisitData.shared.clear()
         PhotosCollection.shared.PhotoList = []
@@ -326,7 +398,7 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
     }
     func DashboardNew(){
         let apiKey: String = "\(axn)&divisionCode=\(DivCode)&rSF=\(SFCode)&sfCode=\(SFCode)&vanWorkFlag=&State_Code=\(StateCode)"
-        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
             AFdata in
             switch AFdata.result
             {
@@ -351,7 +423,7 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
                             let totalcalls = (item["RCCOUNT"] as! Int) - (item["calls"] as! Int)
                             print(totalcalls)
                             
-                            TodayDetls.append(Todaydate(id: 1, Route: item["RouteName"] as? String ?? "", AC: "AC", ACvalue: item["RCCOUNT"] as! Int, TC: "TC", TCvalue: item["calls"] as! Int, PC: "PC", PCvalue: item["order"] as! Int, BAC: "BAC", BACvalue: totalcalls, valuesTotal: item["orderVal"] as! String))
+                            TodayDetls.append(Todaydate(id: 1, Route: item["RouteName"] as? String ?? "", AC: "AC", ACvalue: item["RCCOUNT"] as! Int, TC: "TC", TCvalue: item["calls"] as! Int, PC: "PC", PCvalue: item["order"] as! Int, BAC: "BAC", BACvalue: totalcalls, valuesTotal: String(item["orderVal"] as! Double)))
                             
                             self.currentdate.text = item["Adate"] as? String
                         }
@@ -424,7 +496,7 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         ]
         
         let apiKey="get/calls&divisionCode=" + DivCode + "&rSF=" + SFCode + "&sfCode=" + SFCode
-        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+apiKey, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
             AFdata in
             switch AFdata.result
             {
@@ -691,10 +763,7 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
             alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
                 return
             })
-            
         })
-        
- 
     }
     func DayEndSub(Loction: CLLocation){
      
@@ -833,6 +902,18 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
             return
         }
 
+    }
+    
+    func allLoacl(){
+        let userDefaults = UserDefaults.standard
+
+        // Get all the items as a dictionary
+        let allItems = userDefaults.dictionaryRepresentation()
+
+        // Print all the items
+        for (key, value) in allItems {
+            print("\(key): \(value)")
+        }
     }
     
     

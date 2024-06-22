@@ -134,7 +134,6 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         if let JointWData = LocalStoreage.string(forKey: "Jointwork_Master"),
            let list = GlobalFunc.convertToDictionary(text:  JointWData) as? [AnyObject] {
             lstJoint = list;
-            print("JointWData  ___________________________")
         }
         if let list = GlobalFunc.convertToDictionary(text: PlnDets) as? [AnyObject] {
             lstPlnDetail = list;
@@ -667,6 +666,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
                 lblPrvDistNm.text = name
                 VisitData.shared.Dist.name = name
                 VisitData.shared.Dist.id = id
+                Stockist_Code = id
                 
             }
             else if SelMode=="UOM"
@@ -1969,13 +1969,9 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
             })
             self.present(alert, animated: true)
         }
-        
     }
     
     @IBAction func closeWin(_ sender:Any){
         vwSelWindow.isHidden=true
     }
 }
-
-
-//0001

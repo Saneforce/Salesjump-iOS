@@ -67,6 +67,7 @@ class Expense_View: UIViewController, UITableViewDelegate, UITableViewDataSource
         var Rej_Amt:String
         var ClstrName:String
         var DailyAddDeduct:String
+        var DailyAddDeductSymb:String
     }
     struct Exp_Sum:Codable{
         let Tit:String
@@ -333,7 +334,7 @@ class Expense_View: UIViewController, UITableViewDelegate, UITableViewDataSource
             cell.Exp_Da_Typ.text = Exp_Detel_Data[indexPath.row].Da_Typ
             cell.Exp_DA_Exp.text = Exp_Detel_Data[indexPath.row].DA_Exp
             cell.Exp_Amount.text = Exp_Detel_Data[indexPath.row].Amount
-            cell.Exp_DAddi.text = Exp_Detel_Data[indexPath.row].DAddit
+            cell.Exp_DAddi.text =  Exp_Detel_Data[indexPath.row].DailyAddDeductSymb + Exp_Detel_Data[indexPath.row].DAddit
             cell.Exp_Hotal.text = Exp_Detel_Data[indexPath.row].Hotal_Bill
             cell.Exp_Total.text = Exp_Detel_Data[indexPath.row].Total
             cell.Exp_Status.text = Exp_Detel_Data[indexPath.row].Satus
@@ -433,8 +434,15 @@ class Expense_View: UIViewController, UITableViewDelegate, UITableViewDataSource
                                    let data = jsonObject["data"] as? [AnyObject] {
                                     for i in data {
 //                                        if let divisionCode = i["Division_Code"] as? Int,
-                                           if let effMonth = i["Eff_Month"] as? String,
-                                           let effYear = i["Eff_Year"] as? Int,
+                                        
+                                        var effMonth = ""
+                                        if let effmont = i["Eff_Month"] as? Int{
+                                            effMonth = String(effmont)
+                                        }else if let effmont = i["Eff_Month"] as? String {
+                                            effMonth = effmont
+                                        }
+                                        
+                                           if let effYear = i["Eff_Year"] as? Int,
                                            let fromDate = i["From_Date"] as? String,
                                            let periodId = i["Period_Id"] as? String,
                                            let periodName = i["Period_Name"] as? String,
@@ -521,10 +529,18 @@ class Expense_View: UIViewController, UITableViewDelegate, UITableViewDataSource
                                             DAdditionalAmnt = DAdditionalAmt
                                         }
                                        let DailyAddDeduct = i["DailyAddDeduct"] as? String
+                                        var DailyAddDeductsymb = ""
+                                        if DailyAddDeduct == "ADD"{
+                                            DailyAddDeductsymb = "+"
+                                        }else if DailyAddDeduct == "Deduct" {
+                                            DailyAddDeductsymb = "-"
+                                        }else{
+                                            DailyAddDeductsymb = ""
+                                        }
                                         
                                         let ExpDist1 = i["ExpDist"] as? Int
                                         let ClstrName = i["ClstrName"] as? String
-                                        Exp_Detel_Data.append(Exp_Data(Date: Date!, Mode: Mode!, Wok_Typ: WType!, Wok_plc: WorkedPlace!, From_place: From!, To_place: To, DisKM: Dis, Fare: Fare!, Da_Typ: DATyp!, DA_Exp: DAExp!, Amount: "0.0", DAddit:DAdditionalAmnt, Hotal_Bill: Hotal_Bill!, Total: DAExp!, Satus: status!, ExpDist: ExpDist1!,Rej_Amt:"0", ClstrName : ClstrName!,DailyAddDeduct:DailyAddDeduct!))
+                                        Exp_Detel_Data.append(Exp_Data(Date: Date!, Mode: Mode!, Wok_Typ: WType!, Wok_plc: WorkedPlace!, From_place: From!, To_place: To, DisKM: Dis, Fare: Fare!, Da_Typ: DATyp!, DA_Exp: DAExp!, Amount: "0.0", DAddit:DAdditionalAmnt, Hotal_Bill: Hotal_Bill!, Total: DAExp!, Satus: status!, ExpDist: ExpDist1!,Rej_Amt:"0", ClstrName : ClstrName!,DailyAddDeduct:DailyAddDeduct!, DailyAddDeductSymb: DailyAddDeductsymb))
                                         
                                     }
                                     print(data2)
@@ -539,6 +555,7 @@ class Expense_View: UIViewController, UITableViewDelegate, UITableViewDataSource
                                             totalAmountByDate[edate] = Double(amt)
                                         }
                                     }
+                                    print(totalAmountByDate)
                                     
                                     for (date, total) in totalAmountByDate {
                                         print("Total amount for \(date): \(total)")

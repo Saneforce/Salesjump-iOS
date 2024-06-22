@@ -10,10 +10,8 @@ import Alamofire
 import FSCalendar
 import Foundation
 import CoreLocation
-class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource {
-    
+class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource, UIImagePickerControllerDelegate & UINavigationControllerDelegate {
     @IBOutlet weak var Calender_View: UIView!
-    
     @IBOutlet weak var BT_Back: UIImageView!
     @IBOutlet weak var End_Expense_Scr: UILabel!
     @IBOutlet weak var Select_Date: LabelSelect!
@@ -36,12 +34,18 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource {
     @IBOutlet weak var Date_View: UIView!
     @IBOutlet weak var End_Attachment: UIView!
     @IBOutlet weak var Personal_Km_View: UIView!
+
+    @IBOutlet weak var End_Km_Img: UIImageView!
+    
+    @IBOutlet weak var End_Att_Img: UIImageView!
     
     //Hight
     @IBOutlet weak var Date_View_Hight: NSLayoutConstraint!
     @IBOutlet weak var End_Attachmeni_Height: NSLayoutConstraint!
     @IBOutlet weak var End_Km_Hig: NSLayoutConstraint!
     @IBOutlet weak var Personal_Km_Hig: NSLayoutConstraint!
+    @IBOutlet weak var End_Km_Img_width: NSLayoutConstraint!
+    @IBOutlet weak var End_Att_Img_width: NSLayoutConstraint!
     
     struct End_exData:Codable{
         let From:String
@@ -64,6 +68,8 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource {
     var end_Exp_Datas:[End_exData]=[]
     var Attach_Need = 1
     var StrEnd_Need = 1
+    var photo_Km = ""
+    var Photo_End_Att = ""
     override func viewDidLoad() {
         super.viewDidLoad()
         getUserDetails()
@@ -82,6 +88,10 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource {
         Start_Photo.layer.masksToBounds = true
         Ending_fare_Photo.layer.cornerRadius = 5
         Ending_fare_Photo.layer.masksToBounds = true
+        End_Km_Img.layer.cornerRadius = 5
+        End_Km_Img.layer.masksToBounds = true
+        End_Att_Img.layer.cornerRadius = 5
+        End_Att_Img.layer.masksToBounds = true
         Start_Text_KM.keyboardType = UIKeyboardType.numberPad
         Ending_Fare.keyboardType = UIKeyboardType.numberPad
         Per_KM.keyboardType = UIKeyboardType.numberPad
@@ -94,6 +104,9 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource {
             srtExpenseData(Select_date:Date!)
         }
         End_exp_date() 
+        End_Km_Img.isHidden = true
+        End_Km_Img_width.constant = 0
+        End_Att_Img_width.constant = 0
     }
     func getUserDetails(){
     let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
@@ -139,32 +152,64 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource {
         }else{
             Select_Date.text = myStringDate
             srtExpenseData(Select_date:myStringDate)
+            Ending_rmk.text = ""
             Calender_View.isHidden = true
         }
     }
     @objc private func GotoHome() {
-        if (End_exp_title == "Day End Plan"){
-            let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
-            UIApplication.shared.windows.first?.rootViewController = viewController
-            UIApplication.shared.windows.first?.makeKeyAndVisible()
-        }else{
-            GlobalFunc.MovetoMainMenu()
-        }
+            if (End_exp_title == "Day End Plan"){
+                let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
+                UIApplication.shared.windows.first?.rootViewController = viewController
+                UIApplication.shared.windows.first?.makeKeyAndVisible()
+            }else if (End_exp_title == "Ex_Ent"){
+                VisitData.shared.Nav_id = 1
+                let storyboard = UIStoryboard(name: "AdminForms", bundle: nil)
+                let viewController = storyboard.instantiateViewController(withIdentifier: "Expense") as! Expense_Entry;()
+                UIApplication.shared.windows.first?.rootViewController = viewController
+                UIApplication.shared.windows.first?.makeKeyAndVisible()
+            }else{
+                GlobalFunc.MovetoMainMenu()
+            }
     }
     @objc private func Opencalender(){
         Calender_View.isHidden = false
     }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]){
+        if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            if (SelMod == "KM"){
+                End_Km_Img.isHidden = false
+                End_Km_Img.image = pickedImage
+                let fileName: String = String(Int(Foundation.Date().timeIntervalSince1970))
+                let filenameno="\(fileName).jpg"
+                photo_Km = "_\(filenameno)"
+                ImageUploader().uploadImage(SFCode: self.SFCode, image: pickedImage, fileName: "__\(filenameno)")
+                End_Km_Img_width.constant = 74
+            }else if (SelMod == "Ending"){
+                End_Att_Img.image = pickedImage
+                let fileName: String = String(Int(Foundation.Date().timeIntervalSince1970))
+                let filenameno="\(fileName).jpg"
+                Photo_End_Att = "_\(filenameno)"
+                ImageUploader().uploadImage(SFCode: self.SFCode, image: pickedImage, fileName: "__\(filenameno)")
+                End_Att_Img_width.constant = 74
+            }
+        }
+        dismiss(animated: true, completion: nil)
+    }
+    
     @objc private func openCamera_Km(){
         SelMod = "KM"
-        let vc=self.storyboard?.instantiateViewController(withIdentifier: "PhotoGallary") as!  PhotoGallary
-        vc.modalPresentationStyle = .overCurrentContext
-        self.present(vc, animated: true, completion: nil)
+        let imagePickerController = UIImagePickerController()
+            imagePickerController.delegate = self
+            imagePickerController.sourceType = .camera
+             present(imagePickerController, animated: true, completion: nil)
     }
     @objc private func openCamera_Ending(){
         SelMod = "Ending"
-        let vc=self.storyboard?.instantiateViewController(withIdentifier: "PhotoGallary") as!  PhotoGallary
-        vc.modalPresentationStyle = .overCurrentContext
-        self.present(vc, animated: true, completion: nil)
+        let imagePickerController = UIImagePickerController()
+        imagePickerController.delegate = self
+        imagePickerController.sourceType = .camera
+        present(imagePickerController, animated: true, completion: nil)
     }
     @IBAction func Close_Calender_View(_ sender: Any) {
         Calender_View.isHidden = true
@@ -176,12 +221,17 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource {
         }
         if StrEnd_Need == 1{
             if Start_Text_KM.text == ""{
-                Toast.show(message: "Enter Starting KM", controller: self)
+                Toast.show(message: "Enter Ending KM", controller: self)
                 return false
             }
+            if End_Km_Img.isHidden == true {
+                Toast.show(message: "Add Ending KM Photo", controller: self)
+                return false
+            }
+            
         }
         if Attach_Need == 1{
-            if Ending_Fare.text == "" {
+            if Ending_Fare.text == ""{
                 Toast.show(message: "Enter Ending Fare", controller: self)
                 return false
             }
@@ -198,6 +248,12 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource {
             }
         }
         
+        if let Star_KM =  Double(Start_KM.text!),let end = Double(Start_Text_KM.text!), Star_KM > end{
+            Toast.show(message: "Please provide a valid Ending KM...",controller: self)
+            return false
+        }
+        
+        
         return true
     }
     @IBAction func Save_Data(_ sender: Any) {
@@ -205,6 +261,28 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource {
         if validate() == false {
             return
         }
+        
+        if(NetworkMonitor.Shared.isConnected != true){
+            let alert = UIAlertController(title: "Information", message: "Check the Internet Connection", preferredStyle: .alert)
+                 alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
+                     return
+                 })
+                 self.present(alert, animated: true)
+                return
+        }
+            let alert = UIAlertController(title: "Confirmation", message: "Do you want to submit the end expense?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { [self] _ in
+                save_ending_km()
+            })
+            alert.addAction(UIAlertAction(title: "Cancel", style: .destructive) { _ in
+                return
+            })
+            self.present(alert, animated: true)
+        
+        
+    }
+    
+    func save_ending_km(){
         self.ShowLoading(Message: "Loading...")
         var EndKM = ""
         var PerKOM = ""
@@ -241,7 +319,7 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource {
         }
         
         let axn = "post/endDayExpense"
-        let apiKey = "\(axn)&date=\(Date)&desig=\(Desig)&fare=\(EndFar)&rSF=\(SFCode)&endRemarks=\(EndRmk)&divisionCode=\(DivCode)&date_time=\(date_time)&imageUrl=&sfCode=\(SFCode)&stateCode=\(StateCode)&personalKM=\(PerKOM)&endModID=\(endModID)&sf_code=\(SFCode)&endEntry=1&endKM=\(EndKM)"
+        let apiKey = "\(axn)&date=\(Date)&desig=\(Desig)&fare=\(EndFar)&rSF=\(SFCode)&endRemarks=\(EndRmk)&divisionCode=\(DivCode)&date_time=\(date_time)&imageUrl=\(photo_Km)&sfCode=\(SFCode)&stateCode=\(StateCode)&personalKM=\(PerKOM)&endModID=\(endModID)&sf_code=\(SFCode)&endEntry=1&endKM=\(EndKM)"
         let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
         let url = APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKeyWithoutCommas
         AF.request(url, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self] response in
@@ -262,13 +340,24 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource {
                     
                     print(prettyPrintedJson)
                     Toast.show(message: "submitted successfully", controller: self)
-                    GlobalFunc.movetoHomePage()
+                    
+                        if (End_exp_title == "Ex_Ent"){
+                            VisitData.shared.Nav_id = 1
+                            let storyboard = UIStoryboard(name: "AdminForms", bundle: nil)
+                            let viewController = storyboard.instantiateViewController(withIdentifier: "Expense") as! Expense_Entry;()
+                            UIApplication.shared.windows.first?.rootViewController = viewController
+                            UIApplication.shared.windows.first?.makeKeyAndVisible()
+                        }else{
+                            GlobalFunc.movetoHomePage()
+                        }
                 }
             case .failure(let error):
                 Toast.show(message: error.errorDescription!)
             }
         }
     }
+    
+    
     func getCurrentTimeAndMilliseconds() -> (time: String, milliseconds: Int) {
         let currentTime = Foundation.Date()
         let calendar = Calendar.current
@@ -276,7 +365,6 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource {
         dateFormatter.dateFormat = "HH:mm:ss"
         let timeString = dateFormatter.string(from: currentTime)
         let milliseconds = calendar.component(.nanosecond, from: currentTime) / 1_000_000
-
         return (time: timeString, milliseconds: milliseconds)
     }
     
@@ -340,7 +428,7 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource {
             }
         }
     }
-    func addLetter(to cell: FSCalendarCell?, text:String) {
+    func addLetter(to cell: FSCalendarCell?, text:String){
         let letterLabel = UILabel()
         letterLabel.text = text
         letterLabel.textColor = .red
@@ -371,7 +459,6 @@ func srtExpenseData(Select_date:String){
                     }
                     print(prettyPrintedJson)
                     if let firstItem = json.first {
-                        print(firstItem["NeedAttachment"] as? Int as Any)
                             // NeedAttachment
                         if let NeedAttachment = firstItem["NeedAttachment"] as? Int, NeedAttachment == 0{
                             Attach_Need = 0
@@ -413,8 +500,19 @@ func srtExpenseData(Select_date:String){
                             End_Km_Hig.constant = 0
                             Personal_Km_Hig.constant = 0
                         }
-                        
                         if let from = firstItem["From_Place"] as? String{
+                            if let StEndNeed = firstItem["StEndNeed"] as? Int,StEndNeed == 0 {
+                                    End_Km_Hig.constant = 0
+                                    EndKm_View.isHidden = true
+                                    Personal_Km_Hig.constant = 0
+                                    Personal_Km_View.isHidden = true
+                            }else{
+                                End_Km_Hig.constant = 80
+                                EndKm_View.isHidden = false
+                                Personal_Km_Hig.constant = 80
+                                Personal_Km_View.isHidden = false
+                            }
+                            
                             let to = firstItem["To_Place"] as? String
                             let Star_KM = firstItem["Start_Km"] as? String
                             let Mode_Of_Travel = firstItem["MOT_Name"] as? String
@@ -431,5 +529,4 @@ func srtExpenseData(Select_date:String){
             }
         }
     }
-
 }

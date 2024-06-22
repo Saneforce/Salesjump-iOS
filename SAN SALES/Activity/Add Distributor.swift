@@ -49,6 +49,7 @@ class Add_Distributor: IViewController, UITableViewDelegate, UITableViewDataSour
     var SelMod:String = ""
     var HQ_Sf:String = ""
     var SyncKeys: String = ""
+    var lstWType: [AnyObject] = []
     override func viewDidLoad() {
         super.viewDidLoad()
         getUserDetails()
@@ -290,11 +291,23 @@ class Add_Distributor: IViewController, UITableViewDelegate, UITableViewDataSour
                             return
                         }
                     }
+                    var Id:String = ""
+                    if let PlnDets = LocalStoreage.string(forKey: "Mydayplan"),let list = GlobalFunc.convertToDictionary(text:  PlnDets) as? [AnyObject],list.count != 0 {
+                        Id = (list[0]["subordinateid"] as? String)!
+                    } else {
+                        Id = SFCode
+                    }
+                   
+                    GlobalFunc.FieldMasterSync(SFCode: Id){ [self] in
+                       let  DistData = self.LocalStoreage.string(forKey: "Distributors_Master_"+Id)!
+                        print(DistData)
+                    }
+                    
                     Toast.show(message: "\(UserSetup.shared.StkCap) Created successfully", controller: self)
                    
-                    SyncDis(apiKey: "table/list&divisionCode="+DivCode+"&rSF="+SFCode+"&sfCode="+SFCode,aFormData: [
-                        "tableName":"vwstockiest_Master_APP","coloumns":"[\"distributor_code as id\", \"stockiest_name as name\",\"town_code\",\"town_name\",\"Addr1\",\"Addr2\",\"City\",\"Pincode\",\"GSTN\",\"lat\",\"long\",\"addrs\",\"Tcode\",\"Dis_Cat_Code\"]","where":"[\"isnull(Stockist_Status,0)=0\"]","orderBy":"[\"name asc\"]","desig":"mgr"
-                     ], aStoreKey: "Distributors_Master_"+SFCode)
+//                    SyncDis(apiKey: "table/list&divisionCode="+DivCode+"&rSF="+SFCode+"&sfCode="+SFCode,aFormData: [
+//                        "tableName":"vwstockiest_Master_APP","coloumns":"[\"distributor_code as id\", \"stockiest_name as name\",\"town_code\",\"town_name\",\"Addr1\",\"Addr2\",\"City\",\"Pincode\",\"GSTN\",\"lat\",\"long\",\"addrs\",\"Tcode\",\"Dis_Cat_Code\"]","where":"[\"isnull(Stockist_Status,0)=0\"]","orderBy":"[\"name asc\"]","desig":"mgr"
+//                     ], aStoreKey: "Distributors_Master_"+SFCode)
                     GlobalFunc.movetoHomePage()
                 }
             case .failure(let error):
@@ -309,9 +322,10 @@ class Add_Distributor: IViewController, UITableViewDelegate, UITableViewDataSour
         let params: Parameters = [
             "data": jsonString
         ]
+        print(params)
         self.SyncKeys = self.SyncKeys.replacingOccurrences(of: ";e:" + aStoreKey + ";", with: "")
         SyncKeys = SyncKeys + ";" + aStoreKey + ";"
-        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+apiKey, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+apiKey, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
             AFdata in
             switch AFdata.result
             {
@@ -327,6 +341,7 @@ class Add_Distributor: IViewController, UITableViewDelegate, UITableViewDataSour
                    }
 
                    print(prettyPrintedJson)
+                    
                    self.SyncKeys = self.SyncKeys.replacingOccurrences(of: ";" + aStoreKey + ";", with: "")
                    let LocalStoreage = UserDefaults.standard
                    LocalStoreage.set(prettyPrintedJson, forKey: aStoreKey)
@@ -384,7 +399,7 @@ class Add_Distributor: IViewController, UITableViewDelegate, UITableViewDataSour
         Typs.append(TypData(Name: "Stockist"))
     }
     @objc private func GotoHomee() {
-        let alert = UIAlertController(title: "Confirmation", message: "Do you want to Back?", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Confirmation", message: "Your changes won’t be saved.Do you want to go back anyway?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
             self.dismiss(animated: true, completion: nil)
             GlobalFunc.MovetoMainMenu()
