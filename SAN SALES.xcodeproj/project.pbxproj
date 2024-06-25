@@ -34,7 +34,6 @@
 		384E56BC2BDB669F00B2E8A5 /* Approval.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 384E56BB2BDB669F00B2E8A5 /* Approval.storyboard */; };
 		384E56BF2BDB674700B2E8A5 /* Approval Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384E56BE2BDB674700B2E8A5 /* Approval Menu.swift */; };
 		384E56C12BDB7ABF00B2E8A5 /* New Expense Approval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384E56C02BDB7ABF00B2E8A5 /* New Expense Approval.swift */; };
-		385ED6042ABAB50400B43564 /* FSCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 385ED6032ABAB50400B43564 /* FSCalendar */; };
 		386889E22B1868F90015F20C /* RottPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 386889E12B1868F90015F20C /* RottPageViewController.swift */; };
 		386A43912A1CBB0200CE1833 /* SubmittedDCR.swift in Sources */ = {isa = PBXBuildFile; fileRef = 386A43902A1CBB0200CE1833 /* SubmittedDCR.swift */; };
 		386A43932A1CC3E000CE1833 /* Submittedcalls.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 386A43922A1CC3E000CE1833 /* Submittedcalls.storyboard */; };
@@ -128,6 +127,7 @@
 		3FBF387527E4488100900007 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FBF387427E4488100900007 /* APIClient.swift */; };
 		3FBF387727E4AA8300900007 /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FBF387627E4AA8300900007 /* Toast.swift */; };
 		3FF57C1D286C4A76009E3FE5 /* RptVisitDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF57C1C286C4A76009E3FE5 /* RptVisitDetail.swift */; };
+		3FFB953F2C2A973400C5D737 /* FSCalendar.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FFB953E2C2A973400C5D737 /* FSCalendar.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -259,6 +259,7 @@
 		3FBF387427E4488100900007 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
 		3FBF387627E4AA8300900007 /* Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
 		3FF57C1C286C4A76009E3FE5 /* RptVisitDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RptVisitDetail.swift; sourceTree = "<group>"; };
+		3FFB953E2C2A973400C5D737 /* FSCalendar.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FSCalendar.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		448C0B69977667C109C50683 /* Pods_SAN_SALES.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SAN_SALES.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		ABF79223AB38281122FCCDD2 /* Pods-SAN SALES.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SAN SALES.debug.xcconfig"; path = "Target Support Files/Pods-SAN SALES/Pods-SAN SALES.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -269,8 +270,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				3F4CC1932875580100BA2B4E /* AppTrackingTransparency.framework in Frameworks */,
-				385ED6042ABAB50400B43564 /* FSCalendar in Frameworks */,
 				3F4CC1952875581400BA2B4E /* AdSupport.framework in Frameworks */,
+				3FFB953F2C2A973400C5D737 /* FSCalendar.framework in Frameworks */,
 				19247A3DB960E114A6C28FB3 /* Pods_SAN_SALES.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -509,6 +510,7 @@
 		3F3B818C197DE753883A89FB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3FFB953E2C2A973400C5D737 /* FSCalendar.framework */,
 				3F4CC1942875581400BA2B4E /* AdSupport.framework */,
 				3F4CC1922875580100BA2B4E /* AppTrackingTransparency.framework */,
 				448C0B69977667C109C50683 /* Pods_SAN_SALES.framework */,
@@ -585,7 +587,6 @@
 			);
 			name = "SAN SALES";
 			packageProductDependencies = (
-				385ED6032ABAB50400B43564 /* FSCalendar */,
 			);
 			productName = "SAN SALES";
 			productReference = 3F2F810727CEB30C0015E1CA /* SAN SALES.app */;
@@ -1049,14 +1050,6 @@
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		385ED6032ABAB50400B43564 /* FSCalendar */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 385ED6022ABAB50400B43564 /* XCRemoteSwiftPackageReference "FSCalendar" */;
-			productName = FSCalendar;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 3F2F80FF27CEB30C0015E1CA /* Project object */;
 }
