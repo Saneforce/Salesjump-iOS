@@ -257,80 +257,93 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
         var exp1:Int = 0
         var exp_needed:Int = 0
         
-        if (UserSetup.shared.SrtNd == 0){
-            if !lstWortyp.isEmpty{
-                print(lstWortyp)
-                for lst in lstWortyp{
-                    if (attance_flg.count > 0){
-                        print(attance_flg)
-                        for i in attance_flg{
-                            if let Att_FWFlg = i["FWFlg"] as? String, let Work_FWFlg = lst["FWFlg"] as? String, let pln_date = i["pln_date"] as? String , pln_date == dates2 || pln_date == dates && Att_FWFlg == Work_FWFlg {
-                                exp_needed = (lst["exp_needed"] as? Int ?? 0)!
+        print(UserSetup.shared.SrtEndKMNd)
+        print(UserSetup.shared.exp_auto)
+        print(UserSetup.shared.SrtNd)
+        if validateForm(Seldate: date) == false {
+            return
+        }
+        if (UserSetup.shared.SrtEndKMNd != 0 && UserSetup.shared.exp_auto == 2 ){
+            if (UserSetup.shared.SrtNd == 0){
+                if !lstWortyp.isEmpty{
+                    print(lstWortyp)
+                    for lst in lstWortyp{
+                        if (attance_flg.count > 0){
+                            print(attance_flg)
+                            for i in attance_flg{
+                                if let Att_FWFlg = i["FWFlg"] as? String,
+                                   let Work_FWFlg = lst["FWFlg"] as? String,
+                                   let pln_date = i["pln_date"] as? String ,
+                                   pln_date == dates2 || pln_date == dates && Att_FWFlg == Work_FWFlg {
+                                    exp_needed = (lst["exp_needed"] as? Int ?? 0)!
+                                }
                             }
                         }
                     }
+                }else{
+                    print("No Data")
                 }
+            }
+            for i in srt_exp {
+                if let full_date = i["full_date"] as? String, dates == full_date{
+                    exp = 1
+                }
+            }
+            for i in srt_end_exp {
+                if let full_date = i["full_date"] as? String, dates == full_date{
+                    exp1 = 1
+                }
+            }
+           
+            if (exp==0&&exp1==0&&exp_needed==1){
+                let alert = UIAlertController(title: "Confirm Selection", message: "start expense missing. Do u want to submit start expense?", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Cancel", style: .destructive) { _ in
+                    return
+                })
+                alert.addAction(UIAlertAction(title: "OK", style: .destructive) { [self] _ in
+                    self.dismiss(animated: true, completion: nil)
+                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                    let viewControllers = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
+                    let myDyPln = storyboard.instantiateViewController(withIdentifier: "Start_Expense") as! Start_Expense
+                    let dateFormatter = DateFormatter()
+                    dateFormatter.dateFormat = "yyyy-MM-dd"
+                    let formattedDate = dateFormatter.string(from: date)
+                     myDyPln.Screan_Heding = "Start Expense"
+                     myDyPln.Show_Date = true
+                     myDyPln.Curent_Date = formattedDate
+                     myDyPln.Exp_Nav = "Ex_Ent"
+                    viewControllers.setViewControllers([myDyPln], animated: false)
+                    (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewControllers)
+                })
+                self.present(alert, animated: true)
+                
+            }else if (exp==1&&exp_needed==1){
+                let alert = UIAlertController(title: "Confirm Selection", message: "end expense missing. Do u want to submit end expense?", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Cancel", style: .destructive) { _ in
+                    return
+                })
+                alert.addAction(UIAlertAction(title: "OK", style: .destructive) { [self] _ in
+                    self.dismiss(animated: true, completion: nil)
+                    let dateFormatter = DateFormatter()
+                    dateFormatter.dateFormat = "yyyy-MM-dd"
+                    let formattedDate = dateFormatter.string(from: date)
+                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                    let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
+                    let myDyPln = storyboard.instantiateViewController(withIdentifier: "End_Expense") as! End_Expense
+                    myDyPln.End_exp_title = "Ex_Ent"
+                    myDyPln.Date_Nd = true
+                    myDyPln.Date = formattedDate
+                    viewController.setViewControllers([myDyPln], animated: false)
+                    (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
+                })
+                self.present(alert, animated: true)
             }else{
-                print("No Data")
+                new_DateofExpense(date: date)
             }
-        }
-        for i in srt_exp {
-            if let full_date = i["full_date"] as? String, dates == full_date{
-                exp = 1
-            }
-        }
-        for i in srt_end_exp {
-            if let full_date = i["full_date"] as? String, dates == full_date{
-                exp1 = 1
-            }
-        }
-       
-        if (exp==0&&exp1==0&&exp_needed==1){
-            let alert = UIAlertController(title: "Confirm Selection", message: "start expense missing. Do u want to submit start expense?", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "Cancel", style: .destructive) { _ in
-                return
-            })
-            alert.addAction(UIAlertAction(title: "OK", style: .destructive) { [self] _ in
-                self.dismiss(animated: true, completion: nil)
-                let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                let viewControllers = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
-                let myDyPln = storyboard.instantiateViewController(withIdentifier: "Start_Expense") as! Start_Expense
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "yyyy-MM-dd"
-                let formattedDate = dateFormatter.string(from: date)
-                 myDyPln.Screan_Heding = "Start Expense"
-                 myDyPln.Show_Date = true
-                 myDyPln.Curent_Date = formattedDate
-                 myDyPln.Exp_Nav = "Ex_Ent"
-                viewControllers.setViewControllers([myDyPln], animated: false)
-                (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewControllers)
-            })
-            self.present(alert, animated: true)
-            
-        }else if (exp==1&&exp_needed==1){
-            let alert = UIAlertController(title: "Confirm Selection", message: "end expense missing. Do u want to submit end expense?", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "Cancel", style: .destructive) { _ in
-                return
-            })
-            alert.addAction(UIAlertAction(title: "OK", style: .destructive) { [self] _ in
-                self.dismiss(animated: true, completion: nil)
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "yyyy-MM-dd"
-                let formattedDate = dateFormatter.string(from: date)
-                let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
-                let myDyPln = storyboard.instantiateViewController(withIdentifier: "End_Expense") as! End_Expense
-                myDyPln.End_exp_title = "Day End Plan"
-                myDyPln.Date_Nd = true
-                myDyPln.Date = formattedDate
-                myDyPln.Exp_Nav = "Ex_Ent"
-                viewController.setViewControllers([myDyPln], animated: false)
-                (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
-            })
-            self.present(alert, animated: true)
         }else{
             new_DateofExpense(date: date)
         }
+   
     }
     func addLetterA(to cell: FSCalendarCell?, text:String) {
         let letterLabel = UILabel()
@@ -419,6 +432,7 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
             print(item)
             print(Monthtext_and_year)
             let calendars = Calendar.current
+            
             let currentYear = calendars.component(.year, from: Date())
             if (selectYear == "\(currentYear)"){
                 let currentMonthIndex = Calendar.current.component(.month, from: Date()) - 1
@@ -447,7 +461,6 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
             let currentMonthIndex = Calendar.current.component(.month, from: Date()) - 1
             if (currentMonthIndex == 0){
                 let item = Monthtext_and_year[indexPath.row]
-                print(item)
                 let dateFormatter = DateFormatter()
                 dateFormatter.dateFormat = "MMM"
                 Monthtext_and_year = dateFormatter.shortMonthSymbols
@@ -576,8 +589,7 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
         print(FDate)
        return FDate
     }
-    func periodic() {
-        print(Load_Cout)
+    func periodic(){
         if Load_Cout == 0{
             self.ShowLoading(Message: "Loading...")
         }else{
@@ -604,9 +616,14 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
                                    let data = jsonObject["data"] as? [AnyObject] {
                                     print(data)
                                     for i in data {
-                                         //let divisionCode = i["Division_Code"] as? Int
-                                           if let effMonth = i["Eff_Month"] as? String,
-                                           let effYear = i["Eff_Year"] as? Int,
+                                        var effMonth = ""
+                                        if let effmont = i["Eff_Month"] as? Int{
+                                            effMonth = String(effmont)
+                                        }else if let effmont = i["Eff_Month"] as? String {
+                                            effMonth = effmont
+                                        }
+                                        
+                                           if let effYear = i["Eff_Year"] as? Int,
                                            let fromDate = i["From_Date"] as? String,
                                            let periodId = i["Period_Id"] as? String,
                                            let periodName = i["Period_Name"] as? String,
@@ -661,6 +678,8 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
                                 var count = 0
                                 if let jsonObject = try JSONSerialization.jsonObject(with: prettyJsonData, options: []) as? [String: Any]{
                                     print(jsonObject)
+                                    var exp:Int = 0
+                                    var exp1:Int = 0
                                     // srt_exp
                                     if let srt_exps = jsonObject["srt_exp"] as? [[String: Any]] {
                                         srt_exp = srt_exps
@@ -691,7 +710,7 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
                                         Load_Couts = 0
                                     }
                                     
-                                    if apr_flg == "0"{
+                                    if apr_flg == "0" || apr_flg == "1"{
                                         Sent_apr_bt.backgroundColor = .lightGray
                                     }else{
                                         Sent_apr_bt.backgroundColor = UIColor(red: 0.06, green: 0.68, blue: 0.76, alpha: 1.00)
@@ -707,6 +726,8 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
                                             MisDatesDatas = []
                                             return
                                         }
+                                        
+                                        print(attance_flg)
                                         
                                         let dateFormatter = DateFormatter()
                                         dateFormatter.dateFormat = "dd/MM/yyyy"
@@ -729,6 +750,12 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
                                                 attance_flg_L = attance_flg
                                                 let cell = calendar.cell(for: Formated_Date!, at: .current)
                                                 addLetterA(to: cell, text: "H")
+                                            }
+                                            if (Leave == "W"){
+                                                count = count + 1
+                                                attance_flg_L = attance_flg
+                                                let cell = calendar.cell(for: Formated_Date!, at: .current)
+                                                addLetterA(to: cell, text: "W")
                                             }
                                         }
                                         
@@ -765,7 +792,6 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
                                                     print("Error: Unable to convert string to date.")
                                                 }
                                         }
-                                        
                                     }
                                     // exp_submit
                                     if let ExpDate = jsonObject["exp_submit"] as? [AnyObject] {
@@ -1110,7 +1136,7 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
         }
     }
     @IBAction func Send_Apr(_ sender: Any) {
-        if apr_flg == "0"{
+        if apr_flg == "0" || apr_flg == "1" {
             print("Not Apr")
         }else{
             if validateForm() == false {
@@ -1133,10 +1159,6 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
             Toast.show(message: "Select Period")
             return false
         }
-//        if ( Allow_Apr == false){
-//            Toast.show(message: "Approval already Sent")
-//            return false
-//        }
         if ( Allow_Apr == true){
             Toast.show(message: "Complete this period expense")
             return false

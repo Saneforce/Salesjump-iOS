@@ -400,7 +400,7 @@ class Add_Distributor: IViewController, UITableViewDelegate, UITableViewDataSour
         Typs.append(TypData(Name: "Stockist"))
     }
     @objc private func GotoHomee() {
-        let alert = UIAlertController(title: "Confirmation", message: "Do you want to Back?", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Confirmation", message: "Your changes won’t be saved.Do you want to go back anyway?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
             self.dismiss(animated: true, completion: nil)
             GlobalFunc.MovetoMainMenu()

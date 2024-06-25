@@ -368,7 +368,7 @@ class Add_Route: IViewController, UITableViewDelegate, UITableViewDataSource {
         print(allowance)
     }
     @objc private func GotoHome() {
-        let alert = UIAlertController(title: "Confirmation", message: "Do you want to Back?", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Confirmation", message: "Your changes won’t be saved.Do you want to go back anyway?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
             self.dismiss(animated: true, completion: nil)
             GlobalFunc.MovetoMainMenu()

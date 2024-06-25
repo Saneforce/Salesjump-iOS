@@ -27,6 +27,9 @@ class UserSetup{
     var offerMode: Int = 0
     var SchemeBased : Int = 0
     var SuperStockistNeed : Int = 0
+    var distributorBased : Int = 0
+    var tpTargetBased : Int = 0
+    var jointWorkNeed : Int = 0
     var Desig:String = ""
     var Sf_HQ:String = ""
     var StkRoute:String = ""
@@ -42,8 +45,14 @@ class UserSetup{
     var exp_process_type:Int = 0
     var SrtEndKMNd:Int = 0
     var sf_emp_id:String = ""
+    var employeeId: String = ""
+    var tpDcrDeviationNeed: Int = 0
+    var tpNeed: Int = 0
+    var tpRemainderDate: String = ""
+    var tpMandatoryNeed: Int = 0
     var Hotel_Bill_Nd:Int = 0
     var SrtNd:Int = 0
+    var dsg_code:Int = 0
     func initUserSetup(){
         let SetupStoreage = UserDefaults.standard
         let SetupData: String=SetupStoreage.string(forKey: "UserSetup")!
@@ -64,7 +73,7 @@ class UserSetup{
         offerMode = lstSetups[0]["OfferMode"] as? Int ?? 0
         SchemeBased = lstSetups[0]["scheme_based"] as? Int ?? 0
         SuperStockistNeed = lstSetups[0]["MR_SStockist_Nd"] as? Int ?? 0
-        SF_Name = lstSetups[0]["sfName"] as? String ?? ""
+        SF_Name = lstSetups[0]["SF_Name"] as? String ?? ""
         Desig = lstSetups[0]["Desig"] as? String ?? ""
         Sf_HQ = lstSetups[0]["Sf_HQ"] as? String ?? ""
         StkRoute = lstSetups[0]["StkRoute"] as? String ?? ""
@@ -78,6 +87,14 @@ class UserSetup{
         exp_process_type = lstSetups[0]["exp_process_type"] as? Int ?? 0
         SrtEndKMNd = lstSetups[0]["SrtEndKMNd"] as? Int ?? 0
         sf_emp_id = lstSetups[0]["sf_emp_id"] as? String ?? ""
+        distributorBased = lstSetups[0]["DistBased"] as? Int ?? 0
+        tpTargetBased = lstSetups[0]["TP_Target_Based"] as? Int ?? 0
+        jointWorkNeed = lstSetups[0]["jointwork"] as? Int ?? 0
+        employeeId = lstSetups[0]["Employee_Id"] as? String ?? ""
+        tpDcrDeviationNeed = lstSetups[0]["TPDCR_Deviation"] as? Int ?? 0
+        tpNeed = lstSetups[0]["TP_ND"] as? Int ?? 0
+        tpRemainderDate = lstSetups[0]["TP_Remainder_Date"] as? String ?? ""
+        tpMandatoryNeed = lstSetups[0]["TP_Mandatory_ND"] as? Int ?? 0
         Hotel_Bill_Nd = lstSetups[0]["Hotel_Bill_Nd"] as? Int ?? 0
         SrtNd = lstSetups[0]["SrtNd"] as? Int ?? 0
         if(lstSetups[0]["Geo_Fencing"] as? Int == 1){

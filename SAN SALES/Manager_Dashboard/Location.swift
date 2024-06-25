@@ -132,7 +132,7 @@ class Location: IViewController,MKMapViewDelegate,UITableViewDelegate, UITableVi
                         print("Error: Could print JSON in String")
                         return
                     }
-                    //print(prettyPrintedJson)
+                    print(prettyPrintedJson)
                    
                         if let jsonData = try? JSONSerialization.data(withJSONObject: value, options: []),
                            let jsonArray = try? JSONSerialization.jsonObject(with: jsonData) as? [[String: Any]] {

@@ -16,6 +16,18 @@ extension String {
         let contentSize = tmp.boundingRect(with: limitSize, options: .usesLineFragmentOrigin, context: nil)
         return contentSize.size
     }
+    
+    func toDate(format: String = "yyyy-MM-dd HH:mm:ss") -> Date{
+        let dateformatter = DateFormatter()
+        dateformatter.dateFormat = format
+        return dateformatter.date(from: self) ?? Date()
+    }
+    
+    func changeFormat(from: String = "yyyy-MM-dd HH:mm:ss", to: String = "dd MMM yyyy") -> String{
+        let date = self.toDate(format: from)
+        let dateString = date.toString(format: to)
+        return dateString
+    }
 }
 extension UIFont {
     func sizeOfString (string: String, constrainedToWidth width: Double) -> CGSize {
@@ -282,6 +294,9 @@ class GlobalFunc{
     static func getCurrDateAsString() -> String {
         let dateFormatter : DateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        print(Locale.current.identifier)
+  //      dateFormatter.locale = Locale(identifier: Locale.current.identifier)
+  //      dateFormatter.timeZone = TimeZone(identifier: Locale.current.identifier)
         let date = Date()
         return dateFormatter.string(from: date)
     }
@@ -336,6 +351,10 @@ class GlobalFunc{
         
         strMasList.append(mnuItem.init(MasId: 11, MasName: "Supplier List", MasImage: "mnuPrimary",StoreKey: "Supplier_Master_"+SFCode, ApiKey: "get/SupplierMster&divisionCode="+(prettyJsonData["divisionCode"] as? String ?? "")+"&rSF="+SFCode+"&sfCode="+SFCode,fromData: [
             "orderBy":"[\"name asc\"]","desig":"mgr"
+        ]))
+        
+        strMasList.append(mnuItem.init(MasId: 16, MasName: "Jointwork", MasImage: "mnuPrimary",StoreKey: "Jointwork_Master_"+SFCode, ApiKey: "get/jointwork&divisionCode="+(prettyJsonData["divisionCode"] as? String ?? "")+"&rSF="+(prettyJsonData["sfCode"] as? String ?? "")+"&sfCode="+SFCode,fromData: [
+           "tableName":"salesforce_master","coloumns":"[\"sf_code as id\", \"sf_name as name\"]","orderBy":"[\"name asc\"]","desig":"mgr"
         ]))
         
         for lItm in strMasList {

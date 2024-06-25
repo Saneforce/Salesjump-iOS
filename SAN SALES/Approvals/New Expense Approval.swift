@@ -100,6 +100,7 @@ class New_Expense_Approval: UIViewController, UITableViewDataSource, UITableView
         let DailyAddDeduct:String
         let DAdditionalAmnt:String
         var Add_Exp:String
+        let DailyAddDeductsymbl:String
     }
     var ExpenseDetail_data:[ExpenseDetails_data] = []
     var Monthtext_and_year: [String] = []
@@ -336,9 +337,13 @@ class New_Expense_Approval: UIViewController, UITableViewDataSource, UITableView
                 cell.NA_To.text = ExpenseDetail_data[indexPath.row].to_place
                 cell.NA_WORK.text = ExpenseDetail_data[indexPath.row].work_type
                 cell.NA_Work.text = ExpenseDetail_data[indexPath.row].worked_place
+                
+                cell.NA_Daily_Allowance_Heda.text = "Daily Allowance (\(ExpenseDetail_data[indexPath.row].expense_type))"
+                
                 cell.NA_Daily.text = ExpenseDetail_data[indexPath.row].da_amount
-                cell.NA_DAdd.text = ExpenseDetail_data[indexPath.row].DAdditionalAmnt
+                cell.NA_DAdd.text =   ExpenseDetail_data[indexPath.row].DailyAddDeductsymbl + ExpenseDetail_data[indexPath.row].DAdditionalAmnt
                 cell.NA_Hotal_Bill.text = ExpenseDetail_data[indexPath.row].Hotel_Bill_Amt
+                cell.NA_Travel_Expense_Head.text = "Travel Expense  (\( ExpenseDetail_data[indexPath.row].travel_k))"
                 cell.NA_Travel.text = ExpenseDetail_data[indexPath.row].travel_amount
                 cell.NA_Addit.text = ExpenseDetail_data[indexPath.row].Add_Exp
                 cell.NA_Total.text = ExpenseDetail_data[indexPath.row].amount
@@ -510,8 +515,15 @@ class New_Expense_Approval: UIViewController, UITableViewDataSource, UITableView
                                    let data = jsonObject["data"] as? [AnyObject] {
                                     for i in data {
                                         //if let divisionCode = i["Division_Code"] as? Int,
-                                          if let effMonth = i["Eff_Month"] as? String,
-                                           let effYear = i["Eff_Year"] as? Int,
+                                        
+                                        var effMonth = ""
+                                        if let effmont = i["Eff_Month"] as? Int{
+                                            effMonth = String(effmont)
+                                        }else if let effmont = i["Eff_Month"] as? String {
+                                            effMonth = effmont
+                                        }
+                                        
+                                          if let effYear = i["Eff_Year"] as? Int,
                                            let fromDate = i["From_Date"] as? String,
                                            let periodId = i["Period_Id"] as? String,
                                            let periodName = i["Period_Name"] as? String,
@@ -585,8 +597,8 @@ class New_Expense_Approval: UIViewController, UITableViewDataSource, UITableView
                                         let da_amount2 = Double(da_amount!)
                                         Tot_amt = Tot_amt + da_amount2!
                                         var travel_k = ""
-                                        if let travel_k2 = i["travel_km"] as? String, travel_k2 != ""{
-                                            travel_k = travel_k2
+                                        if let travel_k2 = i["travel_km"] as? Int{
+                                            travel_k = String(travel_k2)+" KM"
                                         }else{
                                             travel_k = "0"
                                         }
@@ -605,6 +617,7 @@ class New_Expense_Approval: UIViewController, UITableViewDataSource, UITableView
                                         Tot_amt = Tot_amt + Hotel_Bill_Amt2!
                                         
                                         var DailyAddDeduct = ""
+                                        var DailyAddDeductsymb = ""
                                         if let DailyAddDeduct2 = i["DailyAddDeduct"] as? String{
                                             DailyAddDeduct = DailyAddDeduct2
                                         }
@@ -634,7 +647,16 @@ class New_Expense_Approval: UIViewController, UITableViewDataSource, UITableView
                                             Tot_amt = Tot_amt - Double(DAdditionalAmnt!)
                                         }
                                         
-                                        ExpenseDetail_data.append(ExpenseDetails_data(sf_code: sf_code!, name: name!, full_date: full_date!, from_place: from_place!, to_place: to_place!, amount: String(format: "%.2f",Tot_amt), work_type: work_type!, expense_type: expense_type!, da_amount: da_amount!, travel_k: travel_k, travel_amount: travel_amount, worked_place: worked_place!, Hotel_Bill_Amt: Hotel_Bill_Amt!, DailyAddDeduct: DailyAddDeduct, DAdditionalAmnt: String(format: "%.2f",DAdditionalAmnt!), Add_Exp: "0"))
+                                        if DailyAddDeduct == "ADD"{
+                                            DailyAddDeductsymb = "+"
+                                        }else if DailyAddDeduct == "Deduct"{
+                                            DailyAddDeductsymb = "-"
+                                        }else{
+                                            DailyAddDeductsymb = ""
+                                        }
+                                        
+                                        
+                                        ExpenseDetail_data.append(ExpenseDetails_data(sf_code: sf_code!, name: name!, full_date: full_date!, from_place: from_place!, to_place: to_place!, amount: String(format: "%.2f",Tot_amt), work_type: work_type!, expense_type: expense_type!, da_amount: da_amount!, travel_k: travel_k, travel_amount: travel_amount, worked_place: worked_place!, Hotel_Bill_Amt: Hotel_Bill_Amt!, DailyAddDeduct: DailyAddDeduct, DAdditionalAmnt: String(format: "%.2f",DAdditionalAmnt!), Add_Exp: "0", DailyAddDeductsymbl: DailyAddDeductsymb))
                                     }
                                     
                                     
@@ -852,7 +874,7 @@ class New_Expense_Approval: UIViewController, UITableViewDataSource, UITableView
     let year = components[2]
     let Sel_Date = item.full_date
     let axn = "rejectExpense"
-        let apiKey = "\(axn)&month=\(mon)&year=\(year)&selected_date=\(Sel_Date)&rej_sf_code=\(SFCode)&rej_type=0&period_id=\(period_id)&sf_code=\(item.sf_code)&remarks=xjdd&emp_id=\(Emp_Id)"
+        let apiKey = "\(axn)&month=\(mon)&year=\(year)&selected_date=\(Sel_Date)&rej_sf_code=\(SFCode)&rej_type=0&period_id=\(period_id)&sf_code=\(item.sf_code)&remarks=reject&emp_id=\(Emp_Id)"
     let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
     let url = APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKeyWithoutCommas
         print(url)
