@@ -76,6 +76,7 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
     var srt_end_exp: [[String: Any]] = []
     var attance_flg:[[String: Any]] = []
     var lstWortyp: [AnyObject] = []
+    var exp_neededs = 0
     override func viewDidLoad(){
         super.viewDidLoad()
         YearPostion.text = selectYear
@@ -94,6 +95,7 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
         let lstWorktypData: String=LocalStoreage.string(forKey: "Worktype_Master")!
         if let list = GlobalFunc.convertToDictionary(text: lstWorktypData) as? [AnyObject] {
             lstWortyp = list;
+            print(lstWortyp)
         }
         getUserDetails()
         calendar.delegate=self
@@ -276,6 +278,8 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
                                    let pln_date = i["pln_date"] as? String ,
                                    pln_date == dates2 || pln_date == dates && Att_FWFlg == Work_FWFlg {
                                     exp_needed = (lst["exp_needed"] as? Int ?? 0)!
+                                    exp_neededs = (lst["exp_needed"] as? Int ?? 0)!
+                                    
                                 }
                             }
                         }
@@ -915,6 +919,7 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
             myDyPln.day_Plan = Day_Plan_Data
             myDyPln.set_Date = Set_Date
             myDyPln.PeriodicData = Nav_PeriodicData
+            myDyPln.ExpEditNeed = exp_neededs
             
             let formatters = DateFormatter()
             formatters.dateFormat = "yyyy-MM-dd"

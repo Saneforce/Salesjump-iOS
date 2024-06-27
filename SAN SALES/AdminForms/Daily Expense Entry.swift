@@ -155,6 +155,7 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
     var SelMod = ""
     var day_Plan:[AnyObject]?
     var PeriodicData:[AnyObject]?
+    var ExpEditNeed:Int?
     var set_Date:String?
     var Exp_Data:[exData] = []
     var Exp_Datas:[exData]=[]
@@ -225,6 +226,13 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
         
         Edit_Km.addTarget(target: self, action: #selector(Edit_Km_Scr))
         
+        print(ExpEditNeed)
+        if let Editimg = ExpEditNeed, Editimg != 1 {
+            Edit_Km.isHidden = false
+        } else {
+            Edit_Km.isHidden = true
+        }
+        
         set_form()
         travel_data(date: set_Date!)
         DAExp_ND()
@@ -287,7 +295,6 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
         }
         Start_Km_Img.isHidden = true
         End_Km_Img.isHidden = true
-        Edit_Km.isHidden = false
         
         
         Image_Sc_Close.layer.cornerRadius = 10

@@ -766,13 +766,21 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
         Drop_Down_Sc.isHidden = true
     }
     @objc private func Open_Calender(){
-        for Letter in expsub_Date{
-            let datess = Letter.Dates
+        for letter in expsub_Date {
+            let datess = letter.Dates
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "dd/MM/yyyy"
-            let Formated_Date = dateFormatter.date(from: datess)
-            let cell = calendar.cell(for: Formated_Date!, at: .current)
-            addLetter(to: cell, text: ".")
+            
+            if let formattedDate = dateFormatter.date(from: datess) {
+                print("Formatted Date: \(formattedDate)")
+                if let cell = calendar.cell(for: formattedDate, at: .current) {
+                    addLetter(to: cell, text: ".")
+                } else {
+                    print("Cell is nil for date: \(datess)")
+                }
+            } else {
+                print("Failed to parse date: \(datess)")
+            }
         }
         calendar_view.isHidden = false
     }
