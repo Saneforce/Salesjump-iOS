@@ -73,7 +73,7 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource, UIIma
     override func viewDidLoad() {
         super.viewDidLoad()
         getUserDetails()
-        End_Expense_Scr.text = End_exp_title
+        End_Expense_Scr.text = "End Expense"
         if Date_Nd == true{
         Date_View.isHidden = true
         Date_View_Hight.constant = 0
@@ -125,13 +125,22 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource, UIIma
         return Foundation.Date()
     }
     func minimumDate(for calendar: FSCalendar) -> Date {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+
+        // Calculate the start of the month 3 months ago
+        var comp = DateComponents()
+        comp.month = -3
         let currentDate = Foundation.Date()
-        let calendar = Calendar.current
-        let components = calendar.dateComponents([.year, .month], from: currentDate)
-        guard let firstDayOfMonth = calendar.date(from: components) else {
-            return currentDate
+        guard let threeMonthsAgo = Calendar.current.date(byAdding: comp, to: currentDate) else {
+            fatalError("Error calculating date")
         }
-        return firstDayOfMonth
+        var startOfMonthComponents = Calendar.current.dateComponents([.year, .month], from: threeMonthsAgo)
+        startOfMonthComponents.day = 1
+        guard let startOfMonth = Calendar.current.date(from: startOfMonthComponents) else {
+            fatalError("Error calculating start of month")
+        }
+        return startOfMonth
     }
 
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
@@ -214,7 +223,7 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource, UIIma
     @IBAction func Close_Calender_View(_ sender: Any) {
         Calender_View.isHidden = true
     }
-    func validate() -> Bool {
+    func validate(personalKm:Bool) -> Bool {
         if Select_Date.text == "Select Date"{
             Toast.show(message: "Select Date", controller: self)
             return false
@@ -246,6 +255,12 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource, UIIma
                 Toast.show(message: "Enter Personal KM", controller: self)
                 return false
             }
+            if personalKm == true{
+                Toast.show(message: "Please provide a valid Personal KM", controller: self)
+                return false
+            }
+
+            
         }
         
         if let Star_KM =  Double(Start_KM.text!),let end = Double(Start_Text_KM.text!), Star_KM > end{
@@ -257,8 +272,45 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource, UIIma
         return true
     }
     @IBAction func Save_Data(_ sender: Any) {
+        var StKM = 0
+        var EndKM = 0
+        var perKm = 0
+        var AllPerKm:Bool = false
+        var StartKm = ""
+        if end_Exp_Datas.count == 0 {
+            StartKm = ""
+        }else{
+             StartKm = end_Exp_Datas[0].Start_KM
+        }
+        if StartKm != "" {
+            StKM = Int(StartKm) ?? 0
+        } else {
+            StKM = 0
+        }
+
+        if let endKM = Start_Text_KM.text, !endKM.isEmpty {
+            EndKM = Int(endKM) ?? 0
+        } else {
+            EndKM = 0
+        }
         
-        if validate() == false {
+        
+        if let PerKm = Per_KM.text, !PerKm.isEmpty{
+            perKm = Int(PerKm)!
+        }else{
+            perKm = 0
+        }
+        
+        let TotalKm = EndKM - StKM
+        
+        if (TotalKm < perKm){
+            AllPerKm = true
+        }else{
+            AllPerKm = false
+        }
+        
+        
+        if validate(personalKm: AllPerKm) == false {
             return
         }
         

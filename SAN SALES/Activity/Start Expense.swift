@@ -120,7 +120,7 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
         var subordinateid:String = ""
         if let PlnDets = LocalStoreage.string(forKey: "Mydayplan"),let list = GlobalFunc.convertToDictionary(text:  PlnDets) as? [AnyObject],list.count != 0 {
             print(list)
-            Id = (list[0]["stockistid"] as? String)!
+            Id = (list[0]["subordinateid"] as? String)!
             subordinateid = (list[0]["subordinateid"] as? String)!
         } else {
             subordinateid = SFCode
@@ -133,7 +133,9 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
             print(list)
         }
         lstRoutes = lstAllRoutes.filter({(fitem) in
-            let StkId: String = String(format: ",%@,", fitem["stockist_code"] as! CVarArg)
+            print(fitem)
+            let StkId: String = String(format: ",%@,", fitem["field_code"] as! CVarArg)
+            print(StkId)
             return Bool(StkId.range(of: String(format: ",%@,", Id))?.lowerBound != nil )
         })
         
@@ -182,7 +184,7 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if (SelMod == "Allowance") {
-            return Exp_Data.count
+            return Exp_Datas.count
         }else if (SelMod == "Travel"){
             return Trave_Dets.count
         }else if (SelMod == "TO"){
@@ -195,7 +197,7 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
         let cell:cellListItem = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
         
         if (SelMod == "Allowance") {
-            cell.lblText.text = Exp_Data[indexPath.row].name
+            cell.lblText.text = Exp_Datas[indexPath.row].name
         }else if (SelMod == "Travel"){
             cell.lblText.text = Trave_Dets[indexPath.row].name
         }else if (SelMod == "TO"){
@@ -205,7 +207,7 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if (SelMod == "Allowance") {
-            let item = Exp_Data[indexPath.row]
+            let item = Exp_Datas[indexPath.row]
             print(item)
             select_allow = item.name
             Daily_Allowance.text = item.name
@@ -255,13 +257,24 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
         return Date()
     }
     func minimumDate(for calendar: FSCalendar) -> Date {
+     
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+
+        // Calculate the start of the month 3 months ago
+        var comp = DateComponents()
+        comp.month = -3
         let currentDate = Date()
-        let calendar = Calendar.current
-        let components = calendar.dateComponents([.year, .month], from: currentDate)
-        guard let firstDayOfMonth = calendar.date(from: components) else {
-            return currentDate
+        guard let threeMonthsAgo = Calendar.current.date(byAdding: comp, to: currentDate) else {
+            fatalError("Error calculating date")
         }
-        return firstDayOfMonth
+        var startOfMonthComponents = Calendar.current.dateComponents([.year, .month], from: threeMonthsAgo)
+        startOfMonthComponents.day = 1
+        guard let startOfMonth = Calendar.current.date(from: startOfMonthComponents) else {
+            fatalError("Error calculating start of month")
+        }
+        return startOfMonth
+        
     }
 
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
@@ -284,24 +297,46 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
     }
 
     func expSubmitDates(){
-        let dateFormatter = DateFormatter()
-        let date = Date()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
     
-        //  Start of Month
-        let comp: DateComponents = Calendar.current.dateComponents([.year, .month], from: date)
-        let startOfMonth = Calendar.current.date(from: comp)!
-        print(dateFormatter.string(from: startOfMonth))
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+
+        // Calculate the start of the month 3 months ago
+        var comp = DateComponents()
+        comp.month = -3
+        let currentDate = Date()
+        guard let threeMonthsAgo = Calendar.current.date(byAdding: comp, to: currentDate) else {
+            fatalError("Error calculating date")
+        }
+        var startOfMonthComponents = Calendar.current.dateComponents([.year, .month], from: threeMonthsAgo)
+        startOfMonthComponents.day = 1
+        guard let startOfMonth = Calendar.current.date(from: startOfMonthComponents) else {
+            fatalError("Error calculating start of month")
+        }
         
-        //  End of Month
+        let currentDates = Date()
+
+        var components = Calendar.current.dateComponents([.year, .month], from: currentDate)
+        components.month! += 1
+        components.day = 1
+        guard let startOfNextMonth = Calendar.current.date(from: components) else {
+            fatalError("Error calculating start of next month")
+        }
+        let lastDayOfCurrentMonth = Calendar.current.date(byAdding: .day, value: -1, to: startOfNextMonth)
+        
         var comps2 = DateComponents()
-        comps2.month = 1
-        comps2.day = -1
-        let endOfMonth = Calendar.current.date(byAdding: comps2, to: startOfMonth)
-        print(dateFormatter.string(from: endOfMonth!))
+        comps2.month = 0
+        comps2.day = 0
+        let date = Date()
         
+        guard let endOfMonth = Calendar.current.date(byAdding: comps2, to: lastDayOfCurrentMonth!) else {
+            fatalError("Error calculating end of month")
+        }
+        
+        
+        self.ShowLoading(Message: "Loading...")
         let axn = "get/expSubmitDates"
-        let apiKey = "\(axn)&from_date=\(dateFormatter.string(from: startOfMonth))&to_date=\(dateFormatter.string(from: endOfMonth!))&selected_period=null&sf_code=\(SFCode)"
+        let apiKey = "\(axn)&from_date=\(dateFormatter.string(from: startOfMonth))&to_date=\(dateFormatter.string(from:endOfMonth))&selected_period=null&sf_code=\(SFCode)"
         let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
         let url = APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKeyWithoutCommas
         AF.request(url, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self] response in
@@ -348,8 +383,14 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
                             }
                         }
                     }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                           self.LoadingDismiss()
+                                       }
                 }
             case .failure(let error):
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                       self.LoadingDismiss()
+                                   }
                 Toast.show(message: error.errorDescription!)
             }
         }
@@ -367,6 +408,7 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
     }
     
     func getallowns(){
+        self.ShowLoading(Message: "Loading...")
         Exp_Data.removeAll()
         Trave_Det.removeAll()
         let axn = "get/Allow_Type"
@@ -395,6 +437,9 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
                                     }
                                     Exp_Datas = Exp_Data
                                     Drop_Down_TB.reloadData()
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                        self.LoadingDismiss()
+                                    }
                                 } else {
                                     print("Error: Could not convert JSON to Dictionary or access 'data'")
                                 }
@@ -407,11 +452,15 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
                     }
                     
                 case .failure(let error):
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        self.LoadingDismiss()
+                    }
                     Toast.show(message: error.errorDescription ?? "Unknown Error")
             }
         }
     }
     func travelmode(){
+        self.ShowLoading(Message: "Loading...")
         Exp_Data.removeAll()
         Trave_Det.removeAll()
         let axn = "get/travelmode"
@@ -445,6 +494,9 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
                                     }
                                     Trave_Dets = Trave_Det
                                     Drop_Down_TB.reloadData()
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                                           self.LoadingDismiss()
+                                                       }
                                 } else {
                                     print("Error: Could not convert JSON to Dictionary or access 'data'")
                                 }
@@ -457,6 +509,9 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
                     }
                     
                 case .failure(let error):
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                           self.LoadingDismiss()
+                                       }
                     Toast.show(message: error.errorDescription ?? "Unknown Error")
                 }
             }
@@ -747,6 +802,7 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
         AllRout.append(Rout_list(id:"others", name: "others", stockist_code:"others"))
         lstrout = AllRout
         Drop_Down_TB.reloadData()
+        Drop_Down_Head.text = "Select To"
         Drop_Down_Sc.isHidden = false
     }
     @objc private func Box(){
@@ -757,10 +813,10 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
             checked = false
             Check_Box.image = UIImage(named: "uncheckbox")
         }
-        print(checked)
     }
     @IBAction func SearchByText(_ sender: Any) {
         let txtbx: UITextField = sender as! UITextField
+        print(txtbx.text!.lowercased())
         if (SelMod == "Allowance") {
             if txtbx.text!.isEmpty {
                 Exp_Datas = Exp_Data

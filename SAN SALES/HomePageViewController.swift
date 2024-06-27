@@ -208,13 +208,6 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         
         DashboardNew()
         LOG_OUTMODE()
-        
-        
-        
-        
-        
-        
-        
     }
     
     func tpMandatoryNeed() {
@@ -230,10 +223,6 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
                 print(value)
                 
                 let apiResponse = try? JSONSerialization.jsonObject(with: AFData.data!, options: JSONSerialization.ReadingOptions.allowFragments)
-                
-                print(apiResponse)
-                
-                
                 
                 guard let response = apiResponse as? AnyObject else {
                     return
@@ -369,6 +358,8 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         
 
         if (UserSetup.shared.SrtEndKMNd != 0 && UserSetup.shared.exp_auto == 2 ){
+            let datas=LocalStoreage.string(forKey: "Mydayplan")
+            print(datas)
         if let data=LocalStoreage.string(forKey: "Mydayplan"), data != "[\n\n]" {
             print(data)
             if let attendanceView=LocalStoreage.string(forKey: "attendanceView") {
@@ -381,7 +372,7 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
                     dateFormatter.dateFormat = "yyyy-MM-dd"
                     let currentDate = Date()
                     let formattedDate = dateFormatter.string(from: currentDate)
-                    myDyPln.Screan_Heding = "My day plan"
+                    myDyPln.Screan_Heding = "Start Expense" // 
                     myDyPln.Show_Date = true
                     myDyPln.Curent_Date = formattedDate
                     myDyPln.Exp_Nav = ""
