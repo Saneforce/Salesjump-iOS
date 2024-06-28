@@ -61,6 +61,7 @@ class TourPlanCalenderScreen : UIViewController, FSCalendarDelegate, FSCalendarD
     var date : Date = Date()
     var isBackEnabled : Bool = true
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         imgBack.addTarget(target: self, action: #selector(backVC))
@@ -84,6 +85,10 @@ class TourPlanCalenderScreen : UIViewController, FSCalendarDelegate, FSCalendarD
         
         btnPrev.isEnabled = false
         
+        if isBackEnabled == false {
+            Toast.show(message: "Enter Tour Plan first (or) Contact Administrator", controller: self)
+        }
+        
         self.calendarView.appearance.titleFont = UIFont(name: "Poppins-Regular", size: 16)!
         self.calendarView.appearance.headerTitleFont = UIFont(name: "Poppins-Bold", size: 18)!
         self.calendarView.appearance.weekdayFont = UIFont(name: "Poppins-SemiBold", size: 16)!
@@ -103,6 +108,23 @@ class TourPlanCalenderScreen : UIViewController, FSCalendarDelegate, FSCalendarD
         self.calendarView.setCurrentPage(date, animated: true)
         self.calendarView.reloadData()
         
+        let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
+        let data = Data(prettyPrintedJson!.utf8)
+        
+        guard let prettyJsonData = try? JSONSerialization.jsonObject(with: data, options:[]) as? [String: Any]
+        else {
+            print("Error: Cannot convert JSON object to Pretty JSON data")
+            return
+        }
+        
+        LocationService.sharedInstance.getNewLocation(location: { location in
+        }, error:{ errMsg in
+        })
+        
+        sfCode = prettyJsonData["sfCode"] as? String ?? ""
+        divCode = prettyJsonData["divisionCode"] as? String ?? ""
+        desig = prettyJsonData["desigCode"] as? String ?? ""
+        sfName = prettyJsonData["sfName"] as? String ?? ""
     }
     
     deinit {
@@ -111,7 +133,7 @@ class TourPlanCalenderScreen : UIViewController, FSCalendarDelegate, FSCalendarD
     
 //    override func viewWillAppear(_ animated: Bool) {
 //        super.viewWillAppear(animated)
-//        fetchFullTP()
+//        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
 //    }
     
     func getUserDetails(){
@@ -340,7 +362,7 @@ class TourPlanCalenderScreen : UIViewController, FSCalendarDelegate, FSCalendarD
             days = calendar.dateComponents([.day], from: interval.start, to: interval.end).day!
         }
         
-        let confirmed = String(format: "%@", self.lstTourDetails.first?["Confirmed"] as! CVarArg) // self.lstTourDetails.first["Confirmed"]
+        let confirmed = String(format: "%@", self.lstTourDetails.first?["Confirmed"] as? CVarArg ?? "") // self.lstTourDetails.first["Confirmed"]
         
         print(confirmed)
         
@@ -497,6 +519,60 @@ class TourPlanCalenderScreen : UIViewController, FSCalendarDelegate, FSCalendarD
     @objc func backVC() {
         if self.isBackEnabled == true {
             self.navigationController?.popViewController(animated: true)
+        }else {
+            tpMandatoryNeed()
+        }
+        
+    }
+    
+    func tpMandatoryNeed() {
+        
+         AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"get/tpdetails_mand&sfCode=\(sfCode)&rSF=\(sfCode)&divisionCode=\(divCode)&State_Code=\(stateCode)",method: .get,parameters: nil,headers: nil).validate(statusCode: 200..<209).responseData { AFData in
+            
+            switch AFData.result {
+                
+            case .success(let value):
+                print(value)
+                
+                let apiResponse = try? JSONSerialization.jsonObject(with: AFData.data!, options: JSONSerialization.ReadingOptions.allowFragments)
+                
+                guard let response = apiResponse as? AnyObject else {
+                    return
+                }
+                
+                guard let currentResponse = response["current"] as? [AnyObject] else{
+                    return
+                }
+                
+                guard let nextResponse = response["next"] as? [AnyObject] else{
+                    return
+                }
+                
+                
+                
+                
+                if UserSetup.shared.tpDcrDeviationNeed == 0 || UserSetup.shared.tpNeed == 1 {
+                    
+                    let storyboard = UIStoryboard(name: "AdminForms", bundle: nil)
+                    let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
+                    if !currentResponse.isEmpty {
+                        GlobalFunc.movetoHomePage()
+                        return
+                    }
+                    
+                    
+                    if UserSetup.shared.tpMandatoryNeed <= Int(Date().toString(format: "dd"))! {
+                        
+                        if !nextResponse.isEmpty {
+                            GlobalFunc.movetoHomePage()
+                            return
+                        }
+                    }
+                    
+                }
+            case .failure(let error):
+                Toast.show(message: error.errorDescription ?? "", controller: self)
+            }
         }
         
     }
