@@ -1136,7 +1136,13 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                         self.vwRejectReason.isHidden = true
                         
                         self.switchDeviate.isOn = false
-                        self.vwMainScroll.contentSize = CGSize(width: self.vwContent.frame.width, height: 850)
+                        let fwflg = self.myDyTp["WT"]?.FWFlg ?? ""
+                        if fwflg != "F" {
+                            self.vwMainScroll.contentSize = CGSize(width: self.vwContent.frame.width, height: 650)
+                        }else{
+                            self.vwMainScroll.contentSize = CGSize(width: self.vwContent.frame.width, height: 1000)
+                        }
+                        // self.vwMainScroll.contentSize = CGSize(width: self.vwContent.frame.width, height: 850)
                         return
                     }
                     status = statusVal

@@ -548,19 +548,12 @@ class TourPlanCalenderScreen : UIViewController, FSCalendarDelegate, FSCalendarD
                     return
                 }
                 
-                
-                
-                
                 if UserSetup.shared.tpDcrDeviationNeed == 0 || UserSetup.shared.tpNeed == 1 {
                     
-                    let storyboard = UIStoryboard(name: "AdminForms", bundle: nil)
-                    let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
                     if !currentResponse.isEmpty {
                         GlobalFunc.movetoHomePage()
                         return
                     }
-                    
-                    
                     if UserSetup.shared.tpMandatoryNeed <= Int(Date().toString(format: "dd"))! {
                         
                         if !nextResponse.isEmpty {

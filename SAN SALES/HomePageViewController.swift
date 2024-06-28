@@ -235,7 +235,30 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
                 
                 if (currentResponse.isEmpty || nextResponse.isEmpty) &&  Int(Date().toString(format: "dd"))! >= Int(UserSetup.shared.tpRemainderDate) ?? 0 && Int(Date().toString(format: "dd"))! <= UserSetup.shared.tpMandatoryNeed && UserSetup.shared.tpNeed == 1 {
                     
-                    Toast.show(message: "Reminder Enter the Tour Plan", controller: self)
+                    
+                    let LocalStoreage = UserDefaults.standard
+                    
+                    
+                 //  let isShown = LocalStoreage.data(forKey: "isRemainderShown")
+                    
+                    
+                    let isShown = UserDefaults.standard.bool(forKey: "isRemainderShown")
+                
+                    let today = UserDefaults.standard.string(forKey: "TodayDate")
+                    
+                    if today != Date().toString(format: "yyyy-MM-dd"){
+                        LocalStoreage.set(false, forKey: "isRemainderShown")
+                    }
+                    
+                    print(isShown)
+                    if !isShown{
+                        let date = Date().toString(format: "yyyy-MM-dd")
+                        LocalStoreage.set(true, forKey: "isRemainderShown")
+                        LocalStoreage.set("date", forKey: "TodayDate")
+                        Toast.show(message: "Reminder Enter the Tour Plan", controller: self)
+                    }
+                    
+                    
                 }
                 
                 
