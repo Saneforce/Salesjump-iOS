@@ -27,6 +27,8 @@
 		15B518BC2C13305D00DD75C1 /* DeviationRemarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B518BB2C13305D00DD75C1 /* DeviationRemarks.swift */; };
 		15C4B3182BECAA6B001ACBF4 /* RejectReasonViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15C4B3172BECAA6B001ACBF4 /* RejectReasonViewController.xib */; };
 		15C4B3192BECAA6B001ACBF4 /* RejectReasonViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15C4B3162BECAA6B001ACBF4 /* RejectReasonViewController.swift */; };
+		15F4504E2C2A88DF0074D285 /* MissedDateSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F4504D2C2A88DF0074D285 /* MissedDateSelection.swift */; };
+		15F450502C2A89AB0074D285 /* MissedDateRouteSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F4504F2C2A89AB0074D285 /* MissedDateRouteSelection.swift */; };
 		19247A3DB960E114A6C28FB3 /* Pods_SAN_SALES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 448C0B69977667C109C50683 /* Pods_SAN_SALES.framework */; };
 		381EF93D2B19DB9700CED65F /* UI+Constraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 381EF93C2B19DB9700CED65F /* UI+Constraints.swift */; };
 		382103F52BA16B83005C02CD /* Expense Entry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 382103F42BA16B83005C02CD /* Expense Entry.swift */; };
@@ -151,6 +153,8 @@
 		15B518BB2C13305D00DD75C1 /* DeviationRemarks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviationRemarks.swift; sourceTree = "<group>"; };
 		15C4B3162BECAA6B001ACBF4 /* RejectReasonViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RejectReasonViewController.swift; sourceTree = "<group>"; };
 		15C4B3172BECAA6B001ACBF4 /* RejectReasonViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RejectReasonViewController.xib; sourceTree = "<group>"; };
+		15F4504D2C2A88DF0074D285 /* MissedDateSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissedDateSelection.swift; sourceTree = "<group>"; };
+		15F4504F2C2A89AB0074D285 /* MissedDateRouteSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissedDateRouteSelection.swift; sourceTree = "<group>"; };
 		3453EBBCA5603BC17DBC6D2A /* Pods-SAN SALES.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SAN SALES.release.xcconfig"; path = "Target Support Files/Pods-SAN SALES/Pods-SAN SALES.release.xcconfig"; sourceTree = "<group>"; };
 		381EF93C2B19DB9700CED65F /* UI+Constraints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UI+Constraints.swift"; sourceTree = "<group>"; };
 		382103F42BA16B83005C02CD /* Expense Entry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Expense Entry.swift"; sourceTree = "<group>"; };
@@ -358,6 +362,8 @@
 				38DDD8482BA1D8120074AEF1 /* Daily Expense Entry.swift */,
 				388CD92B2BDA3ABE003A06F9 /* TourPlanSingleEntry.swift */,
 				388CD92A2BDA3ABE003A06F9 /* TourPlanCalenderScreen.swift */,
+				15F4504D2C2A88DF0074D285 /* MissedDateSelection.swift */,
+				15F4504F2C2A89AB0074D285 /* MissedDateRouteSelection.swift */,
 				155F39732BEA5FED0096139B /* ItemMultipleSelectionViewController.swift */,
 				155F39742BEA5FED0096139B /* ItemMultipleSelectionViewController.xib */,
 			);
@@ -772,6 +778,7 @@
 				3F5B297828891D5C002D226C /* CheckPermissions.swift in Sources */,
 				3F28CC1127DC856400B95964 /* MasterSync.swift in Sources */,
 				3883A09C2A176B6300B858CF /* SubmittedCalls.swift in Sources */,
+				15F450502C2A89AB0074D285 /* MissedDateRouteSelection.swift in Sources */,
 				1514DF762BD785D900E6B45A /* SuperStockistOrderList.swift in Sources */,
 				38F6F5AB2B19D2C2007090BF /* Summary.swift in Sources */,
 				3F28CC1427DC97F000B95964 /* cellListItem.swift in Sources */,
@@ -786,6 +793,7 @@
 				3FBF387727E4AA8300900007 /* Toast.swift in Sources */,
 				1514DF6C2BD7839D00E6B45A /* CallPreview.swift in Sources */,
 				3F0822BD29000872009C33EA /* AdminMenus.swift in Sources */,
+				15F4504E2C2A88DF0074D285 /* MissedDateSelection.swift in Sources */,
 				3F063535284171800027842E /* NewOutlet.swift in Sources */,
 				386A43952A1CC63100CE1833 /* PrimarySubmittedDCR.swift in Sources */,
 				386A43912A1CBB0200CE1833 /* SubmittedDCR.swift in Sources */,
