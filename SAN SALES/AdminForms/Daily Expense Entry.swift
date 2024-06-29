@@ -1074,7 +1074,7 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
         for needs in Needs_Entry{
             if needs.Photo_Mandatory == 1 && needs.Photo_Nd == 1 && needs.amount != ""{
                 if needs.image.isEmpty{
-                    return Toast.show(message: "ADD \(needs.Name) PHOTO")
+                    return Toast.show(message: "Add \(needs.Name) Photo")
                 }
             }
         }

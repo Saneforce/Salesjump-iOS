@@ -709,10 +709,10 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
                                             }
                                         }
                                     }
-                                    if Load_Couts == 1{
-                                        apr_flg = "-1"
-                                        Load_Couts = 0
-                                    }
+//                                    if Load_Couts == 1{
+//                                        apr_flg = "-1"
+//                                        Load_Couts = 0
+//                                    }
                                     
                                     if apr_flg == "0" || apr_flg == "1"{
                                         Sent_apr_bt.backgroundColor = .lightGray
@@ -797,6 +797,26 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
                                                 }
                                         }
                                     }
+                                    
+                                    // srt_end_exp
+                                    if let srt_end_exp = jsonObject["srt_end_exp"] as? [[String: Any]]{
+                                        for i in srt_end_exp {
+                                            if let dateString = i["full_date"] as? String {
+                                                let dateFormatter = DateFormatter()
+                                                dateFormatter.dateFormat = "dd/MM/yyyy"
+                                                
+                                                if let date = dateFormatter.date(from: dateString) {
+                                                    let cell = calendar.cell(for: date, at: .current)
+                                                    addDART_ORG(to: cell, text: ".")
+                                                } else {
+                                                    print("Failed to convert \(dateString) to Date.")
+                                                }
+                                            } else {
+                                                print("Date string is nil or not in the expected format.")
+                                            }
+                                        }
+                                    }
+                                    
                                     // exp_submit
                                     if let ExpDate = jsonObject["exp_submit"] as? [AnyObject] {
                                         print(ExpDate)
@@ -820,24 +840,7 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
                                             }
                                         }
                                     }
-                                    // srt_end_exp
-                                    if let srt_end_exp = jsonObject["srt_end_exp"] as? [[String: Any]]{
-                                        for i in srt_end_exp {
-                                            if let dateString = i["full_date"] as? String {
-                                                let dateFormatter = DateFormatter()
-                                                dateFormatter.dateFormat = "dd/MM/yyyy"
-                                                
-                                                if let date = dateFormatter.date(from: dateString) {
-                                                    let cell = calendar.cell(for: date, at: .current)
-                                                    addDART_ORG(to: cell, text: ".")
-                                                } else {
-                                                    print("Failed to convert \(dateString) to Date.")
-                                                }
-                                            } else {
-                                                print("Date string is nil or not in the expected format.")
-                                            }
-                                        }
-                                    }
+                                 
                                     //rej_exp
 
                                     if let exp_SubitDate = exp_SubitDate as? [[String: Any]],

@@ -80,6 +80,7 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource, UIIma
         }
         calendar.delegate = self
         calendar.dataSource = self
+        calendar.placeholderType = .none
         BT_Back.addTarget(target: self, action: #selector(GotoHome))
         Select_Date.addTarget(target: self, action: #selector(Opencalender))
         Start_Photo.addTarget(target: self, action: #selector(openCamera_Km))
@@ -95,10 +96,10 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource, UIIma
         Start_Text_KM.keyboardType = UIKeyboardType.numberPad
         Ending_Fare.keyboardType = UIKeyboardType.numberPad
         Per_KM.keyboardType = UIKeyboardType.numberPad
-        From_plc.text = "no data"
-        To_plc.text = "no data"
-        Start_KM.text = "no data"
-        Mode_OF_Trav.text = "no data"
+        From_plc.text = "-"
+        To_plc.text = "-"
+        Start_KM.text = "-"
+        Mode_OF_Trav.text = "-"
         if Date != ""{
             Select_Date.text = Date
             srtExpenseData(Select_date:Date!)
@@ -130,7 +131,7 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource, UIIma
 
         // Calculate the start of the month 3 months ago
         var comp = DateComponents()
-        comp.month = -3
+        comp.month = -1
         let currentDate = Foundation.Date()
         guard let threeMonthsAgo = Calendar.current.date(byAdding: comp, to: currentDate) else {
             fatalError("Error calculating date")
@@ -259,8 +260,6 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource, UIIma
                 Toast.show(message: "Please provide a valid Personal KM", controller: self)
                 return false
             }
-
-            
         }
         
         if let Star_KM =  Double(Start_KM.text!),let end = Double(Start_Text_KM.text!), Star_KM > end{
@@ -422,22 +421,42 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource, UIIma
     
     func End_exp_date(){
         let dateFormatter = DateFormatter()
-        let date = Foundation.Date()
         dateFormatter.dateFormat = "yyyy-MM-dd"
-    
-        //  Start of Month
-        let comp: DateComponents = Calendar.current.dateComponents([.year, .month], from: date)
-        let startOfMonth = Calendar.current.date(from: comp)!
-        print(dateFormatter.string(from: startOfMonth))
         
-        //  End of Month
+        // Calculate the start of the month 3 months ago
+        var comp = DateComponents()
+        comp.month = -1
+       // comp.month = 0
+        let currentDate = Foundation.Date()
+        guard let threeMonthsAgo = Calendar.current.date(byAdding: comp, to: currentDate) else {
+            fatalError("Error calculating date")
+        }
+        var startOfMonthComponents = Calendar.current.dateComponents([.year, .month], from: threeMonthsAgo)
+        startOfMonthComponents.day = 1
+        guard let startOfMonth = Calendar.current.date(from: startOfMonthComponents) else {
+            fatalError("Error calculating start of month")
+        }
+        
+        let currentDates = Foundation.Date()
+        
+        var components = Calendar.current.dateComponents([.year, .month], from: currentDate)
+        components.month! += 1
+        components.day = 1
+        guard let startOfNextMonth = Calendar.current.date(from: components) else {
+            fatalError("Error calculating start of next month")
+        }
+        let lastDayOfCurrentMonth = Calendar.current.date(byAdding: .day, value: -1, to: startOfNextMonth)
+        
         var comps2 = DateComponents()
-        comps2.month = 1
-        comps2.day = -1
-        let endOfMonth = Calendar.current.date(byAdding: comps2, to: startOfMonth)
-        print(dateFormatter.string(from: endOfMonth!))
+        comps2.month = 0
+        comps2.day = 0
+        let date = Foundation.Date()
+        
+        guard let endOfMonth = Calendar.current.date(byAdding: comps2, to: lastDayOfCurrentMonth!) else {
+            fatalError("Error calculating end of month")
+        }
         let axn = "get/expSubmitDates"
-        let apiKey = "\(axn)&from_date=\(dateFormatter.string(from: startOfMonth))&to_date=\(dateFormatter.string(from: endOfMonth!))&selected_period=null&sf_code=\(SFCode)"
+        let apiKey = "\(axn)&from_date=\(dateFormatter.string(from: startOfMonth))&to_date=\(dateFormatter.string(from: endOfMonth))&selected_period=null&sf_code=\(SFCode)"
         
         let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
         let url = APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKeyWithoutCommas
@@ -468,18 +487,46 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource, UIIma
                                 let dateFormatter = DateFormatter()
                                 dateFormatter.dateFormat = "dd/MM/yyyy"
                                 let Formated_Date = dateFormatter.date(from: full_date)
-                                let cell = calendar.cell(for: Formated_Date!, at: .current)
-                                addLetter(to: cell, text: ".")
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [self] in
+                                    if let cell = calendar.cell(for: Formated_Date!, at: .current){
+                                        addLetter(to: cell, text: ".")
+                                    }else{
+                                        print("Cell is nil for date: \(full_date)")
+                                    }
+                                }
                                 expsub_Date = expsub_Date.filter { $0.Dates != full_date }
                             }
                         }
                     }
+                    print(expsub_Date)
                 }
             case .failure(let error):
                 Toast.show(message: error.errorDescription!)
             }
         }
     }
+    
+    
+    func calendarCurrentPageDidChange(_ calendar: FSCalendar) {
+        
+        self.ShowLoading(Message: "Loading...")
+        removeLabels()
+        
+        End_exp_date()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                               self.LoadingDismiss()
+                           }
+        
+    }
+    
+    func removeLabels(){
+       
+         for (_, label) in labelsDictionary {
+                label.removeFromSuperview()
+         }
+         labelsDictionary.removeAll()
+     }
+    
     func addLetter(to cell: FSCalendarCell?, text:String){
         let letterLabel = UILabel()
         letterLabel.text = text

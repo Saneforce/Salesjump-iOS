@@ -142,6 +142,7 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
         expSubmitDates()
         calendar.delegate = self
         calendar.dataSource = self
+        calendar.placeholderType = .none
         Drop_Down_TB.dataSource = self
         Drop_Down_TB.delegate = self
         calendar.appearance.titlePlaceholderColor = .lightGray
@@ -263,7 +264,7 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
 
         // Calculate the start of the month 3 months ago
         var comp = DateComponents()
-        comp.month = -3
+        comp.month = -1
         let currentDate = Date()
         guard let threeMonthsAgo = Calendar.current.date(byAdding: comp, to: currentDate) else {
             fatalError("Error calculating date")
@@ -296,14 +297,15 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
         }
     }
 
-    func expSubmitDates(){
-    
+    func expSubmitDates() {
+       // expsub_Date.removeAll()
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
-
+        
         // Calculate the start of the month 3 months ago
         var comp = DateComponents()
-        comp.month = -3
+        comp.month = -1
+       // comp.month = 0
         let currentDate = Date()
         guard let threeMonthsAgo = Calendar.current.date(byAdding: comp, to: currentDate) else {
             fatalError("Error calculating date")
@@ -315,7 +317,7 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
         }
         
         let currentDates = Date()
-
+        
         var components = Calendar.current.dateComponents([.year, .month], from: currentDate)
         components.month! += 1
         components.day = 1
@@ -332,7 +334,6 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
         guard let endOfMonth = Calendar.current.date(byAdding: comps2, to: lastDayOfCurrentMonth!) else {
             fatalError("Error calculating end of month")
         }
-        
         
         self.ShowLoading(Message: "Loading...")
         let axn = "get/expSubmitDates"
@@ -383,18 +384,58 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
                             }
                         }
                     }
+                    
+                    print(expsub_Date)
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                                           self.LoadingDismiss()
-                                       }
+                        self.LoadingDismiss()
+                    }
                 }
             case .failure(let error):
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                                       self.LoadingDismiss()
-                                   }
+                    self.LoadingDismiss()
+                }
                 Toast.show(message: error.errorDescription!)
             }
         }
     }
+    
+
+    func getLastThreeMonthsDates() -> [String] {
+        var dates: [String] = []
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd/MM/yyyy"
+        
+        // Calculate the start of the month 3 months ago
+        var comp = DateComponents()
+        comp.month = -3
+        let currentDate = Date()
+        guard let threeMonthsAgo = Calendar.current.date(byAdding: comp, to: currentDate) else {
+            fatalError("Error calculating date")
+        }
+        var startOfMonthComponents = Calendar.current.dateComponents([.year, .month], from: threeMonthsAgo)
+        startOfMonthComponents.day = 1
+        guard let startOfMonth = Calendar.current.date(from: startOfMonthComponents) else {
+            fatalError("Error calculating start of month")
+        }
+        
+        // Iterate through each day from startDate to currentDate
+        var date = startOfMonth
+        let calendar = Calendar.current
+        while date <= currentDate {
+            let formattedDate = dateFormatter.string(from: date)
+            dates.append(formattedDate)
+            // Move to the next day
+            date = calendar.date(byAdding: .day, value: 1, to: date)!
+        }
+        
+        return dates
+    }
+
+
+
+
+    
+
     func addLetter(to cell: FSCalendarCell?, text:String) {
         let letterLabel = UILabel()
         letterLabel.text = text
@@ -406,6 +447,14 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
         cell?.addSubview(letterLabel)
         labelsDictionary[cell!] = letterLabel
     }
+    
+    func removeLabels(){
+       
+         for (_, label) in labelsDictionary {
+                label.removeFromSuperview()
+         }
+         labelsDictionary.removeAll()
+     }
     
     func getallowns(){
         self.ShowLoading(Message: "Loading...")
@@ -682,13 +731,13 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
             return false
         }
        // Enter_From Validation
-        if Enter_From.text == "" {
+        if let enterFromText = Enter_From.text?.trimmingCharacters(in: .whitespaces), enterFromText.isEmpty {
             Toast.show(message: "Enter From", controller: self)
             return false
         }
         // To Validation
         if Select_To.text == "others"{
-            if Enter_To.text == ""{
+            if let EnterText = Enter_To.text?.trimmingCharacters(in: .whitespaces),EnterText.isEmpty{
                 Toast.show(message: "Enter To", controller: self)
                 return false
             }
@@ -766,6 +815,8 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
         Drop_Down_Sc.isHidden = true
     }
     @objc private func Open_Calender(){
+        
+       
         for letter in expsub_Date {
             let datess = letter.Dates
             let dateFormatter = DateFormatter()
@@ -773,17 +824,32 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
             
             if let formattedDate = dateFormatter.date(from: datess) {
                 print("Formatted Date: \(formattedDate)")
-                if let cell = calendar.cell(for: formattedDate, at: .current) {
-                    addLetter(to: cell, text: ".")
-                } else {
-                    print("Cell is nil for date: \(datess)")
-                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [self] in
+                    if let cell = calendar.cell(for: formattedDate, at: .current) {
+                        addLetter(to: cell, text: ".")
+                    } else {
+                        print("Cell is nil for date: \(datess)")
+                    }
+                    }
+                
+               
             } else {
                 print("Failed to parse date: \(datess)")
             }
         }
         calendar_view.isHidden = false
     }
+    func calendarCurrentPageDidChange(_ calendar: FSCalendar) {
+        
+        self.ShowLoading(Message: "Loading...")
+        removeLabels()
+        
+        Open_Calender()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                               self.LoadingDismiss()
+                           }
+     }
+    
     @objc private func Clos_Calender(){
         calendar_view.isHidden = true
     }
