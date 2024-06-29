@@ -131,10 +131,10 @@ class TourPlanCalenderScreen : UIViewController, FSCalendarDelegate, FSCalendarD
         print("TourPlanCalenderScreen deCollected")
     }
     
-//    override func viewWillAppear(_ animated: Bool) {
-//        super.viewWillAppear(animated)
-//        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
-//    }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
+    }
     
     func getUserDetails(){
         let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
