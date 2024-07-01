@@ -231,36 +231,48 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
                 
                 let apiResponse = try? JSONSerialization.jsonObject(with: AFData.data!, options: JSONSerialization.ReadingOptions.allowFragments)
                 
-                print(apiResponse)
-                
-                
-                
                 guard let response = apiResponse as? AnyObject else {
                     return
                 }
-                print(response)
                 
                 guard let currentResponse = response["current"] as? [AnyObject] else{
                     return
                 }
-                print(currentResponse)
                 
                 guard let nextResponse = response["next"] as? [AnyObject] else{
                     return
                 }
-                print(nextResponse)
                 
-                if (currentResponse.isEmpty || nextResponse.isEmpty) &&  Int(Date().toString(format: "dd"))! >= Int(UserSetup.shared.tpRemainderDate) ?? 0 && Int(Date().toString(format: "dd"))! <= UserSetup.shared.tpMandatoryNeed {
+                if (currentResponse.isEmpty || nextResponse.isEmpty) &&  Int(Date().toString(format: "dd"))! >= Int(UserSetup.shared.tpRemainderDate) ?? 0 && Int(Date().toString(format: "dd"))! <= UserSetup.shared.tpMandatoryNeed && UserSetup.shared.tpNeed == 1 {
                     
-                    Toast.show(message: "Reminder Enter the Tour Plan", controller: self)
+                    
+                    let LocalStoreage = UserDefaults.standard
+                    
+                    
+                 //  let isShown = LocalStoreage.data(forKey: "isRemainderShown")
+                    
+                    
+                    let isShown = UserDefaults.standard.bool(forKey: "isRemainderShown")
+                
+                    let today = UserDefaults.standard.string(forKey: "TodayDate")
+                    
+                    if today != Date().toString(format: "yyyy-MM-dd"){
+                        LocalStoreage.set(false, forKey: "isRemainderShown")
+                    }
+                    
+                    print(isShown)
+                    if !isShown{
+                        let date = Date().toString(format: "yyyy-MM-dd")
+                        LocalStoreage.set(true, forKey: "isRemainderShown")
+                        LocalStoreage.set("date", forKey: "TodayDate")
+                        Toast.show(message: "Reminder Enter the Tour Plan", controller: self)
+                    }
+                    
+                    
                 }
                 
                 
-                if UserSetup.shared.tpDcrDeviationNeed == 0 && UserSetup.shared.tpNeed == 1 {
-                    print(UserSetup.shared.tpDcrDeviationNeed)
-                    print(UserSetup.shared.tpNeed)
-                    print(UserSetup.shared.tpRemainderDate)
-                    print(UserSetup.shared.tpMandatoryNeed)
+                if UserSetup.shared.tpDcrDeviationNeed == 0 || UserSetup.shared.tpNeed == 1 {
                     
                     let storyboard = UIStoryboard(name: "AdminForms", bundle: nil)
                     let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
@@ -276,8 +288,7 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
                     
                     
                     if UserSetup.shared.tpMandatoryNeed <= Int(Date().toString(format: "dd"))! {
-                        print(UserSetup.shared.tpMandatoryNeed)
-                        print(Int(Date().toString(format: "dd"))!)
+                        
                         if nextResponse.isEmpty {
                             let tpMnuVc = storyboard.instantiateViewController(withIdentifier: "sbAdminMnu") as! AdminMenus
                             let trPln = storyboard.instantiateViewController(withIdentifier: "sbTourPlanCalenderScreen") as! TourPlanCalenderScreen
