@@ -76,6 +76,7 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
     var srt_end_exp: [[String: Any]] = []
     var attance_flg:[[String: Any]] = []
     var lstWortyp: [AnyObject] = []
+    var exp_neededs = 0
     override func viewDidLoad(){
         super.viewDidLoad()
         YearPostion.text = selectYear
@@ -94,6 +95,7 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
         let lstWorktypData: String=LocalStoreage.string(forKey: "Worktype_Master")!
         if let list = GlobalFunc.convertToDictionary(text: lstWorktypData) as? [AnyObject] {
             lstWortyp = list;
+            print(lstWortyp)
         }
         getUserDetails()
         calendar.delegate=self
@@ -226,7 +228,8 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
                 print("Invalid date format")
             }
             print(item.Eff_Month)
-            
+            print(FDate)
+            print(TDate)
             Sent_Apr_Det.append(Apr_Data(Period_Id: item.Period_Id, Eff_Month: String(item.Eff_Month), Eff_Year: String(item.Eff_Year), From_Date: item.From_Date, To_Date: item.To_Date))
             expSubmitDates()
             calendar.reloadData()
@@ -276,6 +279,8 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
                                    let pln_date = i["pln_date"] as? String ,
                                    pln_date == dates2 || pln_date == dates && Att_FWFlg == Work_FWFlg {
                                     exp_needed = (lst["exp_needed"] as? Int ?? 0)!
+                                    exp_neededs = (lst["exp_needed"] as? Int ?? 0)!
+                                    
                                 }
                             }
                         }
@@ -568,7 +573,8 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
             print("Invalid date format")
         }
         print(item.Eff_Month)
-        
+        print(FDate)
+        print(TDate)
         Sent_Apr_Det.append(Apr_Data(Period_Id: item.Period_Id, Eff_Month: String(item.Eff_Month), Eff_Year: String(item.Eff_Year), From_Date: item.From_Date, To_Date: item.To_Date))
         expSubmitDates()
         calendar.reloadData()
@@ -705,10 +711,10 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
                                             }
                                         }
                                     }
-                                    if Load_Couts == 1{
-                                        apr_flg = "-1"
-                                        Load_Couts = 0
-                                    }
+//                                    if Load_Couts == 1{
+//                                        apr_flg = "-1"
+//                                        Load_Couts = 0
+//                                    }
                                     
                                     if apr_flg == "0" || apr_flg == "1"{
                                         Sent_apr_bt.backgroundColor = .lightGray
@@ -793,6 +799,26 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
                                                 }
                                         }
                                     }
+                                    
+                                    // srt_end_exp
+                                    if let srt_end_exp = jsonObject["srt_end_exp"] as? [[String: Any]]{
+                                        for i in srt_end_exp {
+                                            if let dateString = i["full_date"] as? String {
+                                                let dateFormatter = DateFormatter()
+                                                dateFormatter.dateFormat = "dd/MM/yyyy"
+                                                
+                                                if let date = dateFormatter.date(from: dateString) {
+                                                    let cell = calendar.cell(for: date, at: .current)
+                                                    addDART_ORG(to: cell, text: ".")
+                                                } else {
+                                                    print("Failed to convert \(dateString) to Date.")
+                                                }
+                                            } else {
+                                                print("Date string is nil or not in the expected format.")
+                                            }
+                                        }
+                                    }
+                                    
                                     // exp_submit
                                     if let ExpDate = jsonObject["exp_submit"] as? [AnyObject] {
                                         print(ExpDate)
@@ -816,24 +842,7 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
                                             }
                                         }
                                     }
-                                    // srt_end_exp
-                                    if let srt_end_exp = jsonObject["srt_end_exp"] as? [[String: Any]]{
-                                        for i in srt_end_exp {
-                                            if let dateString = i["full_date"] as? String {
-                                                let dateFormatter = DateFormatter()
-                                                dateFormatter.dateFormat = "dd/MM/yyyy"
-                                                
-                                                if let date = dateFormatter.date(from: dateString) {
-                                                    let cell = calendar.cell(for: date, at: .current)
-                                                    addDART_ORG(to: cell, text: ".")
-                                                } else {
-                                                    print("Failed to convert \(dateString) to Date.")
-                                                }
-                                            } else {
-                                                print("Date string is nil or not in the expected format.")
-                                            }
-                                        }
-                                    }
+                                 
                                     //rej_exp
 
                                     if let exp_SubitDate = exp_SubitDate as? [[String: Any]],
@@ -915,6 +924,7 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
             myDyPln.day_Plan = Day_Plan_Data
             myDyPln.set_Date = Set_Date
             myDyPln.PeriodicData = Nav_PeriodicData
+            myDyPln.ExpEditNeed = exp_neededs
             
             let formatters = DateFormatter()
             formatters.dateFormat = "yyyy-MM-dd"

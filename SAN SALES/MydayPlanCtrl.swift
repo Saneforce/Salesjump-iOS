@@ -1323,6 +1323,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                                 }
                                    let LocalStoreage = UserDefaults.standard
                                    LocalStoreage.set(prettyPrintedJson, forKey: "Mydayplan")
+                                print(prettyPrintedJson)
                                     let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
                                     UIApplication.shared.windows.first?.rootViewController = viewController
                                     UIApplication.shared.windows.first?.makeKeyAndVisible()

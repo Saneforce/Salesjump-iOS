@@ -70,16 +70,18 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource, UIIma
     var StrEnd_Need = 1
     var photo_Km = ""
     var Photo_End_Att = ""
+    var EndingFare = 0
     override func viewDidLoad() {
         super.viewDidLoad()
         getUserDetails()
-        End_Expense_Scr.text = End_exp_title
+        End_Expense_Scr.text = "End Expense"
         if Date_Nd == true{
         Date_View.isHidden = true
         Date_View_Hight.constant = 0
         }
         calendar.delegate = self
         calendar.dataSource = self
+        calendar.placeholderType = .none
         BT_Back.addTarget(target: self, action: #selector(GotoHome))
         Select_Date.addTarget(target: self, action: #selector(Opencalender))
         Start_Photo.addTarget(target: self, action: #selector(openCamera_Km))
@@ -95,10 +97,10 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource, UIIma
         Start_Text_KM.keyboardType = UIKeyboardType.numberPad
         Ending_Fare.keyboardType = UIKeyboardType.numberPad
         Per_KM.keyboardType = UIKeyboardType.numberPad
-        From_plc.text = "no data"
-        To_plc.text = "no data"
-        Start_KM.text = "no data"
-        Mode_OF_Trav.text = "no data"
+        From_plc.text = "-"
+        To_plc.text = "-"
+        Start_KM.text = "-"
+        Mode_OF_Trav.text = "-"
         if Date != ""{
             Select_Date.text = Date
             srtExpenseData(Select_date:Date!)
@@ -125,13 +127,22 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource, UIIma
         return Foundation.Date()
     }
     func minimumDate(for calendar: FSCalendar) -> Date {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+
+        // Calculate the start of the month 3 months ago
+        var comp = DateComponents()
+        comp.month = -1
         let currentDate = Foundation.Date()
-        let calendar = Calendar.current
-        let components = calendar.dateComponents([.year, .month], from: currentDate)
-        guard let firstDayOfMonth = calendar.date(from: components) else {
-            return currentDate
+        guard let threeMonthsAgo = Calendar.current.date(byAdding: comp, to: currentDate) else {
+            fatalError("Error calculating date")
         }
-        return firstDayOfMonth
+        var startOfMonthComponents = Calendar.current.dateComponents([.year, .month], from: threeMonthsAgo)
+        startOfMonthComponents.day = 1
+        guard let startOfMonth = Calendar.current.date(from: startOfMonthComponents) else {
+            fatalError("Error calculating start of month")
+        }
+        return startOfMonth
     }
 
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
@@ -214,7 +225,7 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource, UIIma
     @IBAction func Close_Calender_View(_ sender: Any) {
         Calender_View.isHidden = true
     }
-    func validate() -> Bool {
+    func validate(personalKm:Bool) -> Bool {
         if Select_Date.text == "Select Date"{
             Toast.show(message: "Select Date", controller: self)
             return false
@@ -235,6 +246,11 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource, UIIma
                 Toast.show(message: "Enter Ending Fare", controller: self)
                 return false
             }
+            
+            if let endingFare = Int(Ending_Fare.text ?? ""), endingFare > EndingFare {
+                Toast.show(message: "Enter the fare less than \(EndingFare)", controller: self)
+                return false
+            }
         }
     
         if Ending_rmk.text == ""{
@@ -244,6 +260,10 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource, UIIma
         if StrEnd_Need == 1{
             if Per_KM.text == ""{
                 Toast.show(message: "Enter Personal KM", controller: self)
+                return false
+            }
+            if personalKm == true{
+                Toast.show(message: "Please provide a valid Personal KM", controller: self)
                 return false
             }
         }
@@ -257,8 +277,45 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource, UIIma
         return true
     }
     @IBAction func Save_Data(_ sender: Any) {
+        var StKM = 0
+        var EndKM = 0
+        var perKm = 0
+        var AllPerKm:Bool = false
+        var StartKm = ""
+        if end_Exp_Datas.count == 0 {
+            StartKm = ""
+        }else{
+             StartKm = end_Exp_Datas[0].Start_KM
+        }
+        if StartKm != "" {
+            StKM = Int(StartKm) ?? 0
+        } else {
+            StKM = 0
+        }
+
+        if let endKM = Start_Text_KM.text, !endKM.isEmpty {
+            EndKM = Int(endKM) ?? 0
+        } else {
+            EndKM = 0
+        }
         
-        if validate() == false {
+        
+        if let PerKm = Per_KM.text, !PerKm.isEmpty{
+            perKm = Int(PerKm)!
+        }else{
+            perKm = 0
+        }
+        
+        let TotalKm = EndKM - StKM
+        
+        if (TotalKm < perKm){
+            AllPerKm = true
+        }else{
+            AllPerKm = false
+        }
+        
+        
+        if validate(personalKm: AllPerKm) == false {
             return
         }
         
@@ -370,22 +427,42 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource, UIIma
     
     func End_exp_date(){
         let dateFormatter = DateFormatter()
-        let date = Foundation.Date()
         dateFormatter.dateFormat = "yyyy-MM-dd"
-    
-        //  Start of Month
-        let comp: DateComponents = Calendar.current.dateComponents([.year, .month], from: date)
-        let startOfMonth = Calendar.current.date(from: comp)!
-        print(dateFormatter.string(from: startOfMonth))
         
-        //  End of Month
+        // Calculate the start of the month 3 months ago
+        var comp = DateComponents()
+        comp.month = -1
+       // comp.month = 0
+        let currentDate = Foundation.Date()
+        guard let threeMonthsAgo = Calendar.current.date(byAdding: comp, to: currentDate) else {
+            fatalError("Error calculating date")
+        }
+        var startOfMonthComponents = Calendar.current.dateComponents([.year, .month], from: threeMonthsAgo)
+        startOfMonthComponents.day = 1
+        guard let startOfMonth = Calendar.current.date(from: startOfMonthComponents) else {
+            fatalError("Error calculating start of month")
+        }
+        
+        let currentDates = Foundation.Date()
+        
+        var components = Calendar.current.dateComponents([.year, .month], from: currentDate)
+        components.month! += 1
+        components.day = 1
+        guard let startOfNextMonth = Calendar.current.date(from: components) else {
+            fatalError("Error calculating start of next month")
+        }
+        let lastDayOfCurrentMonth = Calendar.current.date(byAdding: .day, value: -1, to: startOfNextMonth)
+        
         var comps2 = DateComponents()
-        comps2.month = 1
-        comps2.day = -1
-        let endOfMonth = Calendar.current.date(byAdding: comps2, to: startOfMonth)
-        print(dateFormatter.string(from: endOfMonth!))
+        comps2.month = 0
+        comps2.day = 0
+        let date = Foundation.Date()
+        
+        guard let endOfMonth = Calendar.current.date(byAdding: comps2, to: lastDayOfCurrentMonth!) else {
+            fatalError("Error calculating end of month")
+        }
         let axn = "get/expSubmitDates"
-        let apiKey = "\(axn)&from_date=\(dateFormatter.string(from: startOfMonth))&to_date=\(dateFormatter.string(from: endOfMonth!))&selected_period=null&sf_code=\(SFCode)"
+        let apiKey = "\(axn)&from_date=\(dateFormatter.string(from: startOfMonth))&to_date=\(dateFormatter.string(from: endOfMonth))&selected_period=null&sf_code=\(SFCode)"
         
         let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
         let url = APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKeyWithoutCommas
@@ -416,18 +493,46 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource, UIIma
                                 let dateFormatter = DateFormatter()
                                 dateFormatter.dateFormat = "dd/MM/yyyy"
                                 let Formated_Date = dateFormatter.date(from: full_date)
-                                let cell = calendar.cell(for: Formated_Date!, at: .current)
-                                addLetter(to: cell, text: ".")
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [self] in
+                                    if let cell = calendar.cell(for: Formated_Date!, at: .current){
+                                        addLetter(to: cell, text: ".")
+                                    }else{
+                                        print("Cell is nil for date: \(full_date)")
+                                    }
+                                }
                                 expsub_Date = expsub_Date.filter { $0.Dates != full_date }
                             }
                         }
                     }
+                    print(expsub_Date)
                 }
             case .failure(let error):
                 Toast.show(message: error.errorDescription!)
             }
         }
     }
+    
+    
+    func calendarCurrentPageDidChange(_ calendar: FSCalendar) {
+        
+        self.ShowLoading(Message: "Loading...")
+        removeLabels()
+        
+        End_exp_date()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                               self.LoadingDismiss()
+                           }
+        
+    }
+    
+    func removeLabels(){
+       
+         for (_, label) in labelsDictionary {
+                label.removeFromSuperview()
+         }
+         labelsDictionary.removeAll()
+     }
+    
     func addLetter(to cell: FSCalendarCell?, text:String){
         let letterLabel = UILabel()
         letterLabel.text = text
@@ -461,17 +566,32 @@ func srtExpenseData(Select_date:String){
                     if let firstItem = json.first {
                             // NeedAttachment
                         if let NeedAttachment = firstItem["NeedAttachment"] as? Int, NeedAttachment == 0{
-                            Attach_Need = 0
-                            End_Attachment.isHidden = true
-                            End_Attachmeni_Height.constant = 0
+                            if let MaxKm = firstItem["MaxKm"] as? Int , MaxKm > 0 {
+                                EndingFare = MaxKm
+                                Attach_Need = 1
+                                End_Attachment.isHidden = false
+                                End_Attachmeni_Height.constant = 80
+                            }else{
+                                Attach_Need = 0
+                                End_Attachment.isHidden = true
+                                End_Attachmeni_Height.constant = 0
+                            }
+                            
                         }else if let NeedAttachment = firstItem["NeedAttachment"] as? Int, NeedAttachment == 1{
                             Attach_Need = 1
                             End_Attachment.isHidden = false
                             End_Attachmeni_Height.constant = 80
                         }else{
-                            Attach_Need = 0
-                            End_Attachment.isHidden = true
-                            End_Attachmeni_Height.constant = 0
+                            if let MaxKm = firstItem["MaxKm"] as? Int , MaxKm > 0 {
+                                EndingFare = MaxKm
+                                Attach_Need = 1
+                                End_Attachment.isHidden = false
+                                End_Attachmeni_Height.constant = 80
+                            }else{
+                                Attach_Need = 0
+                                End_Attachment.isHidden = true
+                                End_Attachmeni_Height.constant = 0
+                            }
                         }
                         // StEndNeed
                         if let StEndNeed = firstItem["StEndNeed"] as? Int,StEndNeed == 0{
