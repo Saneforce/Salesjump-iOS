@@ -139,15 +139,18 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
                          self.view.layoutIfNeeded()
         var moveMyPln: Bool=false
         if LocalStoreage.string(forKey: "Mydayplan") == nil {
+            LocalStoreage.set("0", forKey: "dayplan")
             moveMyPln=true
         }else{
             let lstMyPlnData: String = LocalStoreage.string(forKey: "Mydayplan")!
             if let list = GlobalFunc.convertToDictionary(text: lstMyPlnData) as? [AnyObject] {
                 lstMyplnList = list;
                 if lstMyplnList.count<1 {
+                    LocalStoreage.set("0", forKey: "dayplan")
                     moveMyPln=true
                 }
                 else{
+                    LocalStoreage.set("1", forKey: "dayplan")
                     let formatter = DateFormatter()
                     formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
                     //let finalDate = formatter.date(from: plnDt["plnDate"] as! String)
@@ -211,7 +214,6 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
     }
     
     func tpMandatoryNeed() {
-         // http://fmcg.salesjump.in/server/native_Db_V13.php?State_Code=24&divisionCode=29%2C&rSF=SEFMR0038&axn=get%2Ftpdetails_mand&sfCode=SEFMR0038
 
         print(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"get/tpdetails_mand&sfCode=\(SFCode)&rSF=\(SFCode)&divisionCode=\(DivCode)&State_Code=\(StateCode)")
         
@@ -358,10 +360,7 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         
 
         if (UserSetup.shared.SrtEndKMNd != 0 && UserSetup.shared.exp_auto == 2 ){
-            let datas=LocalStoreage.string(forKey: "Mydayplan")
-            print(datas)
-        if let data=LocalStoreage.string(forKey: "Mydayplan"), data != "[\n\n]" {
-            print(data)
+        if let data=LocalStoreage.string(forKey: "dayplan"), data == "1" {
             if let attendanceView=LocalStoreage.string(forKey: "attendanceView") {
                 if (attendanceView == "0") {
                     // Naviagte To Strat Expense
@@ -675,6 +674,7 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
                        print("Error: Could print JSON in String")
                        return
                    }
+                    print(prettyPrintedJson)
                    let LocalStoreage = UserDefaults.standard
                    LocalStoreage.set(prettyPrintedJson, forKey: "Mydayplan")
                 Validate?()

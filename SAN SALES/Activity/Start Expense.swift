@@ -754,10 +754,10 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
         }
         // Start Km Image
         if Start_Km_Img.isHidden == true {
-            if StarKmNeed == 1 {
-                Toast.show(message: "Add Start KM Photo", controller: self)
-                return false
-            }
+//            if StarKmNeed == 1 {
+//                Toast.show(message: "Add Start KM Photo", controller: self)
+//                return false
+//            }
         }
         
         return true
