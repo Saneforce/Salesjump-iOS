@@ -228,7 +228,8 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
                 print("Invalid date format")
             }
             print(item.Eff_Month)
-            
+            print(FDate)
+            print(TDate)
             Sent_Apr_Det.append(Apr_Data(Period_Id: item.Period_Id, Eff_Month: String(item.Eff_Month), Eff_Year: String(item.Eff_Year), From_Date: item.From_Date, To_Date: item.To_Date))
             expSubmitDates()
             calendar.reloadData()
@@ -572,7 +573,8 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
             print("Invalid date format")
         }
         print(item.Eff_Month)
-        
+        print(FDate)
+        print(TDate)
         Sent_Apr_Det.append(Apr_Data(Period_Id: item.Period_Id, Eff_Month: String(item.Eff_Month), Eff_Year: String(item.Eff_Year), From_Date: item.From_Date, To_Date: item.To_Date))
         expSubmitDates()
         calendar.reloadData()

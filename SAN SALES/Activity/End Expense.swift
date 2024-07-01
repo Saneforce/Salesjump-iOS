@@ -70,6 +70,7 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource, UIIma
     var StrEnd_Need = 1
     var photo_Km = ""
     var Photo_End_Att = ""
+    var EndingFare = 0
     override func viewDidLoad() {
         super.viewDidLoad()
         getUserDetails()
@@ -243,6 +244,11 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource, UIIma
         if Attach_Need == 1{
             if Ending_Fare.text == ""{
                 Toast.show(message: "Enter Ending Fare", controller: self)
+                return false
+            }
+            
+            if let endingFare = Int(Ending_Fare.text ?? ""), endingFare > EndingFare {
+                Toast.show(message: "Enter the fare less than \(EndingFare)", controller: self)
                 return false
             }
         }
@@ -560,17 +566,32 @@ func srtExpenseData(Select_date:String){
                     if let firstItem = json.first {
                             // NeedAttachment
                         if let NeedAttachment = firstItem["NeedAttachment"] as? Int, NeedAttachment == 0{
-                            Attach_Need = 0
-                            End_Attachment.isHidden = true
-                            End_Attachmeni_Height.constant = 0
+                            if let MaxKm = firstItem["MaxKm"] as? Int , MaxKm > 0 {
+                                EndingFare = MaxKm
+                                Attach_Need = 1
+                                End_Attachment.isHidden = false
+                                End_Attachmeni_Height.constant = 80
+                            }else{
+                                Attach_Need = 0
+                                End_Attachment.isHidden = true
+                                End_Attachmeni_Height.constant = 0
+                            }
+                            
                         }else if let NeedAttachment = firstItem["NeedAttachment"] as? Int, NeedAttachment == 1{
                             Attach_Need = 1
                             End_Attachment.isHidden = false
                             End_Attachmeni_Height.constant = 80
                         }else{
-                            Attach_Need = 0
-                            End_Attachment.isHidden = true
-                            End_Attachmeni_Height.constant = 0
+                            if let MaxKm = firstItem["MaxKm"] as? Int , MaxKm > 0 {
+                                EndingFare = MaxKm
+                                Attach_Need = 1
+                                End_Attachment.isHidden = false
+                                End_Attachmeni_Height.constant = 80
+                            }else{
+                                Attach_Need = 0
+                                End_Attachment.isHidden = true
+                                End_Attachmeni_Height.constant = 0
+                            }
                         }
                         // StEndNeed
                         if let StEndNeed = firstItem["StEndNeed"] as? Int,StEndNeed == 0{
