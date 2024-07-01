@@ -1328,6 +1328,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                                     UIApplication.shared.windows.first?.rootViewController = viewController
                                     UIApplication.shared.windows.first?.makeKeyAndVisible()
                                
+                                    LocalStoreage.set("1", forKey: "dayplan")
                                     Toast.show(message: "My day plan submitted successfully", controller: self)
                                case .failure(let error):
                                    print(error.errorDescription!)

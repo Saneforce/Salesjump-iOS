@@ -150,7 +150,7 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
                     moveMyPln=true
                 }
                 else{
-                    LocalStoreage.set("1", forKey: "dayplan")
+                    //LocalStoreage.set("1", forKey: "dayplan")
                     let formatter = DateFormatter()
                     formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
                     //let finalDate = formatter.date(from: plnDt["plnDate"] as! String)
@@ -203,6 +203,7 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
                 }
             })
         }else{
+            LocalStoreage.set("1", forKey: "dayplan")
             makeMenuView()
             Dashboard()
         }
