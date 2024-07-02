@@ -320,6 +320,11 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
+    }
+    
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.text == "Enter the Remarks"{
             textView.text = ""
@@ -662,6 +667,8 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                 self.vwRmksCtrl.frame.origin.y  = vwWTCtrl.frame.origin.y+vwWTCtrl.frame.height+8
                 self.vwDeviationCtrl.frame.origin.y = vwRmksCtrl.frame.origin.y+vwRmksCtrl.frame.height+8
                 self.vwRejectReason.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height+8
+                
+                myDyTp.updateValue(lItem(id: id, name: name,FWFlg: typ), forKey: "WT")
             }else{
                 
                 let sfid=String(format: "%@", lstPlnDetail[0]["subordinateid"] as! CVarArg)
@@ -847,9 +854,14 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         
         if UserSetup.shared.tpDcrDeviationNeed == 0 && !switchDeviate.isOn {
             
-            let code = self.tpDatas.tp.first?.HQ_Code.string ?? ""
+            if UserSetup.shared.SF_type == 1 {
+                lObjSel=lstHQs
+            }else{
+                let code = self.tpDatas.tp.first?.HQ_Code.string ?? ""
+                
+                lObjSel=lstHQs.filter{($0["id"] as? String ?? "") == code}
+            }
             
-            lObjSel=lstHQs.filter{($0["id"] as? String ?? "") == code}
             
         }else{
             lObjSel=lstHQs
@@ -1136,15 +1148,18 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                     
                     var status = 0
                     
-                    
-                    
-                    
                     guard let statusVal = objects.status.first?.Status.int else{
                         self.vwDeviationCtrl.isHidden = false
                         self.vwRejectReason.isHidden = true
                         
                         self.switchDeviate.isOn = false
-                        self.vwMainScroll.contentSize = CGSize(width: self.vwContent.frame.width, height: 1000)
+                        let fwflg = self.myDyTp["WT"]?.FWFlg ?? ""
+                        if fwflg != "F" {
+                            self.vwMainScroll.contentSize = CGSize(width: self.vwContent.frame.width, height: 650)
+                        }else{
+                            self.vwMainScroll.contentSize = CGSize(width: self.vwContent.frame.width, height: 1000)
+                        }
+                        // self.vwMainScroll.contentSize = CGSize(width: self.vwContent.frame.width, height: 850)
                         return
                     }
                     status = statusVal
@@ -1183,7 +1198,15 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                         self.vwDeviationCtrl.isHidden = false
                         self.vwRejectReason.isHidden = false
                         self.switchDeviate.isOn = false
-                        self.vwMainScroll.contentSize = CGSize(width: self.vwContent.frame.width, height: 1000)
+                        
+                        let fwflg = self.myDyTp["WT"]?.FWFlg ?? ""
+                        
+                        if fwflg != "F" {
+                            self.vwMainScroll.contentSize = CGSize(width: self.vwContent.frame.width, height: 750)
+                        }else{
+                            self.vwMainScroll.contentSize = CGSize(width: self.vwContent.frame.width, height: 1000)
+                        }
+                        
                     }else {
                         if UserSetup.shared.SrtEndKMNd == 2{
                             self.vwMainScroll.contentSize = CGSize(width: self.vwContent.frame.width, height: 830)
@@ -1324,6 +1347,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                                 }
                                    let LocalStoreage = UserDefaults.standard
                                    LocalStoreage.set(prettyPrintedJson, forKey: "Mydayplan")
+                                print(prettyPrintedJson)
                                     let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
                                     UIApplication.shared.windows.first?.rootViewController = viewController
                                     UIApplication.shared.windows.first?.makeKeyAndVisible()

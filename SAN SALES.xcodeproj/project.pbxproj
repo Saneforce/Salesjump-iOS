@@ -66,6 +66,7 @@
 		3F063535284171800027842E /* NewOutlet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F063534284171800027842E /* NewOutlet.swift */; };
 		3F06353728421D870027842E /* ImageUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F06353628421D870027842E /* ImageUploader.swift */; };
 		3F0635392844025C0027842E /* PhotosCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0635382844025C0027842E /* PhotosCollection.swift */; };
+		3F0637DC2C26F2EE008530FD /* FSCalendar.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F0637DB2C26F2EE008530FD /* FSCalendar.framework */; };
 		3F0822BA28FE721A009C33EA /* AdminForms.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3F0822B928FE721A009C33EA /* AdminForms.storyboard */; };
 		3F0822BD29000872009C33EA /* AdminMenus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0822BC29000872009C33EA /* AdminMenus.swift */; };
 		3F0822BF29000D65009C33EA /* LeaveForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0822BE29000D65009C33EA /* LeaveForm.swift */; };
@@ -196,6 +197,7 @@
 		3F063534284171800027842E /* NewOutlet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewOutlet.swift; sourceTree = "<group>"; };
 		3F06353628421D870027842E /* ImageUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageUploader.swift; sourceTree = "<group>"; };
 		3F0635382844025C0027842E /* PhotosCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosCollection.swift; sourceTree = "<group>"; };
+		3F0637DB2C26F2EE008530FD /* FSCalendar.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FSCalendar.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F0822B928FE721A009C33EA /* AdminForms.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = AdminForms.storyboard; sourceTree = "<group>"; };
 		3F0822BC29000872009C33EA /* AdminMenus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminMenus.swift; sourceTree = "<group>"; };
 		3F0822BE29000D65009C33EA /* LeaveForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaveForm.swift; sourceTree = "<group>"; };
@@ -273,6 +275,7 @@
 				3F4CC1952875581400BA2B4E /* AdSupport.framework in Frameworks */,
 				3FFB953F2C2A973400C5D737 /* FSCalendar.framework in Frameworks */,
 				19247A3DB960E114A6C28FB3 /* Pods_SAN_SALES.framework in Frameworks */,
+				3F0637DC2C26F2EE008530FD /* FSCalendar.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -510,7 +513,7 @@
 		3F3B818C197DE753883A89FB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				3FFB953E2C2A973400C5D737 /* FSCalendar.framework */,
+				3F0637DB2C26F2EE008530FD /* FSCalendar.framework */,
 				3F4CC1942875581400BA2B4E /* AdSupport.framework */,
 				3F4CC1922875580100BA2B4E /* AppTrackingTransparency.framework */,
 				448C0B69977667C109C50683 /* Pods_SAN_SALES.framework */,

@@ -337,7 +337,19 @@ class Expense_View: UIViewController, UITableViewDelegate, UITableViewDataSource
             cell.Exp_DAddi.text =  Exp_Detel_Data[indexPath.row].DailyAddDeductSymb + Exp_Detel_Data[indexPath.row].DAddit
             cell.Exp_Hotal.text = Exp_Detel_Data[indexPath.row].Hotal_Bill
             cell.Exp_Total.text = Exp_Detel_Data[indexPath.row].Total
-            cell.Exp_Status.text = Exp_Detel_Data[indexPath.row].Satus
+            
+            if Exp_Detel_Data[indexPath.row].Satus == "Rejected" {
+                // Set the text properties first
+                cell.Exp_Status.text = Exp_Detel_Data[indexPath.row].Satus
+                let attributedText = NSAttributedString(string: cell.Exp_Status?.text ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor.red])
+                cell.Exp_Status?.attributedText = attributedText
+            } else {
+                cell.Exp_Status.text = Exp_Detel_Data[indexPath.row].Satus
+                let attributedText = NSAttributedString(string: cell.Exp_Status?.text ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor(red: 0.09, green: 0.64, blue: 0.29, alpha: 1.00)])
+                cell.Exp_Status?.attributedText = attributedText
+            }
+            
+            
         }else if (Period_TB == tableView){
             cell.lblText.text = lstOfPeriod[indexPath.row].Period_Name
         }else if (Sum_Exp == tableView){
