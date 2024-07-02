@@ -46,8 +46,6 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
     @IBOutlet weak var vwRmksCtrl: UIView!
     @IBOutlet weak var Setval: UIButton!
     
-    
-    
     @IBOutlet weak var vwDeviationLock: UIView!
     
     @IBOutlet weak var lblRejectReason: UILabel!
@@ -57,6 +55,9 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
     
     @IBOutlet weak var vwDeviationCtrl: UIView!
     @IBOutlet weak var switchDeviate: UISwitch!
+    
+    @IBOutlet weak var vwTravelMode: UIView!
+    @IBOutlet weak var lblTravelMode: UILabel!
     
     struct lItem: Any {
         let id: String
@@ -109,8 +110,8 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         txRem.returnKeyType = .done
         txRem.delegate = self
         txRem.contentSize = CGSize(width:view.frame.width, height: vwContent.frame.height)
-        self.vwContent.frame.size = CGSize(width: self.vwContent.frame.width, height: 930)
-        self.vwMainScroll.contentSize = CGSize(width: self.vwContent.frame.width, height: 930)
+        self.vwContent.frame.size = CGSize(width: self.vwContent.frame.width, height: 1010)
+        self.vwMainScroll.contentSize = CGSize(width: self.vwContent.frame.width, height: 1010)
         Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(TimeDisplay), userInfo: nil, repeats: true)
         
         let formatter = DateFormatter()
@@ -299,6 +300,23 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
             self.vwDeviationCtrl.isHidden = true
             self.vwRejectReason.isHidden = true
             self.vwMainScroll.contentSize = CGSize(width: self.vwContent.frame.width, height: 750)
+        }
+        
+        
+        if UserSetup.shared.SrtEndKMNd == 2{
+            self.vwTravelMode.frame.origin.y = vwTravelMode.frame.origin.y+vwTravelMode.frame.height-155
+                self.vwMainScroll.contentSize = CGSize(width: self.vwContent.frame.width, height: 830)
+            
+        }else{
+            
+            self.vwTravelMode.isHidden  = true
+            self.vwMainScroll.contentSize = CGSize(width: self.vwContent.frame.width, height: 750)
+            self.vwJointCtrl.frame.origin.y = vwJointCtrl.frame.origin.y+vwJointCtrl.frame.height-300
+           // self.vwDeviationCtrl.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height-300
+           // self.vwRejectReason.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height-300
+           self.vwRmksCtrl.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height-300
+            
+            
         }
     }
     
@@ -1167,7 +1185,13 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                         self.switchDeviate.isOn = false
                         self.vwMainScroll.contentSize = CGSize(width: self.vwContent.frame.width, height: 1000)
                     }else {
-                        self.vwMainScroll.contentSize = CGSize(width: self.vwContent.frame.width, height: 750)
+                        if UserSetup.shared.SrtEndKMNd == 2{
+                            self.vwMainScroll.contentSize = CGSize(width: self.vwContent.frame.width, height: 830)
+                        }else{
+                            self.vwMainScroll.contentSize = CGSize(width: self.vwContent.frame.width, height: 750)
+                        }
+                        
+                      
                     } // || status == 6)
                     
                 }catch {
