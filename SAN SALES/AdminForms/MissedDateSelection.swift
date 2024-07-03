@@ -114,6 +114,7 @@ class MissedDateSelection : IViewController{
     @IBAction func secondaryAction(_ sender: UIButton) {
         
         let vc=self.storyboard?.instantiateViewController(withIdentifier: "sbMissedDateRouteSelection") as!  MissedDateRouteSelection
+        vc.isFromSecondary = true
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -122,6 +123,7 @@ class MissedDateSelection : IViewController{
     @IBAction func primaryAction(_ sender: UIButton) {
         
         let vc=self.storyboard?.instantiateViewController(withIdentifier: "sbMissedDateRouteSelection") as!  MissedDateRouteSelection
+        vc.isFromSecondary = false
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -137,6 +139,52 @@ class MissedDateSelection : IViewController{
             return
         }
         
+        
+        let workTypeCode = self.selectedWorktype["id"] as? Int ?? 0
+        let fwflg = selectedWorktype["FWFlg"] as? String ?? ""
+        let workTypeName = selectedWorktype["name"] as? String ?? ""
+        
+        print(fwflg)
+        print(workTypeCode)
+        print(workTypeName)
+        finalSubmit()
+    }
+    
+    func finalSubmit() {
+        
+        
+        
+        // http://sjdev.salesjump.in/server/native_Db_V13.php?axn=dcr%2Fsave&divisionCode=258%2C&sfCode=SJQAMGR0005&desig=MR
+        let workTypeCode = self.selectedWorktype["id"] as? Int ?? 0
+        let fwflg = selectedWorktype["FWFlg"] as? String ?? ""
+        let workTypeName = selectedWorktype["name"] as? String ?? ""
+        
+        let date = (self.selectedDate["name"] as? String ?? "") + " 00:00:00"
+        
+        let jsonString = "[{\"Activity_Report_APP\":{\"Worktype_code\":\"\'\(workTypeCode)\'\",\"Town_code\":\"\'\'\",\"RateEditable\":\"\'\'\",\"dcr_activity_date\":\"\'\(date)\'\",\"workTypFlag_Missed\":\"\(fwflg)\",\"mydayplan\":1,\"mypln_town\":\"\'Missed Entry\'\",\"mypln_town_id\":\"\'Missed Entry'\",\"Daywise_Remarks\":\"\'\'\",\"eKey\":\"\",\"rx\":\"\'1\'\",\"rx_t\":\"\'\'\",\"\":\"\'\(sfCode)\'\"}},{\"Activity_Sample_Report\":[]},{\"Trans_Order_Details\":[]},{\"Activity_Input_Report\":[]},{\"Activity_Event_Captures\":[]},{\"PENDING_Bills\":[]},{\"Compititor_Product\":[]}]"
+        
+        let params: Parameters = [ "data": jsonString ]
+        
+        print(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"dcr%2Fsave&divisionCode=\(divCode)&sfCode=\(sfCode)&desig=\(self.desig)")
+        print(params)
+        
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"dcr%2Fsave&divisionCode=\(divCode)&sfCode=\(sfCode)&desig=\(self.desig)",method: .post,parameters: params).validate(statusCode: 200..<209).responseData { AFData in
+            switch AFData.result {
+                
+            case .success(let value):
+                print(value)
+                
+                do {
+                    let json = try JSON(data: AFData.data!)
+                    print(json)
+                }catch {
+                    print("Error")
+                }
+                
+            case .failure(let error):
+                Toast.show(message: error.errorDescription ?? "", controller: self)
+            }
+        }
     }
     
     
