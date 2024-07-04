@@ -226,6 +226,20 @@ class Expense_View: UIViewController, UITableViewDelegate, UITableViewDataSource
                     FDate = date
                     TDate = date
                 }
+                
+                if Sel_Date.text != "\(item)-\(selectYear)" {
+                    Sel_Period.text = "Select Period"
+                    Exp_Detel_Data.removeAll()
+                    Exp_Report_TB.reloadData()
+                    Exp_Summary_Data.removeAll()
+                    Exp_Summary_Data.append(Exp_Sum(Tit: "Total Daily Expense", Amt: "-"))
+                    Exp_Summary_Data.append(Exp_Sum(Tit: "Total Added (+)", Amt: "-"))
+                    Exp_Summary_Data.append(Exp_Sum(Tit: "Total Deducted (-)", Amt: "-"))
+                    Exp_Summary_Data.append(Exp_Sum(Tit: "Rejected Expense", Amt: "-"))
+                    Exp_Summary_Data.append(Exp_Sum(Tit: "Payable Amount", Amt: "-"))
+                    Sum_Exp.reloadData()
+                }
+                
                 Sel_Date.text = "\(item)-\(selectYear)"
                 //SelPeriod.text = "Select Period"
                 removeLabels()

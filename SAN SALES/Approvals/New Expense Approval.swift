@@ -288,7 +288,7 @@ class New_Expense_Approval: UIViewController, UITableViewDataSource, UITableView
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if eXP_Data == tableView {return 70}
         if Period_TB == tableView {return 50}
-        if Apr_View_TB == tableView {return 500}
+        if Apr_View_TB == tableView {return 530}
         if Summary_TB == tableView {return 30}
         return 0
     }
@@ -353,7 +353,7 @@ class New_Expense_Approval: UIViewController, UITableViewDataSource, UITableView
                 if(ExpenseDetail_data[indexPath.row].amount == "0.00"){
                     cell.NA_Reject_BT.isHidden = true
                 }
-                
+                cell.Mode_of_trave_in_apr.text = ExpenseDetail_data[indexPath.row].MotName
             }else if (Summary_TB == tableView) {
                 cell.lblText.text = Exp_Summary_Data[indexPath.row].Tit
                 cell.lblText2.text = Exp_Summary_Data[indexPath.row].Amt
@@ -664,15 +664,17 @@ class New_Expense_Approval: UIViewController, UITableViewDataSource, UITableView
                                         }
                                         
                                         var MotName = ""
-                                        for motname in Mod_of_trave_data{
-                                            if let motid = motname["Sl_No"] as? Int, motid == Int(MotId!){
-                                                if let motname = motname["MOT"] as? String{
-                                                   MotName = motname
-                                                }
-                                            }else{
-                                                MotName = ""
-                                            }
+                                        
+                                        if let moddata = Mod_of_trave_data.filter({ $0["Sl_No"] as? Int == Int(MotId!) }).first {
+                                            print(moddata)
+                                            MotName = (moddata["MOT"] as? String)!
+                                            
+                                        } else {
+                                            print("No data found with the given MotId")
+                                            MotName = ""
                                         }
+                                        
+
                                         
                                         print(MotName)
                                         ExpenseDetail_data.append(ExpenseDetails_data(sf_code: sf_code!, name: name!, full_date: full_date!, from_place: from_place!, to_place: to_place!, amount: String(format: "%.2f",Tot_amt), work_type: work_type!, expense_type: expense_type!, da_amount: da_amount!, travel_k: travel_k, travel_amount: travel_amount, worked_place: worked_place!, Hotel_Bill_Amt: Hotel_Bill_Amt!, DailyAddDeduct: DailyAddDeduct, DAdditionalAmnt: String(format: "%.2f",DAdditionalAmnt!), Add_Exp: "0", DailyAddDeductsymbl: DailyAddDeductsymb, MotName: MotName))

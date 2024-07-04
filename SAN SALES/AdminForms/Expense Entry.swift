@@ -69,7 +69,7 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
     var No_Of_Days_In_Perio = 0
     var Allow_Apr:Bool = false
     var selected_period = ""
-    var apr_flg = ""
+    var apr_flg = "0"
     var Load_Cout = 0
     var Load_Couts = 0
     var srt_exp: [[String: Any]] = []
@@ -79,6 +79,7 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
     var exp_neededs = 0
     override func viewDidLoad(){
         super.viewDidLoad()
+        Sent_apr_bt.backgroundColor = .lightGray
         YearPostion.text = selectYear
         let Month = Calendar.current.component(.month, from: Date()) - 1
         let formattedPosition = String(format: "%02d", Month + 1)
@@ -167,6 +168,7 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
     func set_priod_calendar(){
         if let data = UserDefaults.standard.data(forKey: "periodicData"),
            let item = try? JSONDecoder().decode(PeriodicData.self, from: data) {
+           // self.ShowLoading(Message: "Loading...")
             Nav_PeriodicData = [item as AnyObject]
             print(Nav_PeriodicData)
             removeLabels()
@@ -663,6 +665,7 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
     }
     
     func expSubmitDates(){
+       // self.ShowLoading(Message: "Loading...")
         let axn = "get/expSubmitDates"
         let apiKey = "\(axn)&desig=\(Desig)&divisionCode=\(DivCode)&from_date=\(period_from_date)&to_date=\(period_to_date)&month=\(SelectMonth)&rSF=\(SFCode)&year=\(selectYear)&selected_period=\(selected_period)&sfCode=\(SFCode)&stateCode=\(StateCode)&sf_code=\(SFCode)"
         let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
@@ -670,9 +673,7 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
         AF.request(url, method: .post, parameters: nil, encoding: URLEncoding.default, headers: nil)
             .validate(statusCode: 200..<299)
             .responseJSON { [self] response in
-//                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-//                    self.LoadingDismiss()
-//                }
+               
                 switch response.result {
                 case .success(let value):
                     print(value)
@@ -970,6 +971,9 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
                             print("Error: \(error.localizedDescription)")
                         }
                     }
+//                    DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+//                        self.LoadingDismiss()
+//                    }
                     
                 case .failure(let error):
                     Toast.show(message: error.errorDescription ?? "Unknown Error")

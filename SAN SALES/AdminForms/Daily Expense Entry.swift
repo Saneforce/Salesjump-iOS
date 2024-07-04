@@ -730,16 +730,26 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
         set_data_TB(openMod: "Staying")
     }
     @objc private func Start_Km_Img_View(){
+        Image_Sc.isHidden = false
+        self.ShowLoading(Message: "Loading...")
         let imageData = try? Data(contentsOf: st_Km_Img!)
         let image = UIImage(data: imageData!)
         Image_View.image = image
-        Image_Sc.isHidden = false
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                              self.LoadingDismiss()
+                         }
+        
     }
     @objc private func End_Km_Img_View(){
+        Image_Sc.isHidden = false
+        self.ShowLoading(Message: "Loading...")
         let imageData = try? Data(contentsOf: Ed_Km_Img!)
         let image = UIImage(data: imageData!)
         Image_View.image = image
-        Image_Sc.isHidden = false
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                              self.LoadingDismiss()
+                         }
+       
     }
     
     @objc private func Edit_Km_Scr(){

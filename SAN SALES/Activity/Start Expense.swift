@@ -212,6 +212,7 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
             print(item)
             select_allow = item.name
             Daily_Allowance.text = item.name
+            Mode_Of_Travel.text = "Select Mode of Travel" 
         }else if (SelMod == "Travel"){
             let item = Trave_Dets[indexPath.row]
             print(item)
