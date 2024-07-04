@@ -350,7 +350,7 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
         }
    
     }
-    func addLetterA(to cell: FSCalendarCell?, text:String) {
+    func addLetterA(to cell: FSCalendarCell?, text:String){
         let letterLabel = UILabel()
         letterLabel.text = text
         letterLabel.textColor = .red
@@ -361,7 +361,7 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
         cell?.addSubview(letterLabel)
         labelsDictionary[cell!] = letterLabel
     }
-    func addDART(to cell: FSCalendarCell?,text:String) {
+    func addDART(to cell: FSCalendarCell?,text:String){
         let letterLabel = UILabel()
         letterLabel.text = text
         letterLabel.textColor = UIColor(red: 0.06, green: 0.68, blue: 0.76, alpha: 1.00)
@@ -726,79 +726,77 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
                                     
                                     exp_SubitDate = []
                                     attance_flg_L = []
-                                    if let attance_flg = jsonObject["attance_flg"] as?  [[String: Any]]{
-                                        print(attance_flg)
-                                        if attance_flg.isEmpty{
-                                            MisDatesDatas = []
-                                            return
-                                        }
-                                        
-                                        print(attance_flg)
-                                        
-                                        let dateFormatter = DateFormatter()
-                                        dateFormatter.dateFormat = "dd/MM/yyyy"
-                                        let dates = attance_flg.compactMap { dictionary -> Date? in
-                                            guard let dateString = dictionary["pln_date"] as? String else { return nil }
-                                            return dateFormatter.date(from: dateString)
-                                        }
-                                        for item in attance_flg{
-                                            let datess = item["pln_date"] as? String
-                                            let Formated_Date = dateFormatter.date(from: datess!)
-                                            let Leave = item["FWFlg"] as? String
-                                            if (Leave == "L"){
-                                                count = count + 1
-                                                attance_flg_L = attance_flg
-                                                let cell = calendar.cell(for: Formated_Date!, at: .current)
-                                                addLetterA(to: cell, text: "L")
-                                            }
-                                            if (Leave == "H"){
-                                                count = count + 1
-                                                attance_flg_L = attance_flg
-                                                let cell = calendar.cell(for: Formated_Date!, at: .current)
-                                                addLetterA(to: cell, text: "H")
-                                            }
-                                            if (Leave == "W"){
-                                                count = count + 1
-                                                attance_flg_L = attance_flg
-                                                let cell = calendar.cell(for: Formated_Date!, at: .current)
-                                                addLetterA(to: cell, text: "W")
-                                            }
-                                        }
-                                        
-                                       // let startDate = dates.min() ?? Date()
-                                       // let endDate = dates.max() ?? Date()
-                                        
-                                        let olDateFormatter = DateFormatter()
-                                        olDateFormatter.dateFormat = "yyyy-MM-dd"
-                                        let startDate = olDateFormatter.date(from: period_from_date)
-                                        let endDate = olDateFormatter.date(from: period_to_date)
-                                        var allDates = [Date]()
-                                        var currentDate = startDate
-                                        while currentDate! <= endDate!{
-                                            allDates.append(currentDate!)
-                                            currentDate = Calendar.current.date(byAdding: .day, value: 1, to: currentDate!)!
-                                        }
-                                        let currentDates = Date()
-                                        var missingDates = allDates.filter { !dates.contains($0) }
-                                        missingDates = missingDates.filter { $0 <= currentDates }
-                                        print(missingDates)
-                                        MisDatesDatas = missingDates
-                                        MisDatesDatas = MisDatesDatas.filter { $0 <= currentDates }
-                                        print(MisDatesDatas)
-                                        missingDates.forEach {
-                                            print(dateFormatter.string(from: $0))
-                                            let missingDates = dateFormatter.string(from: $0)
-                                                let formatter = DateFormatter()
-                                                formatter.dateFormat = "dd/MM/yyyy"
-                                                if let missingDate = formatter.date(from: missingDates) {
-                                                    print(missingDate)
-                                                    let cell = calendar.cell(for: missingDate, at: .current)
-                                                    addLetterA(to: cell, text: "A")
-                                                } else {
-                                                    print("Error: Unable to convert string to date.")
-                                                }
-                                        }
-                                    }
+//                                    if let attance_flg = jsonObject["attance_flg"] as?  [[String: Any]]{
+//                                        print(attance_flg)
+//                                        if attance_flg.isEmpty{
+//                                            MisDatesDatas = []
+//                                            return
+//                                        }
+//                                        
+//                                        print(attance_flg)
+//                                        
+//                                        let dateFormatter = DateFormatter()
+//                                        dateFormatter.dateFormat = "dd/MM/yyyy"
+//                                        let dates = attance_flg.compactMap { dictionary -> Date? in
+//                                            guard let dateString = dictionary["pln_date"] as? String else { return nil }
+//                                            return dateFormatter.date(from: dateString)
+//                                        }
+//                                        for item in attance_flg{
+//                                            let datess = item["pln_date"] as? String
+//                                            let Formated_Date = dateFormatter.date(from: datess!)
+//                                            let Leave = item["FWFlg"] as? String
+//                                            if (Leave == "L"){
+//                                                count = count + 1
+//                                                attance_flg_L = attance_flg
+//                                                let cell = calendar.cell(for: Formated_Date!, at: .current)
+//                                                addLetterA(to: cell, text: "L")
+//                                            }
+//                                            if (Leave == "H"){
+//                                                count = count + 1
+//                                                attance_flg_L = attance_flg
+//                                                let cell = calendar.cell(for: Formated_Date!, at: .current)
+//                                                addLetterA(to: cell, text: "H")
+//                                            }
+//                                            if (Leave == "W"){
+//                                                count = count + 1
+//                                                attance_flg_L = attance_flg
+//                                                let cell = calendar.cell(for: Formated_Date!, at: .current)
+//                                                addLetterA(to: cell, text: "W")
+//                                            }
+//                                        }
+//                                        
+//                                        
+//                                        let olDateFormatter = DateFormatter()
+//                                        olDateFormatter.dateFormat = "yyyy-MM-dd"
+//                                        let startDate = olDateFormatter.date(from: period_from_date)
+//                                        let endDate = olDateFormatter.date(from: period_to_date)
+//                                        var allDates = [Date]()
+//                                        var currentDate = startDate
+//                                        while currentDate! <= endDate!{
+//                                            allDates.append(currentDate!)
+//                                            currentDate = Calendar.current.date(byAdding: .day, value: 1, to: currentDate!)!
+//                                        }
+//                                        let currentDates = Date()
+//                                        var missingDates = allDates.filter { !dates.contains($0) }
+//                                        missingDates = missingDates.filter { $0 <= currentDates }
+//                                        print(missingDates)
+//                                        MisDatesDatas = missingDates
+//                                        MisDatesDatas = MisDatesDatas.filter { $0 <= currentDates }
+//                                        print(MisDatesDatas)
+//                                        missingDates.forEach {
+//                                            print(dateFormatter.string(from: $0))
+//                                            let missingDates = dateFormatter.string(from: $0)
+//                                                let formatter = DateFormatter()
+//                                                formatter.dateFormat = "dd/MM/yyyy"
+//                                                if let missingDate = formatter.date(from: missingDates) {
+//                                                    print(missingDate)
+//                                                    let cell = calendar.cell(for: missingDate, at: .current)
+//                                                    addLetterA(to: cell, text: "A")
+//                                                } else {
+//                                                    print("Error: Unable to convert string to date.")
+//                                                }
+//                                        }
+//                                    }
                                     
                                     // srt_end_exp
                                     if let srt_end_exp = jsonObject["srt_end_exp"] as? [[String: Any]]{
@@ -843,6 +841,83 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
                                         }
                                     }
                                  
+                                    
+                                    if let attance_flg = jsonObject["attance_flg"] as?  [[String: Any]]{
+                                        print(attance_flg)
+                                        if attance_flg.isEmpty{
+                                            MisDatesDatas = []
+                                            return
+                                        }
+                                        
+                                        print(attance_flg)
+                                        
+                                        let dateFormatter = DateFormatter()
+                                        dateFormatter.dateFormat = "dd/MM/yyyy"
+                                        let dates = attance_flg.compactMap { dictionary -> Date? in
+                                            guard let dateString = dictionary["pln_date"] as? String else { return nil }
+                                            return dateFormatter.date(from: dateString)
+                                        }
+                                        for item in attance_flg{
+                                            let datess = item["pln_date"] as? String
+                                            let Formated_Date = dateFormatter.date(from: datess!)
+                                            let Leave = item["FWFlg"] as? String
+                                            if (Leave == "L"){
+                                                count = count + 1
+                                                attance_flg_L = attance_flg
+                                                let cell = calendar.cell(for: Formated_Date!, at: .current)
+                                                addLetterA(to: cell, text: "L")
+                                            }
+                                            if (Leave == "H"){
+                                                count = count + 1
+                                                attance_flg_L = attance_flg
+                                                let cell = calendar.cell(for: Formated_Date!, at: .current)
+                                                addLetterA(to: cell, text: "H")
+                                            }
+                                            if (Leave == "W"){
+                                                count = count + 1
+                                                attance_flg_L = attance_flg
+                                                let cell = calendar.cell(for: Formated_Date!, at: .current)
+                                                addLetterA(to: cell, text: "W")
+                                            }
+                                        }
+                                        
+                                        
+                                        let olDateFormatter = DateFormatter()
+                                        olDateFormatter.dateFormat = "yyyy-MM-dd"
+                                        let startDate = olDateFormatter.date(from: period_from_date)
+                                        let endDate = olDateFormatter.date(from: period_to_date)
+                                        var allDates = [Date]()
+                                        var currentDate = startDate
+                                        while currentDate! <= endDate!{
+                                            allDates.append(currentDate!)
+                                            currentDate = Calendar.current.date(byAdding: .day, value: 1, to: currentDate!)!
+                                        }
+                                        let currentDates = Date()
+                                        var missingDates = allDates.filter { !dates.contains($0) }
+                                        missingDates = missingDates.filter { $0 <= currentDates }
+                                        print(missingDates)
+                                        MisDatesDatas = missingDates
+                                        MisDatesDatas = MisDatesDatas.filter { $0 <= currentDates }
+                                        print(MisDatesDatas)
+                                        missingDates.forEach {
+                                            print(dateFormatter.string(from: $0))
+                                            let missingDates = dateFormatter.string(from: $0)
+                                                let formatter = DateFormatter()
+                                                formatter.dateFormat = "dd/MM/yyyy"
+                                            if let missingDate = formatter.date(from: missingDates) {
+                                                    print(missingDate)
+                                                    let cell = calendar.cell(for: missingDate, at: .current)
+                                                    if let cell = cell {
+                                                        addLetterA(to: cell, text: "A")
+                                                    } else {
+                                                        print("Cell for date \(missingDates) is nil.")
+                                                    }
+                                                } else {
+                                                    print("Date string \(missingDates) is invalid.")
+                                                }
+                                        }
+                                    }
+                                    
                                     //rej_exp
 
                                     if let exp_SubitDate = exp_SubitDate as? [[String: Any]],
@@ -973,6 +1048,14 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
                 }
             }
             if item["FWFlg"] as? String == "H"{
+                if let dateString = dates, let exdate = dateFormatter.date(from: dateString) {
+                    if exdate == Seldate {
+                        Toast.show(message: "Please Select a Valid Date")
+                        return false
+                    }
+                }
+            }
+            if item["FWFlg"] as? String == "W"{
                 if let dateString = dates, let exdate = dateFormatter.date(from: dateString) {
                     if exdate == Seldate {
                         Toast.show(message: "Please Select a Valid Date")

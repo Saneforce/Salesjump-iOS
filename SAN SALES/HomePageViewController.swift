@@ -173,8 +173,9 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
             }
         }
         if moveMyPln {
-            getMyDayPlan(Validate: {
+            getMyDayPlan(Validate: { [self] in
                 if self.LocalStoreage.string(forKey: "Mydayplan") == nil{
+                    LocalStoreage.set("0", forKey: "dayplan")
                     let myDyPln = self.storyboard?.instantiateViewController(withIdentifier: "sbMydayplan") as! MydayPlanCtrl
                     self.navigationController?.pushViewController(myDyPln, animated: true)
                     return
@@ -188,11 +189,13 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
                     }
                     if (self.lstMyplnList.count>0){
                         if("\(String(describing: self.lstMyplnList[0]["tourplanDone"]))" != "Optional(nil)"){
+                            LocalStoreage.set("0", forKey: "dayplan")
                             let myDyPln = self.storyboard?.instantiateViewController(withIdentifier: "sbMydayplan") as! MydayPlanCtrl
                             self.navigationController?.pushViewController(myDyPln, animated: true)
                             return
                         }
                     }else{
+                        LocalStoreage.set("0", forKey: "dayplan")
                         self.Managerdas.isHidden = true
                         let myDyPln = self.storyboard?.instantiateViewController(withIdentifier: "sbMydayplan") as! MydayPlanCtrl
                         self.navigationController?.pushViewController(myDyPln, animated: true)
@@ -260,7 +263,7 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
                     if !isShown{
                         let date = Date().toString(format: "yyyy-MM-dd")
                         LocalStoreage.set(true, forKey: "isRemainderShown")
-                        LocalStoreage.set("date", forKey: "TodayDate")
+                        LocalStoreage.set(date, forKey: "TodayDate")
                         Toast.show(message: "Reminder Enter the Tour Plan", controller: self)
                     }
                     
@@ -376,6 +379,7 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         
 
         if (UserSetup.shared.SrtEndKMNd != 0 && UserSetup.shared.exp_auto == 2 ){
+            
         if let data=LocalStoreage.string(forKey: "dayplan"), data == "1" {
             if let attendanceView=LocalStoreage.string(forKey: "attendanceView") {
                 if (attendanceView == "0") {
@@ -902,7 +906,6 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         let defaults = UserDefaults.standard
         var storedDate_Today = ""
         if let storedDate = defaults.string(forKey: "storedDate") {
-            print("Stored Date: \(storedDate)")
             storedDate_Today = storedDate
         }
       

@@ -355,7 +355,7 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
                     print(prettyPrintedJson)
                     if let attance_flg = json["attance_flg"] as? [AnyObject] {
                         for item in attance_flg{
-                            if let Flf = item["FWFlg"] as? String, Flf == "F"||Flf=="H"||Flf=="W"{
+                            if let Flf = item["FWFlg"] as? String, Flf == "F"||Flf=="N" {
                                 print(item)
                                 expsub_Date.append(Expsub_Date(Dates: (item["pln_date"] as? String)!, Text: (item["FWFlg"] as? String)!))
                             }
@@ -385,7 +385,6 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
                         }
                     }
                     
-                    print(expsub_Date)
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                         self.LoadingDismiss()
                     }
@@ -625,9 +624,7 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
   
     }
     func save_data(lat:String,log:String){
-        
-        print(StarKmNeed)
-        
+
         if Select_To.text == "others"{
             to_place=Enter_To.text!
         }
@@ -754,10 +751,10 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
         }
         // Start Km Image
         if Start_Km_Img.isHidden == true {
-//            if StarKmNeed == 1 {
-//                Toast.show(message: "Add Start KM Photo", controller: self)
-//                return false
-//            }
+            if StarKmNeed == 1 {
+                Toast.show(message: "Add Start KM Photo", controller: self)
+                return false
+            }
         }
         
         return true

@@ -164,7 +164,6 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource, UIIma
             Select_Date.text = myStringDate
             srtExpenseData(Select_date:myStringDate)
             Ending_rmk.text = ""
-            Calender_View.isHidden = true
         }
     }
     @objc private func GotoHome() {
@@ -257,6 +256,12 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource, UIIma
             Toast.show(message: "Enter Ending Remarks", controller: self)
             return false
         }
+        
+        if let Star_KM =  Double(Start_KM.text!),let end = Double(Start_Text_KM.text!), Star_KM > end{
+            Toast.show(message: "Please provide a valid Ending KM...",controller: self)
+            return false
+        }
+
         if StrEnd_Need == 1{
             if Per_KM.text == ""{
                 Toast.show(message: "Enter Personal KM", controller: self)
@@ -268,10 +273,6 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource, UIIma
             }
         }
         
-        if let Star_KM =  Double(Start_KM.text!),let end = Double(Start_Text_KM.text!), Star_KM > end{
-            Toast.show(message: "Please provide a valid Ending KM...",controller: self)
-            return false
-        }
         
         
         return true
@@ -480,7 +481,9 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource, UIIma
                     }
                     print(prettyPrintedJson)
                     if let attance_flg = json["attance_flg"] as? [AnyObject] {
+                        print(attance_flg)
                         for item in attance_flg{
+                            print(item)
                             if let Flf = item["FWFlg"] as? String, Flf == "F"||Flf=="H"||Flf=="W"{
                                 print(item)
                                 expsub_Date.append(Endsub_Date(Dates: (item["pln_date"] as? String)!, Text: (item["FWFlg"] as? String)!))
@@ -562,7 +565,12 @@ func srtExpenseData(Select_date:String){
                         print("Error: Could not print JSON in String")
                         return
                     }
-                    print(prettyPrintedJson)
+                    if json.isEmpty || json.count == 0{
+                        Toast.show(message: "Please Select a Valid Date", controller: self)
+                        return
+                    }
+                    
+                    
                     if let firstItem = json.first {
                             // NeedAttachment
                         if let NeedAttachment = firstItem["NeedAttachment"] as? Int, NeedAttachment == 0{
@@ -643,9 +651,11 @@ func srtExpenseData(Select_date:String){
                             end_Exp_Datas.append(End_exData(From: from, To_Plce: to!, Start_KM: Star_KM!, Mode_Of_Travel: Mode_Of_Travel!))
                         }
                     }
+                    Calender_View.isHidden = true
                 }
             case .failure(let error):
                 Toast.show(message: error.errorDescription!)
+                Calender_View.isHidden = true
             }
         }
     }

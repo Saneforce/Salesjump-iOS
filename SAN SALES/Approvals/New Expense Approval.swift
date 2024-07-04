@@ -101,6 +101,7 @@ class New_Expense_Approval: UIViewController, UITableViewDataSource, UITableView
         let DAdditionalAmnt:String
         var Add_Exp:String
         let DailyAddDeductsymbl:String
+        let MotName:String
     }
     var ExpenseDetail_data:[ExpenseDetails_data] = []
     var Monthtext_and_year: [String] = []
@@ -119,6 +120,7 @@ class New_Expense_Approval: UIViewController, UITableViewDataSource, UITableView
     var period_id = ""
     var Emp_Id = ""
     var Rej_Coun = 0
+    var Mod_of_trave_data:[AnyObject] = []
     override func viewDidLoad() {
         super.viewDidLoad()
         let Month = Calendar.current.component(.month, from: Date()) - 1
@@ -180,6 +182,7 @@ class New_Expense_Approval: UIViewController, UITableViewDataSource, UITableView
         Exp_Summary_Data.append(Exp_Sum(Tit: "Total Deducted (-)", Amt: "-"))
         Exp_Summary_Data.append(Exp_Sum(Tit: "Rejected Expense", Amt: "-"))
         Exp_Summary_Data.append(Exp_Sum(Tit: "Payable Amount", Amt: "-"))
+        travelmode()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -572,7 +575,6 @@ class New_Expense_Approval: UIViewController, UITableViewDataSource, UITableView
                                 print(prettyPrintedJson)
                                 if let jsonObject = try JSONSerialization.jsonObject(with: prettyJsonData, options: []) as? [String: Any],
                                    let data = jsonObject["data"] as? [AnyObject], let data2 = jsonObject["additional_data"] as? [AnyObject], let data3 = jsonObject["add_sub_exp"] as? [AnyObject], let data4 = jsonObject["sum_add_data"] as? [AnyObject] {
-                                    print(data2)
                                     for i in data{
                                         print(i)
                                         let sf_code = i["sf_code"] as? String
@@ -580,6 +582,7 @@ class New_Expense_Approval: UIViewController, UITableViewDataSource, UITableView
                                         let full_date = i["full_date"] as? String
                                         let from_place = i["from_place"] as? String
                                         let to_place = i["to_place"] as? String
+                                        let MotId =  i["mot_id"] as? String
                                         var Tot_amt = 0.0
                                         var amount = i["amount"] as? String
                                         if (amount == ""){
@@ -598,6 +601,12 @@ class New_Expense_Approval: UIViewController, UITableViewDataSource, UITableView
                                         var travel_k = ""
                                         if let travel_k2 = i["travel_km"] as? Int{
                                             travel_k = String(travel_k2)+" KM"
+                                        }else{
+                                            travel_k = "0"
+                                        }
+                                        
+                                        if let travel_k2 = i["travel_km"] as? String{
+                                            travel_k = travel_k2+" KM"
                                         }else{
                                             travel_k = "0"
                                         }
@@ -654,11 +663,22 @@ class New_Expense_Approval: UIViewController, UITableViewDataSource, UITableView
                                             DailyAddDeductsymb = ""
                                         }
                                         
+                                        var MotName = ""
+                                        for motname in Mod_of_trave_data{
+                                            if let motid = motname["Sl_No"] as? Int, motid == Int(MotId!){
+                                                if let motname = motname["MOT"] as? String{
+                                                   MotName = motname
+                                                }
+                                            }else{
+                                                MotName = ""
+                                            }
+                                        }
                                         
-                                        ExpenseDetail_data.append(ExpenseDetails_data(sf_code: sf_code!, name: name!, full_date: full_date!, from_place: from_place!, to_place: to_place!, amount: String(format: "%.2f",Tot_amt), work_type: work_type!, expense_type: expense_type!, da_amount: da_amount!, travel_k: travel_k, travel_amount: travel_amount, worked_place: worked_place!, Hotel_Bill_Amt: Hotel_Bill_Amt!, DailyAddDeduct: DailyAddDeduct, DAdditionalAmnt: String(format: "%.2f",DAdditionalAmnt!), Add_Exp: "0", DailyAddDeductsymbl: DailyAddDeductsymb))
+                                        print(MotName)
+                                        ExpenseDetail_data.append(ExpenseDetails_data(sf_code: sf_code!, name: name!, full_date: full_date!, from_place: from_place!, to_place: to_place!, amount: String(format: "%.2f",Tot_amt), work_type: work_type!, expense_type: expense_type!, da_amount: da_amount!, travel_k: travel_k, travel_amount: travel_amount, worked_place: worked_place!, Hotel_Bill_Amt: Hotel_Bill_Amt!, DailyAddDeduct: DailyAddDeduct, DAdditionalAmnt: String(format: "%.2f",DAdditionalAmnt!), Add_Exp: "0", DailyAddDeductsymbl: DailyAddDeductsymb, MotName: MotName))
                                     }
                                     
-                                    
+                                    print(ExpenseDetail_data)
                                     
                                     for i2 in data2{
                                         print(i2)
@@ -746,6 +766,52 @@ class New_Expense_Approval: UIViewController, UITableViewDataSource, UITableView
                 }
         }
     }
+    
+    func travelmode(){
+        let axn = "get/travelmode"
+        let apiKey = "\(axn)&State_Code=\(StateCode)&Division_Code=\(DivCode)"
+        var result = apiKey
+        if let lastCommaIndex = result.lastIndex(of: ",") {
+            result.remove(at: lastCommaIndex)
+        }
+        let apiKeyWithoutCommas = result.replacingOccurrences(of: ",&", with: "&")
+        let url = APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKeyWithoutCommas
+        AF.request(url, method: .post, parameters: nil, encoding: URLEncoding.default, headers: nil)
+            .validate(statusCode: 200..<299)
+            .responseJSON { [self] response in
+                switch response.result {
+                case .success(let value):
+                    print(value)
+                    if let json = value as? [AnyObject] {
+                        do {
+                            let prettyJsonData = try JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
+                            if let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) {
+                                print(prettyPrintedJson)
+                                if let jsonObject = try JSONSerialization.jsonObject(with: prettyJsonData, options: []) as? [AnyObject]{
+                                    print(jsonObject)
+                                   
+                                    Mod_of_trave_data = jsonObject
+                                    
+                                } else {
+                                    print("Error: Could not convert JSON to Dictionary or access 'data'")
+                                }
+                            } else {
+                                print("Error: Could not convert JSON to String")
+                            }
+                        } catch {
+                            print("Error: \(error.localizedDescription)")
+                        }
+                    }
+                    
+                case .failure(let error):
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                           self.LoadingDismiss()
+                                       }
+                    Toast.show(message: error.errorDescription ?? "Unknown Error")
+                }
+            }
+    }
+    
     
     @objc private func Approve_Expense_BT(){
         if Rej_Coun == 1 {

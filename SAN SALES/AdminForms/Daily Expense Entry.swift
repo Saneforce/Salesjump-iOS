@@ -226,7 +226,6 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
         
         Edit_Km.addTarget(target: self, action: #selector(Edit_Km_Scr))
         
-        print(ExpEditNeed)
         if let Editimg = ExpEditNeed, Editimg != 1 {
             Edit_Km.isHidden = false
         } else {
@@ -300,7 +299,7 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
         Image_Sc_Close.layer.cornerRadius = 10
         let shadowPath = UIBezierPath(roundedRect: Image_Sc_Close.bounds, cornerRadius: 10)
         Image_Sc_Close.layer.masksToBounds = false
-        var shadowColor: UIColor? = UIColor.black
+        let shadowColor: UIColor? = UIColor.black
         Image_Sc_Close.layer.shadowColor = shadowColor?.cgColor
         Image_Sc_Close.layer.shadowOffset = CGSize(width: 0, height: 3);
         Image_Sc_Close.layer.shadowOpacity = 0.5
@@ -1016,11 +1015,11 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
                                             cALIM_KM.text = String(clam_km)
                                             EnterKM.text = String(clam_km)
                                             Pers_KM.text = String((travel_data[0]["Fuel_Charge"] as? Double)!)
-                                            var claim_amounnt = 0
+                                            var claim_amounnt = 0.0
                                             if let clamkm = Double(cALIM_KM.text!), let Fuel_Charge = Double(Pers_KM.text!){
-                                                claim_amounnt = Int(clamkm * Fuel_Charge)
+                                                claim_amounnt = clamkm * Fuel_Charge
                                             }
-                                            Claim_Amt.text = String(claim_amounnt)
+                                            Claim_Amt.text = String(format: "%.2f",claim_amounnt)
                                             Expense_data[0].fare = String(claim_amounnt)
                                             From_Text.text = travel_data[0]["From_Place"] as? String
                                             To_Text.text = travel_data[0]["To_Place"] as? String
