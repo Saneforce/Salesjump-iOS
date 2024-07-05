@@ -10,7 +10,7 @@ import Alamofire
 import FSCalendar
 import Foundation
 import CoreLocation
-class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UITableViewDataSource, UITableViewDelegate, UIImagePickerControllerDelegate & UINavigationControllerDelegate {
+class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource,FSCalendarDelegateAppearance, UITableViewDataSource, UITableViewDelegate, UIImagePickerControllerDelegate & UINavigationControllerDelegate {
     @IBOutlet weak var BT_Back: UIImageView!
     @IBOutlet weak var Start_Expense_Scr: UILabel!
     @IBOutlet weak var calendar: FSCalendar!
@@ -299,7 +299,6 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
     }
 
     func expSubmitDates() {
-       // expsub_Date.removeAll()
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
         
@@ -386,7 +385,10 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
                         }
                     }
                     
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [self] in
+                        calendar.reloadData()
                         self.LoadingDismiss()
                     }
                 }
@@ -398,7 +400,23 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
             }
         }
     }
+
+    func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, titleDefaultColorFor date: Date) -> UIColor? {
+        let day : Int! = Int(date.toString(format: "dd"))
+        print(expsub_Date)
+        let currentMonth = expsub_Date.filter{$0.Dates.changeFormat(from: "dd/MM/yyyy",to: "MM") == date.toString(format: "MM")}
+        let dates = currentMonth.map{Int($0.Dates.changeFormat(from: "dd/MM/yyyy",to: "dd"))}
+        return dates.contains(day) ? UIColor.black : UIColor.lightGray
+    }
     
+    func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, titleSelectionColorFor date: Date) -> UIColor? {
+        let day : Int! = Int(date.toString(format: "dd"))
+        
+        let currentMonth = expsub_Date.filter{$0.Dates.changeFormat(from: "dd/MM/yyyy",to: "MM") == date.toString(format: "MM")}
+        let dates = currentMonth.map{Int($0.Dates.changeFormat(from: "dd/MM/yyyy",to: "dd"))}
+       // return dates.contains(day) ? UIColor.lightGray : UIColor.black
+        return dates.contains(day) ? UIColor.black : UIColor.lightGray
+    }
 
     func getLastThreeMonthsDates() -> [String] {
         var dates: [String] = []
@@ -782,7 +800,7 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
             let fileName: String = String(Int(Date().timeIntervalSince1970))
             let filenameno = "\(fileName).jpg"
             photo_name = "_\(filenameno)"
-            
+            print(APIClient.shared.BaseURL)
             ImageUploade().uploadImage(SFCode: self.SFCode, image: pickedImage, fileName: "__\(filenameno)") {
                 // This code runs after the image upload is complete
                 DispatchQueue.main.async { [self] in
@@ -829,8 +847,7 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
         Drop_Down_Sc.isHidden = true
     }
     @objc private func Open_Calender(){
-        
-       
+        print(expsub_Date)
         for letter in expsub_Date {
             let datess = letter.Dates
             let dateFormatter = DateFormatter()
@@ -845,8 +862,6 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
                         print("Cell is nil for date: \(datess)")
                     }
                     }
-                
-               
             } else {
                 print("Failed to parse date: \(datess)")
             }

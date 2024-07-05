@@ -34,7 +34,7 @@ class ImageUploade {
         
         AF.upload(multipartFormData: { multipartFormData in
             multipartFormData.append(imgData!, withName: "imgfile", fileName: fileName, mimeType: "image/jpg")
-        }, to: APIClient.shared.BaseURL + APIClient.shared.DBURL + "imgupload&sf_code=" + SFCode)
+        }, to: "http://fmcg.sanfmcg.com" + APIClient.shared.DBURL + "imgupload&sf_code=" + SFCode)
         .uploadProgress { progress in
             print(progress)
         }

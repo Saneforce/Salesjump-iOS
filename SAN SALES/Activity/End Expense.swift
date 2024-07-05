@@ -10,7 +10,7 @@ import Alamofire
 import FSCalendar
 import Foundation
 import CoreLocation
-class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource, UIImagePickerControllerDelegate & UINavigationControllerDelegate {
+class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource,FSCalendarDelegateAppearance, UIImagePickerControllerDelegate & UINavigationControllerDelegate {
     @IBOutlet weak var Calender_View: UIView!
     @IBOutlet weak var BT_Back: UIImageView!
     @IBOutlet weak var End_Expense_Scr: UILabel!
@@ -57,7 +57,12 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource, UIIma
         let Dates:String
         let Text:String
     }
+    struct Expsub_Date:Codable{
+        let Dates:String
+        let Text:String
+    }
     var expsub_Date:[Endsub_Date]=[]
+    var expsub_Dates:[Expsub_Date]=[]
     var labelsDictionary = [FSCalendarCell: UILabel]()
     var SelMod:String = ""
     var End_exp_title:String?
@@ -444,6 +449,7 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource, UIIma
     }
     
     func End_exp_date(){
+        expsub_Dates.removeAll()
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
         
@@ -496,6 +502,9 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource, UIIma
                         print("Error: Could not print JSON in String")
                         return
                     }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [self] in
+                        calendar.reloadData()
+                    }
                     print(prettyPrintedJson)
                     if let attance_flg = json["attance_flg"] as? [AnyObject] {
                         print(attance_flg)
@@ -510,9 +519,11 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource, UIIma
                     if let srt_exp = json["srt_exp"] as? [AnyObject] {
                         for item in srt_exp {
                             if let full_date = item["full_date"] as? String{
+                                
                                 let dateFormatter = DateFormatter()
                                 dateFormatter.dateFormat = "dd/MM/yyyy"
                                 let Formated_Date = dateFormatter.date(from: full_date)
+                                expsub_Dates.append(Expsub_Date(Dates:full_date, Text: ""))
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [self] in
                                     if let cell = calendar.cell(for: Formated_Date!, at: .current){
                                         addLetter(to: cell, text: ".")
@@ -677,4 +688,22 @@ func srtExpenseData(Select_date:String){
             }
         }
     }
+    
+    func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, titleDefaultColorFor date: Date) -> UIColor? {
+        let day : Int! = Int(date.toString(format: "dd"))
+        print(expsub_Dates)
+        let currentMonth = expsub_Dates.filter{$0.Dates.changeFormat(from: "dd/MM/yyyy",to: "MM") == date.toString(format: "MM")}
+        let dates = currentMonth.map{Int($0.Dates.changeFormat(from: "dd/MM/yyyy",to: "dd"))}
+        return dates.contains(day) ? UIColor.black : UIColor.lightGray
+    }
+    
+    func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, titleSelectionColorFor date: Date) -> UIColor? {
+        let day : Int! = Int(date.toString(format: "dd"))
+        
+        let currentMonth = expsub_Dates.filter{$0.Dates.changeFormat(from: "dd/MM/yyyy",to: "MM") == date.toString(format: "MM")}
+        let dates = currentMonth.map{Int($0.Dates.changeFormat(from: "dd/MM/yyyy",to: "dd"))}
+       // return dates.contains(day) ? UIColor.lightGray : UIColor.black
+        return dates.contains(day) ? UIColor.black : UIColor.lightGray
+    }
+    
 }

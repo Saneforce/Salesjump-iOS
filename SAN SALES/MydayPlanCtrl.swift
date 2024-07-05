@@ -63,8 +63,8 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         let name: String
         let FWFlg: String
     }
-    var myDyTp: [String: lItem] = [:]
     
+    var myDyTp: [String: lItem] = [:]
     var CamSession: AVCaptureSession?
     var stillImageOutput: AVCapturePhotoOutput?
     
@@ -100,9 +100,8 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
     var exp_Need:Int = 0
     var lstPlnDetail: [AnyObject] = []
     var attendanceView:Int = 0
-    
     var tpDatas : JSON!
-    override func viewDidLoad() {
+    override func viewDidLoad(){
         super.viewDidLoad()
         txRem.text = "Enter the Remarks"
         txRem.textColor = UIColor.lightGray
@@ -388,8 +387,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         self.present(vc, animated: true, completion: nil)
     }
     
-    @objc func TimeDisplay()
-    {
+    @objc func TimeDisplay(){
         
         let formatter = DateFormatter()
         formatter.dateFormat = "HH:mm:ss"
@@ -1092,6 +1090,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                 
             })
         }else{
+            LocalStoreage.set("1", forKey: "attendanceView")
             let storyboard = UIStoryboard(name: "AdminForms", bundle: nil)
             let viewController = storyboard.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
             let myDyPln = storyboard.instantiateViewController(withIdentifier: "sbLeaveFrm") as! LeaveForm
@@ -1303,7 +1302,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                         let params: Parameters = [
                             "data": jsonString
                         ]
-                        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
+                        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
                             AFdata in
                             switch AFdata.result
                             {
@@ -1327,7 +1326,18 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                                     let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
                                     UIApplication.shared.windows.first?.rootViewController = viewController
                                     UIApplication.shared.windows.first?.makeKeyAndVisible()
+                                if let flag = myDyTp["WT"]?.FWFlg {
+                                    if flag == "W" || flag == "L" || flag == "H" {
+                                        print(flag)
+                                        LocalStoreage.set("1", forKey: "attendanceView")
+                                    } else {
+                                        LocalStoreage.set("0", forKey: "attendanceView")
+                                    }
+                                } else {
                                     LocalStoreage.set("0", forKey: "attendanceView")
+                                }
+
+                                   
                                     LocalStoreage.set("1", forKey: "dayplan")
                                     Toast.show(message: "My day plan submitted successfully", controller: self)
                                case .failure(let error):

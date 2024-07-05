@@ -232,9 +232,9 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
         Edit_Km.addTarget(target: self, action: #selector(Edit_Km_Scr))
         
         if let Editimg = ExpEditNeed, Editimg != 1 {
-            Edit_Km.isHidden = false
-        } else {
             Edit_Km.isHidden = true
+        }else{
+            Edit_Km.isHidden = false
         }
         
         set_form()
@@ -321,7 +321,8 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
         Edit_Save_BT.layer.shadowOpacity = 0.5
         Edit_Save_BT.layer.shadowPath = shadowPaths.cgPath
         
-        APIClient.shared.imgurl = "\(APIClient.shared.BaseURL)/Photos/"
+        //APIClient.shared.imgurl = "\(APIClient.shared.BaseURL)/Photos/"
+        APIClient.shared.imgurl = "http://fmcg.sanfmcg.com/Photos/"
     }
     func getUserDetails(){
     let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
@@ -957,19 +958,24 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
                                                 Calim_Amt_View.isHidden = true
                                             }
                                           print(travel_data)
-                                            
-                                            if let fareamount = travel_data[0]["fare"] as? String,fareamount != ""{
-                                                print(fareamount)
-                                                scroll_hig = scroll_hig + 50
+                                            var fareamount = 0.0
+                                            if let fareString = travel_data[0]["fare"] as? String, !fareString.isEmpty {
+                                                print(fareString)
+                                                scroll_hig = scroll_hig + 70
                                                 endfare_view.isHidden = false
-                                                Endfare.text = fareamount
+                                                Endfare.text = fareString
+                                                if let fareDouble = Double(fareString) {
+                                                    fareamount = fareDouble
+                                                }
                                                 Endfare_hight.constant = 25
-                                            }else{
-                                                scroll_hig = scroll_hig - 50
+                                            } else {
+                                                scroll_hig = scroll_hig - 70
                                                 endfare_view.isHidden = true
                                                 Endfare_hight.constant = 0
                                                 Endfare.text = "0"
+                                                fareamount = 0.0
                                             }
+
                                             print(travel_data)
                                             
                                             if let Image_Url = travel_data[0]["Image_Url"] as? String,Image_Url != ""{
@@ -1052,6 +1058,7 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
                                             var claim_amounnt = 0.0
                                             if let clamkm = Double(cALIM_KM.text!), let Fuel_Charge = Double(Pers_KM.text!){
                                                 claim_amounnt = clamkm * Fuel_Charge
+                                                claim_amounnt = claim_amounnt + fareamount
                                             }
                                             Claim_Amt.text = String(format: "%.2f",claim_amounnt)
                                             Expense_data[0].fare = String(claim_amounnt)
