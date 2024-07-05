@@ -87,6 +87,8 @@ class TourPlanCalenderScreen : UIViewController, FSCalendarDelegate, FSCalendarD
         
         if isBackEnabled == false {
             Toast.show(message: "Enter Tour Plan first (or) Contact Administrator", controller: self)
+            self.btnNext.isEnabled = false
+            self.btnPrev.isEnabled = false
         }
         
         self.calendarView.appearance.titleFont = UIFont(name: "Poppins-Regular", size: 16)!
