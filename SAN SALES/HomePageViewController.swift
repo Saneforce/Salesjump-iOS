@@ -254,7 +254,7 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
                     if !isShown{
                         let date = Date().toString(format: "yyyy-MM-dd")
                         LocalStoreage.set(true, forKey: "isRemainderShown")
-                        LocalStoreage.set("date", forKey: "TodayDate")
+                        LocalStoreage.set(date, forKey: "TodayDate")
                         Toast.show(message: "Reminder Enter the Tour Plan", controller: self)
                     }
                     
