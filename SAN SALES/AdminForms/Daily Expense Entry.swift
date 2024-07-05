@@ -93,6 +93,11 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
     @IBOutlet var Edit_Km_sc: UIView!
     @IBOutlet weak var Edit_Save_BT: UIButton!
     
+    // fare amount
+    
+    @IBOutlet weak var Endfare: UILabel!
+    @IBOutlet weak var Endfare_hight: NSLayoutConstraint!
+    @IBOutlet weak var endfare_view: UIView!
     
     struct exData:Codable{
     let id:String
@@ -938,7 +943,11 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
                                             
                                         
                                             if travel_data[0]["StEndNeed"] as? String == "0" {
-                                                Travel_Det_Height.constant = 35
+                                                
+                                               
+                                                
+                                                
+                                                Travel_Det_Height.constant = 70
                                                 scroll_hig = scroll_hig - 250
                                                 Scrollview_Height.constant = scroll_hig
                                                 Main_Scrollview_Height.constant = scroll_hig
@@ -948,6 +957,21 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
                                                 Calim_Amt_View.isHidden = true
                                             }
                                           print(travel_data)
+                                            
+                                            if let fareamount = travel_data[0]["fare"] as? String,fareamount != ""{
+                                                print(fareamount)
+                                                scroll_hig = scroll_hig + 50
+                                                endfare_view.isHidden = false
+                                                Endfare.text = fareamount
+                                                Endfare_hight.constant = 25
+                                            }else{
+                                                scroll_hig = scroll_hig - 50
+                                                endfare_view.isHidden = true
+                                                Endfare_hight.constant = 0
+                                                Endfare.text = "0"
+                                            }
+                                            print(travel_data)
+                                            
                                             if let Image_Url = travel_data[0]["Image_Url"] as? String,Image_Url != ""{
                                                 Start_Km_Img.isHidden = false
                                                 let apiKey: String = "\(SFCode)_\(Image_Url)"

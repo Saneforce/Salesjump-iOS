@@ -772,19 +772,35 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
     }
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                self.ShowLoading(Message: "Image upload, please wait...")
+                             }
+           
             Start_Km_Img.layer.cornerRadius = 10
             Start_Km_Img.layer.masksToBounds = true
             Start_Km_Img.image = pickedImage
             let fileName: String = String(Int(Date().timeIntervalSince1970))
-            let filenameno="\(fileName).jpg"
+            let filenameno = "\(fileName).jpg"
             photo_name = "_\(filenameno)"
-            ImageUploader().uploadImage(SFCode: self.SFCode, image: pickedImage, fileName: "__\(filenameno)")
-            Str_Km_text_width.constant = 200
-            Str_Km_with.constant = 60
-            Start_Km_Img.isHidden = false
+            
+            ImageUploade().uploadImage(SFCode: self.SFCode, image: pickedImage, fileName: "__\(filenameno)") {
+                // This code runs after the image upload is complete
+                DispatchQueue.main.async { [self] in
+                    Str_Km_text_width.constant = 200
+                    Str_Km_with.constant = 60
+                    Start_Km_Img.isHidden = false
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                          self.LoadingDismiss()
+                                     }
+                    
+                }
+            }
         }
         dismiss(animated: true, completion: nil)
     }
+
+
     
     @objc private func openCamera(){
         let imagePickerController = UIImagePickerController()

@@ -1327,7 +1327,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                                     let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
                                     UIApplication.shared.windows.first?.rootViewController = viewController
                                     UIApplication.shared.windows.first?.makeKeyAndVisible()
-                               
+                                    LocalStoreage.set("0", forKey: "attendanceView")
                                     LocalStoreage.set("1", forKey: "dayplan")
                                     Toast.show(message: "My day plan submitted successfully", controller: self)
                                case .failure(let error):

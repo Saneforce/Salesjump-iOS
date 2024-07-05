@@ -161,7 +161,6 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource, UIIma
             Toast.show(message: "Please Select a Valid Date", controller: self)
             return
         }else{
-            Select_Date.text = myStringDate
             srtExpenseData(Select_date:myStringDate)
             Ending_rmk.text = ""
         }
@@ -185,27 +184,45 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource, UIIma
         Calender_View.isHidden = false
     }
     
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]){
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-            if (SelMod == "KM"){
+            let fileName: String = String(Int(Foundation.Date().timeIntervalSince1970))
+            let filenameno = "\(fileName).jpg"
+            
+            if SelMod == "KM" {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    self.ShowLoading(Message: "Image upload, please wait...")
+                                 }
                 End_Km_Img.isHidden = false
                 End_Km_Img.image = pickedImage
-                let fileName: String = String(Int(Foundation.Date().timeIntervalSince1970))
-                let filenameno="\(fileName).jpg"
                 photo_Km = "_\(filenameno)"
-                ImageUploader().uploadImage(SFCode: self.SFCode, image: pickedImage, fileName: "__\(filenameno)")
-                End_Km_Img_width.constant = 74
-            }else if (SelMod == "Ending"){
+                ImageUploade().uploadImage(SFCode: self.SFCode, image: pickedImage, fileName: "__\(filenameno)") {
+                    DispatchQueue.main.async { [self] in
+                        End_Km_Img_width.constant = 74
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                              self.LoadingDismiss()
+                                         }
+                    }
+                }
+            } else if SelMod == "Ending" {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    self.ShowLoading(Message: "Image upload, please wait...")
+                                 }
                 End_Att_Img.image = pickedImage
-                let fileName: String = String(Int(Foundation.Date().timeIntervalSince1970))
-                let filenameno="\(fileName).jpg"
                 Photo_End_Att = "_\(filenameno)"
-                ImageUploader().uploadImage(SFCode: self.SFCode, image: pickedImage, fileName: "__\(filenameno)")
-                End_Att_Img_width.constant = 74
+                ImageUploade().uploadImage(SFCode: self.SFCode, image: pickedImage, fileName: "__\(filenameno)") {
+                    DispatchQueue.main.async { [self] in
+                        End_Att_Img_width.constant = 74
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                              self.LoadingDismiss()
+                                         }
+                    }
+                }
             }
         }
         dismiss(animated: true, completion: nil)
     }
+
     
     @objc private func openCamera_Km(){
         SelMod = "KM"
@@ -570,6 +587,7 @@ func srtExpenseData(Select_date:String){
                         return
                     }
                     
+                    Select_Date.text = Select_date
                     
                     if let firstItem = json.first {
                             // NeedAttachment

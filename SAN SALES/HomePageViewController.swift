@@ -66,6 +66,8 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
     let LocalStoreage = UserDefaults.standard
     
     override func viewDidLoad() {
+        print(LocalStoreage.string(forKey: "attendanceView"))
+        LocalStoreage.set("0", forKey: "dayplan")
         AutoLogOut()
         DashBoradTB.delegate=self
         DashBoradTB.dataSource=self
@@ -116,7 +118,7 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         //                }
         
         Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(TimeDisplay), userInfo: nil, repeats: true)
-        getUserDetails()
+       // getUserDetails()
         
         self.tpMandatoryNeed()
         /*if let json = try JSONSerialization.jsonObject(with: prettyPrintedJson!, options: []) as? [String: Any] {
@@ -379,8 +381,10 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         
 
         if (UserSetup.shared.SrtEndKMNd != 0 && UserSetup.shared.exp_auto == 2 ){
-            
+            print(LocalStoreage.string(forKey: "dayplan"))
         if let data=LocalStoreage.string(forKey: "dayplan"), data == "1" {
+            print(data)
+            print(LocalStoreage.string(forKey: "attendanceView"))
             if let attendanceView=LocalStoreage.string(forKey: "attendanceView") {
                 if (attendanceView == "0") {
                     // Naviagte To Strat Expense
