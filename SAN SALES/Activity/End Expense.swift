@@ -47,6 +47,11 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource,FSCale
     @IBOutlet weak var End_Km_Img_width: NSLayoutConstraint!
     @IBOutlet weak var End_Att_Img_width: NSLayoutConstraint!
     
+    @IBOutlet weak var Image_sc: UIView!
+    @IBOutlet weak var End_exp_Image_view: UIImageView!
+    
+    @IBOutlet weak var Close_BT: UIButton!
+    
     struct End_exData:Codable{
         let From:String
         let To_Plce:String
@@ -76,6 +81,8 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource,FSCale
     var photo_Km = ""
     var Photo_End_Att = ""
     var EndingFare = 0
+    var endimage: UIImageView = UIImageView()
+    var endFARE: UIImageView = UIImageView()
     override func viewDidLoad() {
         super.viewDidLoad()
         getUserDetails()
@@ -91,6 +98,16 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource,FSCale
         Select_Date.addTarget(target: self, action: #selector(Opencalender))
         Start_Photo.addTarget(target: self, action: #selector(openCamera_Km))
         Ending_fare_Photo.addTarget(target: self, action: #selector(openCamera_Ending))
+        
+        End_Km_Img.isUserInteractionEnabled = true
+        End_Att_Img.isUserInteractionEnabled = true
+        
+        let tapGestureRecognizer1 = UITapGestureRecognizer(target: self, action: #selector(Open_End_Image))
+               End_Km_Img.addGestureRecognizer(tapGestureRecognizer1)
+               
+               let tapGestureRecognizer2 = UITapGestureRecognizer(target: self, action: #selector(Open_end_fare_Image))
+               End_Att_Img.addGestureRecognizer(tapGestureRecognizer2)
+        
         Start_Photo.layer.cornerRadius = 5
         Start_Photo.layer.masksToBounds = true
         Ending_fare_Photo.layer.cornerRadius = 5
@@ -200,6 +217,7 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource,FSCale
                                  }
                 End_Km_Img.isHidden = false
                 End_Km_Img.image = pickedImage
+                endimage.image = pickedImage
                 photo_Km = "_\(filenameno)"
                 ImageUploade().uploadImage(SFCode: self.SFCode, image: pickedImage, fileName: "__\(filenameno)") {
                     DispatchQueue.main.async { [self] in
@@ -214,6 +232,7 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource,FSCale
                     self.ShowLoading(Message: "Image upload, please wait...")
                                  }
                 End_Att_Img.image = pickedImage
+                endFARE.image = pickedImage
                 Photo_End_Att = "_\(filenameno)"
                 ImageUploade().uploadImage(SFCode: self.SFCode, image: pickedImage, fileName: "__\(filenameno)") {
                     DispatchQueue.main.async { [self] in
@@ -510,7 +529,7 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource,FSCale
                         print(attance_flg)
                         for item in attance_flg{
                             print(item)
-                            if let Flf = item["FWFlg"] as? String, Flf == "F"||Flf=="H"||Flf=="W"{
+                            if let Flf = item["FWFlg"] as? String, Flf == "F"||Flf=="H"||Flf=="W"||Flf=="N"{
                                 print(item)
                                 expsub_Date.append(Endsub_Date(Dates: (item["pln_date"] as? String)!, Text: (item["FWFlg"] as? String)!))
                             }
@@ -704,6 +723,32 @@ func srtExpenseData(Select_date:String){
         let dates = currentMonth.map{Int($0.Dates.changeFormat(from: "dd/MM/yyyy",to: "dd"))}
        // return dates.contains(day) ? UIColor.lightGray : UIColor.black
         return dates.contains(day) ? UIColor.black : UIColor.lightGray
+    }
+    
+    @objc  func Open_End_Image(){
+        Open_Iamge_View(selmod: "End")
+    }
+    
+    @objc private func Open_end_fare_Image(){
+        Open_Iamge_View(selmod: "Fare")
+    }
+    
+    func Open_Iamge_View(selmod:String){
+        if selmod == "End" {
+            End_exp_Image_view.image =  endimage.image
+   
+        }
+        
+        if selmod == "Fare" {
+            End_exp_Image_view.image = endFARE.image
+            
+        }
+        
+        Image_sc.isHidden = false
+    }
+    
+    @IBAction func Image_sc_close(_ sender: Any) {
+        Image_sc.isHidden = true
     }
     
 }

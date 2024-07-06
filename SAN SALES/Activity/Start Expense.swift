@@ -46,6 +46,10 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource,FSC
     @IBOutlet weak var Str_Km_text_width: NSLayoutConstraint!
     @IBOutlet weak var Str_Km_with: NSLayoutConstraint!
     
+    @IBOutlet weak var Image_sc: UIView!
+    @IBOutlet weak var Image_Sc_Close: UIButton!
+    @IBOutlet weak var Start_Exp_Image_View: UIImageView!
+    
     
     struct exData:Codable{
     let id:String
@@ -109,6 +113,19 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource,FSC
         Add_Photo.addTarget(target: self, action: #selector(openCamera))
         Select_To.addTarget(target: self, action: #selector(opento))
         Check_Box.addTarget(target: self, action: #selector(Box))
+        
+        Start_Km_Img.addTarget(target: self, action: #selector(Open_cam_sc))
+        
+        
+        
+        Image_Sc_Close.layer.cornerRadius = 10
+        let shadowPath = UIBezierPath(roundedRect: Image_Sc_Close.bounds, cornerRadius: 10)
+        Image_Sc_Close.layer.masksToBounds = false
+        let shadowColor: UIColor? = UIColor.black
+        Image_Sc_Close.layer.shadowColor = shadowColor?.cgColor
+        Image_Sc_Close.layer.shadowOffset = CGSize(width: 0, height: 3);
+        Image_Sc_Close.layer.shadowOpacity = 0.5
+        Image_Sc_Close.layer.shadowPath = shadowPath.cgPath
         
         
         if let WorkTypeData = LocalStoreage.string(forKey: "Worktype_Master"),
@@ -797,6 +814,7 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource,FSC
             Start_Km_Img.layer.cornerRadius = 10
             Start_Km_Img.layer.masksToBounds = true
             Start_Km_Img.image = pickedImage
+            Start_Exp_Image_View.image = pickedImage
             let fileName: String = String(Int(Date().timeIntervalSince1970))
             let filenameno = "\(fileName).jpg"
             photo_name = "_\(filenameno)"
@@ -950,4 +968,16 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource,FSC
         }
         Drop_Down_TB.reloadData()
     }
+    
+    @objc private func Open_cam_sc(){
+        
+        
+        
+        Image_sc.isHidden = false
+    }
+    
+    @IBAction func Close_img_sc(_ sender: Any) {
+        Image_sc.isHidden = true
+    }
+    
 }
