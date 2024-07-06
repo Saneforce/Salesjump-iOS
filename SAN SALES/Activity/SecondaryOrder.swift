@@ -1117,7 +1117,6 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         print(Disc)
         print(refresh)
         if items.count>0 {
-            print(VisitData.shared.ProductCart)
             if let i = VisitData.shared.ProductCart.firstIndex(where: { (item) in
                 if item["id"] as! String == id {
                     return true
@@ -1220,7 +1219,6 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
 //        if (refresh == 3 ){
 //            tbPrvOrderProduct.reloadData()
 //        }
-
        
     }
     

@@ -176,6 +176,7 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
     var need_mode_of_trav = 0
     var st_Km_Img:URL?
     var Ed_Km_Img:URL?
+    var fareamount = 0.0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -958,7 +959,6 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
                                                 Calim_Amt_View.isHidden = true
                                             }
                                           print(travel_data)
-                                            var fareamount = 0.0
                                             if let fareString = travel_data[0]["fare"] as? String, !fareString.isEmpty {
                                                 print(fareString)
                                                 scroll_hig = scroll_hig + 70
@@ -1482,11 +1482,12 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
                 }
                 
                 cALIM_KM.text = String(clam_km)
-                var claim_amounnt = 0
+                var claim_amounnt = 0.0
                 if let clamkm = Double(cALIM_KM.text!), let Fuel_Charge = Double(Pers_KM.text!){
-                    claim_amounnt = Int(clamkm * Fuel_Charge)
+                    claim_amounnt = clamkm * Fuel_Charge
+                    claim_amounnt = claim_amounnt + fareamount
                 }
-                Claim_Amt.text = String(claim_amounnt)
+                Claim_Amt.text = String(format: "%.2f",claim_amounnt)
                 Expense_data[0].fare = String(claim_amounnt)
                 animateOut(desiredView:blureView)
                 animateOut(desiredView:Edit_Km_sc)
