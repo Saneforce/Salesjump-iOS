@@ -52,28 +52,28 @@
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "8DCCFAFB-DFAC-4032-9672-EB60E0416960 - ead95a93874966b2"
+                  uuid = "8DCCFAFB-DFAC-4032-9672-EB60E0416960 - dd1bedf0fba2609d"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
                   symbolName = "closure #2 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.SecondaryVisit.subcall() -&gt; ()"
                   moduleName = "SAN SALES"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS%20New%20Main/SAN%20SALES/Activity/SecondaryVisit.swift"
+                  urlString = "file:///Users/naga/Desktop/Salesjump-iOS%20june%2012/SAN%20SALES/Activity/SecondaryVisit.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "472"
                   endingLineNumber = "472">
                </Location>
                <Location
-                  uuid = "8DCCFAFB-DFAC-4032-9672-EB60E0416960 - ead95a93874966b2"
+                  uuid = "8DCCFAFB-DFAC-4032-9672-EB60E0416960 - dd1bedf0fba2609d"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
                   symbolName = "closure #2 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.SecondaryVisit.subcall() -&gt; ()"
                   moduleName = "SAN SALES"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS%20New%20Main/SAN%20SALES/Activity/SecondaryVisit.swift"
+                  urlString = "file:///Users/naga/Desktop/Salesjump-iOS%20june%2012/SAN%20SALES/Activity/SecondaryVisit.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "472"
@@ -92,40 +92,10 @@
             filePath = "SAN SALES/MydayPlanCtrl.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1183"
-            endingLineNumber = "1183"
-            landmarkName = "saveDayTP(location:)"
+            startingLineNumber = "1206"
+            endingLineNumber = "1206"
+            landmarkName = "tpDeviation()"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "14BC44C2-4963-493E-86EF-F71FF30BBEB5 - d264d27ea3c39883"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "function signature specialization &lt;Arg[3] = Value Promoted from Box&gt; of closure #1 (Swift.Optional&lt;Swift.Array&lt;__C.CLPlacemark&gt;&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in SAN_SALES.MydayPlanCtrl.saveDayTP(location: __C.CLLocation) -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS%20New%20Main/SAN%20SALES/MydayPlanCtrl.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "1183"
-                  endingLineNumber = "1183">
-               </Location>
-               <Location
-                  uuid = "14BC44C2-4963-493E-86EF-F71FF30BBEB5 - d264d27ea3c39883"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "function signature specialization &lt;Arg[3] = Value Promoted from Box&gt; of closure #1 (Swift.Optional&lt;Swift.Array&lt;__C.CLPlacemark&gt;&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in SAN_SALES.MydayPlanCtrl.saveDayTP(location: __C.CLLocation) -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS%20New%20Main/SAN%20SALES/MydayPlanCtrl.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "1183"
-                  endingLineNumber = "1183">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -144,28 +114,28 @@
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "49C8095F-522D-41B1-BF0D-8619089A9D93 - 97877b988f72120a"
+                  uuid = "49C8095F-522D-41B1-BF0D-8619089A9D93 - f4aa670dd90c8c51"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
                   symbolName = "SAN_SALES.PrimaryVisit.subcall() -&gt; ()"
                   moduleName = "SAN SALES"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS%20New%20Main/SAN%20SALES/Activity/PrimaryVisit.swift"
+                  urlString = "file:///Users/naga/Desktop/Salesjump-iOS%20june%2012/SAN%20SALES/Activity/PrimaryVisit.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "456"
                   endingLineNumber = "456">
                </Location>
                <Location
-                  uuid = "49C8095F-522D-41B1-BF0D-8619089A9D93 - 48314486b2cd8a21"
+                  uuid = "49C8095F-522D-41B1-BF0D-8619089A9D93 - 2b1c5813e4b314fe"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
                   symbolName = "closure #2 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.PrimaryVisit.subcall() -&gt; ()"
                   moduleName = "SAN SALES"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS%20New%20Main/SAN%20SALES/Activity/PrimaryVisit.swift"
+                  urlString = "file:///Users/naga/Desktop/Salesjump-iOS%20june%2012/SAN%20SALES/Activity/PrimaryVisit.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "458"
@@ -184,8 +154,8 @@
             filePath = "SAN SALES/AdminForms/TourPlanCalenderScreen.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "183"
-            endingLineNumber = "183"
+            startingLineNumber = "207"
+            endingLineNumber = "207"
             landmarkName = "fetchTotalCommitment()"
             landmarkType = "7">
          </BreakpointContent>
@@ -200,8 +170,8 @@
             filePath = "SAN SALES/AdminForms/TourPlanCalenderScreen.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "202"
-            endingLineNumber = "202"
+            startingLineNumber = "226"
+            endingLineNumber = "226"
             landmarkName = "fetchTotalCommitment()"
             landmarkType = "7">
          </BreakpointContent>
@@ -360,8 +330,8 @@
             filePath = "SAN SALES/HomePageViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "230"
-            endingLineNumber = "230"
+            startingLineNumber = "226"
+            endingLineNumber = "226"
             landmarkName = "tpMandatoryNeed()"
             landmarkType = "7">
          </BreakpointContent>
@@ -392,24 +362,8 @@
             filePath = "SAN SALES/HomePageViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "272"
-            endingLineNumber = "272"
-            landmarkName = "tpMandatoryNeed()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "25D973F0-45AA-4744-80FC-69DAAB4519F0"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "SAN SALES/HomePageViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "241"
-            endingLineNumber = "241"
+            startingLineNumber = "283"
+            endingLineNumber = "283"
             landmarkName = "tpMandatoryNeed()"
             landmarkType = "7">
          </BreakpointContent>
@@ -424,8 +378,8 @@
             filePath = "SAN SALES/AdminForms/TourPlanCalenderScreen.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "499"
-            endingLineNumber = "499"
+            startingLineNumber = "523"
+            endingLineNumber = "523"
             landmarkName = "backVC()"
             landmarkType = "7">
          </BreakpointContent>
@@ -440,8 +394,8 @@
             filePath = "SAN SALES/HomePageViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "271"
-            endingLineNumber = "271"
+            startingLineNumber = "282"
+            endingLineNumber = "282"
             landmarkName = "tpMandatoryNeed()"
             landmarkType = "7">
          </BreakpointContent>
@@ -568,8 +522,8 @@
             filePath = "SAN SALES/AdminForms/TourPlanCalenderScreen.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "331"
-            endingLineNumber = "331"
+            startingLineNumber = "355"
+            endingLineNumber = "355"
             landmarkName = "isAllDaysApplied()"
             landmarkType = "7">
          </BreakpointContent>
@@ -594,14 +548,14 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "691440E5-BC74-4256-ADD6-E1816CCF85AB"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SAN SALES/HomePageViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "260"
-            endingLineNumber = "260"
+            startingLineNumber = "272"
+            endingLineNumber = "272"
             landmarkName = "tpMandatoryNeed()"
             landmarkType = "7">
          </BreakpointContent>
@@ -632,8 +586,8 @@
             filePath = "SAN SALES/AdminForms/TourPlanCalenderScreen.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "253"
-            endingLineNumber = "253"
+            startingLineNumber = "277"
+            endingLineNumber = "277"
             landmarkName = "fetchFullTP()"
             landmarkType = "7">
          </BreakpointContent>
@@ -648,8 +602,8 @@
             filePath = "SAN SALES/AdminForms/TourPlanCalenderScreen.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "252"
-            endingLineNumber = "252"
+            startingLineNumber = "276"
+            endingLineNumber = "276"
             landmarkName = "fetchFullTP()"
             landmarkType = "7">
          </BreakpointContent>
@@ -689,22 +643,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "7DE52226-B471-4418-A879-3A2AA01E0E75"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "SAN SALES/MydayPlanCtrl.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1122"
-            endingLineNumber = "1122"
-            landmarkName = "tpDeviation()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "285AB918-CF2A-4C4E-B758-AB01FF798ED4"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -712,8 +650,8 @@
             filePath = "SAN SALES/MydayPlanCtrl.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1098"
-            endingLineNumber = "1098"
+            startingLineNumber = "1110"
+            endingLineNumber = "1110"
             landmarkName = "tpDeviation()"
             landmarkType = "7">
          </BreakpointContent>
@@ -728,8 +666,8 @@
             filePath = "SAN SALES/MydayPlanCtrl.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1096"
-            endingLineNumber = "1096"
+            startingLineNumber = "1108"
+            endingLineNumber = "1108"
             landmarkName = "tpDeviation()"
             landmarkType = "7">
          </BreakpointContent>
@@ -744,9 +682,9 @@
             filePath = "SAN SALES/MydayPlanCtrl.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1031"
-            endingLineNumber = "1031"
-            landmarkName = "tpDeviation()"
+            startingLineNumber = "1043"
+            endingLineNumber = "1043"
+            landmarkName = "SaveMyDayPlan(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -808,9 +746,9 @@
             filePath = "SAN SALES/MydayPlanCtrl.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "726"
-            endingLineNumber = "726"
-            landmarkName = "selWorktype()"
+            startingLineNumber = "733"
+            endingLineNumber = "733"
+            landmarkName = "setTodayPlan()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -824,9 +762,9 @@
             filePath = "SAN SALES/MydayPlanCtrl.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "727"
-            endingLineNumber = "727"
-            landmarkName = "selWorktype()"
+            startingLineNumber = "734"
+            endingLineNumber = "734"
+            landmarkName = "setTodayPlan()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -840,9 +778,9 @@
             filePath = "SAN SALES/MydayPlanCtrl.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "747"
-            endingLineNumber = "747"
-            landmarkName = "selHeadquaters()"
+            startingLineNumber = "754"
+            endingLineNumber = "754"
+            landmarkName = "setTodayPlan()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -856,54 +794,10 @@
             filePath = "SAN SALES/MydayPlanCtrl.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "749"
-            endingLineNumber = "749"
-            landmarkName = "selHeadquaters()"
+            startingLineNumber = "756"
+            endingLineNumber = "756"
+            landmarkName = "setTodayPlan()"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "BEB7D23F-60FD-4A7E-8F22-64CFC51D78B0 - e9f1529ee013df17"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SAN_SALES.MydayPlanCtrl.selHeadquaters() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS%20New%20Main/SAN%20SALES/MydayPlanCtrl.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "750"
-                  endingLineNumber = "750">
-               </Location>
-               <Location
-                  uuid = "BEB7D23F-60FD-4A7E-8F22-64CFC51D78B0 - e5ddf9e2830677ba"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.AnyObject) -&gt; Swift.Bool in SAN_SALES.MydayPlanCtrl.selHeadquaters() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS%20New%20Main/SAN%20SALES/MydayPlanCtrl.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "750"
-                  endingLineNumber = "750">
-               </Location>
-               <Location
-                  uuid = "BEB7D23F-60FD-4A7E-8F22-64CFC51D78B0 - e9f1529ee013df36"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SAN_SALES.MydayPlanCtrl.selHeadquaters() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS%20New%20Main/SAN%20SALES/MydayPlanCtrl.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "749"
-                  endingLineNumber = "749">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -916,54 +810,10 @@
             filePath = "SAN SALES/MydayPlanCtrl.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "749"
-            endingLineNumber = "749"
-            landmarkName = "selHeadquaters()"
+            startingLineNumber = "756"
+            endingLineNumber = "756"
+            landmarkName = "setTodayPlan()"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "5797B9FF-A482-490E-BE8A-DC0E2C44D44D - e9f1529ee013df17"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SAN_SALES.MydayPlanCtrl.selHeadquaters() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS%20New%20Main/SAN%20SALES/MydayPlanCtrl.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "750"
-                  endingLineNumber = "750">
-               </Location>
-               <Location
-                  uuid = "5797B9FF-A482-490E-BE8A-DC0E2C44D44D - e5ddf9e2830677ba"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.AnyObject) -&gt; Swift.Bool in SAN_SALES.MydayPlanCtrl.selHeadquaters() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS%20New%20Main/SAN%20SALES/MydayPlanCtrl.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "750"
-                  endingLineNumber = "750">
-               </Location>
-               <Location
-                  uuid = "5797B9FF-A482-490E-BE8A-DC0E2C44D44D - e9f1529ee013df36"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SAN_SALES.MydayPlanCtrl.selHeadquaters() -&gt; ()"
-                  moduleName = "SAN SALES"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/naga/Documents/Salesjump-iOS%20New%20Main/SAN%20SALES/MydayPlanCtrl.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "749"
-                  endingLineNumber = "749">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -976,9 +826,9 @@
             filePath = "SAN SALES/MydayPlanCtrl.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "780"
-            endingLineNumber = "780"
-            landmarkName = "selRoutes()"
+            startingLineNumber = "787"
+            endingLineNumber = "787"
+            landmarkName = "setTodayPlan()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1008,9 +858,9 @@
             filePath = "SAN SALES/MydayPlanCtrl.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1052"
-            endingLineNumber = "1052"
-            landmarkName = "tpDeviation()"
+            startingLineNumber = "1064"
+            endingLineNumber = "1064"
+            landmarkName = "getLocatio()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1040,9 +890,9 @@
             filePath = "SAN SALES/MydayPlanCtrl.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1059"
-            endingLineNumber = "1059"
-            landmarkName = "tpDeviation()"
+            startingLineNumber = "1071"
+            endingLineNumber = "1071"
+            landmarkName = "getLocatio()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1059,6 +909,294 @@
             startingLineNumber = "291"
             endingLineNumber = "291"
             landmarkName = "viewDidLoad()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D1E9794A-A7CD-49D3-89C1-D8BFA1A0FCD0"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SAN SALES/AdminForms/TourPlanCalenderScreen.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "306"
+            endingLineNumber = "306"
+            landmarkName = "fetchFullTP()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "96B9F1F6-EE97-46F5-BAE7-1E842D929D5E"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SAN SALES/AdminForms/TourPlanCalenderScreen.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "341"
+            endingLineNumber = "341"
+            landmarkName = "isAllDaysApplied()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "EACCC8B2-5584-420B-A0D2-AF53FB22B269"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SAN SALES/HomePageViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "236"
+            endingLineNumber = "236"
+            landmarkName = "tpMandatoryNeed()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "864AD579-7DB6-4CA5-A6D4-8430745CC4B0"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SAN SALES/HomePageViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "269"
+            endingLineNumber = "269"
+            landmarkName = "tpMandatoryNeed()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "C685C3A5-DAA9-4CBD-9388-C35F7DD6652A"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SAN SALES/HomePageViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "280"
+            endingLineNumber = "280"
+            landmarkName = "tpMandatoryNeed()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "F14DA286-A3E0-46EF-925C-638161CBC1F9"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SAN SALES/AdminForms/TourPlanCalenderScreen.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "342"
+            endingLineNumber = "342"
+            landmarkName = "isAllDaysApplied()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "6C68D810-7080-47CE-8102-E8AEB173D995"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SAN SALES/MydayPlanCtrl.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1188"
+            endingLineNumber = "1188"
+            landmarkName = "tpDeviation()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "3CF01C85-373A-4189-9963-F64A67ACCF27"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SAN SALES/MydayPlanCtrl.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1106"
+            endingLineNumber = "1106"
+            landmarkName = "tpDeviation()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "64A06B26-C956-4901-BE9C-94F6CDF7FD97"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SAN SALES/MydayPlanCtrl.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "845"
+            endingLineNumber = "845"
+            landmarkName = "selHeadquaters()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "4061533F-DDD3-4D5F-A1A3-3158F91A4034"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SAN SALES/HomePageViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "215"
+            endingLineNumber = "215"
+            landmarkName = "tpMandatoryNeed()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "6CAF0B22-6230-4562-9E11-FC558B2F0BA7"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SAN SALES/MydayPlanCtrl.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1135"
+            endingLineNumber = "1135"
+            landmarkName = "tpDeviation()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "2ED96E64-647E-4121-83A5-7B5E62BE8BA2"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SAN SALES/HomePageViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "214"
+            endingLineNumber = "214"
+            landmarkName = "tpMandatoryNeed()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "70DA858E-21F0-4B5D-93CE-98A1D77FE601"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SAN SALES/MydayPlanCtrl.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1137"
+            endingLineNumber = "1137"
+            landmarkName = "tpDeviation()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "53E28F42-B57F-4B14-B42E-D6757E9A82BE"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SAN SALES/HomePageViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "256"
+            endingLineNumber = "256"
+            landmarkName = "tpMandatoryNeed()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "517C38B3-E24C-40CD-A869-A3C89BA95745"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SAN SALES/HomePageViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "254"
+            endingLineNumber = "254"
+            landmarkName = "tpMandatoryNeed()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "22E62DCD-6F00-4D56-A535-7A71AFFA3809"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SAN SALES/ViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "127"
+            endingLineNumber = "127"
+            landmarkName = "signin(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "73C67D59-251C-4440-8000-3936C7B56A95"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SAN SALES/ViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "216"
+            endingLineNumber = "216"
+            landmarkName = "userAuth()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "2AB5E857-7287-4285-885F-F19B14E2FD22"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SAN SALES/AdminForms/TourPlanCalenderScreen.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "541"
+            endingLineNumber = "541"
+            landmarkName = "tpMandatoryNeed()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
