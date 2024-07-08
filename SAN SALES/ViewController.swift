@@ -218,6 +218,7 @@ class ViewController: IViewController {
                     let jsonString = String(data: jsonData!, encoding: .utf8)!
                     LocalStoreage.set(jsonString, forKey: "APPConfig")
                     LocalStoreage.set(prettyPrintedJson, forKey: "UserDetails")
+                    LocalStoreage.set("0", forKey: "attendanceView")
                     //                        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+"login", method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
                     //                            AFdata in
                     self.LoadingDismiss()

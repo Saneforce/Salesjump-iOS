@@ -60,13 +60,12 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
     var axn="get/allcalls"
     var TodayDetls:[Todaydate] = []
     var strMenuList:[mnuItem]=[]
-    var SFCode: String = "", StateCode: String = "", DivCode: String = "",attendanceView = 0,Desig: String = ""
+    var SFCode: String = "", StateCode: String = "", DivCode: String = "",attendanceViews = 0,Desig: String = ""
     public static var selfieLoginActive = 0
     
     let LocalStoreage = UserDefaults.standard
     
     override func viewDidLoad() {
-        print(LocalStoreage.string(forKey: "attendanceView"))
         LocalStoreage.set("0", forKey: "dayplan")
         AutoLogOut()
         DashBoradTB.delegate=self
@@ -338,11 +337,19 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
             print("Error: Cannot convert JSON object to Pretty JSON data")
             return
         }
-        
+        print(prettyJsonData)
         SFCode = prettyJsonData["sfCode"] as? String ?? ""
         StateCode = prettyJsonData["State_Code"] as? String ?? ""
         DivCode = prettyJsonData["divisionCode"] as? String ?? ""
         Desig=prettyJsonData["desigCode"] as? String ?? ""
+        attendanceViews=prettyJsonData["attendanceView"] as? Int ?? 0
+        
+        
+        if attendanceViews == 1{
+            LocalStoreage.set("1", forKey: "attendanceView")
+        }
+       
+        
         
         //Get Design code
         
@@ -381,12 +388,17 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         
 
         if (UserSetup.shared.SrtEndKMNd != 0 && UserSetup.shared.exp_auto == 2 ){
-            print(LocalStoreage.string(forKey: "dayplan"))
         if let data=LocalStoreage.string(forKey: "dayplan"), data == "1" {
-            print(data)
-            print(LocalStoreage.string(forKey: "attendanceView"))
-            if let attendanceView=LocalStoreage.string(forKey: "attendanceView") {
-                if (attendanceView == "0") {
+            print(attendanceViews)
+            if (attendanceViews == 0) {
+                print(LocalStoreage.string(forKey: "attendanceView"))
+                if let attendanceView=LocalStoreage.string(forKey: "attendanceView"){
+                    print(attendanceView)
+                }
+                if let attendanceView=LocalStoreage.string(forKey: "attendanceView"){
+                    print(attendanceView)
+                    if attendanceView == "0"{
+                    attendanceViews = Int(attendanceView)!
                     // Naviagte To Strat Expense
                     let storyboard = UIStoryboard(name: "Main", bundle: nil)
                     let viewControllers = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
@@ -395,13 +407,14 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
                     dateFormatter.dateFormat = "yyyy-MM-dd"
                     let currentDate = Date()
                     let formattedDate = dateFormatter.string(from: currentDate)
-                    myDyPln.Screan_Heding = "Start Expense" // 
+                    myDyPln.Screan_Heding = "Start Expense" //
                     myDyPln.Show_Date = true
                     myDyPln.Curent_Date = formattedDate
                     myDyPln.Exp_Nav = ""
                     viewControllers.setViewControllers([myDyPln], animated: false)
                     (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewControllers)
                 }
+            }
             }
         }
     }

@@ -1330,11 +1330,8 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                                     if flag == "W" || flag == "L" || flag == "H" {
                                         print(flag)
                                         LocalStoreage.set("1", forKey: "attendanceView")
-                                    } else {
-                                        LocalStoreage.set("0", forKey: "attendanceView")
                                     }
-                                } else {
-                                    LocalStoreage.set("0", forKey: "attendanceView")
+                                    
                                 }
 
                                    
