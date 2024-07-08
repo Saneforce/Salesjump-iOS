@@ -32,6 +32,8 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
     @IBOutlet weak var DayEndView: UIView!
     @IBOutlet weak var EndRmk: UITextView!
     @IBOutlet weak var DayendBT: UILabel!
+    
+    
     var lstMyplnList: [AnyObject] = []
     var TodayDate: [String:AnyObject] = [:]
     var routeNames = [String]()
@@ -344,11 +346,9 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         Desig=prettyJsonData["desigCode"] as? String ?? ""
         attendanceViews=prettyJsonData["attendanceView"] as? Int ?? 0
         
-        
         if attendanceViews == 1{
             LocalStoreage.set("1", forKey: "attendanceView")
         }
-       
         
         
         //Get Design code
