@@ -31,6 +31,9 @@ class MissedDateRouteSelection : IViewController , UITableViewDelegate,UITableVi
     var sfCode = "",divCode = "",desig = "", sfName = "",stateCode = ""
     let LocalStoreage = UserDefaults.standard
     
+    var retailerList = [RetailerList]()
+    var selectedList = [RetailerList]()
+    var allRetailerList = [RetailerList]()
     
     var selectedHeadquarter : AnyObject! {
         didSet {
@@ -95,6 +98,19 @@ class MissedDateRouteSelection : IViewController , UITableViewDelegate,UITableVi
         desig=prettyJsonData["desigCode"] as? String ?? ""
     }
     
+    func updateRetailer(retailers : [AnyObject]) {
+        
+        for retailer in retailers {
+            
+            let name = String(format: "%@", retailer["name"] as! CVarArg)
+            let id = String(format: "%@", retailer["id"] as! CVarArg)
+            let townCode = String(format: "%@", retailer["town_code"] as! CVarArg)
+            
+            self.allRetailerList.append(RetailerList(id: id,name: name,townCode: townCode, isSelected: false,retailer: retailer))
+        }
+        
+        
+    }
     
     func updateRoutes(id : String) {
         if(LocalStoreage.string(forKey: "Distributors_Master_"+id)==nil){
@@ -112,6 +128,7 @@ class MissedDateRouteSelection : IViewController , UITableViewDelegate,UITableVi
                 
                 if let list = GlobalFunc.convertToDictionary(text: RetailData) as? [AnyObject] {
                     lstAllRetails = list
+                    self.updateRetailer(retailers: list)
                 }
                 lblDistributor.text = "Select the Distributor"
                 
@@ -135,6 +152,7 @@ class MissedDateRouteSelection : IViewController , UITableViewDelegate,UITableVi
                 if let lstRetailData = LocalStoreage.string(forKey: "Retail_Master_"+id),
                    let list = GlobalFunc.convertToDictionary(text:  lstRetailData) as? [AnyObject] {
                     lstAllRetails = list
+                    self.updateRetailer(retailers: list)
                 }
             }
         }
@@ -142,38 +160,60 @@ class MissedDateRouteSelection : IViewController , UITableViewDelegate,UITableVi
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return lstRetails.count
+        return retailerList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell:MissedDateOrderSelectionTableViewCell = tableView.dequeueReusableCell(withIdentifier: "Cell") as! MissedDateOrderSelectionTableViewCell
-        print(lstRetails[indexPath.row])
-        cell.lblName.text = lstRetails[indexPath.row]["name"] as? String ?? ""
+       
+        cell.lblName.text = retailerList[indexPath.row].name // lstRetails[indexPath.row]["name"] as? String ?? ""
+        cell.btnSelect.isSelected = retailerList[indexPath.row].isSelected
         cell.btnOrder.addTarget(target: self, action: #selector(orderAction))
+        cell.btnOrder.addTarget(self, action: #selector(orderAction(_:)), for: .touchUpInside)
+        cell.btnSelect.addTarget(self, action: #selector(selectAction(_:)), for: .touchUpInside)
+        cell.heightVwRemarksConstrainst.constant = retailerList[indexPath.row].isSelected == true ? 125 : 0
+        cell.btnOrder.isHidden = retailerList[indexPath.row].isSelected == true ? false : true
         return cell
+    }
+    
+    @objc func selectAction(_ sender : UIButton) {
+        let buttonPosition:CGPoint = sender.convert(CGPoint.zero, to:self.tableViewOrderList)
+        guard let indexPath = self.tableViewOrderList.indexPathForRow(at: buttonPosition) else{
+            return
+        }
+        
+        let retailer = retailerList[indexPath.row]
+        
+        retailerList[indexPath.row].isSelected = !retailerList[indexPath.row].isSelected
+        
+        self.tableViewOrderList.reloadRows(at: [indexPath], with: .automatic)
     }
     
     @objc func orderAction(_ sender : UIButton) {
         
         
         if isFromSecondary == true {
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
-            let trPln = storyboard.instantiateViewController(withIdentifier: "sbSecondaryOrder") as! SecondaryOrder
-            
-            viewController.setViewControllers([trPln], animated: false)
-            (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
-        }else {
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
-            let trPln = storyboard.instantiateViewController(withIdentifier: "sbPrimaryOrder") as! PrimaryOrder
-            
-            viewController.setViewControllers([trPln], animated: false)
-            (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
-        }
-        
-        
 
+            let secondaryOrder = UIStoryboard.secondaryOrder
+            secondaryOrder.isFromMissedEntry = true
+            secondaryOrder.missedDateSubmit = { paramString in
+                print(paramString)
+                self.navigationController?.popViewController(animated: true)
+            }
+            self.navigationController?.pushViewController(secondaryOrder, animated: true)
+            
+        }else {
+
+            
+            let primaryOrder = UIStoryboard.primaryOrder
+            primaryOrder.isFromMissedEntry = true
+            primaryOrder.missedDateSubmit = { paramString in
+                print(paramString)
+                self.navigationController?.popViewController(animated: true)
+            }
+            self.navigationController?.pushViewController(primaryOrder, animated: true)
+        }
+     
     }
     
     @objc private func headquarterAction() {
@@ -215,7 +255,7 @@ class MissedDateRouteSelection : IViewController , UITableViewDelegate,UITableVi
             self.selectedRoute = selectedRoute
             self.navigationController?.popViewController(animated: true)
             
-            self.lstRetails = self.lstAllRetails.filter{($0["id"] as? Int ?? 0) == (self.selectedRoute["id"] as? Int ?? 0)}
+            self.retailerList = self.allRetailerList.filter{$0.townCode == "\(self.selectedRoute["id"] as? String ?? "")"}
             
             self.tableViewOrderList.reloadData()
         }
@@ -227,6 +267,21 @@ class MissedDateRouteSelection : IViewController , UITableViewDelegate,UITableVi
     }
 }
 
+extension MissedDateRouteSelection: UITextViewDelegate{
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.textColor == UIColor.lightGray {
+            textView.text = nil
+            textView.textColor = .black
+        }
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text.isEmpty {
+            textView.text = "Enter the remarks"
+            textView.textColor = UIColor.lightGray
+        }
+    }
+}
 
 class MissedDateOrderSelectionTableViewCell : UITableViewCell {
     
@@ -236,7 +291,60 @@ class MissedDateOrderSelectionTableViewCell : UITableViewCell {
     @IBOutlet weak var btnOrder: UIButton!
     
     
+    @IBOutlet weak var heightVwRemarksConstrainst: NSLayoutConstraint!
+    
+    
     override func awakeFromNib() {
         super.awakeFromNib()
+    }
+}
+
+
+struct SecondaryOrderList {
+    
+    var headquarterId : String!
+    var distributorId : String!
+    var routeId : String!
+    
+    var params : String!
+}
+
+struct RetailerList {
+    
+    var id : String!
+    var name : String!
+    var townCode : String!
+    var isSelected : Bool!
+    var retailer : AnyObject!
+}
+
+
+
+
+
+
+extension UIStoryboard {
+    
+    static var adminForms: UIStoryboard {
+        return UIStoryboard(name: "AdminForms", bundle: nil)
+    }
+    
+    static var main : UIStoryboard {
+        return UIStoryboard(name: "Main", bundle: nil)
+    }
+    
+    
+    static var secondaryOrder:SecondaryOrder {
+        guard let secondaryOrder = UIStoryboard.main.instantiateViewController(withIdentifier: "sbSecondaryOrder") as? SecondaryOrder else {
+            fatalError("SecondaryOrder couldn't be found in Storyboard file")
+        }
+        return secondaryOrder
+    }
+    
+    static var primaryOrder: PrimaryOrder {
+        guard let primaryOrder = UIStoryboard.main.instantiateViewController(withIdentifier: "sbPrimaryOrder") as? PrimaryOrder else {
+            fatalError("primaryOrder couldn't be found in Storyboard file")
+        }
+        return primaryOrder
     }
 }

@@ -106,6 +106,9 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
     var net_weight_data = ""
     var ImgName:String = ""
     
+    var isFromMissedEntry : Bool = false
+    var missedDateSubmit : (String) -> () = { _ in}
+    
     override func viewDidLoad() {
         loadViewIfNeeded()
        
@@ -219,6 +222,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         
         EditSecondaryordervalue()
 
+        print(isFromMissedEntry)
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -1541,9 +1545,15 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         let params: Parameters = [
             "data": jsonString //"["+jsonString+"]"//
         ]
-        print(params)
+   //     print(params)
         print(VisitData.shared.cInTime)
         print(SubmittedDCR.Order_Out_Time)
+        
+        if isFromMissedEntry {
+            missedDateSubmit(jsonString)
+            self.LoadingDismiss()
+            return
+        }
         
         if VisitData.shared.cInTime.isEmpty {
           
@@ -1562,6 +1572,8 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
                 "data": jsonString2 //"["+jsonString+"]"//
             ]
             print(params2)
+            
+            
             
             if (Edit_Order_Count == 0){
             AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"dcr/updateProducts" + "&divisionCode=" + self.DivCode + "&sfCode=" + self.SFCode + "&desig=" + self.Desig, method: .post, parameters: params2, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {

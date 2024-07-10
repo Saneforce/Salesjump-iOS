@@ -293,7 +293,7 @@
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fq5-hE-vVP">
-                                                        <rect key="frame" x="298" y="20" width="42" height="20"/>
+                                                        <rect key="frame" x="295" y="20" width="45" height="20"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
                                                         <fontDescription key="fontDescription" name="Poppins-SemiBold" family="Poppins" pointSize="14"/>
                                                         <nil key="textColor"/>
@@ -325,7 +325,7 @@
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dAH-bO-N17">
-                                                        <rect key="frame" x="297" y="20" width="43" height="21"/>
+                                                        <rect key="frame" x="294" y="20" width="46" height="21"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
                                                         <fontDescription key="fontDescription" name="Poppins-SemiBold" family="Poppins" pointSize="14"/>
                                                         <nil key="textColor"/>
@@ -583,14 +583,15 @@
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xAD-62-cw4">
                                                             <rect key="frame" x="0.0" y="0.0" width="390" height="50"/>
                                                             <subviews>
-                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rjo-Qd-ewm">
+                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rjo-Qd-ewm">
                                                                     <rect key="frame" x="10" y="10" width="25" height="25"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="height" constant="25" id="a1a-dd-U2Y"/>
                                                                         <constraint firstAttribute="width" constant="25" id="jcb-hr-NRL"/>
                                                                     </constraints>
-                                                                    <state key="normal" title="Button"/>
-                                                                    <buttonConfiguration key="configuration" style="plain" title="Button"/>
+                                                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                                    <state key="normal" image="check-box-empty"/>
+                                                                    <state key="selected" image="check-box"/>
                                                                 </button>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LXU-6O-U7W">
                                                                     <rect key="frame" x="45" y="10" width="235" height="35"/>
@@ -625,9 +626,47 @@
                                                         </view>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yhM-6t-vpR">
                                                             <rect key="frame" x="0.0" y="50" width="390" height="132"/>
+                                                            <subviews>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Remarks" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Ts-Qq-IsK">
+                                                                    <rect key="frame" x="15.000000000000004" y="10" width="62.333333333333343" height="21"/>
+                                                                    <constraints>
+                                                                        <constraint firstAttribute="height" constant="21" id="uph-dp-Ihq"/>
+                                                                    </constraints>
+                                                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
+                                                                    <nil key="textColor"/>
+                                                                    <nil key="highlightedColor"/>
+                                                                </label>
+                                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="R3S-px-aZp">
+                                                                    <rect key="frame" x="10" y="41" width="370" height="81"/>
+                                                                    <color key="backgroundColor" red="0.93725490199999995" green="0.95294117649999999" blue="0.98431372549999996" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                                                    <color key="textColor" systemColor="labelColor"/>
+                                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                                                </textView>
+                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="byk-ih-98B">
+                                                                    <rect key="frame" x="295" y="10" width="80" height="25"/>
+                                                                    <constraints>
+                                                                        <constraint firstAttribute="height" constant="25" id="pDl-Yg-9xr"/>
+                                                                        <constraint firstAttribute="width" constant="80" id="xAu-PR-nlB"/>
+                                                                    </constraints>
+                                                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="14"/>
+                                                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                                    <state key="normal" title="Templates">
+                                                                        <color key="titleColor" red="0.062745098040000002" green="0.67843137249999996" blue="0.76078431369999999" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                                                    </state>
+                                                                </button>
+                                                            </subviews>
                                                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                             <constraints>
+                                                                <constraint firstAttribute="trailing" secondItem="R3S-px-aZp" secondAttribute="trailing" constant="10" id="2g1-6c-Str"/>
+                                                                <constraint firstItem="R3S-px-aZp" firstAttribute="top" secondItem="1Ts-Qq-IsK" secondAttribute="bottom" constant="10" id="Q16-7k-0mk"/>
+                                                                <constraint firstItem="1Ts-Qq-IsK" firstAttribute="leading" secondItem="yhM-6t-vpR" secondAttribute="leading" constant="15" id="TMT-Jw-VIc"/>
+                                                                <constraint firstItem="R3S-px-aZp" firstAttribute="leading" secondItem="yhM-6t-vpR" secondAttribute="leading" constant="10" id="ZuN-A1-wz3"/>
+                                                                <constraint firstItem="byk-ih-98B" firstAttribute="top" secondItem="yhM-6t-vpR" secondAttribute="top" constant="10" id="enX-2x-X7g"/>
+                                                                <constraint firstAttribute="bottom" secondItem="R3S-px-aZp" secondAttribute="bottom" constant="10" id="hFi-VD-dIU"/>
                                                                 <constraint firstAttribute="height" constant="125" id="i6S-aj-pgI"/>
+                                                                <constraint firstItem="1Ts-Qq-IsK" firstAttribute="top" secondItem="yhM-6t-vpR" secondAttribute="top" constant="10" id="ogO-qT-552"/>
+                                                                <constraint firstAttribute="trailing" secondItem="byk-ih-98B" secondAttribute="trailing" constant="15" id="qdX-iD-Iw4"/>
                                                             </constraints>
                                                         </view>
                                                     </subviews>
@@ -653,6 +692,7 @@
                                         <connections>
                                             <outlet property="btnOrder" destination="x1W-CH-zpO" id="9Ye-xV-4Hv"/>
                                             <outlet property="btnSelect" destination="rjo-Qd-ewm" id="h8W-0k-tdW"/>
+                                            <outlet property="heightVwRemarksConstrainst" destination="i6S-aj-pgI" id="HQN-bf-0cv"/>
                                             <outlet property="lblName" destination="LXU-6O-U7W" id="J9x-eo-O63"/>
                                         </connections>
                                     </tableViewCell>
@@ -896,7 +936,7 @@
                                                                                     <nil key="highlightedColor"/>
                                                                                 </label>
                                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JeT-RN-eGV">
-                                                                                    <rect key="frame" x="117" y="11" width="55" height="21"/>
+                                                                                    <rect key="frame" x="114" y="11" width="55" height="21"/>
                                                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                                                     <nil key="textColor"/>
@@ -2024,7 +2064,7 @@
                                                                     <textInputTraits key="textInputTraits"/>
                                                                 </textField>
                                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="camera.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="Jnd-Zu-Hei">
-                                                                    <rect key="frame" x="288" y="15.333333333333336" width="25" height="18.999999999999986"/>
+                                                                    <rect key="frame" x="288" y="15.333333333333334" width="25" height="18.999999999999993"/>
                                                                     <color key="tintColor" red="0.062745098040000002" green="0.67843137249999996" blue="0.76078431369999999" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="width" constant="25" id="l5j-MQ-OVN"/>
@@ -2808,7 +2848,7 @@
                                                 </connections>
                                             </view>
                                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SZ4-Kk-kRO">
-                                                <rect key="frame" x="321" y="14" width="32" height="30"/>
+                                                <rect key="frame" x="320" y="14" width="31" height="30"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
                                                 <color key="tintColor" red="0.40061411200000002" green="0.39668652269999999" blue="0.39668652269999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
@@ -3240,7 +3280,7 @@
                                                                 <nil key="highlightedColor"/>
                                                             </label>
                                                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9fW-HW-bLw">
-                                                                <rect key="frame" x="243" y="7" width="56" height="24"/>
+                                                                <rect key="frame" x="242" y="7" width="55" height="24"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
                                                                 <color key="tintColor" red="0.21176470589999999" green="0.20784313730000001" blue="0.20784313730000001" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
@@ -3334,7 +3374,7 @@
                                                                 <nil key="highlightedColor"/>
                                                             </label>
                                                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zJr-hM-TiG">
-                                                                <rect key="frame" x="235" y="5" width="71" height="28"/>
+                                                                <rect key="frame" x="232" y="5" width="74" height="28"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
                                                                 <color key="tintColor" red="0.21176470589999999" green="0.20784313730000001" blue="0.20784313730000001" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
@@ -3602,6 +3642,8 @@
         <image name="arrow.right" catalog="system" width="128" height="95"/>
         <image name="backsmall" width="24" height="24"/>
         <image name="camera.fill" catalog="system" width="128" height="93"/>
+        <image name="check-box" width="128" height="128"/>
+        <image name="check-box-empty" width="128" height="128"/>
         <image name="eye.circle.fill" catalog="system" width="128" height="123"/>
         <image name="geoTagMarker" width="30" height="30"/>
         <image name="multiply.circle.fill" catalog="system" width="128" height="123"/>

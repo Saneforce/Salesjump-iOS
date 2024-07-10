@@ -94,6 +94,10 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
     var SFCode: String = "", StateCode: String = "", DivCode: String = "",Desig: String="", rSF: String = ""
     let LocalStoreage = UserDefaults.standard
     var net_weight_data = ""
+    
+    var isFromMissedEntry : Bool!
+    var missedDateSubmit : (String) -> () = { _ in}
+    
     override func viewDidLoad() {
         getUserDetails()
         updateEditOrderValues()
