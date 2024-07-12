@@ -385,9 +385,10 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
                     Toast.show(message: error.errorDescription!)  //, controller: self
                 }
             }
-        
+        //Old Conduction
+      //  if (UserSetup.shared.SrtEndKMNd != 0 && UserSetup.shared.exp_auto == 2 ){
 
-        if (UserSetup.shared.SrtEndKMNd != 0 && UserSetup.shared.exp_auto == 2 ){
+        if (UserSetup.shared.SrtEndKMNd == 1 && UserSetup.shared.exp_auto == 2 ){
         if let data=LocalStoreage.string(forKey: "dayplan"), data == "1" {
             print(attendanceViews)
             if (attendanceViews == 0) {

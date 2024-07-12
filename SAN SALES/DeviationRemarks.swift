@@ -32,7 +32,7 @@ class DeviationRemarks : IViewController,UITextViewDelegate {
         
         getUserDetails()
         
-        print(self.tpDatas)
+      //  print(self.tpDatas)
     }
     
     func getUserDetails(){

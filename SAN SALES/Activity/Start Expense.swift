@@ -717,18 +717,17 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource,FSC
                     LocalStoreage.set("1", forKey: "attendanceView")
                     if let attendanceArray = prettyPrintedJson["Attendance"] as? [[String: Any]] {
                         if let firstAttendance = attendanceArray.first {
-                            if let msgValue = firstAttendance["msg"] as? String {
-                                
-                            } else {
-                               // LocalStoreage.set("0", forKey: "attendanceView")
-                            }
+//                            if let msgValue = firstAttendance["msg"] as? String {
+//                                
+//                            } else {
+//                               // LocalStoreage.set("0", forKey: "attendanceView")
+//                            }
                         } else {
                            // LocalStoreage.set("0", forKey: "attendanceView")
                         }
                     } else {
                        // LocalStoreage.set("0", forKey: "attendanceView")
                     }
-                    print(LocalStoreage.string(forKey: "attendanceView"))
                     
                     Toast.show(message: "submitted successfully", controller: self)
                     if let NavExp = Exp_Nav, NavExp=="Ex_Ent"{

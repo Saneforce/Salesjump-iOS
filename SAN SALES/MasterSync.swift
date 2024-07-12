@@ -78,7 +78,7 @@ import BackgroundTasks
          ]))
          
          strMasList.append(mnuItem.init(MasId: 8, MasName: "Route List", MasImage: "mnuPrimary",StoreKey: "Route_Master_"+SFCode, ApiKey: "table/list&divisionCode="+(prettyJsonData["divisionCode"] as? String ?? "")+"&rSF="+SFCode+"&sfCode="+SFCode,fromData: [
-            "tableName":"vwTown_Master_APP","coloumns":"[\"town_code as id\", \"town_name as name\",\"target\",\"min_prod\",\"field_code\",\"stockist_code\",\"Allowance_Type\"]","where":"[\"isnull(Town_Activation_Flag,0)=0\"]","orderBy":"[\"name asc\"]","desig":"mgr"
+            "tableName":" mardi","coloumns":"[\"town_code as id\", \"town_name as name\",\"target\",\"min_prod\",\"field_code\",\"stockist_code\",\"Allowance_Type\"]","where":"[\"isnull(Town_Activation_Flag,0)=0\"]","orderBy":"[\"name asc\"]","desig":"mgr"
          ]))
          
          
