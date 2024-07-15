@@ -954,8 +954,8 @@
             filePath = "SAN SALES/Activity/SecondaryOrder.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1705"
-            endingLineNumber = "1705"
+            startingLineNumber = "1774"
+            endingLineNumber = "1774"
             landmarkName = "EditSecondaryordervalue()"
             landmarkType = "7">
          </BreakpointContent>
@@ -970,8 +970,8 @@
             filePath = "SAN SALES/Activity/SecondaryOrder.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1879"
-            endingLineNumber = "1879"
+            startingLineNumber = "1948"
+            endingLineNumber = "1948"
             landmarkName = "DemoEdite()"
             landmarkType = "7">
          </BreakpointContent>
@@ -986,8 +986,8 @@
             filePath = "SAN SALES/Activity/SecondaryOrder.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1057"
-            endingLineNumber = "1057"
+            startingLineNumber = "1061"
+            endingLineNumber = "1061"
             landmarkName = "updateQty(id:sUom:sUomNm:sUomConv:sNetUnt:sQty:ProdItem:refresh:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1002,10 +1002,166 @@
             filePath = "SAN SALES/AdminForms/MissedDateRouteSelection.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "258"
-            endingLineNumber = "258"
+            startingLineNumber = "322"
+            endingLineNumber = "322"
             landmarkName = "routeAction()"
             landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "0B9ECC71-BA5A-4DAA-99AA-80FD9D28BD16"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SAN SALES/Activity/SecondaryOrder.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1601"
+            endingLineNumber = "1601"
+            landmarkName = "OrderSubmit(sLocation:sAddress:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "003ABDED-017A-4CEF-A834-0F18CB35061A"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SAN SALES/Activity/SecondaryOrder.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1051"
+            endingLineNumber = "1051"
+            landmarkName = "updateQty(id:sUom:sUomNm:sUomConv:sNetUnt:sQty:ProdItem:refresh:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "ADA18E4D-545A-4EEF-A63F-BFDF8F495010"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SAN SALES/AdminForms/MissedDateRouteSelection.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "262"
+            endingLineNumber = "262"
+            landmarkName = "orderAction(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "BAB3A6AC-73DD-4927-874A-18AF1FDAF832"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SAN SALES/Activity/SecondaryOrder.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1060"
+            endingLineNumber = "1060"
+            landmarkName = "updateQty(id:sUom:sUomNm:sUomConv:sNetUnt:sQty:ProdItem:refresh:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "58433765-CD42-4BAF-8E05-3C8D1A6E8A17"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SAN SALES/Activity/SecondaryOrder.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1666"
+            endingLineNumber = "1666"
+            landmarkName = "OrderSubmit(sLocation:sAddress:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "58433765-CD42-4BAF-8E05-3C8D1A6E8A17 - deb23bd5cbbe365d"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "SAN_SALES.SecondaryOrder.OrderSubmit(sLocation: Swift.String, sAddress: Swift.String) -&gt; ()"
+                  moduleName = "SAN SALES"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/naga/Desktop/Salesjump-iOS%20MD%20jul%203/SAN%20SALES/Activity/SecondaryOrder.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1666"
+                  endingLineNumber = "1666">
+               </Location>
+               <Location
+                  uuid = "58433765-CD42-4BAF-8E05-3C8D1A6E8A17 - 3a21f65251492c4d"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #6 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.SecondaryOrder.OrderSubmit(sLocation: Swift.String, sAddress: Swift.String) -&gt; ()"
+                  moduleName = "SAN SALES"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/naga/Desktop/Salesjump-iOS%20MD%20jul%203/SAN%20SALES/Activity/SecondaryOrder.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1668"
+                  endingLineNumber = "1668">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "398CFC1D-BAC2-41DF-B88F-BECFAA9F0AE1"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SAN SALES/Activity/PrimaryOrder.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1329"
+            endingLineNumber = "1329"
+            landmarkName = "OrderSubmit(sLocation:sAddress:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "398CFC1D-BAC2-41DF-B88F-BECFAA9F0AE1 - bb81daba12c1847a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "SAN_SALES.PrimaryOrder.OrderSubmit(sLocation: Swift.String, sAddress: Swift.String) -&gt; ()"
+                  moduleName = "SAN SALES"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/naga/Desktop/Salesjump-iOS%20MD%20jul%203/SAN%20SALES/Activity/PrimaryOrder.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1329"
+                  endingLineNumber = "1329">
+               </Location>
+               <Location
+                  uuid = "398CFC1D-BAC2-41DF-B88F-BECFAA9F0AE1 - fb096386480b0cc4"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #4 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.PrimaryOrder.OrderSubmit(sLocation: Swift.String, sAddress: Swift.String) -&gt; ()"
+                  moduleName = "SAN SALES"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/naga/Desktop/Salesjump-iOS%20MD%20jul%203/SAN%20SALES/Activity/PrimaryOrder.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1331"
+                  endingLineNumber = "1331">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

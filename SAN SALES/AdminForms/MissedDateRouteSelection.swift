@@ -18,6 +18,25 @@ class MissedDateRouteSelection : IViewController , UITableViewDelegate,UITableVi
     @IBOutlet weak var lblRoutes: LabelSelect!
     @IBOutlet weak var tableViewOrderList: UITableView!
     
+    
+    @IBOutlet weak var vwHeadquartes: UIView!
+    @IBOutlet weak var vwDistributors: UIView!
+    @IBOutlet weak var vwRoutes: UIView!
+    
+    
+    
+    @IBOutlet weak var heightVwheadquartersConstraint: NSLayoutConstraint!
+    @IBOutlet weak var heightVwDistributorsConstraint: NSLayoutConstraint!
+    @IBOutlet weak var heightVwRoutesConstraints: NSLayoutConstraint!
+    
+    
+    
+    @IBOutlet weak var topHeightVwHeadquartersConstraint: NSLayoutConstraint!
+    
+    
+    @IBOutlet weak var topHeightVwDistributorsConstraints: NSLayoutConstraint!
+    
+    
     var isFromSecondary : Bool!
     
     var lstHQs: [AnyObject] = []
@@ -65,7 +84,7 @@ class MissedDateRouteSelection : IViewController , UITableViewDelegate,UITableVi
         lblDistributor.addTarget(target: self, action: #selector(distributorAction))
         lblRoutes.addTarget(target: self, action: #selector(routeAction))
         getUserDetails()
-        
+        updateDisplay()
         if UserSetup.shared.SF_type != 1 {
             if let HQData = LocalStoreage.string(forKey: "HQ_Master"),
                let list = GlobalFunc.convertToDictionary(text:  HQData) as? [AnyObject] {
@@ -81,6 +100,27 @@ class MissedDateRouteSelection : IViewController , UITableViewDelegate,UITableVi
         if let RouteData = LocalStoreage.string(forKey: "Route_Master_"+sfCode),
            let list = GlobalFunc.convertToDictionary(text:  RouteData) as? [AnyObject] {
             lstRoutes = list
+            
+        }
+        
+        if let RetailData = LocalStoreage.string(forKey: "Retail_Master_"+sfCode),
+           let list = GlobalFunc.convertToDictionary(text:  RetailData) as? [AnyObject] {
+            lstAllRetails = list
+            self.updateRetailer(retailers: list)
+        }
+    }
+    
+    func updateDisplay() {
+        if UserSetup.shared.SF_type == 1 {
+            self.vwHeadquartes.isHidden = true
+            self.topHeightVwHeadquartersConstraint.constant = 0
+            self.heightVwheadquartersConstraint.constant = 0
+        }
+        
+        if UserSetup.shared.distributorBased == 0 {
+            self.vwDistributors.isHidden = true
+            self.topHeightVwDistributorsConstraints.constant = 0
+            self.heightVwDistributorsConstraint.constant = 0
             
         }
     }
@@ -108,8 +148,6 @@ class MissedDateRouteSelection : IViewController , UITableViewDelegate,UITableVi
             
             self.allRetailerList.append(RetailerList(id: id,name: name,townCode: townCode, isSelected: false,retailer: retailer))
         }
-        
-        
     }
     
     func updateRoutes(id : String) {
@@ -159,6 +197,14 @@ class MissedDateRouteSelection : IViewController , UITableViewDelegate,UITableVi
     }
     
     
+    
+    @IBAction func saveAction(_ sender: UIButton) {
+        
+        
+    }
+    
+    
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return retailerList.count
     }
@@ -168,11 +214,13 @@ class MissedDateRouteSelection : IViewController , UITableViewDelegate,UITableVi
        
         cell.lblName.text = retailerList[indexPath.row].name // lstRetails[indexPath.row]["name"] as? String ?? ""
         cell.btnSelect.isSelected = retailerList[indexPath.row].isSelected
-        cell.btnOrder.addTarget(target: self, action: #selector(orderAction))
         cell.btnOrder.addTarget(self, action: #selector(orderAction(_:)), for: .touchUpInside)
         cell.btnSelect.addTarget(self, action: #selector(selectAction(_:)), for: .touchUpInside)
         cell.heightVwRemarksConstrainst.constant = retailerList[indexPath.row].isSelected == true ? 125 : 0
         cell.btnOrder.isHidden = retailerList[indexPath.row].isSelected == true ? false : true
+        if retailerList[indexPath.row].orderList.count != 0 {
+            cell.btnOrder.setTitle("Edit", for: .normal)
+        }
         return cell
     }
     
@@ -187,18 +235,34 @@ class MissedDateRouteSelection : IViewController , UITableViewDelegate,UITableVi
         retailerList[indexPath.row].isSelected = !retailerList[indexPath.row].isSelected
         
         self.tableViewOrderList.reloadRows(at: [indexPath], with: .automatic)
+        self.tableViewOrderList.reloadData()
+        
+        self.tableViewOrderList.beginUpdates()
+        self.tableViewOrderList.setNeedsDisplay()
+        self.tableViewOrderList.endUpdates()
     }
     
     @objc func orderAction(_ sender : UIButton) {
+        let buttonPosition:CGPoint = sender.convert(CGPoint.zero, to:self.tableViewOrderList)
+        guard let indexPath = self.tableViewOrderList.indexPathForRow(at: buttonPosition) else{
+            return
+        }
         
         
         if isFromSecondary == true {
 
             let secondaryOrder = UIStoryboard.secondaryOrder
             secondaryOrder.isFromMissedEntry = true
+            secondaryOrder.selectedProducts = self.retailerList[indexPath.row].orderList
             secondaryOrder.missedDateSubmit = { paramString in
                 print(paramString)
-                self.navigationController?.popViewController(animated: true)
+                self.tableViewOrderList.reloadRows(at: [indexPath], with: .automatic)
+            }
+            secondaryOrder.missedDateEditData = { paramString in
+                print(paramString)
+                self.retailerList[indexPath.row].orderList = paramString
+                
+                self.tableViewOrderList.reloadRows(at: [indexPath], with: .automatic)
             }
             self.navigationController?.pushViewController(secondaryOrder, animated: true)
             
@@ -316,6 +380,8 @@ struct RetailerList {
     var townCode : String!
     var isSelected : Bool!
     var retailer : AnyObject!
+    
+    var orderList = [SecondaryOrderSelectedList]()
 }
 
 

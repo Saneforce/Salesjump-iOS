@@ -108,6 +108,9 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
     
     var isFromMissedEntry : Bool = false
     var missedDateSubmit : (String) -> () = { _ in}
+    var missedDateEditData : ([SecondaryOrderSelectedList]) -> () = { _ in}
+    var products = [SecondaryOrderSelectedList]()
+    var selectedProducts = [SecondaryOrderSelectedList]()
     
     override func viewDidLoad() {
         loadViewIfNeeded()
@@ -222,6 +225,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         
         EditSecondaryordervalue()
 
+        self.editMissedDateOrder()
         print(isFromMissedEntry)
     }
     override func viewDidAppear(_ animated: Bool) {
@@ -1298,7 +1302,14 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
                     }
                     Count = Count+1
                     if (OrderSub == "OD"){
-                        self.OrderSubmit(sLocation: sLocation, sAddress: sAddress)
+                        
+                        if self.isFromMissedEntry == true {
+                            self.OrderSubmitMissedDate(sLocation: sLocation, sAddress: sAddress)
+                        }else {
+                            self.OrderSubmit(sLocation: sLocation, sAddress: sAddress)
+                        }
+                        
+                        
                         OrderSub  = ""
                         print(Count)
                     }else{
@@ -1317,6 +1328,38 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         
         
     }
+    
+    func OrderSubmitMissedDate(sLocation: String,sAddress: String) {
+        
+        for i in 0..<self.lstPrvOrder.count {
+            let item: [String: Any]=self.lstPrvOrder[i] as! [String : Any]
+            let id=String(format: "%@", item["id"] as! CVarArg)
+            let uom=String(format: "%@", item["UOM"] as! CVarArg)
+            let uomName=String(format: "%@", item["UOMNm"] as! CVarArg)
+            let uomConv=String(format: "%@", item["UOMConv"] as! CVarArg)
+            let rate=String(format: "%@", item["NetWt"] as! CVarArg)
+            let Qty=String(format: "%@", item["Qty"] as! CVarArg)
+            
+            
+            let ProdItems = self.lstAllProducts.filter({(product) in
+                let ProdId: String = String(format: "%@", product["id"] as! CVarArg)
+                return Bool(ProdId == id)
+            })
+            print(ProdItems)
+            
+            self.products.append(SecondaryOrderSelectedList(productId: id, unitId: uom, unitName: uomName, unitConversion: uomConv, rate: rate, Qty: Qty, product: ProdItems.first, distributorId: VisitData.shared.Dist.id))
+        }
+        
+        missedDateEditData(self.products)
+        self.LoadingDismiss()
+        PhotosCollection.shared.PhotoList = []
+        VisitData.shared.clear()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0){
+            self.navigationController?.popViewController(animated: true)
+        }
+        
+    }
+    
     func OrderSubmit(sLocation: String,sAddress: String){
         
         var sPItems:String = ""
@@ -1552,6 +1595,11 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         if isFromMissedEntry {
             missedDateSubmit(jsonString)
             self.LoadingDismiss()
+            PhotosCollection.shared.PhotoList = []
+            VisitData.shared.clear()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0){
+                self.navigationController?.popViewController(animated: true)
+            }
             return
         }
         
@@ -1613,6 +1661,8 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
     }
      else{
          print(params)
+         print(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"dcr/save&divisionCode=" + self.DivCode + "&rSF=" + self.SFCode + "&sfCode=" + self.SFCode)
+         
          AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"dcr/save&divisionCode=" + self.DivCode + "&rSF=" + self.SFCode + "&sfCode=" + self.SFCode, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
          AFdata in
          self.LoadingDismiss()
@@ -1654,6 +1704,25 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         DivCode = prettyJsonData["divisionCode"] as? String ?? ""
         Desig=prettyJsonData["desigCode"] as? String ?? ""
     }
+    
+    func editMissedDateOrder() {
+        
+        if !self.selectedProducts.isEmpty {
+            for product in selectedProducts {
+                updateQty(id: product.productId, sUom: product.unitId, sUomNm: product.unitName, sUomConv: product.unitConversion,sNetUnt: product.rate, sQty: product.Qty,ProdItem: product.product as! [String : Any],refresh: 1)
+            }
+            
+            let filteredArray = lstDistList.filter {($0["id"] as? Int) == Int(self.selectedProducts.first?.distributorId ?? "0")}
+            if (filteredArray.isEmpty){
+                VisitData.shared.Dist.id = ""
+                lblDistNm.text = ""
+            }else{
+                VisitData.shared.Dist.id = String((filteredArray[0]["id"] as? Int)!)
+                lblDistNm.text = filteredArray[0]["name"] as? String
+            }
+        }
+    }
+    
     func EditSecondaryordervalue() {
         let product = productData
         print(product as Any)
@@ -1986,4 +2055,29 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
     @IBAction func closeWin(_ sender:Any){
         vwSelWindow.isHidden=true
     }
+}
+
+struct SecondaryOrderSelectedList {
+    
+    var productId : String!
+    var unitId : String!
+    var unitName : String!
+    var unitConversion : String!
+    var rate : String!
+    var Qty : String!
+    var product: AnyObject!
+    var distributorId : String!
+    
+    init(productId: String!, unitId: String!, unitName: String!, unitConversion: String!, rate: String!, Qty: String!, product: AnyObject!,distributorId:String!) {
+        self.productId = productId
+        self.unitId = unitId
+        self.unitName = unitName
+        self.unitConversion = unitConversion
+        self.rate = rate
+        self.Qty = Qty
+        self.product = product
+        self.distributorId = distributorId
+    }
+    
+    
 }
