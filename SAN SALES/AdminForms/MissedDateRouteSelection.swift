@@ -271,9 +271,16 @@ class MissedDateRouteSelection : IViewController , UITableViewDelegate,UITableVi
             
             let primaryOrder = UIStoryboard.primaryOrder
             primaryOrder.isFromMissedEntry = true
+            primaryOrder.selectedProducts = self.retailerList[indexPath.row].orderList
             primaryOrder.missedDateSubmit = { paramString in
                 print(paramString)
                 self.navigationController?.popViewController(animated: true)
+            }
+            primaryOrder.missedDateEditData = { paramString in
+                print(paramString)
+                self.retailerList[indexPath.row].orderList = paramString
+                
+                self.tableViewOrderList.reloadRows(at: [indexPath], with: .automatic)
             }
             self.navigationController?.pushViewController(primaryOrder, animated: true)
         }
@@ -382,6 +389,7 @@ struct RetailerList {
     var retailer : AnyObject!
     
     var orderList = [SecondaryOrderSelectedList]()
+    var remarks : String!
 }
 
 
