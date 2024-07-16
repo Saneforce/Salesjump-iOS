@@ -314,17 +314,13 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                 self.vwMainScroll.contentSize = CGSize(width: self.vwContent.frame.width, height: 830)
             
         }else{
-            
             self.vwTravelMode.isHidden  = true
             self.vwMainScroll.contentSize = CGSize(width: self.vwContent.frame.width, height: 750)
             self.vwJointCtrl.frame.origin.y = vwJointCtrl.frame.origin.y+vwJointCtrl.frame.height-300
            // self.vwDeviationCtrl.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height-300
            // self.vwRejectReason.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height-300
            self.vwRmksCtrl.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height-300
-            
-            
         }
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -347,7 +343,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
     travelmode()
     }
     
-    func travelmode() {
+    func travelmode(){
         let axn = "get/travelmode"
         let apiKey = "\(axn)&State_Code=\(StateCode)&Division_Code=\(DivCode)"
         var result = apiKey
@@ -1096,13 +1092,13 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                 Toast.show(message: "Select the Route", controller: self)
                 return false
             }
+            
+            if UserSetup.shared.SrtEndKMNd == 2 {
+                if lblTravelMode.text=="Select Travel Mode"{
+                    Toast.show(message: "Select Travel Mode", controller: self)
+                    return false
+                }
         }
-        
-        if UserSetup.shared.SrtEndKMNd == 2 {
-            if lblTravelMode.text=="Select Travel Mode"{
-                Toast.show(message: "Select Travel Mode", controller: self)
-                return false
-            }
         }
         /*
         if NewOutlet.shared.Lat == "" {

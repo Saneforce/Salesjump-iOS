@@ -115,6 +115,7 @@
 		3F5B297828891D5C002D226C /* CheckPermissions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5B297728891D5C002D226C /* CheckPermissions.swift */; };
 		3F5B297A28894AB3002D226C /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5B297928894AB3002D226C /* GradientView.swift */; };
 		3F5B2FC3284B59E400574D7C /* MsgLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5B2FC2284B59E400574D7C /* MsgLoader.swift */; };
+		3F601F3E2C466499002EF90F /* Daily Expense Entry SFC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F601F3D2C466499002EF90F /* Daily Expense Entry SFC.swift */; };
 		3F619F3C27EAEDC000F3D05F /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F619F3B27EAEDC000F3D05F /* LocationService.swift */; };
 		3F619F3E27EB275000F3D05F /* CLocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F619F3D27EB274F00F3D05F /* CLocationService.swift */; };
 		3F7CCF0328F14CA3002A7C03 /* GEOTagging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7CCF0228F14CA3002A7C03 /* GEOTagging.swift */; };
@@ -247,6 +248,7 @@
 		3F5B297728891D5C002D226C /* CheckPermissions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckPermissions.swift; sourceTree = "<group>"; };
 		3F5B297928894AB3002D226C /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 		3F5B2FC2284B59E400574D7C /* MsgLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MsgLoader.swift; sourceTree = "<group>"; };
+		3F601F3D2C466499002EF90F /* Daily Expense Entry SFC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Daily Expense Entry SFC.swift"; sourceTree = "<group>"; };
 		3F619F3B27EAEDC000F3D05F /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
 		3F619F3D27EB274F00F3D05F /* CLocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CLocationService.swift; sourceTree = "<group>"; };
 		3F7CCF0228F14CA3002A7C03 /* GEOTagging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GEOTagging.swift; sourceTree = "<group>"; };
@@ -361,6 +363,7 @@
 				388CD92A2BDA3ABE003A06F9 /* TourPlanCalenderScreen.swift */,
 				155F39732BEA5FED0096139B /* ItemMultipleSelectionViewController.swift */,
 				155F39742BEA5FED0096139B /* ItemMultipleSelectionViewController.xib */,
+				3F601F3D2C466499002EF90F /* Daily Expense Entry SFC.swift */,
 			);
 			path = AdminForms;
 			sourceTree = "<group>";
@@ -774,6 +777,7 @@
 				3F28CC1127DC856400B95964 /* MasterSync.swift in Sources */,
 				3883A09C2A176B6300B858CF /* SubmittedCalls.swift in Sources */,
 				1514DF762BD785D900E6B45A /* SuperStockistOrderList.swift in Sources */,
+				3F601F3E2C466499002EF90F /* Daily Expense Entry SFC.swift in Sources */,
 				38F6F5AB2B19D2C2007090BF /* Summary.swift in Sources */,
 				3F28CC1427DC97F000B95964 /* cellListItem.swift in Sources */,
 				3F06352C283BC9790027842E /* PhotoGallary.swift in Sources */,

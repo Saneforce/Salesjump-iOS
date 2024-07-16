@@ -268,7 +268,7 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
         if validateForm(Seldate: date) == false {
             return
         }
-        if (UserSetup.shared.SrtEndKMNd != 0 && UserSetup.shared.exp_auto == 2 ){
+        if (UserSetup.shared.SrtEndKMNd == 1 && UserSetup.shared.exp_auto == 2 ){
             if (UserSetup.shared.SrtNd == 0){
                 if !lstWortyp.isEmpty{
                     print(lstWortyp)
@@ -980,11 +980,7 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
                 }
             }
         }
-    
-    func nave_to_start_end_exp(){
         
-    }
-    
     func Nav_Exp_Form(date:Date){
         if validateForm(Seldate: date) == false {
             return
@@ -995,22 +991,35 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
         })
         alert.addAction(UIAlertAction(title: "OK", style: .destructive) { [self] _ in
             self.dismiss(animated: true, completion: nil)
-            let storyboard = UIStoryboard(name: "AdminForms", bundle: nil)
-            let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
-            let RptMnuVc = storyboard.instantiateViewController(withIdentifier: "Expense") as! Expense_Entry
-            let myDyPln = storyboard.instantiateViewController(withIdentifier: "Daily_Expense_Entry") as! Daily_Expense_Entry
-            VisitData.shared.Nav_id = 1
-            myDyPln.day_Plan = Day_Plan_Data
-            myDyPln.set_Date = Set_Date
-            myDyPln.PeriodicData = Nav_PeriodicData
-            myDyPln.ExpEditNeed = exp_neededs
-            
-            let formatters = DateFormatter()
-            formatters.dateFormat = "yyyy-MM-dd"
-            VisitData.shared.fromdate = formatters.string(from: FDate)
-            VisitData.shared.Todate = formatters.string(from: TDate)
-            viewController.setViewControllers([RptMnuVc,myDyPln], animated: false)
-            (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
+            if UserSetup.shared.SrtEndKMNd == 2{
+                let storyboard = UIStoryboard(name: "AdminForms", bundle: nil)
+                let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
+                let RptMnuVc = storyboard.instantiateViewController(withIdentifier: "Expense") as! Expense_Entry
+                let myDyPln = storyboard.instantiateViewController(withIdentifier: "Daily_Expense_EntrySFC") as! Daily_Expense_Entry_SFC
+                VisitData.shared.Nav_id = 1
+                myDyPln.set_Date = Set_Date
+                viewController.setViewControllers([RptMnuVc,myDyPln], animated: false)
+                (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
+                
+            }else{
+                
+                let storyboard = UIStoryboard(name: "AdminForms", bundle: nil)
+                let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
+                let RptMnuVc = storyboard.instantiateViewController(withIdentifier: "Expense") as! Expense_Entry
+                let myDyPln = storyboard.instantiateViewController(withIdentifier: "Daily_Expense_Entry") as! Daily_Expense_Entry
+                VisitData.shared.Nav_id = 1
+                myDyPln.day_Plan = Day_Plan_Data
+                myDyPln.set_Date = Set_Date
+                myDyPln.PeriodicData = Nav_PeriodicData
+                myDyPln.ExpEditNeed = exp_neededs
+                
+                let formatters = DateFormatter()
+                formatters.dateFormat = "yyyy-MM-dd"
+                VisitData.shared.fromdate = formatters.string(from: FDate)
+                VisitData.shared.Todate = formatters.string(from: TDate)
+                viewController.setViewControllers([RptMnuVc,myDyPln], animated: false)
+                (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
+            }
         })
         self.present(alert, animated: true)
     }

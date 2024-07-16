@@ -158,6 +158,8 @@ class Expense_View: UIViewController, UITableViewDelegate, UITableViewDataSource
         Exp_Summary_Data.append(Exp_Sum(Tit: "Total Deducted (-)", Amt: "-"))
         Exp_Summary_Data.append(Exp_Sum(Tit: "Rejected Expense", Amt: "-"))
         Exp_Summary_Data.append(Exp_Sum(Tit: "Payable Amount", Amt: "-"))
+        
+        Test_SFC()
     }
     func getUserDetails(){
     let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
@@ -504,7 +506,6 @@ class Expense_View: UIViewController, UITableViewDelegate, UITableViewDataSource
         Exp_Detel_Data.removeAll()
         Exp_Summary_Data.removeAll()
         Exp_Summary_Data.append(Exp_Sum(Tit: "Total Daily Expense", Amt: "-"))
-       
         var Div = DivCode
         Div = Div.replacingOccurrences(of: ",", with: "")
         let axn = "getExpenseReportDetails"
@@ -741,5 +742,36 @@ class Expense_View: UIViewController, UITableViewDelegate, UITableViewDataSource
             })
         }
         Period_TB.reloadData()
+    }
+    
+    func Test_SFC(){
+        let apiKey: String = "getExpenseReportDetailsSFC&sf_code=\(SFCode)&division_code=\(DivCode)"
+        let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
+        AF.request(APIClient.shared.BaseURL + APIClient.shared.DBURL2 + apiKeyWithoutCommas, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+            AFdata in
+            switch AFdata.result {
+                
+            case .success(let value):
+                print(value)
+                if let json = value as? [ AnyObject] {
+                    guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
+                        print("Error: Cannot convert JSON object to Pretty JSON data")
+                        return
+                    }
+                    guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+                        print("Error: Could print JSON in String")
+                        return
+                    }
+                    print(prettyPrintedJson)
+                    if let jsonData = try? JSONSerialization.data(withJSONObject: value, options: []),
+                       let jsonArray = try? JSONSerialization.jsonObject(with: jsonData) as? [[String: Any]] {
+                    } else {
+                        print("Error: Unable to parse JSON")
+                    }
+                }
+            case .failure(let error):
+                Toast.show(message: error.errorDescription!)  //, controller: self
+            }
+        }
     }
 }
