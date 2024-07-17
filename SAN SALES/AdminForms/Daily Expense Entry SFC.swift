@@ -392,6 +392,11 @@ class Daily_Expense_Entry_SFC: IViewController, UIImagePickerControllerDelegate,
                         return
                     }
                     print(prettyPrintedJson)
+                    Toast.show(message:"Expense Submitted Successfully", controller: self)
+                    let storyboard = UIStoryboard(name: "AdminForms", bundle: nil)
+                    let viewController = storyboard.instantiateViewController(withIdentifier: "Expense") as! Expense_Entry;()
+                    UIApplication.shared.windows.first?.rootViewController = viewController
+                    UIApplication.shared.windows.first?.makeKeyAndVisible()
                 }
             case .failure(let error):
                 Toast.show(message: error.errorDescription!)
