@@ -9,6 +9,7 @@ import Foundation
 import UIKit
 import Alamofire
 
+typealias SyncCallBack = (_ status: Bool) -> Void
 class MissedDateSelection : IViewController{
     
     
@@ -24,6 +25,30 @@ class MissedDateSelection : IViewController{
     
     @IBOutlet weak var vwOrderListHeightConstraints: NSLayoutConstraint!
     
+    
+    
+    
+    @IBOutlet weak var lblSecondaryOrder: UILabel!
+    
+    @IBOutlet weak var lblPrimaryOrder: UILabel!
+    
+    @IBOutlet weak var lblSecondaryOrderCount: UILabel!
+    @IBOutlet weak var lblPrimaryOrderCount: UILabel!
+    
+    
+    
+    var secondaryOrderList = [RetailerList](){
+        didSet{
+            self.lblSecondaryOrderCount.text = secondaryOrderList.count.description
+        }
+    }
+    var primaryOrderList = [RetailerList](){
+        didSet{
+            self.lblPrimaryOrderCount.text = primaryOrderList.count.description
+        }
+    }
+    
+    
     var lstWType: [AnyObject] = []
     var lstDates: [AnyObject] = []
     
@@ -35,7 +60,7 @@ class MissedDateSelection : IViewController{
     
     var selectedWorktype : AnyObject! {
         didSet {
-            self.lblWorkType.text = selectedWorktype["name"] as? String
+            self.lblWorkType.text = selectedWorktype?["name"] as? String
         }
     }
     
@@ -65,6 +90,9 @@ class MissedDateSelection : IViewController{
            let list = GlobalFunc.convertToDictionary(text:  WorkTypeData) as? [AnyObject] {
             lstWType = list
         }
+        
+        self.lblPrimaryOrder.text = UserSetup.shared.PrimaryCaption
+        self.lblSecondaryOrder.text = UserSetup.shared.SecondaryCaption
         
     }
     
@@ -115,6 +143,16 @@ class MissedDateSelection : IViewController{
         
         let vc=self.storyboard?.instantiateViewController(withIdentifier: "sbMissedDateRouteSelection") as!  MissedDateRouteSelection
         vc.isFromSecondary = true
+        vc.selectedDate = self.selectedDate
+        vc.selectedWorktype = self.selectedWorktype
+        vc.selectedList = self.secondaryOrderList
+        vc.missedDateSubmit = { products in
+            print(products)
+            
+            self.secondaryOrderList = products
+            self.navigationController?.popViewController(animated: true)
+            
+        }
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -124,6 +162,15 @@ class MissedDateSelection : IViewController{
         
         let vc=self.storyboard?.instantiateViewController(withIdentifier: "sbMissedDateRouteSelection") as!  MissedDateRouteSelection
         vc.isFromSecondary = false
+        vc.selectedDate = self.selectedDate
+        vc.selectedWorktype = self.selectedWorktype
+        vc.missedDateSubmit = { products in
+            print(products)
+            
+            self.primaryOrderList = products
+            self.navigationController?.popViewController(animated: true)
+            
+        }
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -140,22 +187,105 @@ class MissedDateSelection : IViewController{
         }
         
         
-        let workTypeCode = self.selectedWorktype["id"] as? Int ?? 0
-        let fwflg = selectedWorktype["FWFlg"] as? String ?? ""
-        let workTypeName = selectedWorktype["name"] as? String ?? ""
+        let alert = UIAlertController(title: "Confirmation", message: "Do you want to submit order?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
+            
+            
+            let workTypeCode = self.selectedWorktype?["id"] as? Int ?? 0
+            let fwflg = self.selectedWorktype?["FWFlg"] as? String ?? ""
+            let workTypeName = self.selectedWorktype?["name"] as? String ?? ""
+            
+            print(fwflg)
+            print(workTypeCode)
+            print(workTypeName)
+            
+            if fwflg == "F" {
+                
+                if self.secondaryOrderList.count == 0 && self.primaryOrderList.count == 0 {
+                    Toast.show(message: "Please Select Atleast one Order", controller: self)
+                    return
+                }
+                
+                self.finalSubmit()
+            }else {
+                self.finalSubmitNonFieldwork()
+            }
+            
+            return
+        })
+        alert.addAction(UIAlertAction(title: "Cancel", style: .destructive) { _ in
+            return
+        })
+        self.present(alert, animated: true)
         
-        print(fwflg)
-        print(workTypeCode)
-        print(workTypeName)
-        finalSubmit()
+        
+        
+        
     }
     
     func finalSubmit() {
         
+        let secondaryOrder = self.secondaryOrderList.map{["params": $0.params ?? ""]}
         
+        let primaryOrder = self.primaryOrderList.map{["params": $0.params ?? ""]}
         
-        // http://sjdev.salesjump.in/server/native_Db_V13.php?axn=dcr%2Fsave&divisionCode=258%2C&sfCode=SJQAMGR0005&desig=MR
-        let workTypeCode = self.selectedWorktype["id"] as? Int ?? 0
+        let orders = secondaryOrder + primaryOrder
+        
+        print(secondaryOrder)
+        UserDefaults.standard.set(orders, forKey: "MissedDate")
+        UserDefaults.standard.synchronize()
+        
+        self.submit()
+        GlobalFunc.movetoHomePage()
+    }
+    
+    func submit(){
+        DispatchQueue.global(qos: .background).async {
+            let outboxes = UserDefaults.standard.object(forKey: "MissedDate") as! [[String : Any]]
+            guard let outbox = outboxes.first else{
+                return
+            }
+            self.OrderOutbox(data: outbox) { (_) in
+                self.submit()
+            }
+            DispatchQueue.main.async {
+                print("This is run on the main queue, after the previous code in outer block")
+            }
+        }
+    }
+    
+    func OrderOutbox(data:[String : Any],callback:@escaping SyncCallBack) {
+        let url =  APIClient.shared.BaseURL+APIClient.shared.DBURL1+"dcr/save&divisionCode=" + self.divCode + "&rSF=" + self.sfCode + "&sfCode=" + self.sfCode
+        let paramStr = data["params"] as? String ?? ""
+        
+        let params: Parameters = [ "data": paramStr ]
+        
+        print(url)
+        print(params)
+        AF.request(url,method: .post, parameters: params).validate(statusCode: 200..<209).responseData { AFData in
+            
+            switch AFData.result {
+                
+            case .success(let value):
+                print(value)
+                
+                let json = try? JSON(data: AFData.data!)
+                print(json as Any)
+                var datas = UserDefaults.standard.object(forKey: "MissedDate") as! [[String : Any]]
+                if !datas.isEmpty {
+                    datas.removeFirst()
+                    UserDefaults.standard.set(datas, forKey: "MissedDate")
+                    callback(true)
+                }
+            case .failure(let error):
+                Toast.show(message: error.errorDescription ?? "", controller: self)
+            }
+        }
+    }
+    
+    func finalSubmitNonFieldwork() {
+        
+        let workTypeCode = self.selectedWorktype?["id"] as? Int ?? 0
         let fwflg = selectedWorktype["FWFlg"] as? String ?? ""
         let workTypeName = selectedWorktype["name"] as? String ?? ""
         
@@ -188,6 +318,14 @@ class MissedDateSelection : IViewController{
     }
     
     
+    func updateDisplay() {
+        self.selectedWorktype = nil
+        self.lblWorkType.text = "Select the WorkType"
+        self.vwOrderListHeightConstraints.constant = 0
+        self.vwOrderList.isHidden = true
+    }
+    
+    
     @objc private func dateAction() {
         print(self.lstDates)
         let dateVC = ItemViewController(items: lstDates, configure: { (Cell : SingleSelectionTableViewCell, date) in
@@ -196,8 +334,24 @@ class MissedDateSelection : IViewController{
         dateVC.title = "Select the Missed Date"
         dateVC.didSelect = { selectedDate in
             print(selectedDate)
-            self.selectedDate = selectedDate
             self.navigationController?.popViewController(animated: true)
+            
+            if self.selectedWorktype != nil {
+                let alert = UIAlertController(title: "Confirm Clear", message: "Do you want to Clear Data?", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
+                    self.selectedDate = selectedDate
+                    self.updateDisplay()
+                    return
+                })
+                alert.addAction(UIAlertAction(title: "Cancel", style: .destructive) { _ in
+                    return
+                })
+                self.present(alert, animated: true)
+            }else {
+                self.selectedDate = selectedDate
+            }
+            
+            
         }
         self.navigationController?.pushViewController(dateVC, animated: true)
     }
@@ -219,7 +373,7 @@ class MissedDateSelection : IViewController{
             
             switch fwflg{
                 case "F":
-                    self.vwOrderListHeightConstraints.constant = 140
+                    self.vwOrderListHeightConstraints.constant = 120
                     self.vwOrderList.isHidden = false
                 default:
                     self.vwOrderListHeightConstraints.constant = 0

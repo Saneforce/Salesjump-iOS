@@ -1152,8 +1152,8 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
                 return Bool(ProdId == id)
             })
             print(ProdItems)
-            
-            self.products.append(SecondaryOrderSelectedList(productId: id, unitId: uom, unitName: uomName, unitConversion: uomConv, rate: rate, Qty: Qty, product: ProdItems.first, distributorId: VisitData.shared.Dist.id))
+            let name =  ProdItems.first?["name"] as? String ?? ""
+            self.products.append(SecondaryOrderSelectedList(productId: id, productName: name, unitId: uom, unitName: uomName, unitConversion: uomConv, rate: rate, Qty: Qty, product: ProdItems.first, distributorId: VisitData.shared.Dist.id,distributorName: VisitData.shared.Dist.name, item: self.lstPrvOrder[i], subtotal: (lblTotAmt.text!).replacingOccurrences(of: "Rs. ", with: "")))
         }
         
         missedDateEditData(self.products)

@@ -461,10 +461,7 @@ class SecondaryVisit: IViewController, UITableViewDelegate, UITableViewDataSourc
             "data": jsonString //"["+jsonString+"]"//
             ]
         print(params)
-        print(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"dcr/save&divisionCode=" + self.DivCode + "&rSF="+self.SFCode+"&sfCode="+self.SFCode)
-        // native_Db_V13-Mani_test.php
-        print("http://fmcg.sanfmcg.com/server/native_Db_V13-Mani_test.php?axn=dcr/save&divisionCode=29,&rSF=MR4126&sfCode=MR4126")
-        AF.request("http://fmcg.sanfmcg.com/server/native_Db_V13-Mani_test.php?axn=dcr/save&divisionCode=29,&rSF=MR4126&sfCode=MR4126", method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"dcr/save&divisionCode=" + self.DivCode + "&rSF="+self.SFCode+"&sfCode="+self.SFCode, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
             AFdata in
             self.LoadingDismiss()
             switch AFdata.result
