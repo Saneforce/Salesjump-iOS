@@ -107,6 +107,7 @@
 		3F2F811727CEB30D0015E1CA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3F2F811527CEB30D0015E1CA /* LaunchScreen.storyboard */; };
 		3F2F811F27D0E7430015E1CA /* HomePageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F2F811E27D0E7430015E1CA /* HomePageViewController.swift */; };
 		3F2F812127D0E9670015E1CA /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F2F812027D0E9670015E1CA /* RootViewController.swift */; };
+		3F30F82E2C4E5786005EFAD9 /* Expense View SFC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F30F82D2C4E5786005EFAD9 /* Expense View SFC.swift */; };
 		3F3D4DDB27E810880063E271 /* GlobalFunc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3D4DDA27E810880063E271 /* GlobalFunc.swift */; };
 		3F4CC1932875580100BA2B4E /* AppTrackingTransparency.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F4CC1922875580100BA2B4E /* AppTrackingTransparency.framework */; };
 		3F4CC1952875581400BA2B4E /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F4CC1942875581400BA2B4E /* AdSupport.framework */; };
@@ -240,6 +241,7 @@
 		3F2F811827CEB30D0015E1CA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3F2F811E27D0E7430015E1CA /* HomePageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageViewController.swift; sourceTree = "<group>"; };
 		3F2F812027D0E9670015E1CA /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
+		3F30F82D2C4E5786005EFAD9 /* Expense View SFC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Expense View SFC.swift"; sourceTree = "<group>"; };
 		3F3D4DDA27E810880063E271 /* GlobalFunc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalFunc.swift; sourceTree = "<group>"; };
 		3F4CC1922875580100BA2B4E /* AppTrackingTransparency.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppTrackingTransparency.framework; path = System/Library/Frameworks/AppTrackingTransparency.framework; sourceTree = SDKROOT; };
 		3F4CC1942875581400BA2B4E /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
@@ -544,6 +546,7 @@
 				159095212BF1E954001D8347 /* TourPlanViewDateWise.swift */,
 				159095232BF23AD0001D8347 /* CalendarViewController.swift */,
 				159095242BF23AD0001D8347 /* CalendarViewController.xib */,
+				3F30F82D2C4E5786005EFAD9 /* Expense View SFC.swift */,
 			);
 			path = Reports;
 			sourceTree = "<group>";
@@ -751,6 +754,7 @@
 				381EF93D2B19DB9700CED65F /* UI+Constraints.swift in Sources */,
 				1514DF6D2BD7839D00E6B45A /* CustomAlertVCViewController.swift in Sources */,
 				3F3D4DDB27E810880063E271 /* GlobalFunc.swift in Sources */,
+				3F30F82E2C4E5786005EFAD9 /* Expense View SFC.swift in Sources */,
 				3F06353728421D870027842E /* ImageUploader.swift in Sources */,
 				3F28CC0F27D74D7200B95964 /* LabelSelect.swift in Sources */,
 				3F4CC197287B297A00BA2B4E /* NetworkMonitor.swift in Sources */,

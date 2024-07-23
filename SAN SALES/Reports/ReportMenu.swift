@@ -103,9 +103,16 @@ class ReportMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
             
         } else if lItm.MasId == 3 {
             let RptMnuVc = storyboard.instantiateViewController(withIdentifier: "sbReportsmnu") as! ReportMenu
-            let brandAv = storyboard.instantiateViewController(withIdentifier: "Expenseview") as! Expense_View
             
-             viewController.setViewControllers([RptMnuVc,brandAv], animated: false)
+            if UserSetup.shared.SrtEndKMNd == 2{
+                let brandAv = storyboard.instantiateViewController(withIdentifier: "ExpenseviewSFC") as! Expense_View_SFC
+                viewController.setViewControllers([RptMnuVc,brandAv], animated: false)
+            }else{
+                let brandAv = storyboard.instantiateViewController(withIdentifier: "Expenseview") as! Expense_View
+                viewController.setViewControllers([RptMnuVc,brandAv], animated: false)
+            }
+            
+            
              //viewController.navigationController?.pushViewController(myDyPln, animated: true)
              (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
             

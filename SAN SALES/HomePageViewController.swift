@@ -119,7 +119,7 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         //                }
         
         Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(TimeDisplay), userInfo: nil, repeats: true)
-       // getUserDetails()
+        getUserDetails()
         
         self.tpMandatoryNeed()
         /*if let json = try JSONSerialization.jsonObject(with: prettyPrintedJson!, options: []) as? [String: Any] {
@@ -214,8 +214,7 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
             Dashboard()
         }
         
-        getUserDetails()
-        
+        Navstartfrom()
         DashboardNew()
         LOG_OUTMODE()
     }
@@ -349,8 +348,10 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         if attendanceViews == 1{
             LocalStoreage.set("1", forKey: "attendanceView")
         }
-        
-        
+       
+    }
+    
+    func Navstartfrom(){
         //Get Design code
         
             let apiKey1: String = "get/submgr&divisionCode=\(DivCode)&rSF=\(SFCode)&sfcode=\(SFCode)&stateCode=\(StateCode)&desig=\(Desig)"

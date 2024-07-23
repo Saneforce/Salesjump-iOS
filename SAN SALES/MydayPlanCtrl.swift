@@ -971,6 +971,8 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
             Toast.show(message: "Select the Route First", controller: self)
             return
         }
+        print(lstModeOfTravel)
+        print(Allowance_Type)
         for item in lstModeOfTravel{
             let Alw_Eligibilty = item["Alw_Eligibilty"] as? String
             let spriteArray = Alw_Eligibilty!.components(separatedBy: ",")
@@ -1465,10 +1467,8 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                                         print(flag)
                                         LocalStoreage.set("1", forKey: "attendanceView")
                                     }
-                                    
                                 }
-
-                                   
+                                
                                     LocalStoreage.set("1", forKey: "dayplan")
                                     Toast.show(message: "My day plan submitted successfully", controller: self)
                                case .failure(let error):
@@ -1489,7 +1489,6 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
     }
     @objc private func openCamera(){
         let vc=self.storyboard?.instantiateViewController(withIdentifier: "PhotoGallary") as!  PhotoGallary
-
         vc.modalPresentationStyle = .overCurrentContext
         self.present(vc, animated: true, completion: nil)
     }
