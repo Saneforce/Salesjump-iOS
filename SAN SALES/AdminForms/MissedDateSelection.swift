@@ -67,6 +67,11 @@ class MissedDateSelection : IViewController{
     var selectedDate : AnyObject! {
         didSet {
             self.lblDate.text = selectedDate["name"] as? String
+            
+            self.selectedWorktype = nil
+            self.lblWorkType.text = "Select the WorkType"
+            self.vwOrderListHeightConstraints.constant = 0
+            self.vwOrderList.isHidden = true
         }
     }
     
@@ -94,6 +99,10 @@ class MissedDateSelection : IViewController{
         self.lblPrimaryOrder.text = UserSetup.shared.PrimaryCaption
         self.lblSecondaryOrder.text = UserSetup.shared.SecondaryCaption
         
+    }
+    
+    deinit {
+        print("Missed Date Deallocted")
     }
     
     func getUserDetails(){
@@ -164,6 +173,7 @@ class MissedDateSelection : IViewController{
         vc.isFromSecondary = false
         vc.selectedDate = self.selectedDate
         vc.selectedWorktype = self.selectedWorktype
+        vc.selectedList = self.primaryOrderList
         vc.missedDateSubmit = { products in
             print(products)
             
@@ -183,6 +193,11 @@ class MissedDateSelection : IViewController{
         
         if self.selectedWorktype == nil {
             Toast.show(message: "Please Select WorkType", controller: self)
+            return
+        }
+        
+        if self.secondaryOrderList.isEmpty && self.primaryOrderList.isEmpty {
+            Toast.show(message: "Please Select at least One Order", controller: self)
             return
         }
         
@@ -236,7 +251,11 @@ class MissedDateSelection : IViewController{
         UserDefaults.standard.synchronize()
         
         self.submit()
-        GlobalFunc.movetoHomePage()
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
+            GlobalFunc.movetoHomePage()
+        }
+       // GlobalFunc.movetoHomePage()
     }
     
     func submit(){
@@ -318,13 +337,6 @@ class MissedDateSelection : IViewController{
     }
     
     
-    func updateDisplay() {
-        self.selectedWorktype = nil
-        self.lblWorkType.text = "Select the WorkType"
-        self.vwOrderListHeightConstraints.constant = 0
-        self.vwOrderList.isHidden = true
-    }
-    
     
     @objc private func dateAction() {
         print(self.lstDates)
@@ -340,7 +352,6 @@ class MissedDateSelection : IViewController{
                 let alert = UIAlertController(title: "Confirm Clear", message: "Do you want to Clear Data?", preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
                     self.selectedDate = selectedDate
-                    self.updateDisplay()
                     return
                 })
                 alert.addAction(UIAlertAction(title: "Cancel", style: .destructive) { _ in
@@ -386,7 +397,15 @@ class MissedDateSelection : IViewController{
     }
     
     @objc func backVC() {
-        self.navigationController?.popViewController(animated: true)
+        let alert = UIAlertController(title: "Confirm Exit", message: "Do you want to Close?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
+            self.navigationController?.popViewController(animated: true)
+            return
+        })
+        alert.addAction(UIAlertAction(title: "Cancel", style: .destructive) { _ in
+            return
+        })
+        self.present(alert, animated: true)
     }
 }
 

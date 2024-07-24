@@ -153,7 +153,7 @@ class MissedDateRouteSelection : IViewController , UITableViewDelegate,UITableVi
         stateCode = prettyJsonData["State_Code"] as? String ?? ""
         divCode = prettyJsonData["divisionCode"] as? String ?? ""
         desig=prettyJsonData["desigCode"] as? String ?? ""
-        eKey = String(format: "EK%@-%i", sfCode,Int(Date().timeIntervalSince1970))
+      //  eKey = String(format: "EK%@-%i", sfCode,Int(Date().timeIntervalSince1970))
     }
     
     func updateDisplay() {
@@ -174,6 +174,8 @@ class MissedDateRouteSelection : IViewController , UITableViewDelegate,UITableVi
     func updateDistributor(distributors : [AnyObject],sfcode : String){
         let lists = self.allRetailerList.filter{$0.mapId == sfcode}
         
+        
+        print(lists)
         if !lists.isEmpty {
             return
         }
@@ -389,6 +391,7 @@ class MissedDateRouteSelection : IViewController , UITableViewDelegate,UITableVi
             
             let currentDate = GlobalFunc.getCurrDateAsString()
             
+            eKey = String(format: "EK%@-%i", sfCode,Int((Date().timeIntervalSince1970)+Double(Int.random(in: 0..<500))))
             
             let dataSF = hqCode == "" ? self.sfCode : hqCode
             
@@ -478,11 +481,10 @@ class MissedDateRouteSelection : IViewController , UITableViewDelegate,UITableVi
             
             let currentDate = GlobalFunc.getCurrDateAsString()
             
+            eKey = String(format: "EK%@-%i", sfCode,Int((Date().timeIntervalSince1970)+Double(Int.random(in: 0..<500))))
+            
             let jsonString = "[{\"Activity_Report_APP\":{\"Worktype_code\":\"'\(workType)'\",\"Town_code\":\"'\(routeCode)'\",\"RateEditable\":\"\'\'\",\"dcr_activity_date\":\"\'\(date)\'\",\"workTypFlag_Missed\":\"\(selectedWorktype["FWFlg"] as? String ?? "")\",\"mydayplan\":1,\"mypln_town\":\"\'\(routeName)\'\",\"mypln_town_id\":\"\'\(routeCode)\'\",\"hq_code\":\"\'\(hqCode)\'\",\"hq_name\":\"\'\(hqName)\'\",\"missed_date_entry\":1,\"Daywise_Remarks\":\"\(retailerList.remarks ?? "")\",\"eKey\":\"\(self.eKey)\",\"rx\":\"\'1\'\",\"rx_t\":\"\'\'\",\"DataSF\":\"\'\(dataSF)\'\"}},{\"Activity_Stockist_Report\":{\"Worked_With\":\"\'\'\",\"Stk_Meet_Time\":\"\'\(date)\'\",\"modified_time\":\"\'\(currentDate)\'\",\"net_weight_value\":\"0.0\",\"stockist_code\":\"\'\(retailerList.id)\'\",\"stockist_name\":\"\'\(retailerList.name ?? "")\'\",\"superstockistid\":\"\'\'\",\"Discountpercent\":0,\"CheckinTime\":\"\(currentDate)\",\"CheckoutTime\":\"\(currentDate)\",\"location\":\"\'1.5\'\",\"geoaddress\":\"\",\"Super_Stck_code\":\"\'\(stkcode)\'\",\"Stockist_POB\":\"0\",\"date_of_intrument\":\"\",\"intrumenttype\":\"\",\"orderValue\":\"\(retailerList.orderList.first?.subtotal ?? "")\",\"Aob\":0,\"PhoneOrderTypes\":\"0\",\"f_key\":{\"Activity_Report_Code\":\"\'Activity_Report_APP\'\"}}},{\"Activity_Stk_POB_Report\":[\(productString)]},{\"Activity_Stk_Sample_Report\":[]},{\"Activity_Event_Captures\":[]},{\"PENDING_Bills\":[]},{\"Compititor_Product\":[]}]"
             
-            
-            
-     //       let jsonString =  "[{\"Activity_Report_APP\":{\"Worktype_code\":\"'" + (self.lstPlnDetail[0]["worktype"] as! String) + "'\",\"Town_code\":\"'" + (self.lstPlnDetail[0]["clusterid"] as! String) + "'\",\"RateEditable\":\"''\",\"dcr_activity_date\":\"'" + VisitData.shared.cInTime + "'\",\"Daywise_Remarks\":\"" + VisitData.shared.VstRemarks.name.trimmingCharacters(in: .whitespacesAndNewlines) + "\",\"eKey\":\"" + self.eKey + "\",\"rx\":\"'1'\",\"rx_t\":\"''\",\"DataSF\":\"'" + DataSF + "'\"}},{\"Activity_Stockist_Report\":{\"Stockist_POB\":\"" + VisitData.shared.PayValue + "\",\"Worked_With\":\"'"+Join_Works+"'\",\"location\":\"'" + sLocation + "'\",\"geoaddress\":\"" + sAddress + "\",\"superstockistid\":\"''\",\"Stk_Meet_Time\":\"'" + VisitData.shared.cInTime + "'\",\"modified_time\":\"'" + VisitData.shared.cInTime + "'\",\"date_of_intrument\":\"" + VisitData.shared.DOP.id + "\",\"intrumenttype\":\""+VisitData.shared.PayType.id+"\",\"orderValue\":\"" + (lblTotAmt.text!).replacingOccurrences(of: "Rs. ", with: "") + "\",\"Aob\":0,\"CheckinTime\":\"" + VisitData.shared.cInTime + "\",\"CheckoutTime\":\"" + VisitData.shared.cOutTime + "\",\"PhoneOrderTypes\":" + VisitData.shared.OrderMode.id + ",\"Super_Stck_code\":\"'\(VisitData.shared.Dist.id)'\",\"stockist_code\":\"'" + VisitData.shared.CustID + "'\",\"stockist_name\":\"''\",\"f_key\":{\"Activity_Report_Code\":\"'Activity_Report_APP'\"}}},{\"Activity_Stk_POB_Report\":[" + sPItems +  "]},{\"Activity_Stk_Sample_Report\":[]},{\"Activity_Event_Captures\":[" + sImgItems +  "]},{\"PENDING_Bills\":[]},{\"Compititor_Product\":[]},{\"Activity_Event_Captures_Call\":[]}]"
             
             
            // retailerList.params = jsonString
@@ -498,11 +500,6 @@ class MissedDateRouteSelection : IViewController , UITableViewDelegate,UITableVi
         
         
         missedDateSubmit(self.allRetailerList.filter{$0.isSelected})
-        
-   //     let productStr = "{\"product_code\":\"D111\",\"product_Name\":\"Arokya 150 Ml Milk\",\"rx_Conqty\":\"3\",\"Qty\":\"3\",\"PQty\":0,\"cb_qty\":0,\"free\":\"0\",\"Pfree\":0,\"Rate\":\"10.0\",\"PieseRate\":\"10.0\",\"discount\":\"\0.0\",\"FreeP_Code\":\"\",\"Fname\":\"\",\"discount_price\":\"0.0\",\"tax\":\"5.0\",\"tax_price\":\"1.5\",\"OrdConv\":\"1\",\"product_unit_name\":\"Piece\",\"selectedScheme\":\"0\",\"selectedOffProCode\":\"2\",\"selectedOffProName\":\"Piece\",\"selectedOffProUnit\":\"1\",\"f_key\":{\"activity_stockist_code\":\"Activity_Stockist_Report\"}},"
-        
-   //     let jsonString = "[{\"Activity_Report_APP\":{\"Worktype_code\":\"'1'\",\"Town_code\":\"'Aligarh'\",\"RateEditable\":\"\'\'\",\"dcr_activity_date\":\"\'2024-04-20 00:00:00\'\",\"workTypFlag_Missed\":\"F\",\"mydayplan\":1,\"mypln_town\":\"\'Aligarh\'\",\"mypln_town_id\":\"\'699\'\",\"hq_code\":\"\'SJQAMGR0005\'\",\"hq_name\":\"\'\'\",\"missed_date_entry\":1,\"Daywise_Remarks\":\"\",\"eKey\":\"EKSJQAMGR0005-1720613753000\",\"rx\":\"\'1\'\",\"rx_t\":\"\'\'\",\"DataSF\":\"\'SJQAMGR0005\'\"}},{\"Activity_Stockist_Report\":{\"Worked_With\":\"\'\'\",\"Stk_Meet_Time\":\"\'2024-04-20 00:00:00\'\",\"modified_time\":\"\'2024-07-10 17:45:53\'\",\"net_weight_value\":\"1.5\",\"stockist_code\":\"\'693\'\",\"stockist_name\":\"\'ANIL MEDICALS\'\",\"superstockistid\":\"\'\'\",\"Discountpercent\":0,\"CheckinTime\":\"2024-07-10 17:45:52\",\"CheckoutTime\":\"2024-07-10 17:46:22\",\"location\":\"\'1.5\'\",\"geoaddress\":\"\",\"Super_Stck_code\":\"\'693\'\",\"Stockist_POB\":\"0\",\"date_of_intrument\":\"\",\"intrumenttype\":\"\",\"orderValue\":\"31.5\",\"Aob\":0,\"PhoneOrderTypes\":\"0\",\"f_key\":{\"Activity_Report_Code\":\"\'Activity_Report_APP\'\"}}},{\"Activity_Stk_POB_Report\":[{\"product_code\":\"D111\",\"product_Name\":\"Arokya 150 Ml Milk\",\"rx_Conqty\":\"3\",\"Qty\":\"3\",\"PQty\":0,\"cb_qty\":0,\"free\":\"0\",\"Pfree\":0,\"Rate\":\"10.0\",\"PieseRate\":\"10.0\",\"discount\":\"\0.0\",\"FreeP_Code\":\"\",\"Fname\":\"\",\"discount_price\":\"0.0\",\"tax\":\"5.0\",\"tax_price\":\"1.5\",\"OrdConv\":\"1\",\"product_unit_name\":\"Piece\",\"selectedScheme\":\"0\",\"selectedOffProCode\":\"2\",\"selectedOffProName\":\"Piece\",\"selectedOffProUnit\":\"1\",\"f_key\":{\"activity_stockist_code\":\"Activity_Stockist_Report\"}}]},{\"Activity_Stk_Sample_Report\":[]},{\"Activity_Event_Captures\":[]},{\"PENDING_Bills\":[]},{\"Compititor_Product\":[]}]"
-        
         
     }
     
@@ -576,7 +573,6 @@ class MissedDateRouteSelection : IViewController , UITableViewDelegate,UITableVi
             return
         }
         
-        let retailer = retailerList[indexPath.row]
         
         retailerList[indexPath.row].isSelected = !retailerList[indexPath.row].isSelected
         
@@ -614,10 +610,10 @@ class MissedDateRouteSelection : IViewController , UITableViewDelegate,UITableVi
             let secondaryOrder = UIStoryboard.secondaryOrder
             secondaryOrder.isFromMissedEntry = true
             secondaryOrder.selectedProducts = self.retailerList[indexPath.row].orderList
-            secondaryOrder.missedDateSubmit = { paramString in
-                print(paramString)
-                self.tableViewOrderList.reloadRows(at: [indexPath], with: .automatic)
-            }
+//            secondaryOrder.missedDateSubmit = { paramString in
+//                print(paramString)
+//                self.tableViewOrderList.reloadRows(at: [indexPath], with: .automatic)
+//            }
             secondaryOrder.missedDateEditData = { products in
                 
                 self.retailerList[indexPath.row].orderList = products
@@ -638,10 +634,6 @@ class MissedDateRouteSelection : IViewController , UITableViewDelegate,UITableVi
             let primaryOrder = UIStoryboard.primaryOrder
             primaryOrder.isFromMissedEntry = true
             primaryOrder.selectedProducts = self.retailerList[indexPath.row].orderList
-            primaryOrder.missedDateSubmit = { paramString in
-                print(paramString)
-                self.navigationController?.popViewController(animated: true)
-            }
             primaryOrder.missedDateEditData = { paramString in
                 print(paramString)
                 self.retailerList[indexPath.row].orderList = paramString
@@ -698,7 +690,7 @@ class MissedDateRouteSelection : IViewController , UITableViewDelegate,UITableVi
             self.selectedRoute = selectedRoute
             self.navigationController?.popViewController(animated: true)
             
-            if self.isFromSecondary == false {
+            if self.isFromSecondary == true {
                 self.retailerList = self.allRetailerList.filter{$0.townCode == "\(self.selectedRoute["id"] as? String ?? "")"}
             }
             
