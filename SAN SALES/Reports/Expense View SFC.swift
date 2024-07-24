@@ -32,6 +32,17 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
     @IBOutlet weak var ViewDet_TB: UITableView!
     @IBOutlet weak var Detiles_View: UIView!
     @IBOutlet weak var Detils_View_Close_BT: UIButton!
+    @IBOutlet weak var Mod_of_tra_TB: UITableView!
+    @IBOutlet weak var StausView: UIView!
+    @IBOutlet weak var Exp_Det_View: UIView!
+    @IBOutlet weak var Mod_of_trv_tb_Hig: NSLayoutConstraint!
+    @IBOutlet weak var Lab_hig: UIView!
+    @IBOutlet weak var CardView: UIView!
+    @IBOutlet weak var ScrollView_Hig: NSLayoutConstraint!
+    @IBOutlet weak var Card_View_Hig: NSLayoutConstraint!
+    @IBOutlet weak var lab_layuot_hig: NSLayoutConstraint!
+    @IBOutlet weak var Exp_Det_View_hig: NSLayoutConstraint!
+    @IBOutlet weak var Status_View_Hig: NSLayoutConstraint!
     struct PeriodicDatas:Codable{
         let Division_Code:Int
         let Eff_Month:Int
@@ -71,6 +82,7 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
     var period_to_date = ""
     var period_id = ""
     var Eff_Month="", Eff_Year=0
+    var Selected_data:[ExpenseDatas] = []
     override func viewDidLoad(){
         super.viewDidLoad()
         getUserDetails()
@@ -84,9 +96,16 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
         Period_TB.dataSource=self
         ViewDet_TB.delegate=self
         ViewDet_TB.dataSource=self
+        Mod_of_tra_TB.delegate=self
+        Mod_of_tra_TB.dataSource=self
         blureView.bounds = self.view.bounds
         PopUpView.bounds = CGRect(x: 0, y: 0, width: self.view.bounds.width * 0.9, height: self.view.bounds.height * 0.4)
         PopUpView.layer.cornerRadius = 10
+        StausView.layer.cornerRadius = 8
+        StausView.layer.masksToBounds = true
+        Exp_Det_View.layer.cornerRadius = 8
+        Exp_Det_View.layer.masksToBounds = true
+        
         cardViewInstance.styleSummaryView(MonthView)
         cardViewInstance.styleSummaryView(PeriodicView)
         cardViewInstance.styleSummaryView(SummaryView)
@@ -102,6 +121,13 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
         Exp_Summary_Data.append(Exp_Sum(Tit: "Total Added (+)", Amt: "-"))
         Exp_Summary_Data.append(Exp_Sum(Tit: "Total Deducted (-)", Amt: "-"))
         Exp_Summary_Data.append(Exp_Sum(Tit: "Payable Amount", Amt: "-"))
+        
+        Mod_of_trv_tb_Hig.constant = 0
+        print(StausView.frame.size.height)
+        print(Exp_Det_View.frame.size.height)
+        print(Lab_hig.frame.size.height)
+        print(CardView.frame.size.height)
+        print(Card_View_Hig.constant)
     }
     func getUserDetails(){
     let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
@@ -268,9 +294,8 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
         if SFC_Data_TB == tableView {return 450}
         if Period_TB == tableView {return 50}
         if Summary_TB == tableView {return 30}
-        if ViewDet_TB == tableView {
-            return 100
-        }
+        if ViewDet_TB == tableView {return 100}
+        if Mod_of_tra_TB == tableView {return 40}
         return 0
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -278,6 +303,23 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
         if Period_TB == tableView {return lstOfPeriod.count}
         if Summary_TB == tableView {return Exp_Summary_Data.count}
         if ViewDet_TB == tableView{return ExpenseDetils.count}
+        if Mod_of_tra_TB == tableView{
+            print(Selected_data)
+            if !Selected_data.isEmpty{
+                let SFCdetils_data = Selected_data[0].SFCdetils
+                Mod_of_trv_tb_Hig.constant = CGFloat(SFCdetils_data.count * 40)
+                let Fix_height = lab_layuot_hig.constant + Card_View_Hig.constant + CGFloat(SFCdetils_data.count) * 40.0
+                Exp_Det_View_hig.constant = Fix_height + 30
+                ScrollView_Hig.constant = Status_View_Hig.constant + Fix_height + 30
+                let Fixed_Scroll_Hight = Status_View_Hig.constant + Fix_height + 30
+                print(Fixed_Scroll_Hight)
+                if Fixed_Scroll_Hight < 700 {
+                    print("750")
+                }
+                
+                return SFCdetils_data.count
+            }
+        }
         return 0
     }
     
@@ -300,12 +342,23 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
             cell.lblText2.text = Exp_Summary_Data[indexPath.row].Amt
         }else if Period_TB == tableView{
             cell.lblText.text = lstOfPeriod[indexPath.row].Period_Name
+        }else if Mod_of_tra_TB == tableView{
+            let getitem = Selected_data[0].SFCdetils
+            print(getitem)
+            let Fromplace = getitem[indexPath.row]["fromplace"] as? String ?? ""
+            let Toplace = getitem[indexPath.row]["Toplace"] as? String ?? ""
+            let Mod_of_Travel =  getitem[indexPath.row]["modeoftravel"] as? String ?? ""
+            cell.Fromlbsfc.text = Fromplace
+            cell.TolblSFC.text = Toplace
+            cell.Mod_of_trv_SFC.text = Mod_of_Travel
         }
         return cell
     }
     
     @objc func View_Det(_ sender: UIButton) {
-        print(sender.tag)
+        Selected_data.removeAll()
+        Selected_data.append(ExpenseDetils[sender.tag])
+        Mod_of_tra_TB.reloadData()
         Detiles_View.isHidden = false
         
     }
@@ -496,16 +549,15 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
                                 }
                                 return false
                             }
+                            print(filteredData)
                             for data in filteredData {
-                                print(data)
                                 let date = data["Date_Time"] as? String ?? ""
                                 let MOT_Name = data["MOT_Name"] as? String ?? ""
                                 let From_Place = data["From_Place"] as? String ?? ""
                                 let To_Place = data["To_Place"] as? String ?? ""
-                                let itms: [String: Any]=["date": date,"modeoftravel":MOT_Name,"fromplace":From_Place,"Toplace":To_Place,"Fromid":"","Toid":""];
+                                let itms: [String: Any]=["date": date,"modeoftravel":MOT_Name,"fromplace":"Test place","Toplace":"To place","Fromid":"","Toid":""];
                                 let jitm: AnyObject = itms as AnyObject
                                 SFCDetils.append(jitm)
-                                
                             }
                             ExpenseDetils.append(ExpenseDatas(date: item, SFCdetils:SFCDetils))
                         }
