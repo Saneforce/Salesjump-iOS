@@ -103,6 +103,11 @@ class cellListItem:UITableViewCell{
     @IBOutlet weak var Exp_Status: UILabel!
     
     
+    // Expense View SFC
+    @IBOutlet weak var Status: UILabel!
+    @IBOutlet weak var item: UILabel!
+    @IBOutlet weak var Date: UILabel!
+    @IBOutlet weak var ViewBT: UIButton!
     // Expense Approval
     @IBOutlet weak var Apr_Date: UILabel!
     @IBOutlet weak var Apr_Work_Typ: UILabel!

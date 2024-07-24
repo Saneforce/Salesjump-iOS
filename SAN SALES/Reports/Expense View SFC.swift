@@ -28,10 +28,10 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
     @IBOutlet weak var Sel_Period_Drop_Down: UIView!
     @IBOutlet weak var Close_Pop_Up: UILabel!
     @IBOutlet weak var TextSearch: UITextField!
-    
     @IBOutlet weak var Close_Drop_Down: UIButton!
-    
-    
+    @IBOutlet weak var ViewDet_TB: UITableView!
+    @IBOutlet weak var Detiles_View: UIView!
+    @IBOutlet weak var Detils_View_Close_BT: UIButton!
     struct PeriodicDatas:Codable{
         let Division_Code:Int
         let Eff_Month:Int
@@ -47,6 +47,12 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
         let Tit:String
         var Amt:String
     }
+    
+    struct ExpenseDatas:Any{
+        let date:String
+        let SFCdetils:[AnyObject]
+    }
+    var ExpenseDetils:[ExpenseDatas] = []
     var Exp_Summary_Data:[Exp_Sum] = []
     var SFCode: String = "", StateCode: String = "", DivCode: String = "",Desig: String = "",SF_type: String = ""
     let LocalStoreage = UserDefaults.standard
@@ -65,7 +71,7 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
     var period_to_date = ""
     var period_id = ""
     var Eff_Month="", Eff_Year=0
-    override func viewDidLoad() {
+    override func viewDidLoad(){
         super.viewDidLoad()
         getUserDetails()
         SFC_Data_TB.delegate = self
@@ -76,20 +82,21 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
         Collection_Of_Month.dataSource=self
         Period_TB.delegate=self
         Period_TB.dataSource=self
+        ViewDet_TB.delegate=self
+        ViewDet_TB.dataSource=self
         blureView.bounds = self.view.bounds
         PopUpView.bounds = CGRect(x: 0, y: 0, width: self.view.bounds.width * 0.9, height: self.view.bounds.height * 0.4)
         PopUpView.layer.cornerRadius = 10
         cardViewInstance.styleSummaryView(MonthView)
         cardViewInstance.styleSummaryView(PeriodicView)
         cardViewInstance.styleSummaryView(SummaryView)
-        
+        cardViewInstance.styleSummaryView(Detils_View_Close_BT)
         btnBack.addTarget(target: self, action: #selector(GotoHome))
         Sel_Period.addTarget(target: self, action: #selector(Open_Drop_Down_View))
         Sel_Date.addTarget(target: self, action: #selector(OpenPopUP))
         Close_Pop_Up.addTarget(target: self, action: #selector(ClosePopUP))
         YearPostion.addTarget(target: self, action: #selector(OpenYear))
         MonthPostion.addTarget(target: self, action: #selector(OpenMonth))
-        ExpenseReportDetailsSFC()
         Close_Drop_Down.addTarget(target: self, action: #selector(Close_Drop_Down_View))
         Exp_Summary_Data.append(Exp_Sum(Tit: "Total Daily Expense", Amt: "-"))
         Exp_Summary_Data.append(Exp_Sum(Tit: "Total Added (+)", Amt: "-"))
@@ -261,15 +268,16 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
         if SFC_Data_TB == tableView {return 450}
         if Period_TB == tableView {return 50}
         if Summary_TB == tableView {return 30}
-            
-        
+        if ViewDet_TB == tableView {
+            return 100
+        }
         return 0
-       
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if SFC_Data_TB == tableView {return 10}
+        if SFC_Data_TB == tableView {return ExpenseDetils.count}
         if Period_TB == tableView {return lstOfPeriod.count}
         if Summary_TB == tableView {return Exp_Summary_Data.count}
+        if ViewDet_TB == tableView{return ExpenseDetils.count}
         return 0
     }
     
@@ -278,6 +286,15 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
         
         if SFC_Data_TB == tableView {
             cardViewInstance.styleSummaryView(cell.Card_View)
+            cell.Exp_Date.text = ExpenseDetils[indexPath.row].date
+            print(ExpenseDetils[indexPath.row].SFCdetils)
+        }else if ViewDet_TB == tableView {
+            cell.Status.text = "Expense Submitted"
+            cell.item.text = "10199.58"
+            cell.Date.text = ExpenseDetils[indexPath.row].date
+            cell.ViewBT.tag = indexPath.row
+            cell.ViewBT.addTarget(self, action: #selector(View_Det(_:)), for: .touchUpInside)
+            
         }else if Summary_TB == tableView {
             cell.lblText.text = Exp_Summary_Data[indexPath.row].Tit
             cell.lblText2.text = Exp_Summary_Data[indexPath.row].Amt
@@ -287,69 +304,79 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
         return cell
     }
     
+    @objc func View_Det(_ sender: UIButton) {
+        print(sender.tag)
+        Detiles_View.isHidden = false
+        
+    }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let item = lstOfPeriod[indexPath.row]
-        print(item)
-       // Nav_PeriodicData = [item as AnyObject]
-        Sel_Period.text = item.Period_Name
-        period_id = item.Period_Id
-        //Eff_Month = item.Eff_Month
-        Eff_Year = item.Eff_Year
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        let From_Date = item.From_Date
-        period_from_date = "\(selectYear)-\(SelectMonth)-"+From_Date
-        if let date = dateFormatter.date(from: "\(selectYear)-\(SelectMonth)-" + From_Date) {
-            FDate = date
-        } else {
-            print("Error: Unable to convert string to Date")
-        }
-        let To_Date = item.To_Date
-        if To_Date == "end of month"{
-            let currentDate = FDate
-            let calendar = Calendar.current
-            if let monthRange = calendar.range(of: .day, in: .month, for: currentDate) {
-                print(monthRange)
-                let lastDayOfMonth = monthRange.upperBound - 1
-                if let lastDateOfMonth = calendar.date(bySetting: .day, value: lastDayOfMonth, of: currentDate) {
-                    print("Last date of the month: \(lastDateOfMonth)")
-                    TDate = lastDateOfMonth
-                    print(lastDateOfMonth)
-                    let formatters = DateFormatter()
-                    formatters.dateFormat = "yyyy-MM-dd"
-                    period_to_date = formatters.string(from: lastDateOfMonth)
-                }
-            }
-        }else{
+        if Period_TB == tableView {
+            let item = lstOfPeriod[indexPath.row]
+            print(item)
+            // Nav_PeriodicData = [item as AnyObject]
+            Sel_Period.text = item.Period_Name
+            period_id = item.Period_Id
+            //Eff_Month = item.Eff_Month
+            Eff_Year = item.Eff_Year
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd"
-            let Per_To_Date = To_Date
-            period_to_date = "\(selectYear)-\(SelectMonth)-"+To_Date
-            if let date = dateFormatter.date(from: "\(selectYear)-\(SelectMonth)-" + Per_To_Date) {
-                TDate = date
+            let From_Date = item.From_Date
+            period_from_date = "\(selectYear)-\(SelectMonth)-"+From_Date
+            if let date = dateFormatter.date(from: "\(selectYear)-\(SelectMonth)-" + From_Date) {
+                FDate = date
             } else {
                 print("Error: Unable to convert string to Date")
             }
+            let To_Date = item.To_Date
+            if To_Date == "end of month"{
+                let currentDate = FDate
+                let calendar = Calendar.current
+                if let monthRange = calendar.range(of: .day, in: .month, for: currentDate) {
+                    print(monthRange)
+                    let lastDayOfMonth = monthRange.upperBound - 1
+                    if let lastDateOfMonth = calendar.date(bySetting: .day, value: lastDayOfMonth, of: currentDate) {
+                        print("Last date of the month: \(lastDateOfMonth)")
+                        TDate = lastDateOfMonth
+                        print(lastDateOfMonth)
+                        let formatters = DateFormatter()
+                        formatters.dateFormat = "yyyy-MM-dd"
+                        period_to_date = formatters.string(from: lastDateOfMonth)
+                    }
+                }
+            }else{
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "yyyy-MM-dd"
+                let Per_To_Date = To_Date
+                period_to_date = "\(selectYear)-\(SelectMonth)-"+To_Date
+                if let date = dateFormatter.date(from: "\(selectYear)-\(SelectMonth)-" + Per_To_Date) {
+                    TDate = date
+                } else {
+                    print("Error: Unable to convert string to Date")
+                }
+            }
+            let dateFormatterss = DateFormatter()
+            dateFormatterss.dateFormat = "yyyy-MM-dd"
+            let From = dateFormatterss.string(from: FDate)
+            let To = dateFormatterss.string(from: TDate)
+            // Convert string dates to Date objects
+            if let startDate = dateFormatterss.date(from: From),
+               let endDate = dateFormatterss.date(from: To) {
+                let days = daysBetweenDates(startDate, endDate)
+                print("Number of days between the two dates: \(days)")
+                No_Of_Days_In_Perio = days + 1
+            } else {
+                print("Invalid date format")
+            }
+            TextSearch.text = ""
+            
+            
+            ExpenseReportDetailsSFC()
+            
+            Sel_Period_Drop_Down.isHidden = true
+        }else if ViewDet_TB == tableView {
+            print("Test")
         }
-        let dateFormatterss = DateFormatter()
-        dateFormatterss.dateFormat = "yyyy-MM-dd"
-        let From = dateFormatterss.string(from: FDate)
-        let To = dateFormatterss.string(from: TDate)
-        // Convert string dates to Date objects
-        if let startDate = dateFormatterss.date(from: From),
-           let endDate = dateFormatterss.date(from: To) {
-            let days = daysBetweenDates(startDate, endDate)
-            print("Number of days between the two dates: \(days)")
-            No_Of_Days_In_Perio = days + 1
-        } else {
-            print("Invalid date format")
-        }
-        TextSearch.text = ""
-        
-      
-        ExpenseReportDetailsSFC()
-      
-        Sel_Period_Drop_Down.isHidden = true
     }
     func daysBetweenDates(_ startDate: Date, _ endDate: Date) -> Int {
         let calendar = Calendar.current
@@ -432,21 +459,59 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
             case .success(let value):
                 print(value)
                 if let json = value as? [String:AnyObject] {
-                    guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
-                        print("Error: Cannot convert JSON object to Pretty JSON data")
-                        return
-                    }
-                    guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
-                        print("Error: Could print JSON in String")
-                        return
-                    }
-                    print(prettyPrintedJson)
-                    
-                    do {
-                        let json = try! JSON(data: AFdata.data!)
-                        print(json)
-                    }catch{
+                    print(json)
+                    if let getdata = json["data"] as? [AnyObject]{
+                        print(getdata)
+                        var subdates = [String]()
+                        for item in getdata {
+                            print(item)
+                            var Date = ""
+                            let dateTimeString = item["Date_Time"] as? String ?? "2024-07-01 09:41:38"
+                            let inputDateFormat = "yyyy-MM-dd HH:mm:ss"
+                            let outputDateFormat = "yyyy-MM-dd"
+                            let inputDateFormatter = DateFormatter()
+                            inputDateFormatter.dateFormat = inputDateFormat
+                            if let date = inputDateFormatter.date(from: dateTimeString) {
+                                let outputDateFormatter = DateFormatter()
+                                outputDateFormatter.dateFormat = outputDateFormat
+                                let dateString = outputDateFormatter.string(from: date)
+                                Date = dateString
+                                subdates.append(Date)
+                                print(dateString)
+                            } else {
+                                print("Invalid date-time string")
+                            }
+                            
+                        }
+                        let uniqueSubdatesSet = Set(subdates)
+                        let uniqueSubdatesArray = Array(uniqueSubdatesSet)
+                        let sortedUniqueSubdatesArray = uniqueSubdatesArray.sorted()
+                        print(sortedUniqueSubdatesArray)
                         
+                        for item in sortedUniqueSubdatesArray {
+                            var SFCDetils: [AnyObject] = []
+                            let filteredData = getdata.filter {
+                                if let dateTime = $0["Date_Time"] as? String {
+                                    return dateTime.contains(item)
+                                }
+                                return false
+                            }
+                            for data in filteredData {
+                                print(data)
+                                let date = data["Date_Time"] as? String ?? ""
+                                let MOT_Name = data["MOT_Name"] as? String ?? ""
+                                let From_Place = data["From_Place"] as? String ?? ""
+                                let To_Place = data["To_Place"] as? String ?? ""
+                                let itms: [String: Any]=["date": date,"modeoftravel":MOT_Name,"fromplace":From_Place,"Toplace":To_Place,"Fromid":"","Toid":""];
+                                let jitm: AnyObject = itms as AnyObject
+                                SFCDetils.append(jitm)
+                                
+                            }
+                            ExpenseDetils.append(ExpenseDatas(date: item, SFCdetils:SFCDetils))
+                        }
+                        print(ExpenseDetils)
+                        //SFC_Data_TB.reloadData()
+                        ViewDet_TB.reloadData()
                     }
                     
                 }
@@ -459,6 +524,11 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
     @objc private func Close_Drop_Down_View() {
         Sel_Period_Drop_Down.isHidden = true
     }
+    
+    @IBAction func Close_Detiles_View(_ sender: Any) {
+        Detiles_View.isHidden = true
+    }
+    
     @IBAction func SerchByText(_ sender: Any) {
         let txtbx: UITextField = sender as! UITextField
         if txtbx.text!.isEmpty {
