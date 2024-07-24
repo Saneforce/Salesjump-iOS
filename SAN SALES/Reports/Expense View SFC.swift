@@ -513,7 +513,7 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
                 print(value)
                 if let json = value as? [String:AnyObject] {
                     print(json)
-                    if let getdata = json["data"] as? [AnyObject]{
+                    if let getdata = json["data"] as? [AnyObject], let DistanceEntr = json["DistanceEntr"] as? [AnyObject]{
                         print(getdata)
                         var subdates = [String]()
                         for item in getdata {
@@ -555,14 +555,14 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
                                 let MOT_Name = data["MOT_Name"] as? String ?? ""
                                 let From_Place = data["From_Place"] as? String ?? ""
                                 let To_Place = data["To_Place"] as? String ?? ""
-                                let itms: [String: Any]=["date": date,"modeoftravel":MOT_Name,"fromplace":"Test place","Toplace":"To place","Fromid":"","Toid":""];
+                                let itms: [String: Any]=["date": date,"modeoftravel":MOT_Name,"fromplace":"Test place","Toplace":To_Place,"Fromid":"","Toid":""];
                                 let jitm: AnyObject = itms as AnyObject
                                 SFCDetils.append(jitm)
                             }
                             ExpenseDetils.append(ExpenseDatas(date: item, SFCdetils:SFCDetils))
                         }
                         print(ExpenseDetils)
-                        //SFC_Data_TB.reloadData()
+                        print(DistanceEntr)
                         ViewDet_TB.reloadData()
                     }
                     
