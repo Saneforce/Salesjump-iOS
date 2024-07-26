@@ -48,6 +48,7 @@ class ReportMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
         
         strMasList.append(mnuItem.init(MasId: 4, MasName: "TP View", MasImage: "SwitchRoute"))
         strMasList.append(mnuItem.init(MasId: 5, MasName: "TP View Datewise", MasImage: "SwitchRoute"))
+        strMasList.append(mnuItem.init(MasId: 6, MasName: "My Resources", MasImage: "SwitchRoute"))
         
         btnBack.addTarget(target: self, action: #selector(closeMenuWin))
         menuClose.addTarget(target: self, action: #selector(closeMenuWin))
@@ -120,6 +121,12 @@ class ReportMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
             let tpVwDayVC = storyboard.instantiateViewController(withIdentifier: "sbTourPlanViewDateWise") as! TourPlanViewDateWise
             
              viewController.setViewControllers([RptMnuVc,tpVwDayVC], animated: false)
+             (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
+        }else if lItm.MasId == 6 {
+            let RptMnuVc = storyboard.instantiateViewController(withIdentifier: "sbReportsmnu") as! ReportMenu
+            let resVC = storyboard.instantiateViewController(withIdentifier: "sbMyResources") as! MyResources
+            
+             viewController.setViewControllers([RptMnuVc,resVC], animated: false)
              (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
         }
         /*else if lItm.MasId == 2 {

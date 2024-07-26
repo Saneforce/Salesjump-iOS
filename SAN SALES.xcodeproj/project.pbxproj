@@ -29,6 +29,10 @@
 		15C4B3192BECAA6B001ACBF4 /* RejectReasonViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15C4B3162BECAA6B001ACBF4 /* RejectReasonViewController.swift */; };
 		15F4504E2C2A88DF0074D285 /* MissedDateSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F4504D2C2A88DF0074D285 /* MissedDateSelection.swift */; };
 		15F450502C2A89AB0074D285 /* MissedDateRouteSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F4504F2C2A89AB0074D285 /* MissedDateRouteSelection.swift */; };
+		15F9E7B12C5229220057D4C6 /* MyResources.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F9E7B02C5229220057D4C6 /* MyResources.swift */; };
+		15F9E7B32C5399D70057D4C6 /* MyResourcesRetailerList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F9E7B22C5399D70057D4C6 /* MyResourcesRetailerList.swift */; };
+		15F9E7B52C53A12C0057D4C6 /* PrecallAnalysis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F9E7B42C53A12C0057D4C6 /* PrecallAnalysis.swift */; };
+		15F9E7B92C53BE170057D4C6 /* MyResourceRoutes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F9E7B82C53BE170057D4C6 /* MyResourceRoutes.swift */; };
 		19247A3DB960E114A6C28FB3 /* Pods_SAN_SALES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 448C0B69977667C109C50683 /* Pods_SAN_SALES.framework */; };
 		381EF93D2B19DB9700CED65F /* UI+Constraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 381EF93C2B19DB9700CED65F /* UI+Constraints.swift */; };
 		382103F52BA16B83005C02CD /* Expense Entry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 382103F42BA16B83005C02CD /* Expense Entry.swift */; };
@@ -155,6 +159,10 @@
 		15C4B3172BECAA6B001ACBF4 /* RejectReasonViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RejectReasonViewController.xib; sourceTree = "<group>"; };
 		15F4504D2C2A88DF0074D285 /* MissedDateSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissedDateSelection.swift; sourceTree = "<group>"; };
 		15F4504F2C2A89AB0074D285 /* MissedDateRouteSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissedDateRouteSelection.swift; sourceTree = "<group>"; };
+		15F9E7B02C5229220057D4C6 /* MyResources.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyResources.swift; sourceTree = "<group>"; };
+		15F9E7B22C5399D70057D4C6 /* MyResourcesRetailerList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyResourcesRetailerList.swift; sourceTree = "<group>"; };
+		15F9E7B42C53A12C0057D4C6 /* PrecallAnalysis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrecallAnalysis.swift; sourceTree = "<group>"; };
+		15F9E7B82C53BE170057D4C6 /* MyResourceRoutes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyResourceRoutes.swift; sourceTree = "<group>"; };
 		3453EBBCA5603BC17DBC6D2A /* Pods-SAN SALES.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SAN SALES.release.xcconfig"; path = "Target Support Files/Pods-SAN SALES/Pods-SAN SALES.release.xcconfig"; sourceTree = "<group>"; };
 		381EF93C2B19DB9700CED65F /* UI+Constraints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UI+Constraints.swift"; sourceTree = "<group>"; };
 		382103F42BA16B83005C02CD /* Expense Entry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Expense Entry.swift"; sourceTree = "<group>"; };
@@ -545,6 +553,10 @@
 				38FBAA2B2BD6279D00E36C0D /* Expense View.swift */,
 				1590951F2BF1E941001D8347 /* TourPlanView.swift */,
 				159095212BF1E954001D8347 /* TourPlanViewDateWise.swift */,
+				15F9E7B02C5229220057D4C6 /* MyResources.swift */,
+				15F9E7B22C5399D70057D4C6 /* MyResourcesRetailerList.swift */,
+				15F9E7B42C53A12C0057D4C6 /* PrecallAnalysis.swift */,
+				15F9E7B82C53BE170057D4C6 /* MyResourceRoutes.swift */,
 				159095232BF23AD0001D8347 /* CalendarViewController.swift */,
 				159095242BF23AD0001D8347 /* CalendarViewController.xib */,
 			);
@@ -739,6 +751,7 @@
 				38D0F76829BB2447003EEB03 /* BrandReviewVisit.swift in Sources */,
 				388CD9292BDA3A7C003A06F9 /* SuperStockistOrderSubmittedDetails.swift in Sources */,
 				3F97F9F62831B5950097166D /* AddNewCustomer.swift in Sources */,
+				15F9E7B32C5399D70057D4C6 /* MyResourcesRetailerList.swift in Sources */,
 				1514DF782BD786CF00E6B45A /* SuperStockistOrderSubmittedDetails.swift in Sources */,
 				3F5B2FC3284B59E400574D7C /* MsgLoader.swift in Sources */,
 				38DDD8492BA1D8120074AEF1 /* Daily Expense Entry.swift in Sources */,
@@ -769,6 +782,7 @@
 				3894BC5D2B919A0E0019B40A /* Add Route.swift in Sources */,
 				384E56BA2BDB664B00B2E8A5 /* Expense Approval.swift in Sources */,
 				15B518BA2C12ECEF00DD75C1 /* JsonModel.swift in Sources */,
+				15F9E7B52C53A12C0057D4C6 /* PrecallAnalysis.swift in Sources */,
 				38C5A9802B958AFB00EF4584 /* Add Distributor.swift in Sources */,
 				38F6F5AD2B19D2DA007090BF /* Performance.swift in Sources */,
 				38FBAA2C2BD6279D00E36C0D /* Expense View.swift in Sources */,
@@ -777,6 +791,7 @@
 				388CD92D2BDA3ABE003A06F9 /* TourPlanSingleEntry.swift in Sources */,
 				3FF57C1D286C4A76009E3FE5 /* RptVisitDetail.swift in Sources */,
 				3F5B297828891D5C002D226C /* CheckPermissions.swift in Sources */,
+				15F9E7B92C53BE170057D4C6 /* MyResourceRoutes.swift in Sources */,
 				3F28CC1127DC856400B95964 /* MasterSync.swift in Sources */,
 				3883A09C2A176B6300B858CF /* SubmittedCalls.swift in Sources */,
 				15F450502C2A89AB0074D285 /* MissedDateRouteSelection.swift in Sources */,
@@ -801,6 +816,7 @@
 				159095252BF23AD0001D8347 /* CalendarViewController.swift in Sources */,
 				3F7CCF0328F14CA3002A7C03 /* GEOTagging.swift in Sources */,
 				3F0861C328053B3A006A30FB /* UserSetup.swift in Sources */,
+				15F9E7B12C5229220057D4C6 /* MyResources.swift in Sources */,
 				38F6F5AF2B19D2ED007090BF /* Location.swift in Sources */,
 				3F2F810B27CEB30C0015E1CA /* AppDelegate.swift in Sources */,
 				38A1859F2BB53D5D00E01407 /* End Expense.swift in Sources */,

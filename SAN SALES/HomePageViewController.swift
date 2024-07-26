@@ -117,7 +117,7 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         //                }
         
         Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(TimeDisplay), userInfo: nil, repeats: true)
-       // getUserDetails()
+        getUserDetails()
         
         self.tpMandatoryNeed()
         /*if let json = try JSONSerialization.jsonObject(with: prettyPrintedJson!, options: []) as? [String: Any] {
