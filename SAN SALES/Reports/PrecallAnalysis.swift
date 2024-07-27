@@ -15,6 +15,14 @@ class PrecallAnalysis : UIViewController {
     @IBOutlet weak var imgBack: UIImageView!
     
     
+    
+    @IBOutlet weak var lblRouteHeader: UILabel!
+    @IBOutlet weak var lblRoutes: UILabel!
+    
+    
+    @IBOutlet weak var lblCustomerHeader: UILabel!
+    @IBOutlet weak var lblCustomer: UILabel!
+    
     @IBOutlet weak var lblSvlNo: UILabel!
     @IBOutlet weak var lblSlab: UILabel!
     @IBOutlet weak var lblGiftName: UILabel!
@@ -33,6 +41,12 @@ class PrecallAnalysis : UIViewController {
         getUserDetails()
         fetchPrecall()
 
+        lblRouteHeader.text = UserSetup.shared.StkRoute
+        lblCustomerHeader.text = UserSetup.shared.drCap
+        
+        lblRoutes.text = retailer["town_name"] as? String ?? ""
+        lblCustomer.text = retailer["name"] as? String ?? ""
+        
     }
     
     func getUserDetails(){
@@ -53,7 +67,7 @@ class PrecallAnalysis : UIViewController {
         
         let id = String(format: "%@", retailer["id"] as! CVarArg)
         let url = APIClient.shared.BaseURL+APIClient.shared.DBURL1+"get/precall&Msl_No=\(id)&divisionCode=\(divCode)&sfCode=\(sfCode)"
-        
+        print(url)
         AF.request(url,method: .get,parameters: nil).validate(statusCode: 200..<209).responseData { AFData in
             
             switch AFData.result {
@@ -66,12 +80,12 @@ class PrecallAnalysis : UIViewController {
                     print(json)
                     
                     
-                    self.lblSvlNo.text = ""
-                    self.lblSlab.text = ""
-                    self.lblGiftName.text = ""
-                    self.lblClass.text = ""
-                    self.lblRetailerChannel.text = ""
-                    self.lblLastOrderAmt.text = json.last_order_remarks.string
+                    self.lblSvlNo.text = json.SVL.string
+                    self.lblSlab.text = json.SlabName.string
+                    self.lblGiftName.text = json.Giftenrol_Name.string
+                    self.lblClass.text = json.DrCat.string
+                    self.lblRetailerChannel.text = json.DrSpl.string
+                    self.lblLastOrderAmt.text = "\(json.LastorderAmount.int)"
                     
                 }catch{
                     print("Error")
@@ -83,6 +97,11 @@ class PrecallAnalysis : UIViewController {
         }
         
     }
+    
+    func fetchLeaveReport() {
+        
+    }
+    
     @objc func backVC() {
         self.navigationController?.popViewController(animated: true)
     }

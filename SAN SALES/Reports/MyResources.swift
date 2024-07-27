@@ -59,8 +59,8 @@ class MyResources : UIViewController, UITableViewDelegate , UITableViewDataSourc
             lstRetails = list
         }
         
-        strMasList.append(mnuItem.init(MasId: 1, MasName: "Secondary Count", MasImage: "SwitchRoute",BTC: String(lstRetails.count)))
-        strMasList.append(mnuItem.init(MasId: 2, MasName: "Secondary Count", MasImage: "SwitchRoute",BTC: String(lstDistList.count)))
+        strMasList.append(mnuItem.init(MasId: 1, MasName: "\(UserSetup.shared.drCap) Count", MasImage: "SwitchRoute",BTC: String(lstRetails.count)))
+        strMasList.append(mnuItem.init(MasId: 2, MasName: "\(UserSetup.shared.StkCap) Count", MasImage: "SwitchRoute",BTC: String(lstDistList.count)))
         strMasList.append(mnuItem.init(MasId: 3, MasName: "\(UserSetup.shared.StkRoute) Count", MasImage: "SwitchRoute",BTC: String(lstRoutes.count)))
         
         tableViewResourceList.reloadData()

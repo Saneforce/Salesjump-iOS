@@ -53,6 +53,7 @@ class UserSetup{
     var Hotel_Bill_Nd:Int = 0
     var SrtNd:Int = 0
     var dsg_code:Int = 0
+    var drCap : String = ""
     func initUserSetup(){
         let SetupStoreage = UserDefaults.standard
         let SetupData: String=SetupStoreage.string(forKey: "UserSetup")!
@@ -96,6 +97,7 @@ class UserSetup{
         tpRemainderDate = lstSetups[0]["TP_Remainder_Date"] as? String ?? ""
         tpMandatoryNeed = lstSetups[0]["TP_Mandatory_ND"] as? Int ?? 0
         Hotel_Bill_Nd = lstSetups[0]["Hotel_Bill_Nd"] as? Int ?? 0
+        drCap = lstSetups[0]["DrCap"] as? String ?? ""
         SrtNd = lstSetups[0]["SrtNd"] as? Int ?? 0
         if(lstSetups[0]["Geo_Fencing"] as? Int == 1){
             Fenching = true

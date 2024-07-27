@@ -363,7 +363,7 @@
                             </constraints>
                         </view>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="brX-IM-GjG">
-                            <rect key="frame" x="7" y="48" width="226" height="19"/>
+                            <rect key="frame" x="7" y="48" width="226" height="22.5"/>
                             <fontDescription key="fontDescription" name="Poppins-SemiBold" family="Poppins" pointSize="16"/>
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
@@ -4540,13 +4540,13 @@
                                         <rect key="frame" x="10" y="15" width="394" height="80"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Worktype" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="v6f-uQ-zwP">
-                                                <rect key="frame" x="24" y="8" width="75" height="21"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <rect key="frame" x="24" y="8" width="300" height="21"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                 <fontDescription key="fontDescription" name="Poppins-SemiBold" family="Poppins" pointSize="15"/>
                                                 <color key="textColor" red="0.40061411200000002" green="0.39668652269999999" blue="0.39668652269999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Select the Worktype" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GIT-fk-WQZ" customClass="LabelSelect" customModule="SAN_SALES" customModuleProvider="target">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Route" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GIT-fk-WQZ" customClass="LabelSelect" customModule="SAN_SALES" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="34" width="394" height="40"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                 <color key="backgroundColor" red="0.93725490199999995" green="0.95294117649999999" blue="0.98431372549999996" alpha="1" colorSpace="calibratedRGB"/>
@@ -4560,17 +4560,17 @@
                                             <constraint firstAttribute="height" constant="80" id="Tys-fs-dN4"/>
                                         </constraints>
                                     </view>
-                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vNU-rn-88k">
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uqD-kD-p3T">
                                         <rect key="frame" x="10" y="110" width="394" height="80"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Worktype" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YBI-5R-O7w">
-                                                <rect key="frame" x="24" y="8" width="75" height="21"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Worktype" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Uw-wT-0Ao">
+                                                <rect key="frame" x="24" y="8" width="300" height="21"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                 <fontDescription key="fontDescription" name="Poppins-SemiBold" family="Poppins" pointSize="15"/>
                                                 <color key="textColor" red="0.40061411200000002" green="0.39668652269999999" blue="0.39668652269999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Select the Worktype" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SkE-h9-Ubn" customClass="LabelSelect" customModule="SAN_SALES" customModuleProvider="target">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Route" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Lg-ef-hgt" customClass="LabelSelect" customModule="SAN_SALES" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="34" width="394" height="40"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                 <color key="backgroundColor" red="0.93725490199999995" green="0.95294117649999999" blue="0.98431372549999996" alpha="1" colorSpace="calibratedRGB"/>
@@ -4581,7 +4581,7 @@
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="80" id="9Lw-CA-Wit"/>
+                                            <constraint firstAttribute="height" constant="80" id="Wua-XD-NfX"/>
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zhn-O5-LfB">
@@ -4707,7 +4707,7 @@
                                                 <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Last Order Amount" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KhT-8O-n7A">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Last Order Amount" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KhT-8O-n7A">
                                                 <rect key="frame" x="10" y="190" width="147" height="18"/>
                                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
                                                 <nil key="textColor"/>
@@ -4786,14 +4786,16 @@
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="uqD-kD-p3T" secondAttribute="trailing" constant="10" id="039-st-zNH"/>
                                     <constraint firstAttribute="trailing" secondItem="ngE-0k-1Fd" secondAttribute="trailing" constant="10" id="9yM-O2-ct8"/>
                                     <constraint firstItem="ngE-0k-1Fd" firstAttribute="top" secondItem="dZp-Xy-Meg" secondAttribute="top" constant="15" id="FSH-ZT-8Bs"/>
                                     <constraint firstAttribute="bottom" secondItem="zhn-O5-LfB" secondAttribute="bottom" constant="10" id="Ldx-RU-MPO"/>
                                     <constraint firstItem="zhn-O5-LfB" firstAttribute="leading" secondItem="dZp-Xy-Meg" secondAttribute="leading" constant="10" id="MZi-5R-dWt"/>
-                                    <constraint firstItem="zhn-O5-LfB" firstAttribute="top" secondItem="vNU-rn-88k" secondAttribute="bottom" constant="15" id="ODz-c9-ygS"/>
-                                    <constraint firstItem="vNU-rn-88k" firstAttribute="top" secondItem="ngE-0k-1Fd" secondAttribute="bottom" constant="15" id="iQj-be-pvU"/>
+                                    <constraint firstItem="uqD-kD-p3T" firstAttribute="leading" secondItem="dZp-Xy-Meg" secondAttribute="leading" constant="10" id="Oux-2v-5tB"/>
+                                    <constraint firstItem="zhn-O5-LfB" firstAttribute="top" secondItem="uqD-kD-p3T" secondAttribute="bottom" constant="15" id="VQk-sa-607"/>
                                     <constraint firstItem="ngE-0k-1Fd" firstAttribute="leading" secondItem="dZp-Xy-Meg" secondAttribute="leading" constant="10" id="n12-ur-fTF"/>
                                     <constraint firstAttribute="trailing" secondItem="zhn-O5-LfB" secondAttribute="trailing" constant="10" id="sCW-nH-HBp"/>
+                                    <constraint firstItem="uqD-kD-p3T" firstAttribute="top" secondItem="ngE-0k-1Fd" secondAttribute="bottom" constant="15" id="w1O-OH-oc7"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -4812,9 +4814,13 @@
                     <connections>
                         <outlet property="imgBack" destination="wtt-7A-V6g" id="xaG-Gy-48Q"/>
                         <outlet property="lblClass" destination="y4R-PI-COR" id="XUF-Ok-7VK"/>
+                        <outlet property="lblCustomer" destination="7Lg-ef-hgt" id="8He-al-cl6"/>
+                        <outlet property="lblCustomerHeader" destination="2Uw-wT-0Ao" id="RaF-r2-C4I"/>
                         <outlet property="lblGiftName" destination="ile-JW-AYv" id="jk0-1b-7x6"/>
                         <outlet property="lblLastOrderAmt" destination="FVo-bO-oib" id="lR9-7o-Viz"/>
                         <outlet property="lblRetailerChannel" destination="5Db-V8-Zfd" id="6gD-D9-iom"/>
+                        <outlet property="lblRouteHeader" destination="v6f-uQ-zwP" id="EYX-Q7-QFx"/>
+                        <outlet property="lblRoutes" destination="GIT-fk-WQZ" id="iHF-6P-ARC"/>
                         <outlet property="lblSlab" destination="Chx-Rt-6hv" id="bTV-yG-RDC"/>
                         <outlet property="lblSvlNo" destination="77o-NL-iIo" id="gqy-mo-16g"/>
                     </connections>
