@@ -83,6 +83,8 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
     var period_id = ""
     var Eff_Month="", Eff_Year=0
     var Selected_data:[ExpenseDatas] = []
+    var lstHQs: [AnyObject] = []
+    var lstdiskm: [AnyObject] = []
     override func viewDidLoad(){
         super.viewDidLoad()
         getUserDetails()
@@ -106,6 +108,15 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
         Exp_Det_View.layer.cornerRadius = 8
         Exp_Det_View.layer.masksToBounds = true
         
+        
+        
+        if let HQData = LocalStoreage.string(forKey: "HQ_Master"),
+           let list = GlobalFunc.convertToDictionary(text:  HQData) as? [AnyObject] {
+            lstHQs = list;
+            
+        }
+        
+        
         cardViewInstance.styleSummaryView(MonthView)
         cardViewInstance.styleSummaryView(PeriodicView)
         cardViewInstance.styleSummaryView(SummaryView)
@@ -128,6 +139,18 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
         print(Lab_hig.frame.size.height)
         print(CardView.frame.size.height)
         print(Card_View_Hig.constant)
+        
+        
+        getExpenseDisSFC() { [self] disEnrty in
+            if let disEnrty = disEnrty {
+                print(disEnrty)
+                lstdiskm = disEnrty
+                print(lstdiskm)
+            } else {
+                print("Failed to get disEnrty")
+            }
+        }
+        
     }
     func getUserDetails(){
     let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
@@ -516,6 +539,8 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
                     if let getdata = json["data"] as? [AnyObject], let DistanceEntr = json["DistanceEntr"] as? [AnyObject]{
                         print(getdata)
                         var subdates = [String]()
+                        var FilterDisKms:[AnyObject] = []
+                        var sf_code_data:String = ""
                         for item in getdata {
                             print(item)
                             var Date = ""
@@ -550,19 +575,107 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
                                 return false
                             }
                             print(filteredData)
+                           
                             for data in filteredData {
+                                print(data)
+                                var Dis_Km = 0
+                                var From_Place = ""
+                                var To_place = ""
                                 let date = data["Date_Time"] as? String ?? ""
                                 let MOT_Name = data["MOT_Name"] as? String ?? ""
-                                let From_Place = data["From_Place"] as? String ?? ""
                                 let To_Place = data["To_Place"] as? String ?? ""
-                                let itms: [String: Any]=["date": date,"modeoftravel":MOT_Name,"fromplace":From_Place,"Toplace":To_Place,"Fromid":"","Toid":""];
+                                let to_place_id = data["To_Place_Id"] as? String ?? ""
+                                let Fromdat = lstHQs.filter{ $0["id"] as? String == data["From_Place"] as? String}
+                                print(Fromdat)
+                              if UserSetup.shared.SF_type == 2{
+                                if Fromdat.isEmpty {
+                                    From_Place = data["From_Place"] as? String ?? ""
+                                    for i in FilterDisKms{
+                                        if From_Place == To_Place{
+                                            Dis_Km = i["Distance_KM"] as? Int ?? 0
+                                        }else{
+                                            let BasLevelFilter = FilterDisKms.filter {
+                                                $0["To_Plc_Code"] as? String == To_Place &&
+                                                $0["Frm_Plc_Code"] as? String == sf_code_data
+                                            }
+                                            
+                                            if BasLevelFilter.isEmpty{
+                                                Dis_Km = 0
+                                            }else{
+                                                Dis_Km = BasLevelFilter[0]["Distance_KM"] as? Int ?? 0
+                                            }
+                                        }
+                                    }
+                                }else{
+                                    print(Fromdat)
+                                    From_Place = Fromdat[0]["name"] as? String ?? ""
+                                    let FilterDis = DistanceEntr.filter{ $0["To_Plc_Code"] as? String == data["From_Place"] as? String}
+                                    Dis_Km = FilterDis[0]["Distance_KM"] as? Int ?? 0
+                                    let Frm_Plc_Code = data["From_Place"] as? String ?? SFCode
+                                    let FilterDisKm = lstdiskm.filter{ $0["Sf_code"] as? String == Frm_Plc_Code}
+                                    sf_code_data = Frm_Plc_Code
+                                    print(FilterDisKm)
+                                    FilterDisKms = FilterDisKm
+                                    print(FilterDisKms)
+                                    for i in FilterDisKm {
+                                        if let Frm_Plc_Code = i["Frm_Plc_Code"] as? String,
+                                           let To_Plc_Code = i["To_Plc_Code"] as? String {
+                                            if data["From_Place"] as? String == Frm_Plc_Code && data["To_Place"] as? String == To_Plc_Code {
+                                                let Dis = i["Distance_KM"] as? Int ?? 0
+                                                Dis_Km = Dis_Km + Dis
+                                            } else {
+                                                print("No data")
+                                            }
+                                        }
+                                    }
+                                }
+                              }else{
+                                  From_Place = data["From_Place"] as? String ?? ""
+                                  sf_code_data = DistanceEntr[0]["Sf_code"] as? String ?? SFCode
+                                  if Fromdat.isEmpty{
+                                     
+                                      print(DistanceEntr)
+                                      for i in DistanceEntr{
+                                          print(i)
+                                          if From_Place == i["Frm_Plc_Code"] as? String && To_Place ==  i["To_Plc_Code"] as? String{
+                                              print(i)
+                                              Dis_Km = i["Distance_KM"] as? Int ?? 0
+                                          }
+//                                          else{
+//                                              print(DistanceEntr)
+//                                              let BasLevelFilter = DistanceEntr.filter {
+//                                                  $0["To_Plc_Code"] as? String == To_Place &&
+//                                                  $0["Frm_Plc_Code"] as? String == sf_code_data
+//                                              }
+//                                              
+//                                              print(BasLevelFilter)
+//                                              if BasLevelFilter.isEmpty{
+//                                                  Dis_Km = 0
+//                                              }else{
+//                                                  Dis_Km = BasLevelFilter[0]["Distance_KM"] as? Int ?? 0
+//                                              }
+//                                          }
+                                      }
+                                  }else{
+                                      let BasLevelFilter = DistanceEntr.filter {
+                                          $0["To_Plc_Code"] as? String == To_Place &&
+                                          $0["Frm_Plc_Code"] as? String == sf_code_data
+                                      }
+                                      if BasLevelFilter.isEmpty{
+                                          Dis_Km = 0
+                                      }else{
+                                          Dis_Km = BasLevelFilter[0]["Distance_KM"] as? Int ?? 0
+                                      }
+                                  }
+                              }
+                             
+                                let itms: [String: Any]=["date": date,"modeoftravel":MOT_Name,"fromplace":From_Place,"Toplace":To_Place,"Fromid":"","Toid":to_place_id,"Dist":Dis_Km];
                                 let jitm: AnyObject = itms as AnyObject
                                 SFCDetils.append(jitm)
                             }
                             ExpenseDetils.append(ExpenseDatas(date: item, SFCdetils:SFCDetils))
                         }
                         print(ExpenseDetils)
-                        print(DistanceEntr)
                         ViewDet_TB.reloadData()
                     }
                     
@@ -593,4 +706,37 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
         }
         Period_TB.reloadData()
     }
+    
+    func getExpenseDisSFC(completion: @escaping ([AnyObject]?) -> Void) {
+        self.ShowLoading(Message: "Please Wait...")
+        let axn = "getExpenseDisSFC"
+        let apiKey = "\(axn)&sf_code=\("")"
+        var result = apiKey
+        if let lastCommaIndex = result.lastIndex(of: ",") {
+            result.remove(at: lastCommaIndex)
+        }
+        let apiKeyWithoutCommas = result.replacingOccurrences(of: ",&", with: "&")
+        let url = APIClient.shared.BaseURL + APIClient.shared.DBURL2 + apiKeyWithoutCommas
+        
+        AF.request(url, method: .post, parameters: nil, encoding: URLEncoding.default, headers: nil)
+            .validate(statusCode: 200..<299)
+            .responseJSON { response in
+                switch response.result {
+                case .success(let value):
+                    if let json = value as? [String: AnyObject],
+                       let disEnrty = json["DistanceEntr"] as? [AnyObject] {
+                        completion(disEnrty)
+                        self.LoadingDismiss()
+                    } else {
+                        completion(nil)
+                        self.LoadingDismiss()
+                    }
+                case .failure(let error):
+                    Toast.show(message: error.errorDescription ?? "Unknown Error")
+                    completion(nil)
+                    self.LoadingDismiss()
+                }
+            }
+    }
+
 }
