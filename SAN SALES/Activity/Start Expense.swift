@@ -901,18 +901,42 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource,FSC
     @objc private func Clos_Calender(){
         calendar_view.isHidden = true
     }
+//    @objc private func GotoHome(){
+//        if let NavExp = Exp_Nav{
+//            if (NavExp == "Ex_Ent"){
+//                VisitData.shared.Nav_id = 1
+//                let storyboard = UIStoryboard(name: "AdminForms", bundle: nil)
+//                let viewController = storyboard.instantiateViewController(withIdentifier: "Expense") as! Expense_Entry;()
+//                UIApplication.shared.windows.first?.rootViewController = viewController
+//                UIApplication.shared.windows.first?.makeKeyAndVisible()
+//            }
+//        }else{
+//            GlobalFunc.MovetoMainMenu()
+//        }
+//    }
     @objc private func GotoHome(){
-        if let NavExp = Exp_Nav{
-            if (NavExp == "Ex_Ent"){
-                VisitData.shared.Nav_id = 1
-                let storyboard = UIStoryboard(name: "AdminForms", bundle: nil)
-                let viewController = storyboard.instantiateViewController(withIdentifier: "Expense") as! Expense_Entry;()
-                UIApplication.shared.windows.first?.rootViewController = viewController
-                UIApplication.shared.windows.first?.makeKeyAndVisible()
-            }
-        }else{
-            GlobalFunc.MovetoMainMenu()
-        }
+           
+            let alert = UIAlertController(title: "Confirmation", message: "Do you want it back?", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { [self] _ in
+                if let NavExp = Exp_Nav{
+                    if (NavExp == "Ex_Ent"){
+                        VisitData.shared.Nav_id = 1
+                        let storyboard = UIStoryboard(name: "AdminForms", bundle: nil)
+                        let viewController = storyboard.instantiateViewController(withIdentifier: "Expense") as! Expense_Entry;()
+                        UIApplication.shared.windows.first?.rootViewController = viewController
+                        UIApplication.shared.windows.first?.makeKeyAndVisible()
+                    }
+                }else{
+                    GlobalFunc.MovetoMainMenu()
+                }
+                self.navigationController?.popViewController(animated: true)
+                return
+            })
+            alert.addAction(UIAlertAction(title: "Cancel", style: .destructive) { _ in
+                return
+            })
+            self.present(alert, animated: true)
+            
     }
     @objc private func opento(){
         AllRout.removeAll()
