@@ -61,6 +61,7 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
     
     struct ExpenseDatas:Any{
         let date:String
+        var miscellaneous_exp:String
         let SFCdetils:[AnyObject]
     }
     var ExpenseDetils:[ExpenseDatas] = []
@@ -393,13 +394,13 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
             // Nav_PeriodicData = [item as AnyObject]
             Sel_Period.text = item.Period_Name
             period_id = item.Period_Id
-            //Eff_Month = item.Eff_Month
+            Eff_Month = String(item.Eff_Month)
             Eff_Year = item.Eff_Year
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd"
             let From_Date = item.From_Date
-            period_from_date = "\(selectYear)-\(SelectMonth)-"+From_Date
-            if let date = dateFormatter.date(from: "\(selectYear)-\(SelectMonth)-" + From_Date) {
+            period_from_date = "\(Eff_Year)-\(Eff_Month)-"+From_Date
+            if let date = dateFormatter.date(from: "\(Eff_Year)-\(Eff_Month)-" + From_Date) {
                 FDate = date
             } else {
                 print("Error: Unable to convert string to Date")
@@ -445,9 +446,7 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
                 print("Invalid date format")
             }
             TextSearch.text = ""
-            
-            
-            ExpenseReportDetailsSFC()
+            ExpenseReportDetailsSFC(fromdate: From, todate: To)
             
             Sel_Period_Drop_Down.isHidden = true
         }else if ViewDet_TB == tableView {
@@ -525,9 +524,8 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
         periodic()
         Sel_Period_Drop_Down.isHidden = false
     }
-    
-    func ExpenseReportDetailsSFC(){
-        let apiKey: String = "getExpenseReportDetailsSFC&sf_code=\(SFCode)&division_code=\(DivCode)"
+    func ExpenseReportDetailsSFC(fromdate:String,todate:String){
+        let apiKey: String = "getExpenseReportDetailsSFC&sf_code=\(SFCode)&division_code=\(DivCode)&from_date=\(fromdate)&to_date=\(todate)"
         let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
         AF.request(APIClient.shared.BaseURL + APIClient.shared.DBURL2 + apiKeyWithoutCommas, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
             AFdata in
@@ -536,11 +534,12 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
                 print(value)
                 if let json = value as? [String:AnyObject] {
                     print(json)
-                    if let getdata = json["data"] as? [AnyObject], let DistanceEntr = json["DistanceEntr"] as? [AnyObject]{
+                    if let getdata = json["data"] as? [AnyObject], let DistanceEntr = json["DistanceEntr"] as? [AnyObject],let dailyExpense = json["dailyExpense"] as? [AnyObject]{
                         print(getdata)
                         var subdates = [String]()
                         var FilterDisKms:[AnyObject] = []
                         var sf_code_data:String = ""
+                        var miscellaneous_exp:String = "0"
                         for item in getdata {
                             print(item)
                             var Date = ""
@@ -668,14 +667,24 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
                                       }
                                   }
                               }
-                             
                                 let itms: [String: Any]=["date": date,"modeoftravel":MOT_Name,"fromplace":From_Place,"Toplace":To_Place,"Fromid":"","Toid":to_place_id,"Dist":Dis_Km];
                                 let jitm: AnyObject = itms as AnyObject
                                 SFCDetils.append(jitm)
                             }
-                            ExpenseDetils.append(ExpenseDatas(date: item, SFCdetils:SFCDetils))
+                            
+                            ExpenseDetils.append(ExpenseDatas(date: item,miscellaneous_exp:miscellaneous_exp, SFCdetils:SFCDetils))
+                        }
+                        for (index, Detils) in ExpenseDetils.enumerated() {
+                            let filter = dailyExpense.filter { $0["date"] as? String == Detils.date }
+                            if filter.isEmpty{
+                                ExpenseDetils[index].miscellaneous_exp = "0"
+                            }else{
+                                ExpenseDetils[index].miscellaneous_exp = String(filter[0]["amt"] as? Int ?? 0)
+                            }
+                            
                         }
                         print(ExpenseDetils)
+                        
                         ViewDet_TB.reloadData()
                     }
                     
