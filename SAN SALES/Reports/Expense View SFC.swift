@@ -8,6 +8,7 @@
 import UIKit
 import Alamofire
 import FSCalendar
+
 class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource {
    
     @IBOutlet weak var YearPostion: UILabel!
@@ -319,7 +320,7 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
         if Period_TB == tableView {return 50}
         if Summary_TB == tableView {return 30}
         if ViewDet_TB == tableView {return 100}
-        if Mod_of_tra_TB == tableView {return 40}
+        if Mod_of_tra_TB == tableView {return 80}
         return 0
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -384,10 +385,18 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
     }
     
     @objc func View_Det(_ sender: UIButton) {
-        Selected_data.removeAll()
-        Selected_data.append(ExpenseDetils[sender.tag])
-        Mod_of_tra_TB.reloadData()
-        Detiles_View.isHidden = false
+//        Selected_data.removeAll()
+//        Selected_data.append(ExpenseDetils[sender.tag])
+//        Mod_of_tra_TB.reloadData()
+//        Detiles_View.isHidden = false
+        
+        let storyboard = UIStoryboard(name: "Reports", bundle: nil)
+        let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
+        let myDyPln = storyboard.instantiateViewController(withIdentifier: "SFC_Details_View") as! SFC_Details_View
+        myDyPln.viewdetils = ExpenseDetils[sender.tag]
+        viewController.setViewControllers([myDyPln], animated: false)
+        (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
+        
         
     }
     

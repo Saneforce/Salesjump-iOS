@@ -120,6 +120,7 @@
 		3F619F3C27EAEDC000F3D05F /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F619F3B27EAEDC000F3D05F /* LocationService.swift */; };
 		3F619F3E27EB275000F3D05F /* CLocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F619F3D27EB274F00F3D05F /* CLocationService.swift */; };
 		3F7CCF0328F14CA3002A7C03 /* GEOTagging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7CCF0228F14CA3002A7C03 /* GEOTagging.swift */; };
+		3F8B989A2C594C610073D452 /* SFC Details View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F8B98992C594C610073D452 /* SFC Details View.swift */; };
 		3F8BF29D27E99CCA00E1C41B /* CameraService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F8BF29C27E99CCA00E1C41B /* CameraService.swift */; };
 		3F97F9F62831B5950097166D /* AddNewCustomer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F97F9F52831B5950097166D /* AddNewCustomer.swift */; };
 		3F97F9F8283216BD0097166D /* EditTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F97F9F7283216BD0097166D /* EditTextField.swift */; };
@@ -254,6 +255,7 @@
 		3F619F3B27EAEDC000F3D05F /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
 		3F619F3D27EB274F00F3D05F /* CLocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CLocationService.swift; sourceTree = "<group>"; };
 		3F7CCF0228F14CA3002A7C03 /* GEOTagging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GEOTagging.swift; sourceTree = "<group>"; };
+		3F8B98992C594C610073D452 /* SFC Details View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SFC Details View.swift"; sourceTree = "<group>"; };
 		3F8BF29C27E99CCA00E1C41B /* CameraService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraService.swift; sourceTree = "<group>"; };
 		3F97F9F52831B5950097166D /* AddNewCustomer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewCustomer.swift; sourceTree = "<group>"; };
 		3F97F9F7283216BD0097166D /* EditTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTextField.swift; sourceTree = "<group>"; };
@@ -547,6 +549,7 @@
 				159095232BF23AD0001D8347 /* CalendarViewController.swift */,
 				159095242BF23AD0001D8347 /* CalendarViewController.xib */,
 				3F30F82D2C4E5786005EFAD9 /* Expense View SFC.swift */,
+				3F8B98992C594C610073D452 /* SFC Details View.swift */,
 			);
 			path = Reports;
 			sourceTree = "<group>";
@@ -748,6 +751,7 @@
 				384E56C12BDB7ABF00B2E8A5 /* New Expense Approval.swift in Sources */,
 				3F0822BF29000D65009C33EA /* LeaveForm.swift in Sources */,
 				386889E22B1868F90015F20C /* RottPageViewController.swift in Sources */,
+				3F8B989A2C594C610073D452 /* SFC Details View.swift in Sources */,
 				3FBF387527E4488100900007 /* APIClient.swift in Sources */,
 				3F0861BA28001D47006A30FB /* RoundedCornerView.swift in Sources */,
 				3F14EAEA27F73DAD00B0997B /* SecondaryVisit.swift in Sources */,

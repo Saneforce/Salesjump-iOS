@@ -7,23 +7,63 @@
 
 import UIKit
 
-class SFC_Details_View: UIViewController {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-    }
+class SFC_Details_View: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    
+    var viewdetils:Expense_View_SFC.ExpenseDatas?
+  
+    var ExpenseDetils:[Expense_View_SFC.ExpenseDatas] = []
+    
+    @IBOutlet weak var Mod_of_trv_TB: UITableView!
+    @IBOutlet weak var Exp_status: UILabel!
+    @IBOutlet weak var Exp_date: UILabel!
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        Mod_of_trv_TB.dataSource = self
+        Mod_of_trv_TB.delegate = self
+        if let data = viewdetils{
+            ExpenseDetils.append(data)
+               }
+        Exp_status.text = "Expense Submitted"
+        Exp_date.text = ExpenseDetils[0].date
+        
+        print(ExpenseDetils)
+        
     }
-    */
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 100
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return ExpenseDetils[0].SFCdetils.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell:cellListItem = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
+        let getitem = ExpenseDetils[0].SFCdetils
+        print(getitem)
+        let Fromplace = getitem[indexPath.row]["fromplace"] as? String ?? ""
+        let Toplace = getitem[indexPath.row]["Toplace"] as? String ?? ""
+        let Mod_of_Travel =  getitem[indexPath.row]["modeoftravel"] as? String ?? ""
+        let Km = String(getitem[indexPath.row]["Dist"] as? Int ?? 0)
+        let per_km_fare = getitem[indexPath.row]["per_km_fare"] as? String ?? ""
+        let fare = getitem[indexPath.row]["fare"] as? String ?? ""
+        cell.Fromlbsfc.text = Fromplace
+        cell.TolblSFC.text = Toplace
+        cell.Mod_of_trv_SFC.text = Mod_of_Travel
+        cell.Km_sfc.text = Km
+        cell.Fare_sfc.text = per_km_fare
+        cell.Amount_sfc.text = fare
+        return cell
+    }
 
+    
+    @IBAction func Close_View(_ sender: Any) {
+        let storyboard = UIStoryboard(name: "Reports", bundle: nil)
+        let viewController = storyboard.instantiateViewController(withIdentifier: "ExpenseviewSFC") as! Expense_View_SFC
+        UIApplication.shared.windows.first?.rootViewController = viewController
+        UIApplication.shared.windows.first?.makeKeyAndVisible()
+    }
 }
