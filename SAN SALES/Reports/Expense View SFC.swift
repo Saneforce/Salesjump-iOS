@@ -372,9 +372,13 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
             let Fromplace = getitem[indexPath.row]["fromplace"] as? String ?? ""
             let Toplace = getitem[indexPath.row]["Toplace"] as? String ?? ""
             let Mod_of_Travel =  getitem[indexPath.row]["modeoftravel"] as? String ?? ""
+            let Km = getitem[indexPath.row]["Dist"] as? String ?? ""
             cell.Fromlbsfc.text = Fromplace
             cell.TolblSFC.text = Toplace
             cell.Mod_of_trv_SFC.text = Mod_of_Travel
+            cell.Km_sfc.text = Km
+            cell.Fare_sfc.text = ""
+            cell.Amount_sfc.text = ""
         }
         return cell
     }
@@ -525,7 +529,7 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
         Sel_Period_Drop_Down.isHidden = false
     }
     func ExpenseReportDetailsSFC(fromdate:String,todate:String){
-        let apiKey: String = "getExpenseReportDetailsSFC&sf_code=\(SFCode)&division_code=\(DivCode)&from_date=\(fromdate)&to_date=\(todate)"
+        let apiKey: String = "getExpenseReportDetailsSFC&sf_code=\(SFCode)&division_code=\(DivCode)&from_date=\(fromdate)&to_date=\(todate)&stateCode=\(StateCode)&Design_code=\(UserSetup.shared.dsg_code)"
         let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
         AF.request(APIClient.shared.BaseURL + APIClient.shared.DBURL2 + apiKeyWithoutCommas, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
             AFdata in
@@ -534,12 +538,15 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
                 print(value)
                 if let json = value as? [String:AnyObject] {
                     print(json)
-                    if let getdata = json["data"] as? [AnyObject], let DistanceEntr = json["DistanceEntr"] as? [AnyObject],let dailyExpense = json["dailyExpense"] as? [AnyObject]{
+                    if let getdata = json["data"] as? [AnyObject], let DistanceEntr = json["DistanceEntr"] as? [AnyObject],let dailyExpense = json["dailyExpense"] as? [AnyObject], let Mot_Exp = json["Mot_Exp"] as? [AnyObject]{
                         print(getdata)
                         var subdates = [String]()
                         var FilterDisKms:[AnyObject] = []
                         var sf_code_data:String = ""
                         var miscellaneous_exp:String = "0"
+                        var modeid:String = ""
+                        var per_km_fare:String = ""
+                        var Km_fare:String = ""
                         for item in getdata {
                             print(item)
                             var Date = ""
@@ -589,6 +596,7 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
                               if UserSetup.shared.SF_type == 2{
                                 if Fromdat.isEmpty {
                                     From_Place = data["From_Place"] as? String ?? ""
+                                    modeid = data["MOT"] as? String ?? ""
                                     for i in FilterDisKms{
                                         if From_Place == To_Place{
                                             Dis_Km = i["Distance_KM"] as? Int ?? 0
@@ -611,6 +619,7 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
                                     let FilterDis = DistanceEntr.filter{ $0["To_Plc_Code"] as? String == data["From_Place"] as? String}
                                     Dis_Km = FilterDis[0]["Distance_KM"] as? Int ?? 0
                                     let Frm_Plc_Code = data["From_Place"] as? String ?? SFCode
+                                    modeid = data["MOT"] as? String ?? ""
                                     let FilterDisKm = lstdiskm.filter{ $0["Sf_code"] as? String == Frm_Plc_Code}
                                     sf_code_data = Frm_Plc_Code
                                     print(FilterDisKm)
@@ -629,8 +638,11 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
                                     }
                                 }
                               }else{
+                                  print(data)
+                                  modeid = data["MOT"] as? String ?? ""
+                                  print(modeid)
                                   From_Place = data["From_Place"] as? String ?? ""
-                                  sf_code_data = DistanceEntr[0]["Sf_code"] as? String ?? SFCode
+                                  sf_code_data = SFCode
                                   if Fromdat.isEmpty{
                                      
                                       print(DistanceEntr)
@@ -667,7 +679,22 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
                                       }
                                   }
                               }
-                                let itms: [String: Any]=["date": date,"modeoftravel":MOT_Name,"fromplace":From_Place,"Toplace":To_Place,"Fromid":"","Toid":to_place_id,"Dist":Dis_Km];
+                                
+                                let Mot_Filter_Exp = Mot_Exp.filter{$0["MOT_ID"] as? Int == Int(modeid) }
+                                if Mot_Filter_Exp.isEmpty{
+                                    per_km_fare = "0.0"
+                                    Km_fare = "0.0"
+                                }else{
+                                    let ful_charge = Mot_Filter_Exp[0]["Fuel_Charge"] as? Double ?? 0.0
+                                    per_km_fare = String(ful_charge)
+                                    
+                                    let Total_amt = Double(Dis_Km) * ful_charge
+                                    print(Total_amt)
+                                     Km_fare = String(format: "%.2f", Total_amt)
+                                }
+                                
+                                
+                                let itms: [String: Any]=["date": date,"modeoftravel":MOT_Name,"modeid":modeid,"fromplace":From_Place,"Toplace":To_Place,"Fromid":"","Toid":to_place_id,"Dist":Dis_Km,"per_km_fare":per_km_fare,"fare":Km_fare];
                                 let jitm: AnyObject = itms as AnyObject
                                 SFCDetils.append(jitm)
                             }
@@ -684,7 +711,6 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
                             
                         }
                         print(ExpenseDetils)
-                        
                         ViewDet_TB.reloadData()
                     }
                     
