@@ -169,9 +169,11 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
     SF_type=prettyJsonData["SF_type"] as? String ?? ""
     }
     @objc private func GotoHome() {
-        navigationController?.popViewController(animated: true)
+        let storyboard = UIStoryboard(name: "Reports", bundle: nil)
+        let viewController = storyboard.instantiateViewController(withIdentifier: "sbReportsmnu") as! ReportMenu
+        UIApplication.shared.windows.first?.rootViewController = viewController
+        UIApplication.shared.windows.first?.makeKeyAndVisible()
     }
-    
     
     func animateIn(desiredView: UIView){
         let  backGroundView = self.view
