@@ -85,7 +85,7 @@ class PrecallAnalysis : UIViewController {
                     self.lblGiftName.text = json.Giftenrol_Name.string
                     self.lblClass.text = json.DrCat.string
                     self.lblRetailerChannel.text = json.DrSpl.string
-                    self.lblLastOrderAmt.text = "\(json.LastorderAmount.int)"
+                    self.lblLastOrderAmt.text = "\(json.LastorderAmount.double)"
                     
                 }catch{
                     print("Error")

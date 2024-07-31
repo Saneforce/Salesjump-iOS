@@ -107,6 +107,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
     var ImgName:String = ""
     
     var isFromMissedEntry : Bool = false
+    var selectedSf : String!
     var missedDateSubmit : (String) -> () = { _ in}
     var missedDateEditData : ([SecondaryOrderSelectedList]) -> () = { _  in}
     var products = [SecondaryOrderSelectedList]()
@@ -176,7 +177,11 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
                 print(lstProducts.count)
             }
         }
-        DataSF = self.lstPlnDetail[0]["subordinateid"] as! String
+        if self.isFromMissedEntry == false {
+            DataSF = self.lstPlnDetail[0]["subordinateid"] as! String
+        }else {
+            DataSF = self.selectedSf
+        }
         
             if let lstDistData = LocalStoreage.string(forKey: "Distributors_Master_"+DataSF),
                let list = GlobalFunc.convertToDictionary(text:  lstDistData) as? [AnyObject] {
@@ -1187,7 +1192,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
             
             if (Cart["SalQty"] as! Double) > 0 {
                 if (refresh == 1 || refresh == 3 ){
-                    tbPrvOrderProduct.reloadData()
+                  //  tbPrvOrderProduct.reloadData()
                 }
                 return true
             }else{
@@ -1221,7 +1226,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         lblTotItem.text = String(format: "%i",  lstPrvOrders.count)
         lblPrvTotItem.text = String(format: "%i",  lstPrvOrders.count)
         if (refresh == 1 || Upadet_table == 2 || refresh == 3){
-            tbProduct.reloadData()
+            // tbProduct.reloadData()
         }
         
 //        if (refresh == 3 ){
@@ -1243,6 +1248,14 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         })
         if(lstPrvOrder.count<1){
             Toast.show(message: "Cart is Empty.", controller: self)
+            return false
+        }else {
+            for i in 0..<lstPrvOrder.count {
+                if (lstPrvOrder[i]["Rate"] as! Double) > 0 {
+                    return true
+                }
+            }
+            Toast.show(message: "Please select atleast one product with rate", controller: self)
             return false
         }
         return true
@@ -2063,6 +2076,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         if(vwPrvOrderCtrl.isHidden==false){
                 vwPrvOrderCtrl.isHidden = true
                 tbProduct.isHidden = false
+                tbProduct.reloadData()
         }else{
             let alert = UIAlertController(title: "Confirmation", message: "Do you want to cancel this order draft ?", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in

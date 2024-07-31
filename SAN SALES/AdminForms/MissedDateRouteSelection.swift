@@ -302,7 +302,7 @@ class MissedDateRouteSelection : IViewController , UITableViewDelegate,UITableVi
     @IBAction func saveAction(_ sender: UIButton) {
         
         if self.selectedRoute == nil {
-            Toast.show(message: "Please Selece Route", controller: self)
+            Toast.show(message: "Please Select Route", controller: self)
             return
         }
         
@@ -312,6 +312,11 @@ class MissedDateRouteSelection : IViewController , UITableViewDelegate,UITableVi
         
         print(retailerLists)
         print(retailerLists.count)
+        
+        if self.retailerList.isEmpty && retailerLists.isEmpty{
+            Toast.show(message: "No Retailer for this route", controller: self)
+            return
+        }
         
         if retailerLists.isEmpty {
             Toast.show(message: "Please select Order", controller: self)
@@ -610,6 +615,7 @@ class MissedDateRouteSelection : IViewController , UITableViewDelegate,UITableVi
             let secondaryOrder = UIStoryboard.secondaryOrder
             secondaryOrder.isFromMissedEntry = true
             secondaryOrder.selectedProducts = self.retailerList[indexPath.row].orderList
+            secondaryOrder.selectedSf = self.retailerList[indexPath.row].mapId
 //            secondaryOrder.missedDateSubmit = { paramString in
 //                print(paramString)
 //                self.tableViewOrderList.reloadRows(at: [indexPath], with: .automatic)

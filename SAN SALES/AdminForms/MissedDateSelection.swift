@@ -72,6 +72,8 @@ class MissedDateSelection : IViewController{
             self.lblWorkType.text = "Select the WorkType"
             self.vwOrderListHeightConstraints.constant = 0
             self.vwOrderList.isHidden = true
+            self.secondaryOrderList.removeAll()
+            self.primaryOrderList.removeAll()
         }
     }
     
@@ -196,11 +198,14 @@ class MissedDateSelection : IViewController{
             return
         }
         
-        if self.secondaryOrderList.isEmpty && self.primaryOrderList.isEmpty {
-            Toast.show(message: "Please Select at least One Order", controller: self)
-            return
-        }
+        let fwflg = self.selectedWorktype?["FWFlg"] as? String ?? ""
         
+        if fwflg == "F" {
+            if self.secondaryOrderList.isEmpty && self.primaryOrderList.isEmpty {
+                Toast.show(message: "Please Select at least One Order", controller: self)
+                return
+            }
+        }
         
         let alert = UIAlertController(title: "Confirmation", message: "Do you want to submit order?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
@@ -252,7 +257,7 @@ class MissedDateSelection : IViewController{
         
         self.submit()
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             GlobalFunc.movetoHomePage()
         }
        // GlobalFunc.movetoHomePage()
@@ -326,6 +331,7 @@ class MissedDateSelection : IViewController{
                 do {
                     let json = try JSON(data: AFData.data!)
                     print(json)
+                    GlobalFunc.movetoHomePage()
                 }catch {
                     print("Error")
                 }

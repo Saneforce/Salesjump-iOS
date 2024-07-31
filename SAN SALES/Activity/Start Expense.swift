@@ -916,7 +916,7 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource,FSC
 //    }
     @objc private func GotoHome(){
            
-            let alert = UIAlertController(title: "Confirmation", message: "Do you want it back?", preferredStyle: .alert)
+            let alert = UIAlertController(title: "Confirmation", message: "Please submit start expense", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { [self] _ in
                 if let NavExp = Exp_Nav{
                     if (NavExp == "Ex_Ent"){

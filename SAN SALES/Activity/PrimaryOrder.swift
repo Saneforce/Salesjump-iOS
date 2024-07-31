@@ -647,6 +647,14 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
         if(lstPrvOrder.count<1){
             Toast.show(message: "Cart is Empty.") //, controller: self
             return false
+        }else {
+            for i in 0..<lstPrvOrder.count {
+                if (lstPrvOrder[i]["Rate"] as! Double) > 0 {
+                    return true
+                }
+            }
+            Toast.show(message: "Please select atleast one product with rate", controller: self)
+            return false
         }
         return true
     }
@@ -1026,7 +1034,7 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
             
             if (Cart["SalQty"] as! Double) > 0 {
                 if (refresh == 1 || refresh == 3){
-                    tbPrvOrderProduct.reloadData()
+                    // tbPrvOrderProduct.reloadData()
                 }
                 return true
             }else{
@@ -1060,7 +1068,7 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
         lblTotItem.text = String(format: "%i",  lstPrvOrders.count)
         lblPrvTotItem.text = String(format: "%i",  lstPrvOrders.count)
         if (refresh == 1 || Upadet_table == 2 || refresh == 3){
-            tbProduct.reloadData()
+           // tbProduct.reloadData()
         }
         
         
@@ -1398,6 +1406,7 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
         if(vwPrvOrderCtrl.isHidden==false){
             vwPrvOrderCtrl.isHidden = true
             tbProduct.isHidden = false
+            tbProduct.reloadData()
         }else{
             let alert = UIAlertController(title: "Confirmation", message: "Do you want to cancel this order draft ?", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
