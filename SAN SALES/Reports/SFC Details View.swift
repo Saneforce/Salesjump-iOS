@@ -20,6 +20,9 @@ class SFC_Details_View: UIViewController, UITableViewDelegate, UITableViewDataSo
     @IBOutlet weak var Status_view: UIView!
     @IBOutlet weak var Travel_Det_View: UIView!
     @IBOutlet weak var Close_Bt_View: UIButton!
+    @IBOutlet weak var Amount: UILabel!
+    
+    @IBOutlet weak var Total_amt: UILabel!
     
     let cardViewInstance = CardViewdata()
     
@@ -35,6 +38,8 @@ class SFC_Details_View: UIViewController, UITableViewDelegate, UITableViewDataSo
                }
         Exp_status.text = "Expense Submitted"
         Exp_date.text = ExpenseDetils[0].date
+        Amount.text = ExpenseDetils[0].miscellaneous_exp
+        Total_amt.text = ExpenseDetils[0].Total_Amt
         
         print(ExpenseDetils)
         Mod_of_trv_hig.constant = CGFloat(ExpenseDetils[0].SFCdetils.count * 80)
@@ -50,7 +55,7 @@ class SFC_Details_View: UIViewController, UITableViewDelegate, UITableViewDataSo
         return ExpenseDetils[0].SFCdetils.count
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell{
         let cell:cellListItem = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
         let getitem = ExpenseDetils[0].SFCdetils
         print(getitem)
@@ -69,7 +74,6 @@ class SFC_Details_View: UIViewController, UITableViewDelegate, UITableViewDataSo
         return cell
     }
 
-    
     @IBAction func Close_View(_ sender: Any) {
         let storyboard = UIStoryboard(name: "Reports", bundle: nil)
         let viewController = storyboard.instantiateViewController(withIdentifier: "ExpenseviewSFC") as! Expense_View_SFC

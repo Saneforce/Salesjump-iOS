@@ -63,6 +63,7 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
     struct ExpenseDatas:Any{
         let date:String
         var miscellaneous_exp:String
+        var Total_Amt:String
         let SFCdetils:[AnyObject]
     }
     var ExpenseDetils:[ExpenseDatas] = []
@@ -359,7 +360,7 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
             print(ExpenseDetils[indexPath.row].SFCdetils)
         }else if ViewDet_TB == tableView {
             cell.Status.text = "Expense Submitted"
-            cell.item.text = "10199.58"
+            cell.item.text = ExpenseDetils[indexPath.row].Total_Amt
             cell.Date.text = ExpenseDetils[indexPath.row].date
             cell.ViewBT.tag = indexPath.row
             cell.ViewBT.addTarget(self, action: #selector(View_Det(_:)), for: .touchUpInside)
@@ -558,6 +559,7 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
                         var modeid:String = ""
                         var per_km_fare:String = ""
                         var Km_fare:String = ""
+                        var Total_amts:Double = 0.0
                         for item in getdata {
                             print(item)
                             var Date = ""
@@ -660,7 +662,6 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
                                       for i in DistanceEntr{
                                           print(i)
                                           if From_Place == i["Frm_Plc_Code"] as? String && To_Place ==  i["To_Plc_Code"] as? String{
-                                              print(i)
                                               Dis_Km = i["Distance_KM"] as? Int ?? 0
                                           }
 //                                          else{
@@ -702,6 +703,7 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
                                     let Total_amt = Double(Dis_Km) * ful_charge
                                     print(Total_amt)
                                      Km_fare = String(format: "%.2f", Total_amt)
+                                    Total_amts =  Total_amts + Total_amt
                                 }
                                 
                                 
@@ -710,14 +712,30 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
                                 SFCDetils.append(jitm)
                             }
                             
-                            ExpenseDetils.append(ExpenseDatas(date: item,miscellaneous_exp:miscellaneous_exp, SFCdetils:SFCDetils))
+                            ExpenseDetils.append(ExpenseDatas(date: item,miscellaneous_exp:miscellaneous_exp, Total_Amt: String(Total_amts), SFCdetils:SFCDetils))
                         }
+                        print(ExpenseDetils)
                         for (index, Detils) in ExpenseDetils.enumerated() {
                             let filter = dailyExpense.filter { $0["date"] as? String == Detils.date }
+                            print(filter)
                             if filter.isEmpty{
                                 ExpenseDetils[index].miscellaneous_exp = "0"
                             }else{
-                                ExpenseDetils[index].miscellaneous_exp = String(filter[0]["amt"] as? Int ?? 0)
+                                //ExpenseDetils[index].miscellaneous_exp = String(filter[0]["amt"] as? Double ?? 0)
+                                if let amt = filter[0]["amt"] as? Double {
+                                    ExpenseDetils[index].miscellaneous_exp = String(amt)
+                                    
+                                    if let totalAmt = Double(ExpenseDetils[index].Total_Amt) {
+                                        let newTotalAmt = totalAmt + amt
+                                        ExpenseDetils[index].Total_Amt = String(format: "%.2f", newTotalAmt)
+                                    } else {
+                                        ExpenseDetils[index].Total_Amt = String(amt)
+                                    }
+                                } else {
+                                    // Handle the case where filter[0]["amt"] is not a valid Double
+                                    ExpenseDetils[index].miscellaneous_exp = "0"
+                                }
+
                             }
                             
                         }
