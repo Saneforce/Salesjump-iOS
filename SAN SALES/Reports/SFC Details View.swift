@@ -8,9 +8,6 @@
 import UIKit
 
 class SFC_Details_View: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    
-
-    
     var viewdetils:Expense_View_SFC.ExpenseDatas?
   
     var ExpenseDetils:[Expense_View_SFC.ExpenseDatas] = []
@@ -18,8 +15,19 @@ class SFC_Details_View: UIViewController, UITableViewDelegate, UITableViewDataSo
     @IBOutlet weak var Mod_of_trv_TB: UITableView!
     @IBOutlet weak var Exp_status: UILabel!
     @IBOutlet weak var Exp_date: UILabel!
+    @IBOutlet weak var Mod_of_trv_hig: NSLayoutConstraint!
+    @IBOutlet weak var Scroll_View_hig: NSLayoutConstraint!
+    @IBOutlet weak var Status_view: UIView!
+    @IBOutlet weak var Travel_Det_View: UIView!
+    @IBOutlet weak var Close_Bt_View: UIButton!
+    
+    let cardViewInstance = CardViewdata()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        cardViewInstance.styleSummaryView(Status_view)
+        cardViewInstance.styleSummaryView(Travel_Det_View)
+        cardViewInstance.styleSummaryView(Close_Bt_View)
         Mod_of_trv_TB.dataSource = self
         Mod_of_trv_TB.delegate = self
         if let data = viewdetils{
@@ -29,6 +37,8 @@ class SFC_Details_View: UIViewController, UITableViewDelegate, UITableViewDataSo
         Exp_date.text = ExpenseDetils[0].date
         
         print(ExpenseDetils)
+        Mod_of_trv_hig.constant = CGFloat(ExpenseDetils[0].SFCdetils.count * 80)
+        Scroll_View_hig.constant = CGFloat(ExpenseDetils[0].SFCdetils.count * 80) + 600
         
     }
     
