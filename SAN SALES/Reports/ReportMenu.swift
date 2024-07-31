@@ -49,7 +49,7 @@ class ReportMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
         strMasList.append(mnuItem.init(MasId: 4, MasName: "TP View", MasImage: "SwitchRoute"))
         strMasList.append(mnuItem.init(MasId: 5, MasName: "TP View Datewise", MasImage: "SwitchRoute"))
         strMasList.append(mnuItem.init(MasId: 6, MasName: "My Resources", MasImage: "SwitchRoute"))
-     //   strMasList.append(mnuItem.init(MasId: 7, MasName: "Attendance Report", MasImage: "SwitchRoute"))
+        strMasList.append(mnuItem.init(MasId: 7, MasName: "Attendance Report", MasImage: "SwitchRoute"))
         
         btnBack.addTarget(target: self, action: #selector(closeMenuWin))
         menuClose.addTarget(target: self, action: #selector(closeMenuWin))
