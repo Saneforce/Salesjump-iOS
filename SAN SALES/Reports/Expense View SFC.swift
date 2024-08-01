@@ -630,6 +630,7 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
                                     print(Fromdat)
                                     From_Place = Fromdat[0]["name"] as? String ?? ""
                                     let FilterDis = DistanceEntr.filter{ $0["To_Plc_Code"] as? String == data["From_Place"] as? String}
+                                    print(FilterDis)
                                     Dis_Km = FilterDis[0]["Distance_KM"] as? Int ?? 0
                                     let Frm_Plc_Code = data["From_Place"] as? String ?? SFCode
                                     modeid = data["MOT"] as? String ?? ""
@@ -641,7 +642,11 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
                                     for i in FilterDisKm {
                                         if let Frm_Plc_Code = i["Frm_Plc_Code"] as? String,
                                            let To_Plc_Code = i["To_Plc_Code"] as? String {
+                                            print(Frm_Plc_Code)
+                                            print(To_Plc_Code)
+                                            print(data)
                                             if data["From_Place"] as? String == Frm_Plc_Code && data["To_Place"] as? String == To_Plc_Code {
+                                               
                                                 let Dis = i["Distance_KM"] as? Int ?? 0
                                                 Dis_Km = Dis_Km + Dis
                                             } else {
@@ -706,7 +711,7 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
                                     Total_amts =  Total_amts + Total_amt
                                 }
                                 
-                                
+                                print(Dis_Km)
                                 let itms: [String: Any]=["date": date,"modeoftravel":MOT_Name,"modeid":modeid,"fromplace":From_Place,"Toplace":To_Place,"Fromid":"","Toid":to_place_id,"Dist":Dis_Km,"per_km_fare":per_km_fare,"fare":Km_fare];
                                 let jitm: AnyObject = itms as AnyObject
                                 SFCDetils.append(jitm)

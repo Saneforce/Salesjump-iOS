@@ -7,23 +7,76 @@
 
 import UIKit
 
-class Day_End_SFC: UIViewController {
-
+class Day_End_SFC: UIViewController, UITableViewDataSource, UITableViewDelegate {
+  
+    
+    @IBOutlet weak var Back_BT: UIImageView!
+    @IBOutlet weak var Mod_of_trv_TB: UITableView!
+    @IBOutlet weak var Mod_Of_TB_HIG: NSLayoutConstraint!
+    @IBOutlet weak var rMK: UITextView!
+    @IBOutlet weak var Scroll_View_hig: NSLayoutConstraint!
+    @IBOutlet weak var Det_View: UIView!
+    let cardViewInstance = CardViewdata()
+    let Count:Int = 10
+    let LocalStoreage = UserDefaults.standard
+    var SFCode: String = "", StateCode: String = "", DivCode: String = "",Desig: String = ""
+    var Date_Time:String?
+    var Get_Date_Time:String = ""
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        Back_BT.addTarget(target: self, action: #selector(GotoHome))
+        Mod_of_trv_TB.dataSource = self
+        Mod_of_trv_TB.delegate = self
+        Mod_Of_TB_HIG.constant = CGFloat(Count * 40)
+        Scroll_View_hig.constant = CGFloat((Count*40) + 600)
+        cardViewInstance.styleSummaryView(Det_View)
+        if let date = Date_Time{
+            Get_Date_Time = date
+        }else{
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd"
+            let currentDate = dateFormatter.string(from: Date())
+            Get_Date_Time = ""
+        }
+        Exp_Detils()
+    }
+    func getUserDetails(){
+        let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
+        let data = Data(prettyPrintedJson!.utf8)
+        guard let prettyJsonData = try? JSONSerialization.jsonObject(with: data, options:[]) as? [String: Any] else {
+            print("Error: Cannot convert JSON object to Pretty JSON data")
+            return
+        }
+        print(prettyJsonData)
+        SFCode = prettyJsonData["sfCode"] as? String ?? ""
+        StateCode = prettyJsonData["State_Code"] as? String ?? ""
+        DivCode = prettyJsonData["divisionCode"] as? String ?? ""
+        Desig=prettyJsonData["desigCode"] as? String ?? ""
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 40
     }
-    */
-
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return Count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell:cellListItem = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
+        cell.Fromlbsfc.text = "Chennai"
+        cell.TolblSFC.text = "Chennai 2"
+        cell.Mod_of_trv_SFC.text = "Bike"
+        return cell
+    }
+    func Exp_Detils(){
+        print(Get_Date_Time)
+    }
+    
+    @objc private func GotoHome(){
+        let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
+        UIApplication.shared.windows.first?.rootViewController = viewController
+        UIApplication.shared.windows.first?.makeKeyAndVisible()
+    }
+   
 }
