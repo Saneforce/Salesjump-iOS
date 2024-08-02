@@ -222,7 +222,9 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         
         Navstartfrom()
         DashboardNew()
-        LOG_OUTMODE()
+        if UserSetup.shared.SrtEndKMNd != 2{
+            LOG_OUTMODE()
+        }
     }
     
     func tpMandatoryNeed() {
@@ -973,9 +975,9 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
                     print(json)
                     if currentDate == Date_Time{
                         if Enddateand_time == ""{
-                            DayEndView.isHidden = true
+                            DayEnd.isHidden = false
                         }else{
-                            DayEndView.isHidden = false
+                            DayEnd.isHidden = true
                         }
                         
                     }else{
