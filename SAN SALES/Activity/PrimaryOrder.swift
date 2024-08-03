@@ -950,6 +950,10 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
             Rate = (RateItems[0]["Retailor_Price"] as! NSString).doubleValue
         }
         print(Rate)
+        if Rate == 0 {
+            Toast.show(message: "Please Select Product With Rate Value", controller: self)
+            return
+        }
         var ItmValue: Double = (TotQty*Rate)
         if(Schemes.count>0){
             Scheme = (Schemes[0]["Scheme"] as! NSString).doubleValue

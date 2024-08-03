@@ -91,6 +91,7 @@ class AttendanceReport : UIViewController, UITableViewDelegate,UITableViewDataSo
     @IBAction func dateAction(_ sender: UIButton) {
         
         let alertView = CalendarViewController()
+        alertView.date = Date()
         alertView.didSelect = { date in
             print(date)
             self.date = date
@@ -124,7 +125,8 @@ class AttendanceReport : UIViewController, UITableViewDelegate,UITableViewDataSo
         cell.lblPlanTime.text = self.json?[indexPath.row].Pln_Time.string
         cell.lblLogOut.text = self.json?[indexPath.row].Logout_Time.string
         cell.lblRemarks.text = self.json?[indexPath.row].Remarks.string
-        
+        cell.lblFcStartTime.text = self.json?[indexPath.row].StartOrder_Time.string
+        cell.lblLCEndTime.text = self.json?[indexPath.row].EndOrder_Time.string
         return cell
     }
     
@@ -150,6 +152,12 @@ class AttendanceReportcell : UITableViewCell {
     @IBOutlet weak var lblLogIn: UILabel!
     @IBOutlet weak var lblPlanTime: UILabel!
     @IBOutlet weak var lblLogOut: UILabel!
+    
+    
+    @IBOutlet weak var lblFcStartTime: UILabel!
+    
+    @IBOutlet weak var lblLCEndTime: UILabel!
+    
     
     
     @IBOutlet weak var lblRemarksTitle: UILabel!
