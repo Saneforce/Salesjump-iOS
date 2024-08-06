@@ -8,7 +8,7 @@
 import UIKit
 import Alamofire
 
-class Day_End_SFC: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class Day_End_SFC: IViewController, UITableViewDataSource, UITableViewDelegate {
   
     
     @IBOutlet weak var Back_BT: UIImageView!
@@ -104,9 +104,6 @@ class Day_End_SFC: UIViewController, UITableViewDataSource, UITableViewDelegate 
         }
     }
     
-    
-    
-    
     @IBAction func Sumbit(_ sender: Any) {
         if rMK.text.isEmpty{
             Toast.show(message: "Enter Remark", controller: self)
@@ -119,7 +116,8 @@ class Day_End_SFC: UIViewController, UITableViewDataSource, UITableViewDelegate 
         let axn = "post/save_dayend_details_sfc"
         let remark = rMK.text ?? ""
         let encodedRemark = remark.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
-        let apiKey: String = "\(axn)&rSF=\(SFCode)&sfCode=\(SFCode)&date=\(Get_Date_Time)&Enddateand_time=\(formattedDate)&remarks=\(encodedRemark)"
+        let encodedformattedDate = formattedDate.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+        let apiKey: String = "\(axn)&rSF=\(SFCode)&sfCode=\(SFCode)&date=\(Get_Date_Time)&Enddateand_time=\(encodedformattedDate)&remarks=\(encodedRemark)"
         AF.request(APIClient.shared.BaseURL + APIClient.shared.DBURL2 + apiKey, method: .post, parameters: nil, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self] AFdata in
             print(AFdata)
             switch AFdata.result {

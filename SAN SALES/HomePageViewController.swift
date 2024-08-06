@@ -972,7 +972,6 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
                     let currentDate = dateFormatter.string(from: Date())
                     let Date_Time = json[0]["Date_Time"] as? String ?? ""
                     let Enddateand_time = json[0]["Enddateand_time"] as? String ?? ""
-                    print(json)
                     if currentDate == Date_Time{
                         if Enddateand_time == ""{
                             DayEnd.isHidden = false
@@ -1011,8 +1010,6 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
             print("\(key): \(value)")
         }
     }
-    
-    
 }
 
 //Username: Sankafo2,aachi-testso2

@@ -91,6 +91,22 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
     override func viewDidLoad(){
         super.viewDidLoad()
         getUserDetails()
+        YearPostion.text = selectYear
+        let Month = Calendar.current.component(.month, from: Date()) - 1
+        let formattedPosition = String(format: "%02d", Month + 1)
+        SelectMonth = formattedPosition
+        Eff_Month = formattedPosition
+        let dateFormatter = DateFormatter()
+        let mon_formater =  DateFormatter()
+        mon_formater.dateFormat = "MMM"
+        dateFormatter.dateFormat = "MMM-yyyy"
+        let currentDate = Date()
+        let formattedDate = dateFormatter.string(from: currentDate)
+        let formattedDatemon = mon_formater.string(from: currentDate)
+        print(formattedDatemon)
+        MonthPostion.text = formattedDatemon
+        Sel_Date.text = formattedDate
+        
         SFC_Data_TB.delegate = self
         SFC_Data_TB.dataSource = self
         Summary_TB.delegate = self
@@ -534,7 +550,6 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
                 }
         }
     }
-
     
     @objc private func Open_Drop_Down_View() {
         periodic()
