@@ -57,14 +57,14 @@ class CalendarViewController: UIViewController , FSCalendarDelegate ,FSCalendarD
         didSelect(date.toString(format: "yyyy-MM-dd"))
     }
     
-    func maximumDate(for calendar: FSCalendar) -> Date {
-        
-        if let date = self.date {
-            return date
-        }else {
-            return Date()
-        }
-    }
+//    func maximumDate(for calendar: FSCalendar) -> Date {
+//        
+//        if let date = self.date {
+//            return date
+//        }else {
+//            return Date()
+//        }
+//    }
 
     /*
     // MARK: - Navigation

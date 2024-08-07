@@ -48,6 +48,9 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
     @IBOutlet weak var vwBtnOrder: RoundedCornerView!
     @IBOutlet weak var vwBtnCam: RoundedCornerView!
     
+    
+    @IBOutlet weak var supplierHeightConstraints: NSLayoutConstraint!
+    
     struct lItem: Any {
         let id: String
         let name: String
@@ -188,6 +191,11 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
         tbDataSelect.delegate=self
         tbDataSelect.dataSource=self
         editMissedDateOrder()
+        
+        if UserSetup.shared.SuperStockistNeed != 1 {
+            self.lblSuppNm.isHidden = true
+            self.supplierHeightConstraints.constant = 0
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -633,7 +641,7 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
     }
     
     func validateForm() -> Bool {
-        if VisitData.shared.Dist.id == "" {
+        if VisitData.shared.Dist.id == "" && (UserSetup.shared.SuperStockistNeed == 1){
             Toast.show(message: "Select the Supplier")//, controller: self
             return false
         }
