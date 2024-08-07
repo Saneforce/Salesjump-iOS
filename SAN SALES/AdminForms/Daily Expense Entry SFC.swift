@@ -39,7 +39,7 @@ class Daily_Expense_Entry_SFC: IViewController, UIImagePickerControllerDelegate,
     var snk:[UIImage] = []
     var images: [UIImage] = []
     var set_Date:String?
-    override func viewDidLoad() {
+    override func viewDidLoad(){
         super.viewDidLoad()
         Daily_Expense_TB.delegate = self
         Daily_Expense_TB.dataSource = self
@@ -57,8 +57,7 @@ class Daily_Expense_Entry_SFC: IViewController, UIImagePickerControllerDelegate,
         getUserDetails()
         DAExp_ND()
     }
-    
-    @objc private func GotoHome() {
+    @objc private func GotoHome(){
         VisitData.shared.Nav_id = 1
         self.resignFirstResponder()
         

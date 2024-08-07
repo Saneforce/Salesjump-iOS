@@ -609,8 +609,10 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
                                 return false
                             }
                             print(filteredData)
+                            
+                            
                            
-                            for data in filteredData {
+                            for data in filteredData{
                                 print(data)
                                 var Dis_Km = 0
                                 var From_Place = ""
@@ -704,10 +706,27 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
                                           $0["To_Plc_Code"] as? String == To_Place &&
                                           $0["Frm_Plc_Code"] as? String == sf_code_data
                                       }
+                                      
+                                      print(BasLevelFilter)
+                                      var End_dailyAllowance:String = ""
+                                      if let filteredDatalast = filteredData.last{
+                                          print(filteredDatalast)
+                                          End_dailyAllowance = filteredDatalast["dailyAllowance"] as? String ?? ""
+                                      }
+                                      
+                                      
                                       if BasLevelFilter.isEmpty{
                                           Dis_Km = 0
                                       }else{
-                                          Dis_Km = BasLevelFilter[0]["Distance_KM"] as? Int ?? 0
+                                          
+                                          if End_dailyAllowance == ""{
+                                              Dis_Km = BasLevelFilter[0]["Distance_KM"] as? Int ?? 0
+                                          }else{
+                                              if End_dailyAllowance == "EX"{
+                                                  let Dis_Data = BasLevelFilter[0]["Distance_KM"] as? Int ?? 0
+                                                  Dis_Km = (Dis_Data * 2)
+                                              }
+                                          }
                                       }
                                   }
                               }

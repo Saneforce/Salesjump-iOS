@@ -43,6 +43,9 @@ class SFC_Details_View: UIViewController, UITableViewDelegate, UITableViewDataSo
             ExpenseDetils2.append(data)
                }
         
+        print(viewdetils)
+        print(viewdetils_approv)
+        
         
         if ExpenseDetils.count == 0{
             Exp_status.text = "Expense Submitted"
@@ -70,7 +73,7 @@ class SFC_Details_View: UIViewController, UITableViewDelegate, UITableViewDataSo
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         if Mod_of_trv_TB == tableView{
-            if ExpenseDetils.count != 0{
+            if ExpenseDetils.count == 0{
                 return ExpenseDetils2.count
             }else{
                 return ExpenseDetils.count
@@ -81,7 +84,7 @@ class SFC_Details_View: UIViewController, UITableViewDelegate, UITableViewDataSo
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell{
         let cell:cellListItem = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
-        if ExpenseDetils.count != 0{
+        if ExpenseDetils.count == 0{
             let getitem = ExpenseDetils2[0].SFCdetils
             print(getitem)
             let Fromplace = getitem[indexPath.row]["fromplace"] as? String ?? ""
