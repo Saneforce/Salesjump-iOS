@@ -15,6 +15,8 @@ class CalendarViewController: UIViewController , FSCalendarDelegate ,FSCalendarD
     
     
     var didSelect : (String) -> () = { _ in}
+    
+    var date : Date!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,6 +56,15 @@ class CalendarViewController: UIViewController , FSCalendarDelegate ,FSCalendarD
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
         didSelect(date.toString(format: "yyyy-MM-dd"))
     }
+    
+//    func maximumDate(for calendar: FSCalendar) -> Date {
+//        
+//        if let date = self.date {
+//            return date
+//        }else {
+//            return Date()
+//        }
+//    }
 
     /*
     // MARK: - Navigation

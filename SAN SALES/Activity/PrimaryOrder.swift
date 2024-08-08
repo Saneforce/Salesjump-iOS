@@ -48,6 +48,9 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
     @IBOutlet weak var vwBtnOrder: RoundedCornerView!
     @IBOutlet weak var vwBtnCam: RoundedCornerView!
     
+    
+    @IBOutlet weak var supplierHeightConstraints: NSLayoutConstraint!
+    
     struct lItem: Any {
         let id: String
         let name: String
@@ -188,6 +191,11 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
         tbDataSelect.delegate=self
         tbDataSelect.dataSource=self
         editMissedDateOrder()
+        
+        if UserSetup.shared.SuperStockistNeed != 1 {
+            self.lblSuppNm.isHidden = true
+            self.supplierHeightConstraints.constant = 0
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -633,7 +641,7 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
     }
     
     func validateForm() -> Bool {
-        if VisitData.shared.Dist.id == "" {
+        if VisitData.shared.Dist.id == "" && (UserSetup.shared.SuperStockistNeed == 1){
             Toast.show(message: "Select the Supplier")//, controller: self
             return false
         }
@@ -646,6 +654,14 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
         print(lstPrvOrder.count)
         if(lstPrvOrder.count<1){
             Toast.show(message: "Cart is Empty.") //, controller: self
+            return false
+        }else {
+            for i in 0..<lstPrvOrder.count {
+                if (lstPrvOrder[i]["Rate"] as! Double) > 0 {
+                    return true
+                }
+            }
+            Toast.show(message: "Please select atleast one product with rate", controller: self)
             return false
         }
         return true
@@ -942,6 +958,10 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
             Rate = (RateItems[0]["Retailor_Price"] as! NSString).doubleValue
         }
         print(Rate)
+        if Rate == 0 {
+            Toast.show(message: "Please Select Product With Rate Value", controller: self)
+            return
+        }
         var ItmValue: Double = (TotQty*Rate)
         if(Schemes.count>0){
             Scheme = (Schemes[0]["Scheme"] as! NSString).doubleValue
@@ -1026,7 +1046,7 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
             
             if (Cart["SalQty"] as! Double) > 0 {
                 if (refresh == 1 || refresh == 3){
-                    tbPrvOrderProduct.reloadData()
+                    // tbPrvOrderProduct.reloadData()
                 }
                 return true
             }else{
@@ -1060,7 +1080,7 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
         lblTotItem.text = String(format: "%i",  lstPrvOrders.count)
         lblPrvTotItem.text = String(format: "%i",  lstPrvOrders.count)
         if (refresh == 1 || Upadet_table == 2 || refresh == 3){
-            tbProduct.reloadData()
+           // tbProduct.reloadData()
         }
         
         
@@ -1398,6 +1418,7 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
         if(vwPrvOrderCtrl.isHidden==false){
             vwPrvOrderCtrl.isHidden = true
             tbProduct.isHidden = false
+            tbProduct.reloadData()
         }else{
             let alert = UIAlertController(title: "Confirmation", message: "Do you want to cancel this order draft ?", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in

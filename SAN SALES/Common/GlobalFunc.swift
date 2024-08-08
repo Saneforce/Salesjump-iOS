@@ -296,7 +296,7 @@ class GlobalFunc{
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
         print(Locale.current.identifier)
         dateFormatter.locale = Locale(identifier: Locale.current.identifier)
-  //      dateFormatter.timeZone = TimeZone(identifier: Locale.current.identifier)
+        dateFormatter.timeZone = TimeZone(identifier: Locale.current.identifier)
         let date = Date()
         return dateFormatter.string(from: date)
     }

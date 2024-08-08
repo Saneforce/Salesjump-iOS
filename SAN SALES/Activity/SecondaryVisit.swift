@@ -107,10 +107,14 @@ class SecondaryVisit: IViewController, UITableViewDelegate, UITableViewDataSourc
             lstRmksTmpl = list;
         }
         //new
+        
+        print(DataSF)
         if let lstRetailData = LocalStoreage.string(forKey: "Retail_Master_"+DataSF),
            let list = GlobalFunc.convertToDictionary(text:  lstRetailData) as? [AnyObject] {
             lstRetails = list
         }
+        
+        
         //new
 //        let lstRetailData: String = LocalStoreage.string(forKey: "Retail_Master_"+DataSF)!
 //        if let list = GlobalFunc.convertToDictionary(text: lstRetailData) as? [AnyObject] {

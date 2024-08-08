@@ -72,6 +72,8 @@ class MissedDateSelection : IViewController{
             self.lblWorkType.text = "Select the WorkType"
             self.vwOrderListHeightConstraints.constant = 0
             self.vwOrderList.isHidden = true
+            self.secondaryOrderList.removeAll()
+            self.primaryOrderList.removeAll()
         }
     }
     
@@ -196,11 +198,14 @@ class MissedDateSelection : IViewController{
             return
         }
         
-        if self.secondaryOrderList.isEmpty && self.primaryOrderList.isEmpty {
-            Toast.show(message: "Please Select at least One Order", controller: self)
-            return
-        }
+        let fwflg = self.selectedWorktype?["FWFlg"] as? String ?? ""
         
+        if fwflg == "F" {
+            if self.secondaryOrderList.isEmpty && self.primaryOrderList.isEmpty {
+                Toast.show(message: "Please Select at least One Order", controller: self)
+                return
+            }
+        }
         
         let alert = UIAlertController(title: "Confirmation", message: "Do you want to submit order?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
@@ -252,7 +257,7 @@ class MissedDateSelection : IViewController{
         
         self.submit()
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             GlobalFunc.movetoHomePage()
         }
        // GlobalFunc.movetoHomePage()
@@ -310,7 +315,9 @@ class MissedDateSelection : IViewController{
         
         let date = (self.selectedDate["name"] as? String ?? "") + " 00:00:00"
         
-        let jsonString = "[{\"Activity_Report_APP\":{\"Worktype_code\":\"\'\(workTypeCode)\'\",\"Town_code\":\"\'\'\",\"RateEditable\":\"\'\'\",\"dcr_activity_date\":\"\'\(date)\'\",\"workTypFlag_Missed\":\"\(fwflg)\",\"mydayplan\":1,\"mypln_town\":\"\'Missed Entry\'\",\"mypln_town_id\":\"\'Missed Entry'\",\"Daywise_Remarks\":\"\'\'\",\"eKey\":\"\",\"rx\":\"\'1\'\",\"rx_t\":\"\'\'\",\"\":\"\'\(sfCode)\'\"}},{\"Activity_Sample_Report\":[]},{\"Trans_Order_Details\":[]},{\"Activity_Input_Report\":[]},{\"Activity_Event_Captures\":[]},{\"PENDING_Bills\":[]},{\"Compititor_Product\":[]}]"
+        let remarks = self.txtRemarks.textColor == UIColor.lightGray ? "" : self.txtRemarks.text!
+        
+        let jsonString = "[{\"Activity_Report_APP\":{\"Worktype_code\":\"\'\(workTypeCode)\'\",\"Town_code\":\"\'\'\",\"RateEditable\":\"\'\'\",\"dcr_activity_date\":\"\'\(date)\'\",\"workTypFlag_Missed\":\"\(fwflg)\",\"mydayplan\":1,\"mypln_town\":\"\'\'\",\"mypln_town_id\":\"\''\",\"Daywise_Remarks\":\"\(remarks)\",\"eKey\":\"\",\"rx\":\"\'1\'\",\"rx_t\":\"\'\'\",\"\":\"\'\(sfCode)\'\"}},{\"Activity_Sample_Report\":[]},{\"Trans_Order_Details\":[]},{\"Activity_Input_Report\":[]},{\"Activity_Event_Captures\":[]},{\"PENDING_Bills\":[]},{\"Compititor_Product\":[]}]"
         
         let params: Parameters = [ "data": jsonString ]
         
@@ -326,6 +333,7 @@ class MissedDateSelection : IViewController{
                 do {
                     let json = try JSON(data: AFData.data!)
                     print(json)
+                    GlobalFunc.movetoHomePage()
                 }catch {
                     print("Error")
                 }

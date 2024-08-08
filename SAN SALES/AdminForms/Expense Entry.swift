@@ -70,6 +70,7 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
     var Allow_Apr:Bool = false
     var selected_period = ""
     var apr_flg = "0"
+    var apr_flg2 = ""
     var Load_Cout = 0
     var Load_Couts = 0
     var srt_exp: [[String: Any]] = []
@@ -705,10 +706,18 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
                                         print(apr_flags)
                                         if apr_flags.isEmpty{
                                             apr_flg = "0"
+                                            apr_flg2 = ""
                                            
                                         }else{
                                             if let Aprflg = apr_flags[0]["approve_flag"] as? Int{
                                                 apr_flg = String(Aprflg)
+                                                if String(Aprflg) == "0"{
+                                                    apr_flg2 = "12"
+                                                }
+                                                if 1 <= Aprflg{
+                                                    apr_flg2 = "13"
+                                                }
+                                                
                                             }
                                         }
                                     }
@@ -1068,6 +1077,16 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
                 }
             }
         }
+        if apr_flg2 == "12"{
+            Toast.show(message: "Already Sent For Approval")
+            return false
+        }
+        if apr_flg2 == "13"{
+            Toast.show(message: "Expense alredy approved")
+            return false
+        }
+
+        
         
         return true
     }
