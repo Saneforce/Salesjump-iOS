@@ -146,6 +146,7 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
             let lstMyPlnData: String = LocalStoreage.string(forKey: "Mydayplan")!
             if let list = GlobalFunc.convertToDictionary(text: lstMyPlnData) as? [AnyObject] {
                 lstMyplnList = list;
+                print(list)
                 if lstMyplnList.count<1 {
                     LocalStoreage.set("0", forKey: "dayplan")
                     moveMyPln=true
@@ -157,15 +158,15 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
                     //let finalDate = formatter.date(from: plnDt["plnDate"] as! String)
                     var sPlnDt: String = lstMyplnList[0]["plnDate"] as! String
                     if(sPlnDt.contains(":") == false){ sPlnDt = sPlnDt + " 00:00:00" }
-                    let plnDt=formatter.date(from: sPlnDt)
+                    let plnDt=sPlnDt.toDate()// formatter.date(from: sPlnDt)
                     let strDate: String = formatter.string(from: Date())
                     print(strDate)
                     let calendar = Calendar.current
-//                    if(calendar.dateComponents([.day],from: plnDt!,to: Date()).day! > 0){
-//                        LocalStoreage.removeObject(forKey: "Mydayplan")
-//                        moveMyPln=true
-//                    }
-                    if("\(String(describing: lstMyplnList[0]["tourplanDone"]))" != "Optional(nil)"){
+                    if(calendar.dateComponents([.day],from: plnDt,to: Date()).day! > 0){
+                        LocalStoreage.removeObject(forKey: "Mydayplan")
+                        moveMyPln=true
+                    }
+                    if("\(String(describing: lstMyplnList[0]["tourplanDone"]))" != "Optional(nil)") || moveMyPln == true {
                         let myDyPln = self.storyboard?.instantiateViewController(withIdentifier: "sbMydayplan") as! MydayPlanCtrl
                         self.navigationController?.pushViewController(myDyPln, animated: true)
                         return

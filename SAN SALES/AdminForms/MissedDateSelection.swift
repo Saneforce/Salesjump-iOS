@@ -317,7 +317,7 @@ class MissedDateSelection : IViewController{
         
         let remarks = self.txtRemarks.textColor == UIColor.lightGray ? "" : self.txtRemarks.text!
         
-        let jsonString = "[{\"Activity_Report_APP\":{\"Worktype_code\":\"\'\(workTypeCode)\'\",\"Town_code\":\"\'\'\",\"RateEditable\":\"\'\'\",\"dcr_activity_date\":\"\'\(date)\'\",\"workTypFlag_Missed\":\"\(fwflg)\",\"mydayplan\":1,\"mypln_town\":\"\'\'\",\"mypln_town_id\":\"\''\",\"Daywise_Remarks\":\"\'\(remarks)\'\",\"eKey\":\"\",\"rx\":\"\'1\'\",\"rx_t\":\"\'\'\",\"\":\"\'\(sfCode)\'\"}},{\"Activity_Sample_Report\":[]},{\"Trans_Order_Details\":[]},{\"Activity_Input_Report\":[]},{\"Activity_Event_Captures\":[]},{\"PENDING_Bills\":[]},{\"Compititor_Product\":[]}]"
+        let jsonString = "[{\"Activity_Report_APP\":{\"Worktype_code\":\"\'\(workTypeCode)\'\",\"Town_code\":\"\'\'\",\"RateEditable\":\"\'\'\",\"dcr_activity_date\":\"\'\(date)\'\",\"workTypFlag_Missed\":\"\(fwflg)\",\"mydayplan\":1,\"mypln_town\":\"\'\'\",\"mypln_town_id\":\"\''\",\"Daywise_Remarks\":\"\(remarks)\",\"eKey\":\"\",\"rx\":\"\'1\'\",\"rx_t\":\"\'\'\",\"\":\"\'\(sfCode)\'\"}},{\"Activity_Sample_Report\":[]},{\"Trans_Order_Details\":[]},{\"Activity_Input_Report\":[]},{\"Activity_Event_Captures\":[]},{\"PENDING_Bills\":[]},{\"Compititor_Product\":[]}]"
         
         let params: Parameters = [ "data": jsonString ]
         
