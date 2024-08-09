@@ -22,6 +22,10 @@ class SFC_Details_View: UIViewController, UITableViewDelegate, UITableViewDataSo
     @IBOutlet weak var Travel_Det_View: UIView!
     @IBOutlet weak var Close_Bt_View: UIButton!
     @IBOutlet weak var Amount: UILabel!
+    @IBOutlet weak var Total_Dis_KM: UILabel!
+    
+    
+    @IBOutlet weak var Total_Fare: UILabel!
     
     @IBOutlet weak var Total_amt: UILabel!
     
@@ -42,25 +46,49 @@ class SFC_Details_View: UIViewController, UITableViewDelegate, UITableViewDataSo
         if let data = viewdetils_approv{
             ExpenseDetils2.append(data)
                }
-        
-        print(viewdetils)
-        print(viewdetils_approv)
-        
-        
+
         if ExpenseDetils.count == 0{
+            var Total_Km = 0
+            var Total_Far = 0.0
+            for i in ExpenseDetils2[0].SFCdetils{
+                print(i)
+                if let Dis = i["Dist"] as? Int{
+                    Total_Km = Total_Km + Dis
+                }
+                if let Dis = i["fare"] as? String{
+                    let Convert_Double = Double(Dis)
+                    Total_Far = Total_Far + Convert_Double!
+                }
+            }
+            
+            Total_Dis_KM.text = String(Total_Km)
+            Total_Fare.text = String(Total_Far)
             Exp_status.text = "Expense Submitted"
             Exp_date.text = ExpenseDetils2[0].date
             Amount.text = ExpenseDetils2[0].miscellaneous_exp
             Total_amt.text = ExpenseDetils2[0].Total_Amt
-            print(ExpenseDetils)
             Mod_of_trv_hig.constant = CGFloat(ExpenseDetils2[0].SFCdetils.count * 80)
             Scroll_View_hig.constant = CGFloat(ExpenseDetils2[0].SFCdetils.count * 80) + 600
         }else{
+            var Total_Km = 0
+            var Total_Far = 0.0
+            for i in ExpenseDetils[0].SFCdetils{
+                print(i)
+                if let Dis = i["Dist"] as? Int{
+                    Total_Km = Total_Km + Dis
+                }
+                if let Dis = i["fare"] as? String{
+                    let Convert_Double = Double(Dis)
+                    Total_Far = Total_Far + Convert_Double!
+                }
+            }
+            
+            Total_Dis_KM.text = String(Total_Km)
+            Total_Fare.text = String(Total_Far)
             Exp_status.text = "Expense Submitted"
             Exp_date.text = ExpenseDetils[0].date
             Amount.text = ExpenseDetils[0].miscellaneous_exp
             Total_amt.text = ExpenseDetils[0].Total_Amt
-            print(ExpenseDetils)
             Mod_of_trv_hig.constant = CGFloat(ExpenseDetils[0].SFCdetils.count * 80)
             Scroll_View_hig.constant = CGFloat(ExpenseDetils[0].SFCdetils.count * 80) + 600
         }
@@ -74,9 +102,9 @@ class SFC_Details_View: UIViewController, UITableViewDelegate, UITableViewDataSo
         
         if Mod_of_trv_TB == tableView{
             if ExpenseDetils.count == 0{
-                return ExpenseDetils2.count
+                return ExpenseDetils2[0].SFCdetils.count
             }else{
-                return ExpenseDetils.count
+                return ExpenseDetils[0].SFCdetils.count
             }
         }
         return 0

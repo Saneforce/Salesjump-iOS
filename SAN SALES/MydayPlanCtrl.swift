@@ -106,11 +106,12 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
     var Allowance_Type = ""
     var Trave_Det:[Trav_Data]=[]
     var Trave_Dets:[Trav_Data]=[]
-    
+    var needed_MOT = 0
+    var Start_End_Need = 0
     override func viewDidLoad(){
         super.viewDidLoad()
         print(UserSetup.shared.SrtEndKMNd)
-        
+        Start_End_Need = UserSetup.shared.SrtEndKMNd
         txRem.text = "Enter the Remarks"
         txRem.textColor = UIColor.lightGray
         txRem.returnKeyType = .done
@@ -309,18 +310,20 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
             self.vwMainScroll.contentSize = CGSize(width: self.vwContent.frame.width, height: 750)
         }
         
-        if UserSetup.shared.SrtEndKMNd == 2{
-            self.vwTravelMode.frame.origin.y = vwTravelMode.frame.origin.y+vwTravelMode.frame.height-155
-                self.vwMainScroll.contentSize = CGSize(width: self.vwContent.frame.width, height: 830)
-            
-        }else{
-            self.vwTravelMode.isHidden  = true
-            self.vwMainScroll.contentSize = CGSize(width: self.vwContent.frame.width, height: 750)
-            self.vwJointCtrl.frame.origin.y = vwJointCtrl.frame.origin.y+vwJointCtrl.frame.height-300
-           // self.vwDeviationCtrl.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height-300
-           // self.vwRejectReason.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height-300
-           self.vwRmksCtrl.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height-300
-        }
+        Need_MOT()
+        
+//        if UserSetup.shared.SrtEndKMNd == 2{
+//            self.vwTravelMode.frame.origin.y = vwTravelMode.frame.origin.y+vwTravelMode.frame.height-155
+//                self.vwMainScroll.contentSize = CGSize(width: self.vwContent.frame.width, height: 830)
+//            
+//        }else{
+//            self.vwTravelMode.isHidden  = true
+//            self.vwMainScroll.contentSize = CGSize(width: self.vwContent.frame.width, height: 750)
+//            self.vwJointCtrl.frame.origin.y = vwJointCtrl.frame.origin.y+vwJointCtrl.frame.height-300
+//           // self.vwDeviationCtrl.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height-300
+//           // self.vwRejectReason.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height-300
+//           self.vwRmksCtrl.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height-300
+//        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -383,6 +386,51 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
             }
     }
     
+    func Need_MOT(){
+        self.ShowLoading(Message: "Loading...")
+         AF.request(APIClient.shared.BaseURL + APIClient.shared.DBURL2 + "neededMOTSFC&sf_code=\(SFCode)&Date=", method: .post, parameters: nil, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self] AFdata in
+             print(AFdata)
+             switch AFdata.result {
+             case .success(let value):
+                 print(value)
+                 if let json = value as? [AnyObject],let needed_MOT_ = json[0]["Result"] as? Int{
+                     needed_MOT = needed_MOT_
+                     print(needed_MOT_)
+                     if UserSetup.shared.SrtEndKMNd == 2{
+                         print(needed_MOT)
+                         if needed_MOT == 0{
+                             self.vwTravelMode.frame.origin.y = vwTravelMode.frame.origin.y+vwTravelMode.frame.height-155
+                            self.vwMainScroll.contentSize = CGSize(width: self.vwContent.frame.width, height: 830)
+                             self.vwTravelMode.isHidden  = false
+                         }else{
+                             Start_End_Need = 0
+                             self.vwTravelMode.isHidden  = true
+                             self.vwMainScroll.contentSize = CGSize(width: self.vwContent.frame.width, height: 750)
+                             self.vwJointCtrl.frame.origin.y = vwJointCtrl.frame.origin.y+vwJointCtrl.frame.height-300
+                            // self.vwDeviationCtrl.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height-300
+                            // self.vwRejectReason.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height-300
+                            self.vwRmksCtrl.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height-300
+                         }
+                     }else{
+                         self.vwTravelMode.isHidden  = true
+                         self.vwMainScroll.contentSize = CGSize(width: self.vwContent.frame.width, height: 750)
+                         self.vwJointCtrl.frame.origin.y = vwJointCtrl.frame.origin.y+vwJointCtrl.frame.height-300
+                        // self.vwDeviationCtrl.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height-300
+                        // self.vwRejectReason.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height-300
+                        self.vwRmksCtrl.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height-300
+                     }
+                 }
+                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.0){
+                     self.LoadingDismiss()
+                 }
+             case .failure(let error):
+                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.0){
+                     self.LoadingDismiss()
+                 }
+                 Toast.show(message: error.errorDescription ?? "", controller: self)
+             }
+         }
+       }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.text == "Enter the Remarks"{
@@ -1095,7 +1143,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                 return false
             }
             
-            if UserSetup.shared.SrtEndKMNd == 2 {
+            if Start_End_Need == 2 {
                 if lblTravelMode.text=="Select Travel Mode"{
                     Toast.show(message: "Select Travel Mode", controller: self)
                     return false
@@ -1411,7 +1459,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                 remarks = ""
             }
             print(myDyTp)
-            let jsonString = "[{\"tbMyDayPlan\":{\"wtype\":\"'" + (myDyTp["WT"]?.id ?? "") + "'\",\"sf_member_code\":\"'" + (myDyTp["HQ"]?.id ?? SFCode) + "'\",\"stockist\":\"'" + (myDyTp["DIS"]?.id ?? "") + "'\",\"stkName\":\"" + (myDyTp["DIS"]?.name ?? "") + "\",\"dcrtype\":\"App\",\"cluster\":\"'" + (myDyTp["RUT"]?.id ?? "") + "'\",\"custid\":\"" + (myDyTp["RUT"]?.id ?? "") + "\",\"custName\":\"" + (myDyTp["RUT"]?.name ?? "") + "\",\"address\":\"" + sAddress + "\",\"remarks\":\"'" + (remarks) + "'\",\"OtherWors\":\"\",\"FWFlg\":\"'" + (myDyTp["WT"]?.FWFlg ?? "") + "'\",\"SundayWorkigFlag\":\"''\",\"Place_Inv\":\"\",\"WType_SName\":\"" + (myDyTp["WT"]?.name ?? "") + "\",\"ClstrName\":\"'" + (myDyTp["RUT"]?.name ?? "") + "'\",\"AppVersion\":\"Vi_\(Bundle.main.appVersionLong).\(Bundle.main.appBuild)\",\"self\":1,\"location\":\"" + slocation + "\",\"dcr_activity_date\":\"'" + dateString + "'\",\"worked_with\":\"'\(Join_Works)'\"\(ImgName),\"SrtEndKMNd\":\"\(UserSetup.shared.SrtEndKMNd)\",\"mode_name\":\"" + (myDyTp["Travel"]?.name ?? "") + "\",\"mod_id\":\"" + (myDyTp["Travel"]?.id ?? "") + "\",\"Allowance_Type\":\"\(Allowance_Type)\",\"Date_Time\":\"" + dateString + "\",\"Hq_id\":\"" + (myDyTp["HQ"]?.id ?? SFCode)  + "\"}}]"
+            let jsonString = "[{\"tbMyDayPlan\":{\"wtype\":\"'" + (myDyTp["WT"]?.id ?? "") + "'\",\"sf_member_code\":\"'" + (myDyTp["HQ"]?.id ?? SFCode) + "'\",\"stockist\":\"'" + (myDyTp["DIS"]?.id ?? "") + "'\",\"stkName\":\"" + (myDyTp["DIS"]?.name ?? "") + "\",\"dcrtype\":\"App\",\"cluster\":\"'" + (myDyTp["RUT"]?.id ?? "") + "'\",\"custid\":\"" + (myDyTp["RUT"]?.id ?? "") + "\",\"custName\":\"" + (myDyTp["RUT"]?.name ?? "") + "\",\"address\":\"" + sAddress + "\",\"remarks\":\"'" + (remarks) + "'\",\"OtherWors\":\"\",\"FWFlg\":\"'" + (myDyTp["WT"]?.FWFlg ?? "") + "'\",\"SundayWorkigFlag\":\"''\",\"Place_Inv\":\"\",\"WType_SName\":\"" + (myDyTp["WT"]?.name ?? "") + "\",\"ClstrName\":\"'" + (myDyTp["RUT"]?.name ?? "") + "'\",\"AppVersion\":\"Vi_\(Bundle.main.appVersionLong).\(Bundle.main.appBuild)\",\"self\":1,\"location\":\"" + slocation + "\",\"dcr_activity_date\":\"'" + dateString + "'\",\"worked_with\":\"'\(Join_Works)'\"\(ImgName),\"SrtEndKMNd\":\"\(Start_End_Need)\",\"mode_name\":\"" + (myDyTp["Travel"]?.name ?? "") + "\",\"mod_id\":\"" + (myDyTp["Travel"]?.id ?? "") + "\",\"Allowance_Type\":\"\(Allowance_Type)\",\"Date_Time\":\"" + dateString + "\",\"Hq_id\":\"" + (myDyTp["HQ"]?.id ?? SFCode)  + "\"}}]"
             
             
         let params: Parameters = [
@@ -1494,3 +1542,6 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         self.present(vc, animated: true, completion: nil)
     }
 }
+
+
+

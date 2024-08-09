@@ -10,12 +10,10 @@ import Alamofire
 import FSCalendar
 
 class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource {
-   
     @IBOutlet weak var YearPostion: UILabel!
     @IBOutlet weak var MonthPostion: UILabel!
     @IBOutlet weak var Sel_Date: UILabel!
     @IBOutlet weak var Sel_Period: UILabel!
-    
     @IBOutlet weak var btnBack: UIImageView!
     @IBOutlet weak var MonthView: UIView!
     @IBOutlet weak var PeriodicView: UIView!
@@ -610,9 +608,15 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
                             }
                             print(filteredData)
                             
+                            var dailAllow_Typ = [String]()
                             
-                           
+                            
                             for data in filteredData{
+                                dailAllow_Typ.append(data["dailyAllowance"] as? String ?? "")
+                                
+                            }
+                           
+                            for (index,data) in filteredData.enumerated(){
                                 print(data)
                                 var Dis_Km = 0
                                 var From_Place = ""
@@ -621,6 +625,9 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
                                 let MOT_Name = data["MOT_Name"] as? String ?? ""
                                 let To_Place = data["To_Place"] as? String ?? ""
                                 let to_place_id = data["To_Place_Id"] as? String ?? ""
+                                var From_plac_sfcode = data["From_Place"] as? String ?? ""
+                                
+                                
                                 let Fromdat = lstHQs.filter{ $0["id"] as? String == data["From_Place"] as? String}
                                 print(Fromdat)
                               if UserSetup.shared.SF_type == 2{
@@ -673,33 +680,48 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
                                     }
                                 }
                               }else{
+                                  // MR Expense Colluction
+                                  var DailyAllowanc = ""
+                                  print(dailAllow_Typ)
+                                  let LevelFilter = DistanceEntr.filter{
+                                      $0["To_Plc_Code"] as? String == To_Place &&
+                                      $0["Frm_Plc_Code"] as? String == From_plac_sfcode
+                                      
+                                  }
+                                  print(LevelFilter)
+                                  if !LevelFilter.isEmpty{
+                                      DailyAllowanc = LevelFilter[0]["Place_Type"] as? String ?? ""
+                                  }
+                                  if LevelFilter.isEmpty{
+                                      let LevelFilter = DistanceEntr.filter {
+                                          $0["To_Plc_Code"] as? String == To_Place &&
+                                          $0["Frm_Plc_Code"] as? String == SFCode
+                                      }
+                                      print(LevelFilter)
+                                      if !LevelFilter.isEmpty{
+                                          From_plac_sfcode = LevelFilter[0]["Frm_Plc_Code"] as? String ?? SFCode
+                                          DailyAllowanc = LevelFilter[0]["Place_Type"] as? String ?? ""
+                                      }else{
+                                          From_plac_sfcode = SFCode
+                                      }
+                                      
+        
+                                  }
+                                  
+                                  let Fromdats = lstHQs.filter{ $0["id"] as? String == From_plac_sfcode}
+                                  
                                   print(data)
                                   modeid = data["MOT"] as? String ?? ""
                                   print(modeid)
                                   From_Place = data["From_Place"] as? String ?? ""
                                   sf_code_data = SFCode
-                                  if Fromdat.isEmpty{
-                                     
+                                  if Fromdats.isEmpty{
                                       print(DistanceEntr)
                                       for i in DistanceEntr{
                                           print(i)
                                           if From_Place == i["Frm_Plc_Code"] as? String && To_Place ==  i["To_Plc_Code"] as? String{
                                               Dis_Km = i["Distance_KM"] as? Int ?? 0
                                           }
-//                                          else{
-//                                              print(DistanceEntr)
-//                                              let BasLevelFilter = DistanceEntr.filter {
-//                                                  $0["To_Plc_Code"] as? String == To_Place &&
-//                                                  $0["Frm_Plc_Code"] as? String == sf_code_data
-//                                              }
-//                                              
-//                                              print(BasLevelFilter)
-//                                              if BasLevelFilter.isEmpty{
-//                                                  Dis_Km = 0
-//                                              }else{
-//                                                  Dis_Km = BasLevelFilter[0]["Distance_KM"] as? Int ?? 0
-//                                              }
-//                                          }
                                       }
                                   }else{
                                       let BasLevelFilter = DistanceEntr.filter {
@@ -708,29 +730,23 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
                                       }
                                       
                                       print(BasLevelFilter)
-                                      var End_dailyAllowance:String = ""
-                                      if let filteredDatalast = filteredData.last{
-                                          print(filteredDatalast)
-                                          End_dailyAllowance = filteredDatalast["dailyAllowance"] as? String ?? ""
-                                      }
-                                      
                                       
                                       if BasLevelFilter.isEmpty{
                                           Dis_Km = 0
                                       }else{
-                                          
-                                          if End_dailyAllowance == ""{
-                                              Dis_Km = BasLevelFilter[0]["Distance_KM"] as? Int ?? 0
-                                          }else{
-                                              if End_dailyAllowance == "EX"{
-                                                  let Dis_Data = BasLevelFilter[0]["Distance_KM"] as? Int ?? 0
-                                                  Dis_Km = (Dis_Data * 2)
-                                              }
+                                          let Dis_Km_data  = BasLevelFilter[0]["Distance_KM"] as? Int ?? 0
+                                          if DailyAllowanc == "HQ"{
+                                              Dis_Km = (Dis_Km_data * 2)
+                                          }else if DailyAllowanc == "EX"{
+                                              Dis_Km = (Dis_Km_data * 2)
                                           }
+                                          
+                                         // old code
+                                              //Dis_Km = BasLevelFilter[0]["Distance_KM"] as? Int ?? 0
+                                          
                                       }
                                   }
                               }
-                                
                                 let Mot_Filter_Exp = Mot_Exp.filter{$0["MOT_ID"] as? Int == Int(modeid) }
                                 if Mot_Filter_Exp.isEmpty{
                                     per_km_fare = "0.0"

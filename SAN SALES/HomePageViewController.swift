@@ -225,6 +225,7 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         if UserSetup.shared.SrtEndKMNd != 2{
             LOG_OUTMODE()
         }
+        neededMOT()
     }
     
     func tpMandatoryNeed() {
@@ -934,6 +935,20 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
             }
         }
     }
+    func neededMOT(){
+        AF.request(APIClient.shared.BaseURL + APIClient.shared.DBURL2 + "neededMOTSFC&sf_code=\(SFCode)&Date=", method: .post, parameters: nil, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self] AFdata in
+            print(AFdata)
+            switch AFdata.result {
+            case .success(let value):
+                if let json = value as? [String: Any]{
+                    print(json)
+                }
+            case .failure(let error):
+                Toast.show(message: error.errorDescription ?? "", controller: self)
+            }
+        }
+    }
+    
     func AutoLogOut(){
         let formatters = DateFormatter()
         formatters.dateFormat = "yyyy-MM-dd"
