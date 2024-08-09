@@ -558,12 +558,12 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
         let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
         AF.request(APIClient.shared.BaseURL + APIClient.shared.DBURL2 + apiKeyWithoutCommas, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
             AFdata in
-            switch AFdata.result {
+            switch AFdata.result{
             case .success(let value):
                 print(value)
                 if let json = value as? [String:AnyObject] {
                     print(json)
-                    if let getdata = json["data"] as? [AnyObject], let DistanceEntr = json["DistanceEntr"] as? [AnyObject],let dailyExpense = json["dailyExpense"] as? [AnyObject], let Mot_Exp = json["Mot_Exp"] as? [AnyObject]{
+                    if let getdata = json["data"] as? [AnyObject], let DistanceEntr = json["DistanceEntr"] as? [AnyObject],let dailyExpense = json["dailyExpense"] as? [AnyObject], let Mot_Exp = json["Mot_Exp"] as? [AnyObject],let GetRouteChart = json["GetRouteChart"] as? [AnyObject]{
                         print(getdata)
                         var subdates = [String]()
                         var FilterDisKms:[AnyObject] = []
@@ -767,7 +767,7 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
                                 SFCDetils.append(jitm)
                             }
                             
-                            ExpenseDetils.append(ExpenseDatas(date: item,miscellaneous_exp:miscellaneous_exp, Total_Amt: String(Total_amts), SFCdetils:SFCDetils))
+                           // ExpenseDetils.append(ExpenseDatas(date: item,miscellaneous_exp:miscellaneous_exp, Total_Amt: String(Total_amts), SFCdetils:SFCDetils))
                         }
                         print(ExpenseDetils)
                         for (index, Detils) in ExpenseDetils.enumerated() {
@@ -796,6 +796,9 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
                         }
                         print(ExpenseDetils)
                         ViewDet_TB.reloadData()
+                        
+                        collectrout(Getdata:GetRouteChart, distance_data: DistanceEntr)
+                        
                     }
                     
                 }
@@ -804,6 +807,83 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
             }
         }
     }
+    
+    func collectrout(Getdata:[AnyObject],distance_data:[AnyObject]){
+        print(Getdata)
+        
+        let past_Place_Types = ""
+        var count = 0
+        
+        var allow = [String]()
+        for (index,i) in Getdata.enumerated(){
+            let allownace_typ = Getdata[count]["Dayend_Place_Types"] as? String ?? ""
+            allow.append(allownace_typ)
+            let Place_Types = i["Place_Types"] as? String ?? ""
+            let substrings = Place_Types.split(separator: ",")
+            let result = substrings.map { String($0) }
+            let Route_chart = i["Route_chart"] as? String ?? ""
+            let substrings2 = Route_chart.split(separator: ",")
+            let result2 = substrings2.map { String($0) }
+            let date = i["pln_date"] as? String ?? ""
+            let MOT_Name = "BUS"
+            let modeid = i["Mot_ID"] as? Int ?? 0
+            let per_km_fare = i["Fuel_amount"] as? Double ?? 0.0
+            print(i)
+            let miscellaneous_exp = i["Miscellaneous_amount"] as? Double ?? 0.0
+            var Total_amts = 0.0
+            var Dayend_Place_Types = i["Dayend_Place_Types"] as? String ?? ""
+            var SFCDetils: [AnyObject] = []
+            var List_Count = 0
+            for i in result2{
+                List_Count = List_Count + 1
+                if List_Count == result2.count{
+                    break
+                }
+                let From_Place = i
+                let To_Place = result2[List_Count]
+                var Dis_km = 0
+                var fare = 0.0
+                
+                let BasLevelFilter = distance_data.filter {
+                    $0["To_Plc_Code"] as? String == To_Place &&
+                    $0["Frm_Plc_Code"] as? String == From_Place
+                }
+                
+                if !BasLevelFilter.isEmpty {
+                    Dis_km = BasLevelFilter[0]["Distance_KM"] as? Int ?? 0
+                }
+                
+                
+                if BasLevelFilter.isEmpty{
+                    print(From_Place)
+                    print(To_Place)
+                    
+                    let BasLevelFilter = distance_data.filter {
+                        $0["To_Plc_Code"] as? String == To_Place &&
+                        $0["Frm_Plc_Code"] as? String == SFCode
+                    }
+                    if !BasLevelFilter.isEmpty{
+                        Dis_km = BasLevelFilter[0]["Distance_KM"] as? Int ?? 0
+                    }else{
+                        Dis_km = 0
+                    }
+                    
+                   
+                }
+                
+                fare = Double(Dis_km) * per_km_fare
+                
+                let itms: [String: Any]=["date": date,"modeoftravel":MOT_Name,"modeid":modeid,"fromplace":From_Place,"Toplace":To_Place,"Fromid":From_Place,"Toid":To_Place,"Dist":Dis_km,"per_km_fare":per_km_fare,"fare":String(format: "%.2f", fare)];
+                let jitm: AnyObject = itms as AnyObject
+                SFCDetils.append(jitm)
+                print(SFCDetils)
+            }
+            ExpenseDetils.append(ExpenseDatas(date: date,miscellaneous_exp:String(format: "%.2f", miscellaneous_exp), Total_Amt: String(Total_amts), SFCdetils:SFCDetils))
+            count = count + 1
+        }
+        ViewDet_TB.reloadData()
+    }
+    
     
     @objc private func Close_Drop_Down_View() {
         Sel_Period_Drop_Down.isHidden = true
