@@ -50,8 +50,12 @@ class Expense_approval_SFC: UIViewController, UITableViewDelegate, UITableViewDa
     
     struct ExpenseDatas:Any{
         let date:String
+        let Work_typ:String
         var miscellaneous_exp:String
         var Total_Amt:String
+        let Returnkm:String
+        let Plc_typ:String
+        let Fuel_amount:String
         let SFCdetils:[AnyObject]
     }
     
@@ -593,205 +597,208 @@ class Expense_approval_SFC: UIViewController, UITableViewDelegate, UITableViewDa
         Sel_Period_Drop_Down.isHidden = false
     }
     func ExpenseReportDetailsSFC(fromdate:String,todate:String,SF_code:String){
-        let apiKey: String = "getExpenseReportDetailsSFC&sf_code=\(SF_code)&division_code=\(DivCode)&from_date=\(fromdate)&to_date=\(todate)&stateCode=\(StateCode)&Design_code=\(UserSetup.shared.dsg_code)"
+        let apiKey: String = "getExpenseReportDetailsSFC&sf_code=\(SF_code)&division_code=\(DivCode)&from_date=\(fromdate)&to_date=\(todate)&stateCode=\(StateCode)&Design_code=\(UserSetup.shared.dsg_code)&Mn=\(Eff_Month)&Yr=\(Eff_Year)&PriID=\(period_id)"
         let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
         AF.request(APIClient.shared.BaseURL + APIClient.shared.DBURL2 + apiKeyWithoutCommas, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
             AFdata in
-            switch AFdata.result {
+            switch AFdata.result{
             case .success(let value):
                 print(value)
                 if let json = value as? [String:AnyObject] {
                     print(json)
-                    if let getdata = json["data"] as? [AnyObject], let DistanceEntr = json["DistanceEntr"] as? [AnyObject],let dailyExpense = json["dailyExpense"] as? [AnyObject], let Mot_Exp = json["Mot_Exp"] as? [AnyObject]{
-                        print(getdata)
-                        var subdates = [String]()
-                        var FilterDisKms:[AnyObject] = []
-                        var sf_code_data:String = ""
-                        var miscellaneous_exp:String = "0"
-                        var modeid:String = ""
-                        var per_km_fare:String = ""
-                        var Km_fare:String = ""
-                        var Total_amts:Double = 0.0
-                        for item in getdata {
-                            print(item)
-                            var Date = ""
-                            let dateTimeString = item["Date_Time"] as? String ?? "2024-07-01 09:41:38"
-                            let inputDateFormat = "yyyy-MM-dd HH:mm:ss"
-                            let outputDateFormat = "yyyy-MM-dd"
-                            let inputDateFormatter = DateFormatter()
-                            inputDateFormatter.dateFormat = inputDateFormat
-                            if let date = inputDateFormatter.date(from: dateTimeString) {
-                                let outputDateFormatter = DateFormatter()
-                                outputDateFormatter.dateFormat = outputDateFormat
-                                let dateString = outputDateFormatter.string(from: date)
-                                Date = dateString
-                                subdates.append(Date)
-                                print(dateString)
-                            } else {
-                                print("Invalid date-time string")
-                            }
-                            
-                        }
-                        let uniqueSubdatesSet = Set(subdates)
-                        let uniqueSubdatesArray = Array(uniqueSubdatesSet)
-                        let sortedUniqueSubdatesArray = uniqueSubdatesArray.sorted()
-                        print(sortedUniqueSubdatesArray)
-                        
-                        for item in sortedUniqueSubdatesArray {
-                            var SFCDetils: [AnyObject] = []
-                            let filteredData = getdata.filter {
-                                if let dateTime = $0["Date_Time"] as? String {
-                                    return dateTime.contains(item)
-                                }
-                                return false
-                            }
-                            print(filteredData)
-                           
-                            for data in filteredData {
-                                print(data)
-                                var Dis_Km = 0
-                                var From_Place = ""
-                                var To_place = ""
-                                let date = data["Date_Time"] as? String ?? ""
-                                let MOT_Name = data["MOT_Name"] as? String ?? ""
-                                let To_Place = data["To_Place"] as? String ?? ""
-                                let to_place_id = data["To_Place_Id"] as? String ?? ""
-                                let Fromdat = lstHQs.filter{ $0["id"] as? String == data["From_Place"] as? String}
-                                print(Fromdat)
-                              if UserSetup.shared.SF_type == 2{
-                                if Fromdat.isEmpty {
-                                    From_Place = data["From_Place"] as? String ?? ""
-                                    modeid = data["MOT"] as? String ?? ""
-                                    for i in FilterDisKms{
-                                        if From_Place == To_Place{
-                                            Dis_Km = i["Distance_KM"] as? Int ?? 0
-                                        }else{
-                                            let BasLevelFilter = FilterDisKms.filter {
-                                                $0["To_Plc_Code"] as? String == To_Place &&
-                                                $0["Frm_Plc_Code"] as? String == sf_code_data
-                                            }
-                                            
-                                            if BasLevelFilter.isEmpty{
-                                                Dis_Km = 0
-                                            }else{
-                                                Dis_Km = BasLevelFilter[0]["Distance_KM"] as? Int ?? 0
-                                            }
-                                        }
-                                    }
-                                }else{
-                                    print(Fromdat)
-                                    From_Place = Fromdat[0]["name"] as? String ?? ""
-                                    let FilterDis = DistanceEntr.filter{ $0["To_Plc_Code"] as? String == data["From_Place"] as? String}
-                                    print(FilterDis)
-                                    Dis_Km = FilterDis[0]["Distance_KM"] as? Int ?? 0
-                                    let Frm_Plc_Code = data["From_Place"] as? String ?? SFCode
-                                    modeid = data["MOT"] as? String ?? ""
-                                    let FilterDisKm = lstdiskm.filter{ $0["Sf_code"] as? String == Frm_Plc_Code}
-                                    sf_code_data = Frm_Plc_Code
-                                    print(FilterDisKm)
-                                    FilterDisKms = FilterDisKm
-                                    print(FilterDisKms)
-                                    for i in FilterDisKm {
-                                        if let Frm_Plc_Code = i["Frm_Plc_Code"] as? String,
-                                           let To_Plc_Code = i["To_Plc_Code"] as? String {
-                                            print(Frm_Plc_Code)
-                                            print(To_Plc_Code)
-                                            print(data)
-                                            if data["From_Place"] as? String == Frm_Plc_Code && data["To_Place"] as? String == To_Plc_Code {
-                                               
-                                                let Dis = i["Distance_KM"] as? Int ?? 0
-                                                Dis_Km = Dis_Km + Dis
-                                            } else {
-                                                print("No data")
-                                            }
-                                        }
-                                    }
-                                }
-                              }else{
-                                  print(data)
-                                  modeid = data["MOT"] as? String ?? ""
-                                  print(modeid)
-                                  From_Place = data["From_Place"] as? String ?? ""
-                                  sf_code_data = SFCode
-                                  if Fromdat.isEmpty{
-                                     
-                                      print(DistanceEntr)
-                                      for i in DistanceEntr{
-                                          print(i)
-                                          if From_Place == i["Frm_Plc_Code"] as? String && To_Place ==  i["To_Plc_Code"] as? String{
-                                              Dis_Km = i["Distance_KM"] as? Int ?? 0
-                                          }
-                                      }
-                                  }else{
-                                      let BasLevelFilter = DistanceEntr.filter {
-                                          $0["To_Plc_Code"] as? String == To_Place &&
-                                          $0["Frm_Plc_Code"] as? String == sf_code_data
-                                      }
-                                      if BasLevelFilter.isEmpty{
-                                          Dis_Km = 0
-                                      }else{
-                                          Dis_Km = BasLevelFilter[0]["Distance_KM"] as? Int ?? 0
-                                      }
-                                  }
-                              }
-                                
-                                let Mot_Filter_Exp = Mot_Exp.filter{$0["MOT_ID"] as? Int == Int(modeid) }
-                                if Mot_Filter_Exp.isEmpty{
-                                    per_km_fare = "0.0"
-                                    Km_fare = "0.0"
-                                }else{
-                                    let ful_charge = Mot_Filter_Exp[0]["Fuel_Charge"] as? Double ?? 0.0
-                                    per_km_fare = String(ful_charge)
-                                    
-                                    let Total_amt = Double(Dis_Km) * ful_charge
-                                    print(Total_amt)
-                                     Km_fare = String(format: "%.2f", Total_amt)
-                                    Total_amts =  Total_amts + Total_amt
-                                }
-                                
-                                print(Dis_Km)
-                                let itms: [String: Any]=["date": date,"modeoftravel":MOT_Name,"modeid":modeid,"fromplace":From_Place,"Toplace":To_Place,"Fromid":"","Toid":to_place_id,"Dist":Dis_Km,"per_km_fare":per_km_fare,"fare":Km_fare];
-                                let jitm: AnyObject = itms as AnyObject
-                                SFCDetils.append(jitm)
-                            }
-                            
-                            ExpenseDetils.append(ExpenseDatas(date: item,miscellaneous_exp:miscellaneous_exp, Total_Amt: String(Total_amts), SFCdetils:SFCDetils))
-                        }
-                        print(ExpenseDetils)
-                        for (index, Detils) in ExpenseDetils.enumerated() {
-                            let filter = dailyExpense.filter { $0["date"] as? String == Detils.date }
-                            print(filter)
-                            if filter.isEmpty{
-                                ExpenseDetils[index].miscellaneous_exp = "0"
-                            }else{
-                                //ExpenseDetils[index].miscellaneous_exp = String(filter[0]["amt"] as? Double ?? 0)
-                                if let amt = filter[0]["amt"] as? Double {
-                                    ExpenseDetils[index].miscellaneous_exp = String(amt)
-                                    
-                                    if let totalAmt = Double(ExpenseDetils[index].Total_Amt) {
-                                        let newTotalAmt = totalAmt + amt
-                                        ExpenseDetils[index].Total_Amt = String(format: "%.2f", newTotalAmt)
-                                    } else {
-                                        ExpenseDetils[index].Total_Amt = String(amt)
-                                    }
-                                } else {
-                                    // Handle the case where filter[0]["amt"] is not a valid Double
-                                    ExpenseDetils[index].miscellaneous_exp = "0"
-                                }
-
-                            }
-                            
-                        }
-                        print(ExpenseDetils)
-                        ViewDet_TB.reloadData()
+                    if let getdata = json["data"] as? [AnyObject], let DistanceEntr = json["DistanceEntr"] as? [AnyObject],let dailyExpense = json["dailyExpense"] as? [AnyObject], let Mot_Exp = json["Mot_Exp"] as? [AnyObject],let GetRouteChart = json["GetRouteChart"] as? [AnyObject], let add_sub_exp = json["add_sub_exp"] as? [AnyObject]{
+                        collectrout(Getdata:GetRouteChart, distance_data: DistanceEntr, add_sub_exp: add_sub_exp)
                     }
                     
                 }
             case .failure(let error):
                 Toast.show(message: error.errorDescription!)  //, controller: self
             }
-        }
+        } 
     }
+    
+    func collectrout(Getdata:[AnyObject],distance_data:[AnyObject],add_sub_exp:[AnyObject]){
+        
+        Exp_Summary_Data.removeAll()
+
+        print(Getdata)
+        print(add_sub_exp)
+        let past_Place_Types = ""
+        var count = 0
+        var allow = [String]()
+        for (index,i) in Getdata.enumerated(){
+            let allownace_typ = Getdata[count]["Dayend_Place_Types"] as? String ?? ""
+            allow.append(allownace_typ)
+            let Place_Types = i["Place_Types"] as? String ?? ""
+            let substrings = Place_Types.split(separator: ",")
+            let result = substrings.map { String($0) }
+            let Route_chart = i["Route_chart"] as? String ?? ""
+            let substrings2 = Route_chart.split(separator: ",")
+            let result2 = substrings2.map { String($0) }
+            let date = i["pln_date"] as? String ?? ""
+            let MOT_Name = "BUS"
+            let modeid = i["Mot_ID"] as? Int ?? 0
+            let per_km_fare = i["Fuel_amount"] as? Double ?? 0.0
+            print(i)
+            let miscellaneous_exp = i["Miscellaneous_amount"] as? Double ?? 0.0
+            var Total_amts = miscellaneous_exp
+            let Dayend_Place_Types = i["Dayend_Place_Types"] as? String ?? ""
+            let Work_typ = i["Work_typ"] as? String ?? ""
+            var SFCDetils: [AnyObject] = []
+            var List_Count = 0
+            var Totalkm = 0
+            for i in result2{
+                List_Count = List_Count + 1
+                if List_Count == result2.count{
+                    break
+                }
+                let From_Place = i
+                let To_Place = result2[List_Count]
+                var Dis_km = 0
+                var fare = 0.0
+                
+                let BasLevelFilter = distance_data.filter {
+                    $0["To_Plc_Code"] as? String == To_Place &&
+                    $0["Frm_Plc_Code"] as? String == From_Place
+                }
+                
+                if !BasLevelFilter.isEmpty {
+                    Dis_km = BasLevelFilter[0]["Distance_KM"] as? Int ?? 0
+                }
+                
+                if BasLevelFilter.isEmpty{
+                    print(From_Place)
+                    print(To_Place)
+                    
+                    let BasLevelFilter = distance_data.filter {
+                        $0["To_Plc_Code"] as? String == To_Place &&
+                        $0["Frm_Plc_Code"] as? String == SFCode
+                    }
+                    if !BasLevelFilter.isEmpty{
+                        Dis_km = BasLevelFilter[0]["Distance_KM"] as? Int ?? 0
+                    }else{
+                        Dis_km = 0
+                    }
+                }
+                Totalkm = Totalkm + Dis_km
+                
+                
+                fare = Double(Dis_km) * per_km_fare
+                
+                let itms: [String: Any]=["date": date,"modeoftravel":MOT_Name,"modeid":modeid,"fromplace":From_Place,"Toplace":To_Place,"Fromid":From_Place,"Toid":To_Place,"Dist":Dis_km,"per_km_fare":String(per_km_fare),"fare":String(format: "%.2f", fare)];
+                let jitm: AnyObject = itms as AnyObject
+                SFCDetils.append(jitm)
+                print(SFCDetils)
+            }
+           // Collect return distance.
+            var Returnkm = 0
+            if Dayend_Place_Types == "HQ"{
+                print(Dayend_Place_Types)
+                print(result)
+                print(result2)
+                let Firstplace = result2.first
+                let secondplace =  result2.last
+                let BasLevelFilter = distance_data.filter {
+                    $0["To_Plc_Code"] as? String == secondplace &&
+                    $0["Frm_Plc_Code"] as? String == Firstplace
+                }
+                
+                if !BasLevelFilter.isEmpty{
+                    Returnkm = BasLevelFilter[0]["Distance_KM"] as? Int ?? 0
+                }
+                print(BasLevelFilter)
+                if BasLevelFilter.isEmpty{
+                    for i in SFCDetils{
+                        let dis = i["Dist"] as? Int ?? 0
+                        Returnkm = Returnkm + dis
+                        
+                    }
+                }
+            }else if Dayend_Place_Types == "EX"{
+                print(Dayend_Place_Types)
+                print(result2)
+                let Firstplace = result2.first
+                let secondplace =  result2.last
+                let BasLevelFilter = distance_data.filter {
+                    $0["To_Plc_Code"] as? String == secondplace &&
+                    $0["Frm_Plc_Code"] as? String == Firstplace
+                }
+                
+                if !BasLevelFilter.isEmpty{
+                    Returnkm = BasLevelFilter[0]["Distance_KM"] as? Int ?? 0
+                }
+                print(BasLevelFilter)
+                if BasLevelFilter.isEmpty{
+                    for i in SFCDetils{
+                        let dis = i["Dist"] as? Int ?? 0
+                        Returnkm = Returnkm + dis
+                        
+                    }
+                }
+                
+            }else if Dayend_Place_Types == "OS"{
+                Returnkm = 0
+            }else if Dayend_Place_Types == "OX"{
+                print(Dayend_Place_Types)
+                print(result2)
+                let Firstplace = result2.first
+                let secondplace =  result2.last
+                let BasLevelFilter = distance_data.filter {
+                    $0["To_Plc_Code"] as? String == secondplace &&
+                    $0["Frm_Plc_Code"] as? String == Firstplace
+                }
+                
+                if !BasLevelFilter.isEmpty{
+                    Returnkm = BasLevelFilter[0]["Distance_KM"] as? Int ?? 0
+                }
+                print(BasLevelFilter)
+                if BasLevelFilter.isEmpty{
+                    for i in SFCDetils{
+                        let dis = i["Dist"] as? Int ?? 0
+                        Returnkm = Returnkm + dis
+                        
+                    }
+                }
+            }
+            
+            Totalkm = Totalkm + Returnkm
+            Total_amts = Double(Total_amts)  * Double(per_km_fare)
+            ExpenseDetils.append(ExpenseDatas(date: date, Work_typ: Work_typ,miscellaneous_exp:String(format: "%.2f", miscellaneous_exp), Total_Amt: String(Total_amts), Returnkm: String(Returnkm), Plc_typ: Dayend_Place_Types, Fuel_amount: String(per_km_fare), SFCdetils:SFCDetils))
+            count = count + 1
+        }
+        print(ExpenseDetils)
+        
+        var sum_Total_all = 0.0
+        
+        for i in ExpenseDetils{
+            let Total_Amt =  Double(i.Total_Amt) ?? 0.0
+            sum_Total_all = sum_Total_all + Total_Amt
+        }
+        // Expense Summary
+        
+        Exp_Summary_Data.append(Exp_Sum(Tit: "Total Daily Expense", Amt: String(sum_Total_all)))
+        var total_sum = 0.0
+        var total_ded = 0.0
+        for item3 in add_sub_exp{
+            print(item3)
+            let exp_amnt = Double((item3["exp_amnt"] as? String)!)
+            if let add_sub = item3["add_sub"] as? String,add_sub == "+"{
+                total_sum = total_sum + exp_amnt!
+            }else{
+                total_ded = total_ded + exp_amnt!
+            } }
+        
+        sum_Total_all = sum_Total_all + total_sum
+        sum_Total_all = sum_Total_all - total_ded
+        
+        Exp_Summary_Data.append(Exp_Sum(Tit: "Total Added (+)", Amt: "\(total_sum)"))
+        Exp_Summary_Data.append(Exp_Sum(Tit: "Total Deducted (-)", Amt: "\(total_ded)"))
+        Exp_Summary_Data.append(Exp_Sum(Tit: "Payable Amount", Amt: "\(sum_Total_all)"))
+        
+        ViewDet_TB.reloadData()
+        Summary_TB.reloadData()
+    }
+    
     
     @objc private func Close_Drop_Down_View() {
         Sel_Period_Drop_Down.isHidden = true

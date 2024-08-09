@@ -5581,14 +5581,14 @@
                                                                         <rect key="frame" x="8" y="46" width="376" height="48"/>
                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                                         <subviews>
-                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Distance(KM)" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BNG-T4-dhc">
+                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Return KM" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BNG-T4-dhc">
                                                                                 <rect key="frame" x="5" y="4" width="150" height="18"/>
                                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                                                                 <nil key="textColor"/>
                                                                                 <nil key="highlightedColor"/>
                                                                             </label>
-                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Fare" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CKD-8v-9Rb">
+                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Place type" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CKD-8v-9Rb">
                                                                                 <rect key="frame" x="221" y="4" width="150" height="17"/>
                                                                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
@@ -5616,14 +5616,14 @@
                                                                         <rect key="frame" x="8" y="102" width="376" height="48"/>
                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                                         <subviews>
-                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="DA Type" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ijR-Rj-nBE">
+                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Distance(KM)" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ijR-Rj-nBE">
                                                                                 <rect key="frame" x="5" y="4" width="150" height="18"/>
                                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                                                                 <nil key="textColor"/>
                                                                                 <nil key="highlightedColor"/>
                                                                             </label>
-                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="DA Expense" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AKJ-IM-5cD">
+                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Fare" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AKJ-IM-5cD">
                                                                                 <rect key="frame" x="221" y="4" width="150" height="17"/>
                                                                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
@@ -5801,12 +5801,15 @@
                         <outlet property="Exp_status" destination="pNl-i4-TVh" id="9c6-4k-E8W"/>
                         <outlet property="Mod_of_trv_TB" destination="jcD-nI-JnF" id="CPL-Oo-35J"/>
                         <outlet property="Mod_of_trv_hig" destination="HjL-kJ-SSF" id="P9e-Bs-QBk"/>
+                        <outlet property="Place_Typ" destination="7MY-q7-Jh3" id="Bjf-5S-RWJ"/>
+                        <outlet property="Return_km" destination="dGv-hG-Sjh" id="Hzk-Ps-dR7"/>
                         <outlet property="Scroll_View_hig" destination="8RM-hw-Cko" id="iKr-RN-G6I"/>
                         <outlet property="Status_view" destination="17E-zk-MHf" id="zpC-MU-hKR"/>
-                        <outlet property="Total_Dis_KM" destination="dGv-hG-Sjh" id="v46-8o-yOm"/>
-                        <outlet property="Total_Fare" destination="7MY-q7-Jh3" id="uFa-Je-OEp"/>
+                        <outlet property="Total_Dis_KM" destination="54L-Pb-Zhq" id="UQD-tY-Mxo"/>
+                        <outlet property="Total_Fare" destination="gKD-0j-FqU" id="fFY-o8-RHm"/>
                         <outlet property="Total_amt" destination="yGK-Xj-3jl" id="vKc-7B-C4w"/>
                         <outlet property="Travel_Det_View" destination="BMc-Em-JaC" id="mxO-vU-ccx"/>
+                        <outlet property="Wor_typ" destination="aIY-9a-ES5" id="3bY-iY-hzz"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5DH-8i-hej" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

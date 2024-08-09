@@ -154,6 +154,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
            let list = GlobalFunc.convertToDictionary(text:  WorkTypeData) as? [AnyObject] {
             lstWType = list
         }
+    
         
         if let DistData = LocalStoreage.string(forKey: "Distributors_Master_"+SFCode),
            let list = GlobalFunc.convertToDictionary(text:  DistData) as? [AnyObject] {

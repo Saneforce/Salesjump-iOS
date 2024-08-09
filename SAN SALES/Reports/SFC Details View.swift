@@ -22,15 +22,22 @@ class SFC_Details_View: UIViewController, UITableViewDelegate, UITableViewDataSo
     @IBOutlet weak var Travel_Det_View: UIView!
     @IBOutlet weak var Close_Bt_View: UIButton!
     @IBOutlet weak var Amount: UILabel!
+    
+    @IBOutlet weak var Return_km: UILabel!
+    @IBOutlet weak var Place_Typ: UILabel!
+    
+    
     @IBOutlet weak var Total_Dis_KM: UILabel!
-    
-    
     @IBOutlet weak var Total_Fare: UILabel!
-    
     @IBOutlet weak var Total_amt: UILabel!
+    @IBOutlet weak var Wor_typ: UILabel!
+    
+    
+    
     
     let cardViewInstance = CardViewdata()
-    
+    var lstWType: [AnyObject] = []
+    let LocalStoreage = UserDefaults.standard
     override func viewDidLoad() {
         super.viewDidLoad()
         cardViewInstance.styleSummaryView(Status_view)
@@ -46,6 +53,18 @@ class SFC_Details_View: UIViewController, UITableViewDelegate, UITableViewDataSo
         if let data = viewdetils_approv{
             ExpenseDetils2.append(data)
                }
+        
+        
+        if let WorkTypeData = LocalStoreage.string(forKey: "Worktype_Master"),
+           let list = GlobalFunc.convertToDictionary(text:  WorkTypeData) as? [AnyObject] {
+            lstWType = list
+        }
+        
+   
+        
+        
+        print(viewdetils)
+        print(viewdetils_approv)
 
         if ExpenseDetils.count == 0{
             var Total_Km = 0
@@ -60,7 +79,10 @@ class SFC_Details_View: UIViewController, UITableViewDelegate, UITableViewDataSo
                     Total_Far = Total_Far + Convert_Double!
                 }
             }
-            
+            let Get_work_typ = ExpenseDetils2[0].Work_typ
+            let Filter_work = lstWType.filter{$0["FWFlg"] as? String == Get_work_typ}
+            print(Filter_work)
+            Wor_typ.text = Filter_work[0]["name"] as? String ?? ""
             Total_Dis_KM.text = String(Total_Km)
             Total_Fare.text = String(Total_Far)
             Exp_status.text = "Expense Submitted"
@@ -70,6 +92,7 @@ class SFC_Details_View: UIViewController, UITableViewDelegate, UITableViewDataSo
             Mod_of_trv_hig.constant = CGFloat(ExpenseDetils2[0].SFCdetils.count * 80)
             Scroll_View_hig.constant = CGFloat(ExpenseDetils2[0].SFCdetils.count * 80) + 600
         }else{
+            var Work_Typ = ""
             var Total_Km = 0
             var Total_Far = 0.0
             for i in ExpenseDetils[0].SFCdetils{
@@ -77,12 +100,17 @@ class SFC_Details_View: UIViewController, UITableViewDelegate, UITableViewDataSo
                 if let Dis = i["Dist"] as? Int{
                     Total_Km = Total_Km + Dis
                 }
-                if let Dis = i["fare"] as? String{
-                    let Convert_Double = Double(Dis)
-                    Total_Far = Total_Far + Convert_Double!
-                }
             }
-            
+            let Fare = Double(ExpenseDetils[0].Fuel_amount) ?? 0.0
+            let ReturnKM = Int(ExpenseDetils[0].Returnkm) ?? 0
+            Total_Km = Total_Km + ReturnKM
+            Total_Far = Double(Total_Km) * Fare
+            let Get_work_typ = ExpenseDetils[0].Work_typ
+            let Filter_work = lstWType.filter{$0["FWFlg"] as? String == Get_work_typ}
+            print(Filter_work)
+            Wor_typ.text = Filter_work[0]["name"] as? String ?? ""
+            Return_km.text = ExpenseDetils[0].Returnkm
+            Place_Typ.text = ExpenseDetils[0].Plc_typ
             Total_Dis_KM.text = String(Total_Km)
             Total_Fare.text = String(Total_Far)
             Exp_status.text = "Expense Submitted"
