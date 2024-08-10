@@ -95,6 +95,12 @@ class Expense_approval_SFC: UIViewController, UITableViewDelegate, UITableViewDa
     var Exp_approv_item:Int = 0
     var Rej_Coun = 0
     var Emp_Id = ""
+    var Aprsfcode = ""
+    var Per_From = ""
+    var Per_To = ""
+    var Per_Id = ""
+    var Expense_Amt = ""
+    var Applied_ExpAmnt = ""
     override func viewDidLoad() {
         super.viewDidLoad()
         getUserDetails()
@@ -354,7 +360,7 @@ class Expense_approval_SFC: UIViewController, UITableViewDelegate, UITableViewDa
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell:cellListItem = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
        if ViewDet_TB == tableView {
-            cell.Status.text = "Expense Submitted"
+            cell.Status.text = ExpenseDetils[indexPath.row].status
             cell.item.text = ExpenseDetils[indexPath.row].Total_Amt
             cell.Date.text = ExpenseDetils[indexPath.row].date
             cell.ViewBT.tag = indexPath.row
@@ -378,7 +384,6 @@ class Expense_approval_SFC: UIViewController, UITableViewDelegate, UITableViewDa
     }
     
     @objc func View_Det(_ sender: UIButton) {
-        
         let storyboard = UIStoryboard(name: "Reports", bundle: nil)
         let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
         let myDyPln = storyboard.instantiateViewController(withIdentifier: "SFC_Details_View") as! SFC_Details_View
@@ -386,8 +391,6 @@ class Expense_approval_SFC: UIViewController, UITableViewDelegate, UITableViewDa
         myDyPln.Naveapprovel_scr = 1
         viewController.setViewControllers([myDyPln], animated: false)
         (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
-        
-        
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -439,6 +442,9 @@ class Expense_approval_SFC: UIViewController, UITableViewDelegate, UITableViewDa
             dateFormatterss.dateFormat = "yyyy-MM-dd"
             let From = dateFormatterss.string(from: FDate)
             let To = dateFormatterss.string(from: TDate)
+            Per_From = From
+            Per_To = To
+            Per_Id = item.Period_Id
             // Convert string dates to Date objects
             if let startDate = dateFormatterss.date(from: From),
                let endDate = dateFormatterss.date(from: To) {
@@ -476,6 +482,7 @@ class Expense_approval_SFC: UIViewController, UITableViewDelegate, UITableViewDa
         let From = dateFormatterss.string(from: FDate)
         let To = dateFormatterss.string(from: TDate)
         ExpenseReportDetailsSFC(fromdate: From, todate: To, SF_code: item.SF_Code)
+        Aprsfcode = item.SF_Code
         Approval_Scr.isHidden = false
     }
     
@@ -853,6 +860,8 @@ class Expense_approval_SFC: UIViewController, UITableViewDelegate, UITableViewDa
             sum_Total_all = sum_Total_all + Total_Amt
         }
         // Expense Summary
+        Expense_Amt =  String(format: "%.2f", sum_Total_all)
+       
         Exp_Summary_Data.append(Exp_Sum(Tit: "Total Daily Expense", Amt: String(sum_Total_all)))
         var total_sum = 0.0
         var total_ded = 0.0
@@ -868,6 +877,7 @@ class Expense_approval_SFC: UIViewController, UITableViewDelegate, UITableViewDa
         sum_Total_all = sum_Total_all + total_sum
         sum_Total_all = sum_Total_all - total_ded
         
+        Applied_ExpAmnt = String(format: "%.2f", sum_Total_all)
         Exp_Summary_Data.append(Exp_Sum(Tit: "Total Added (+)", Amt: "\(total_sum)"))
         Exp_Summary_Data.append(Exp_Sum(Tit: "Total Deducted (-)", Amt: "\(total_ded)"))
         Exp_Summary_Data.append(Exp_Sum(Tit: "Payable Amount", Amt: "\(sum_Total_all)"))
@@ -955,6 +965,29 @@ class Expense_approval_SFC: UIViewController, UITableViewDelegate, UITableViewDa
                 }
             }
     }
-
+    
+    
+    
+    @IBAction func Appr_sfc(_ sender: Any) {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        let formattedDateString = dateFormatter.string(from: Date())
+        let axn = "approv_SFC"
+        let apiKey = "\(axn)&sf_code=\(Aprsfcode)&expense_Month=\(Eff_Month)&Expense_Year=\(Eff_Year)&Expense_Amt=\(Expense_Amt)&Exp_Sent_date=\(formattedDateString)&Approval_Date=\(formattedDateString)&Applied_ExpAmnt=\(Applied_ExpAmnt)&Appr_By=\(SFCode)&Periodic_ID=\(Per_Id)&Pri_FrmDt=\(Per_From)&Pri_ToDt=\(Per_To)"
+        
+        let encodedApiKey = apiKey.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+        print(apiKey)
+        AF.request(APIClient.shared.BaseURL + APIClient.shared.DBURL2 + encodedApiKey!, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+            AFdata in
+            switch AFdata.result{
+            case .success(let value):
+                print(value)
+            case .failure(let error):
+                Toast.show(message: error.errorDescription!)  //, controller: self
+            }
+        }
+        
+        }
+    
 
 }
