@@ -855,7 +855,6 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
                                         }
                                     }
                                  
-                                    
                                     if let attance_flg = jsonObject["attance_flg"] as?  [[String: Any]]{
                                         print(attance_flg)
                                         if attance_flg.isEmpty{

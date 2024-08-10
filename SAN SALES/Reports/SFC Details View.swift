@@ -38,8 +38,14 @@ class SFC_Details_View: UIViewController, UITableViewDelegate, UITableViewDataSo
     let cardViewInstance = CardViewdata()
     var lstWType: [AnyObject] = []
     let LocalStoreage = UserDefaults.standard
+    var SFCode: String=""
+    var DivCode: String=""
+    var StateCode: String = ""
+    var lstAllRoutes: [AnyObject] = []
+    var lstHQs: [AnyObject] = []
     override func viewDidLoad() {
         super.viewDidLoad()
+        getUserDetails()
         cardViewInstance.styleSummaryView(Status_view)
         cardViewInstance.styleSummaryView(Travel_Det_View)
         cardViewInstance.styleSummaryView(Close_Bt_View)
@@ -60,13 +66,23 @@ class SFC_Details_View: UIViewController, UITableViewDelegate, UITableViewDataSo
             lstWType = list
         }
         
-   
+        
+        if let RouteData = LocalStoreage.string(forKey: "Route_Master_"+SFCode),
+           let list = GlobalFunc.convertToDictionary(text:  RouteData) as? [AnyObject] {
+            lstAllRoutes = list
+        }
+
+        if let HQData = LocalStoreage.string(forKey: "HQ_Master"),
+           let list = GlobalFunc.convertToDictionary(text:  HQData) as? [AnyObject] {
+            lstHQs = list;
+        }
         
         
         print(viewdetils)
         print(viewdetils_approv)
 
         if ExpenseDetils.count == 0{
+            var Work_Typ = ""
             var Total_Km = 0
             var Total_Far = 0.0
             for i in ExpenseDetils2[0].SFCdetils{
@@ -74,18 +90,22 @@ class SFC_Details_View: UIViewController, UITableViewDelegate, UITableViewDataSo
                 if let Dis = i["Dist"] as? Int{
                     Total_Km = Total_Km + Dis
                 }
-                if let Dis = i["fare"] as? String{
-                    let Convert_Double = Double(Dis)
-                    Total_Far = Total_Far + Convert_Double!
-                }
             }
+            let Fare = Double(ExpenseDetils2[0].Fuel_amount) ?? 0.0
+            let ReturnKM = Int(ExpenseDetils2[0].Returnkm) ?? 0
+            Total_Km = Total_Km + ReturnKM
+            Total_Far = Double(Total_Km) * Fare
             let Get_work_typ = ExpenseDetils2[0].Work_typ
             let Filter_work = lstWType.filter{$0["FWFlg"] as? String == Get_work_typ}
             print(Filter_work)
-            Wor_typ.text = Filter_work[0]["name"] as? String ?? ""
+            if Filter_work.isEmpty{
+                Wor_typ.text = ""
+            }else{
+                Wor_typ.text = Filter_work[0]["name"] as? String ?? ""
+            }
             Total_Dis_KM.text = String(Total_Km)
             Total_Fare.text = String(Total_Far)
-            Exp_status.text = "Expense Submitted"
+            Exp_status.text = ExpenseDetils2[0].status
             Exp_date.text = ExpenseDetils2[0].date
             Amount.text = ExpenseDetils2[0].miscellaneous_exp
             Total_amt.text = ExpenseDetils2[0].Total_Amt
@@ -108,18 +128,34 @@ class SFC_Details_View: UIViewController, UITableViewDelegate, UITableViewDataSo
             let Get_work_typ = ExpenseDetils[0].Work_typ
             let Filter_work = lstWType.filter{$0["FWFlg"] as? String == Get_work_typ}
             print(Filter_work)
-            Wor_typ.text = Filter_work[0]["name"] as? String ?? ""
+            if Filter_work.isEmpty{
+                Wor_typ.text = ""
+            }else{
+                Wor_typ.text = Filter_work[0]["name"] as? String ?? ""
+            }
+            
             Return_km.text = ExpenseDetils[0].Returnkm
             Place_Typ.text = ExpenseDetils[0].Plc_typ
             Total_Dis_KM.text = String(Total_Km)
             Total_Fare.text = String(Total_Far)
-            Exp_status.text = "Expense Submitted"
+            Exp_status.text = ExpenseDetils[0].status
             Exp_date.text = ExpenseDetils[0].date
             Amount.text = ExpenseDetils[0].miscellaneous_exp
             Total_amt.text = ExpenseDetils[0].Total_Amt
             Mod_of_trv_hig.constant = CGFloat(ExpenseDetils[0].SFCdetils.count * 80)
             Scroll_View_hig.constant = CGFloat(ExpenseDetils[0].SFCdetils.count * 80) + 600
         }
+    }
+    func getUserDetails(){
+    let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
+    let data = Data(prettyPrintedJson!.utf8)
+    guard let prettyJsonData = try? JSONSerialization.jsonObject(with: data, options:[]) as? [String: Any] else {
+    print("Error: Cannot convert JSON object to Pretty JSON data")
+    return
+    }
+    SFCode = prettyJsonData["sfCode"] as? String ?? ""
+    StateCode = prettyJsonData["State_Code"] as? String ?? ""
+    DivCode = prettyJsonData["divisionCode"] as? String ?? ""
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -143,12 +179,29 @@ class SFC_Details_View: UIViewController, UITableViewDelegate, UITableViewDataSo
         if ExpenseDetils.count == 0{
             let getitem = ExpenseDetils2[0].SFCdetils
             print(getitem)
-            let Fromplace = getitem[indexPath.row]["fromplace"] as? String ?? ""
-            let Toplace = getitem[indexPath.row]["Toplace"] as? String ?? ""
+            var Fromplace = getitem[indexPath.row]["fromplace"] as? String ?? ""
+            var Toplace = getitem[indexPath.row]["Toplace"] as? String ?? ""
             let Mod_of_Travel =  getitem[indexPath.row]["modeoftravel"] as? String ?? ""
             let Km = String(getitem[indexPath.row]["Dist"] as? Int ?? 0)
             let per_km_fare = getitem[indexPath.row]["per_km_fare"] as? String ?? ""
             let fare = getitem[indexPath.row]["fare"] as? String ?? ""
+            
+            let From_FilterRoute = lstAllRoutes.filter{$0["id"] as? String == Fromplace}
+            print(From_FilterRoute)
+            if From_FilterRoute.isEmpty{
+                Fromplace = SFCode
+            }else{
+                Fromplace = From_FilterRoute[0]["name"] as? String ?? ""
+            }
+            
+            let To_FilterRoute = lstAllRoutes.filter{$0["id"] as? String == Toplace}
+            
+            if To_FilterRoute.isEmpty{
+                Toplace = getitem[indexPath.row]["Toplace"] as? String ?? ""
+            }else{
+                Toplace = To_FilterRoute[0]["name"] as? String ?? ""
+            }
+            
             cell.Fromlbsfc.text = Fromplace
             cell.TolblSFC.text = Toplace
             cell.Mod_of_trv_SFC.text = Mod_of_Travel
@@ -158,12 +211,32 @@ class SFC_Details_View: UIViewController, UITableViewDelegate, UITableViewDataSo
         }else{
             let getitem = ExpenseDetils[0].SFCdetils
             print(getitem)
-            let Fromplace = getitem[indexPath.row]["fromplace"] as? String ?? ""
-            let Toplace = getitem[indexPath.row]["Toplace"] as? String ?? ""
+            var Fromplace = getitem[indexPath.row]["fromplace"] as? String ?? ""
+            var Toplace = getitem[indexPath.row]["Toplace"] as? String ?? ""
             let Mod_of_Travel =  getitem[indexPath.row]["modeoftravel"] as? String ?? ""
             let Km = String(getitem[indexPath.row]["Dist"] as? Int ?? 0)
             let per_km_fare = getitem[indexPath.row]["per_km_fare"] as? String ?? ""
             let fare = getitem[indexPath.row]["fare"] as? String ?? ""
+            
+            let From_FilterRoute = lstAllRoutes.filter{$0["id"] as? String == Fromplace}
+            print(From_FilterRoute)
+            if From_FilterRoute.isEmpty{
+                Fromplace = lstHQs[0]["name"] as? String ?? SFCode
+                
+            }else{
+                Fromplace = From_FilterRoute[0]["name"] as? String ?? ""
+            }
+            
+            let To_FilterRoute = lstAllRoutes.filter{$0["id"] as? String == Toplace}
+            
+            if To_FilterRoute.isEmpty{
+                Toplace = getitem[indexPath.row]["Toplace"] as? String ?? ""
+            }else{
+                Toplace = To_FilterRoute[0]["name"] as? String ?? ""
+            }
+            
+            
+            
             cell.Fromlbsfc.text = Fromplace
             cell.TolblSFC.text = Toplace
             cell.Mod_of_trv_SFC.text = Mod_of_Travel

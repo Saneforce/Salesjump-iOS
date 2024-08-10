@@ -56,6 +56,8 @@ class Expense_approval_SFC: UIViewController, UITableViewDelegate, UITableViewDa
         let Returnkm:String
         let Plc_typ:String
         let Fuel_amount:String
+        let Mot_Name:String
+        let status:String
         let SFCdetils:[AnyObject]
     }
     
@@ -597,6 +599,7 @@ class Expense_approval_SFC: UIViewController, UITableViewDelegate, UITableViewDa
         Sel_Period_Drop_Down.isHidden = false
     }
     func ExpenseReportDetailsSFC(fromdate:String,todate:String,SF_code:String){
+        ExpenseDetils.removeAll()
         let apiKey: String = "getExpenseReportDetailsSFC&sf_code=\(SF_code)&division_code=\(DivCode)&from_date=\(fromdate)&to_date=\(todate)&stateCode=\(StateCode)&Design_code=\(UserSetup.shared.dsg_code)&Mn=\(Eff_Month)&Yr=\(Eff_Year)&PriID=\(period_id)"
         let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
         AF.request(APIClient.shared.BaseURL + APIClient.shared.DBURL2 + apiKeyWithoutCommas, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
@@ -607,26 +610,30 @@ class Expense_approval_SFC: UIViewController, UITableViewDelegate, UITableViewDa
                 if let json = value as? [String:AnyObject] {
                     print(json)
                     if let getdata = json["data"] as? [AnyObject], let DistanceEntr = json["DistanceEntr"] as? [AnyObject],let dailyExpense = json["dailyExpense"] as? [AnyObject], let Mot_Exp = json["Mot_Exp"] as? [AnyObject],let GetRouteChart = json["GetRouteChart"] as? [AnyObject], let add_sub_exp = json["add_sub_exp"] as? [AnyObject]{
-                        collectrout(Getdata:GetRouteChart, distance_data: DistanceEntr, add_sub_exp: add_sub_exp)
+                        print(Mot_Exp)
+                        print(GetRouteChart)
+                        
+                        collectrout(Getdata:GetRouteChart, distance_data: DistanceEntr, add_sub_exp: add_sub_exp,FromDate:fromdate,ToDate:todate, Sf_Code: SF_code )
                     }
                     
                 }
             case .failure(let error):
                 Toast.show(message: error.errorDescription!)  //, controller: self
             }
-        } 
+        }
     }
     
-    func collectrout(Getdata:[AnyObject],distance_data:[AnyObject],add_sub_exp:[AnyObject]){
-        
+    func collectrout(Getdata:[AnyObject],distance_data:[AnyObject],add_sub_exp:[AnyObject],FromDate:String,ToDate:String,Sf_Code:String){
         Exp_Summary_Data.removeAll()
-
-        print(Getdata)
-        print(add_sub_exp)
         let past_Place_Types = ""
         var count = 0
         var allow = [String]()
-        for (index,i) in Getdata.enumerated(){
+        
+        print(FromDate)
+        print(ToDate)
+        
+        
+        for i in Getdata{
             let allownace_typ = Getdata[count]["Dayend_Place_Types"] as? String ?? ""
             allow.append(allownace_typ)
             let Place_Types = i["Place_Types"] as? String ?? ""
@@ -636,19 +643,23 @@ class Expense_approval_SFC: UIViewController, UITableViewDelegate, UITableViewDa
             let substrings2 = Route_chart.split(separator: ",")
             let result2 = substrings2.map { String($0) }
             let date = i["pln_date"] as? String ?? ""
-            let MOT_Name = "BUS"
+            let MOT_Name = i["Mot_Name"] as? String ?? ""
             let modeid = i["Mot_ID"] as? Int ?? 0
+            let Mot_Name = i["Mot_Name"] as? String ?? ""
             let per_km_fare = i["Fuel_amount"] as? Double ?? 0.0
-            print(i)
             let miscellaneous_exp = i["Miscellaneous_amount"] as? Double ?? 0.0
             var Total_amts = miscellaneous_exp
             let Dayend_Place_Types = i["Dayend_Place_Types"] as? String ?? ""
             let Work_typ = i["Work_typ"] as? String ?? ""
+            let status = i["status"] as? String ?? ""
             var SFCDetils: [AnyObject] = []
             var List_Count = 0
             var Totalkm = 0
-            for i in result2{
+            print(result2)
+            for (index,i) in result2.enumerated(){
+                
                 List_Count = List_Count + 1
+                print(result2.count)
                 if List_Count == result2.count{
                     break
                 }
@@ -672,7 +683,7 @@ class Expense_approval_SFC: UIViewController, UITableViewDelegate, UITableViewDa
                     
                     let BasLevelFilter = distance_data.filter {
                         $0["To_Plc_Code"] as? String == To_Place &&
-                        $0["Frm_Plc_Code"] as? String == SFCode
+                        $0["Frm_Plc_Code"] as? String == Sf_Code
                     }
                     if !BasLevelFilter.isEmpty{
                         Dis_km = BasLevelFilter[0]["Distance_KM"] as? Int ?? 0
@@ -680,8 +691,20 @@ class Expense_approval_SFC: UIViewController, UITableViewDelegate, UITableViewDa
                         Dis_km = 0
                     }
                 }
+                //Find Next switch Route
+                if List_Count+1 != result2.count{
+                    let Nextswitch_From_Place = result2[List_Count]
+                    let Nextswitch_To_Place = result2[List_Count+1]
+                    let Nextswitch_BasLevelFilter = distance_data.filter {
+                        $0["To_Plc_Code"] as? String == Nextswitch_To_Place &&
+                        $0["Frm_Plc_Code"] as? String == Nextswitch_From_Place
+                    }
+                    if Nextswitch_BasLevelFilter.isEmpty{
+                        Dis_km = Dis_km + Dis_km
+                    }
+                }
+  
                 Totalkm = Totalkm + Dis_km
-                
                 
                 fare = Double(Dis_km) * per_km_fare
                 
@@ -755,27 +778,81 @@ class Expense_approval_SFC: UIViewController, UITableViewDelegate, UITableViewDa
                 if BasLevelFilter.isEmpty{
                     for i in SFCDetils{
                         let dis = i["Dist"] as? Int ?? 0
-                        Returnkm = Returnkm + dis
+                        Returnkm = dis
                         
                     }
                 }
             }
             
             Totalkm = Totalkm + Returnkm
-            Total_amts = Double(Total_amts)  * Double(per_km_fare)
-            ExpenseDetils.append(ExpenseDatas(date: date, Work_typ: Work_typ,miscellaneous_exp:String(format: "%.2f", miscellaneous_exp), Total_Amt: String(Total_amts), Returnkm: String(Returnkm), Plc_typ: Dayend_Place_Types, Fuel_amount: String(per_km_fare), SFCdetils:SFCDetils))
+            Total_amts = Total_amts+(Double(Totalkm)  * Double(per_km_fare))
+            
+            print(date)
+            print(Total_amts)
+            
+   
+            ExpenseDetils.append(ExpenseDatas(date: date, Work_typ: Work_typ,miscellaneous_exp:String(format: "%.2f", miscellaneous_exp), Total_Amt: String(Total_amts), Returnkm: String(Returnkm), Plc_typ: Dayend_Place_Types, Fuel_amount: String(per_km_fare), Mot_Name: Mot_Name, status: status, SFCdetils:SFCDetils))
             count = count + 1
         }
+        
+        print(ExpenseDetils)
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        let fromDateString = FromDate
+        let currentDate = dateFormatter.string(from: Date())
+
+        guard let fromDate = dateFormatter.date(from: fromDateString),
+              let endDate = dateFormatter.date(from: currentDate) else {
+            fatalError("Invalid dates")
+        }
+        let calendar = Calendar.current
+        guard let adjustedStartDate = calendar.date(byAdding: .day, value: -1, to: fromDate) else {
+            fatalError("Failed to calculate the adjusted start date")
+        }
+        let missingDates = getMissingDates(from: adjustedStartDate, to: endDate, excludingStart: true)
+        let missingDatesFormatted = missingDates.map { dateFormatter.string(from: $0) }
+        
+        print("Missing Dates: \(missingDatesFormatted)")
+        print(ExpenseDetils)
+        
+        for missdates in missingDatesFormatted {
+            var found = false
+            for AddMissdate in ExpenseDetils {
+                if missdates == AddMissdate.date {
+                    found = true
+                    break
+                }
+            }
+            if !found {
+                ExpenseDetils.append(ExpenseDatas(
+                    date: missdates,  // Ensure `missdates` matches the type expected by `ExpenseDatas`
+                    Work_typ: "",
+                    miscellaneous_exp: "0.00",
+                    Total_Amt: "0.00",
+                    Returnkm: "0",
+                    Plc_typ: "",
+                    Fuel_amount: "0.00",
+                    Mot_Name: "",
+                    status: "Not Climed",
+                    SFCdetils: []
+                ))
+            }
+        }
+
+        
+        print(ExpenseDetils)
+        
+        ExpenseDetils.sort { $0.date < $1.date }
+
         print(ExpenseDetils)
         
         var sum_Total_all = 0.0
-        
         for i in ExpenseDetils{
             let Total_Amt =  Double(i.Total_Amt) ?? 0.0
             sum_Total_all = sum_Total_all + Total_Amt
         }
         // Expense Summary
-        
         Exp_Summary_Data.append(Exp_Sum(Tit: "Total Daily Expense", Amt: String(sum_Total_all)))
         var total_sum = 0.0
         var total_ded = 0.0
@@ -797,6 +874,32 @@ class Expense_approval_SFC: UIViewController, UITableViewDelegate, UITableViewDa
         
         ViewDet_TB.reloadData()
         Summary_TB.reloadData()
+    }
+    func getMissingDates(from start: Date, to end: Date, excludingStart: Bool) -> [Date] {
+        var missingDates: [Date] = []
+        let calendar = Calendar.current
+
+        // Determine the actual start date based on excludingStart flag
+        var currentDate = excludingStart ? calendar.date(byAdding: .day, value: 1, to: start) : start
+
+        // Ensure the start date is valid
+        guard let unwrappedCurrentDate = currentDate else {
+            fatalError("Invalid start date")
+        }
+
+        // Iterate from the start date to the end date
+        var dateToCheck = unwrappedCurrentDate
+        while dateToCheck <= end {
+            missingDates.append(dateToCheck)
+            
+            // Move to the next day
+            guard let nextDate = calendar.date(byAdding: .day, value: 1, to: dateToCheck) else {
+                break
+            }
+            dateToCheck = nextDate
+        }
+
+        return missingDates
     }
     
     
