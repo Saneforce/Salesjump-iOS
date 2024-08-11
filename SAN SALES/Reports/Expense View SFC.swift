@@ -58,6 +58,16 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
         var Amt:String
     }
     
+    struct MgrRout:Any{
+        var date:String
+        var Routs:String
+        var ClusterName:String
+        var Mot_Name:String
+        var Mot_ID:String
+        var Fuel_amount: Double
+    }
+    var mgrRouts:[MgrRout] = []
+    
     struct ExpenseDatas:Any{
         let date:String
         let Work_typ:String
@@ -570,8 +580,11 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
                     if let getdata = json["data"] as? [AnyObject], let DistanceEntr = json["DistanceEntr"] as? [AnyObject],let dailyExpense = json["dailyExpense"] as? [AnyObject], let Mot_Exp = json["Mot_Exp"] as? [AnyObject],let GetRouteChart = json["GetRouteChart"] as? [AnyObject], let add_sub_exp = json["add_sub_exp"] as? [AnyObject]{
                         print(Mot_Exp)
                         print(GetRouteChart)
-                        
-                        collectrout(Getdata:GetRouteChart, distance_data: DistanceEntr, add_sub_exp: add_sub_exp,FromDate:fromdate,ToDate:todate )
+                       if UserSetup.shared.SF_type == 1{
+                           collectrout(Getdata:GetRouteChart, distance_data: DistanceEntr, add_sub_exp: add_sub_exp,FromDate:fromdate,ToDate:todate )
+                       }else{
+                           Collect_mgr_rout(Getdata:GetRouteChart, distance_data: DistanceEntr, add_sub_exp: add_sub_exp,FromDate:fromdate,ToDate:todate )
+                       }
                     }
                     
                 }
@@ -581,6 +594,108 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
         }
     }
     
+    func Collect_mgr_rout(Getdata:[AnyObject], distance_data:[AnyObject], add_sub_exp:[AnyObject], FromDate:String, ToDate:String){
+        var seenEntries = [String: String]()
+        // Filter out duplicates
+        let filteredData = Getdata.filter { entry in
+            guard let pln_date = entry["pln_date"] as? String,
+                  let routeChartMgr = entry["Route_chart_mgr"] as? String else {
+                return false
+            }
+            let date = extractDate(from: pln_date)
+            let key = "\(routeChartMgr)-\(date)"
+            
+            if seenEntries[key] != nil {
+                return false
+            } else {
+                seenEntries[key] = routeChartMgr
+                return true
+            }
+        }
+        for MgrRout in filteredData {
+            print(MgrRout)
+            let getRouts = MgrRout["Route_chart_mgr"] as? String ?? ""
+            var Date = ""
+            let originalDateString = MgrRout["pln_date"] as? String ?? ""
+            let ClstrName_mgr = MgrRout["ClstrName_mgr"] as? String ?? ""
+            let Mot_Name = MgrRout["Mot_Name"] as? String ?? ""
+            let Mot_ID = MgrRout["Mot_ID"] as? String ?? ""
+            let Fuel_amount = MgrRout["Fuel_amount"] as? Double ?? 0
+            let originalDateFormatter = DateFormatter()
+            originalDateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+            if let date = originalDateFormatter.date(from: originalDateString) {
+                let newDateFormatter = DateFormatter()
+                newDateFormatter.dateFormat = "yyyy-MM-dd"
+                let newDateString = newDateFormatter.string(from: date)
+                print("Formatted Date: \(newDateString)")
+                Date = newDateString
+            } else {
+                print("Invalid date format")
+            }
+            
+            if mgrRouts.isEmpty {
+                let newRout = Expense_View_SFC.MgrRout(date: Date, Routs: getRouts, ClusterName: ClstrName_mgr, Mot_Name: Mot_Name, Mot_ID: Mot_ID, Fuel_amount: Fuel_amount)
+                mgrRouts.append(newRout)
+            } else {
+                if let index = mgrRouts.firstIndex(where: { $0.date == Date }) {
+                    print("Position of date '\(Date)': \(index)")
+                    mgrRouts[index].Routs += "," + getRouts
+                    mgrRouts[index].Routs += "," + ClstrName_mgr
+                } else {
+                    let newRout = Expense_View_SFC.MgrRout(date: Date, Routs: getRouts, ClusterName: ClstrName_mgr, Mot_Name: Mot_Name, Mot_ID: Mot_ID, Fuel_amount: Fuel_amount)
+                    mgrRouts.append(newRout)
+                }
+            }
+        }
+        print(mgrRouts)
+        
+        for x in mgrRouts{
+            let routs = x.Routs
+            let MOT_Name = x.Mot_Name
+            let Mot_ID = x.Mot_ID
+            let substrings2 = routs.split(separator: ",")
+            let Dis_km = 0.0
+            let Fuel_amount = x.Fuel_amount
+            var fare = 0.0
+            let MrRouts = lstdiskm.filter{$0["Sf_code"] as? String == String(substrings2[0])}
+            print(MrRouts)
+            let getdate = x.date
+            for (index,i) in substrings2.enumerated(){
+                var Fromplace = ""
+                var Toplace = ""
+                if index == 0{
+                    Fromplace = SFCode
+                    Toplace = String(i)
+                    let mgrLevelFilter = distance_data.filter {
+                        $0["To_Plc_Code"] as? String == Toplace &&
+                        $0["Frm_Plc_Code"] as? String == Fromplace
+                    }
+                    print(mgrLevelFilter)
+                }else{
+                    Fromplace = String(substrings2[index-1])
+                    Toplace = String(i)
+                    let MrRouts = distance_data.filter {
+                        $0["To_Plc_Code"] as? String == Toplace &&
+                        $0["Frm_Plc_Code"] as? String == Fromplace
+                    }
+                    print(MrRouts)
+                }
+                fare = Double(Dis_km) * Double(Fuel_amount)
+                
+                let itms: [String: Any]=["date": getdate,"modeoftravel":MOT_Name,"modeid":Mot_ID,"fromplace":Fromplace,"Toplace":Toplace,"Fromid":Fromplace,"Toid":Toplace,"Dist":Dis_km,"per_km_fare":String(Fuel_amount),"fare":String(format: "%.2f", fare)];
+            }
+        }
+    }
+    func extractDate(from pln_date: String) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        if let date = dateFormatter.date(from: pln_date) {
+            dateFormatter.dateFormat = "yyyy-MM-dd"
+            return dateFormatter.string(from: date)
+        }
+        return ""
+    }
+
     func collectrout(Getdata:[AnyObject],distance_data:[AnyObject],add_sub_exp:[AnyObject],FromDate:String,ToDate:String){
         Exp_Summary_Data.removeAll()
         let past_Place_Types = ""
