@@ -10,7 +10,6 @@ import UIKit
 
 class AdminMenus: IViewController, UITableViewDelegate, UITableViewDataSource  {
     @IBOutlet weak var tbMenuDetail: UITableView!
-    
     @IBOutlet weak var btnBack: UIImageView!
     @IBOutlet weak var imgProf: UIImageView!
     @IBOutlet weak var lblSFName: UILabel!

@@ -83,7 +83,7 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource,FSCale
     var EndingFare = 0
     var endimage: UIImageView = UIImageView()
     var endFARE: UIImageView = UIImageView()
-    override func viewDidLoad() {
+    override func viewDidLoad(){
         super.viewDidLoad()
         getUserDetails()
         End_Expense_Scr.text = "End Expense"

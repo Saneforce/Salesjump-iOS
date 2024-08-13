@@ -22,7 +22,6 @@ extension UIView {
 class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource, UITextViewDelegate {
     @IBOutlet weak var vwMainScroll: UIScrollView!
     @IBOutlet weak var vwContent: UIView!
-    
     @IBOutlet weak var lblTimer: UILabel!
     @IBOutlet weak var lblWorktype: LabelSelect!
     @IBOutlet weak var lblHQ: LabelSelect!
@@ -45,23 +44,24 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
     @IBOutlet weak var vwJointCtrl: UIView!
     @IBOutlet weak var vwRmksCtrl: UIView!
     @IBOutlet weak var Setval: UIButton!
-    
-    
-    
     @IBOutlet weak var vwDeviationLock: UIView!
-    
     @IBOutlet weak var lblRejectReason: UILabel!
-    
-    
     @IBOutlet weak var vwRejectReason: UIView!
-    
     @IBOutlet weak var vwDeviationCtrl: UIView!
     @IBOutlet weak var switchDeviate: UISwitch!
-    
+    @IBOutlet weak var vwTravelMode: UIView!
+    @IBOutlet weak var lblTravelMode: LabelSelect!
     struct lItem: Any {
         let id: String
         let name: String
         let FWFlg: String
+    }
+    
+    struct Trav_Data:Codable{
+        let name:String
+        let StEndNeed:Int
+        let DriverNeed:Int
+        let Sl_No:Int
     }
     
     var myDyTp: [String: lItem] = [:]
@@ -87,12 +87,14 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
     var lstJoint: [AnyObject] = []
     var lstSelJWNms: [AnyObject] = []
     var lstJWNms: [AnyObject] = []
+    var lstModeOfTravel: [AnyObject] = []
    
     var isMulti: Bool = false
     
     var SFCode: String=""
     var DivCode: String=""
     var Leaveid: String = ""
+    var StateCode: String = ""
    // var selfieLoginActive = 1
     public static var SfidString: String=""
     var leavWorktype: String = ""
@@ -101,8 +103,15 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
     var lstPlnDetail: [AnyObject] = []
     var attendanceView:Int = 0
     var tpDatas : JSON!
+    var Allowance_Type = ""
+    var Trave_Det:[Trav_Data]=[]
+    var Trave_Dets:[Trav_Data]=[]
+    var needed_MOT = 0
+    var Start_End_Need = 0
     override func viewDidLoad(){
         super.viewDidLoad()
+        print(UserSetup.shared.SrtEndKMNd)
+        Start_End_Need = UserSetup.shared.SrtEndKMNd
         txRem.text = "Enter the Remarks"
         txRem.textColor = UIColor.lightGray
         txRem.returnKeyType = .done
@@ -145,6 +154,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
            let list = GlobalFunc.convertToDictionary(text:  WorkTypeData) as? [AnyObject] {
             lstWType = list
         }
+    
         
         if let DistData = LocalStoreage.string(forKey: "Distributors_Master_"+SFCode),
            let list = GlobalFunc.convertToDictionary(text:  DistData) as? [AnyObject] {
@@ -256,6 +266,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         lblDist.addTarget(target: self, action: #selector(selDistributor))
         lblRoute.addTarget(target: self, action: #selector(selRoutes))
         btnAdd.addTarget(target: self, action: #selector(selJointWK))
+        lblTravelMode.addTarget(target: self, action: #selector(selTravelMode))
         
         tbDataSelect.delegate=self
         tbDataSelect.dataSource=self
@@ -288,7 +299,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         }
         
         Applylev.addTarget(target: self, action: #selector(levedata))
-        
+        getUserDetails()
         setTodayPlan()
        //selectedid()
 
@@ -299,12 +310,128 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
             self.vwRejectReason.isHidden = true
             self.vwMainScroll.contentSize = CGSize(width: self.vwContent.frame.width, height: 750)
         }
+        
+        Need_MOT()
+        
+//        if UserSetup.shared.SrtEndKMNd == 2{
+//            self.vwTravelMode.frame.origin.y = vwTravelMode.frame.origin.y+vwTravelMode.frame.height-155
+//                self.vwMainScroll.contentSize = CGSize(width: self.vwContent.frame.width, height: 830)
+//            
+//        }else{
+//            self.vwTravelMode.isHidden  = true
+//            self.vwMainScroll.contentSize = CGSize(width: self.vwContent.frame.width, height: 750)
+//            self.vwJointCtrl.frame.origin.y = vwJointCtrl.frame.origin.y+vwJointCtrl.frame.height-300
+//           // self.vwDeviationCtrl.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height-300
+//           // self.vwRejectReason.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height-300
+//           self.vwRmksCtrl.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height-300
+//        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
     }
+    
+    
+    func getUserDetails(){
+    let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
+    let data = Data(prettyPrintedJson!.utf8)
+    guard let prettyJsonData = try? JSONSerialization.jsonObject(with: data, options:[]) as? [String: Any] else {
+    print("Error: Cannot convert JSON object to Pretty JSON data")
+    return
+    }
+    SFCode = prettyJsonData["sfCode"] as? String ?? ""
+    StateCode = prettyJsonData["State_Code"] as? String ?? ""
+    DivCode = prettyJsonData["divisionCode"] as? String ?? ""
+        
+    travelmode()
+    }
+    
+    func travelmode(){
+        let axn = "get/travelmode"
+        let apiKey = "\(axn)&State_Code=\(StateCode)&Division_Code=\(DivCode)"
+        var result = apiKey
+        if let lastCommaIndex = result.lastIndex(of: ",") {
+            result.remove(at: lastCommaIndex)
+        }
+        let apiKeyWithoutCommas = result.replacingOccurrences(of: ",&", with: "&")
+        let url = APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKeyWithoutCommas
+        
+        AF.request(url, method: .post, parameters: nil, encoding: URLEncoding.default, headers: nil)
+            .validate(statusCode: 200..<299)
+            .responseJSON { [self] response in
+                switch response.result {
+                case .success(let value):
+                    print(value)
+                    if let json = value as? [AnyObject] {
+                        do {
+                            let prettyJsonData = try JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
+                            if let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) {
+                                print(prettyPrintedJson)
+                                if let list = GlobalFunc.convertToDictionary(text: prettyPrintedJson) as? [AnyObject] {
+                                    lstModeOfTravel = list
+                                    print(list)
+                                    print(lstModeOfTravel)
+                                }
+                            } else {
+                                print("Error: Could not convert JSON to String")
+                            }
+                        } catch {
+                            print("Error: \(error.localizedDescription)")
+                        }
+                    }
+                    
+                case .failure(let error):
+                    Toast.show(message: error.errorDescription ?? "Unknown Error")
+                }
+            }
+    }
+    
+    func Need_MOT(){
+        self.ShowLoading(Message: "Loading...")
+         AF.request(APIClient.shared.BaseURL + APIClient.shared.DBURL2 + "neededMOTSFC&sf_code=\(SFCode)&Date=", method: .post, parameters: nil, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self] AFdata in
+             print(AFdata)
+             switch AFdata.result {
+             case .success(let value):
+                 print(value)
+                 if let json = value as? [AnyObject],let needed_MOT_ = json[0]["Result"] as? Int{
+                     needed_MOT = needed_MOT_
+                     print(needed_MOT_)
+                     if UserSetup.shared.SrtEndKMNd == 2{
+                         print(needed_MOT)
+                         if needed_MOT == 0{
+                             self.vwTravelMode.frame.origin.y = vwTravelMode.frame.origin.y+vwTravelMode.frame.height-155
+                            self.vwMainScroll.contentSize = CGSize(width: self.vwContent.frame.width, height: 830)
+                             self.vwTravelMode.isHidden  = false
+                         }else{
+                             Start_End_Need = 0
+                             self.vwTravelMode.isHidden  = true
+                             self.vwMainScroll.contentSize = CGSize(width: self.vwContent.frame.width, height: 750)
+                             self.vwJointCtrl.frame.origin.y = vwJointCtrl.frame.origin.y+vwJointCtrl.frame.height-300
+                            // self.vwDeviationCtrl.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height-300
+                            // self.vwRejectReason.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height-300
+                            self.vwRmksCtrl.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height-300
+                         }
+                     }else{
+                         self.vwTravelMode.isHidden  = true
+                         self.vwMainScroll.contentSize = CGSize(width: self.vwContent.frame.width, height: 750)
+                         self.vwJointCtrl.frame.origin.y = vwJointCtrl.frame.origin.y+vwJointCtrl.frame.height-300
+                        // self.vwDeviationCtrl.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height-300
+                        // self.vwRejectReason.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height-300
+                        self.vwRmksCtrl.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height-300
+                     }
+                 }
+                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.0){
+                     self.LoadingDismiss()
+                 }
+             case .failure(let error):
+                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.0){
+                     self.LoadingDismiss()
+                 }
+                 Toast.show(message: error.errorDescription ?? "", controller: self)
+             }
+         }
+       }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.text == "Enter the Remarks"{
@@ -326,7 +453,6 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
     }
 //
     func selectedid(){
-
         var lstPlnDetail: [AnyObject] = []
         if self.LocalStoreage.string(forKey: "Mydayplan") == nil { return }
         let PlnDets: String=LocalStoreage.string(forKey: "Mydayplan")!
@@ -397,7 +523,11 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView==tbJWKSelect { return lstJWNms.count }
-        return lObjSel.count
+        if SelMode == "Travel"{
+            return Trave_Det.count
+        }else{
+            return lObjSel.count
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -408,6 +538,14 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
             cell.lblText?.text = item["name"] as? String
             cell.imgBtnDel.addTarget(target: self, action: #selector(self.delJWK(_:)))
         }else{
+            
+            if SelMode == "Travel" {
+              print(Trave_Det)
+                print(indexPath.row)
+                cell.lblText?.text = Trave_Det[indexPath.row].name
+                cell.imgSelect?.image = nil
+            }else{
+            
             let item: [String: Any]=lObjSel[indexPath.row] as! [String : Any]
             cell.lblText?.text = item["name"] as? String
             cell.imgSelect?.image = nil
@@ -418,6 +556,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                     cell.imgSelect?.image = UIImage(named: "Select")
                 }
             }
+        }
             
         }
         return cell
@@ -425,7 +564,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let item: [String: Any]=lObjSel[indexPath.row] as! [String : Any]
-        let name=item["name"] as! String
+        var name=item["name"] as! String
         print(item)
         if let need = item["exp_needed"] as? Int{
             exp_Need = need
@@ -469,6 +608,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                // vwDistCtrl.isHidden=false
                 vwRouteCtrl.isHidden=false
                 vwJointCtrl.isHidden=false
+                vwTravelMode.isHidden=false
                 
                 self.vwRmksCtrl.frame.origin.y = vwJointCtrl.frame.origin.y+vwJointCtrl.frame.height+8
                 self.vwDeviationCtrl.frame.origin.y = vwRmksCtrl.frame.origin.y+vwRmksCtrl.frame.height+8
@@ -478,11 +618,11 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                    // vwDistCtrl.isHidden=true
                     vwRouteCtrl.isHidden=true
                     vwJointCtrl.isHidden=true
-        
-                    
+                    vwTravelMode.isHidden=true
                     self.vwRmksCtrl.frame.origin.y = vwWTCtrl.frame.origin.y+vwWTCtrl.frame.height+8
                     self.vwDeviationCtrl.frame.origin.y = vwRmksCtrl.frame.origin.y+vwRmksCtrl.frame.height+8
                     self.vwRejectReason.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height+8
+                    //self.vwTravelMode.frame.origin.y =
                     
                 }
             } else if SelMode == "DIS" {
@@ -492,7 +632,9 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                     return Bool(StkId.range(of: String(format: ",%@,", id))?.lowerBound != nil )
                 })
             } else if SelMode == "RUT" {
+                print(item)
                 lblRoute.text = name  //+(item["id"] as! String)
+                Allowance_Type = item["Allowance_Type"] as! String
                 
             }else if SelMode == "HQ" {
                 lblHQ.text = name  //+(item["id"] as! String)
@@ -564,6 +706,12 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                 if(UserSetup.shared.DistBased == 1){
                     
                 }
+            }else if SelMode == "Travel"{
+                print(Trave_Det)
+                id = String(Trave_Det[indexPath.row].Sl_No)
+                name = Trave_Det[indexPath.row].name
+                typ = String(Trave_Det[indexPath.row].StEndNeed)
+                lblTravelMode.text = Trave_Det[indexPath.row].name
             }
             
             myDyTp.updateValue(lItem(id: id, name: name,FWFlg: typ), forKey: SelMode)
@@ -866,6 +1014,29 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         openWin(Mode: "DIS")
     }
     
+    @objc private func selTravelMode(){
+        Trave_Det.removeAll()
+        if lblRoute.text=="Select the Route"{
+            Toast.show(message: "Select the Route First", controller: self)
+            return
+        }
+        print(lstModeOfTravel)
+        print(Allowance_Type)
+        for item in lstModeOfTravel{
+            let Alw_Eligibilty = item["Alw_Eligibilty"] as? String
+            let spriteArray = Alw_Eligibilty!.components(separatedBy: ",")
+            if spriteArray.contains(Allowance_Type) {
+                print(item)
+                Trave_Det.append(Trav_Data(name: (item["MOT"] as? String)!, StEndNeed: (item["StEndNeed"] as? Int)!, DriverNeed: (item["DriverNeed"] as? Int)!, Sl_No: (item["Sl_No"] as? Int)!))
+            }
+        }
+        print(Trave_Det)
+        Trave_Dets = Trave_Det
+        lblSelTitle.text="Select Travel Mode"
+        openWin(Mode: "Travel")
+        tbDataSelect.reloadData()
+    }
+    
     @objc private func selRoutes() {
         isMulti=false
         if UserSetup.shared.tpDcrDeviationNeed == 0 && !switchDeviate.isOn{
@@ -931,12 +1102,23 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         
         let txtbx: UITextField = sender as! UITextField
         if txtbx.text!.isEmpty {
-            lObjSel = lAllObjSel
+            if SelMode == "Travel" {
+               Trave_Det = Trave_Dets
+            }else{
+                lObjSel = lAllObjSel
+            }
         }else{
+            if SelMode == "Travel" {
+                Trave_Det = Trave_Dets.filter({(product) in
+                    let name: String = String(format: "%@", product.name)
+                    return name.lowercased().contains(txtbx.text!.lowercased())
+                })
+            }else{
             lObjSel = lAllObjSel.filter({(product) in
                 let name: String = String(format: "%@", product["name"] as! CVarArg)
                 return name.lowercased().contains(txtbx.text!.lowercased())
             })
+        }
         }
         tbDataSelect.reloadData()
         
@@ -961,6 +1143,13 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                 Toast.show(message: "Select the Route", controller: self)
                 return false
             }
+            
+            if Start_End_Need == 2 {
+                if lblTravelMode.text=="Select Travel Mode"{
+                    Toast.show(message: "Select Travel Mode", controller: self)
+                    return false
+                }
+        }
         }
         /*
         if NewOutlet.shared.Lat == "" {
@@ -1271,24 +1460,20 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                 remarks = ""
             }
             print(myDyTp)
-            let jsonString = "[{\"tbMyDayPlan\":{\"wtype\":\"'" + (myDyTp["WT"]?.id ?? "") + "'\",\"sf_member_code\":\"'" + (myDyTp["HQ"]?.id ?? SFCode) + "'\",\"stockist\":\"'" + (myDyTp["DIS"]?.id ?? "") + "'\",\"stkName\":\"" + (myDyTp["DIS"]?.name ?? "") + "\",\"dcrtype\":\"App\",\"cluster\":\"'" + (myDyTp["RUT"]?.id ?? "") + "'\",\"custid\":\"" + (myDyTp["RUT"]?.id ?? "") + "\",\"custName\":\"" + (myDyTp["RUT"]?.name ?? "") + "\",\"address\":\"" + sAddress + "\",\"remarks\":\"'" + (remarks) + "'\",\"OtherWors\":\"\",\"FWFlg\":\"'" + (myDyTp["WT"]?.FWFlg ?? "") + "'\",\"SundayWorkigFlag\":\"''\",\"Place_Inv\":\"\",\"WType_SName\":\"" + (myDyTp["WT"]?.name ?? "") + "\",\"ClstrName\":\"'" + (myDyTp["RUT"]?.name ?? "") + "'\",\"AppVersion\":\"Vi_\(Bundle.main.appVersionLong).\(Bundle.main.appBuild)\",\"self\":1,\"location\":\"" + slocation + "\",\"dcr_activity_date\":\"'" + dateString + "'\",\"worked_with\":\"'\(Join_Works)'\"\(ImgName)}}]"
-       // let jsonString: String = ""
-        //AppVersion\":\"Vi1.1.0\
-
+            let jsonString = "[{\"tbMyDayPlan\":{\"wtype\":\"'" + (myDyTp["WT"]?.id ?? "") + "'\",\"sf_member_code\":\"'" + (myDyTp["HQ"]?.id ?? SFCode) + "'\",\"stockist\":\"'" + (myDyTp["DIS"]?.id ?? "") + "'\",\"stkName\":\"" + (myDyTp["DIS"]?.name ?? "") + "\",\"dcrtype\":\"App\",\"cluster\":\"'" + (myDyTp["RUT"]?.id ?? "") + "'\",\"custid\":\"" + (myDyTp["RUT"]?.id ?? "") + "\",\"custName\":\"" + (myDyTp["RUT"]?.name ?? "") + "\",\"address\":\"" + sAddress + "\",\"remarks\":\"'" + (remarks) + "'\",\"OtherWors\":\"\",\"FWFlg\":\"'" + (myDyTp["WT"]?.FWFlg ?? "") + "'\",\"SundayWorkigFlag\":\"''\",\"Place_Inv\":\"\",\"WType_SName\":\"" + (myDyTp["WT"]?.name ?? "") + "\",\"ClstrName\":\"'" + (myDyTp["RUT"]?.name ?? "") + "'\",\"AppVersion\":\"Vi_\(Bundle.main.appVersionLong).\(Bundle.main.appBuild)\",\"self\":1,\"location\":\"" + slocation + "\",\"dcr_activity_date\":\"'" + dateString + "'\",\"worked_with\":\"'\(Join_Works)'\"\(ImgName),\"SrtEndKMNd\":\"\(Start_End_Need)\",\"mode_name\":\"" + (myDyTp["Travel"]?.name ?? "") + "\",\"mod_id\":\"" + (myDyTp["Travel"]?.id ?? "") + "\",\"Allowance_Type\":\"\(Allowance_Type)\",\"Date_Time\":\"" + dateString + "\",\"Hq_id\":\"" + (myDyTp["HQ"]?.id ?? SFCode)  + "\"}}]"
+            
+            
         let params: Parameters = [
             "data": jsonString //"["+jsonString+"]"
         ]
-        print(APIClient.shared.BaseURL+APIClient.shared.DBURL+"dcr/save&divisionCode="+self.DivCode+"&rSF="+self.SFCode+"&sfCode="+self.SFCode)
-        print(params)
-            print(self.SFCode) // APIClient.shared.BaseURL+APIClient.shared.DBURL+"dcr/save&divisionCode="+self.DivCode+"&rSF="+self.SFCode+"&sfCode="+self.SFCode
-            // http://fmcg.sanfmcg.com/server/native_Db_V13- `  1q.php?axn=dcr/save&divisionCode=29,&rSF=MR4126&sfCode=MR4126
-        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+"dcr/save&divisionCode="+self.DivCode+"&rSF="+self.SFCode+"&sfCode="+self.SFCode, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
+            
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL2+"dcr/save&divisionCode="+self.DivCode+"&rSF="+self.SFCode+"&sfCode="+self.SFCode, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
             AFdata in
             self.LoadingDismiss()
             switch AFdata.result {
             case .success(let value):
                 print(value)
-                if let json = value as? [String: Any] {
+                 if let json = value as? [String: Any] {
                     if((json["success"] as! Bool) == false){
                         Toast.show(message: json["msg"] as! String, controller: self)
                         return
@@ -1315,7 +1500,8 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                                        print("Error: Could print JSON in String")
                                        return
                                    }
-                                   print(prettyPrintedJson)
+
+                                print(prettyPrintedJson)
                                 let PlnDets: String=LocalStoreage.string(forKey: "Mydayplan")!
                                 if let list = GlobalFunc.convertToDictionary(text: PlnDets) as? [AnyObject] {
                                     lstPlnDetail = list;
@@ -1331,10 +1517,8 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                                         print(flag)
                                         LocalStoreage.set("1", forKey: "attendanceView")
                                     }
-                                    
                                 }
-
-                                   
+                                
                                     LocalStoreage.set("1", forKey: "dayplan")
                                     Toast.show(message: "My day plan submitted successfully", controller: self)
                                case .failure(let error):
@@ -1355,8 +1539,10 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
     }
     @objc private func openCamera(){
         let vc=self.storyboard?.instantiateViewController(withIdentifier: "PhotoGallary") as!  PhotoGallary
-
         vc.modalPresentationStyle = .overCurrentContext
         self.present(vc, animated: true, completion: nil)
     }
 }
+
+
+

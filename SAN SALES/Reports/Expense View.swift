@@ -158,6 +158,7 @@ class Expense_View: UIViewController, UITableViewDelegate, UITableViewDataSource
         Exp_Summary_Data.append(Exp_Sum(Tit: "Total Deducted (-)", Amt: "-"))
         Exp_Summary_Data.append(Exp_Sum(Tit: "Rejected Expense", Amt: "-"))
         Exp_Summary_Data.append(Exp_Sum(Tit: "Payable Amount", Amt: "-"))
+        
     }
     func getUserDetails(){
     let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
@@ -431,7 +432,10 @@ class Expense_View: UIViewController, UITableViewDelegate, UITableViewDataSource
             print("Invalid date format")
         }
         TextSearch.text = ""
-        ExpenseReportDetails()
+        
+      
+          ExpenseReportDetails()
+      
         Sel_Period_Drop_Down.isHidden = true
     }
     func daysBetweenDates(_ startDate: Date, _ endDate: Date) -> Int {
@@ -504,7 +508,6 @@ class Expense_View: UIViewController, UITableViewDelegate, UITableViewDataSource
         Exp_Detel_Data.removeAll()
         Exp_Summary_Data.removeAll()
         Exp_Summary_Data.append(Exp_Sum(Tit: "Total Daily Expense", Amt: "-"))
-       
         var Div = DivCode
         Div = Div.replacingOccurrences(of: ",", with: "")
         let axn = "getExpenseReportDetails"
@@ -742,4 +745,5 @@ class Expense_View: UIViewController, UITableViewDelegate, UITableViewDataSource
         }
         Period_TB.reloadData()
     }
+    
 }

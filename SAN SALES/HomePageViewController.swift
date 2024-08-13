@@ -32,6 +32,8 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
     @IBOutlet weak var DayEndView: UIView!
     @IBOutlet weak var EndRmk: UITextView!
     @IBOutlet weak var DayendBT: UILabel!
+    
+    
     var lstMyplnList: [AnyObject] = []
     var TodayDate: [String:AnyObject] = [:]
     var routeNames = [String]()
@@ -118,6 +120,12 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         
         Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(TimeDisplay), userInfo: nil, repeats: true)
         getUserDetails()
+        
+        
+        if UserSetup.shared.SrtEndKMNd == 2{
+            DayEnd_SFC()
+        }
+        
         
         self.tpMandatoryNeed()
         /*if let json = try JSONSerialization.jsonObject(with: prettyPrintedJson!, options: []) as? [String: Any] {
@@ -213,10 +221,12 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
             Dashboard()
         }
         
-        getUserDetails()
-        
+        Navstartfrom()
         DashboardNew()
-        LOG_OUTMODE()
+        if UserSetup.shared.SrtEndKMNd != 2{
+            LOG_OUTMODE()
+        }
+        neededMOT()
     }
     
     func tpMandatoryNeed() {
@@ -345,15 +355,14 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         Desig=prettyJsonData["desigCode"] as? String ?? ""
         attendanceViews=prettyJsonData["attendanceView"] as? Int ?? 0
         
-        
         if attendanceViews == 1{
             LocalStoreage.set("1", forKey: "attendanceView")
         }
        
-        
-        
+    }
+    
+    func Navstartfrom(){
         //Get Design code
-        
             let apiKey1: String = "get/submgr&divisionCode=\(DivCode)&rSF=\(SFCode)&sfcode=\(SFCode)&stateCode=\(StateCode)&desig=\(Desig)"
             let apiKeyWithoutCommas = apiKey1.replacingOccurrences(of: ",&", with: "&")
             
@@ -386,9 +395,10 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
                     Toast.show(message: error.errorDescription!)  //, controller: self
                 }
             }
-        
+        //Old Conduction
+      //  if (UserSetup.shared.SrtEndKMNd != 0 && UserSetup.shared.exp_auto == 2 ){
 
-        if (UserSetup.shared.SrtEndKMNd != 0 && UserSetup.shared.exp_auto == 2 ){
+        if (UserSetup.shared.SrtEndKMNd == 1 && UserSetup.shared.exp_auto == 2 ){
         if let data=LocalStoreage.string(forKey: "dayplan"), data == "1" {
             print(attendanceViews)
             if (attendanceViews == 0) {
@@ -767,8 +777,7 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         UIApplication.shared.windows.first?.rootViewController = navigationController
     }
     @objc func OpenDayEndView(){
-       
-        if UserSetup.shared.SrtEndKMNd == 1 ||  UserSetup.shared.SrtEndKMNd == 2{
+        if UserSetup.shared.SrtEndKMNd == 1{
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd"
             let currentDate = Date()
@@ -779,6 +788,16 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
             myDyPln.End_exp_title = "Day End Plan"
             myDyPln.Date_Nd = true
             myDyPln.Date = formattedDate
+            viewController.setViewControllers([myDyPln], animated: false)
+            (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
+        }else if ( UserSetup.shared.SrtEndKMNd == 2){
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
+            let myDyPln = storyboard.instantiateViewController(withIdentifier: "Day_End_SFC") as! Day_End_SFC
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd"
+            let currentDate = dateFormatter.string(from: Date())
+            myDyPln.Date_Time = currentDate
             viewController.setViewControllers([myDyPln], animated: false)
             (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
         }else{
@@ -917,6 +936,20 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
             }
         }
     }
+    func neededMOT(){
+        AF.request(APIClient.shared.BaseURL + APIClient.shared.DBURL2 + "neededMOTSFC&sf_code=\(SFCode)&Date=", method: .post, parameters: nil, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self] AFdata in
+            print(AFdata)
+            switch AFdata.result {
+            case .success(let value):
+                if let json = value as? [String: Any]{
+                    print(json)
+                }
+            case .failure(let error):
+                Toast.show(message: error.errorDescription ?? "", controller: self)
+            }
+        }
+    }
+    
     func AutoLogOut(){
         let formatters = DateFormatter()
         formatters.dateFormat = "yyyy-MM-dd"
@@ -942,6 +975,46 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
 
     }
     
+    func DayEnd_SFC(){
+        let axn = "get/dayendsfc"
+        let apiKey: String = "\(axn)&rSF=\(SFCode)&sfCode=\(SFCode)"
+        AF.request(APIClient.shared.BaseURL + APIClient.shared.DBURL2 + apiKey, method: .post, parameters: nil, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self] AFdata in
+            print(AFdata)
+            switch AFdata.result {
+            case .success(let value):
+                if let json = value as? [AnyObject]{
+                    let dateFormatter = DateFormatter()
+                    dateFormatter.dateFormat = "yyyy-MM-dd"
+                    let currentDate = dateFormatter.string(from: Date())
+                    let Date_Time = json[0]["Date_Time"] as? String ?? ""
+                    let Enddateand_time = json[0]["Enddateand_time"] as? String ?? ""
+                    if currentDate == Date_Time{
+                        if Enddateand_time == ""{
+                            DayEnd.isHidden = false
+                        }else{
+                            DayEnd.isHidden = true
+                        }
+                        
+                    }else{
+                        if Enddateand_time == ""{
+                            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                            let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
+                            let myDyPln = storyboard.instantiateViewController(withIdentifier: "Day_End_SFC") as! Day_End_SFC
+                            myDyPln.Date_Time = Date_Time
+                            viewController.setViewControllers([myDyPln], animated: false)
+                            (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
+                            Toast.show(message:"Please submit past day end missing date(\(Date_Time))", controller: self)
+                        }
+                    }
+                } else {
+                    print("Invalid response format")
+                }
+            case .failure(let error):
+                Toast.show(message: error.errorDescription ?? "", controller: self)
+            }
+        }
+    }
+    
     func allLoacl(){
         let userDefaults = UserDefaults.standard
 
@@ -953,8 +1026,6 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
             print("\(key): \(value)")
         }
     }
-    
-    
 }
 
 //Username: Sankafo2,aachi-testso2

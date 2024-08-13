@@ -55,11 +55,23 @@ class Approval_Menu: UIViewController, UITableViewDelegate, UITableViewDataSourc
             //viewController.navigationController?.pushViewController(myDyPln, animated: true)
             (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
         }else if (lItm.MasId == 2){
-            let RptMnuVc = storyboard.instantiateViewController(withIdentifier: "ApprovalMenu") as! Approval_Menu
-            let myDyPln = storyboard.instantiateViewController(withIdentifier: "New_Expense_apr") as! New_Expense_Approval
-            viewController.setViewControllers([RptMnuVc,myDyPln], animated: false)
-            //viewController.navigationController?.pushViewController(myDyPln, animated: true)
-            (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
+            
+            if UserSetup.shared.SrtEndKMNd == 2{
+                let RptMnuVc = storyboard.instantiateViewController(withIdentifier: "ApprovalMenu") as! Approval_Menu
+                let myDyPln = storyboard.instantiateViewController(withIdentifier: "ExpenseapprovalSFC") as! Expense_approval_SFC
+                viewController.setViewControllers([RptMnuVc,myDyPln], animated: false)
+                //viewController.navigationController?.pushViewController(myDyPln, animated: true)
+                (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
+            }else{
+                let RptMnuVc = storyboard.instantiateViewController(withIdentifier: "ApprovalMenu") as! Approval_Menu
+                let myDyPln = storyboard.instantiateViewController(withIdentifier: "New_Expense_apr") as! New_Expense_Approval
+                viewController.setViewControllers([RptMnuVc,myDyPln], animated: false)
+                //viewController.navigationController?.pushViewController(myDyPln, animated: true)
+                (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
+            }
+            
+            
+         
         }else if (lItm.MasId == 3) {
             let tpVc = storyboard.instantiateViewController(withIdentifier: "ApprovalMenu") as! Approval_Menu
             let tpApproval = storyboard.instantiateViewController(withIdentifier: "sbTourPlanApproval") as! TourPlanApproval

@@ -717,18 +717,17 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource,FSC
                     LocalStoreage.set("1", forKey: "attendanceView")
                     if let attendanceArray = prettyPrintedJson["Attendance"] as? [[String: Any]] {
                         if let firstAttendance = attendanceArray.first {
-                            if let msgValue = firstAttendance["msg"] as? String {
-                                
-                            } else {
-                               // LocalStoreage.set("0", forKey: "attendanceView")
-                            }
+//                            if let msgValue = firstAttendance["msg"] as? String {
+//                                
+//                            } else {
+//                               // LocalStoreage.set("0", forKey: "attendanceView")
+//                            }
                         } else {
                            // LocalStoreage.set("0", forKey: "attendanceView")
                         }
                     } else {
                        // LocalStoreage.set("0", forKey: "attendanceView")
                     }
-                    print(LocalStoreage.string(forKey: "attendanceView"))
                     
                     Toast.show(message: "submitted successfully", controller: self)
                     if let NavExp = Exp_Nav, NavExp=="Ex_Ent"{
@@ -915,28 +914,28 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource,FSC
 //        }
 //    }
     @objc private func GotoHome(){
-           
-            let alert = UIAlertController(title: "Confirmation", message: "Please submit start expense", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { [self] _ in
-                if let NavExp = Exp_Nav{
-                    if (NavExp == "Ex_Ent"){
-                        VisitData.shared.Nav_id = 1
-                        let storyboard = UIStoryboard(name: "AdminForms", bundle: nil)
-                        let viewController = storyboard.instantiateViewController(withIdentifier: "Expense") as! Expense_Entry;()
-                        UIApplication.shared.windows.first?.rootViewController = viewController
-                        UIApplication.shared.windows.first?.makeKeyAndVisible()
-                    }
-                }else{
-                    GlobalFunc.MovetoMainMenu()
+       
+        let alert = UIAlertController(title: "Confirmation", message: "Do you want it back?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { [self] _ in
+            if let NavExp = Exp_Nav{
+                if (NavExp == "Ex_Ent"){
+                    VisitData.shared.Nav_id = 1
+                    let storyboard = UIStoryboard(name: "AdminForms", bundle: nil)
+                    let viewController = storyboard.instantiateViewController(withIdentifier: "Expense") as! Expense_Entry;()
+                    UIApplication.shared.windows.first?.rootViewController = viewController
+                    UIApplication.shared.windows.first?.makeKeyAndVisible()
                 }
-                self.navigationController?.popViewController(animated: true)
-                return
-            })
-            alert.addAction(UIAlertAction(title: "Cancel", style: .destructive) { _ in
-                return
-            })
-            self.present(alert, animated: true)
-            
+            }else{
+                GlobalFunc.MovetoMainMenu()
+            }
+            self.navigationController?.popViewController(animated: true)
+            return
+        })
+        alert.addAction(UIAlertAction(title: "Cancel", style: .destructive) { _ in
+            return
+        })
+        self.present(alert, animated: true)
+        
     }
     @objc private func opento(){
         AllRout.removeAll()
