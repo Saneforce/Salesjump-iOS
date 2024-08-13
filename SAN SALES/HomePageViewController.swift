@@ -68,6 +68,7 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
     let LocalStoreage = UserDefaults.standard
     
     override func viewDidLoad() {
+        UserDefaults.standard.removeObject(forKey: "periodicData")
         LocalStoreage.set("0", forKey: "dayplan")
         AutoLogOut()
         DashBoradTB.delegate=self
@@ -123,7 +124,7 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         
         
         if UserSetup.shared.SrtEndKMNd == 2{
-            DayEnd_SFC()
+            //DayEnd_SFC()
         }
         
         

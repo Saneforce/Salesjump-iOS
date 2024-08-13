@@ -70,6 +70,7 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
     var Allow_Apr:Bool = false
     var selected_period = ""
     var apr_flg = "0"
+    var apr_flgsfc = "0"
     var Load_Cout = 0
     var Load_Couts = 0
     var srt_exp: [[String: Any]] = []
@@ -253,6 +254,13 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
     }
     
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition){
+        
+        if UserSetup.shared.SrtEndKMNd == 2{
+            if apr_flg == "1"{
+                Toast.show(message: "Expense Already Approved")
+                return
+            }
+        }
         if (SelPeriod.text == "Select Period"){
             Toast.show(message: "Select Period")
             return
@@ -1013,6 +1021,19 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
                                 var count = 0
                                 if let jsonObject = try JSONSerialization.jsonObject(with: prettyJsonData, options: []) as? [String: Any]{
                                     print(jsonObject)
+                                    // apr_flg
+                                    if let apr_flags = jsonObject["apr_flag"] as?  [[String: Any]]{
+                                        print(apr_flags)
+                                        if apr_flags.isEmpty{
+                                            apr_flg = "0"
+                                           
+                                        }else{
+                                            if let Aprflg = apr_flags[0]["approve_flag"] as? Int{
+                                                apr_flg = String(Aprflg)
+                                            }
+                                        }
+                                    }
+                                    
                                     
                                     if let ExpDate = jsonObject["exp_submit_date"] as? [AnyObject] {
                                         print(ExpDate)

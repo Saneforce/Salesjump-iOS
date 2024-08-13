@@ -9,13 +9,12 @@ import UIKit
 
 @main
 
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate{
     var window: UIWindow?
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         //declare this property where it won't go out of scope relative to your listener
         
-       
         //declare this inside of viewWillAppear
         NetworkMonitor.Shared.startMonitoring()
         
