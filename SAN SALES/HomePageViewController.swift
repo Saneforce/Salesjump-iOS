@@ -68,6 +68,7 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
     let LocalStoreage = UserDefaults.standard
     
     override func viewDidLoad() {
+        UserDefaults.standard.removeObject(forKey: "periodicData")
         LocalStoreage.set("0", forKey: "dayplan")
         AutoLogOut()
         DashBoradTB.delegate=self
@@ -123,7 +124,7 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         
         
         if UserSetup.shared.SrtEndKMNd == 2{
-            DayEnd_SFC()
+            //DayEnd_SFC()
         }
         
         
@@ -937,7 +938,7 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         }
     }
     func neededMOT(){
-        AF.request(APIClient.shared.BaseURL + APIClient.shared.DBURL2 + "neededMOTSFC&sf_code=\(SFCode)&Date=", method: .post, parameters: nil, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self] AFdata in
+        AF.request(APIClient.shared.BaseURL + APIClient.shared.DBURL1 + "neededMOTSFC&sf_code=\(SFCode)&Date=", method: .post, parameters: nil, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self] AFdata in
             print(AFdata)
             switch AFdata.result {
             case .success(let value):

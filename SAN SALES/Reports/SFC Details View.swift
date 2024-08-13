@@ -31,8 +31,7 @@ class SFC_Details_View: UIViewController, UITableViewDelegate, UITableViewDataSo
     @IBOutlet weak var Total_Fare: UILabel!
     @IBOutlet weak var Total_amt: UILabel!
     @IBOutlet weak var Wor_typ: UILabel!
-    
-    
+    @IBOutlet weak var Mod_Of_Trvel: UILabel!
     
     
     let cardViewInstance = CardViewdata()
@@ -107,6 +106,7 @@ class SFC_Details_View: UIViewController, UITableViewDelegate, UITableViewDataSo
             Total_Fare.text = String(Total_Far)
             Exp_status.text = ExpenseDetils2[0].status
             Exp_date.text = ExpenseDetils2[0].date
+            Mod_Of_Trvel.text = ExpenseDetils2[0].Mot_Name
             Amount.text = ExpenseDetils2[0].miscellaneous_exp
             Total_amt.text = ExpenseDetils2[0].Total_Amt
             Mod_of_trv_hig.constant = CGFloat(ExpenseDetils2[0].SFCdetils.count * 80)
@@ -136,6 +136,7 @@ class SFC_Details_View: UIViewController, UITableViewDelegate, UITableViewDataSo
             
             Return_km.text = ExpenseDetils[0].Returnkm
             Place_Typ.text = ExpenseDetils[0].Plc_typ
+            Mod_Of_Trvel.text = ExpenseDetils[0].Mot_Name
             Total_Dis_KM.text = String(Total_Km)
             Total_Fare.text = String(Total_Far)
             Exp_status.text = ExpenseDetils[0].status
@@ -204,7 +205,6 @@ class SFC_Details_View: UIViewController, UITableViewDelegate, UITableViewDataSo
             
             cell.Fromlbsfc.text = Fromplace
             cell.TolblSFC.text = Toplace
-            cell.Mod_of_trv_SFC.text = Mod_of_Travel
             cell.Km_sfc.text = Km
             cell.Fare_sfc.text = per_km_fare
             cell.Amount_sfc.text = fare
@@ -239,7 +239,6 @@ class SFC_Details_View: UIViewController, UITableViewDelegate, UITableViewDataSo
             
             cell.Fromlbsfc.text = Fromplace
             cell.TolblSFC.text = Toplace
-            cell.Mod_of_trv_SFC.text = Mod_of_Travel
             cell.Km_sfc.text = Km
             cell.Fare_sfc.text = per_km_fare
             cell.Amount_sfc.text = fare

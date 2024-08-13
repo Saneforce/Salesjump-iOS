@@ -323,85 +323,99 @@ class Daily_Expense_Entry_SFC: IViewController, UIImagePickerControllerDelegate,
             Toast.show(message: "Enter valid data")
             return
         }
-        var Activity_img_url2:String = ""
-        var CamItem: String = ""
-        var Totalamt:Double = 0.0
-        for i in Needs_Entry {
-            print(Needs_Entry)
-            print(i.amount)
-            var amount:Double = 0
-            if (i.amount == ""){
-                amount = 0
-            }else{
-                amount = Double(i.amount)!
-            }
-            Totalamt = Totalamt + amount
-            CamItem += "{"
-            CamItem += " \"ID\": " + String(i.ID) + ","
-            CamItem += " \"Name\": \"" + i.Name + "\","
-            CamItem += " \"amt\": \"" + i.amount + "\","
-            CamItem += " \"exp_remarks\": \"" + i.remark + "\","
-            if !i.image.isEmpty {
-                CamItem += " \"imgData\": \""
-                for (index, image) in i.image_name.enumerated() {
-                    Activity_img_url2 = Activity_img_url2 + image + ","
-                    CamItem += image.description
-                    if index < i.image_name.count - 1 {
-                        CamItem += ","
-                    }
+        
+        let alert = UIAlertController(title: "Confirmation", message: "Do you want Submit?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { [self] _ in
+        
+            var Activity_img_url2:String = ""
+            var CamItem: String = ""
+            var Totalamt:Double = 0.0
+            for i in Needs_Entry {
+                print(Needs_Entry)
+                print(i.amount)
+                var amount:Double = 0
+                if (i.amount == ""){
+                    amount = 0
+                }else{
+                    amount = Double(i.amount)!
                 }
-                CamItem += "\","
-                CamItem += " \"prvImage\": \""
-                for (index, image) in i.image_name.enumerated() {
-                    CamItem += image.description
-                    if index < i.image_name.count - 1 {
-                        CamItem += ","
+                Totalamt = Totalamt + amount
+                CamItem += "{"
+                CamItem += " \"ID\": " + String(i.ID) + ","
+                CamItem += " \"Name\": \"" + i.Name + "\","
+                CamItem += " \"amt\": \"" + i.amount + "\","
+                CamItem += " \"exp_remarks\": \"" + i.remark + "\","
+                if !i.image.isEmpty {
+                    CamItem += " \"imgData\": \""
+                    for (index, image) in i.image_name.enumerated() {
+                        Activity_img_url2 = Activity_img_url2 + image + ","
+                        CamItem += image.description
+                        if index < i.image_name.count - 1 {
+                            CamItem += ","
+                        }
                     }
+                    CamItem += "\","
+                    CamItem += " \"prvImage\": \""
+                    for (index, image) in i.image_name.enumerated() {
+                        CamItem += image.description
+                        if index < i.image_name.count - 1 {
+                            CamItem += ","
+                        }
+                    }
+                    CamItem += "\","
+                } else {
+                    CamItem += " \"imgData\": \"\","
+                    CamItem += " \"prvImage\": \"\","
                 }
-                CamItem += "\","
-            } else {
-                CamItem += " \"imgData\": \"\","
-                CamItem += " \"prvImage\": \"\","
+                CamItem += " \"Photo_Nd\": " + String(i.Photo_Nd) + ""
+                CamItem += "},"
             }
-            CamItem += " \"Photo_Nd\": " + String(i.Photo_Nd) + ""
-            CamItem += "},"
-        }
-        CamItem = String(CamItem.dropLast())
-        print(CamItem)
-        let jsonString = "[{\"dailyExpenseSFC\":[" + CamItem + "]}]"
-        let params: Parameters = [
-            "data": jsonString
-        ]
-        print(params)
-        let axn = "dcr/save"
-        let apiKey = "\(axn)&State_Code=\(StateCode)&desig=\(Desig)&divisionCode=\(DivCode)&rSF=\(SFCode)&sfCode=\(SFCode)&stateCode=\(StateCode)&EntDate=\(set_Date!)"
-        let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
-        let url = APIClient.shared.BaseURL + APIClient.shared.DBURL2 + apiKeyWithoutCommas
-        AF.request(url, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
-            AFdata in
-            switch AFdata.result {
-            case .success(let value):
-                if let json = value as? [ String:AnyObject] {
-                    guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
-                        print("Error: Cannot convert JSON object to Pretty JSON data")
-                        return
+            CamItem = String(CamItem.dropLast())
+            print(CamItem)
+            let jsonString = "[{\"dailyExpenseSFC\":[" + CamItem + "]}]"
+            let params: Parameters = [
+                "data": jsonString
+            ]
+            print(params)
+            let axn = "dcr/save"
+            let apiKey = "\(axn)&State_Code=\(StateCode)&desig=\(Desig)&divisionCode=\(DivCode)&rSF=\(SFCode)&sfCode=\(SFCode)&stateCode=\(StateCode)&EntDate=\(set_Date!)"
+            let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
+            let url = APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKeyWithoutCommas
+            AF.request(url, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+                AFdata in
+                switch AFdata.result {
+                case .success(let value):
+                    if let json = value as? [ String:AnyObject] {
+                        guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
+                            print("Error: Cannot convert JSON object to Pretty JSON data")
+                            return
+                        }
+                        guard let prettyPrintedJson = try? JSONSerialization.jsonObject(with: prettyJsonData, options: []) as? [String: AnyObject] else {
+                            print("Error: Could print JSON in String")
+                            return
+                        }
+                        print(prettyPrintedJson)
+                        Toast.show(message:"Expense Submitted Successfully", controller: self)
+                        let storyboard = UIStoryboard(name: "AdminForms", bundle: nil)
+                        let viewController = storyboard.instantiateViewController(withIdentifier: "Expense") as! Expense_Entry;()
+                        UIApplication.shared.windows.first?.rootViewController = viewController
+                        UIApplication.shared.windows.first?.makeKeyAndVisible()
                     }
-                    guard let prettyPrintedJson = try? JSONSerialization.jsonObject(with: prettyJsonData, options: []) as? [String: AnyObject] else {
-                        print("Error: Could print JSON in String")
-                        return
-                    }
-                    print(prettyPrintedJson)
-                    Toast.show(message:"Expense Submitted Successfully", controller: self)
-                    let storyboard = UIStoryboard(name: "AdminForms", bundle: nil)
-                    let viewController = storyboard.instantiateViewController(withIdentifier: "Expense") as! Expense_Entry;()
-                    UIApplication.shared.windows.first?.rootViewController = viewController
-                    UIApplication.shared.windows.first?.makeKeyAndVisible()
+                case .failure(let error):
+                    Toast.show(message: error.errorDescription!)
                 }
-            case .failure(let error):
-                Toast.show(message: error.errorDescription!)
+                
             }
-            
-        }
+            self.navigationController?.popViewController(animated: true)
+            return
+        })
+        alert.addAction(UIAlertAction(title: "Cancel", style: .destructive) { _ in
+            return
+        })
+        self.present(alert, animated: true)
+        
+        
+       
         
         func validateForm() -> Bool {
             print(Needs_Entry)
@@ -415,4 +429,6 @@ class Daily_Expense_Entry_SFC: IViewController, UIImagePickerControllerDelegate,
             return false
         }
     }
+    
+    
 }

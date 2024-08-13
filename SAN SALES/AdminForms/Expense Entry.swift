@@ -70,6 +70,7 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
     var Allow_Apr:Bool = false
     var selected_period = ""
     var apr_flg = "0"
+    var apr_flgsfc = "0"
     var apr_flg2 = ""
     var Load_Cout = 0
     var Load_Couts = 0
@@ -254,6 +255,13 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
     }
     
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition){
+        
+        if UserSetup.shared.SrtEndKMNd == 2{
+            if apr_flg == "1"{
+                Toast.show(message: "Expense Already Approved")
+                return
+            }
+        }
         if (SelPeriod.text == "Select Period"){
             Toast.show(message: "Select Period")
             return
@@ -1006,7 +1014,7 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
         let axn = "get/expSubmitDatesSFC"
         let apiKey = "\(axn)&desig=\(Desig)&divisionCode=\(DivCode)&from_date=\(period_from_date)&to_date=\(period_to_date)&month=\(SelectMonth)&rSF=\(SFCode)&year=\(selectYear)&selected_period=\(selected_period)&sfCode=\(SFCode)&stateCode=\(StateCode)&sf_code=\(SFCode)"
         let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
-        let url = APIClient.shared.BaseURL + APIClient.shared.DBURL2 + apiKeyWithoutCommas
+        let url = APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKeyWithoutCommas
         AF.request(url, method: .post, parameters: nil, encoding: URLEncoding.default, headers: nil)
             .validate(statusCode: 200..<299)
             .responseJSON { [self] response in
@@ -1022,6 +1030,19 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
                                 var count = 0
                                 if let jsonObject = try JSONSerialization.jsonObject(with: prettyJsonData, options: []) as? [String: Any]{
                                     print(jsonObject)
+                                    // apr_flg
+                                    if let apr_flags = jsonObject["apr_flag"] as?  [[String: Any]]{
+                                        print(apr_flags)
+                                        if apr_flags.isEmpty{
+                                            apr_flg = "0"
+                                           
+                                        }else{
+                                            if let Aprflg = apr_flags[0]["approve_flag"] as? Int{
+                                                apr_flg = String(Aprflg)
+                                            }
+                                        }
+                                    }
+                                    
                                     
                                     if let ExpDate = jsonObject["exp_submit_date"] as? [AnyObject] {
                                         print(ExpDate)

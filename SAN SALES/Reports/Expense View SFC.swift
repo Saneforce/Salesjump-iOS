@@ -52,11 +52,23 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
         let To_Date:String
         let dis_Rank:String
     }
-    
     struct Exp_Sum:Codable{
         let Tit:String
         var Amt:String
     }
+    struct MgrRout:Any{
+        var date:String
+        var Routs:String
+        var ClusterName:String
+        var Mot_Name:String
+        var Mot_ID:String
+        var Fuel_amount: Double
+        var Miscellaneous_amount: Double
+        var Work_typ:String
+        var status:String
+        var Place_Types:String
+    }
+    var mgrRouts:[MgrRout] = []
     
     struct ExpenseDatas:Any{
         let date:String
@@ -173,7 +185,7 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
                 print("Failed to get disEnrty")
             }
         }
-        
+        set_priod_calendar()
     }
     func getUserDetails(){
     let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
@@ -189,7 +201,73 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
     Desig=prettyJsonData["desigCode"] as? String ?? ""
     SF_type=prettyJsonData["SF_type"] as? String ?? ""
     }
+    
+    func set_priod_calendar(){
+        if let data = UserDefaults.standard.data(forKey: "periodicData"),
+           let item = try? JSONDecoder().decode(PeriodicData.self, from: data) {
+            print(item)
+            let item = item
+            Sel_Period.text = item.Period_Name
+            period_id = item.Period_Id
+            Eff_Month = String(item.Eff_Month)
+            Eff_Year = item.Eff_Year
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd"
+            let From_Date = item.From_Date
+            period_from_date = "\(Eff_Year)-\(Eff_Month)-"+From_Date
+            if let date = dateFormatter.date(from: "\(Eff_Year)-\(Eff_Month)-" + From_Date) {
+                FDate = date
+            } else {
+                print("Error: Unable to convert string to Date")
+            }
+            let To_Date = item.To_Date
+            if To_Date == "end of month"{
+                let currentDate = FDate
+                let calendar = Calendar.current
+                if let monthRange = calendar.range(of: .day, in: .month, for: currentDate) {
+                    print(monthRange)
+                    let lastDayOfMonth = monthRange.upperBound - 1
+                    if let lastDateOfMonth = calendar.date(bySetting: .day, value: lastDayOfMonth, of: currentDate) {
+                        print("Last date of the month: \(lastDateOfMonth)")
+                        TDate = lastDateOfMonth
+                        print(lastDateOfMonth)
+                        let formatters = DateFormatter()
+                        formatters.dateFormat = "yyyy-MM-dd"
+                        period_to_date = formatters.string(from: lastDateOfMonth)
+                    }
+                }
+            }else{
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "yyyy-MM-dd"
+                let Per_To_Date = To_Date
+                period_to_date = "\(selectYear)-\(SelectMonth)-"+To_Date
+                if let date = dateFormatter.date(from: "\(selectYear)-\(SelectMonth)-" + Per_To_Date) {
+                    TDate = date
+                } else {
+                    print("Error: Unable to convert string to Date")
+                }
+            }
+            let dateFormatterss = DateFormatter()
+            dateFormatterss.dateFormat = "yyyy-MM-dd"
+            let From = dateFormatterss.string(from: FDate)
+            let To = dateFormatterss.string(from: TDate)
+            // Convert string dates to Date objects
+            if let startDate = dateFormatterss.date(from: From),
+               let endDate = dateFormatterss.date(from: To) {
+                let days = daysBetweenDates(startDate, endDate)
+                print("Number of days between the two dates: \(days)")
+                No_Of_Days_In_Perio = days + 1
+            }else{
+                print("Invalid date format")
+            }
+            TextSearch.text = ""
+            ExpenseReportDetailsSFC(fromdate: From, todate: To)
+        }
+    }
+    
     @objc private func GotoHome() {
+        UserDefaults.standard.removeObject(forKey: "periodicData")
+        UserDefaults.standard.removeObject(forKey: "periodicDataapr")
         let storyboard = UIStoryboard(name: "Reports", bundle: nil)
         let viewController = storyboard.instantiateViewController(withIdentifier: "sbReportsmnu") as! ReportMenu
         UIApplication.shared.windows.first?.rootViewController = viewController
@@ -425,6 +503,10 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if Period_TB == tableView {
             let item = lstOfPeriod[indexPath.row]
+            let encoder = JSONEncoder()
+            if let encoded = try? encoder.encode(item){
+                UserDefaults.standard.set(encoded, forKey: "periodicData")
+            }
             Sel_Period.text = item.Period_Name
             period_id = item.Period_Id
             Eff_Month = String(item.Eff_Month)
@@ -560,7 +642,7 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
         ExpenseDetils.removeAll()
         let apiKey: String = "getExpenseReportDetailsSFC&sf_code=\(SFCode)&division_code=\(DivCode)&from_date=\(fromdate)&to_date=\(todate)&stateCode=\(StateCode)&Design_code=\(UserSetup.shared.dsg_code)&Mn=\(Eff_Month)&Yr=\(Eff_Year)&PriID=\(period_id)"
         let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
-        AF.request(APIClient.shared.BaseURL + APIClient.shared.DBURL2 + apiKeyWithoutCommas, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+        AF.request(APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKeyWithoutCommas, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
             AFdata in
             switch AFdata.result{
             case .success(let value):
@@ -570,8 +652,11 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
                     if let getdata = json["data"] as? [AnyObject], let DistanceEntr = json["DistanceEntr"] as? [AnyObject],let dailyExpense = json["dailyExpense"] as? [AnyObject], let Mot_Exp = json["Mot_Exp"] as? [AnyObject],let GetRouteChart = json["GetRouteChart"] as? [AnyObject], let add_sub_exp = json["add_sub_exp"] as? [AnyObject]{
                         print(Mot_Exp)
                         print(GetRouteChart)
-                        
-                        collectrout(Getdata:GetRouteChart, distance_data: DistanceEntr, add_sub_exp: add_sub_exp,FromDate:fromdate,ToDate:todate )
+                       if UserSetup.shared.SF_type == 1{
+                           collectrout(Getdata:GetRouteChart, distance_data: DistanceEntr, add_sub_exp: add_sub_exp,FromDate:fromdate,ToDate:todate, dailyExpense: dailyExpense )
+                       }else{
+                           Collect_mgr_rout(Getdata:GetRouteChart, distance_data: DistanceEntr, add_sub_exp: add_sub_exp,FromDate:fromdate,ToDate:todate, dailyExpense: dailyExpense)
+                       }
                     }
                     
                 }
@@ -581,7 +666,426 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
         }
     }
     
-    func collectrout(Getdata:[AnyObject],distance_data:[AnyObject],add_sub_exp:[AnyObject],FromDate:String,ToDate:String){
+    func Collect_mgr_rout(Getdata:[AnyObject], distance_data:[AnyObject], add_sub_exp:[AnyObject], FromDate:String, ToDate:String,dailyExpense:[AnyObject]){
+        print(Getdata)
+        Exp_Summary_Data.removeAll()
+        var seenEntries = [String: String]()
+        // Filter out duplicates
+        let filteredData = Getdata.filter { entry in
+            guard let pln_date = entry["pln_date"] as? String,
+                  let routeChartMgr = entry["Route_chart_mgr"] as? String else {
+                return false
+            }
+            let date = extractDate(from: pln_date)
+            let key = "\(routeChartMgr)-\(date)"
+            
+            if seenEntries[key] != nil {
+                return false
+            } else {
+                seenEntries[key] = routeChartMgr
+                return true
+            }
+        }
+        for MgrRout in filteredData {
+            print(MgrRout)
+            let getRouts = MgrRout["Route_chart_mgr"] as? String ?? ""
+            var Date = ""
+            let originalDateString = MgrRout["pln_date"] as? String ?? ""
+            let ClstrName_mgr = MgrRout["ClstrName_mgr"] as? String ?? ""
+            let Place_Types = MgrRout["Place_Types"] as? String ?? ""
+            let Mot_Name = MgrRout["Mot_Name"] as? String ?? ""
+            let Mot_ID = MgrRout["Mot_ID"] as? String ?? ""
+            let Fuel_amount = MgrRout["Fuel_amount"] as? Double ?? 0
+            let miscellaneous_exp = MgrRout["Miscellaneous_amount"] as? Double ?? 0.0
+            let originalDateFormatter = DateFormatter()
+            let Work_typ = MgrRout["Work_typ"] as? String ?? ""
+            let status = MgrRout["status"] as? String ?? ""
+            originalDateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+            if let date = originalDateFormatter.date(from: originalDateString) {
+                let newDateFormatter = DateFormatter()
+                newDateFormatter.dateFormat = "yyyy-MM-dd"
+                let newDateString = newDateFormatter.string(from: date)
+                print("Formatted Date: \(newDateString)")
+                Date = newDateString
+            } else {
+                print("Invalid date format")
+            }
+            
+            if mgrRouts.isEmpty {
+                let newRout = Expense_View_SFC.MgrRout(date: Date, Routs: getRouts, ClusterName: ClstrName_mgr, Mot_Name: Mot_Name, Mot_ID: Mot_ID, Fuel_amount: Fuel_amount, Miscellaneous_amount: miscellaneous_exp, Work_typ: Work_typ, status: status, Place_Types: Place_Types)
+                mgrRouts.append(newRout)
+            } else {
+                if let index = mgrRouts.firstIndex(where: { $0.date == Date }) {
+                    print("Position of date '\(Date)': \(index)")
+                    mgrRouts[index].Routs += "," + getRouts
+                    mgrRouts[index].ClusterName += "," + ClstrName_mgr
+                    mgrRouts[index].Place_Types += "," + Place_Types
+                } else {
+                    let newRout = Expense_View_SFC.MgrRout(date: Date, Routs: getRouts, ClusterName: ClstrName_mgr, Mot_Name: Mot_Name, Mot_ID: Mot_ID, Fuel_amount: Fuel_amount, Miscellaneous_amount: miscellaneous_exp, Work_typ: Work_typ, status: status, Place_Types: Place_Types)
+                    mgrRouts.append(newRout)
+                }
+            }
+            print(mgrRouts)
+        }
+        
+        print(mgrRouts)
+        for x in mgrRouts{
+            var SFCDetils: [AnyObject] = []
+            let routs = x.Routs
+            let Place_Types = x.Place_Types
+            let MOT_Name = x.Mot_Name
+            let Mot_ID = x.Mot_ID
+            let substrings2 = routs.split(separator: ",")
+            var placstring = Place_Types.split(separator: ",")
+            var Dis_km = 0.0
+            let Fuel_amount = x.Fuel_amount
+            var fare = 0.0
+            var Work_typ = x.Work_typ
+            var Returnkm = 0
+            var Dayend_Place_Types = ""
+            if let plcetyp = placstring.last{
+                Dayend_Place_Types = String(plcetyp)
+            }
+            var  miscellaneous_exp = 0.0
+            let Miscellaneous_amount = dailyExpense.filter{$0["date"] as? String == x.date}
+            if Miscellaneous_amount.isEmpty{
+                miscellaneous_exp = 0.0
+            }else{
+                miscellaneous_exp = Miscellaneous_amount[0]["amt"] as? Double ?? 0.0
+            }
+            var Total_amts = miscellaneous_exp
+            var status = x.status
+            var MrRouts = lstdiskm.filter{$0["Sf_code"] as? String == String(substrings2[0])}
+            print(MrRouts)
+            let getdate = x.date
+            var PastSf = SFCode
+            var CurentSf = ""
+            var past_Toplace = ""
+            for (index,i) in substrings2.enumerated(){
+                print(substrings2)
+                while placstring.count < substrings2.count{
+                    placstring.append("")
+                }
+                print(placstring)
+                var Fromplace = ""
+                var Toplace = ""
+                var PlcTyp = [String]()
+                if index == 0{
+                    Fromplace = SFCode
+                    Toplace = String(i)
+                    let mgrLevelFilter = distance_data.filter {
+                        $0["To_Plc_Code"] as? String == Toplace &&
+                        $0["Frm_Plc_Code"] as? String == Fromplace
+                    }
+                    print(mgrLevelFilter)
+                    if mgrLevelFilter.isEmpty{
+                        Dis_km = 0
+                    }else{
+                        let Dis = mgrLevelFilter[0]["Distance_KM"] as? Int ?? 0
+                        Dis_km = Double(Dis)
+                    }
+                }else{
+                    
+                    //find Future Switch Route
+                    if substrings2.count != index+1{
+                        
+                        let FutreRoute = substrings2[index+1]
+                        let hqFilter = lstHQs.filter {
+                            $0["id"] as? String ?? "" == FutreRoute
+                        }
+                        print(substrings2)
+                        
+                        
+                        
+                        print(hqFilter)
+                        print(MrRouts)
+                        
+                        if hqFilter.isEmpty{
+                            Fromplace = String(substrings2[index-1])
+                            Toplace = String(i)
+                            
+                            let Routs = MrRouts.filter {
+                                $0["To_Plc_Code"] as? String == Toplace &&
+                                $0["Frm_Plc_Code"] as? String == Fromplace
+                            }
+                            
+                            print(Routs)
+                            if Routs.isEmpty{
+                                if MrRouts.isEmpty{
+                                    Dis_km = 0
+                                }else{
+                                    let mr_sfcode = MrRouts[0]["Sf_code"] as? String ?? ""
+                                    let Routs = MrRouts.filter{
+                                        $0["To_Plc_Code"] as? String == Toplace &&
+                                        $0["Frm_Plc_Code"] as? String == mr_sfcode
+                                    }
+                                    print(Routs)
+                                    if Routs.isEmpty{
+                                        let Routss = distance_data.filter{
+                                            $0["To_Plc_Code"] as? String == CurentSf &&
+                                            $0["Frm_Plc_Code"] as? String == PastSf
+                                        }
+                                        print(Routss)
+                                        if Routss.isEmpty{
+                                            let Routs = MrRouts.filter{
+                                                $0["To_Plc_Code"] as? String == past_Toplace &&
+                                                $0["Frm_Plc_Code"] as? String == mr_sfcode
+                                            }
+                                            print(Routs)
+                                            if Routs.isEmpty{
+                                                Dis_km = 0
+                                            }else{
+                                                let Dis = Routs[0]["Distance_KM"] as? Int ?? 0
+                                                Dis_km = Double(Dis)
+                                            }
+                                        }else{
+                                            CurentSf = ""
+                                            PastSf = ""
+
+                                            
+                                            let Dis = Routss[0]["Distance_KM"] as? Int ?? 0
+                                            Dis_km = Double(Dis)
+                                        }
+                                    }else{
+                                        let Dis = Routs[0]["Distance_KM"] as? Int ?? 0
+                                        Dis_km = Double(Dis)
+                                    }
+                            }
+                            }else{
+                                let Dis = Routs[0]["Distance_KM"] as? Int ?? 0
+                                Dis_km = Double(Dis)
+                            }
+                            
+                            //find past Route place typ
+                            
+                            if index+1 != placstring.count{
+                                if substrings2.count == placstring.count{
+                                let past_allow = placstring[index]
+                                let curent_allow = placstring[index+1]
+                                print(past_allow)
+                                print(curent_allow)
+                                if past_allow == "OS" && curent_allow == "HQ"{
+                                    Dis_km = Dis_km + Dis_km
+                                    
+                                }else if past_allow == "OS" && curent_allow == "EX"{
+                                        Dis_km = Dis_km + Dis_km
+                                        
+                                    }else if past_allow == "OS" && curent_allow == "OX"{
+                                        Dis_km = Dis_km + Dis_km
+                                        
+                                    }
+                            }
+                            }
+                            
+                        }else{
+                            let Fromplace = MrRouts[0]["Sf_code"] as? String ?? ""
+                            var Toplace = substrings2[index]
+                            let Routs = MrRouts.filter {
+                                $0["To_Plc_Code"] as? String ?? "" == Toplace &&
+                                $0["Frm_Plc_Code"] as? String ?? "" == Fromplace
+                            }
+                            
+//                            for Return in SFCDetils{
+//                                print(Return)
+//                                let dis = Return["Dist"] as? Int ?? 0
+//                                Dis_km = Dis_km + Double(dis)
+//                            }
+                            
+                            print(Routs)
+                            print(hqFilter)
+                            CurentSf = hqFilter[0]["id"] as? String ?? ""
+                            print(CurentSf)
+                            
+                            if Routs.isEmpty{
+                                Dis_km = Dis_km + 0
+                            }else{
+                              let dis = Routs[0]["Distance_KM"] as? Int ?? 0
+                                Dis_km = Dis_km+Double(dis)
+                            }
+                            //find past Route place typ
+                            
+                            if index+1 != placstring.count{
+                                if substrings2.count == placstring.count{
+                                let past_allow = placstring[index]
+                                let curent_allow = placstring[index+1]
+                                 print(placstring)
+                                print(past_allow)
+                                print(curent_allow)
+                                if past_allow == "OS" && curent_allow == "HQ"{
+                                    Dis_km = Dis_km + Dis_km
+                                    
+                                }else if past_allow == "OS" && curent_allow == "EX"{
+                                        Dis_km = Dis_km + Dis_km
+                                        
+                                    }else if past_allow == "OS" && curent_allow == "OX"{
+                                        Dis_km = Dis_km + Dis_km
+                                        
+                                    }
+                            }
+                            }
+                            MrRouts = lstdiskm.filter{$0["Sf_code"] as? String == String(FutreRoute)}
+                            print(MrRouts)
+                            past_Toplace = String(substrings2[index+2])
+                            print(substrings2)
+                            print(Toplace)
+                        }
+                    }else{
+                        print("No data")
+                        //Fixed switch route
+                        let Fromplaces = substrings2[index-1]
+                        let Toplaces = substrings2[index]
+                        let SwitchRouts = MrRouts.filter {
+                            $0["To_Plc_Code"] as? String ?? "" == Toplaces &&
+                            $0["Frm_Plc_Code"] as? String ?? "" == Fromplaces
+                        }
+                        print(SwitchRouts)
+                        
+                        if SwitchRouts.isEmpty{
+                            
+                            if MrRouts.isEmpty{
+                                Dis_km = 0
+                            }else{
+                            
+                            let Fromplace = MrRouts[0]["Sf_code"] as? String ?? ""
+                            var Toplace = substrings2[index]
+                            let Routs = MrRouts.filter {
+                                $0["To_Plc_Code"] as? String ?? "" == Toplace &&
+                                $0["Frm_Plc_Code"] as? String ?? "" == Fromplace
+                            }
+                            print(Routs)
+                            
+                            if Routs.isEmpty{
+                                Dis_km = 0
+                            }else{
+                                let dis = Routs[0]["Distance_KM"] as? Int ?? 0
+                                Dis_km = Double(dis)
+                            }
+                        }
+                        }else{
+                            let dis = SwitchRouts[0]["Distance_KM"] as? Int ?? 0
+                            Dis_km = Double(dis)
+                        }
+                        //find past Route place typ
+                        if index+1 != placstring.count{
+                            if substrings2.count == placstring.count{
+                                let past_allow = placstring[index]
+                                let curent_allow = placstring[index+1]
+                                print(placstring)
+                                print(past_allow)
+                                print(curent_allow)
+                                if past_allow == "OS" && curent_allow == "HQ"{
+                                    Dis_km = Dis_km + Dis_km
+                                    
+                                }else if past_allow == "OS" && curent_allow == "EX"{
+                                    Dis_km = Dis_km + Dis_km
+                                    
+                                }else if past_allow == "OS" && curent_allow == "OX"{
+                                    Dis_km = Dis_km + Dis_km
+                                    
+                                }
+                            }
+                        }
+                    }
+                    // bjbnnjhnj
+                 
+                }
+                fare = Double(Dis_km) * Double(Fuel_amount)
+                print(Dis_km)
+                
+                let itms: [String: Any]=["date": getdate,"modeoftravel":MOT_Name,"modeid":Mot_ID,"fromplace":Fromplace,"Toplace":Toplace,"Fromid":Fromplace,"Toid":Toplace,"Dist":Dis_km,"per_km_fare":String(Fuel_amount),"fare":String(format: "%.2f", fare)];
+                let jitm: AnyObject = itms as AnyObject
+                print(itms)
+                SFCDetils.append(jitm)
+                print(SFCDetils)
+            }
+            // Collect return
+            print(SFCDetils)
+            Total_amts = Total_amts + Double(Dis_km) * Double(Fuel_amount)
+            ExpenseDetils.append(ExpenseDatas(date: getdate, Work_typ: Work_typ,miscellaneous_exp:String(format: "%.2f", miscellaneous_exp), Total_Amt: String(Total_amts), Returnkm: String(Returnkm), Plc_typ: Dayend_Place_Types, Fuel_amount: String(Fuel_amount), Mot_Name: MOT_Name, status: status, SFCdetils:SFCDetils))
+        }
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        let fromDateString = FromDate
+        let currentDate = dateFormatter.string(from: Date())
+
+        guard let fromDate = dateFormatter.date(from: fromDateString),
+              let endDate = dateFormatter.date(from: currentDate) else {
+            fatalError("Invalid dates")
+        }
+        let calendar = Calendar.current
+        guard let adjustedStartDate = calendar.date(byAdding: .day, value: -1, to: fromDate) else {
+            fatalError("Failed to calculate the adjusted start date")
+        }
+        let missingDates = getMissingDates(from: adjustedStartDate, to: endDate, excludingStart: true)
+        let missingDatesFormatted = missingDates.map { dateFormatter.string(from: $0) }
+        
+        print("Missing Dates: \(missingDatesFormatted)")
+        print(ExpenseDetils)
+        
+        for missdates in missingDatesFormatted {
+            var found = false
+            for AddMissdate in ExpenseDetils {
+                if missdates == AddMissdate.date {
+                    found = true
+                    break
+                }
+            }
+            if !found {
+                ExpenseDetils.append(ExpenseDatas(
+                    date: missdates,  // Ensure `missdates` matches the type expected by `ExpenseDatas`
+                    Work_typ: "",
+                    miscellaneous_exp: "0.00",
+                    Total_Amt: "0.00",
+                    Returnkm: "0",
+                    Plc_typ: "",
+                    Fuel_amount: "0.00",
+                    Mot_Name: "",
+                    status: "Not Climed",
+                    SFCdetils: []
+                ))
+            }
+        }
+        ExpenseDetils.sort { $0.date < $1.date }
+        var sum_Total_all = 0.0
+        for i in ExpenseDetils{
+            let Total_Amt =  Double(i.Total_Amt) ?? 0.0
+            sum_Total_all = sum_Total_all + Total_Amt
+        }
+        // Expense Summary
+        Exp_Summary_Data.append(Exp_Sum(Tit: "Total Daily Expense", Amt: String(sum_Total_all)))
+        var total_sum = 0.0
+        var total_ded = 0.0
+        for item3 in add_sub_exp{
+            print(item3)
+            let exp_amnt = Double((item3["exp_amnt"] as? String)!)
+            if let add_sub = item3["add_sub"] as? String,add_sub == "+"{
+                total_sum = total_sum + exp_amnt!
+            }else{
+                total_ded = total_ded + exp_amnt!
+            } }
+        
+        sum_Total_all = sum_Total_all + total_sum
+        sum_Total_all = sum_Total_all - total_ded
+        
+        Exp_Summary_Data.append(Exp_Sum(Tit: "Total Added (+)", Amt: "\(total_sum)"))
+        Exp_Summary_Data.append(Exp_Sum(Tit: "Total Deducted (-)", Amt: "\(total_ded)"))
+        Exp_Summary_Data.append(Exp_Sum(Tit: "Payable Amount", Amt: "\(sum_Total_all)"))
+        
+        ViewDet_TB.reloadData()
+        Summary_TB.reloadData()
+    }
+    func extractDate(from pln_date: String) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        if let date = dateFormatter.date(from: pln_date) {
+            dateFormatter.dateFormat = "yyyy-MM-dd"
+            return dateFormatter.string(from: date)
+        }
+        return ""
+    }
+
+    func collectrout(Getdata:[AnyObject],distance_data:[AnyObject],add_sub_exp:[AnyObject],FromDate:String,ToDate:String,dailyExpense:[AnyObject]){
+        print(Getdata)
         Exp_Summary_Data.removeAll()
         let past_Place_Types = ""
         var count = 0
@@ -605,7 +1109,16 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
             let modeid = i["Mot_ID"] as? Int ?? 0
             let Mot_Name = i["Mot_Name"] as? String ?? ""
             let per_km_fare = i["Fuel_amount"] as? Double ?? 0.0
-            let miscellaneous_exp = i["Miscellaneous_amount"] as? Double ?? 0.0
+            print(dailyExpense)
+            var  miscellaneous_exp = 0.0
+            let Miscellaneous_amount = dailyExpense.filter{$0["date"] as? String == date}
+            if Miscellaneous_amount.isEmpty{
+                miscellaneous_exp = 0.0
+            }else{
+                miscellaneous_exp = Miscellaneous_amount[0]["amt"] as? Double ?? 0.0
+            }
+            
+           
             var Total_amts = miscellaneous_exp
             let Dayend_Place_Types = i["Dayend_Place_Types"] as? String ?? ""
             let Work_typ = i["Work_typ"] as? String ?? ""
@@ -792,7 +1305,7 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
                     Plc_typ: "",
                     Fuel_amount: "0.00",
                     Mot_Name: "",
-                    status: "Not Climed",
+                    status: "NOT CLAIMED",
                     SFCdetils: []
                 ))
             }
@@ -890,7 +1403,7 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
             result.remove(at: lastCommaIndex)
         }
         let apiKeyWithoutCommas = result.replacingOccurrences(of: ",&", with: "&")
-        let url = APIClient.shared.BaseURL + APIClient.shared.DBURL2 + apiKeyWithoutCommas
+        let url = APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKeyWithoutCommas
         
         AF.request(url, method: .post, parameters: nil, encoding: URLEncoding.default, headers: nil)
             .validate(statusCode: 200..<299)

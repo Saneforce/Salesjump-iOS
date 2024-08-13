@@ -3,22 +3,4 @@
    uuid = "10B1D3BC-A9CC-4EF9-9A28-31572D96CD68"
    type = "0"
    version = "2.0">
-   <Breakpoints>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "711DAE19-4F9F-45C0-A4EB-44773A49EA33"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "SAN SALES/Approvals/Expense approval SFC.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "798"
-            endingLineNumber = "798"
-            landmarkName = "collectrout(Getdata:distance_data:add_sub_exp:FromDate:ToDate:Sf_Code:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-   </Breakpoints>
 </Bucket>
