@@ -640,10 +640,9 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
     }
     func ExpenseReportDetailsSFC(fromdate:String,todate:String){
         ExpenseDetils.removeAll()
-        
         let apiKey: String = "getExpenseReportDetailsSFC&sf_code=\(SFCode)&division_code=\(DivCode)&from_date=\(fromdate)&to_date=\(todate)&stateCode=\(StateCode)&Design_code=\(UserSetup.shared.dsg_code)&Mn=\(Eff_Month)&Yr=\(Eff_Year)&PriID=\(period_id)"
         let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
-        AF.request(APIClient.shared.BaseURL + APIClient.shared.DBURL2 + apiKeyWithoutCommas, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+        AF.request(APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKeyWithoutCommas, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
             AFdata in
             switch AFdata.result{
             case .success(let value):
@@ -1306,7 +1305,7 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
                     Plc_typ: "",
                     Fuel_amount: "0.00",
                     Mot_Name: "",
-                    status: "Not Climed",
+                    status: "NOT CLAIMED",
                     SFCdetils: []
                 ))
             }
@@ -1404,7 +1403,7 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
             result.remove(at: lastCommaIndex)
         }
         let apiKeyWithoutCommas = result.replacingOccurrences(of: ",&", with: "&")
-        let url = APIClient.shared.BaseURL + APIClient.shared.DBURL2 + apiKeyWithoutCommas
+        let url = APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKeyWithoutCommas
         
         AF.request(url, method: .post, parameters: nil, encoding: URLEncoding.default, headers: nil)
             .validate(statusCode: 200..<299)

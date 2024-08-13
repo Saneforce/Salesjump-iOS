@@ -380,7 +380,7 @@ class Daily_Expense_Entry_SFC: IViewController, UIImagePickerControllerDelegate,
             let axn = "dcr/save"
             let apiKey = "\(axn)&State_Code=\(StateCode)&desig=\(Desig)&divisionCode=\(DivCode)&rSF=\(SFCode)&sfCode=\(SFCode)&stateCode=\(StateCode)&EntDate=\(set_Date!)"
             let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
-            let url = APIClient.shared.BaseURL + APIClient.shared.DBURL2 + apiKeyWithoutCommas
+            let url = APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKeyWithoutCommas
             AF.request(url, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
                 AFdata in
                 switch AFdata.result {

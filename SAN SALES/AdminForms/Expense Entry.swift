@@ -1005,7 +1005,7 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
         let axn = "get/expSubmitDatesSFC"
         let apiKey = "\(axn)&desig=\(Desig)&divisionCode=\(DivCode)&from_date=\(period_from_date)&to_date=\(period_to_date)&month=\(SelectMonth)&rSF=\(SFCode)&year=\(selectYear)&selected_period=\(selected_period)&sfCode=\(SFCode)&stateCode=\(StateCode)&sf_code=\(SFCode)"
         let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
-        let url = APIClient.shared.BaseURL + APIClient.shared.DBURL2 + apiKeyWithoutCommas
+        let url = APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKeyWithoutCommas
         AF.request(url, method: .post, parameters: nil, encoding: URLEncoding.default, headers: nil)
             .validate(statusCode: 200..<299)
             .responseJSON { [self] response in
