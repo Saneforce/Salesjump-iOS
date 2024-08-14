@@ -50,6 +50,7 @@ class ReportMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
         strMasList.append(mnuItem.init(MasId: 5, MasName: "TP View Datewise", MasImage: "SwitchRoute"))
         strMasList.append(mnuItem.init(MasId: 6, MasName: "My Resources", MasImage: "SwitchRoute"))
         strMasList.append(mnuItem.init(MasId: 7, MasName: "Attendance Report", MasImage: "SwitchRoute"))
+        strMasList.append(mnuItem.init(MasId: 8, MasName: "Rejected And Cancelled Leave Details", MasImage: "SwitchRoute"))
         
         btnBack.addTarget(target: self, action: #selector(closeMenuWin))
         menuClose.addTarget(target: self, action: #selector(closeMenuWin))
@@ -134,6 +135,12 @@ class ReportMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
             let attenReportVC = storyboard.instantiateViewController(withIdentifier: "sbAttendanceReport") as! AttendanceReport
             
              viewController.setViewControllers([RptMnuVc,attenReportVC], animated: false)
+             (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
+        }else if lItm.MasId == 8{
+            let RptMnuVc = storyboard.instantiateViewController(withIdentifier: "sbReportsmnu") as! ReportMenu
+            let detailVC = storyboard.instantiateViewController(withIdentifier: "sbRejectedAndCancelledLeaveDetails") as! RejectedAndCancelledLeaveDetails
+            
+             viewController.setViewControllers([RptMnuVc,detailVC], animated: false)
              (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
         }
         /*else if lItm.MasId == 2 {

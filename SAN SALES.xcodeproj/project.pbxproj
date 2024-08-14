@@ -22,6 +22,7 @@
 		159095222BF1E954001D8347 /* TourPlanViewDateWise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159095212BF1E954001D8347 /* TourPlanViewDateWise.swift */; };
 		159095252BF23AD0001D8347 /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159095232BF23AD0001D8347 /* CalendarViewController.swift */; };
 		159095262BF23AD0001D8347 /* CalendarViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 159095242BF23AD0001D8347 /* CalendarViewController.xib */; };
+		1597B4802C6623A400EAB640 /* RejectedAndCancelledLeaveDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1597B47F2C6623A400EAB640 /* RejectedAndCancelledLeaveDetails.swift */; };
 		15B518B82C108BCB00DD75C1 /* TourPlanDeviationApproval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B518B72C108BCB00DD75C1 /* TourPlanDeviationApproval.swift */; };
 		15B518BA2C12ECEF00DD75C1 /* JsonModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B518B92C12ECEF00DD75C1 /* JsonModel.swift */; };
 		15B518BC2C13305D00DD75C1 /* DeviationRemarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B518BB2C13305D00DD75C1 /* DeviationRemarks.swift */; };
@@ -153,6 +154,7 @@
 		159095212BF1E954001D8347 /* TourPlanViewDateWise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TourPlanViewDateWise.swift; sourceTree = "<group>"; };
 		159095232BF23AD0001D8347 /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
 		159095242BF23AD0001D8347 /* CalendarViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CalendarViewController.xib; sourceTree = "<group>"; };
+		1597B47F2C6623A400EAB640 /* RejectedAndCancelledLeaveDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RejectedAndCancelledLeaveDetails.swift; sourceTree = "<group>"; };
 		15B518B72C108BCB00DD75C1 /* TourPlanDeviationApproval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TourPlanDeviationApproval.swift; sourceTree = "<group>"; };
 		15B518B92C12ECEF00DD75C1 /* JsonModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonModel.swift; sourceTree = "<group>"; };
 		15B518BB2C13305D00DD75C1 /* DeviationRemarks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviationRemarks.swift; sourceTree = "<group>"; };
@@ -560,6 +562,7 @@
 				15F9E7B42C53A12C0057D4C6 /* PrecallAnalysis.swift */,
 				15F9E7B82C53BE170057D4C6 /* MyResourceRoutes.swift */,
 				15BFD3552C57BEFF00C37FC6 /* AttendanceReport.swift */,
+				1597B47F2C6623A400EAB640 /* RejectedAndCancelledLeaveDetails.swift */,
 				159095232BF23AD0001D8347 /* CalendarViewController.swift */,
 				159095242BF23AD0001D8347 /* CalendarViewController.xib */,
 			);
@@ -747,6 +750,7 @@
 				3F2F811F27D0E7430015E1CA /* HomePageViewController.swift in Sources */,
 				38A2E9B22A0E1B940061B854 /* Brand Availability.swift in Sources */,
 				15B518BC2C13305D00DD75C1 /* DeviationRemarks.swift in Sources */,
+				1597B4802C6623A400EAB640 /* RejectedAndCancelledLeaveDetails.swift in Sources */,
 				3F0861BF2801D589006A30FB /* CollectionCell.swift in Sources */,
 				38A1859D2BB53D4700E01407 /* Start Expense.swift in Sources */,
 				3F06352E283BF36A0027842E /* FlowLayout.swift in Sources */,
@@ -998,7 +1002,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = "3.2 T.8";
+				MARKETING_VERSION = "3.3 T.1";
 				PRODUCT_BUNDLE_IDENTIFIER = com.saneforce.sansales;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1035,7 +1039,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = "3.2 T.8";
+				MARKETING_VERSION = "3.3 T.1";
 				PRODUCT_BUNDLE_IDENTIFIER = com.saneforce.sansales;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
