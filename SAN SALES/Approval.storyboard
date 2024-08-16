@@ -888,7 +888,7 @@
                                         <rect key="frame" x="0.0" y="30" width="393" height="50"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Expense Details View" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pd5-FG-woB">
-                                                <rect key="frame" x="43" y="0.0" width="337" height="50"/>
+                                                <rect key="frame" x="42" y="0.0" width="338" height="50"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
                                                 <fontDescription key="fontDescription" name="Poppins-Bold" family="Poppins" pointSize="20"/>
                                                 <color key="textColor" red="0.21176470589999999" green="0.20784313730000001" blue="0.20784313730000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -2978,7 +2978,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Leave Days" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wpg-C4-RE0">
-                                        <rect key="frame" x="127" y="14" width="120" height="30"/>
+                                        <rect key="frame" x="126" y="14" width="120" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                         <nil key="textColor"/>
@@ -3437,9 +3437,11 @@
                     </view>
                     <connections>
                         <outlet property="Approv_View" destination="Xqc-Z2-vVz" id="jOY-iI-aFv"/>
+                        <outlet property="Approve" destination="dEp-sa-FHe" id="Gs7-bg-6K4"/>
                         <outlet property="Apr_Close_BT" destination="isV-OV-yiF" id="Xbi-uI-MoY"/>
                         <outlet property="BackBT" destination="NcM-fh-vqN" id="X2o-8v-nqn"/>
                         <outlet property="Leave_View_TB" destination="mn2-FJ-4hO" id="x3s-bw-FHC"/>
+                        <outlet property="Reject" destination="5fT-2u-Cfl" id="c2v-XL-rdW"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Z3t-zM-IaB" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

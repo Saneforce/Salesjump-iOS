@@ -13,14 +13,15 @@ class Leave_Approval: UIViewController, UITableViewDelegate, UITableViewDataSour
     @IBOutlet weak var Leave_View_TB: UITableView!
     @IBOutlet weak var Approv_View: UIView!
     @IBOutlet weak var Apr_Close_BT: UIImageView!
-    
-    
-    
+    @IBOutlet weak var Approve: UIButton!
+    @IBOutlet weak var Reject: UIButton!
     let cardViewInstance = CardViewdata()
     override func viewDidLoad() {
         super.viewDidLoad()
         Leave_View_TB.delegate = self
         Leave_View_TB.dataSource = self
+        cardViewInstance.styleSummaryView(Approve)
+        cardViewInstance.styleSummaryView(Reject)
         BackBT.addTarget(target: self, action: #selector(GotoHome))
         Apr_Close_BT.addTarget(target: self, action: #selector(Close_apr_view))
     }
