@@ -93,7 +93,7 @@ class Leave_Approval: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell:cellListItem = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
-        cell.lblText.text = LeveDet[indexPath.row].Field_Force_Name+"(\(LeveDet[indexPath.row].HQ)"
+        cell.lblText.text = LeveDet[indexPath.row].Field_Force_Name+"(\(LeveDet[indexPath.row].HQ))"
         cell.lblText2.text = LeveDet[indexPath.row].Laeve_Days
         cell.Leave_Apr.tag = indexPath.row
         cell.Leave_Apr.addTarget(self, action: #selector(buttonClicked(_:)), for: .touchUpInside)
@@ -170,6 +170,10 @@ class Leave_Approval: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     
     @objc private func Reject_leave(){
+        if Text_Reason.text.isEmpty{
+            Toast.show(message: "Enter Rejection Reason.")
+            return
+        }
         let alert = UIAlertController(title: "Confirmation", message: "Do you want to reject the leave?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { [self] _ in
             LeaveReject()
@@ -181,8 +185,8 @@ class Leave_Approval: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     func LeaveReject(){
-        reason = "test Reject"
-        let jsonString = "[{\"LeaveReject\":{\"From_Date\":\"\(from_Date)\",\"To_Date\":\"\(to_Date)\",\"No_of_Days\": \"\(No_of_Days)\",\"reason\":\"\(reason)\",\"Sf_Code\":\"\(Sf_Code)\"}}]"
+        reason = Text_Reason.text
+        let jsonString = "[{\"LeaveReject\":{\"From_Date\":\"\(from_Date)\",\"To_Date\":\"\(to_Date)\",\"No_of_Days\": \"\(No_of_Days)\",\"reason\":\"'\(reason)'\",\"Sf_Code\":\"\(Sf_Code)\"}}]"
         let params: Parameters = [
             "data": jsonString
         ]
