@@ -71,6 +71,7 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
     var selected_period = ""
     var apr_flg = "0"
     var apr_flgsfc = "0"
+    var apr_flg2 = ""
     var Load_Cout = 0
     var Load_Couts = 0
     var srt_exp: [[String: Any]] = []
@@ -123,7 +124,7 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
         print(VisitData.shared.Nav_id)
 //        if VisitData.shared.Nav_id == 1 {
 //            VisitData.shared.Nav_id = 0
-//            
+//
 //            set_priod_calendar()
 //        }
         periodic()
@@ -726,10 +727,18 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
                                         print(apr_flags)
                                         if apr_flags.isEmpty{
                                             apr_flg = "0"
+                                            apr_flg2 = ""
                                            
                                         }else{
                                             if let Aprflg = apr_flags[0]["approve_flag"] as? Int{
                                                 apr_flg = String(Aprflg)
+                                                if String(Aprflg) == "0"{
+                                                    apr_flg2 = "12"
+                                                }
+                                                if 1 <= Aprflg{
+                                                    apr_flg2 = "13"
+                                                }
+                                                
                                             }
                                         }
                                     }
@@ -754,9 +763,9 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
 //                                            MisDatesDatas = []
 //                                            return
 //                                        }
-//                                        
+//
 //                                        print(attance_flg)
-//                                        
+//
 //                                        let dateFormatter = DateFormatter()
 //                                        dateFormatter.dateFormat = "dd/MM/yyyy"
 //                                        let dates = attance_flg.compactMap { dictionary -> Date? in
@@ -786,8 +795,8 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
 //                                                addLetterA(to: cell, text: "W")
 //                                            }
 //                                        }
-//                                        
-//                                        
+//
+//
 //                                        let olDateFormatter = DateFormatter()
 //                                        olDateFormatter.dateFormat = "yyyy-MM-dd"
 //                                        let startDate = olDateFormatter.date(from: period_from_date)
@@ -1028,8 +1037,12 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
                                             apr_flg = "0"
                                            
                                         }else{
-                                            if let Aprflg = apr_flags[0]["approve_flag"] as? Int{
-                                                apr_flg = String(Aprflg)
+                                            let apr = apr_flags.filter{$0["approve_flag"] as? Int == 1 }
+                                            
+                                            if let approve_flags = apr[0]["approve_flag"] as? Int {
+                                                apr_flg = String(approve_flags)
+                                            }else{
+                                                apr_flg = "0"
                                             }
                                         }
                                     }
@@ -1249,6 +1262,16 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
                 }
             }
         }
+        if apr_flg2 == "12"{
+            Toast.show(message: "Already Sent For Approval")
+            return false
+        }
+        if apr_flg2 == "13"{
+            Toast.show(message: "Expense alredy approved")
+            return false
+        }
+
+        
         
         return true
     }

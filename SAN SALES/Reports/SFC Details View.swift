@@ -42,6 +42,7 @@ class SFC_Details_View: UIViewController, UITableViewDelegate, UITableViewDataSo
     var StateCode: String = ""
     var lstAllRoutes: [AnyObject] = []
     var lstHQs: [AnyObject] = []
+    var Sf_Typ:Int?
     override func viewDidLoad() {
         super.viewDidLoad()
         getUserDetails()
@@ -180,28 +181,12 @@ class SFC_Details_View: UIViewController, UITableViewDelegate, UITableViewDataSo
         if ExpenseDetils.count == 0{
             let getitem = ExpenseDetils2[0].SFCdetils
             print(getitem)
-            var Fromplace = getitem[indexPath.row]["fromplace"] as? String ?? ""
-            var Toplace = getitem[indexPath.row]["Toplace"] as? String ?? ""
+            var Fromplace =  getitem[indexPath.row]["Cls_From"] as? String ?? ""
+            var Toplace = getitem[indexPath.row]["Cls_To"] as? String ?? ""
             let Mod_of_Travel =  getitem[indexPath.row]["modeoftravel"] as? String ?? ""
             let Km = String(getitem[indexPath.row]["Dist"] as? Int ?? 0)
             let per_km_fare = getitem[indexPath.row]["per_km_fare"] as? String ?? ""
             let fare = getitem[indexPath.row]["fare"] as? String ?? ""
-            
-            let From_FilterRoute = lstAllRoutes.filter{$0["id"] as? String == Fromplace}
-            print(From_FilterRoute)
-            if From_FilterRoute.isEmpty{
-                Fromplace = SFCode
-            }else{
-                Fromplace = From_FilterRoute[0]["name"] as? String ?? ""
-            }
-            
-            let To_FilterRoute = lstAllRoutes.filter{$0["id"] as? String == Toplace}
-            
-            if To_FilterRoute.isEmpty{
-                Toplace = getitem[indexPath.row]["Toplace"] as? String ?? ""
-            }else{
-                Toplace = To_FilterRoute[0]["name"] as? String ?? ""
-            }
             
             cell.Fromlbsfc.text = Fromplace
             cell.TolblSFC.text = Toplace
@@ -235,10 +220,16 @@ class SFC_Details_View: UIViewController, UITableViewDelegate, UITableViewDataSo
                 Toplace = To_FilterRoute[0]["name"] as? String ?? ""
             }
             
-            
-            
-            cell.Fromlbsfc.text = Fromplace
-            cell.TolblSFC.text = Toplace
+            if Sf_Typ == 2{
+                var Cls_Fromplace = getitem[indexPath.row]["Cls_From"] as? String ?? ""
+                var Cls_Toplace = getitem[indexPath.row]["Cls_To"] as? String ?? ""
+                cell.Fromlbsfc.text = Cls_Fromplace
+                cell.TolblSFC.text = Cls_Toplace
+            }else{
+                cell.Fromlbsfc.text = Fromplace
+                cell.TolblSFC.text = Toplace
+            }
+
             cell.Km_sfc.text = Km
             cell.Fare_sfc.text = per_km_fare
             cell.Amount_sfc.text = fare
