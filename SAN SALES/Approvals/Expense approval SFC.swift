@@ -560,7 +560,7 @@ class Expense_approval_SFC: UIViewController, UITableViewDelegate, UITableViewDa
         return components.day ?? 0
     }
     
-    @objc func buttonClicked(_ sender: UIButton) {
+    @objc func buttonClicked(_ sender: UIButton){
         let indexPath = IndexPath(row: sender.tag, section: 0)
         print("Button clicked in cell at indexPath: \(indexPath)")
         print(sender.tag)
