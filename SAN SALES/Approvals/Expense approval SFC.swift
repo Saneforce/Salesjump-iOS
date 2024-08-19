@@ -582,7 +582,7 @@ class Expense_approval_SFC: UIViewController, UITableViewDelegate, UITableViewDa
         self.ShowLoading(Message: "Loading...")
         AllExpenses.removeAll()
         let axn = "get/AllExpenseDataSFC"
-        let apiKey = "\(axn)&sf_code=\(SFCode)&From_date=\(From)&To_date=\(To)"
+        let apiKey = "\(axn)&sf_code=\(SFCode)&From_date=\(From)&To_date=\(To)&period_id=\(period_id)&Eff_Month=\(Eff_Month)&Eff_Year=\(Eff_Year)"
         let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
         let url = APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKeyWithoutCommas
         AF.request(url, method: .post, parameters: nil, encoding: URLEncoding.default, headers: nil)
@@ -607,7 +607,10 @@ class Expense_approval_SFC: UIViewController, UITableViewDelegate, UITableViewDa
                                         let Expense_Month = i["Expense_Month"] as? String ?? ""
                                         let Expense_Year = i["Expense_Year"] as? Int
                                         let SF_Code = i["Sf_Code"] as? String
-                                        AllExpenses.append(AllExpenseDatas(SF_Name: SF_Name!, Expense_Amt: "0.0",Emp_ID: Emp_ID!, Expense_Month: Expense_Month, Expense_Year: Expense_Year!, SF_Code: SF_Code!))
+                                        let Approve_Flag = i["Approve_Flag"] as? String ?? ""
+                                        if  Approve_Flag != "1"{
+                                            AllExpenses.append(AllExpenseDatas(SF_Name: SF_Name!, Expense_Amt: "0.0",Emp_ID: Emp_ID!, Expense_Month: Expense_Month, Expense_Year: Expense_Year!, SF_Code: SF_Code!))
+                                        }
                                     }
                                     eXP_Data.reloadData()
                                     self.LoadingDismiss()
