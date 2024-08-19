@@ -7,15 +7,22 @@
 
 import UIKit
 import Alamofire
-
 class Leave_Approval: UIViewController, UITableViewDelegate, UITableViewDataSource {
-
     @IBOutlet weak var BackBT: UIImageView!
     @IBOutlet weak var Leave_View_TB: UITableView!
     @IBOutlet weak var Approv_View: UIView!
     @IBOutlet weak var Apr_Close_BT: UIImageView!
     @IBOutlet weak var Approve: UIButton!
     @IBOutlet weak var Reject: UIButton!
+    @IBOutlet weak var Resign_View_Hight: NSLayoutConstraint!
+    
+    @IBOutlet weak var Reject_Reason_View: UIView!
+    
+    @IBOutlet weak var Reject_reason_hig: NSLayoutConstraint!
+    
+    
+    @IBOutlet weak var Reject_bt_text: UIButton!
+    
     struct mnuItem: Any {
         let Field_Force_Name:String
         let Emp_Code:String
@@ -60,6 +67,7 @@ class Leave_Approval: UIViewController, UITableViewDelegate, UITableViewDataSour
     override func viewDidLoad() {
         super.viewDidLoad()
         getUserDetails()
+        
         Leave_View_TB.delegate = self
         Leave_View_TB.dataSource = self
         cardViewInstance.styleSummaryView(Approve)
@@ -102,8 +110,10 @@ class Leave_Approval: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     @objc func buttonClicked(_ sender: UIButton){
-        let indexPath = IndexPath(row: sender.tag, section: 0)
-        print(sender.tag)
+        self.ShowLoading(Message: "Loading...")
+        Reject_Reason_View.isHidden = true
+        Reject_reason_hig.constant = 0
+        Resign_View_Hight.constant = 22
         Field_Force_Name.text = LeveDet[sender.tag].Field_Force_Name
         Emp_Code.text = LeveDet[sender.tag].Emp_Code
         HQ.text = LeveDet[sender.tag].HQ
@@ -114,20 +124,19 @@ class Leave_Approval: UIViewController, UITableViewDelegate, UITableViewDataSour
         To_Date.text = LeveDet[sender.tag].To_Date
         Laeve_Days.text = LeveDet[sender.tag].Laeve_Days
         Leave_Option.text = LeveDet[sender.tag].Leave_Option
-        
-        
         // Set From and To date
-        
         from_Date = LeveDet[sender.tag].From_Date
         to_Date = LeveDet[sender.tag].To_Date
         No_of_Days = LeveDet[sender.tag].Laeve_Days
         Sf_Code = LeveDet[sender.tag].Sf_Code
         Leave_ID = LeveDet[sender.tag].Leave_Id
-        Approv_View.isHidden = false
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) { [self] in
+            Reject_bt_text.setTitle("Reject", for: .normal)
+            Resign_View_Hight.constant = Reason.layer.frame.height
+            Approv_View.isHidden = false
+            self.LoadingDismiss()
+        }
     }
-
-
-    
     func vwLeave(){
         LeveDet.removeAll()
         self.ShowLoading(Message: "Loading...")
@@ -160,6 +169,11 @@ class Leave_Approval: UIViewController, UITableViewDelegate, UITableViewDataSour
                      Leave_View_TB.reloadData()
                      DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                          self.LoadingDismiss()
+                         
+                         if LeveDet.isEmpty{
+                             Toast.show(message: "No Data to Show")
+                         }
+                         
                      }
                  }
              case .failure(let error):
@@ -170,6 +184,14 @@ class Leave_Approval: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     
     @objc private func Reject_leave(){
+        
+        if  Reject_Reason_View.isHidden == true{
+            Reject_Reason_View.isHidden = false
+            Reject_reason_hig.constant = 90
+            Reject_bt_text.setTitle("Send for Field Force", for: .normal)
+            return
+        }
+        
         if Text_Reason.text.isEmpty{
             Toast.show(message: "Enter Rejection Reason.")
             return
