@@ -714,11 +714,17 @@ class Expense_approval_SFC: UIViewController, UITableViewDelegate, UITableViewDa
                     if let getdata = json["data"] as? [AnyObject], let DistanceEntr = json["DistanceEntr"] as? [AnyObject],let dailyExpense = json["dailyExpense"] as? [AnyObject], let Mot_Exp = json["Mot_Exp"] as? [AnyObject],let GetRouteChart = json["GetRouteChart"] as? [AnyObject], let add_sub_exp = json["add_sub_exp"] as? [AnyObject],let apr_data = json["apr_data"] as? [AnyObject]{
                         if !apr_data.isEmpty{
                             let apr = apr_data.filter{$0["approve_flag"] as? Int == 1 }
+                            print(apr)
+                            if apr.isEmpty{
+                                approve_flag = 0
+                            }else{
+                            
                             if let approve_flags = apr[0]["approve_flag"] as? Int {
                                 approve_flag = approve_flags
                             }else{
                                 approve_flag = 0
                             }
+                        }
                         }else{
                             approve_flag = 0
                         }
@@ -734,7 +740,7 @@ class Expense_approval_SFC: UIViewController, UITableViewDelegate, UITableViewDa
                             Collect_mgr_rout(Getdata:GetRouteChart, distance_data: DistanceEntr, add_sub_exp: add_sub_exp,FromDate:fromdate,ToDate:todate,dailyExpense: dailyExpense )
                         }else{
                             Get_Sf_Typ = 1
-                            collectrout(Getdata:GetRouteChart, distance_data: DistanceEntr, add_sub_exp: add_sub_exp,FromDate:fromdate,ToDate:todate, dailyExpense: dailyExpense)
+                            collectrout(Getdata:GetRouteChart, distance_data: DistanceEntr, add_sub_exp: add_sub_exp,FromDate:fromdate,ToDate:todate, dailyExpense: dailyExpense, get_sf_code: SF_code)
                         }
                     }
                     
@@ -1170,7 +1176,7 @@ class Expense_approval_SFC: UIViewController, UITableViewDelegate, UITableViewDa
         return ""
     }
     
-    func collectrout(Getdata:[AnyObject],distance_data:[AnyObject],add_sub_exp:[AnyObject],FromDate:String,ToDate:String,dailyExpense:[AnyObject]){
+    func collectrout(Getdata:[AnyObject],distance_data:[AnyObject],add_sub_exp:[AnyObject],FromDate:String,ToDate:String,dailyExpense:[AnyObject],get_sf_code:String){
         print(Getdata)
         Exp_Summary_Data.removeAll()
         let past_Place_Types = ""
@@ -1187,9 +1193,7 @@ class Expense_approval_SFC: UIViewController, UITableViewDelegate, UITableViewDa
             let Place_Types = i["Place_Types"] as? String ?? ""
             let substrings = Place_Types.split(separator: ",")
             let result = substrings.map { String($0) }
-            let cluster_chart = i["Route_chart"] as? String ?? ""
-            let Route_chart = i["cluster_chart"] as? String ?? ""
-            let Route_chart2 = Route_chart.split(separator: ",")
+            let Route_chart = i["Route_chart"] as? String ?? ""
             let substrings2 = Route_chart.split(separator: ",")
             let result2 = substrings2.map { String($0) }
             let date = i["pln_date"] as? String ?? ""
@@ -1222,8 +1226,6 @@ class Expense_approval_SFC: UIViewController, UITableViewDelegate, UITableViewDa
                 if List_Count == result2.count{
                     break
                 }
-                let Clusterfrom = Route_chart2[index]
-                let  ClusterTo = Route_chart2[List_Count]
                 let From_Place = i
                 let To_Place = result2[List_Count]
                 var Dis_km = 0
@@ -1239,13 +1241,12 @@ class Expense_approval_SFC: UIViewController, UITableViewDelegate, UITableViewDa
                 }
                 
                 if BasLevelFilter.isEmpty{
-                    print(From_Place)
-                    print(To_Place)
                     
-                    let BasLevelFilter = distance_data.filter {
+                    let BasLevelFilter = lstdiskm.filter {
                         $0["To_Plc_Code"] as? String == To_Place &&
-                        $0["Frm_Plc_Code"] as? String == SFCode
+                        $0["Frm_Plc_Code"] as? String == get_sf_code
                     }
+                    
                     if !BasLevelFilter.isEmpty{
                         Dis_km = BasLevelFilter[0]["Distance_KM"] as? Int ?? 0
                     }else{
@@ -1269,7 +1270,7 @@ class Expense_approval_SFC: UIViewController, UITableViewDelegate, UITableViewDa
                 
                 fare = Double(Dis_km) * per_km_fare
                 
-                let itms: [String: Any]=["date": date,"modeoftravel":MOT_Name,"modeid":modeid,"fromplace":From_Place,"Toplace":To_Place,"Fromid":From_Place,"Toid":To_Place,"Dist":Dis_km,"per_km_fare":String(per_km_fare),"fare":String(format: "%.2f", fare),"Cls_From":Clusterfrom,"Cls_To":ClusterTo];
+                let itms: [String: Any]=["date": date,"modeoftravel":MOT_Name,"modeid":modeid,"fromplace":From_Place,"Toplace":To_Place,"Fromid":From_Place,"Toid":To_Place,"Dist":Dis_km,"per_km_fare":String(per_km_fare),"fare":String(format: "%.2f", fare)];
                 let jitm: AnyObject = itms as AnyObject
                 SFCDetils.append(jitm)
                 print(SFCDetils)
@@ -1348,10 +1349,6 @@ class Expense_approval_SFC: UIViewController, UITableViewDelegate, UITableViewDa
             Totalkm = Totalkm + Returnkm
             Total_amts = Total_amts+(Double(Totalkm)  * Double(per_km_fare))
             
-            print(date)
-            print(Total_amts)
-            
-   
             ExpenseDetils.append(ExpenseDatas(date: date, Work_typ: Work_typ,miscellaneous_exp:String(format: "%.2f", miscellaneous_exp), Total_Amt: String(Total_amts), Returnkm: String(Returnkm), Plc_typ: Dayend_Place_Types, Fuel_amount: String(per_km_fare), Mot_Name: Mot_Name, status: status, SFCdetils:SFCDetils))
             count = count + 1
         }
