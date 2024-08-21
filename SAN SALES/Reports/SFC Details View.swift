@@ -32,6 +32,7 @@ class SFC_Details_View: UIViewController, UITableViewDelegate, UITableViewDataSo
     @IBOutlet weak var Total_amt: UILabel!
     @IBOutlet weak var Wor_typ: UILabel!
     @IBOutlet weak var Mod_Of_Trvel: UILabel!
+    @IBOutlet weak var DA_Amount: UILabel!
     
     
     let cardViewInstance = CardViewdata()
@@ -105,10 +106,14 @@ class SFC_Details_View: UIViewController, UITableViewDelegate, UITableViewDataSo
             }
             Total_Dis_KM.text = String(Total_Km)
             Total_Fare.text = String(Total_Far)
+            Return_km.text = ExpenseDetils2[0].Returnkm
+            Place_Typ.text = ExpenseDetils2[0].Plc_typ
+            
             Exp_status.text = ExpenseDetils2[0].status
             Exp_date.text = ExpenseDetils2[0].date
             Mod_Of_Trvel.text = ExpenseDetils2[0].Mot_Name
             Amount.text = ExpenseDetils2[0].miscellaneous_exp
+            DA_Amount.text = ExpenseDetils2[0].Da_amount
             Total_amt.text = ExpenseDetils2[0].Total_Amt
             Mod_of_trv_hig.constant = CGFloat(ExpenseDetils2[0].SFCdetils.count * 80)
             Scroll_View_hig.constant = CGFloat(ExpenseDetils2[0].SFCdetils.count * 80) + 600
@@ -143,6 +148,7 @@ class SFC_Details_View: UIViewController, UITableViewDelegate, UITableViewDataSo
             Exp_status.text = ExpenseDetils[0].status
             Exp_date.text = ExpenseDetils[0].date
             Amount.text = ExpenseDetils[0].miscellaneous_exp
+            DA_Amount.text = ExpenseDetils[0].Da_amount
             Total_amt.text = ExpenseDetils[0].Total_Amt
             Mod_of_trv_hig.constant = CGFloat(ExpenseDetils[0].SFCdetils.count * 80)
             Scroll_View_hig.constant = CGFloat(ExpenseDetils[0].SFCdetils.count * 80) + 600
@@ -181,15 +187,20 @@ class SFC_Details_View: UIViewController, UITableViewDelegate, UITableViewDataSo
         if ExpenseDetils.count == 0{
             let getitem = ExpenseDetils2[0].SFCdetils
             print(getitem)
-            var Fromplace =  getitem[indexPath.row]["Cls_From"] as? String ?? ""
-            var Toplace = getitem[indexPath.row]["Cls_To"] as? String ?? ""
             let Mod_of_Travel =  getitem[indexPath.row]["modeoftravel"] as? String ?? ""
             let Km = String(getitem[indexPath.row]["Dist"] as? Int ?? 0)
             let per_km_fare = getitem[indexPath.row]["per_km_fare"] as? String ?? ""
             let fare = getitem[indexPath.row]["fare"] as? String ?? ""
             
-            cell.Fromlbsfc.text = Fromplace
-            cell.TolblSFC.text = Toplace
+            if Sf_Typ == 2{
+                var Cls_Fromplace = getitem[indexPath.row]["Cls_From"] as? String ?? ""
+                var Cls_Toplace = getitem[indexPath.row]["Cls_To"] as? String ?? ""
+                cell.Fromlbsfc.text = Cls_Fromplace
+                cell.TolblSFC.text = Cls_Toplace
+            }else{
+                cell.Fromlbsfc.text = getitem[indexPath.row]["cluster_from"] as? String ?? ""
+                cell.TolblSFC.text = getitem[indexPath.row]["cluster_to"] as? String ?? ""
+            }
             cell.Km_sfc.text = Km
             cell.Fare_sfc.text = per_km_fare
             cell.Amount_sfc.text = fare
@@ -226,8 +237,8 @@ class SFC_Details_View: UIViewController, UITableViewDelegate, UITableViewDataSo
                 cell.Fromlbsfc.text = Cls_Fromplace
                 cell.TolblSFC.text = Cls_Toplace
             }else{
-                cell.Fromlbsfc.text = Fromplace
-                cell.TolblSFC.text = Toplace
+                cell.Fromlbsfc.text = getitem[indexPath.row]["cluster_from"] as? String ?? ""
+                cell.TolblSFC.text = getitem[indexPath.row]["cluster_to"] as? String ?? ""
             }
 
             cell.Km_sfc.text = Km

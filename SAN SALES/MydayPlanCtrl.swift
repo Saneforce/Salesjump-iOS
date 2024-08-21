@@ -108,6 +108,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
     var Trave_Dets:[Trav_Data]=[]
     var needed_MOT = 0
     var Start_End_Need = 0
+    var Worktyp:String = ""
     override func viewDidLoad(){
         super.viewDidLoad()
         print(UserSetup.shared.SrtEndKMNd)
@@ -272,12 +273,10 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
             self.vwRouteCtrl.frame.origin.y = vwRouteCtrl.frame.origin.y+vwRouteCtrl.frame.height-160
             self.vwJointCtrl.frame.origin.y = vwJointCtrl.frame.origin.y+vwJointCtrl.frame.height-300
             if UserSetup.shared.tpDcrDeviationNeed == 0 {
-                
                 self.vwRmksCtrl.frame.origin.y = vwRmksCtrl.frame.origin.y+vwRmksCtrl.frame.height-155
                 self.vwDeviationCtrl.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height-155
                 self.vwRejectReason.frame.origin.y = vwRejectReason.frame.origin.y+vwRejectReason.frame.height-155
-                
-            }else {
+            }else{
                 self.vwRmksCtrl.frame.origin.y = vwRmksCtrl.frame.origin.y+vwRmksCtrl.frame.height-155
                 self.vwDeviationCtrl.isHidden = true
                 self.vwRejectReason.isHidden = true
@@ -294,6 +293,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         Applylev.addTarget(target: self, action: #selector(levedata))
         getUserDetails()
         setTodayPlan()
+        Need_MOT()
        //selectedid()
 
         if UserSetup.shared.tpDcrDeviationNeed == 0 {
@@ -304,7 +304,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
             self.vwMainScroll.contentSize = CGSize(width: self.vwContent.frame.width, height: 750)
         }
         
-        Need_MOT()
+        
         
 //        if UserSetup.shared.SrtEndKMNd == 2{
 //            self.vwTravelMode.frame.origin.y = vwTravelMode.frame.origin.y+vwTravelMode.frame.height-155
@@ -391,11 +391,13 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                      needed_MOT = needed_MOT_
                      print(needed_MOT_)
                      if UserSetup.shared.SrtEndKMNd == 2{
-                         print(needed_MOT)
                          if needed_MOT == 0{
                              self.vwTravelMode.frame.origin.y = vwTravelMode.frame.origin.y+vwTravelMode.frame.height-155
                             self.vwMainScroll.contentSize = CGSize(width: self.vwContent.frame.width, height: 830)
-                             self.vwTravelMode.isHidden  = false
+                             self.vwTravelMode.isHidden  = true
+                            if Worktyp == "F" {
+                                 self.vwTravelMode.isHidden  = false
+                             }
                          }else{
                              Start_End_Need = 0
                              self.vwTravelMode.isHidden  = true
@@ -403,7 +405,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                              self.vwJointCtrl.frame.origin.y = vwJointCtrl.frame.origin.y+vwJointCtrl.frame.height-300
                             // self.vwDeviationCtrl.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height-300
                             // self.vwRejectReason.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height-300
-                            self.vwRmksCtrl.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height-300
+                            self.vwRmksCtrl.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height-200
                          }
                      }else{
                          self.vwTravelMode.isHidden  = true
@@ -411,7 +413,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                          self.vwJointCtrl.frame.origin.y = vwJointCtrl.frame.origin.y+vwJointCtrl.frame.height-300
                         // self.vwDeviationCtrl.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height-300
                         // self.vwRejectReason.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height-300
-                        self.vwRmksCtrl.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height-300
+                        self.vwRmksCtrl.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height-200
                      }
                  }
                  DispatchQueue.main.asyncAfter(deadline: .now() + 1.0){
@@ -596,6 +598,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         }else{
             if SelMode=="WT" {
                 typ=item["FWFlg"] as! String
+                Worktyp = typ
                 lblWorktype.text = name
                 vwHQCtrl.isHidden=false
                // vwDistCtrl.isHidden=false
@@ -616,7 +619,6 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                     self.vwDeviationCtrl.frame.origin.y = vwRmksCtrl.frame.origin.y+vwRmksCtrl.frame.height+8
                     self.vwRejectReason.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height+8
                     //self.vwTravelMode.frame.origin.y =
-                    
                 }
             } else if SelMode == "DIS" {
                 lblDist.text = name
@@ -757,7 +759,10 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
             lstPlnDetail = list;
         }
         print(lstPlnDetail)
-        if(lstPlnDetail.count < 1){ return }
+        if(lstPlnDetail.count < 1){
+            Worktyp = "F"
+            return
+        }
         let wtid=String(format: "%@", lstPlnDetail[0]["worktype"] as! CVarArg)
         if let indexToDelete = lstWType.firstIndex(where: { String(format: "%@", $0["id"] as! CVarArg) == wtid }) {
            // print(indexToDelete)
@@ -776,14 +781,17 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
            // vwDistCtrl.isHidden=false
             vwRouteCtrl.isHidden=false
             vwJointCtrl.isHidden=false
+            vwTravelMode.isHidden=false
             self.vwRmksCtrl.frame.origin.y  = vwJointCtrl.frame.origin.y+vwJointCtrl.frame.height+8
             self.vwDeviationCtrl.frame.origin.y = vwRmksCtrl.frame.origin.y+vwRmksCtrl.frame.height+8
             self.vwRejectReason.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height+8
+            Worktyp = typ
             if typ != "F" {
                 vwHQCtrl.isHidden=true
                 vwDistCtrl.isHidden=true
                 vwRouteCtrl.isHidden=true
                 vwJointCtrl.isHidden=true
+                vwTravelMode.isHidden=true
                 
                 self.vwRmksCtrl.frame.origin.y  = vwWTCtrl.frame.origin.y+vwWTCtrl.frame.height+8
                 self.vwDeviationCtrl.frame.origin.y = vwRmksCtrl.frame.origin.y+vwRmksCtrl.frame.height+8
@@ -940,14 +948,14 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         self.dismiss(animated: true, completion: nil)
         GlobalFunc.MovetoMainMenu()
     }
-    @IBAction func setSelValues(_ sender: Any) {
+    @IBAction func setSelValues(_ sender: Any){
         strJWCd=strSelJWCd
         strJWNm=strSelJWNm
         lstJWNms=lstSelJWNms
         tbJWKSelect.reloadData()
         closeWin(self)
     }
-    @objc private func selWorktype() {
+    @objc private func selWorktype(){
         isMulti=false
         
         if UserSetup.shared.tpDcrDeviationNeed == 0 && !switchDeviate.isOn {
@@ -1460,6 +1468,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         let params: Parameters = [
             "data": jsonString //"["+jsonString+"]"
         ]
+            print(params)
             
         AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"dcr/save&divisionCode="+self.DivCode+"&rSF="+self.SFCode+"&sfCode="+self.SFCode, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
             AFdata in
