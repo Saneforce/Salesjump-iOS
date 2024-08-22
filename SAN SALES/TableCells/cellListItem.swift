@@ -131,6 +131,10 @@ class cellListItem:UITableViewCell{
     @IBOutlet weak var new_Exp_Tot: UILabel!
     @IBOutlet weak var New_Exp_View_Bt: UIButton!
     
+    // Leave Approve Button
+    @IBOutlet weak var Leave_Apr: UIButton!
+    
+    
     @IBOutlet weak var DATE: UILabel!
     @IBOutlet weak var NA_Name: UILabel!
     @IBOutlet weak var NA_fROM: UILabel!

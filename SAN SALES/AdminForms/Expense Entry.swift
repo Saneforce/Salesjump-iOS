@@ -124,7 +124,7 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
         print(VisitData.shared.Nav_id)
 //        if VisitData.shared.Nav_id == 1 {
 //            VisitData.shared.Nav_id = 0
-//            
+//
 //            set_priod_calendar()
 //        }
         periodic()
@@ -763,9 +763,9 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
 //                                            MisDatesDatas = []
 //                                            return
 //                                        }
-//                                        
+//
 //                                        print(attance_flg)
-//                                        
+//
 //                                        let dateFormatter = DateFormatter()
 //                                        dateFormatter.dateFormat = "dd/MM/yyyy"
 //                                        let dates = attance_flg.compactMap { dictionary -> Date? in
@@ -795,8 +795,8 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
 //                                                addLetterA(to: cell, text: "W")
 //                                            }
 //                                        }
-//                                        
-//                                        
+//
+//
 //                                        let olDateFormatter = DateFormatter()
 //                                        olDateFormatter.dateFormat = "yyyy-MM-dd"
 //                                        let startDate = olDateFormatter.date(from: period_from_date)
@@ -1037,8 +1037,12 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
                                             apr_flg = "0"
                                            
                                         }else{
-                                            if let Aprflg = apr_flags[0]["approve_flag"] as? Int{
-                                                apr_flg = String(Aprflg)
+                                            let apr = apr_flags.filter{$0["approve_flag"] as? Int == 1 }
+                                            
+                                            if let approve_flags = apr[0]["approve_flag"] as? Int {
+                                                apr_flg = String(approve_flags)
+                                            }else{
+                                                apr_flg = "0"
                                             }
                                         }
                                     }

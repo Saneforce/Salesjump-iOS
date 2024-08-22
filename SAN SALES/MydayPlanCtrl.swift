@@ -108,6 +108,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
     var Trave_Dets:[Trav_Data]=[]
     var needed_MOT = 0
     var Start_End_Need = 0
+    var Worktyp:String = ""
     override func viewDidLoad(){
         super.viewDidLoad()
         print(UserSetup.shared.SrtEndKMNd)
@@ -186,8 +187,6 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
             }
             if lstHQs.count < 2{
                 lblHQ.text = name
-                
-              
                 if let DistData = LocalStoreage.string(forKey: "Distributors_Master_"+id),
                    let list = GlobalFunc.convertToDictionary(text:  DistData) as? [AnyObject] {
                     lstDist = list;
@@ -204,17 +203,12 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                         lstJoint = list
                     }
                 }
-            }
-            else
-            {
+            }else{
                 lblHQ.addTarget(target: self, action: #selector(selHeadquaters))
             }
         }
         
-        
         //new
-        
-        
         
 //        if let list = GlobalFunc.convertToDictionary(text: WorkTypeData) as? [AnyObject] {
 //            lstWType = list;
@@ -279,12 +273,10 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
             self.vwRouteCtrl.frame.origin.y = vwRouteCtrl.frame.origin.y+vwRouteCtrl.frame.height-160
             self.vwJointCtrl.frame.origin.y = vwJointCtrl.frame.origin.y+vwJointCtrl.frame.height-300
             if UserSetup.shared.tpDcrDeviationNeed == 0 {
-                
                 self.vwRmksCtrl.frame.origin.y = vwRmksCtrl.frame.origin.y+vwRmksCtrl.frame.height-155
                 self.vwDeviationCtrl.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height-155
                 self.vwRejectReason.frame.origin.y = vwRejectReason.frame.origin.y+vwRejectReason.frame.height-155
-                
-            }else {
+            }else{
                 self.vwRmksCtrl.frame.origin.y = vwRmksCtrl.frame.origin.y+vwRmksCtrl.frame.height-155
                 self.vwDeviationCtrl.isHidden = true
                 self.vwRejectReason.isHidden = true
@@ -301,6 +293,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         Applylev.addTarget(target: self, action: #selector(levedata))
         getUserDetails()
         setTodayPlan()
+        Need_MOT()
        //selectedid()
 
         if UserSetup.shared.tpDcrDeviationNeed == 0 {
@@ -311,7 +304,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
             self.vwMainScroll.contentSize = CGSize(width: self.vwContent.frame.width, height: 750)
         }
         
-        Need_MOT()
+        
         
 //        if UserSetup.shared.SrtEndKMNd == 2{
 //            self.vwTravelMode.frame.origin.y = vwTravelMode.frame.origin.y+vwTravelMode.frame.height-155
@@ -398,11 +391,13 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                      needed_MOT = needed_MOT_
                      print(needed_MOT_)
                      if UserSetup.shared.SrtEndKMNd == 2{
-                         print(needed_MOT)
                          if needed_MOT == 0{
                              self.vwTravelMode.frame.origin.y = vwTravelMode.frame.origin.y+vwTravelMode.frame.height-155
                             self.vwMainScroll.contentSize = CGSize(width: self.vwContent.frame.width, height: 830)
-                             self.vwTravelMode.isHidden  = false
+                             self.vwTravelMode.isHidden  = true
+                            if Worktyp == "F" {
+                                 self.vwTravelMode.isHidden  = false
+                             }
                          }else{
                              Start_End_Need = 0
                              self.vwTravelMode.isHidden  = true
@@ -410,7 +405,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                              self.vwJointCtrl.frame.origin.y = vwJointCtrl.frame.origin.y+vwJointCtrl.frame.height-300
                             // self.vwDeviationCtrl.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height-300
                             // self.vwRejectReason.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height-300
-                            self.vwRmksCtrl.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height-300
+                            self.vwRmksCtrl.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height-200
                          }
                      }else{
                          self.vwTravelMode.isHidden  = true
@@ -418,7 +413,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                          self.vwJointCtrl.frame.origin.y = vwJointCtrl.frame.origin.y+vwJointCtrl.frame.height-300
                         // self.vwDeviationCtrl.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height-300
                         // self.vwRejectReason.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height-300
-                        self.vwRmksCtrl.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height-300
+                        self.vwRmksCtrl.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height-200
                      }
                  }
                  DispatchQueue.main.asyncAfter(deadline: .now() + 1.0){
@@ -433,7 +428,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
          }
        }
     
-    func textViewDidBeginEditing(_ textView: UITextView) {
+    func textViewDidBeginEditing(_ textView: UITextView){
         if textView.text == "Enter the Remarks"{
             textView.text = ""
             textView.textColor = .black
@@ -445,7 +440,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         }
         return true
     }
-    func textViewDidEndEditing(_ textView: UITextView) {
+    func textViewDidEndEditing(_ textView: UITextView){
         if textView.text == ""{
             textView.text = "Enter the Remarks"
             textView.textColor = UIColor.lightGray
@@ -523,6 +518,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView==tbJWKSelect { return lstJWNms.count }
+        print(SelMode)
         if SelMode == "Travel"{
             return Trave_Det.count
         }else{
@@ -538,7 +534,6 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
             cell.lblText?.text = item["name"] as? String
             cell.imgBtnDel.addTarget(target: self, action: #selector(self.delJWK(_:)))
         }else{
-            
             if SelMode == "Travel" {
               print(Trave_Det)
                 print(indexPath.row)
@@ -562,7 +557,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         return cell
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
         let item: [String: Any]=lObjSel[indexPath.row] as! [String : Any]
         var name=item["name"] as! String
         print(item)
@@ -603,6 +598,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         }else{
             if SelMode=="WT" {
                 typ=item["FWFlg"] as! String
+                Worktyp = typ
                 lblWorktype.text = name
                 vwHQCtrl.isHidden=false
                // vwDistCtrl.isHidden=false
@@ -623,7 +619,6 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                     self.vwDeviationCtrl.frame.origin.y = vwRmksCtrl.frame.origin.y+vwRmksCtrl.frame.height+8
                     self.vwRejectReason.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height+8
                     //self.vwTravelMode.frame.origin.y =
-                    
                 }
             } else if SelMode == "DIS" {
                 lblDist.text = name
@@ -632,6 +627,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                     return Bool(StkId.range(of: String(format: ",%@,", id))?.lowerBound != nil )
                 })
             } else if SelMode == "RUT" {
+                lblTravelMode.text = "Select Travel Mode"
                 print(item)
                 lblRoute.text = name  //+(item["id"] as! String)
                 Allowance_Type = item["Allowance_Type"] as! String
@@ -707,7 +703,6 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                     
                 }
             }else if SelMode == "Travel"{
-                print(Trave_Det)
                 id = String(Trave_Det[indexPath.row].Sl_No)
                 name = Trave_Det[indexPath.row].name
                 typ = String(Trave_Det[indexPath.row].StEndNeed)
@@ -764,7 +759,10 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
             lstPlnDetail = list;
         }
         print(lstPlnDetail)
-        if(lstPlnDetail.count < 1){ return }
+        if(lstPlnDetail.count < 1){
+            Worktyp = "F"
+            return
+        }
         let wtid=String(format: "%@", lstPlnDetail[0]["worktype"] as! CVarArg)
         if let indexToDelete = lstWType.firstIndex(where: { String(format: "%@", $0["id"] as! CVarArg) == wtid }) {
            // print(indexToDelete)
@@ -783,14 +781,17 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
            // vwDistCtrl.isHidden=false
             vwRouteCtrl.isHidden=false
             vwJointCtrl.isHidden=false
+            vwTravelMode.isHidden=false
             self.vwRmksCtrl.frame.origin.y  = vwJointCtrl.frame.origin.y+vwJointCtrl.frame.height+8
             self.vwDeviationCtrl.frame.origin.y = vwRmksCtrl.frame.origin.y+vwRmksCtrl.frame.height+8
             self.vwRejectReason.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height+8
+            Worktyp = typ
             if typ != "F" {
                 vwHQCtrl.isHidden=true
                 vwDistCtrl.isHidden=true
                 vwRouteCtrl.isHidden=true
                 vwJointCtrl.isHidden=true
+                vwTravelMode.isHidden=true
                 
                 self.vwRmksCtrl.frame.origin.y  = vwWTCtrl.frame.origin.y+vwWTCtrl.frame.height+8
                 self.vwDeviationCtrl.frame.origin.y = vwRmksCtrl.frame.origin.y+vwRmksCtrl.frame.height+8
@@ -947,14 +948,14 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         self.dismiss(animated: true, completion: nil)
         GlobalFunc.MovetoMainMenu()
     }
-    @IBAction func setSelValues(_ sender: Any) {
+    @IBAction func setSelValues(_ sender: Any){
         strJWCd=strSelJWCd
         strJWNm=strSelJWNm
         lstJWNms=lstSelJWNms
         tbJWKSelect.reloadData()
         closeWin(self)
     }
-    @objc private func selWorktype() {
+    @objc private func selWorktype(){
         isMulti=false
         
         if UserSetup.shared.tpDcrDeviationNeed == 0 && !switchDeviate.isOn {
@@ -966,9 +967,9 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
             lObjSel=lstWType
         }
        // lObjSel=lstWType
-        tbDataSelect.reloadData()
         lblSelTitle.text="Select the Worktype"
         openWin(Mode: "WT")
+        tbDataSelect.reloadData()
         
         /*let locm = CLocationService()
         locm.getNewLocation(location: { location in
@@ -1015,13 +1016,12 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
     }
     
     @objc private func selTravelMode(){
+        isMulti=false
         Trave_Det.removeAll()
         if lblRoute.text=="Select the Route"{
             Toast.show(message: "Select the Route First", controller: self)
             return
         }
-        print(lstModeOfTravel)
-        print(Allowance_Type)
         for item in lstModeOfTravel{
             let Alw_Eligibilty = item["Alw_Eligibilty"] as? String
             let spriteArray = Alw_Eligibilty!.components(separatedBy: ",")
@@ -1030,7 +1030,6 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                 Trave_Det.append(Trav_Data(name: (item["MOT"] as? String)!, StEndNeed: (item["StEndNeed"] as? Int)!, DriverNeed: (item["DriverNeed"] as? Int)!, Sl_No: (item["Sl_No"] as? Int)!))
             }
         }
-        print(Trave_Det)
         Trave_Dets = Trave_Det
         lblSelTitle.text="Select Travel Mode"
         openWin(Mode: "Travel")
@@ -1052,7 +1051,8 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         lblSelTitle.text="Select the Route"
         openWin(Mode: "RUT")
     }
-    @objc private func selJointWK() {
+    
+    @objc private func selJointWK(){
         isMulti=true
         if UserSetup.shared.tpDcrDeviationNeed == 0 && !switchDeviate.isOn{
 
@@ -1069,12 +1069,14 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         lblSelTitle.text="Select the Jointwork"
         openWin(Mode: "JWK")
     }
+    
     @objc private func delJWK(_ sender: UITapGestureRecognizer){
         let cell:cellListItem = GlobalFunc.getTableViewCell(view: sender.view!) as! cellListItem
         let tbView: UITableView = GlobalFunc.getTableView(view: sender.view!)
         let indx:NSIndexPath = tbView.indexPath(for: cell)! as NSIndexPath
         removeJWk(indx: indx.row)
      }
+    
     func removeJWk(indx: Int){
         let sItem: [String: Any] = lstJWNms[indx] as! [String: Any]
         
@@ -1087,8 +1089,10 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         lstJWNms.remove(at: indx)
         tbJWKSelect.reloadData()
     }
+    
     func openWin(Mode:String){
         SelMode=Mode
+        print(SelMode)
         lAllObjSel = lObjSel
         txSearchSel.text = ""
         Setval.isHidden = true
@@ -1096,10 +1100,9 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
             Setval.isHidden = false
         }
         vwSelWindow.isHidden=false
-        
     }
-    @IBAction func searchBytext(_ sender: Any) {
-        
+    
+    @IBAction func searchBytext(_ sender: Any){
         let txtbx: UITextField = sender as! UITextField
         if txtbx.text!.isEmpty {
             if SelMode == "Travel" {
@@ -1123,6 +1126,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         tbDataSelect.reloadData()
         
     }
+    
     @IBAction func closeWin(_ sender:Any){
         vwSelWindow.isHidden=true
     }
@@ -1172,11 +1176,10 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
             return false
         }*/
         return true
-        
     }
     
     
-    @IBAction func deviateAction(_ sender: UISwitch) {
+    @IBAction func deviateAction(_ sender: UISwitch){
       //  self.tpDeviation()
         
         let vc=self.storyboard?.instantiateViewController(withIdentifier: "sbDeviationRemarks") as!  DeviationRemarks
@@ -1193,7 +1196,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
     }
     
     
-    @IBAction func SaveMyDayPlan(_ sender: Any) {
+    @IBAction func SaveMyDayPlan(_ sender: Any){
         print(HomePageViewController.selfieLoginActive)
         print(PhotosCollection.shared.PhotoList.count)
         if (HomePageViewController.selfieLoginActive == 1){
@@ -1288,8 +1291,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         }
     }
     
-    func tpDeviation() {
-        
+    func tpDeviation(){
         AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"get/tpdetails&sfCode=\(SFCode)&rSF=\(SFCode)&divisionCode=\(DivCode)").validate(statusCode: 200..<209).responseData { AFData in
             switch AFData.result {
                 
@@ -1466,6 +1468,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         let params: Parameters = [
             "data": jsonString //"["+jsonString+"]"
         ]
+            print(params)
             
         AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"dcr/save&divisionCode="+self.DivCode+"&rSF="+self.SFCode+"&sfCode="+self.SFCode, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
             AFdata in
@@ -1543,6 +1546,3 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         self.present(vc, animated: true, completion: nil)
     }
 }
-
-
-

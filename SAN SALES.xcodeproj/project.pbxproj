@@ -123,6 +123,7 @@
 		3F5B297828891D5C002D226C /* CheckPermissions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5B297728891D5C002D226C /* CheckPermissions.swift */; };
 		3F5B297A28894AB3002D226C /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5B297928894AB3002D226C /* GradientView.swift */; };
 		3F5B2FC3284B59E400574D7C /* MsgLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5B2FC2284B59E400574D7C /* MsgLoader.swift */; };
+		3F5D05E02C6F21EE00457642 /* Leave Approval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5D05DF2C6F21EE00457642 /* Leave Approval.swift */; };
 		3F601F3E2C466499002EF90F /* Daily Expense Entry SFC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F601F3D2C466499002EF90F /* Daily Expense Entry SFC.swift */; };
 		3F619F3C27EAEDC000F3D05F /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F619F3B27EAEDC000F3D05F /* LocationService.swift */; };
 		3F619F3E27EB275000F3D05F /* CLocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F619F3D27EB274F00F3D05F /* CLocationService.swift */; };
@@ -267,6 +268,7 @@
 		3F5B297728891D5C002D226C /* CheckPermissions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckPermissions.swift; sourceTree = "<group>"; };
 		3F5B297928894AB3002D226C /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 		3F5B2FC2284B59E400574D7C /* MsgLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MsgLoader.swift; sourceTree = "<group>"; };
+		3F5D05DF2C6F21EE00457642 /* Leave Approval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Leave Approval.swift"; sourceTree = "<group>"; };
 		3F601F3D2C466499002EF90F /* Daily Expense Entry SFC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Daily Expense Entry SFC.swift"; sourceTree = "<group>"; };
 		3F619F3B27EAEDC000F3D05F /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
 		3F619F3D27EB274F00F3D05F /* CLocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CLocationService.swift; sourceTree = "<group>"; };
@@ -327,6 +329,7 @@
 				15C4B3162BECAA6B001ACBF4 /* RejectReasonViewController.swift */,
 				15C4B3172BECAA6B001ACBF4 /* RejectReasonViewController.xib */,
 				3FFB59D62C613BE5008AE109 /* Expense approval SFC.swift */,
+				3F5D05DF2C6F21EE00457642 /* Leave Approval.swift */,
 			);
 			path = Approvals;
 			sourceTree = "<group>";
@@ -839,6 +842,7 @@
 				386A43912A1CBB0200CE1833 /* SubmittedDCR.swift in Sources */,
 				159095252BF23AD0001D8347 /* CalendarViewController.swift in Sources */,
 				3F7CCF0328F14CA3002A7C03 /* GEOTagging.swift in Sources */,
+				3F5D05E02C6F21EE00457642 /* Leave Approval.swift in Sources */,
 				3F0861C328053B3A006A30FB /* UserSetup.swift in Sources */,
 				15F9E7B12C5229220057D4C6 /* MyResources.swift in Sources */,
 				38F6F5AF2B19D2ED007090BF /* Location.swift in Sources */,
