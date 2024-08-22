@@ -756,7 +756,14 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
             let substrings2 = routs.split(separator: ",")
             var placstring = Place_Types.split(separator: ",")
             var ClusterNames = ClusterName.split(separator: ",")
+            
+            
+            
+            print(substrings2)
+            print(placstring)
             print(ClusterNames)
+            
+            
             var Dis_km = 0.0
             let Fuel_amount = x.Fuel_amount
             var fare = 0.0
@@ -786,7 +793,11 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
             var CurentSf = ""
             var past_Toplace = ""
             var One_day_plac_typ = [String]()
+            var List_Count = 0
             for (index,i) in substrings2.enumerated(){
+                
+                
+                
                 print(substrings2)
                 while placstring.count < substrings2.count{
                     placstring.append("")
@@ -1031,6 +1042,10 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
                 
                 print(getdate)
                 print(placstring)
+                
+                
+                
+                
                 
                 fare = Double(Dis_km) * Double(Fuel_amount)
                 let itms: [String: Any]=["date": getdate,"modeoftravel":MOT_Name,"modeid":Mot_ID,"fromplace":Fromplace,"Toplace":Toplace,"Fromid":Fromplace,"Toid":Toplace,"Dist":Dis_km,"per_km_fare":String(Fuel_amount),"fare":String(format: "%.2f", fare),"Cls_From":Clusterfrom,"Cls_To":ClusterTo];

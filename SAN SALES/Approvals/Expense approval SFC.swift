@@ -839,7 +839,12 @@ class Expense_approval_SFC: UIViewController, UITableViewDelegate, UITableViewDa
             let substrings2 = routs.split(separator: ",")
             var placstring = Place_Types.split(separator: ",")
             var ClusterNames = ClusterName.split(separator: ",")
+            
+            print(substrings2)
+            print(placstring)
             print(ClusterNames)
+            
+            
             var Dis_km = 0.0
             let Fuel_amount = x.Fuel_amount
             var fare = 0.0

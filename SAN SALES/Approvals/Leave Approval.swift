@@ -111,6 +111,7 @@ class Leave_Approval: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     @objc func buttonClicked(_ sender: UIButton){
         self.ShowLoading(Message: "Loading...")
+        Text_Reason.text = ""
         Reject_Reason_View.isHidden = true
         Reject_reason_hig.constant = 0
         Resign_View_Hight.constant = 22
