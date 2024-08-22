@@ -647,6 +647,7 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
     }
     func ExpenseReportDetailsSFC(fromdate:String,todate:String){
         ExpenseDetils.removeAll()
+        mgrRouts.removeAll()
         let apiKey: String = "getExpenseReportDetailsSFC&sf_code=\(SFCode)&division_code=\(DivCode)&from_date=\(fromdate)&to_date=\(todate)&stateCode=\(StateCode)&Design_code=\(UserSetup.shared.dsg_code)&Mn=\(Eff_Month)&Yr=\(Eff_Year)&PriID=\(period_id)"
         let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
         AF.request(APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKeyWithoutCommas, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
@@ -797,6 +798,11 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
                 if index == 0{
                     Fromplace = SFCode
                     Toplace = String(i)
+                    print(Fromplace)
+                    print(Toplace)
+                    
+                    print(distance_data)
+                    
                     let mgrLevelFilter = distance_data.filter {
                         $0["To_Plc_Code"] as? String == Toplace &&
                         $0["Frm_Plc_Code"] as? String == Fromplace
@@ -811,8 +817,7 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
                         let Dis = mgrLevelFilter[0]["Distance_KM"] as? Int ?? 0
                         Dis_km = Double(Dis)
                         print(mgrLevelFilter)
-                       // One_day_plac_typ.append(mgrLevelFilter[0]["Place_Type"] as? String ?? "")
-                        One_day_plac_typ.append("HQ")
+                        One_day_plac_typ.append(mgrLevelFilter[0]["Place_Type"] as? String ?? "")
                     }
                 }else{
                     //find Future Switch Route
@@ -1099,6 +1104,8 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
             
             if One_day_plac_typ.contains("OS"){
                 Total_amts = Total_amts+(Double(Total_Dis)  * Double(Fuel_amount))
+                Total_amts = Total_amts + Double(x.OS_Allowance_amount)
+                DA_Allowance_amount = String(x.OS_Allowance_amount)
             }
             
             
@@ -1107,7 +1114,19 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
         let fromDateString = FromDate
-        let currentDate = dateFormatter.string(from: Date())
+        let getdate = dateFormatter.string(from: Date())
+        
+        var currentDate = ""
+        
+        
+        if let Date_to_set_up = dateFormatter.date(from:ToDate),let To_Current_Date = dateFormatter.date(from: getdate), Date_to_set_up >= To_Current_Date{
+            
+            
+            currentDate = dateFormatter.string(from: Date())
+            
+        }else{
+            currentDate = ToDate
+        }
 
         guard let fromDate = dateFormatter.date(from: fromDateString),
               let endDate = dateFormatter.date(from: currentDate) else {
@@ -1457,8 +1476,22 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
         let fromDateString = FromDate
-        let currentDate = dateFormatter.string(from: Date())
-
+        let getdate = dateFormatter.string(from: Date())
+        var currentDate = ""
+        
+        
+        if let Date_to_set_up = dateFormatter.date(from:ToDate),let To_Current_Date = dateFormatter.date(from: getdate), Date_to_set_up >= To_Current_Date{
+            
+            
+            currentDate = dateFormatter.string(from: Date())
+            
+        }else{
+            currentDate = ToDate
+        }
+        
+        print(currentDate)
+        
+        
         guard let fromDate = dateFormatter.date(from: fromDateString),
               let endDate = dateFormatter.date(from: currentDate) else {
             fatalError("Invalid dates")

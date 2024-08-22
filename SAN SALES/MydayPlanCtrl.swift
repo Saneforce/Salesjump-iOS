@@ -557,7 +557,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         return cell
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
         let item: [String: Any]=lObjSel[indexPath.row] as! [String : Any]
         var name=item["name"] as! String
         print(item)
