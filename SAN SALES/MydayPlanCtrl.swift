@@ -516,7 +516,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         lblTimer.text = "eTime: "+someDateTime
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int{
         if tableView==tbJWKSelect { return lstJWNms.count }
         print(SelMode)
         if SelMode == "Travel"{
@@ -528,7 +528,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell:cellListItem = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
-        if tableView == tbJWKSelect {
+        if tableView == tbJWKSelect{
             let item: [String: Any]=lstJWNms[indexPath.row] as! [String : Any]
             print(item)
             cell.lblText?.text = item["name"] as? String
@@ -540,7 +540,6 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                 cell.lblText?.text = Trave_Det[indexPath.row].name
                 cell.imgSelect?.image = nil
             }else{
-            
             let item: [String: Any]=lObjSel[indexPath.row] as! [String : Any]
             cell.lblText?.text = item["name"] as? String
             cell.imgSelect?.image = nil
@@ -996,9 +995,10 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
             lObjSel=lstHQs
         }
        // lObjSel=lstHQs
-        tbDataSelect.reloadData()
+        
         lblSelTitle.text="Select the Headquarter"
         openWin(Mode: "HQ")
+        tbDataSelect.reloadData()
     }
     @objc private func selDistributor() {
         isMulti=false
@@ -1010,9 +1010,10 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
             lObjSel=lstDist
         }
         
-        tbDataSelect.reloadData()
+        
         lblSelTitle.text="Select the Distributor"
         openWin(Mode: "DIS")
+        tbDataSelect.reloadData()
     }
     
     @objc private func selTravelMode(){
@@ -1047,9 +1048,10 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
             lObjSel=lstRoutes
         }
         
-        tbDataSelect.reloadData()
+       
         lblSelTitle.text="Select the Route"
         openWin(Mode: "RUT")
+        tbDataSelect.reloadData()
     }
     
     @objc private func selJointWK(){
@@ -1065,9 +1067,10 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         strSelJWCd=strJWCd
         strSelJWNm=strJWNm
         lstSelJWNms=lstJWNms
-        tbDataSelect.reloadData()
+        
         lblSelTitle.text="Select the Jointwork"
         openWin(Mode: "JWK")
+        tbDataSelect.reloadData()
     }
     
     @objc private func delJWK(_ sender: UITapGestureRecognizer){

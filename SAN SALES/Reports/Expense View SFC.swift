@@ -181,16 +181,6 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
         print(CardView.frame.size.height)
         print(Card_View_Hig.constant)
         
-        
-        getExpenseDisSFC() { [self] disEnrty in
-            if let disEnrty = disEnrty {
-                print(disEnrty)
-                lstdiskm = disEnrty
-                print(lstdiskm)
-            } else {
-                print("Failed to get disEnrty")
-            }
-        }
         set_priod_calendar()
     }
     func getUserDetails(){
@@ -664,8 +654,14 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
                            Get_Sf_Typ = 1
                            collectrout(Getdata:GetRouteChart, distance_data: DistanceEntr, add_sub_exp: add_sub_exp,FromDate:fromdate,ToDate:todate, dailyExpense: dailyExpense )
                        }else{
-                           Get_Sf_Typ = 2
-                           Collect_mgr_rout(Getdata:GetRouteChart, distance_data: DistanceEntr, add_sub_exp: add_sub_exp,FromDate:fromdate,ToDate:todate, dailyExpense: dailyExpense)
+                           getExpenseDisSFC { [self] success in
+                               if success {
+                                   Get_Sf_Typ = 2
+                                   Collect_mgr_rout(Getdata: GetRouteChart, distance_data: DistanceEntr, add_sub_exp: add_sub_exp, FromDate: fromdate, ToDate: todate, dailyExpense: dailyExpense)
+                               } else {
+                                   print("First function failed, second function won't run.")
+                               }
+                           }
                        }
                     }
                     
@@ -676,8 +672,26 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
         }
     }
     
+    func getExpenseDisSFC(completion: @escaping (Bool) -> Void) {
+        // Assuming this is an asynchronous operation
+        getExpenseDisSFC() { [self] disEnrty in
+            if let disEnrty = disEnrty {
+                print(disEnrty)
+                lstdiskm = disEnrty
+                print(lstdiskm)
+                completion(true) // Call the completion handler when done
+            } else {
+                print("Failed to get disEnrty")
+                completion(false) // Call the completion handler if there was an error
+            }
+        }
+    }
+    
+    
     func Collect_mgr_rout(Getdata:[AnyObject], distance_data:[AnyObject], add_sub_exp:[AnyObject], FromDate:String, ToDate:String,dailyExpense:[AnyObject]){
         print(Getdata)
+        print(distance_data)
+        print(lstdiskm)
         Exp_Summary_Data.removeAll()
         var seenEntries = [String: String]()
         var DA_Allowance_amount = ""
@@ -756,12 +770,16 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
             let substrings2 = routs.split(separator: ",")
             var placstring = Place_Types.split(separator: ",")
             var ClusterNames = ClusterName.split(separator: ",")
+            
+            
+            print(substrings2)
+            print(placstring)
             print(ClusterNames)
+            
             var Dis_km = 0.0
             let Fuel_amount = x.Fuel_amount
             var fare = 0.0
             var Work_typ = x.Work_typ
-            var Returnkm = 0
             var Dayend_Place_Types = ""
             var Clusterfrom = ""
             var ClusterTo = ""
@@ -786,12 +804,13 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
             var CurentSf = ""
             var past_Toplace = ""
             var One_day_plac_typ = [String]()
+            var List_Count = 0
             for (index,i) in substrings2.enumerated(){
-                print(substrings2)
+
                 while placstring.count < substrings2.count{
                     placstring.append("")
                 }
-                print(placstring)
+                
                 var Fromplace = ""
                 var Toplace = ""
                 var PlcTyp = [String]()
@@ -839,6 +858,9 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
                             Toplace = String(i)
                             Clusterfrom=String(ClusterNames[index-1])
                             ClusterTo = String(ClusterNames[index])
+                            print(Clusterfrom)
+                            print(ClusterTo)
+                            
                             let Routs = MrRouts.filter {
                                 $0["To_Plc_Code"] as? String == Toplace &&
                                 $0["Frm_Plc_Code"] as? String == Fromplace
@@ -877,8 +899,7 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
                                         }else{
                                             CurentSf = ""
                                             PastSf = ""
-
-                                            
+                                            Clusterfrom=x.sf_hq
                                             let Dis = Routss[0]["Distance_KM"] as? Int ?? 0
                                             One_day_plac_typ.append(Routss[0]["Place_Type"] as? String ?? "")
                                             Dis_km = Double(Dis)
@@ -917,11 +938,20 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
                             }
                             
                         }else{
+                            
+                            Clusterfrom=String(ClusterNames[index-1])
+                            ClusterTo = String(ClusterNames[index])
+                            print(Clusterfrom)
+                            print(ClusterTo)
+                            
                             if MrRouts.isEmpty{
                                Dis_km = 0
                             }else{
                                 let Fromplace = MrRouts[0]["Sf_code"] as? String ?? ""
                                 var Toplace = substrings2[index]
+                                
+   
+                                
                                 let Routs = MrRouts.filter {
                                     $0["To_Plc_Code"] as? String ?? "" == Toplace &&
                                     $0["Frm_Plc_Code"] as? String ?? "" == Fromplace
@@ -971,6 +1001,9 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
                         let Toplaces = substrings2[index]
                         Clusterfrom = String(ClusterNames[index-1])
                         ClusterTo = String(ClusterNames[index])
+                        
+                        print(Clusterfrom)
+                        print(ClusterTo)
                         let SwitchRouts = MrRouts.filter {
                             $0["To_Plc_Code"] as? String ?? "" == Toplaces &&
                             $0["Frm_Plc_Code"] as? String ?? "" == Fromplaces
@@ -1032,6 +1065,11 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
                 print(getdate)
                 print(placstring)
                 
+                print(Clusterfrom)
+                print(ClusterTo)
+                
+                
+                
                 fare = Double(Dis_km) * Double(Fuel_amount)
                 let itms: [String: Any]=["date": getdate,"modeoftravel":MOT_Name,"modeid":Mot_ID,"fromplace":Fromplace,"Toplace":Toplace,"Fromid":Fromplace,"Toid":Toplace,"Dist":Dis_km,"per_km_fare":String(Fuel_amount),"fare":String(format: "%.2f", fare),"Cls_From":Clusterfrom,"Cls_To":ClusterTo];
                 let jitm: AnyObject = itms as AnyObject
@@ -1040,12 +1078,87 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
                 print(SFCDetils)
             }
             // Collect return
-            print(SFCDetils)
-            print(Total_amts)
             
             print(One_day_plac_typ)
-            print(SFCDetils)
-            Total_Dis = 0
+            
+            DA_Allowance_amount = One_day_plac_typ.last ?? ""
+            var Returnkm = 0
+            let result = One_day_plac_typ
+            let result2 = substrings2
+            
+            if Dayend_Place_Types == "HQ"{
+                print(Dayend_Place_Types)
+                print(result)
+                print(result2)
+                let Firstplace = result2.first
+                let secondplace =  result2.last
+                let BasLevelFilter = distance_data.filter {
+                    ($0["To_Plc_Code"] as? String)! == secondplace! &&
+                    ($0["Frm_Plc_Code"] as? String)! == Firstplace!
+                }
+                
+                if !BasLevelFilter.isEmpty{
+                    Returnkm = BasLevelFilter[0]["Distance_KM"] as? Int ?? 0
+                }
+                print(BasLevelFilter)
+                if BasLevelFilter.isEmpty{
+                    for i in SFCDetils{
+                        let dis = i["Dist"] as? Int ?? 0
+                        Returnkm = Returnkm + dis
+                        
+                    }
+                }
+            }else if Dayend_Place_Types == "EX"{
+                print(Dayend_Place_Types)
+                print(result2)
+                let Firstplace = result2.first
+                let secondplace =  result2.last
+                let BasLevelFilter = distance_data.filter {
+                    ($0["To_Plc_Code"] as? String)! == secondplace! &&
+                    ($0["Frm_Plc_Code"] as? String)! == Firstplace!
+                }
+                
+                if !BasLevelFilter.isEmpty{
+                    Returnkm = BasLevelFilter[0]["Distance_KM"] as? Int ?? 0
+                }
+                print(BasLevelFilter)
+                if BasLevelFilter.isEmpty{
+                    for i in SFCDetils{
+                        let dis = i["Dist"] as? Int ?? 0
+                        Returnkm = Returnkm + dis
+                        
+                    }
+                }
+                
+            }else if Dayend_Place_Types == "OS"{
+                Returnkm = 0
+            }else if Dayend_Place_Types == "OX"{
+                print(Dayend_Place_Types)
+                print(result2)
+                let Firstplace = result2.first
+                let secondplace =  result2.last
+                let BasLevelFilter = distance_data.filter {
+                    ($0["To_Plc_Code"] as? String)! == secondplace! &&
+                    ($0["Frm_Plc_Code"] as? String)! == Firstplace!
+                }
+                
+                if !BasLevelFilter.isEmpty{
+                    Returnkm = BasLevelFilter[0]["Distance_KM"] as? Int ?? 0
+                }
+                print(BasLevelFilter)
+                if BasLevelFilter.isEmpty{
+                    for i in SFCDetils{
+                        let dis = i["Dist"] as? Int ?? 0
+                        Returnkm = dis
+                        
+                    }
+                }
+            }
+            
+            print(Returnkm)
+            
+            
+            Total_Dis = Double(Returnkm)
             for i in SFCDetils{
                 print(i)
                 if let Dis = i["Dist"] as? Int{
@@ -1311,29 +1424,7 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
                 
                 Totalkm = Totalkm + Dis_km
                 
-                print(substrings)
-               // substrings.removeFirst()
-                print(substrings)
-                
-                if substrings.contains("HQ") && !substrings.contains("EX") && !substrings.contains("OS"){
-                    print("Cover Only HQ")
-                }
-                
-                if substrings.contains("HQ") && substrings.contains("EX") && !substrings.contains("OS"){
-                    print("Cover HQ AND EX")
-                }
-                
-                
-                
-                
-                if UserSetup.shared.ExpDist_HQ == 0{
-                    fare = 0
-                }else if UserSetup.shared.ExpDist_HQ == 1{
-                    fare = Double(Dis_km) * per_km_fare
-                }else{
-                    fare = Double(Dis_km) * per_km_fare
-                }
-                
+                fare = Double(Dis_km) * per_km_fare
                 let itms: [String: Any]=["date": date,"modeoftravel":MOT_Name,"modeid":modeid,"fromplace":From_Place,"Toplace":To_Place,"Fromid":From_Place,"Toid":To_Place,"Dist":Dis_km,"per_km_fare":String(per_km_fare),"fare":String(format: "%.2f", fare),"cluster_from":cluster_from,"cluster_to":cluster_to];
                 let jitm: AnyObject = itms as AnyObject
                 SFCDetils.append(jitm)
@@ -1443,12 +1534,8 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
                     
                 }else if UserSetup.shared.ExpDist_HQEX == 1{
                     Total_amts = Total_amts+(Double(Totalkm)  * Double(per_km_fare))
-                    
-                    print(Total_amts)
-                    
+
                     Total_amts = Total_amts + Double(HQ_Allowance_amount)
-                    
-                    print(Total_amts)
                     
                     DA_Allowance_amount = String(HQ_Allowance_amount)
                 }else if UserSetup.shared.ExpDist_HQEX == 2{
@@ -1462,11 +1549,10 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
             
             if One_day_plac_typ.contains("OS"){
                 Total_amts = Total_amts+(Double(Totalkm)  * Double(per_km_fare))
+                Total_amts = Total_amts + Double(OS_Allowance_amount)
+                DA_Allowance_amount = String(OS_Allowance_amount)
             }
             
-            
-
-   
             ExpenseDetils.append(ExpenseDatas(date: date, Work_typ: Work_typ,miscellaneous_exp:String(format: "%.2f", miscellaneous_exp), Total_Amt: String(Total_amts), Returnkm: String(Returnkm), Plc_typ: One_day_plac_typ.last ?? "", Fuel_amount: String(per_km_fare), Mot_Name: Mot_Name, status: status, Da_amount: DA_Allowance_amount, SFCdetils:SFCDetils))
             count = count + 1
         }

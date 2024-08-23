@@ -458,11 +458,12 @@ class LeaveForm: IViewController, UITableViewDelegate,
                                 return
                             }
                         }
-                        let jsonString = "[{\"LeaveForm_New\":{\"Leave_Type\":\"'" + self.sLvlType + "'\",\"From_Date\":\"'" + self.sDOF + "'\",\"To_Date\":\"'" + self.sDOT + "'\",\"Reason\":\"'" + self.txReason.text! + "'\",\"address\":\"''\",\"No_of_Days\":1,\"halfday\":\"''\"}}]"
+                        
+                        
+                        let jsonString = "[{\"LeaveForm_New\":{\"Leave_Type\":\"'" + self.sLvlType + "'\",\"From_Date\":\"'" + self.sDOF + "'\",\"To_Date\":\"'" + self.sDOT + "'\",\"Reason\":\"'" + self.txReason.text! + "'\",\"address\":\"''\",\"No_of_Days\":\(self.NoofDays),\"halfday\":\"''\"}}]"
                         let params: Parameters = [
                                             "data": jsonString //"["+jsonString+"]"//
                                         ]
-                        print(params)
                 
                         AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"dcr/save&divisionCode="+self.DivCode+"&rSF="+self.SFCode+"&sfCode="+self.SFCode, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
                             AFdata in
