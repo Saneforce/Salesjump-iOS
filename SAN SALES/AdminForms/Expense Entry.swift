@@ -69,7 +69,9 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
     var No_Of_Days_In_Perio = 0
     var Allow_Apr:Bool = false
     var selected_period = ""
-    var apr_flg = ""
+    var apr_flg = "0"
+    var apr_flgsfc = "0"
+    var apr_flg2 = ""
     var Load_Cout = 0
     var Load_Couts = 0
     var srt_exp: [[String: Any]] = []
@@ -79,6 +81,10 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
     var exp_neededs = 0
     override func viewDidLoad(){
         super.viewDidLoad()
+      if UserSetup.shared.SrtEndKMNd == 2 {
+          Sent_apr_bt.isHidden = true
+        }
+        Sent_apr_bt.backgroundColor = .lightGray
         YearPostion.text = selectYear
         let Month = Calendar.current.component(.month, from: Date()) - 1
         let formattedPosition = String(format: "%02d", Month + 1)
@@ -118,7 +124,7 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
         print(VisitData.shared.Nav_id)
 //        if VisitData.shared.Nav_id == 1 {
 //            VisitData.shared.Nav_id = 0
-//            
+//
 //            set_priod_calendar()
 //        }
         periodic()
@@ -167,6 +173,7 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
     func set_priod_calendar(){
         if let data = UserDefaults.standard.data(forKey: "periodicData"),
            let item = try? JSONDecoder().decode(PeriodicData.self, from: data) {
+           // self.ShowLoading(Message: "Loading...")
             Nav_PeriodicData = [item as AnyObject]
             print(Nav_PeriodicData)
             removeLabels()
@@ -231,7 +238,13 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
             print(FDate)
             print(TDate)
             Sent_Apr_Det.append(Apr_Data(Period_Id: item.Period_Id, Eff_Month: String(item.Eff_Month), Eff_Year: String(item.Eff_Year), From_Date: item.From_Date, To_Date: item.To_Date))
-            expSubmitDates()
+            
+          if  UserSetup.shared.SrtEndKMNd == 2{
+              expSubmitDatesSFC()
+          }else{
+              expSubmitDates()
+          }
+           
             calendar.reloadData()
             Load_Cout = 1
             Load_Couts = 1
@@ -242,6 +255,13 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
     }
     
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition){
+        
+        if UserSetup.shared.SrtEndKMNd == 2{
+            if apr_flg == "1"{
+                Toast.show(message: "Expense Already Approved")
+                return
+            }
+        }
         if (SelPeriod.text == "Select Period"){
             Toast.show(message: "Select Period")
             return
@@ -266,7 +286,7 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
         if validateForm(Seldate: date) == false {
             return
         }
-        if (UserSetup.shared.SrtEndKMNd != 0 && UserSetup.shared.exp_auto == 2 ){
+        if (UserSetup.shared.SrtEndKMNd == 1 && UserSetup.shared.exp_auto == 2 ){
             if (UserSetup.shared.SrtNd == 0){
                 if !lstWortyp.isEmpty{
                     print(lstWortyp)
@@ -350,7 +370,7 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
         }
    
     }
-    func addLetterA(to cell: FSCalendarCell?, text:String) {
+    func addLetterA(to cell: FSCalendarCell?, text:String){
         let letterLabel = UILabel()
         letterLabel.text = text
         letterLabel.textColor = .red
@@ -361,7 +381,7 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
         cell?.addSubview(letterLabel)
         labelsDictionary[cell!] = letterLabel
     }
-    func addDART(to cell: FSCalendarCell?,text:String) {
+    func addDART(to cell: FSCalendarCell?,text:String){
         let letterLabel = UILabel()
         letterLabel.text = text
         letterLabel.textColor = UIColor(red: 0.06, green: 0.68, blue: 0.76, alpha: 1.00)
@@ -576,7 +596,11 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
         print(FDate)
         print(TDate)
         Sent_Apr_Det.append(Apr_Data(Period_Id: item.Period_Id, Eff_Month: String(item.Eff_Month), Eff_Year: String(item.Eff_Year), From_Date: item.From_Date, To_Date: item.To_Date))
-        expSubmitDates()
+        if  UserSetup.shared.SrtEndKMNd == 2{
+            expSubmitDatesSFC()
+        }else{
+            expSubmitDates()
+        }
         calendar.reloadData()
         TextSeh.text = ""
         Selwind.isHidden = true
@@ -663,6 +687,7 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
     }
     
     func expSubmitDates(){
+       // self.ShowLoading(Message: "Loading...")
         let axn = "get/expSubmitDates"
         let apiKey = "\(axn)&desig=\(Desig)&divisionCode=\(DivCode)&from_date=\(period_from_date)&to_date=\(period_to_date)&month=\(SelectMonth)&rSF=\(SFCode)&year=\(selectYear)&selected_period=\(selected_period)&sfCode=\(SFCode)&stateCode=\(StateCode)&sf_code=\(SFCode)"
         let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
@@ -670,9 +695,7 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
         AF.request(url, method: .post, parameters: nil, encoding: URLEncoding.default, headers: nil)
             .validate(statusCode: 200..<299)
             .responseJSON { [self] response in
-//                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-//                    self.LoadingDismiss()
-//                }
+               
                 switch response.result {
                 case .success(let value):
                     print(value)
@@ -704,10 +727,18 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
                                         print(apr_flags)
                                         if apr_flags.isEmpty{
                                             apr_flg = "0"
+                                            apr_flg2 = ""
                                            
                                         }else{
                                             if let Aprflg = apr_flags[0]["approve_flag"] as? Int{
                                                 apr_flg = String(Aprflg)
+                                                if String(Aprflg) == "0"{
+                                                    apr_flg2 = "12"
+                                                }
+                                                if 1 <= Aprflg{
+                                                    apr_flg2 = "13"
+                                                }
+                                                
                                             }
                                         }
                                     }
@@ -726,79 +757,77 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
                                     
                                     exp_SubitDate = []
                                     attance_flg_L = []
-                                    if let attance_flg = jsonObject["attance_flg"] as?  [[String: Any]]{
-                                        print(attance_flg)
-                                        if attance_flg.isEmpty{
-                                            MisDatesDatas = []
-                                            return
-                                        }
-                                        
-                                        print(attance_flg)
-                                        
-                                        let dateFormatter = DateFormatter()
-                                        dateFormatter.dateFormat = "dd/MM/yyyy"
-                                        let dates = attance_flg.compactMap { dictionary -> Date? in
-                                            guard let dateString = dictionary["pln_date"] as? String else { return nil }
-                                            return dateFormatter.date(from: dateString)
-                                        }
-                                        for item in attance_flg{
-                                            let datess = item["pln_date"] as? String
-                                            let Formated_Date = dateFormatter.date(from: datess!)
-                                            let Leave = item["FWFlg"] as? String
-                                            if (Leave == "L"){
-                                                count = count + 1
-                                                attance_flg_L = attance_flg
-                                                let cell = calendar.cell(for: Formated_Date!, at: .current)
-                                                addLetterA(to: cell, text: "L")
-                                            }
-                                            if (Leave == "H"){
-                                                count = count + 1
-                                                attance_flg_L = attance_flg
-                                                let cell = calendar.cell(for: Formated_Date!, at: .current)
-                                                addLetterA(to: cell, text: "H")
-                                            }
-                                            if (Leave == "W"){
-                                                count = count + 1
-                                                attance_flg_L = attance_flg
-                                                let cell = calendar.cell(for: Formated_Date!, at: .current)
-                                                addLetterA(to: cell, text: "W")
-                                            }
-                                        }
-                                        
-                                       // let startDate = dates.min() ?? Date()
-                                       // let endDate = dates.max() ?? Date()
-                                        
-                                        let olDateFormatter = DateFormatter()
-                                        olDateFormatter.dateFormat = "yyyy-MM-dd"
-                                        let startDate = olDateFormatter.date(from: period_from_date)
-                                        let endDate = olDateFormatter.date(from: period_to_date)
-                                        var allDates = [Date]()
-                                        var currentDate = startDate
-                                        while currentDate! <= endDate!{
-                                            allDates.append(currentDate!)
-                                            currentDate = Calendar.current.date(byAdding: .day, value: 1, to: currentDate!)!
-                                        }
-                                        let currentDates = Date()
-                                        var missingDates = allDates.filter { !dates.contains($0) }
-                                        missingDates = missingDates.filter { $0 <= currentDates }
-                                        print(missingDates)
-                                        MisDatesDatas = missingDates
-                                        MisDatesDatas = MisDatesDatas.filter { $0 <= currentDates }
-                                        print(MisDatesDatas)
-                                        missingDates.forEach {
-                                            print(dateFormatter.string(from: $0))
-                                            let missingDates = dateFormatter.string(from: $0)
-                                                let formatter = DateFormatter()
-                                                formatter.dateFormat = "dd/MM/yyyy"
-                                                if let missingDate = formatter.date(from: missingDates) {
-                                                    print(missingDate)
-                                                    let cell = calendar.cell(for: missingDate, at: .current)
-                                                    addLetterA(to: cell, text: "A")
-                                                } else {
-                                                    print("Error: Unable to convert string to date.")
-                                                }
-                                        }
-                                    }
+//                                    if let attance_flg = jsonObject["attance_flg"] as?  [[String: Any]]{
+//                                        print(attance_flg)
+//                                        if attance_flg.isEmpty{
+//                                            MisDatesDatas = []
+//                                            return
+//                                        }
+//
+//                                        print(attance_flg)
+//
+//                                        let dateFormatter = DateFormatter()
+//                                        dateFormatter.dateFormat = "dd/MM/yyyy"
+//                                        let dates = attance_flg.compactMap { dictionary -> Date? in
+//                                            guard let dateString = dictionary["pln_date"] as? String else { return nil }
+//                                            return dateFormatter.date(from: dateString)
+//                                        }
+//                                        for item in attance_flg{
+//                                            let datess = item["pln_date"] as? String
+//                                            let Formated_Date = dateFormatter.date(from: datess!)
+//                                            let Leave = item["FWFlg"] as? String
+//                                            if (Leave == "L"){
+//                                                count = count + 1
+//                                                attance_flg_L = attance_flg
+//                                                let cell = calendar.cell(for: Formated_Date!, at: .current)
+//                                                addLetterA(to: cell, text: "L")
+//                                            }
+//                                            if (Leave == "H"){
+//                                                count = count + 1
+//                                                attance_flg_L = attance_flg
+//                                                let cell = calendar.cell(for: Formated_Date!, at: .current)
+//                                                addLetterA(to: cell, text: "H")
+//                                            }
+//                                            if (Leave == "W"){
+//                                                count = count + 1
+//                                                attance_flg_L = attance_flg
+//                                                let cell = calendar.cell(for: Formated_Date!, at: .current)
+//                                                addLetterA(to: cell, text: "W")
+//                                            }
+//                                        }
+//
+//
+//                                        let olDateFormatter = DateFormatter()
+//                                        olDateFormatter.dateFormat = "yyyy-MM-dd"
+//                                        let startDate = olDateFormatter.date(from: period_from_date)
+//                                        let endDate = olDateFormatter.date(from: period_to_date)
+//                                        var allDates = [Date]()
+//                                        var currentDate = startDate
+//                                        while currentDate! <= endDate!{
+//                                            allDates.append(currentDate!)
+//                                            currentDate = Calendar.current.date(byAdding: .day, value: 1, to: currentDate!)!
+//                                        }
+//                                        let currentDates = Date()
+//                                        var missingDates = allDates.filter { !dates.contains($0) }
+//                                        missingDates = missingDates.filter { $0 <= currentDates }
+//                                        print(missingDates)
+//                                        MisDatesDatas = missingDates
+//                                        MisDatesDatas = MisDatesDatas.filter { $0 <= currentDates }
+//                                        print(MisDatesDatas)
+//                                        missingDates.forEach {
+//                                            print(dateFormatter.string(from: $0))
+//                                            let missingDates = dateFormatter.string(from: $0)
+//                                                let formatter = DateFormatter()
+//                                                formatter.dateFormat = "dd/MM/yyyy"
+//                                                if let missingDate = formatter.date(from: missingDates) {
+//                                                    print(missingDate)
+//                                                    let cell = calendar.cell(for: missingDate, at: .current)
+//                                                    addLetterA(to: cell, text: "A")
+//                                                } else {
+//                                                    print("Error: Unable to convert string to date.")
+//                                                }
+//                                        }
+//                                    }
                                     
                                     // srt_end_exp
                                     if let srt_end_exp = jsonObject["srt_end_exp"] as? [[String: Any]]{
@@ -843,6 +872,82 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
                                         }
                                     }
                                  
+                                    if let attance_flg = jsonObject["attance_flg"] as?  [[String: Any]]{
+                                        print(attance_flg)
+                                        if attance_flg.isEmpty{
+                                            MisDatesDatas = []
+                                            return
+                                        }
+                                        
+                                        print(attance_flg)
+                                        
+                                        let dateFormatter = DateFormatter()
+                                        dateFormatter.dateFormat = "dd/MM/yyyy"
+                                        let dates = attance_flg.compactMap { dictionary -> Date? in
+                                            guard let dateString = dictionary["pln_date"] as? String else { return nil }
+                                            return dateFormatter.date(from: dateString)
+                                        }
+                                        for item in attance_flg{
+                                            let datess = item["pln_date"] as? String
+                                            let Formated_Date = dateFormatter.date(from: datess!)
+                                            let Leave = item["FWFlg"] as? String
+                                            if (Leave == "L"){
+                                                count = count + 1
+                                                attance_flg_L = attance_flg
+                                                let cell = calendar.cell(for: Formated_Date!, at: .current)
+                                                addLetterA(to: cell, text: "L")
+                                            }
+                                            if (Leave == "H"){
+                                                count = count + 1
+                                                attance_flg_L = attance_flg
+                                                let cell = calendar.cell(for: Formated_Date!, at: .current)
+                                                addLetterA(to: cell, text: "H")
+                                            }
+                                            if (Leave == "W"){
+                                                count = count + 1
+                                                attance_flg_L = attance_flg
+                                                let cell = calendar.cell(for: Formated_Date!, at: .current)
+                                                addLetterA(to: cell, text: "W")
+                                            }
+                                        }
+                                        
+                                        
+                                        let olDateFormatter = DateFormatter()
+                                        olDateFormatter.dateFormat = "yyyy-MM-dd"
+                                        let startDate = olDateFormatter.date(from: period_from_date)
+                                        let endDate = olDateFormatter.date(from: period_to_date)
+                                        var allDates = [Date]()
+                                        var currentDate = startDate
+                                        while currentDate! <= endDate!{
+                                            allDates.append(currentDate!)
+                                            currentDate = Calendar.current.date(byAdding: .day, value: 1, to: currentDate!)!
+                                        }
+                                        let currentDates = Date()
+                                        var missingDates = allDates.filter { !dates.contains($0) }
+                                        missingDates = missingDates.filter { $0 <= currentDates }
+                                        print(missingDates)
+                                        MisDatesDatas = missingDates
+                                        MisDatesDatas = MisDatesDatas.filter { $0 <= currentDates }
+                                        print(MisDatesDatas)
+                                        missingDates.forEach {
+                                            print(dateFormatter.string(from: $0))
+                                            let missingDates = dateFormatter.string(from: $0)
+                                                let formatter = DateFormatter()
+                                                formatter.dateFormat = "dd/MM/yyyy"
+                                            if let missingDate = formatter.date(from: missingDates) {
+                                                    print(missingDate)
+                                                    let cell = calendar.cell(for: missingDate, at: .current)
+                                                    if let cell = cell {
+                                                        addLetterA(to: cell, text: "A")
+                                                    } else {
+                                                        print("Cell for date \(missingDates) is nil.")
+                                                    }
+                                                } else {
+                                                    print("Date string \(missingDates) is invalid.")
+                                                }
+                                        }
+                                    }
+                                    
                                     //rej_exp
 
                                     if let exp_SubitDate = exp_SubitDate as? [[String: Any]],
@@ -895,6 +1000,9 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
                             print("Error: \(error.localizedDescription)")
                         }
                     }
+//                    DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+//                        self.LoadingDismiss()
+//                    }
                     
                 case .failure(let error):
                     Toast.show(message: error.errorDescription ?? "Unknown Error")
@@ -902,10 +1010,162 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
             }
         }
     
-    func nave_to_start_end_exp(){
-        
+    func expSubmitDatesSFC(){
+        let axn = "get/expSubmitDatesSFC"
+        let apiKey = "\(axn)&desig=\(Desig)&divisionCode=\(DivCode)&from_date=\(period_from_date)&to_date=\(period_to_date)&month=\(SelectMonth)&rSF=\(SFCode)&year=\(selectYear)&selected_period=\(selected_period)&sfCode=\(SFCode)&stateCode=\(StateCode)&sf_code=\(SFCode)"
+        let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
+        let url = APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKeyWithoutCommas
+        AF.request(url, method: .post, parameters: nil, encoding: URLEncoding.default, headers: nil)
+            .validate(statusCode: 200..<299)
+            .responseJSON { [self] response in
+               
+                switch response.result {
+                case .success(let value):
+                    print(value)
+                    if let json = value as? [String: Any] {
+                        do {
+                            let prettyJsonData = try JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
+                            if let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) {
+                                print(prettyPrintedJson)
+                                var count = 0
+                                if let jsonObject = try JSONSerialization.jsonObject(with: prettyJsonData, options: []) as? [String: Any]{
+                                    print(jsonObject)
+                                    // apr_flg
+                                    if let apr_flags = jsonObject["apr_flag"] as?  [[String: Any]]{
+                                        print(apr_flags)
+                                        if apr_flags.isEmpty{
+                                            apr_flg = "0"
+                                           
+                                        }else{
+                                            let apr = apr_flags.filter{$0["approve_flag"] as? Int == 1 }
+                                            
+                                            if let approve_flags = apr[0]["approve_flag"] as? Int {
+                                                apr_flg = String(approve_flags)
+                                            }else{
+                                                apr_flg = "0"
+                                            }
+                                        }
+                                    }
+                                    
+                                    
+                                    if let ExpDate = jsonObject["exp_submit_date"] as? [AnyObject] {
+                                        print(ExpDate)
+                                        exp_SubitDate = ExpDate
+                                        print(exp_SubitDate)
+                                    }
+                                    if let exp_submit = jsonObject["exp_submit_date"] as? [[String: Any]]{
+                                        for i in exp_submit {
+                                            if let dateString = i["full_date"] as? String {
+                                                let dateFormatter = DateFormatter()
+                                                dateFormatter.dateFormat = "dd/MM/yyyy"
+                                                
+                                                if let date = dateFormatter.date(from: dateString) {
+                                                    let cell = calendar.cell(for: date, at: .current)
+                                                    addDART(to: cell, text: ".")
+                                                } else {
+                                                    print("Failed to convert \(dateString) to Date.")
+                                                }
+                                            } else {
+                                                print("Date string is nil or not in the expected format.")
+                                            }
+                                        }
+                                    }
+
+                                    
+                                    if let attance_flg = jsonObject["attance_flg"] as?  [[String: Any]]{
+                                        print(attance_flg)
+                                        if attance_flg.isEmpty{
+                                            MisDatesDatas = []
+                                            return
+                                        }
+                                        
+                                        print(attance_flg)
+                                        
+                                        let dateFormatter = DateFormatter()
+                                        dateFormatter.dateFormat = "dd/MM/yyyy"
+                                        let dates = attance_flg.compactMap { dictionary -> Date? in
+                                            guard let dateString = dictionary["pln_date"] as? String else { return nil }
+                                            return dateFormatter.date(from: dateString)
+                                        }
+                                        for item in attance_flg{
+                                            let datess = item["pln_date"] as? String
+                                            let Formated_Date = dateFormatter.date(from: datess!)
+                                            let Leave = item["FWFlg"] as? String
+                                            if (Leave == "L"){
+                                                count = count + 1
+                                                attance_flg_L = attance_flg
+                                                let cell = calendar.cell(for: Formated_Date!, at: .current)
+                                                addLetterA(to: cell, text: "L")
+                                            }
+                                            if (Leave == "H"){
+                                                count = count + 1
+                                                attance_flg_L = attance_flg
+                                                let cell = calendar.cell(for: Formated_Date!, at: .current)
+                                                addLetterA(to: cell, text: "H")
+                                            }
+                                            if (Leave == "W"){
+                                                count = count + 1
+                                                attance_flg_L = attance_flg
+                                                let cell = calendar.cell(for: Formated_Date!, at: .current)
+                                                addLetterA(to: cell, text: "W")
+                                            }
+                                        }
+                                        
+                                        let olDateFormatter = DateFormatter()
+                                        olDateFormatter.dateFormat = "yyyy-MM-dd"
+                                        let startDate = olDateFormatter.date(from: period_from_date)
+                                        let endDate = olDateFormatter.date(from: period_to_date)
+                                        var allDates = [Date]()
+                                        var currentDate = startDate
+                                        while currentDate! <= endDate!{
+                                            allDates.append(currentDate!)
+                                            currentDate = Calendar.current.date(byAdding: .day, value: 1, to: currentDate!)!
+                                        }
+                                        let currentDates = Date()
+                                        var missingDates = allDates.filter { !dates.contains($0) }
+                                        missingDates = missingDates.filter { $0 <= currentDates }
+                                        print(missingDates)
+                                        MisDatesDatas = missingDates
+                                        MisDatesDatas = MisDatesDatas.filter { $0 <= currentDates }
+                                        print(MisDatesDatas)
+                                        missingDates.forEach {
+                                            print(dateFormatter.string(from: $0))
+                                            let missingDates = dateFormatter.string(from: $0)
+                                                let formatter = DateFormatter()
+                                                formatter.dateFormat = "dd/MM/yyyy"
+                                            if let missingDate = formatter.date(from: missingDates) {
+                                                    print(missingDate)
+                                                    let cell = calendar.cell(for: missingDate, at: .current)
+                                                    if let cell = cell {
+                                                        addLetterA(to: cell, text: "A")
+                                                    } else {
+                                                        print("Cell for date \(missingDates) is nil.")
+                                                    }
+                                                } else {
+                                                    print("Date string \(missingDates) is invalid.")
+                                                }
+                                        }
+                                    }
+                                    
+                                } else {
+                                    print("Error: Could not convert JSON to Dictionary or access 'data'")
+                                }
+                            } else {
+                                print("Error: Could not convert JSON to String")
+                            }
+                        } catch {
+                            print("Error: \(error.localizedDescription)")
+                        }
+                    }
+
+                    
+                case .failure(let error):
+                    Toast.show(message: error.errorDescription ?? "Unknown Error")
+                }
+            }
     }
     
+        
     func Nav_Exp_Form(date:Date){
         if validateForm(Seldate: date) == false {
             return
@@ -916,22 +1176,35 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
         })
         alert.addAction(UIAlertAction(title: "OK", style: .destructive) { [self] _ in
             self.dismiss(animated: true, completion: nil)
-            let storyboard = UIStoryboard(name: "AdminForms", bundle: nil)
-            let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
-            let RptMnuVc = storyboard.instantiateViewController(withIdentifier: "Expense") as! Expense_Entry
-            let myDyPln = storyboard.instantiateViewController(withIdentifier: "Daily_Expense_Entry") as! Daily_Expense_Entry
-            VisitData.shared.Nav_id = 1
-            myDyPln.day_Plan = Day_Plan_Data
-            myDyPln.set_Date = Set_Date
-            myDyPln.PeriodicData = Nav_PeriodicData
-            myDyPln.ExpEditNeed = exp_neededs
-            
-            let formatters = DateFormatter()
-            formatters.dateFormat = "yyyy-MM-dd"
-            VisitData.shared.fromdate = formatters.string(from: FDate)
-            VisitData.shared.Todate = formatters.string(from: TDate)
-            viewController.setViewControllers([RptMnuVc,myDyPln], animated: false)
-            (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
+            if UserSetup.shared.SrtEndKMNd == 2{
+                let storyboard = UIStoryboard(name: "AdminForms", bundle: nil)
+                let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
+                let RptMnuVc = storyboard.instantiateViewController(withIdentifier: "Expense") as! Expense_Entry
+                let myDyPln = storyboard.instantiateViewController(withIdentifier: "Daily_Expense_EntrySFC") as! Daily_Expense_Entry_SFC
+                VisitData.shared.Nav_id = 1
+                myDyPln.set_Date = Set_Date
+                viewController.setViewControllers([RptMnuVc,myDyPln], animated: false)
+                (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
+                
+            }else{
+                
+                let storyboard = UIStoryboard(name: "AdminForms", bundle: nil)
+                let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
+                let RptMnuVc = storyboard.instantiateViewController(withIdentifier: "Expense") as! Expense_Entry
+                let myDyPln = storyboard.instantiateViewController(withIdentifier: "Daily_Expense_Entry") as! Daily_Expense_Entry
+                VisitData.shared.Nav_id = 1
+                myDyPln.day_Plan = Day_Plan_Data
+                myDyPln.set_Date = Set_Date
+                myDyPln.PeriodicData = Nav_PeriodicData
+                myDyPln.ExpEditNeed = exp_neededs
+                
+                let formatters = DateFormatter()
+                formatters.dateFormat = "yyyy-MM-dd"
+                VisitData.shared.fromdate = formatters.string(from: FDate)
+                VisitData.shared.Todate = formatters.string(from: TDate)
+                viewController.setViewControllers([RptMnuVc,myDyPln], animated: false)
+                (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
+            }
         })
         self.present(alert, animated: true)
     }
@@ -980,7 +1253,25 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
                     }
                 }
             }
+            if item["FWFlg"] as? String == "W"{
+                if let dateString = dates, let exdate = dateFormatter.date(from: dateString) {
+                    if exdate == Seldate {
+                        Toast.show(message: "Please Select a Valid Date")
+                        return false
+                    }
+                }
+            }
         }
+        if apr_flg2 == "12"{
+            Toast.show(message: "Already Sent For Approval")
+            return false
+        }
+        if apr_flg2 == "13"{
+            Toast.show(message: "Expense alredy approved")
+            return false
+        }
+
+        
         
         return true
     }

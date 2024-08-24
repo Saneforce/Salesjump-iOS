@@ -174,10 +174,10 @@ class AddNewCustomer: IViewController, UITableViewDelegate, UITableViewDataSourc
             NewOutlet.shared.Dist.id = id
             NewOutlet.shared.Dist.name = name
             
-            lstRoutes = lstAllRoutes.filter({(fitem) in
-                let StkId: String = String(format: ",%@,", fitem["stockist_code"] as! CVarArg)
-                return Bool(StkId.range(of: String(format: ",%@,", id))?.lowerBound != nil )
-            })
+//            lstRoutes = lstAllRoutes.filter({(fitem) in
+//                let StkId: String = String(format: ",%@,", fitem["stockist_code"] as! CVarArg)
+//                return Bool(StkId.range(of: String(format: ",%@,", id))?.lowerBound != nil )
+//            })
         } else if SelMode == "RUT" {
             lblRoute.text = name  //+(item["id"] as! String)
             NewOutlet.shared.Route.id = id
@@ -190,16 +190,34 @@ class AddNewCustomer: IViewController, UITableViewDelegate, UITableViewDataSourc
             let LocalStoreage = UserDefaults.standard
            // let DistData: String=LocalStoreage.string(forKey: "Distributors_Master_"+id)!
             //new
-            if let DistData = LocalStoreage.string(forKey: "Distributors_Master_"+id),
-               let list = GlobalFunc.convertToDictionary(text:  DistData) as? [AnyObject] {
-                lstDist = list
+            
+            if(LocalStoreage.string(forKey: "Distributors_Master_"+id)==nil){
+                self.ShowLoading(Message: "       Sync Data Please wait...")
+                GlobalFunc.FieldMasterSync(SFCode: id){ [self] in
+                    let DistData = LocalStoreage.string(forKey: "Distributors_Master_"+id)!
+                    let RouteData: String=LocalStoreage.string(forKey: "Route_Master_"+id)!
+                    if let list = GlobalFunc.convertToDictionary(text: DistData) as? [AnyObject] {
+                        self.lstDist = list;
+                    }
+                    if let list = GlobalFunc.convertToDictionary(text: RouteData) as? [AnyObject] {
+                        lstAllRoutes = list
+                        lstRoutes = list
+                    }
+                    self.LoadingDismiss()
+                }
+            }else {
+                if let DistData = LocalStoreage.string(forKey: "Distributors_Master_"+id),
+                   let list = GlobalFunc.convertToDictionary(text:  DistData) as? [AnyObject] {
+                    lstDist = list
+                }
+                
+                if let RouteData = LocalStoreage.string(forKey: "Route_Master_"+id),
+                   let list = GlobalFunc.convertToDictionary(text:  RouteData) as? [AnyObject] {
+                    lstAllRoutes = list
+                    lstRoutes = list
+                }
             }
             
-            if let RouteData = LocalStoreage.string(forKey: "Route_Master_"+id),
-               let list = GlobalFunc.convertToDictionary(text:  RouteData) as? [AnyObject] {
-                lstAllRoutes = list
-                lstRoutes = list
-            }
             //new
             //let RouteData: String=LocalStoreage.string(forKey: "Route_Master_"+id)!
 //            if let list = GlobalFunc.convertToDictionary(text: DistData) as? [AnyObject] {
@@ -231,7 +249,7 @@ class AddNewCustomer: IViewController, UITableViewDelegate, UITableViewDataSourc
             calendar.setCurrentPage(date, animated: true)
         }
         lblDOB.text = selectedDates[0]
-        formatter.dateFormat = "yyyy/MM/dd"
+        formatter.dateFormat = "yyyy-MM-dd"
         sDOB = formatter.string(from: date)
         outletData.updateValue(lItem(id: sDOB, name: lblDOB.text!), forKey: SelMode)
         NewOutlet.shared.DOB.id = sDOB
@@ -390,10 +408,10 @@ class AddNewCustomer: IViewController, UITableViewDelegate, UITableViewDataSourc
             Toast.show(message: "Select the Headquarter", controller: self)
             return false
         }
-        if NewOutlet.shared.Dist.id == "" {
-            Toast.show(message: "Select the Distributor", controller: self)
-            return false
-        }
+//        if NewOutlet.shared.Dist.id == "" {
+//            Toast.show(message: "Select the Distributor", controller: self)
+//            return false
+//        }
         if NewOutlet.shared.Route.id == "" {
             Toast.show(message: "Select the Route", controller: self)
             return false
@@ -493,7 +511,9 @@ class AddNewCustomer: IViewController, UITableViewDelegate, UITableViewDataSourc
         let params: Parameters = [
             "data": jsonString //"["+jsonString+"]"//
         ]
+        print(NewOutlet.shared.HQ.id)
         print(params)
+        print(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"dcr/save&divisionCode=" + self.DivCode +  "&rSF="+self.SFCode+"&sfCode="+self.SFCode)
         AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"dcr/save&divisionCode=" + self.DivCode +  "&rSF="+self.SFCode+"&sfCode="+self.SFCode, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
             AFdata in
             self.LoadingDismiss()
@@ -502,13 +522,14 @@ class AddNewCustomer: IViewController, UITableViewDelegate, UITableViewDataSourc
                
             case .success(let value):
                 print(value)
+                print(NewOutlet.shared.HQ.id)
                 if value is [String: Any] {
                     Toast.show(message: "Customer Added submitted successfully", controller: self)
+                    
+                    self.MasSync(apiKey:  "table/list&divisionCode=" + self.DivCode +  "&rSF="+NewOutlet.shared.HQ.id+"&sfCode="+NewOutlet.shared.HQ.id, aFormData: [
+                        "tableName":"vwDoctor_Master_APP","coloumns":"[\"doctor_code as id\", \"doctor_name as name\",\"town_code\",\"town_name\",\"lat\",\"long\",\"addrs\",\"ListedDr_Address1\",\"ListedDr_Sl_No\",\"Mobile_Number\",\"Doc_cat_code\",\"ContactPersion\",\"Doc_Special_Code\",\"Distributor_Code\",\"Doctor_Code\",\"gst\",\"createdDate\",\"Doctor_Active_flag\",\"ListedDr_Email\",\"Spec_Doc_Code\",\"debtor_code\"]","where":"[\"isnull(Doctor_Active_flag,0)=0\"]","orderBy":"[\"name asc\"]","desig":"mgr"
+                        ], aStoreKey: "Retail_Master_"+NewOutlet.shared.HQ.id)
                     NewOutlet.shared.Clear()
-                    self.MasSync(apiKey:  "table/list&divisionCode=" + self.DivCode +  "&rSF="+self.SFCode+"&sfCode="+self.SFCode, aFormData: [
-                    "tableName":"vwDoctor_Master_APP","coloumns":"[\"doctor_code as id\", \"doctor_name as name\",\"town_code\",\"town_name\",\"lat\",\"long\",\"addrs\",\"ListedDr_Address1\",\"ListedDr_Sl_No\",\"Mobile_Number\",\"Doc_cat_code\",\"ContactPersion\",\"Doc_Special_Code\"]","where":"[\"isnull(Doctor_Active_flag,0)=0\"]","orderBy":"[\"name asc\"]","desig":"mgr"
-                    ], aStoreKey: "Retail_Master_"+self.SFCode)
-    
                     self.GotoHome()
                 }
             case .failure(let error):

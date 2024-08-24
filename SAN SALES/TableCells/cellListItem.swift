@@ -103,6 +103,19 @@ class cellListItem:UITableViewCell{
     @IBOutlet weak var Exp_Status: UILabel!
     
     
+    // Expense View SFC
+    @IBOutlet weak var Status: UILabel!
+    @IBOutlet weak var item: UILabel!
+    @IBOutlet weak var Date: UILabel!
+    @IBOutlet weak var ViewBT: UIButton!
+    
+    @IBOutlet weak var Fromlbsfc: UILabel!
+    @IBOutlet weak var TolblSFC: UILabel!
+    @IBOutlet weak var Mod_of_trv_SFC: UILabel!
+    @IBOutlet weak var Km_sfc: UILabel!
+    @IBOutlet weak var Fare_sfc: UILabel!
+    @IBOutlet weak var Amount_sfc: UILabel!
+    
     // Expense Approval
     @IBOutlet weak var Apr_Date: UILabel!
     @IBOutlet weak var Apr_Work_Typ: UILabel!
@@ -117,6 +130,10 @@ class cellListItem:UITableViewCell{
     @IBOutlet weak var Date_Sf: UILabel!
     @IBOutlet weak var new_Exp_Tot: UILabel!
     @IBOutlet weak var New_Exp_View_Bt: UIButton!
+    
+    // Leave Approve Button
+    @IBOutlet weak var Leave_Apr: UIButton!
+    
     
     @IBOutlet weak var DATE: UILabel!
     @IBOutlet weak var NA_Name: UILabel!
@@ -134,5 +151,8 @@ class cellListItem:UITableViewCell{
     @IBOutlet weak var NA_Approve_BT: UIButton!
     @IBOutlet weak var NA_Daily_Allowance_Heda: UILabel!
     @IBOutlet weak var NA_Travel_Expense_Head: UILabel!
+    
+    @IBOutlet weak var Mode_of_trave_in_apr: UILabel!
+    
     var ischeck = false
 }

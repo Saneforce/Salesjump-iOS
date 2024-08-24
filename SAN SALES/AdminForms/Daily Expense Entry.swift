@@ -93,6 +93,11 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
     @IBOutlet var Edit_Km_sc: UIView!
     @IBOutlet weak var Edit_Save_BT: UIButton!
     
+    // fare amount
+    
+    @IBOutlet weak var Endfare: UILabel!
+    @IBOutlet weak var Endfare_hight: NSLayoutConstraint!
+    @IBOutlet weak var endfare_view: UIView!
     
     struct exData:Codable{
     let id:String
@@ -171,6 +176,7 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
     var need_mode_of_trav = 0
     var st_Km_Img:URL?
     var Ed_Km_Img:URL?
+    var fareamount = 0.0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -226,11 +232,10 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
         
         Edit_Km.addTarget(target: self, action: #selector(Edit_Km_Scr))
         
-        print(ExpEditNeed)
         if let Editimg = ExpEditNeed, Editimg != 1 {
-            Edit_Km.isHidden = false
-        } else {
             Edit_Km.isHidden = true
+        }else{
+            Edit_Km.isHidden = false
         }
         
         set_form()
@@ -300,7 +305,7 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
         Image_Sc_Close.layer.cornerRadius = 10
         let shadowPath = UIBezierPath(roundedRect: Image_Sc_Close.bounds, cornerRadius: 10)
         Image_Sc_Close.layer.masksToBounds = false
-        var shadowColor: UIColor? = UIColor.black
+        let shadowColor: UIColor? = UIColor.black
         Image_Sc_Close.layer.shadowColor = shadowColor?.cgColor
         Image_Sc_Close.layer.shadowOffset = CGSize(width: 0, height: 3);
         Image_Sc_Close.layer.shadowOpacity = 0.5
@@ -317,7 +322,8 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
         Edit_Save_BT.layer.shadowOpacity = 0.5
         Edit_Save_BT.layer.shadowPath = shadowPaths.cgPath
         
-        APIClient.shared.imgurl = "\(APIClient.shared.BaseURL)/Photos/"
+        //APIClient.shared.imgurl = "\(APIClient.shared.BaseURL)/Photos/"
+        APIClient.shared.imgurl = "http://fmcg.sanfmcg.com/Photos/"
     }
     func getUserDetails(){
     let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
@@ -731,16 +737,26 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
         set_data_TB(openMod: "Staying")
     }
     @objc private func Start_Km_Img_View(){
+        Image_Sc.isHidden = false
+        self.ShowLoading(Message: "Loading...")
         let imageData = try? Data(contentsOf: st_Km_Img!)
         let image = UIImage(data: imageData!)
         Image_View.image = image
-        Image_Sc.isHidden = false
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                              self.LoadingDismiss()
+                         }
+        
     }
     @objc private func End_Km_Img_View(){
+        Image_Sc.isHidden = false
+        self.ShowLoading(Message: "Loading...")
         let imageData = try? Data(contentsOf: Ed_Km_Img!)
         let image = UIImage(data: imageData!)
         Image_View.image = image
-        Image_Sc.isHidden = false
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                              self.LoadingDismiss()
+                         }
+       
     }
     
     @objc private func Edit_Km_Scr(){
@@ -929,7 +945,11 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
                                             
                                         
                                             if travel_data[0]["StEndNeed"] as? String == "0" {
-                                                Travel_Det_Height.constant = 35
+                                                
+                                               
+                                                
+                                                
+                                                Travel_Det_Height.constant = 70
                                                 scroll_hig = scroll_hig - 250
                                                 Scrollview_Height.constant = scroll_hig
                                                 Main_Scrollview_Height.constant = scroll_hig
@@ -939,6 +959,25 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
                                                 Calim_Amt_View.isHidden = true
                                             }
                                           print(travel_data)
+                                            if let fareString = travel_data[0]["fare"] as? String, !fareString.isEmpty {
+                                                print(fareString)
+                                                scroll_hig = scroll_hig + 70
+                                                endfare_view.isHidden = false
+                                                Endfare.text = fareString
+                                                if let fareDouble = Double(fareString) {
+                                                    fareamount = fareDouble
+                                                }
+                                                Endfare_hight.constant = 25
+                                            } else {
+                                                scroll_hig = scroll_hig - 70
+                                                endfare_view.isHidden = true
+                                                Endfare_hight.constant = 0
+                                                Endfare.text = "0"
+                                                fareamount = 0.0
+                                            }
+
+                                            print(travel_data)
+                                            
                                             if let Image_Url = travel_data[0]["Image_Url"] as? String,Image_Url != ""{
                                                 Start_Km_Img.isHidden = false
                                                 let apiKey: String = "\(SFCode)_\(Image_Url)"
@@ -1016,11 +1055,12 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
                                             cALIM_KM.text = String(clam_km)
                                             EnterKM.text = String(clam_km)
                                             Pers_KM.text = String((travel_data[0]["Fuel_Charge"] as? Double)!)
-                                            var claim_amounnt = 0
+                                            var claim_amounnt = 0.0
                                             if let clamkm = Double(cALIM_KM.text!), let Fuel_Charge = Double(Pers_KM.text!){
-                                                claim_amounnt = Int(clamkm * Fuel_Charge)
+                                                claim_amounnt = clamkm * Fuel_Charge
+                                                claim_amounnt = claim_amounnt + fareamount
                                             }
-                                            Claim_Amt.text = String(claim_amounnt)
+                                            Claim_Amt.text = String(format: "%.2f",claim_amounnt)
                                             Expense_data[0].fare = String(claim_amounnt)
                                             From_Text.text = travel_data[0]["From_Place"] as? String
                                             To_Text.text = travel_data[0]["To_Place"] as? String
@@ -1442,11 +1482,12 @@ class Daily_Expense_Entry: IViewController, UIImagePickerControllerDelegate, UIN
                 }
                 
                 cALIM_KM.text = String(clam_km)
-                var claim_amounnt = 0
+                var claim_amounnt = 0.0
                 if let clamkm = Double(cALIM_KM.text!), let Fuel_Charge = Double(Pers_KM.text!){
-                    claim_amounnt = Int(clamkm * Fuel_Charge)
+                    claim_amounnt = clamkm * Fuel_Charge
+                    claim_amounnt = claim_amounnt + fareamount
                 }
-                Claim_Amt.text = String(claim_amounnt)
+                Claim_Amt.text = String(format: "%.2f",claim_amounnt)
                 Expense_data[0].fare = String(claim_amounnt)
                 animateOut(desiredView:blureView)
                 animateOut(desiredView:Edit_Km_sc)

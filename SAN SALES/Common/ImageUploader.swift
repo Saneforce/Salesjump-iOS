@@ -12,6 +12,7 @@ import UIKit
 class ImageUploader {
     func uploadImage(SFCode: String,image: UIImage,fileName: String)
     {
+        
          let imgData = image.jpegData(compressionQuality: 0.80)
 
         AF.upload(multipartFormData: { multipartFormData in
@@ -27,3 +28,19 @@ class ImageUploader {
 }
 
 
+class ImageUploade {
+    func uploadImage(SFCode: String, image: UIImage, fileName: String, completion: @escaping () -> Void) {
+        let imgData = image.jpegData(compressionQuality: 0.80)
+        
+        AF.upload(multipartFormData: { multipartFormData in
+            multipartFormData.append(imgData!, withName: "imgfile", fileName: fileName, mimeType: "image/jpg")
+        }, to: "http://fmcg.sanfmcg.com" + APIClient.shared.DBURL + "imgupload&sf_code=" + SFCode)
+        .uploadProgress { progress in
+            print(progress)
+        }
+        .responseJSON { response in
+            print(response)
+            completion() // Call the completion handler when the response is received
+        }
+    }
+}

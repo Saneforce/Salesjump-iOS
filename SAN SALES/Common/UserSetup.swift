@@ -53,6 +53,9 @@ class UserSetup{
     var Hotel_Bill_Nd:Int = 0
     var SrtNd:Int = 0
     var dsg_code:Int = 0
+    var ExpDist_HQ:Int = 0
+    var ExpDist_HQEX:Int = 0
+    var drCap : String = ""
     func initUserSetup(){
         let SetupStoreage = UserDefaults.standard
         let SetupData: String=SetupStoreage.string(forKey: "UserSetup")!
@@ -60,7 +63,6 @@ class UserSetup{
         if let list = GlobalFunc.convertToDictionary(text: SetupData) as? [AnyObject] {
             lstSetups = list;
         }
-        
         print(lstSetups)
         SecondaryCaption = lstSetups[0]["EDrCap"] as? String ?? "Secondary Order"
         PrimaryCaption = lstSetups[0]["EStkCap"] as? String ?? "Primary Order"
@@ -96,7 +98,10 @@ class UserSetup{
         tpRemainderDate = lstSetups[0]["TP_Remainder_Date"] as? String ?? ""
         tpMandatoryNeed = lstSetups[0]["TP_Mandatory_ND"] as? Int ?? 0
         Hotel_Bill_Nd = lstSetups[0]["Hotel_Bill_Nd"] as? Int ?? 0
+        drCap = lstSetups[0]["DrCap"] as? String ?? ""
         SrtNd = lstSetups[0]["SrtNd"] as? Int ?? 0
+        ExpDist_HQ = lstSetups[0]["ExpDist_HQ"] as? Int ?? 0
+        ExpDist_HQEX = lstSetups[0]["ExpDist_HQEX"] as? Int ?? 0
         if(lstSetups[0]["Geo_Fencing"] as? Int == 1){
             Fenching = true
         }else{

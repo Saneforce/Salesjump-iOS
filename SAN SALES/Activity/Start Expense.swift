@@ -10,7 +10,7 @@ import Alamofire
 import FSCalendar
 import Foundation
 import CoreLocation
-class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UITableViewDataSource, UITableViewDelegate, UIImagePickerControllerDelegate & UINavigationControllerDelegate {
+class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource,FSCalendarDelegateAppearance, UITableViewDataSource, UITableViewDelegate, UIImagePickerControllerDelegate & UINavigationControllerDelegate {
     @IBOutlet weak var BT_Back: UIImageView!
     @IBOutlet weak var Start_Expense_Scr: UILabel!
     @IBOutlet weak var calendar: FSCalendar!
@@ -45,6 +45,10 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
     
     @IBOutlet weak var Str_Km_text_width: NSLayoutConstraint!
     @IBOutlet weak var Str_Km_with: NSLayoutConstraint!
+    
+    @IBOutlet weak var Image_sc: UIView!
+    @IBOutlet weak var Image_Sc_Close: UIButton!
+    @IBOutlet weak var Start_Exp_Image_View: UIImageView!
     
     
     struct exData:Codable{
@@ -109,6 +113,19 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
         Add_Photo.addTarget(target: self, action: #selector(openCamera))
         Select_To.addTarget(target: self, action: #selector(opento))
         Check_Box.addTarget(target: self, action: #selector(Box))
+        
+        Start_Km_Img.addTarget(target: self, action: #selector(Open_cam_sc))
+        
+        
+        
+        Image_Sc_Close.layer.cornerRadius = 10
+        let shadowPath = UIBezierPath(roundedRect: Image_Sc_Close.bounds, cornerRadius: 10)
+        Image_Sc_Close.layer.masksToBounds = false
+        let shadowColor: UIColor? = UIColor.black
+        Image_Sc_Close.layer.shadowColor = shadowColor?.cgColor
+        Image_Sc_Close.layer.shadowOffset = CGSize(width: 0, height: 3);
+        Image_Sc_Close.layer.shadowOpacity = 0.5
+        Image_Sc_Close.layer.shadowPath = shadowPath.cgPath
         
         
         if let WorkTypeData = LocalStoreage.string(forKey: "Worktype_Master"),
@@ -212,6 +229,7 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
             print(item)
             select_allow = item.name
             Daily_Allowance.text = item.name
+            Mode_Of_Travel.text = "Select Mode of Travel" 
         }else if (SelMod == "Travel"){
             let item = Trave_Dets[indexPath.row]
             print(item)
@@ -297,8 +315,7 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
         }
     }
 
-    func expSubmitDates() {
-       // expsub_Date.removeAll()
+    func expSubmitDates(){
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
         
@@ -355,7 +372,7 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
                     print(prettyPrintedJson)
                     if let attance_flg = json["attance_flg"] as? [AnyObject] {
                         for item in attance_flg{
-                            if let Flf = item["FWFlg"] as? String, Flf == "F"||Flf=="H"||Flf=="W"{
+                            if let Flf = item["FWFlg"] as? String, Flf == "F"||Flf=="N" {
                                 print(item)
                                 expsub_Date.append(Expsub_Date(Dates: (item["pln_date"] as? String)!, Text: (item["FWFlg"] as? String)!))
                             }
@@ -385,8 +402,10 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
                         }
                     }
                     
-                    print(expsub_Date)
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [self] in
+                        calendar.reloadData()
                         self.LoadingDismiss()
                     }
                 }
@@ -398,7 +417,23 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
             }
         }
     }
+
+    func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, titleDefaultColorFor date: Date) -> UIColor? {
+        let day : Int! = Int(date.toString(format: "dd"))
+        print(expsub_Date)
+        let currentMonth = expsub_Date.filter{$0.Dates.changeFormat(from: "dd/MM/yyyy",to: "MM") == date.toString(format: "MM")}
+        let dates = currentMonth.map{Int($0.Dates.changeFormat(from: "dd/MM/yyyy",to: "dd"))}
+        return dates.contains(day) ? UIColor.black : UIColor.lightGray
+    }
     
+    func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, titleSelectionColorFor date: Date) -> UIColor? {
+        let day : Int! = Int(date.toString(format: "dd"))
+        
+        let currentMonth = expsub_Date.filter{$0.Dates.changeFormat(from: "dd/MM/yyyy",to: "MM") == date.toString(format: "MM")}
+        let dates = currentMonth.map{Int($0.Dates.changeFormat(from: "dd/MM/yyyy",to: "dd"))}
+       // return dates.contains(day) ? UIColor.lightGray : UIColor.black
+        return dates.contains(day) ? UIColor.black : UIColor.lightGray
+    }
 
     func getLastThreeMonthsDates() -> [String] {
         var dates: [String] = []
@@ -625,9 +660,7 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
   
     }
     func save_data(lat:String,log:String){
-        
-        print(StarKmNeed)
-        
+
         if Select_To.text == "others"{
             to_place=Enter_To.text!
         }
@@ -681,20 +714,20 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
                     }
                     print(prettyPrintedJson)
                     let LocalStoreage = UserDefaults.standard
+                    LocalStoreage.set("1", forKey: "attendanceView")
                     if let attendanceArray = prettyPrintedJson["Attendance"] as? [[String: Any]] {
                         if let firstAttendance = attendanceArray.first {
-                            if let msgValue = firstAttendance["msg"] as? String {
-                                LocalStoreage.set(msgValue, forKey: "attendanceView")
-                            } else {
-                                LocalStoreage.set("0", forKey: "attendanceView")
-                            }
+//                            if let msgValue = firstAttendance["msg"] as? String {
+//                                
+//                            } else {
+//                               // LocalStoreage.set("0", forKey: "attendanceView")
+//                            }
                         } else {
-                            LocalStoreage.set("0", forKey: "attendanceView")
+                           // LocalStoreage.set("0", forKey: "attendanceView")
                         }
                     } else {
-                        LocalStoreage.set("0", forKey: "attendanceView")
+                       // LocalStoreage.set("0", forKey: "attendanceView")
                     }
-                    
                     
                     Toast.show(message: "submitted successfully", controller: self)
                     if let NavExp = Exp_Nav, NavExp=="Ex_Ent"{
@@ -754,10 +787,10 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
         }
         // Start Km Image
         if Start_Km_Img.isHidden == true {
-//            if StarKmNeed == 1 {
-//                Toast.show(message: "Add Start KM Photo", controller: self)
-//                return false
-//            }
+            if StarKmNeed == 1 {
+                Toast.show(message: "Add Start KM Photo", controller: self)
+                return false
+            }
         }
         
         return true
@@ -774,19 +807,36 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
     }
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                self.ShowLoading(Message: "Image upload, please wait...")
+                             }
+           
             Start_Km_Img.layer.cornerRadius = 10
             Start_Km_Img.layer.masksToBounds = true
             Start_Km_Img.image = pickedImage
+            Start_Exp_Image_View.image = pickedImage
             let fileName: String = String(Int(Date().timeIntervalSince1970))
-            let filenameno="\(fileName).jpg"
+            let filenameno = "\(fileName).jpg"
             photo_name = "_\(filenameno)"
-            ImageUploader().uploadImage(SFCode: self.SFCode, image: pickedImage, fileName: "__\(filenameno)")
-            Str_Km_text_width.constant = 200
-            Str_Km_with.constant = 60
-            Start_Km_Img.isHidden = false
+            print(APIClient.shared.BaseURL)
+            ImageUploade().uploadImage(SFCode: self.SFCode, image: pickedImage, fileName: "__\(filenameno)") {
+                // This code runs after the image upload is complete
+                DispatchQueue.main.async { [self] in
+                    Str_Km_text_width.constant = 200
+                    Str_Km_with.constant = 60
+                    Start_Km_Img.isHidden = false
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                          self.LoadingDismiss()
+                                     }
+                    
+                }
+            }
         }
         dismiss(animated: true, completion: nil)
     }
+
+
     
     @objc private func openCamera(){
         let imagePickerController = UIImagePickerController()
@@ -815,8 +865,7 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
         Drop_Down_Sc.isHidden = true
     }
     @objc private func Open_Calender(){
-        
-       
+        print(expsub_Date)
         for letter in expsub_Date {
             let datess = letter.Dates
             let dateFormatter = DateFormatter()
@@ -831,8 +880,6 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
                         print("Cell is nil for date: \(datess)")
                     }
                     }
-                
-               
             } else {
                 print("Failed to parse date: \(datess)")
             }
@@ -853,20 +900,41 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
     @objc private func Clos_Calender(){
         calendar_view.isHidden = true
     }
+//    @objc private func GotoHome(){
+//        if let NavExp = Exp_Nav{
+//            if (NavExp == "Ex_Ent"){
+//                VisitData.shared.Nav_id = 1
+//                let storyboard = UIStoryboard(name: "AdminForms", bundle: nil)
+//                let viewController = storyboard.instantiateViewController(withIdentifier: "Expense") as! Expense_Entry;()
+//                UIApplication.shared.windows.first?.rootViewController = viewController
+//                UIApplication.shared.windows.first?.makeKeyAndVisible()
+//            }
+//        }else{
+//            GlobalFunc.MovetoMainMenu()
+//        }
+//    }
     @objc private func GotoHome(){
-        if let NavExp = Exp_Nav{
-            print(NavExp)
-            if (NavExp == "Ex_Ent"){
-                VisitData.shared.Nav_id = 1
-                let storyboard = UIStoryboard(name: "AdminForms", bundle: nil)
-                let viewController = storyboard.instantiateViewController(withIdentifier: "Expense") as! Expense_Entry;()
-                UIApplication.shared.windows.first?.rootViewController = viewController
-                UIApplication.shared.windows.first?.makeKeyAndVisible()
+       
+        let alert = UIAlertController(title: "Confirmation", message: "Do you want it back?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { [self] _ in
+            if let NavExp = Exp_Nav{
+                if (NavExp == "Ex_Ent"){
+                    VisitData.shared.Nav_id = 1
+                    let storyboard = UIStoryboard(name: "AdminForms", bundle: nil)
+                    let viewController = storyboard.instantiateViewController(withIdentifier: "Expense") as! Expense_Entry;()
+                    UIApplication.shared.windows.first?.rootViewController = viewController
+                    UIApplication.shared.windows.first?.makeKeyAndVisible()
+                }
+            }else{
+                GlobalFunc.MovetoMainMenu()
             }
-        }else{
-            GlobalFunc.MovetoMainMenu()
-        }
-        
+            self.navigationController?.popViewController(animated: true)
+            return
+        })
+        alert.addAction(UIAlertAction(title: "Cancel", style: .destructive) { _ in
+            return
+        })
+        self.present(alert, animated: true)
         
     }
     @objc private func opento(){
@@ -924,4 +992,16 @@ class Start_Expense:IViewController, FSCalendarDelegate,FSCalendarDataSource, UI
         }
         Drop_Down_TB.reloadData()
     }
+    
+    @objc private func Open_cam_sc(){
+        
+        
+        
+        Image_sc.isHidden = false
+    }
+    
+    @IBAction func Close_img_sc(_ sender: Any) {
+        Image_sc.isHidden = true
+    }
+    
 }

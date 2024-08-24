@@ -106,6 +106,13 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
     var net_weight_data = ""
     var ImgName:String = ""
     
+    var isFromMissedEntry : Bool = false
+    var selectedSf : String!
+    var missedDateSubmit : (String) -> () = { _ in}
+    var missedDateEditData : ([SecondaryOrderSelectedList]) -> () = { _  in}
+    var products = [SecondaryOrderSelectedList]()
+    var selectedProducts = [SecondaryOrderSelectedList]()
+    
     override func viewDidLoad() {
         loadViewIfNeeded()
        
@@ -170,7 +177,11 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
                 print(lstProducts.count)
             }
         }
-        DataSF = self.lstPlnDetail[0]["subordinateid"] as! String
+        if self.isFromMissedEntry == false {
+            DataSF = self.lstPlnDetail[0]["subordinateid"] as! String
+        }else {
+            DataSF = self.selectedSf
+        }
         
             if let lstDistData = LocalStoreage.string(forKey: "Distributors_Master_"+DataSF),
                let list = GlobalFunc.convertToDictionary(text:  lstDistData) as? [AnyObject] {
@@ -219,6 +230,8 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         
         EditSecondaryordervalue()
 
+        self.editMissedDateOrder()
+        print(isFromMissedEntry)
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -1083,6 +1096,10 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         if(RateItems.count>0){
             Rate = (RateItems[0]["Retailor_Price"] as! NSString).doubleValue
         }
+        if Rate == 0 {
+            Toast.show(message: "Please Select Product With Rate Value", controller: self)
+            return
+        }
         var ItmValue: Double = (TotQty*Rate)
         if(Schemes.count>0){
             Scheme = (Schemes[0]["Scheme"] as! NSString).doubleValue
@@ -1117,7 +1134,6 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         print(Disc)
         print(refresh)
         if items.count>0 {
-            print(VisitData.shared.ProductCart)
             if let i = VisitData.shared.ProductCart.firstIndex(where: { (item) in
                 if item["id"] as! String == id {
                     return true
@@ -1180,7 +1196,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
             
             if (Cart["SalQty"] as! Double) > 0 {
                 if (refresh == 1 || refresh == 3 ){
-                    tbPrvOrderProduct.reloadData()
+                  //  tbPrvOrderProduct.reloadData()
                 }
                 return true
             }else{
@@ -1214,13 +1230,12 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         lblTotItem.text = String(format: "%i",  lstPrvOrders.count)
         lblPrvTotItem.text = String(format: "%i",  lstPrvOrders.count)
         if (refresh == 1 || Upadet_table == 2 || refresh == 3){
-            tbProduct.reloadData()
+            // tbProduct.reloadData()
         }
         
 //        if (refresh == 3 ){
 //            tbPrvOrderProduct.reloadData()
 //        }
-
        
     }
     
@@ -1237,6 +1252,14 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         })
         if(lstPrvOrder.count<1){
             Toast.show(message: "Cart is Empty.", controller: self)
+            return false
+        }else {
+            for i in 0..<lstPrvOrder.count {
+                if (lstPrvOrder[i]["Rate"] as! Double) > 0 {
+                    return true
+                }
+            }
+            Toast.show(message: "Please select atleast one product with rate", controller: self)
             return false
         }
         return true
@@ -1294,7 +1317,14 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
                     }
                     Count = Count+1
                     if (OrderSub == "OD"){
-                        self.OrderSubmit(sLocation: sLocation, sAddress: sAddress)
+                        
+                        if self.isFromMissedEntry == true {
+                            self.OrderSubmitMissedDate(sLocation: sLocation, sAddress: sAddress)
+                        }else {
+                            self.OrderSubmit(sLocation: sLocation, sAddress: sAddress)
+                        }
+                        
+                        
                         OrderSub  = ""
                         print(Count)
                     }else{
@@ -1313,6 +1343,63 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         
         
     }
+    
+    func OrderSubmitMissedDate(sLocation: String,sAddress: String) {
+        
+        
+        var productString = ""
+        
+        for i in 0..<self.lstPrvOrder.count {
+            
+            print(self.lstPrvOrder[i])
+            let item: [String: Any]=self.lstPrvOrder[i] as! [String : Any]
+            let id=String(format: "%@", item["id"] as! CVarArg)
+            let uom=String(format: "%@", item["UOM"] as! CVarArg)
+            let uomName=String(format: "%@", item["UOMNm"] as! CVarArg)
+            let uomConv=String(format: "%@", item["UOMConv"] as! CVarArg)
+            let netWt=String(format: "%@", item["NetWt"] as! CVarArg)
+            
+            let Qty=String(format: "%@", item["Qty"] as? CVarArg ?? "")
+            
+            
+            
+            
+            
+            let ProdItems = self.lstAllProducts.filter({(product) in
+                let ProdId: String = String(format: "%@", product["id"] as! CVarArg)
+                return Bool(ProdId == id)
+            })
+            print(ProdItems)
+            
+            let name =  ProdItems.first?["name"] as? String ?? ""
+            
+            print(VisitData.shared.Dist.id)
+            print(VisitData.shared.Dist.name)
+            
+            self.products.append(SecondaryOrderSelectedList(productId: id, productName: name, unitId: uom, unitName: uomName, unitConversion: uomConv, rate: netWt, Qty: Qty, product: ProdItems.first, distributorId: VisitData.shared.Dist.id, distributorName: VisitData.shared.Dist.name, item: self.lstPrvOrder[i], subtotal: "\(lbltotalamunt)"))
+            
+        }
+        
+        if productString.hasSuffix(","){
+            productString.removeLast()
+        }
+        
+        
+        let jsonString = "[{\"Activity_Report_APP\":{\"Worktype_code\":\"\'1\'\",\"Town_code\":\"\'699\'\",\"RateEditable\":\"\'\'\",\"dcr_activity_date\":\"\'2024-04-19 00:00:00\'\",\"workTypFlag_Missed\":\"F\",\"mydayplan\":1,\"mypln_town\":\"\'Aligarh\'\",\"mypln_town_id\":\"\'699\'\",\"hq_code\":\"\'SJQAMGR0005\'\",\"hq_name\":\"\'\'\",\"missed_date_entry\":1,\"Daywise_Remarks\":\"\",\"eKey\":\"EKSJQAMGR0005-1720613511000\",\"rx\":\"\'1\'\",\"rx_t\":\"\'\'\",\"DataSF\":\"\'SJQAMGR0005\'\"}},{\"Activity_Doctor_Report\":{\"Doctor_POB\":0,\"Worked_With\":\"\'\'\",\"Doc_Meet_Time\":\"\'2024-04-19 00:00:00\'\",\"modified_time\":\"\'2024-07-10 17:41:50\'\",\"net_weight_value\":\"1\",\"stockist_code\":\"\'693\'\",\"stockist_name\":\"\'ANIL MEDICALS\'\",\"superstockistid\":\"\'\'\",\"Discountpercent\":0,\"CheckinTime\":\"2024-07-10 17:41:49\",\"CheckoutTime\":\"2024-07-10 17:43:48\",\"location\":\"\'1\'\",\"geoaddress\":\"\",\"retLatitude\":\"27.8840796\",\"retLongitude\":\"78.069681\",\"PhoneOrderTypes\":\"0\",\"Order_Stk\":\"\'693\'\",\"Order_No\":\"\'\'\",\"rootTarget\":\"\",\"orderValue\":\"15.75\",\"rateMode\":\"free\",\"discount_price\":0,\"doctor_code\":\"\'684\'\",\"doctor_name\":\"\'Anupama medical store\'\",\"f_key\":{\"Activity_Report_Code\":\"\'Activity_Report_APP\'\"}}},{\"Activity_Sample_Report\":[\(productString)]},{\"Trans_Order_Details\":[]},{\"Activity_Input_Report\":[]},{\"Activity_Event_Captures\":[]},{\"PENDING_Bills\":[]},{\"Compititor_Product\":[]}]"
+        
+        
+        
+        
+        missedDateEditData(self.products)
+        self.LoadingDismiss()
+        PhotosCollection.shared.PhotoList = []
+        VisitData.shared.clear()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0){
+            self.navigationController?.popViewController(animated: true)
+        }
+        
+    }
+    
     func OrderSubmit(sLocation: String,sAddress: String){
         
         var sPItems:String = ""
@@ -1541,9 +1628,20 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         let params: Parameters = [
             "data": jsonString //"["+jsonString+"]"//
         ]
-        print(params)
+   //     print(params)
         print(VisitData.shared.cInTime)
         print(SubmittedDCR.Order_Out_Time)
+        
+        if isFromMissedEntry {
+            missedDateSubmit(jsonString)
+            self.LoadingDismiss()
+            PhotosCollection.shared.PhotoList = []
+            VisitData.shared.clear()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0){
+                self.navigationController?.popViewController(animated: true)
+            }
+            return
+        }
         
         if VisitData.shared.cInTime.isEmpty {
           
@@ -1562,6 +1660,8 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
                 "data": jsonString2 //"["+jsonString+"]"//
             ]
             print(params2)
+            
+            
             
             if (Edit_Order_Count == 0){
             AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"dcr/updateProducts" + "&divisionCode=" + self.DivCode + "&sfCode=" + self.SFCode + "&desig=" + self.Desig, method: .post, parameters: params2, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
@@ -1601,6 +1701,8 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
     }
      else{
          print(params)
+         print(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"dcr/save&divisionCode=" + self.DivCode + "&rSF=" + self.SFCode + "&sfCode=" + self.SFCode)
+         
          AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"dcr/save&divisionCode=" + self.DivCode + "&rSF=" + self.SFCode + "&sfCode=" + self.SFCode, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
          AFdata in
          self.LoadingDismiss()
@@ -1642,6 +1744,26 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         DivCode = prettyJsonData["divisionCode"] as? String ?? ""
         Desig=prettyJsonData["desigCode"] as? String ?? ""
     }
+    
+    func editMissedDateOrder() {
+        
+        if !self.selectedProducts.isEmpty {
+            for product in selectedProducts {
+                updateQty(id: product.productId, sUom: product.unitId, sUomNm: product.unitName, sUomConv: product.unitConversion,sNetUnt: product.rate, sQty: product.Qty,ProdItem: product.product as! [String : Any],refresh: 1)
+            }
+            
+            let filteredArray = lstDistList.filter {($0["id"] as? Int) == Int(self.selectedProducts.first?.distributorId ?? "0")}
+            if (filteredArray.isEmpty){
+                VisitData.shared.Dist.id = ""
+                lblDistNm.text = ""
+            }else{
+                VisitData.shared.Dist.id = String((filteredArray[0]["id"] as? Int)!)
+                VisitData.shared.Dist.name = filteredArray[0]["name"] as? String ?? ""
+                lblDistNm.text = filteredArray[0]["name"] as? String
+            }
+        }
+    }
+    
     func EditSecondaryordervalue() {
         let product = productData
         print(product as Any)
@@ -1875,6 +1997,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
                     lblDistNm.text = ""
                 }else{
                     VisitData.shared.Dist.id = String((filteredArray[0]["id"] as? Int)!)
+                    VisitData.shared.Dist.name = filteredArray[0]["name"] as? String ?? ""
                     lblDistNm.text = filteredArray[0]["name"] as? String
                 }
                 
@@ -1957,6 +2080,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         if(vwPrvOrderCtrl.isHidden==false){
                 vwPrvOrderCtrl.isHidden = true
                 tbProduct.isHidden = false
+                tbProduct.reloadData()
         }else{
             let alert = UIAlertController(title: "Confirmation", message: "Do you want to cancel this order draft ?", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
@@ -1974,4 +2098,37 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
     @IBAction func closeWin(_ sender:Any){
         vwSelWindow.isHidden=true
     }
+}
+
+struct SecondaryOrderSelectedList {
+    
+    var productId : String!
+    var productName : String!
+    var unitId : String!
+    var unitName : String!
+    var unitConversion : String!
+    var rate : String!
+    var Qty : String!
+    var product: AnyObject!
+    var distributorId : String!
+    var distributorName : String!
+    var item : AnyObject!
+    var subtotal : String!
+    
+    init(productId: String!,productName: String!, unitId: String!, unitName: String!, unitConversion: String!, rate: String!, Qty: String!, product: AnyObject!,distributorId:String!,distributorName:String!,item:AnyObject!,subtotal:String!) {
+        self.productId = productId
+        self.productName = productName
+        self.unitId = unitId
+        self.unitName = unitName
+        self.unitConversion = unitConversion
+        self.rate = rate
+        self.Qty = Qty
+        self.product = product
+        self.distributorId = distributorId
+        self.distributorName = distributorName
+        self.item = item
+        self.subtotal = subtotal
+    }
+    
+    
 }

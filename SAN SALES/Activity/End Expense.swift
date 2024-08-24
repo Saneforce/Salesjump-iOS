@@ -10,7 +10,7 @@ import Alamofire
 import FSCalendar
 import Foundation
 import CoreLocation
-class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource, UIImagePickerControllerDelegate & UINavigationControllerDelegate {
+class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource,FSCalendarDelegateAppearance, UIImagePickerControllerDelegate & UINavigationControllerDelegate {
     @IBOutlet weak var Calender_View: UIView!
     @IBOutlet weak var BT_Back: UIImageView!
     @IBOutlet weak var End_Expense_Scr: UILabel!
@@ -47,6 +47,11 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource, UIIma
     @IBOutlet weak var End_Km_Img_width: NSLayoutConstraint!
     @IBOutlet weak var End_Att_Img_width: NSLayoutConstraint!
     
+    @IBOutlet weak var Image_sc: UIView!
+    @IBOutlet weak var End_exp_Image_view: UIImageView!
+    
+    @IBOutlet weak var Close_BT: UIButton!
+    
     struct End_exData:Codable{
         let From:String
         let To_Plce:String
@@ -57,7 +62,12 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource, UIIma
         let Dates:String
         let Text:String
     }
+    struct Expsub_Date:Codable{
+        let Dates:String
+        let Text:String
+    }
     var expsub_Date:[Endsub_Date]=[]
+    var expsub_Dates:[Expsub_Date]=[]
     var labelsDictionary = [FSCalendarCell: UILabel]()
     var SelMod:String = ""
     var End_exp_title:String?
@@ -72,7 +82,9 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource, UIIma
     var photo_Km = ""
     var Photo_End_Att = ""
     var EndingFare = 0
-    override func viewDidLoad() {
+    var endimage: UIImageView = UIImageView()
+    var endFARE: UIImageView = UIImageView()
+    override func viewDidLoad(){
         super.viewDidLoad()
         getUserDetails()
         End_Expense_Scr.text = "End Expense"
@@ -87,6 +99,16 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource, UIIma
         Select_Date.addTarget(target: self, action: #selector(Opencalender))
         Start_Photo.addTarget(target: self, action: #selector(openCamera_Km))
         Ending_fare_Photo.addTarget(target: self, action: #selector(openCamera_Ending))
+        
+        End_Km_Img.isUserInteractionEnabled = true
+        End_Att_Img.isUserInteractionEnabled = true
+        
+        let tapGestureRecognizer1 = UITapGestureRecognizer(target: self, action: #selector(Open_End_Image))
+               End_Km_Img.addGestureRecognizer(tapGestureRecognizer1)
+               
+               let tapGestureRecognizer2 = UITapGestureRecognizer(target: self, action: #selector(Open_end_fare_Image))
+               End_Att_Img.addGestureRecognizer(tapGestureRecognizer2)
+        
         Start_Photo.layer.cornerRadius = 5
         Start_Photo.layer.masksToBounds = true
         Ending_fare_Photo.layer.cornerRadius = 5
@@ -162,10 +184,8 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource, UIIma
             Toast.show(message: "Please Select a Valid Date", controller: self)
             return
         }else{
-            Select_Date.text = myStringDate
             srtExpenseData(Select_date:myStringDate)
             Ending_rmk.text = ""
-            Calender_View.isHidden = true
         }
     }
     @objc private func GotoHome() {
@@ -189,27 +209,47 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource, UIIma
         Calender_View.isHidden = false
     }
     
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]){
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-            if (SelMod == "KM"){
+            let fileName: String = String(Int(Foundation.Date().timeIntervalSince1970))
+            let filenameno = "\(fileName).jpg"
+            
+            if SelMod == "KM" {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    self.ShowLoading(Message: "Image upload, please wait...")
+                                 }
                 End_Km_Img.isHidden = false
                 End_Km_Img.image = pickedImage
-                let fileName: String = String(Int(Foundation.Date().timeIntervalSince1970))
-                let filenameno="\(fileName).jpg"
+                endimage.image = pickedImage
                 photo_Km = "_\(filenameno)"
-                ImageUploader().uploadImage(SFCode: self.SFCode, image: pickedImage, fileName: "__\(filenameno)")
-                End_Km_Img_width.constant = 74
-            }else if (SelMod == "Ending"){
+                ImageUploade().uploadImage(SFCode: self.SFCode, image: pickedImage, fileName: "__\(filenameno)") {
+                    DispatchQueue.main.async { [self] in
+                        End_Km_Img_width.constant = 74
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                              self.LoadingDismiss()
+                                         }
+                    }
+                }
+            } else if SelMod == "Ending" {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    self.ShowLoading(Message: "Image upload, please wait...")
+                                 }
                 End_Att_Img.image = pickedImage
-                let fileName: String = String(Int(Foundation.Date().timeIntervalSince1970))
-                let filenameno="\(fileName).jpg"
+                endFARE.image = pickedImage
                 Photo_End_Att = "_\(filenameno)"
-                ImageUploader().uploadImage(SFCode: self.SFCode, image: pickedImage, fileName: "__\(filenameno)")
-                End_Att_Img_width.constant = 74
+                ImageUploade().uploadImage(SFCode: self.SFCode, image: pickedImage, fileName: "__\(filenameno)") {
+                    DispatchQueue.main.async { [self] in
+                        End_Att_Img_width.constant = 74
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                              self.LoadingDismiss()
+                                         }
+                    }
+                }
             }
         }
         dismiss(animated: true, completion: nil)
     }
+
     
     @objc private func openCamera_Km(){
         SelMod = "KM"
@@ -260,6 +300,12 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource, UIIma
             Toast.show(message: "Enter Ending Remarks", controller: self)
             return false
         }
+        
+        if let Star_KM =  Double(Start_KM.text!),let end = Double(Start_Text_KM.text!), Star_KM > end{
+            Toast.show(message: "Please provide a valid Ending KM...",controller: self)
+            return false
+        }
+
         if StrEnd_Need == 1{
             if Per_KM.text == ""{
                 Toast.show(message: "Enter Personal KM", controller: self)
@@ -271,10 +317,6 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource, UIIma
             }
         }
         
-        if let Star_KM =  Double(Start_KM.text!),let end = Double(Start_Text_KM.text!), Star_KM > end{
-            Toast.show(message: "Please provide a valid Ending KM...",controller: self)
-            return false
-        }
         
         
         return true
@@ -429,6 +471,7 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource, UIIma
     }
     
     func End_exp_date(){
+        expsub_Dates.removeAll()
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
         
@@ -481,10 +524,15 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource, UIIma
                         print("Error: Could not print JSON in String")
                         return
                     }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [self] in
+                        calendar.reloadData()
+                    }
                     print(prettyPrintedJson)
                     if let attance_flg = json["attance_flg"] as? [AnyObject] {
+                        print(attance_flg)
                         for item in attance_flg{
-                            if let Flf = item["FWFlg"] as? String, Flf == "F"||Flf=="H"||Flf=="W"{
+                            print(item)
+                            if let Flf = item["FWFlg"] as? String, Flf == "F"||Flf=="H"||Flf=="W"||Flf=="N"{
                                 print(item)
                                 expsub_Date.append(Endsub_Date(Dates: (item["pln_date"] as? String)!, Text: (item["FWFlg"] as? String)!))
                             }
@@ -493,9 +541,11 @@ class End_Expense:IViewController,FSCalendarDelegate,FSCalendarDataSource, UIIma
                     if let srt_exp = json["srt_exp"] as? [AnyObject] {
                         for item in srt_exp {
                             if let full_date = item["full_date"] as? String{
+                                
                                 let dateFormatter = DateFormatter()
                                 dateFormatter.dateFormat = "dd/MM/yyyy"
                                 let Formated_Date = dateFormatter.date(from: full_date)
+                                expsub_Dates.append(Expsub_Date(Dates:full_date, Text: ""))
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [self] in
                                     if let cell = calendar.cell(for: Formated_Date!, at: .current){
                                         addLetter(to: cell, text: ".")
@@ -565,7 +615,13 @@ func srtExpenseData(Select_date:String){
                         print("Error: Could not print JSON in String")
                         return
                     }
-                    print(prettyPrintedJson)
+                    if json.isEmpty || json.count == 0{
+                        Toast.show(message: "Please Select a Valid Date", controller: self)
+                        return
+                    }
+                    
+                    Select_Date.text = Select_date
+                    
                     if let firstItem = json.first {
                             // NeedAttachment
                         if let NeedAttachment = firstItem["NeedAttachment"] as? Int, NeedAttachment == 0{
@@ -646,10 +702,56 @@ func srtExpenseData(Select_date:String){
                             end_Exp_Datas.append(End_exData(From: from, To_Plce: to!, Start_KM: Star_KM!, Mode_Of_Travel: Mode_Of_Travel!))
                         }
                     }
+                    Calender_View.isHidden = true
                 }
             case .failure(let error):
                 Toast.show(message: error.errorDescription!)
+                Calender_View.isHidden = true
             }
         }
     }
+    
+    func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, titleDefaultColorFor date: Date) -> UIColor? {
+        let day : Int! = Int(date.toString(format: "dd"))
+        print(expsub_Dates)
+        let currentMonth = expsub_Dates.filter{$0.Dates.changeFormat(from: "dd/MM/yyyy",to: "MM") == date.toString(format: "MM")}
+        let dates = currentMonth.map{Int($0.Dates.changeFormat(from: "dd/MM/yyyy",to: "dd"))}
+        return dates.contains(day) ? UIColor.black : UIColor.lightGray
+    }
+    
+    func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, titleSelectionColorFor date: Date) -> UIColor? {
+        let day : Int! = Int(date.toString(format: "dd"))
+        
+        let currentMonth = expsub_Dates.filter{$0.Dates.changeFormat(from: "dd/MM/yyyy",to: "MM") == date.toString(format: "MM")}
+        let dates = currentMonth.map{Int($0.Dates.changeFormat(from: "dd/MM/yyyy",to: "dd"))}
+       // return dates.contains(day) ? UIColor.lightGray : UIColor.black
+        return dates.contains(day) ? UIColor.black : UIColor.lightGray
+    }
+    
+    @objc  func Open_End_Image(){
+        Open_Iamge_View(selmod: "End")
+    }
+    
+    @objc private func Open_end_fare_Image(){
+        Open_Iamge_View(selmod: "Fare")
+    }
+    
+    func Open_Iamge_View(selmod:String){
+        if selmod == "End" {
+            End_exp_Image_view.image =  endimage.image
+   
+        }
+        
+        if selmod == "Fare" {
+            End_exp_Image_view.image = endFARE.image
+            
+        }
+        
+        Image_sc.isHidden = false
+    }
+    
+    @IBAction func Image_sc_close(_ sender: Any) {
+        Image_sc.isHidden = true
+    }
+    
 }

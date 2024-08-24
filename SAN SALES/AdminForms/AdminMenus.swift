@@ -10,7 +10,6 @@ import UIKit
 
 class AdminMenus: IViewController, UITableViewDelegate, UITableViewDataSource  {
     @IBOutlet weak var tbMenuDetail: UITableView!
-    
     @IBOutlet weak var btnBack: UIImageView!
     @IBOutlet weak var imgProf: UIImageView!
     @IBOutlet weak var lblSFName: UILabel!
@@ -43,6 +42,7 @@ class AdminMenus: IViewController, UITableViewDelegate, UITableViewDataSource  {
         //strMasList.append(mnuItem.init(MasId: 11, MasName: "Master Sync", MasImage: "MasterSync"))
         
         strMasList.append(mnuItem.init(MasId: 5, MasName: "Tour Plan Entry", MasImage: "SwitchRoute"))
+        strMasList.append(mnuItem.init(MasId: 6, MasName: "Missed Date Entry", MasImage: "SwitchRoute"))
         
         btnBack.addTarget(target: self, action: #selector(closeMenuWin))
         menuClose.addTarget(target: self, action: #selector(closeMenuWin))
@@ -96,6 +96,11 @@ class AdminMenus: IViewController, UITableViewDelegate, UITableViewDataSource  {
             let tpMnuVc = storyboard.instantiateViewController(withIdentifier: "sbAdminMnu") as! AdminMenus
             let trPln = storyboard.instantiateViewController(withIdentifier: "sbTourPlanCalenderScreen") as! TourPlanCalenderScreen
             viewController.setViewControllers([tpMnuVc,trPln], animated: false)
+            (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
+        }else if lItm.MasId == 6 {
+            let mdMnuVc = storyboard.instantiateViewController(withIdentifier: "sbAdminMnu") as! AdminMenus
+            let missedDate = storyboard.instantiateViewController(withIdentifier: "sbMissedDateSelection") as! MissedDateSelection
+            viewController.setViewControllers([mdMnuVc,missedDate], animated: false)
             (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
         }
         print(strMasList[indexPath.row].MasName)

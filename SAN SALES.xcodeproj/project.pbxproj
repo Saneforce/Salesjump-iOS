@@ -25,8 +25,15 @@
 		15B518B82C108BCB00DD75C1 /* TourPlanDeviationApproval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B518B72C108BCB00DD75C1 /* TourPlanDeviationApproval.swift */; };
 		15B518BA2C12ECEF00DD75C1 /* JsonModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B518B92C12ECEF00DD75C1 /* JsonModel.swift */; };
 		15B518BC2C13305D00DD75C1 /* DeviationRemarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B518BB2C13305D00DD75C1 /* DeviationRemarks.swift */; };
+		15BFD3562C57BEFF00C37FC6 /* AttendanceReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15BFD3552C57BEFF00C37FC6 /* AttendanceReport.swift */; };
 		15C4B3182BECAA6B001ACBF4 /* RejectReasonViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15C4B3172BECAA6B001ACBF4 /* RejectReasonViewController.xib */; };
 		15C4B3192BECAA6B001ACBF4 /* RejectReasonViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15C4B3162BECAA6B001ACBF4 /* RejectReasonViewController.swift */; };
+		15F4504E2C2A88DF0074D285 /* MissedDateSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F4504D2C2A88DF0074D285 /* MissedDateSelection.swift */; };
+		15F450502C2A89AB0074D285 /* MissedDateRouteSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F4504F2C2A89AB0074D285 /* MissedDateRouteSelection.swift */; };
+		15F9E7B12C5229220057D4C6 /* MyResources.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F9E7B02C5229220057D4C6 /* MyResources.swift */; };
+		15F9E7B32C5399D70057D4C6 /* MyResourcesRetailerList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F9E7B22C5399D70057D4C6 /* MyResourcesRetailerList.swift */; };
+		15F9E7B52C53A12C0057D4C6 /* PrecallAnalysis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F9E7B42C53A12C0057D4C6 /* PrecallAnalysis.swift */; };
+		15F9E7B92C53BE170057D4C6 /* MyResourceRoutes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F9E7B82C53BE170057D4C6 /* MyResourceRoutes.swift */; };
 		19247A3DB960E114A6C28FB3 /* Pods_SAN_SALES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 448C0B69977667C109C50683 /* Pods_SAN_SALES.framework */; };
 		381EF93D2B19DB9700CED65F /* UI+Constraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 381EF93C2B19DB9700CED65F /* UI+Constraints.swift */; };
 		382103F52BA16B83005C02CD /* Expense Entry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 382103F42BA16B83005C02CD /* Expense Entry.swift */; };
@@ -107,6 +114,7 @@
 		3F2F811727CEB30D0015E1CA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3F2F811527CEB30D0015E1CA /* LaunchScreen.storyboard */; };
 		3F2F811F27D0E7430015E1CA /* HomePageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F2F811E27D0E7430015E1CA /* HomePageViewController.swift */; };
 		3F2F812127D0E9670015E1CA /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F2F812027D0E9670015E1CA /* RootViewController.swift */; };
+		3F30F82E2C4E5786005EFAD9 /* Expense View SFC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F30F82D2C4E5786005EFAD9 /* Expense View SFC.swift */; };
 		3F3D4DDB27E810880063E271 /* GlobalFunc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3D4DDA27E810880063E271 /* GlobalFunc.swift */; };
 		3F4CC1932875580100BA2B4E /* AppTrackingTransparency.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F4CC1922875580100BA2B4E /* AppTrackingTransparency.framework */; };
 		3F4CC1952875581400BA2B4E /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F4CC1942875581400BA2B4E /* AdSupport.framework */; };
@@ -115,9 +123,12 @@
 		3F5B297828891D5C002D226C /* CheckPermissions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5B297728891D5C002D226C /* CheckPermissions.swift */; };
 		3F5B297A28894AB3002D226C /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5B297928894AB3002D226C /* GradientView.swift */; };
 		3F5B2FC3284B59E400574D7C /* MsgLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5B2FC2284B59E400574D7C /* MsgLoader.swift */; };
+		3F5D05E02C6F21EE00457642 /* Leave Approval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5D05DF2C6F21EE00457642 /* Leave Approval.swift */; };
+		3F601F3E2C466499002EF90F /* Daily Expense Entry SFC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F601F3D2C466499002EF90F /* Daily Expense Entry SFC.swift */; };
 		3F619F3C27EAEDC000F3D05F /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F619F3B27EAEDC000F3D05F /* LocationService.swift */; };
 		3F619F3E27EB275000F3D05F /* CLocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F619F3D27EB274F00F3D05F /* CLocationService.swift */; };
 		3F7CCF0328F14CA3002A7C03 /* GEOTagging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7CCF0228F14CA3002A7C03 /* GEOTagging.swift */; };
+		3F8B989A2C594C610073D452 /* SFC Details View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F8B98992C594C610073D452 /* SFC Details View.swift */; };
 		3F8BF29D27E99CCA00E1C41B /* CameraService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F8BF29C27E99CCA00E1C41B /* CameraService.swift */; };
 		3F97F9F62831B5950097166D /* AddNewCustomer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F97F9F52831B5950097166D /* AddNewCustomer.swift */; };
 		3F97F9F8283216BD0097166D /* EditTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F97F9F7283216BD0097166D /* EditTextField.swift */; };
@@ -127,8 +138,9 @@
 		3F9F379C28631F2C002CC408 /* layBranswsSal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9F379B28631F2C002CC408 /* layBranswsSal.swift */; };
 		3FBF387527E4488100900007 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FBF387427E4488100900007 /* APIClient.swift */; };
 		3FBF387727E4AA8300900007 /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FBF387627E4AA8300900007 /* Toast.swift */; };
+		3FCF2AA82C5B5392000D8070 /* Day End SFC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FCF2AA72C5B5392000D8070 /* Day End SFC.swift */; };
 		3FF57C1D286C4A76009E3FE5 /* RptVisitDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF57C1C286C4A76009E3FE5 /* RptVisitDetail.swift */; };
-		3FFB953F2C2A973400C5D737 /* FSCalendar.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FFB953E2C2A973400C5D737 /* FSCalendar.framework */; };
+		3FFB59D72C613BE5008AE109 /* Expense approval SFC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FFB59D62C613BE5008AE109 /* Expense approval SFC.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -150,8 +162,15 @@
 		15B518B72C108BCB00DD75C1 /* TourPlanDeviationApproval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TourPlanDeviationApproval.swift; sourceTree = "<group>"; };
 		15B518B92C12ECEF00DD75C1 /* JsonModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonModel.swift; sourceTree = "<group>"; };
 		15B518BB2C13305D00DD75C1 /* DeviationRemarks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviationRemarks.swift; sourceTree = "<group>"; };
+		15BFD3552C57BEFF00C37FC6 /* AttendanceReport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttendanceReport.swift; sourceTree = "<group>"; };
 		15C4B3162BECAA6B001ACBF4 /* RejectReasonViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RejectReasonViewController.swift; sourceTree = "<group>"; };
 		15C4B3172BECAA6B001ACBF4 /* RejectReasonViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RejectReasonViewController.xib; sourceTree = "<group>"; };
+		15F4504D2C2A88DF0074D285 /* MissedDateSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissedDateSelection.swift; sourceTree = "<group>"; };
+		15F4504F2C2A89AB0074D285 /* MissedDateRouteSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissedDateRouteSelection.swift; sourceTree = "<group>"; };
+		15F9E7B02C5229220057D4C6 /* MyResources.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyResources.swift; sourceTree = "<group>"; };
+		15F9E7B22C5399D70057D4C6 /* MyResourcesRetailerList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyResourcesRetailerList.swift; sourceTree = "<group>"; };
+		15F9E7B42C53A12C0057D4C6 /* PrecallAnalysis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrecallAnalysis.swift; sourceTree = "<group>"; };
+		15F9E7B82C53BE170057D4C6 /* MyResourceRoutes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyResourceRoutes.swift; sourceTree = "<group>"; };
 		3453EBBCA5603BC17DBC6D2A /* Pods-SAN SALES.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SAN SALES.release.xcconfig"; path = "Target Support Files/Pods-SAN SALES/Pods-SAN SALES.release.xcconfig"; sourceTree = "<group>"; };
 		381EF93C2B19DB9700CED65F /* UI+Constraints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UI+Constraints.swift"; sourceTree = "<group>"; };
 		382103F42BA16B83005C02CD /* Expense Entry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Expense Entry.swift"; sourceTree = "<group>"; };
@@ -240,6 +259,7 @@
 		3F2F811827CEB30D0015E1CA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3F2F811E27D0E7430015E1CA /* HomePageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageViewController.swift; sourceTree = "<group>"; };
 		3F2F812027D0E9670015E1CA /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
+		3F30F82D2C4E5786005EFAD9 /* Expense View SFC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Expense View SFC.swift"; sourceTree = "<group>"; };
 		3F3D4DDA27E810880063E271 /* GlobalFunc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalFunc.swift; sourceTree = "<group>"; };
 		3F4CC1922875580100BA2B4E /* AppTrackingTransparency.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppTrackingTransparency.framework; path = System/Library/Frameworks/AppTrackingTransparency.framework; sourceTree = SDKROOT; };
 		3F4CC1942875581400BA2B4E /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
@@ -248,9 +268,12 @@
 		3F5B297728891D5C002D226C /* CheckPermissions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckPermissions.swift; sourceTree = "<group>"; };
 		3F5B297928894AB3002D226C /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 		3F5B2FC2284B59E400574D7C /* MsgLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MsgLoader.swift; sourceTree = "<group>"; };
+		3F5D05DF2C6F21EE00457642 /* Leave Approval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Leave Approval.swift"; sourceTree = "<group>"; };
+		3F601F3D2C466499002EF90F /* Daily Expense Entry SFC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Daily Expense Entry SFC.swift"; sourceTree = "<group>"; };
 		3F619F3B27EAEDC000F3D05F /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
 		3F619F3D27EB274F00F3D05F /* CLocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CLocationService.swift; sourceTree = "<group>"; };
 		3F7CCF0228F14CA3002A7C03 /* GEOTagging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GEOTagging.swift; sourceTree = "<group>"; };
+		3F8B98992C594C610073D452 /* SFC Details View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SFC Details View.swift"; sourceTree = "<group>"; };
 		3F8BF29C27E99CCA00E1C41B /* CameraService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraService.swift; sourceTree = "<group>"; };
 		3F97F9F52831B5950097166D /* AddNewCustomer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewCustomer.swift; sourceTree = "<group>"; };
 		3F97F9F7283216BD0097166D /* EditTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTextField.swift; sourceTree = "<group>"; };
@@ -260,8 +283,9 @@
 		3F9F379B28631F2C002CC408 /* layBranswsSal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = layBranswsSal.swift; sourceTree = "<group>"; };
 		3FBF387427E4488100900007 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
 		3FBF387627E4AA8300900007 /* Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
+		3FCF2AA72C5B5392000D8070 /* Day End SFC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Day End SFC.swift"; sourceTree = "<group>"; };
 		3FF57C1C286C4A76009E3FE5 /* RptVisitDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RptVisitDetail.swift; sourceTree = "<group>"; };
-		3FFB953E2C2A973400C5D737 /* FSCalendar.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FSCalendar.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3FFB59D62C613BE5008AE109 /* Expense approval SFC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Expense approval SFC.swift"; sourceTree = "<group>"; };
 		448C0B69977667C109C50683 /* Pods_SAN_SALES.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SAN_SALES.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		ABF79223AB38281122FCCDD2 /* Pods-SAN SALES.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SAN SALES.debug.xcconfig"; path = "Target Support Files/Pods-SAN SALES/Pods-SAN SALES.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -305,6 +329,8 @@
 				15B518B72C108BCB00DD75C1 /* TourPlanDeviationApproval.swift */,
 				15C4B3162BECAA6B001ACBF4 /* RejectReasonViewController.swift */,
 				15C4B3172BECAA6B001ACBF4 /* RejectReasonViewController.xib */,
+				3FFB59D62C613BE5008AE109 /* Expense approval SFC.swift */,
+				3F5D05DF2C6F21EE00457642 /* Leave Approval.swift */,
 			);
 			path = Approvals;
 			sourceTree = "<group>";
@@ -362,8 +388,11 @@
 				38DDD8482BA1D8120074AEF1 /* Daily Expense Entry.swift */,
 				388CD92B2BDA3ABE003A06F9 /* TourPlanSingleEntry.swift */,
 				388CD92A2BDA3ABE003A06F9 /* TourPlanCalenderScreen.swift */,
+				15F4504D2C2A88DF0074D285 /* MissedDateSelection.swift */,
+				15F4504F2C2A89AB0074D285 /* MissedDateRouteSelection.swift */,
 				155F39732BEA5FED0096139B /* ItemMultipleSelectionViewController.swift */,
 				155F39742BEA5FED0096139B /* ItemMultipleSelectionViewController.xib */,
+				3F601F3D2C466499002EF90F /* Daily Expense Entry SFC.swift */,
 			);
 			path = AdminForms;
 			sourceTree = "<group>";
@@ -399,6 +428,7 @@
 				38C5A97F2B958AFB00EF4584 /* Add Distributor.swift */,
 				38A1859C2BB53D4700E01407 /* Start Expense.swift */,
 				38A1859E2BB53D5D00E01407 /* End Expense.swift */,
+				3FCF2AA72C5B5392000D8070 /* Day End SFC.swift */,
 			);
 			path = Activity;
 			sourceTree = "<group>";
@@ -542,8 +572,15 @@
 				38FBAA2B2BD6279D00E36C0D /* Expense View.swift */,
 				1590951F2BF1E941001D8347 /* TourPlanView.swift */,
 				159095212BF1E954001D8347 /* TourPlanViewDateWise.swift */,
+				15F9E7B02C5229220057D4C6 /* MyResources.swift */,
+				15F9E7B22C5399D70057D4C6 /* MyResourcesRetailerList.swift */,
+				15F9E7B42C53A12C0057D4C6 /* PrecallAnalysis.swift */,
+				15F9E7B82C53BE170057D4C6 /* MyResourceRoutes.swift */,
+				15BFD3552C57BEFF00C37FC6 /* AttendanceReport.swift */,
 				159095232BF23AD0001D8347 /* CalendarViewController.swift */,
 				159095242BF23AD0001D8347 /* CalendarViewController.xib */,
+				3F30F82D2C4E5786005EFAD9 /* Expense View SFC.swift */,
+				3F8B98992C594C610073D452 /* SFC Details View.swift */,
 			);
 			path = Reports;
 			sourceTree = "<group>";
@@ -736,21 +773,25 @@
 				38D0F76829BB2447003EEB03 /* BrandReviewVisit.swift in Sources */,
 				388CD9292BDA3A7C003A06F9 /* SuperStockistOrderSubmittedDetails.swift in Sources */,
 				3F97F9F62831B5950097166D /* AddNewCustomer.swift in Sources */,
+				15F9E7B32C5399D70057D4C6 /* MyResourcesRetailerList.swift in Sources */,
 				1514DF782BD786CF00E6B45A /* SuperStockistOrderSubmittedDetails.swift in Sources */,
 				3F5B2FC3284B59E400574D7C /* MsgLoader.swift in Sources */,
 				38DDD8492BA1D8120074AEF1 /* Daily Expense Entry.swift in Sources */,
 				3F9F379C28631F2C002CC408 /* layBranswsSal.swift in Sources */,
 				384E56BF2BDB674700B2E8A5 /* Approval Menu.swift in Sources */,
 				3F28CC0C27D5302100B95964 /* MydayPlanCtrl.swift in Sources */,
+				3FCF2AA82C5B5392000D8070 /* Day End SFC.swift in Sources */,
 				384E56C12BDB7ABF00B2E8A5 /* New Expense Approval.swift in Sources */,
 				3F0822BF29000D65009C33EA /* LeaveForm.swift in Sources */,
 				386889E22B1868F90015F20C /* RottPageViewController.swift in Sources */,
+				3F8B989A2C594C610073D452 /* SFC Details View.swift in Sources */,
 				3FBF387527E4488100900007 /* APIClient.swift in Sources */,
 				3F0861BA28001D47006A30FB /* RoundedCornerView.swift in Sources */,
 				3F14EAEA27F73DAD00B0997B /* SecondaryVisit.swift in Sources */,
 				381EF93D2B19DB9700CED65F /* UI+Constraints.swift in Sources */,
 				1514DF6D2BD7839D00E6B45A /* CustomAlertVCViewController.swift in Sources */,
 				3F3D4DDB27E810880063E271 /* GlobalFunc.swift in Sources */,
+				3F30F82E2C4E5786005EFAD9 /* Expense View SFC.swift in Sources */,
 				3F06353728421D870027842E /* ImageUploader.swift in Sources */,
 				3F28CC0F27D74D7200B95964 /* LabelSelect.swift in Sources */,
 				3F4CC197287B297A00BA2B4E /* NetworkMonitor.swift in Sources */,
@@ -766,6 +807,8 @@
 				3894BC5D2B919A0E0019B40A /* Add Route.swift in Sources */,
 				384E56BA2BDB664B00B2E8A5 /* Expense Approval.swift in Sources */,
 				15B518BA2C12ECEF00DD75C1 /* JsonModel.swift in Sources */,
+				3FFB59D72C613BE5008AE109 /* Expense approval SFC.swift in Sources */,
+				15F9E7B52C53A12C0057D4C6 /* PrecallAnalysis.swift in Sources */,
 				38C5A9802B958AFB00EF4584 /* Add Distributor.swift in Sources */,
 				38F6F5AD2B19D2DA007090BF /* Performance.swift in Sources */,
 				38FBAA2C2BD6279D00E36C0D /* Expense View.swift in Sources */,
@@ -774,9 +817,12 @@
 				388CD92D2BDA3ABE003A06F9 /* TourPlanSingleEntry.swift in Sources */,
 				3FF57C1D286C4A76009E3FE5 /* RptVisitDetail.swift in Sources */,
 				3F5B297828891D5C002D226C /* CheckPermissions.swift in Sources */,
+				15F9E7B92C53BE170057D4C6 /* MyResourceRoutes.swift in Sources */,
 				3F28CC1127DC856400B95964 /* MasterSync.swift in Sources */,
 				3883A09C2A176B6300B858CF /* SubmittedCalls.swift in Sources */,
+				15F450502C2A89AB0074D285 /* MissedDateRouteSelection.swift in Sources */,
 				1514DF762BD785D900E6B45A /* SuperStockistOrderList.swift in Sources */,
+				3F601F3E2C466499002EF90F /* Daily Expense Entry SFC.swift in Sources */,
 				38F6F5AB2B19D2C2007090BF /* Summary.swift in Sources */,
 				3F28CC1427DC97F000B95964 /* cellListItem.swift in Sources */,
 				3F06352C283BC9790027842E /* PhotoGallary.swift in Sources */,
@@ -786,16 +832,20 @@
 				3F5B297A28894AB3002D226C /* GradientView.swift in Sources */,
 				15C4B3192BECAA6B001ACBF4 /* RejectReasonViewController.swift in Sources */,
 				3F063532283F5FEF0027842E /* PrimaryOrder.swift in Sources */,
+				15BFD3562C57BEFF00C37FC6 /* AttendanceReport.swift in Sources */,
 				3F2F810F27CEB30C0015E1CA /* ViewController.swift in Sources */,
 				3FBF387727E4AA8300900007 /* Toast.swift in Sources */,
 				1514DF6C2BD7839D00E6B45A /* CallPreview.swift in Sources */,
 				3F0822BD29000872009C33EA /* AdminMenus.swift in Sources */,
+				15F4504E2C2A88DF0074D285 /* MissedDateSelection.swift in Sources */,
 				3F063535284171800027842E /* NewOutlet.swift in Sources */,
 				386A43952A1CC63100CE1833 /* PrimarySubmittedDCR.swift in Sources */,
 				386A43912A1CBB0200CE1833 /* SubmittedDCR.swift in Sources */,
 				159095252BF23AD0001D8347 /* CalendarViewController.swift in Sources */,
 				3F7CCF0328F14CA3002A7C03 /* GEOTagging.swift in Sources */,
+				3F5D05E02C6F21EE00457642 /* Leave Approval.swift in Sources */,
 				3F0861C328053B3A006A30FB /* UserSetup.swift in Sources */,
+				15F9E7B12C5229220057D4C6 /* MyResources.swift in Sources */,
 				38F6F5AF2B19D2ED007090BF /* Location.swift in Sources */,
 				3F2F810B27CEB30C0015E1CA /* AppDelegate.swift in Sources */,
 				38A1859F2BB53D5D00E01407 /* End Expense.swift in Sources */,
@@ -973,7 +1023,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = "3.1 T.2";
+				MARKETING_VERSION = 3.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.saneforce.sansales;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1010,7 +1060,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = "3.1 T.2";
+				MARKETING_VERSION = 3.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.saneforce.sansales;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
