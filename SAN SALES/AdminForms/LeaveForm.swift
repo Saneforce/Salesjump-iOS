@@ -555,6 +555,7 @@ class LeaveForm: IViewController, UITableViewDelegate,
                     for item in json {
                         LeveDet.append(mnuItem(levtype: item["Leave_Name"] as! String, Eligibility:item["LeaveValue"] as? Int ?? 0, Taken: (item["LeaveTaken"] as? Int) ?? 0, Available: item["LeaveAvailability"] as? Int ?? 0))
                     }
+                    print(LeveDet)
                     LeaveAvailability.reloadData()
                     Leave_Avaailability_View.isHidden = false
                 }
