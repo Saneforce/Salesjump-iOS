@@ -7,7 +7,7 @@
 
 import UIKit
 import Alamofire
-class Leave_Approval: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class Leave_Approval: IViewController, UITableViewDelegate, UITableViewDataSource {
     @IBOutlet weak var BackBT: UIImageView!
     @IBOutlet weak var Leave_View_TB: UITableView!
     @IBOutlet weak var Approv_View: UIView!
