@@ -217,6 +217,8 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
             "data": jsonString
         ]
    //     self.ShowLoading(Message: "Loading...")
+        
+        print(APIClient.shared.BaseURL+APIClient.shared.DBURL1+apiKey)
         AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
             AFdata in
             DispatchQueue.main.asyncAfter(deadline: .now()) {

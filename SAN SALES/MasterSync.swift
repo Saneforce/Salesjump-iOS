@@ -164,6 +164,9 @@ import BackgroundTasks
          ]))
     
          
+         strMasList.append(mnuItem.init(MasId: 30, MasName: "Product Remarks", MasImage: "mnuPrimary",StoreKey: "Product_Remarks", ApiKey: "table/list&divisionCode="+(prettyJsonData["divisionCode"] as? String ?? "")+"&rSF="+SFCode+"&sfCode="+SFCode+"&State_Code="+StateCode+"&desig="+desigCode,fromData: [
+            "tableName":"vwProductTemplate","coloumns":"[\"id as id\",\"content as name\"]","where":"[\"isnull(ActFlag,0)=0\"]","sfCode":0,"orderBy":"[\"name asc\"]","desig":"mgr"
+         ]))
          
          btnClearData.addTarget(target: self, action: #selector(clearAllData))
          btnSyncAll.addTarget(target: self, action: #selector(callAllApi))

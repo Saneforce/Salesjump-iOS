@@ -192,7 +192,7 @@ class MissedDateRouteSelection : IViewController , UITableViewDelegate,UITableVi
                 
                 if !selectedRetailer.isEmpty {
                     
-                    self.allRetailerList.append(RetailerList(id: selectedRetailer.first?.id ?? "",name: selectedRetailer.first?.name ?? "",townCode: selectedRetailer.first?.townCode ?? "", isSelected: true,routeName: selectedRetailer.first?.routeName ?? "", routeCode: selectedRetailer.first?.routeCode ?? "",hqCode: selectedRetailer.first?.hqCode ?? "",hqName: selectedRetailer.first?.hqName ?? "",distributorCode: selectedRetailer.first?.distributorCode ?? "",distributorName: selectedRetailer.first?.distributorName ?? "",orderList: selectedRetailer.first?.orderList ?? [], params: selectedRetailer.first?.params ?? "", remarks: selectedRetailer.first?.remarks ?? "",remarksId: selectedRetailer.first?.remarksId ?? "",mapId: sfcode))
+                    self.allRetailerList.append(RetailerList(id: selectedRetailer.first?.id ?? "",name: selectedRetailer.first?.name ?? "",townCode: selectedRetailer.first?.townCode ?? "", isSelected: true,routeName: selectedRetailer.first?.routeName ?? "", routeCode: selectedRetailer.first?.routeCode ?? "",hqCode: selectedRetailer.first?.hqCode ?? "",hqName: selectedRetailer.first?.hqName ?? "",distributorCode: selectedRetailer.first?.distributorCode ?? "",distributorName: selectedRetailer.first?.distributorName ?? "",orderList: selectedRetailer.first?.orderList ?? [],secOrderList: selectedRetailer.first?.secOrderList ?? [], params: selectedRetailer.first?.params ?? "", remarks: selectedRetailer.first?.remarks ?? "",remarksId: selectedRetailer.first?.remarksId ?? "",mapId: sfcode))
                 }else{
                     self.allRetailerList.append(RetailerList(id: id,name: name,townCode: townCode, isSelected: false,mapId: sfcode))
                 }
@@ -224,7 +224,7 @@ class MissedDateRouteSelection : IViewController , UITableViewDelegate,UITableVi
                 
                 if !selectedRetailer.isEmpty {
                     
-                    self.allRetailerList.append(RetailerList(id: selectedRetailer.first?.id ?? "",name: selectedRetailer.first?.name ?? "",townCode: selectedRetailer.first?.townCode ?? "", isSelected: true,routeName: selectedRetailer.first?.routeName ?? "", routeCode: selectedRetailer.first?.routeCode ?? "",hqCode: selectedRetailer.first?.hqCode ?? "",hqName: selectedRetailer.first?.hqName ?? "",distributorCode: selectedRetailer.first?.distributorCode ?? "",distributorName: selectedRetailer.first?.distributorName ?? "",orderList: selectedRetailer.first?.orderList ?? [], params: selectedRetailer.first?.params ?? "", remarks: selectedRetailer.first?.remarks ?? "",remarksId: selectedRetailer.first?.remarksId ?? "",mapId: sfcode))
+                    self.allRetailerList.append(RetailerList(id: selectedRetailer.first?.id ?? "",name: selectedRetailer.first?.name ?? "",townCode: selectedRetailer.first?.townCode ?? "", isSelected: true,routeName: selectedRetailer.first?.routeName ?? "", routeCode: selectedRetailer.first?.routeCode ?? "",hqCode: selectedRetailer.first?.hqCode ?? "",hqName: selectedRetailer.first?.hqName ?? "",distributorCode: selectedRetailer.first?.distributorCode ?? "",distributorName: selectedRetailer.first?.distributorName ?? "",orderList: selectedRetailer.first?.orderList ?? [],secOrderList: selectedRetailer.first?.secOrderList ?? [], params: selectedRetailer.first?.params ?? "", remarks: selectedRetailer.first?.remarks ?? "",remarksId: selectedRetailer.first?.remarksId ?? "",mapId: sfcode))
                 }else{
                     self.allRetailerList.append(RetailerList(id: id,name: name,townCode: townCode, isSelected: false,mapId: sfcode))
                 }
@@ -323,23 +323,138 @@ class MissedDateRouteSelection : IViewController , UITableViewDelegate,UITableVi
             return
         }
         
-        for retailerList in retailerLists {
-            if retailerList.orderList.isEmpty && retailerList.remarks == nil {
-                Toast.show(message: "Please select Remarks or order for \(retailerList.name ?? "")", controller: self)
-                return
-            }
-        }
+//        for retailerList in retailerLists {
+//            if retailerList.orderList.isEmpty && retailerList.remarks == nil {
+//                Toast.show(message: "Please select Remarks or order for \(retailerList.name ?? "")", controller: self)
+//                return
+//            }
+//        }
         
         if self.isFromSecondary == true {
-            saveSecondaryOrder()
+            
+            for retailerList in retailerLists {
+                if retailerList.secOrderList.isEmpty && retailerList.remarks == nil {
+                    Toast.show(message: "Please select Remarks or order for \(retailerList.name ?? "")", controller: self)
+                    return
+                }
+            }
+            
+            saveSecondaryOrder1()
+            // saveSecondaryOrder()
         }else {
+            for retailerList in retailerLists {
+                if retailerList.orderList.isEmpty && retailerList.remarks == nil {
+                    Toast.show(message: "Please select Remarks or order for \(retailerList.name ?? "")", controller: self)
+                    return
+                }
+            }
+            
             savePrimaryOrder()
         }
         
         
     }
     
-    
+    func saveSecondaryOrder1(){
+        let retailerLists = self.allRetailerList.filter{$0.isSelected}
+        
+        for retailerList in retailerLists {
+            
+            var productString = ""
+            
+            var stkcode = ""
+            var stkName = ""
+            
+            for i in 0..<retailerList.secOrderList.count {
+                
+                print(i)
+//                let item : [String:Any] = retailerList.orderList[i].item as! [String:Any]
+//                
+//                
+//                let id=String(format: "%@", item["id"] as! CVarArg)
+//                let uom=String(format: "%@", item["UOM"] as! CVarArg)
+//                let uomName=String(format: "%@", item["UOMNm"] as! String)
+//                let uomConv=String(format: "%@", item["UOMConv"] as! CVarArg)
+//                let netWt=String(format: "%@", item["NetWt"] as! CVarArg)
+//                let netVal=(String(format: "%.2f", item["NetVal"] as! Double))
+//                let Qty=String(format: "%@", item["Qty"] as? String ?? "")
+//                let saleQty=String(format: "%.0f", item["SalQty"] as! Double)
+//                let offQty=(String(format: "%.2f", item["OffQty"] as! Int))
+//                let fq=String(format: "%@", item["FQ"] as? Int ?? "")
+//                let offProd=String(format: "%@", item["OffProd"] as? CVarArg ?? "")
+//                let rate=(String(format: "%.2f", item["Rate"] as! Double))
+//                let offProdNm=String(format: "%@", item["OffProdNm"] as? CVarArg ?? "")
+//                let scheme1=String(format: "%@", item["Scheme"] as? Int ?? "")
+//                let disc=String(format: "%@", item["Disc"] as? CVarArg ?? "")
+//                let disVal=String(format: "%@", item["DisVal"] as? CVarArg ?? "")
+                
+                stkcode = retailerList.secOrderList[i].distributorId ?? ""
+                stkName = retailerList.secOrderList[i].distributorName ?? ""
+                
+//                let productStr1 = "{\"product_code\":\"\(id)\",\"product_Name\":\"\(retailerList.orderList[i].productName ?? "")\",\"Product_Rx_Qty\":\(saleQty),\"UnitId\":\"\(uom)\",\"UnitName\":\"\(uomName)\",\"rx_Conqty\":\(Qty),\"Product_Rx_NQty\":\"0\",\"Product_Sample_Qty\":\"\(netVal)\",\"vanSalesOrder\":0,\"net_weight\":\"0.0\",\"free\":\"\(offQty)\",\"FreePQty\":\"\(fq)\",\"FreeP_Code\":\"\(offProd)\",\"Fname\":\"\(offProdNm)\",\"discount\":\"\(disc)\",\"discount_price\":\"\(disVal)\",\"tax\":\"0.0\",\"tax_price\":\"0.0\",\"Rate\":\"\(rate)\",\"Mfg_Date\":\"\",\"cb_qty\":\"0\",\"RcpaId\":\"\",\"Ccb_qty\":0,\"PromoVal\":0,\"rx_remarks\":\"\",\"rx_remarks_Id\":\"\",\"OrdConv\":\"\(uomConv)\",\"selectedScheme\":\"\(scheme1)\",\"selectedOffProCode\":\"\(uom)\",\"selectedOffProName\":\"\(uomName)\",\"selectedOffProUnit\":\"1\",\"f_key\":{\"Activity_MSL_Code\":\"Activity_Doctor_Report\"}},"
+                
+                
+                let qty = retailerList.secOrderList[i].product.unitCount * (Int(retailerList.secOrderList[i].product.sampleQty) ?? 0)
+                var scheme : Int = 0
+                var offerProductCode : String = ""
+                var offerProductName:String = ""
+                var freePCount = retailerList.secOrderList[i].product.productId
+                var freePName = retailerList.secOrderList[i].product.productName
+                let sampleQty = (Int(retailerList.secOrderList[i].product.sampleQty) ?? 0)
+                let clQty = (Int(retailerList.secOrderList[i].product.clQty) ?? 0)
+                let totalCount = retailerList.secOrderList[i].product.totalCount
+                
+                if UserSetup.shared.SchemeBased == 1 && UserSetup.shared.offerMode == 1 {
+                    scheme = retailerList.secOrderList[i].product.scheme
+                    offerProductCode = retailerList.secOrderList[i].product.offerProductCode
+                    offerProductName = retailerList.secOrderList[i].product.offerProductName
+                    freePCount = retailerList.secOrderList[i].product.offerProductCode
+                    freePName = retailerList.secOrderList[i].product.productName
+                }
+                
+                let productStr =   "{\"product_code\":\"\(retailerList.secOrderList[i].product.productId)\",\"product_Name\":\"\(retailerList.secOrderList[i].product.productName)\",\"Product_Rx_Qty\":\(qty),\"UnitId\":\"\(retailerList.secOrderList[i].product.unitId)\",\"UnitName\":\"\(retailerList.secOrderList[i].product.unitName)\",\"rx_Conqty\":\(retailerList.secOrderList[i].product.sampleQty),\"Product_Rx_NQty\":0,\"Product_Sample_Qty\":\"\(totalCount)\",\"vanSalesOrder\":0,\"sale_erp_code\":\"\(retailerList.secOrderList[i].product.saleErpCode)\",\"rateedited\":0,\"retailer_price\":\(retailerList.secOrderList[i].product.retailerPrice),\"net_weight\":\(retailerList.secOrderList[i].product.newWt),\"free\":\(retailerList.secOrderList[i].product.freeCount),\"FreePQty\":\(retailerList.secOrderList[i].product.offerAvailableCount),\"FreeP_Code\":\"\(freePCount)\",\"Fname\":\"\(freePName)\",\"discount\":\(retailerList.secOrderList[i].product.disCountPer),\"discount_price\":\(retailerList.secOrderList[i].product.disCountAmount),\"tax\":\(retailerList.secOrderList[i].product.taxper),\"tax_price\":\(retailerList.secOrderList[i].product.taxAmount),\"Rate\":\(retailerList.secOrderList[i].product.rate),\"Mfg_Date\":\"\",\"cb_qty\":\(clQty),\"RcpaId\":0,\"Ccb_qty\":0,\"PromoVal\":0,\"rx_remarks\":\"\(retailerList.secOrderList[i].product.remarks)\",\"rx_remarks_Id\":\"\(retailerList.secOrderList[i].product.remarksId)\",\"OrdConv\":\(retailerList.secOrderList[i].product.unitCount),\"selectedScheme\":\(scheme),\"selectedOffProCode\":\"\(offerProductCode)\",\"selectedOffProName\":\"\(offerProductName)\",\"selectedOffProUnit\":\"\(retailerList.secOrderList[i].product.unitCount)\",\"CompetitorDet\":[],\"f_key\":{\"Activity_MSL_Code\":\"Activity_Doctor_Report\"}},"
+                
+                productString = productString + productStr
+            }
+            
+            
+            
+            print(productString)
+            if productString.hasSuffix(","){
+                productString.removeLast()
+            }
+            
+            let workType = (String(format: "%@", self.selectedWorktype["id"] as? CVarArg ?? ""))
+            let date = (selectedDate["name"] as? String ?? "") + " 00:00:00"
+            let routeCode = retailerList.routeCode ?? ""
+            let routeName = retailerList.routeName ?? ""
+            let hqCode = retailerList.hqCode ?? ""
+            let hqName = retailerList.hqName ?? ""
+            
+            let currentDate = GlobalFunc.getCurrDateAsString()
+            
+            eKey = String(format: "EK%@-%i", sfCode,Int((Date().timeIntervalSince1970)+Double(Int.random(in: 0..<500))))
+            
+            let dataSF = hqCode == "" ? self.sfCode : hqCode
+            
+            let jsonString = "[{\"Activity_Report_APP\":{\"Worktype_code\":\"\'\(workType)\'\",\"Town_code\":\"\'\(routeCode)\'\",\"RateEditable\":\"\'\'\",\"dcr_activity_date\":\"\'\(date)\'\",\"workTypFlag_Missed\":\"\(selectedWorktype["FWFlg"] as? String ?? "")\",\"mydayplan\":1,\"mypln_town\":\"\'\(routeName)\'\",\"mypln_town_id\":\"\'\(routeCode)\'\",\"hq_code\":\"\'\(hqCode)\'\",\"hq_name\":\"\'\(hqName)\'\",\"missed_date_entry\":1,\"Daywise_Remarks\":\"\(retailerList.remarks ?? "")\",\"eKey\":\"\(self.eKey)\",\"rx\":\"\'1\'\",\"rx_t\":\"\'\'\",\"DataSF\":\"\'\(dataSF)\'\"}},{\"Activity_Doctor_Report\":{\"Doctor_POB\":0,\"Worked_With\":\"\'\'\",\"Doc_Meet_Time\":\"\'\(date)\'\",\"modified_time\":\"\'\(currentDate)\'\",\"net_weight_value\":\"1\",\"stockist_code\":\"\'\(stkcode)\'\",\"stockist_name\":\"\'\(stkName)\'\",\"superstockistid\":\"\'\'\",\"Discountpercent\":0,\"CheckinTime\":\"\(currentDate)\",\"CheckoutTime\":\"\(currentDate)\",\"location\":\"\'1\'\",\"geoaddress\":\"\",\"retLatitude\":\"\",\"retLongitude\":\"\",\"PhoneOrderTypes\":\"0\",\"Order_Stk\":\"\'\'\",\"Order_No\":\"\'\'\",\"rootTarget\":\"\",\"orderValue\":\"\(retailerList.secOrderList.first?.subtotal ?? "")\",\"rateMode\":\"free\",\"discount_price\":0,\"doctor_code\":\"\'\(retailerList.id)\'\",\"doctor_name\":\"\'\(retailerList.name ?? "")\'\",\"f_key\":{\"Activity_Report_Code\":\"\'Activity_Report_APP\'\"}}},{\"Activity_Sample_Report\":[\(productString)]},{\"Trans_Order_Details\":[]},{\"Activity_Input_Report\":[]},{\"Activity_Event_Captures\":[]},{\"PENDING_Bills\":[]},{\"Compititor_Product\":[]}]"
+            
+            
+           // retailerList.params = jsonString
+            if let index = self.allRetailerList.firstIndex(where: { (productInfo) -> Bool in
+                return retailerList.id == productInfo.id
+            }){
+                self.allRetailerList[index] = (RetailerList(id: retailerList.id,name: retailerList.name,townCode: retailerList.townCode, isSelected: retailerList.isSelected,orderList: retailerList.orderList,params: jsonString,mapId: retailerList.mapId))
+            }
+            
+            
+            
+        }
+        
+        print(retailerLists)
+        
+        missedDateSubmit(self.allRetailerList.filter{$0.isSelected})
+    }
     
     func saveSecondaryOrder() {
         let retailerLists = self.allRetailerList.filter{$0.isSelected}
@@ -612,17 +727,35 @@ class MissedDateRouteSelection : IViewController , UITableViewDelegate,UITableVi
         
         if isFromSecondary == true {
 
-            let secondaryOrder = UIStoryboard.secondaryOrder
-            secondaryOrder.isFromMissedEntry = true
-            secondaryOrder.selectedProducts = self.retailerList[indexPath.row].orderList
-            secondaryOrder.selectedSf = self.retailerList[indexPath.row].mapId
-//            secondaryOrder.missedDateSubmit = { paramString in
-//                print(paramString)
+//            let secondaryOrder = UIStoryboard.secondaryOrder
+//            secondaryOrder.isFromMissedEntry = true
+//            secondaryOrder.selectedProducts = self.retailerList[indexPath.row].orderList
+//            secondaryOrder.selectedSf = self.retailerList[indexPath.row].mapId
+////            secondaryOrder.missedDateSubmit = { paramString in
+////                print(paramString)
+////                self.tableViewOrderList.reloadRows(at: [indexPath], with: .automatic)
+////            }
+//            secondaryOrder.missedDateEditData = { products in
+//                
+//                self.retailerList[indexPath.row].orderList = products
+//                
+//                if let index = self.allRetailerList.firstIndex(where: { (productInfo) -> Bool in
+//                    return self.retailerList[indexPath.row].id == productInfo.id
+//                }){
+//                    self.allRetailerList[index] = self.retailerList[indexPath.row]
+//                }
+//                
 //                self.tableViewOrderList.reloadRows(at: [indexPath], with: .automatic)
 //            }
-            secondaryOrder.missedDateEditData = { products in
+//            self.navigationController?.pushViewController(secondaryOrder, animated: true)
+            
+            let secondaryOrderNew = UIStoryboard.SecondaryOrderNew
+            secondaryOrderNew.isFromMissedEntry = true
+            secondaryOrderNew.selectedProductsforMissed = self.retailerList[indexPath.row].secOrderList
+            secondaryOrderNew.selectedSf = self.retailerList[indexPath.row].mapId
+            secondaryOrderNew.missedDateEditData = { products in
                 
-                self.retailerList[indexPath.row].orderList = products
+                self.retailerList[indexPath.row].secOrderList = products
                 
                 if let index = self.allRetailerList.firstIndex(where: { (productInfo) -> Bool in
                     return self.retailerList[indexPath.row].id == productInfo.id
@@ -632,7 +765,7 @@ class MissedDateRouteSelection : IViewController , UITableViewDelegate,UITableVi
                 
                 self.tableViewOrderList.reloadRows(at: [indexPath], with: .automatic)
             }
-            self.navigationController?.pushViewController(secondaryOrder, animated: true)
+            self.navigationController?.pushViewController(secondaryOrderNew, animated: true)
             
         }else {
 
@@ -804,6 +937,7 @@ struct RetailerList {
     var distributorName : String!
     
     var orderList = [SecondaryOrderSelectedList]()
+    var secOrderList = [SecondaryOrderNewSelectedList]()
     var params : String!
     var remarks : String!
     var remarksId : String!
@@ -832,6 +966,13 @@ extension UIStoryboard {
             fatalError("SecondaryOrder couldn't be found in Storyboard file")
         }
         return secondaryOrder
+    }
+    
+    static var SecondaryOrderNew:SecondaryOrderNew {
+        guard let secondaryOrderNew = UIStoryboard.main.instantiateViewController(withIdentifier: "sbSecondaryOrderNew") as? SecondaryOrderNew else {
+            fatalError("SecondaryOrderNew couldn't be found in Storyboard file")
+        }
+        return secondaryOrderNew
     }
     
     static var primaryOrder: PrimaryOrder {

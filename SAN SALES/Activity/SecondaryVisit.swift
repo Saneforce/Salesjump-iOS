@@ -649,7 +649,11 @@ class SecondaryVisit: IViewController, UITableViewDelegate, UITableViewDataSourc
         if validateForm() == false {
             return
         }
-        let vc=self.storyboard?.instantiateViewController(withIdentifier: "sbSecondaryOrder") as!  SecondaryOrder
+//        let vc=self.storyboard?.instantiateViewController(withIdentifier: "sbSecondaryOrder") as!  SecondaryOrder
+//        
+//        self.navigationController?.pushViewController(vc, animated: true)
+        
+        let vc=self.storyboard?.instantiateViewController(withIdentifier: "sbSecondaryOrderNew") as!  SecondaryOrderNew
         
         self.navigationController?.pushViewController(vc, animated: true)
         //self.present(vc, animated: true)
