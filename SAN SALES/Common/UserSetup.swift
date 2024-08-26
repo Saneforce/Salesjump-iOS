@@ -56,6 +56,10 @@ class UserSetup{
     var ExpDist_HQ:Int = 0
     var ExpDist_HQEX:Int = 0
     var drCap : String = ""
+    var clCap : String = ""
+    var clFilter : String = ""
+    var productRemark : Int = 0
+    var rateEditable : Int = 0
     func initUserSetup(){
         let SetupStoreage = UserDefaults.standard
         let SetupData: String=SetupStoreage.string(forKey: "UserSetup")!
@@ -100,6 +104,10 @@ class UserSetup{
         Hotel_Bill_Nd = lstSetups[0]["Hotel_Bill_Nd"] as? Int ?? 0
         drCap = lstSetups[0]["DrCap"] as? String ?? ""
         SrtNd = lstSetups[0]["SrtNd"] as? Int ?? 0
+        clCap = lstSetups[0]["clcap"] as? String ?? ""
+        clFilter = lstSetups[0]["Cl_Filter"] as? String ?? ""
+        productRemark = lstSetups[0]["Product_Remark"] as? Int ?? 0
+        rateEditable = lstSetups[0]["RateEditable"] as? Int ?? 0
         ExpDist_HQ = lstSetups[0]["ExpDist_HQ"] as? Int ?? 0
         ExpDist_HQEX = lstSetups[0]["ExpDist_HQEX"] as? Int ?? 0
         if(lstSetups[0]["Geo_Fencing"] as? Int == 1){

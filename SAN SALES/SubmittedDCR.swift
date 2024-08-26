@@ -580,15 +580,26 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
         
        // self.navigationController?.pushViewController(vc, animated: true)
         
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let viewController = storyboard.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
-        let myDyPln = storyboard.instantiateViewController(withIdentifier: "sbSecondaryOrder") as! SecondaryOrder
-               myDyPln.productData = item1
-               myDyPln.ProdTrans_Sl_No = item2
-               myDyPln.areypostion = arey
-           // viewController.setViewControllers([myDyPln], animated: true)
-           self.navigationController?.pushViewController(myDyPln, animated: true)
-            UIApplication.shared.windows.first?.rootViewController = navigationController
+//            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//            let viewController = storyboard.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
+//        let myDyPln = storyboard.instantiateViewController(withIdentifier: "sbSecondaryOrder") as! SecondaryOrder
+//               myDyPln.productData = item1
+//               myDyPln.ProdTrans_Sl_No = item2
+//               myDyPln.areypostion = arey
+//           // viewController.setViewControllers([myDyPln], animated: true)
+//           self.navigationController?.pushViewController(myDyPln, animated: true)
+//            UIApplication.shared.windows.first?.rootViewController = navigationController
+        
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let viewController = storyboard.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
+    let ordervc = storyboard.instantiateViewController(withIdentifier: "sbSecondaryOrderNew") as! SecondaryOrderNew
+        ordervc.productData = item1
+        ordervc.ProdTrans_Sl_No = item2
+        ordervc.areypostion = arey
+        ordervc.isFromEdit = true
+       // viewController.setViewControllers([myDyPln], animated: true)
+       self.navigationController?.pushViewController(ordervc, animated: true)
+        UIApplication.shared.windows.first?.rootViewController = navigationController
     }
    
     @IBAction func DeleteBT(_ sender: Any) {

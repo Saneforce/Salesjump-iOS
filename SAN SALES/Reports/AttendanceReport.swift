@@ -26,7 +26,7 @@ class AttendanceReport : UIViewController, UITableViewDelegate,UITableViewDataSo
     var sfCode: String = "", stateCode: String = "", divCode: String = "",desig: String="", rSF: String = ""
     let LocalStoreage = UserDefaults.standard
     
-    
+    var Ekey = ""
     var json : JSON?
     
     override func viewDidLoad() {
