@@ -13,7 +13,7 @@ import Alamofire
 import CoreLocation
 
 class LeaveForm: IViewController, UITableViewDelegate,
-                 UITableViewDataSource,FSCalendarDelegate,FSCalendarDataSource, UITextViewDelegate  {
+                 UITableViewDataSource,FSCalendarDelegate,FSCalendarDataSource, UITextViewDelegate {
     @IBOutlet weak var vwSelWindow: UIView!
     @IBOutlet weak var lblSelTitle: UILabel!
     @IBOutlet weak var lblFDate: UILabel!
@@ -208,6 +208,7 @@ class LeaveForm: IViewController, UITableViewDelegate,
                     if (NodayLv! > LeaveValue!) {
                         Toast.show(message: "\(String(describing: Levname)) Leave count Exceeded, Available \(LeaveValue!)")
                         lblLvlTyp.text = "Select the Leave Type"
+                        sLvlType = ""
                         closeWin(self)
                     }else {
                         lblLvlTyp.text = name
@@ -289,6 +290,7 @@ class LeaveForm: IViewController, UITableViewDelegate,
             FDate=date
             datediff()
             lblLvlTyp.text = "Select the Leave Type"
+            sLvlType = ""
             calendar.reloadData()
             
         }
@@ -300,6 +302,7 @@ class LeaveForm: IViewController, UITableViewDelegate,
             TDate = date
             //calendar.reloadData()
             lblLvlTyp.text = "Select the Leave Type"
+            sLvlType = ""
             datediff()
         }
 
@@ -384,7 +387,7 @@ class LeaveForm: IViewController, UITableViewDelegate,
 //            Toast.show(message: "To date must be grater or equal")
 //            return false
 //        }
-        if txReason.text == "" {
+        if txReason.text == "Reason" {
             Toast.show(message: "Enter the Reason", controller: self)
             return false
         }
@@ -415,9 +418,9 @@ class LeaveForm: IViewController, UITableViewDelegate,
     
     @IBAction func SubmitLeave(_ sender: Any) {
         
-        if (self.txReason.text == "Reason"){
-            self.txReason.text = ""
-        }
+//        if (self.txReason.text == "Reason"){
+//            self.txReason.text = ""
+//        }
         if validateForm() == false {
             return
         }
@@ -517,7 +520,7 @@ class LeaveForm: IViewController, UITableViewDelegate,
     }
     
     func LeaveAvailabilityCheck(){
-       let apiKey: String = "\(axn)&divisionCode=\(DivCode)&desig=\(Desig)&rSF=\(SFCode)&sfCode=\(SFCode)&State_Code=\(StateCode)&Year=2023&stateCode=\(StateCode)&rSF=\(SFCode)"
+       let apiKey: String = "\(axn)&divisionCode=\(DivCode)&desig=\(Desig)&rSF=\(SFCode)&sfCode=\(SFCode)&State_Code=\(StateCode)&Year=2024&stateCode=\(StateCode)&rSF=\(SFCode)"
         
        
         AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
@@ -586,14 +589,10 @@ class LeaveForm: IViewController, UITableViewDelegate,
         return components.day!;
     }
     
-    @objc private func GotoHome() {
+    @objc private func GotoHome(){
         self.resignFirstResponder()
    
         self.navigationController?.popViewController(animated: true)
         return
     }
-    
-    //
-    
-   
 }

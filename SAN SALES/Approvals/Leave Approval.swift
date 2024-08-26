@@ -161,7 +161,7 @@ class Leave_Approval: IViewController, UITableViewDelegate, UITableViewDataSourc
                          let Leave_Name = data["Leave_Name"] as? String ?? ""
                          let From_Date = data["From_Date"] as? String ?? ""
                          let To_Date = data["To_Date"] as? String ?? ""
-                         let LeaveDays = String(data["LeaveDays"] as? Int ?? 0)
+                         let LeaveDays = String(data["LeaveDays"] as? Double ?? 0)
                          let leaveoption = data["leaveoption"] as? String ?? ""
                          let Leave_Id = String(data["Leave_Id"] as? Int ?? 0)
                          let Sf_Code = data["Sf_Code"] as? String ?? ""
