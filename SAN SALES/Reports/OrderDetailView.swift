@@ -42,6 +42,12 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
     
     @IBOutlet weak var BackTotalOrder: UIImageView!
     
+    
+    @IBOutlet weak var lblQty: UILabel!
+    
+    
+    @IBOutlet weak var lblClQty: UILabel!
+    
     struct viewDet: Codable {
         let Prname: String
         let rate: Double
@@ -52,6 +58,7 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
         let qty: Int
         let value: Double
         let Product_Code:String
+        let ClQty : Int
        }
     struct NoOfOrder:Codable{
         let OrderId:String
@@ -101,6 +108,14 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
         getOrderDetail()
        // super.viewDidLayoutSubviews()
        // adjustScrollViewContentSize()
+       
+        if UserSetup.shared.clCap  == "CB"{
+            lblClQty.text = "CB Qty"
+            lblQty.text = "Sale"
+        }else if UserSetup.shared.clCap  == "CL"{
+            lblClQty.text = "CL Qty"
+            lblQty.text = "Qty"
+        }
         
        
     }
@@ -173,7 +188,8 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                 cell.lblTax.text = String(detail[indexPath.row].Tax)
                 cell.lblAmt.text =  (String(format: "%.02f",detail[indexPath.row].value))
                 cell.lblValue.text = String(format: "%.02f",detail[indexPath.row].rate)
-                
+                cell.lblText2.text = String(detail[indexPath.row].ClQty)
+                 
             }
             if tbZeroOrd == tableView {
                 let item: [String: Any] = objOfferDetail[indexPath.row] as! [String : Any]
@@ -457,7 +473,7 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                             }
                             let Additional_Prod_Dtls = json[indexToDelete]["productList"] as! [AnyObject]
                             for Item2 in Additional_Prod_Dtls {
-                                detail.append(viewDet(Prname: Item2["Product_Name"] as! String, rate: Item2["Rate"] as! Double, Cl: Item2["Product_Unit_Name"] as! String, Free:Item2["discount"] as! Int, Disc: Item2["discount"] as! Int, Tax: Int(Item2["taxval"] as! Double), qty: Item2["Quantity"] as! Int, value: Item2["sub_total"] as! Double,Product_Code: Item2["Product_Code"] as! String))
+                                detail.append(viewDet(Prname: Item2["Product_Name"] as! String, rate: Item2["Rate"] as! Double, Cl: Item2["Product_Unit_Name"] as! String, Free:Item2["discount"] as! Int, Disc: Item2["discount"] as! Int, Tax: Int(Item2["taxval"] as! Double), qty: Item2["Quantity"] as! Int, value: Item2["sub_total"] as! Double,Product_Code: Item2["Product_Code"] as! String, ClQty: Item2["cl_value"] as! Int))
                                 self.lblTotAmt.text = String(Item2["OrderVal"] as! Double)
                             }
                             tbOrderDetail.reloadData()
@@ -545,7 +561,7 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                             print(Additional_Prod_Dtls)
                             for Item2 in Additional_Prod_Dtls {
                                 if let clBalString = Item2["Product_Unit_Name"] as? String {
-                                detail.append(viewDet(Prname: Item2["Product_Name"] as! String, rate: Item2["Rate"] as! Double, Cl:clBalString, Free:Item2["discount"] as! Int, Disc: Item2["discount"] as! Int, Tax: Int(Item2["taxval"] as! Double), qty: Item2["Quantity"] as! Int, value: Item2["sub_total"] as! Double,Product_Code: Item2["Product_Code"] as! String))
+                                    detail.append(viewDet(Prname: Item2["Product_Name"] as! String, rate: Item2["Rate"] as! Double, Cl:clBalString, Free:Item2["discount"] as! Int, Disc: Item2["discount"] as! Int, Tax: Int(Item2["taxval"] as! Double), qty: Item2["Quantity"] as! Int, value: Item2["sub_total"] as! Double,Product_Code: Item2["Product_Code"] as! String, ClQty: Item2["cl_value"] as! Int))
                                 } else {
                                     print("Error: 'Cl_bal' key not found in the dictionary.")
                                 }
@@ -647,7 +663,7 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                                 
                                 if let clBalString = Item2["Product_Unit_Name"] as? String {
                                    
-                                detail.append(viewDet(Prname: Item2["Product_Name"] as! String, rate: Item2["Rate"] as! Double, Cl:clBalString, Free:Item2["discount"] as! Int, Disc: Item2["discount"] as! Int, Tax: Int(Item2["taxval"] as! Double), qty: Item2["Quantity"] as! Int, value: Item2["sub_total"] as! Double,Product_Code: Item2["Product_Code"] as! String))
+                                    detail.append(viewDet(Prname: Item2["Product_Name"] as! String, rate: Item2["Rate"] as! Double, Cl:clBalString, Free:Item2["discount"] as! Int, Disc: Item2["discount"] as! Int, Tax: Int(Item2["taxval"] as! Double), qty: Item2["Quantity"] as! Int, value: Item2["sub_total"] as! Double,Product_Code: Item2["Product_Code"] as! String, ClQty: Item2["cl_value"] as! Int))
                                         
                                         print(ContentHeight as Any)
                                    
