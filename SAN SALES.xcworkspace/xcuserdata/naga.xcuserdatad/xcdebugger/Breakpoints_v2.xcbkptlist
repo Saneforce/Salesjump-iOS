@@ -1442,6 +1442,36 @@
             endingLineNumber = "240"
             landmarkName = "editMissedDateOrder()"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "8CCFEA15-9FF3-457A-B695-D5DB9C1E91E2 - f3a50493683b2805"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "SAN_SALES.SecondaryOrderNew.editMissedDateOrder() -&gt; ()"
+                  moduleName = "SAN SALES"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/naga/Desktop/Salesjump-iOS%20naga%20Aug%2020/SAN%20SALES/Activity/SecondaryOrderNew.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "240"
+                  endingLineNumber = "240">
+               </Location>
+               <Location
+                  uuid = "8CCFEA15-9FF3-457A-B695-D5DB9C1E91E2 - 3161064d5c1c745a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (SAN_SALES.ProductList) -&gt; Swift.Bool in SAN_SALES.SecondaryOrderNew.editMissedDateOrder() -&gt; ()"
+                  moduleName = "SAN SALES"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/naga/Desktop/Salesjump-iOS%20naga%20Aug%2020/SAN%20SALES/Activity/SecondaryOrderNew.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "241"
+                  endingLineNumber = "241">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
