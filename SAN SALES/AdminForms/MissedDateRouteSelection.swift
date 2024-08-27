@@ -637,11 +637,21 @@ class MissedDateRouteSelection : IViewController , UITableViewDelegate,UITableVi
         cell.btnSelect.addTarget(self, action: #selector(selectAction(_:)), for: .touchUpInside)
         cell.heightVwRemarksConstrainst.constant = retailerList[indexPath.row].isSelected == true ? 125 : 0
         cell.btnOrder.isHidden = retailerList[indexPath.row].isSelected == true ? false : true
-        if retailerList[indexPath.row].orderList.count != 0 {
-            cell.btnOrder.setTitle("Edit", for: .normal)
-        }else {
-            cell.btnOrder.setTitle("Order", for: .normal)
+        
+        if isFromSecondary == true {
+            if retailerList[indexPath.row].secOrderList.count != 0 {
+                cell.btnOrder.setTitle("Edit", for: .normal)
+            }else {
+                cell.btnOrder.setTitle("Order", for: .normal)
+            }
+        }else{
+            if retailerList[indexPath.row].orderList.count != 0 {
+                cell.btnOrder.setTitle("Edit", for: .normal)
+            }else {
+                cell.btnOrder.setTitle("Order", for: .normal)
+            }
         }
+        
         cell.btnTemplates.addTarget(self, action: #selector(remarksTemplatesAction(_:)), for: .touchUpInside)
         if self.retailerList[indexPath.row].remarks != nil{
             cell.txtRemarks.textColor = .black
