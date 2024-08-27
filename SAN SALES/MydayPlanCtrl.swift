@@ -557,151 +557,157 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
-        let item: [String: Any]=lObjSel[indexPath.row] as! [String : Any]
-        var name=item["name"] as! String
-        print(item)
-        if let need = item["exp_needed"] as? Int{
-            exp_Need = need
-        }
-        var id = ""
-        if let ids=item["id"] as? String {
-            id = ids
-        }else{
-            id = String((item["id"] as? Int)!)
-        }
-        if let Flg_id = item["FWFlg"] as? String{
-            Leaveid = Flg_id
-        }
         
-        var typ: String = ""
-        if isMulti==true {
-            if SelMode == "JWK" {
-                let sid=(item["id"] as! String)
-                let sfind: String = (";"+sid+";")
-                
-                if let range: Range<String.Index> = (";"+strSelJWCd).range(of: sfind) {
-                    strSelJWCd=strSelJWCd.replacingOccurrences(of: sid+";", with: "")
-                    strSelJWNm=strSelJWNm.replacingOccurrences(of: name+";", with: "")
-                    if let indexToDelete = lstSelJWNms.firstIndex(where: { $0["id"] as? String == sid}) {
-                        lstSelJWNms.remove(at: indexToDelete)
-                    }
-                    tableView.reloadData()
-                }else{
-                    strSelJWCd += sid+";"
-                    strSelJWNm += name+";"
-                    let jitm: AnyObject = item as AnyObject
-                    lstSelJWNms.append(jitm)
-                    tableView.reloadData()
-                }
+        if SelMode != "Travel"{
+            let item: [String: Any]=lObjSel[indexPath.row] as! [String : Any]
+            var name=item["name"] as! String
+            print(item)
+            if let need = item["exp_needed"] as? Int{
+                exp_Need = need
             }
-        }else{
-            if SelMode=="WT" {
-                typ=item["FWFlg"] as! String
-                Worktyp = typ
-                lblWorktype.text = name
-                vwHQCtrl.isHidden=false
-               // vwDistCtrl.isHidden=false
-                vwRouteCtrl.isHidden=false
-                vwJointCtrl.isHidden=false
-                vwTravelMode.isHidden=false
-                
-                self.vwRmksCtrl.frame.origin.y = vwJointCtrl.frame.origin.y+vwJointCtrl.frame.height+8
-                self.vwDeviationCtrl.frame.origin.y = vwRmksCtrl.frame.origin.y+vwRmksCtrl.frame.height+8
-                self.vwRejectReason.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height+8
-                if typ != "F" {
-                    vwHQCtrl.isHidden=true
-                   // vwDistCtrl.isHidden=true
-                    vwRouteCtrl.isHidden=true
-                    vwJointCtrl.isHidden=true
-                    vwTravelMode.isHidden=true
-                    self.vwRmksCtrl.frame.origin.y = vwWTCtrl.frame.origin.y+vwWTCtrl.frame.height+8
+            var id = ""
+            if let ids=item["id"] as? String {
+                id = ids
+            }else{
+                id = String((item["id"] as? Int)!)
+            }
+            if let Flg_id = item["FWFlg"] as? String{
+                Leaveid = Flg_id
+            }
+            
+            var typ: String = ""
+            if isMulti==true {
+                if SelMode == "JWK" {
+                    let sid=(item["id"] as! String)
+                    let sfind: String = (";"+sid+";")
+                    
+                    if let range: Range<String.Index> = (";"+strSelJWCd).range(of: sfind) {
+                        strSelJWCd=strSelJWCd.replacingOccurrences(of: sid+";", with: "")
+                        strSelJWNm=strSelJWNm.replacingOccurrences(of: name+";", with: "")
+                        if let indexToDelete = lstSelJWNms.firstIndex(where: { $0["id"] as? String == sid}) {
+                            lstSelJWNms.remove(at: indexToDelete)
+                        }
+                        tableView.reloadData()
+                    }else{
+                        strSelJWCd += sid+";"
+                        strSelJWNm += name+";"
+                        let jitm: AnyObject = item as AnyObject
+                        lstSelJWNms.append(jitm)
+                        tableView.reloadData()
+                    }
+                }
+            }else{
+                if SelMode=="WT" {
+                    typ=item["FWFlg"] as! String
+                    Worktyp = typ
+                    lblWorktype.text = name
+                    vwHQCtrl.isHidden=false
+                   // vwDistCtrl.isHidden=false
+                    vwRouteCtrl.isHidden=false
+                    vwJointCtrl.isHidden=false
+                    vwTravelMode.isHidden=false
+                    
+                    self.vwRmksCtrl.frame.origin.y = vwJointCtrl.frame.origin.y+vwJointCtrl.frame.height+8
                     self.vwDeviationCtrl.frame.origin.y = vwRmksCtrl.frame.origin.y+vwRmksCtrl.frame.height+8
                     self.vwRejectReason.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height+8
-                    //self.vwTravelMode.frame.origin.y =
-                }
-            } else if SelMode == "DIS" {
-                lblDist.text = name
-                lstRoutes = lstAllRoutes.filter({(fitem) in
-                    let StkId: String = String(format: ",%@,", fitem["stockist_code"] as! CVarArg)
-                    return Bool(StkId.range(of: String(format: ",%@,", id))?.lowerBound != nil )
-                })
-            } else if SelMode == "RUT" {
-                lblTravelMode.text = "Select Travel Mode"
-                print(item)
-                lblRoute.text = name  //+(item["id"] as! String)
-                Allowance_Type = item["Allowance_Type"] as! String
-                
-            }else if SelMode == "HQ" {
-                lblHQ.text = name  //+(item["id"] as! String)
-                var DistData: String=""
-                if(LocalStoreage.string(forKey: "Distributors_Master_"+id)==nil){
-                    //Toast.show(message: "No Distributors found. Please will try to sync", controller: self)
-                    self.ShowLoading(Message: "       Sync Data Please wait...")
-                    GlobalFunc.FieldMasterSync(SFCode: id){ [self] in
-                        DistData = self.LocalStoreage.string(forKey: "Distributors_Master_"+id)!
-                        let RouteData: String=self.LocalStoreage.string(forKey: "Route_Master_"+id)!
-                        if let list = GlobalFunc.convertToDictionary(text: DistData) as? [AnyObject] {
-                            self.lstDist = list;
-                        }
-                        if let list = GlobalFunc.convertToDictionary(text: RouteData) as? [AnyObject] {
-                            self.lstAllRoutes = list
-                            self.lstRoutes = list
-                        }
-                        if let jointWorkData = LocalStoreage.string(forKey: "Jointwork_Master_"+id){
-                            if let list = GlobalFunc.convertToDictionary(text: jointWorkData) as? [AnyObject] {
-                                lstJoint = list
-                            }
-                        }
-                        lblDist.text = "Select the Distributor"
-                        lblRoute.text = "Select the Route"
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-                            self.LoadingDismiss()
-                            self.vwSelWindow.isHidden=true
-                         //   self.navigationController?.popViewController(animated: true)
-                            
-                        }
+                    if typ != "F" {
+                        vwHQCtrl.isHidden=true
+                       // vwDistCtrl.isHidden=true
+                        vwRouteCtrl.isHidden=true
+                        vwJointCtrl.isHidden=true
+                        vwTravelMode.isHidden=true
+                        self.vwRmksCtrl.frame.origin.y = vwWTCtrl.frame.origin.y+vwWTCtrl.frame.height+8
+                        self.vwDeviationCtrl.frame.origin.y = vwRmksCtrl.frame.origin.y+vwRmksCtrl.frame.height+8
+                        self.vwRejectReason.frame.origin.y = vwDeviationCtrl.frame.origin.y+vwDeviationCtrl.frame.height+8
+                        //self.vwTravelMode.frame.origin.y =
                     }
+                } else if SelMode == "DIS" {
+                    lblDist.text = name
+                    lstRoutes = lstAllRoutes.filter({(fitem) in
+                        let StkId: String = String(format: ",%@,", fitem["stockist_code"] as! CVarArg)
+                        return Bool(StkId.range(of: String(format: ",%@,", id))?.lowerBound != nil )
+                    })
+                } else if SelMode == "RUT" {
+                    lblTravelMode.text = "Select Travel Mode"
+                    print(item)
+                    lblRoute.text = name  //+(item["id"] as! String)
+                    Allowance_Type = item["Allowance_Type"] as! String
                     
-                }else {
-                    self.ShowLoading(Message: "       Sync Data Please wait...")
-                    GlobalFunc.FieldMasterSync(SFCode: id){ [self] in
-                    if let DistData = LocalStoreage.string(forKey: "Distributors_Master_" + id) {
-                        if let RouteData = LocalStoreage.string(forKey: "Route_Master_" + id) {
+                }else if SelMode == "HQ" {
+                    lblHQ.text = name  //+(item["id"] as! String)
+                    var DistData: String=""
+                    if(LocalStoreage.string(forKey: "Distributors_Master_"+id)==nil){
+                        //Toast.show(message: "No Distributors found. Please will try to sync", controller: self)
+                        self.ShowLoading(Message: "       Sync Data Please wait...")
+                        GlobalFunc.FieldMasterSync(SFCode: id){ [self] in
+                            DistData = self.LocalStoreage.string(forKey: "Distributors_Master_"+id)!
+                            let RouteData: String=self.LocalStoreage.string(forKey: "Route_Master_"+id)!
                             if let list = GlobalFunc.convertToDictionary(text: DistData) as? [AnyObject] {
-                                lstDist = list
+                                self.lstDist = list;
                             }
-                            
                             if let list = GlobalFunc.convertToDictionary(text: RouteData) as? [AnyObject] {
-                                lstAllRoutes = list
-                                lstRoutes = list
+                                self.lstAllRoutes = list
+                                self.lstRoutes = list
                             }
-                            
                             if let jointWorkData = LocalStoreage.string(forKey: "Jointwork_Master_"+id){
                                 if let list = GlobalFunc.convertToDictionary(text: jointWorkData) as? [AnyObject] {
                                     lstJoint = list
                                 }
                             }
+                            lblDist.text = "Select the Distributor"
+                            lblRoute.text = "Select the Route"
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                                self.LoadingDismiss()
+                                self.vwSelWindow.isHidden=true
+                             //   self.navigationController?.popViewController(animated: true)
+                                
+                            }
                         }
+                        
+                    }else {
+                        self.ShowLoading(Message: "       Sync Data Please wait...")
+                        GlobalFunc.FieldMasterSync(SFCode: id){ [self] in
+                        if let DistData = LocalStoreage.string(forKey: "Distributors_Master_" + id) {
+                            if let RouteData = LocalStoreage.string(forKey: "Route_Master_" + id) {
+                                if let list = GlobalFunc.convertToDictionary(text: DistData) as? [AnyObject] {
+                                    lstDist = list
+                                }
+                                
+                                if let list = GlobalFunc.convertToDictionary(text: RouteData) as? [AnyObject] {
+                                    lstAllRoutes = list
+                                    lstRoutes = list
+                                }
+                                
+                                if let jointWorkData = LocalStoreage.string(forKey: "Jointwork_Master_"+id){
+                                    if let list = GlobalFunc.convertToDictionary(text: jointWorkData) as? [AnyObject] {
+                                        lstJoint = list
+                                    }
+                                }
+                            }
+                        }
+                            self.LoadingDismiss()
                     }
-                        self.LoadingDismiss()
+                    }
+
+                    if(UserSetup.shared.DistBased == 1){
+                        
+                    }
+                }else if SelMode == "Travel"{
+                    id = String(Trave_Det[indexPath.row].Sl_No)
+                    name = Trave_Det[indexPath.row].name
+                    typ = String(Trave_Det[indexPath.row].StEndNeed)
+                    lblTravelMode.text = Trave_Det[indexPath.row].name
                 }
-                }
-//                else{
-//                    DistData = LocalStoreage.string(forKey: "Distributors_Master_"+id)!
-//
-//                    let RouteData: String=LocalStoreage.string(forKey: "Route_Master_"+id)!
-//                    if let list = GlobalFunc.convertToDictionary(text: DistData) as? [AnyObject] {
-//                        lstDist = list;
-//                    }
-//                    if let list = GlobalFunc.convertToDictionary(text: RouteData) as? [AnyObject] {
-//                        lstAllRoutes = list
-//                        lstRoutes = list
-//                    }
-//                }
-                if(UserSetup.shared.DistBased == 1){
-                    
-                }
-            }else if SelMode == "Travel"{
+                
+                myDyTp.updateValue(lItem(id: id, name: name,FWFlg: typ), forKey: SelMode)
+                print(myDyTp)
+                closeWin(self)
+            }
+        }else{
+            var id = ""
+            var name=""
+            var typ: String = ""
+            if SelMode == "Travel"{
                 id = String(Trave_Det[indexPath.row].Sl_No)
                 name = Trave_Det[indexPath.row].name
                 typ = String(Trave_Det[indexPath.row].StEndNeed)
@@ -712,7 +718,10 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
             print(myDyTp)
             closeWin(self)
         }
+        
+       
     }
+    
    /* func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let item: [String: Any]=lObjSel[indexPath.row] as! [String : Any]
         let name=item["name"] as! String

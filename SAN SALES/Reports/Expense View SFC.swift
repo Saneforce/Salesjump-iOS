@@ -1273,7 +1273,7 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
                     Plc_typ: "",
                     Fuel_amount: "0.00",
                     Mot_Name: "",
-                    status: "Not Climed", Da_amount: "0",
+                    status: "NOT CLAIMED", Da_amount: "0",
                     SFCdetils: []
                 ))
             }

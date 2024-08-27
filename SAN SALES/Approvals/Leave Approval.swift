@@ -7,7 +7,7 @@
 
 import UIKit
 import Alamofire
-class Leave_Approval: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class Leave_Approval: IViewController, UITableViewDelegate, UITableViewDataSource {
     @IBOutlet weak var BackBT: UIImageView!
     @IBOutlet weak var Leave_View_TB: UITableView!
     @IBOutlet weak var Approv_View: UIView!
@@ -161,7 +161,7 @@ class Leave_Approval: UIViewController, UITableViewDelegate, UITableViewDataSour
                          let Leave_Name = data["Leave_Name"] as? String ?? ""
                          let From_Date = data["From_Date"] as? String ?? ""
                          let To_Date = data["To_Date"] as? String ?? ""
-                         let LeaveDays = String(data["LeaveDays"] as? Int ?? 0)
+                         let LeaveDays = String(data["LeaveDays"] as? Double ?? 0)
                          let leaveoption = data["leaveoption"] as? String ?? ""
                          let Leave_Id = String(data["Leave_Id"] as? Int ?? 0)
                          let Sf_Code = data["Sf_Code"] as? String ?? ""
@@ -252,9 +252,10 @@ class Leave_Approval: UIViewController, UITableViewDelegate, UITableViewDataSour
         ]
         print(params)
         let axn = "dcr/save"
-        let apiKey: String = "\(axn)&State_Code=\(StateCode)&desig=\(UserSetup.shared.Desig)&divisionCod=\(DivCode)&rSF=\(SFCode)&leaveid=\(Leave_ID)&sfCode=\(SFCode)&stateCode=\(StateCode)"
+        let apiKey: String = "\(axn)&State_Code=\(StateCode)&desig=\(UserSetup.shared.Desig)&divisionCode=\(DivCode)&rSF=\(SFCode)&leaveid=\(Leave_ID)&sfCode=\(SFCode)&stateCode=\(StateCode)"
         print(apiKey)
-        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+        let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+apiKeyWithoutCommas, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
             AFdata in
             switch AFdata.result
             {
