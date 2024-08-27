@@ -55,6 +55,7 @@ class UserSetup{
     var dsg_code:Int = 0
     var ExpDist_HQ:Int = 0
     var ExpDist_HQEX:Int = 0
+    var Eligibility_Nd:Int = 0
     func initUserSetup(){
         let SetupStoreage = UserDefaults.standard
         let SetupData: String=SetupStoreage.string(forKey: "UserSetup")!
@@ -100,6 +101,7 @@ class UserSetup{
         SrtNd = lstSetups[0]["SrtNd"] as? Int ?? 0
         ExpDist_HQ = lstSetups[0]["ExpDist_HQ"] as? Int ?? 0
         ExpDist_HQEX = lstSetups[0]["ExpDist_HQEX"] as? Int ?? 0
+        Eligibility_Nd = lstSetups[0]["Eligibility_Nd"] as? Int ?? 0
         if(lstSetups[0]["Geo_Fencing"] as? Int == 1){
             Fenching = true
         }else{

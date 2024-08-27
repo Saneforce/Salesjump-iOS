@@ -252,9 +252,10 @@ class Leave_Approval: IViewController, UITableViewDelegate, UITableViewDataSourc
         ]
         print(params)
         let axn = "dcr/save"
-        let apiKey: String = "\(axn)&State_Code=\(StateCode)&desig=\(UserSetup.shared.Desig)&divisionCod=\(DivCode)&rSF=\(SFCode)&leaveid=\(Leave_ID)&sfCode=\(SFCode)&stateCode=\(StateCode)"
+        let apiKey: String = "\(axn)&State_Code=\(StateCode)&desig=\(UserSetup.shared.Desig)&divisionCode=\(DivCode)&rSF=\(SFCode)&leaveid=\(Leave_ID)&sfCode=\(SFCode)&stateCode=\(StateCode)"
         print(apiKey)
-        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+        let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+apiKeyWithoutCommas, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
             AFdata in
             switch AFdata.result
             {

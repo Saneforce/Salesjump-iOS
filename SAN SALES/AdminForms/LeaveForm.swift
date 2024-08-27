@@ -188,14 +188,15 @@ class LeaveForm: IViewController, UITableViewDelegate,
             sLvlType = id
             
         }
-        if SelMode == "LTYP" {
-//            if valu() == false {
-//                return
-//            }
+        if UserSetup.shared.Eligibility_Nd == 1 {
+            if SelMode == "LTYP" {
+            //            if valu() == false {
+            //                return
+            //            }
             
             if let indexToDelete = LeaveAvailabilitydata.firstIndex(where: { String(format: "%@", $0["LeaveCode"] as! CVarArg) == id }){
                 print(indexToDelete)
-               // var Levid = LeaveAvailabilitydata[indexToDelete]["LeaveCode"] as? String
+                // var Levid = LeaveAvailabilitydata[indexToDelete]["LeaveCode"] as? String
                 //print(Levid)
                 let Levname = LeaveAvailabilitydata[indexToDelete]["Leave_SName"] as? String
                 let LeaveValue = LeaveAvailabilitydata[indexToDelete]["LeaveAvailability"] as? Int
@@ -204,29 +205,30 @@ class LeaveForm: IViewController, UITableViewDelegate,
                 let NodayLv = Int(NoofDays)
                 //let avil = NoLeaveAvil
                 print(NodayLv!)
-               
-                    if (NodayLv! > LeaveValue!) {
-                        Toast.show(message: "\(String(describing: Levname)) Leave count Exceeded, Available \(LeaveValue!)")
-                        lblLvlTyp.text = "Select the Leave Type"
-                        sLvlType = ""
-                        closeWin(self)
-                    }else {
-                        lblLvlTyp.text = name
-                        sLvlType = id
-                    }
                 
+                if (NodayLv! > LeaveValue!) {
+                    Toast.show(message: "\(String(describing: Levname)) Leave count Exceeded, Available \(LeaveValue!)")
+                    lblLvlTyp.text = "Select the Leave Type"
+                    sLvlType = ""
+                    closeWin(self)
+                }else {
+                    lblLvlTyp.text = name
+                    sLvlType = id
                 }
+                
+            }
             
             
-//            let NodayLv = NoofDays
-//            let avil = NoLeaveAvil
-//
-//            print(NodayLv)
-//            print(avil)
-          
-               
-        
+            //            let NodayLv = NoofDays
+            //            let avil = NoLeaveAvil
+            //
+            //            print(NodayLv)
+            //            print(avil)
+            
+            
+            
         }
+    }
         
         print(LeaveAvailabilitydata)
         
