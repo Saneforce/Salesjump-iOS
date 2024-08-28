@@ -121,7 +121,6 @@ class Expense_approval_SFC: UIViewController, UITableViewDelegate, UITableViewDa
     var Per_Id = ""
     var Expense_Amt = "0"
     var Applied_ExpAmnt = "0"
-    var approve_flag = 0
     var Get_Sf_Typ:Int = 0
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -716,23 +715,8 @@ class Expense_approval_SFC: UIViewController, UITableViewDelegate, UITableViewDa
                 print(value)
                 if let json = value as? [String:AnyObject]{
                     print(json)
-                    if let getdata = json["data"] as? [AnyObject], let DistanceEntr = json["DistanceEntr"] as? [AnyObject],let dailyExpense = json["dailyExpense"] as? [AnyObject], let Mot_Exp = json["Mot_Exp"] as? [AnyObject],let GetRouteChart = json["GetRouteChart"] as? [AnyObject], let add_sub_exp = json["add_sub_exp"] as? [AnyObject],let apr_data = json["apr_data"] as? [AnyObject]{
-                        if !apr_data.isEmpty{
-                            let apr = apr_data.filter{$0["approve_flag"] as? Int == 1 }
-                            print(apr)
-                            if apr.isEmpty{
-                                approve_flag = 0
-                            }else{
-                            
-                            if let approve_flags = apr[0]["approve_flag"] as? Int {
-                                approve_flag = approve_flags
-                            }else{
-                                approve_flag = 0
-                            }
-                        }
-                        }else{
-                            approve_flag = 0
-                        }
+                    if let DistanceEntr = json["DistanceEntr"] as? [AnyObject],let dailyExpense = json["dailyExpense"] as? [AnyObject],let GetRouteChart = json["GetRouteChart"] as? [AnyObject], let add_sub_exp = json["add_sub_exp"] as? [AnyObject]{
+                       
                         var sf_type = 0
                         if  GetRouteChart.isEmpty{
                             sf_type = 0
@@ -847,7 +831,6 @@ class Expense_approval_SFC: UIViewController, UITableViewDelegate, UITableViewDa
                     mgrRouts.append(newRout)
                 }
             }
-            print(mgrRouts)
         }
         
         print(mgrRouts)
@@ -968,17 +951,25 @@ class Expense_approval_SFC: UIViewController, UITableViewDelegate, UITableViewDa
                                         }
                                         print(Routss)
                                         if Routss.isEmpty{
-                                            let Routs = MrRouts.filter{
-                                                $0["To_Plc_Code"] as? String == past_Toplace &&
-                                                $0["Frm_Plc_Code"] as? String == mr_sfcode
-                                            }
-                                            print(Routs)
-                                            if Routs.isEmpty{
-                                                Dis_km = 0
+                                            if CurentSf != "" && PastSf != ""{
+                                                CurentSf = ""
+                                                PastSf = ""
+                                                Dis_km = 0.0
+                                                
                                             }else{
-                                                let Dis = Routs[0]["Distance_KM"] as? Int ?? 0
-                                                Dis_km = Double(Dis)
-                                                One_day_plac_typ.append(Routs[0]["Place_Type"] as? String ?? "")
+                                                
+                                                let Routs = MrRouts.filter{
+                                                    $0["To_Plc_Code"] as? String == past_Toplace &&
+                                                    $0["Frm_Plc_Code"] as? String == mr_sfcode
+                                                }
+                                                print(Routs)
+                                                if Routs.isEmpty{
+                                                    Dis_km = 0
+                                                }else{
+                                                    let Dis = Routs[0]["Distance_KM"] as? Int ?? 0
+                                                    Dis_km = Double(Dis)
+                                                    One_day_plac_typ.append(Routs[0]["Place_Type"] as? String ?? "")
+                                                }
                                             }
                                         }else{
                                             CurentSf = ""
@@ -1038,7 +1029,19 @@ class Expense_approval_SFC: UIViewController, UITableViewDelegate, UITableViewDa
                                 
                                 CurentSf = hqFilter[0]["id"] as? String ?? ""
                                 if Routs.isEmpty{
-                                    Dis_km = Dis_km + 0
+                                    let Routs = MrRouts.filter {
+                                        $0["To_Plc_Code"] as? String ?? "" == substrings2[index] &&
+                                        $0["Frm_Plc_Code"] as? String ?? "" == substrings2[index-1]
+                                    }
+                                    print(Routs)
+                                    
+                                    if Routs.isEmpty{
+                                        Dis_km = Dis_km + 0
+                                    }else{
+                                        let dis = Routs[0]["Distance_KM"] as? Int ?? 0
+                                          One_day_plac_typ.append(Routs[0]["Place_Type"] as? String ?? "")
+                                          Dis_km = Double(dis)
+                                    }
                                 }else{
                                   let dis = Routs[0]["Distance_KM"] as? Int ?? 0
                                     Dis_km = Dis_km+Double(dis)
@@ -1147,7 +1150,7 @@ class Expense_approval_SFC: UIViewController, UITableViewDelegate, UITableViewDa
             }
             // Collect return
             print(One_day_plac_typ)
-            DA_Allowance_amount = One_day_plac_typ.last ?? ""
+            Dayend_Place_Types = One_day_plac_typ.last ?? ""
             var Returnkm = 0
             let result = One_day_plac_typ
             let result2 = substrings2
@@ -1814,11 +1817,6 @@ class Expense_approval_SFC: UIViewController, UITableViewDelegate, UITableViewDa
     
     @IBAction func Appr_sfc(_ sender: Any) {
   
-        print(approve_flag)
-        if approve_flag == 1 {
-            Toast.show(message: "Expense already approved.")
-            return
-        }
         let First = ExpenseDetils.first?.date
         let last = ExpenseDetils.last?.date
             
