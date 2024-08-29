@@ -1105,9 +1105,7 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
             
             Dayend_Place_Types = One_day_plac_typ.last ?? ""
             var Returnkm = 0
-            let result = One_day_plac_typ
-            let result2 = substrings2
-            
+
             if Dayend_Place_Types == "HQ" || Dayend_Place_Types == "EX"{
                 let routs = x.Routs
                 let substrings2 = routs.split(separator: ",")
@@ -1261,7 +1259,7 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
                 
             }
             
-            if One_day_plac_typ.contains("EX"){
+            if One_day_plac_typ.contains("EX") && One_day_plac_typ.count == 1{
                 Total_amts = Total_amts+(Double(Total_Dis)  * Double(Fuel_amount))
                 Total_amts = Total_amts + Double(x.EX_Allowance_amount)
                 DA_Allowance_amount = String(x.EX_Allowance_amount)
