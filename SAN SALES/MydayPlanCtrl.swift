@@ -1477,6 +1477,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
             let jsonString = "[{\"tbMyDayPlan\":{\"wtype\":\"'" + (myDyTp["WT"]?.id ?? "") + "'\",\"sf_member_code\":\"'" + (myDyTp["HQ"]?.id ?? SFCode) + "'\",\"stockist\":\"'" + (myDyTp["DIS"]?.id ?? "") + "'\",\"stkName\":\"" + (myDyTp["DIS"]?.name ?? "") + "\",\"dcrtype\":\"App\",\"cluster\":\"'" + (myDyTp["RUT"]?.id ?? "") + "'\",\"custid\":\"" + (myDyTp["RUT"]?.id ?? "") + "\",\"custName\":\"" + (myDyTp["RUT"]?.name ?? "") + "\",\"address\":\"" + sAddress + "\",\"remarks\":\"'" + (remarks) + "'\",\"OtherWors\":\"\",\"FWFlg\":\"'" + (myDyTp["WT"]?.FWFlg ?? "") + "'\",\"SundayWorkigFlag\":\"''\",\"Place_Inv\":\"\",\"WType_SName\":\"" + (myDyTp["WT"]?.name ?? "") + "\",\"ClstrName\":\"'" + (myDyTp["RUT"]?.name ?? "") + "'\",\"AppVersion\":\"Vi_\(Bundle.main.appVersionLong).\(Bundle.main.appBuild)\",\"self\":1,\"location\":\"" + slocation + "\",\"dcr_activity_date\":\"'" + dateString + "'\",\"worked_with\":\"'\(Join_Works)'\"\(ImgName),\"SrtEndKMNd\":\"\(Start_End_Need)\",\"mode_name\":\"" + (myDyTp["Travel"]?.name ?? "") + "\",\"mod_id\":\"" + (myDyTp["Travel"]?.id ?? "") + "\",\"Allowance_Type\":\"\(Allowance_Type)\",\"Date_Time\":\"" + dateString + "\",\"Hq_id\":\"" + (myDyTp["HQ"]?.id ?? SFCode)  + "\"}}]"
             
             
+            
         let params: Parameters = [
             "data": jsonString //"["+jsonString+"]"
         ]

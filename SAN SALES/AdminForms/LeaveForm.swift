@@ -34,9 +34,9 @@ class LeaveForm: IViewController, UITableViewDelegate,
     
     struct mnuItem: Any {
         let levtype: String
-        let Eligibility : Int
-        let Taken : Int
-        let Available : Int
+        let Eligibility : Double
+        let Taken : Double
+        let Available : Double
     }
     var LeveDet:[mnuItem]=[]
     
@@ -199,23 +199,22 @@ class LeaveForm: IViewController, UITableViewDelegate,
                 // var Levid = LeaveAvailabilitydata[indexToDelete]["LeaveCode"] as? String
                 //print(Levid)
                 let Levname = LeaveAvailabilitydata[indexToDelete]["Leave_SName"] as? String
-                let LeaveValue = LeaveAvailabilitydata[indexToDelete]["LeaveAvailability"] as? Int
-                print(LeaveValue!)
+                let LeaveValue = LeaveAvailabilitydata[indexToDelete]["LeaveAvailability"] as? Double ?? 0.0
+                print(LeaveValue)
                 
-                let NodayLv = Int(NoofDays)
+                let NodayLv = Double(NoofDays)
                 //let avil = NoLeaveAvil
                 print(NodayLv!)
                 
-                if (NodayLv! > LeaveValue!) {
-                    Toast.show(message: "\(String(describing: Levname)) Leave count Exceeded, Available \(LeaveValue!)")
+                if (NodayLv! > LeaveValue){
+                    Toast.show(message: "\(String(describing: Levname)) Leave count Exceeded, Available \(LeaveValue)")
                     lblLvlTyp.text = "Select the Leave Type"
                     sLvlType = ""
                     closeWin(self)
-                }else {
+                }else{
                     lblLvlTyp.text = name
                     sLvlType = id
                 }
-                
             }
             
             
@@ -555,7 +554,7 @@ class LeaveForm: IViewController, UITableViewDelegate,
 //                    self.NolevPat = String(PatAvil as! Int)
                     //strMasList.append(mnuItem.init(MasId: 1, MasName: "Start Time", MasLbl:VisitData.shared.cInTime))
                     for item in json {
-                        LeveDet.append(mnuItem(levtype: item["Leave_Name"] as! String, Eligibility:item["LeaveValue"] as? Int ?? 0, Taken: (item["LeaveTaken"] as? Int) ?? 0, Available: item["LeaveAvailability"] as? Int ?? 0))
+                        LeveDet.append(mnuItem(levtype: item["Leave_Name"] as! String, Eligibility:item["LeaveValue"] as? Double ?? 0, Taken: (item["LeaveTaken"] as? Double) ?? 0, Available: item["LeaveAvailability"] as? Double ?? 0))
                     }
                     print(LeveDet)
                     LeaveAvailability.reloadData()
