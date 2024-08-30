@@ -18,6 +18,13 @@ class MissedDateSelection : IViewController{
     @IBOutlet weak var lblDate: LabelSelect!
     @IBOutlet weak var lblWorkType: LabelSelect!
     
+    
+    @IBOutlet weak var lblHeadquarters: LabelSelect!
+    @IBOutlet weak var lblDistributor: LabelSelect!
+    @IBOutlet weak var lblRoute: LabelSelect!
+    @IBOutlet weak var lblTravelMode: LabelSelect!
+    
+    
     @IBOutlet weak var txtRemarks: UITextView!
     
     @IBOutlet weak var vwOrderList: UIView!
@@ -36,6 +43,28 @@ class MissedDateSelection : IViewController{
     @IBOutlet weak var lblPrimaryOrderCount: UILabel!
     
     
+    @IBOutlet weak var vwHeadquarters: UIView!
+    @IBOutlet weak var vwDistributor: UIView!
+    @IBOutlet weak var vwRoutes: UIView!
+    
+    @IBOutlet weak var vwTravelMode: UIView!
+    
+    
+    @IBOutlet weak var vwTravelModeHeightConstraint: NSLayoutConstraint!
+    
+    
+    @IBOutlet weak var vwHeadquarterHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var vwDistributorHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var vwRouteHeightConstraint: NSLayoutConstraint!
+    
+    
+    @IBOutlet weak var vwTravelHeightConstraint: NSLayoutConstraint!
+    
+    
+    @IBOutlet weak var topVwHeadquarterHeightConstraint: NSLayoutConstraint!
+    
+    @IBOutlet weak var topVwDistributorHeightConstraint: NSLayoutConstraint!
+    
     
     var secondaryOrderList = [RetailerList](){
         didSet{
@@ -51,6 +80,12 @@ class MissedDateSelection : IViewController{
     
     var lstWType: [AnyObject] = []
     var lstDates: [AnyObject] = []
+    
+    var lstHQs: [AnyObject] = []
+    
+    var lstDist: [AnyObject] = []
+    var lstRoutes: [AnyObject] = []
+    var lstModeOfTravel: [AnyObject] = []
     
     var json : JSON!
     
@@ -77,17 +112,65 @@ class MissedDateSelection : IViewController{
         }
     }
     
+    var selectedHeadquarter : AnyObject! {
+        didSet {
+            self.lblHeadquarters.text = selectedHeadquarter["name"] as? String
+            
+            self.selectedDistributor = nil
+            lblDistributor.text = "Select the \(UserSetup.shared.StkCap)"
+            
+            
+            self.selectedRoute = nil
+            self.lblRoute.text = "Select the \(UserSetup.shared.StkRoute)"
+            
+            self.updateRoutes(id: selectedHeadquarter["id"] as? String ?? "")
+        }
+    }
+    
+    var selectedDistributor : AnyObject? {
+        didSet {
+            self.lblDistributor.text = selectedDistributor?["name"] as? String
+            
+            
+        }
+    }
+    
+    var selectedRoute : AnyObject! {
+        didSet {
+            self.lblRoute.text = selectedRoute?["name"] as? String
+        }
+    }
+    
+    var selectedTravelMode : AnyObject! {
+        didSet {
+            self.lblTravelMode.text = selectedTravelMode?["MOT"] as? String
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         imgBack.addTarget(target: self, action: #selector(backVC))
         getUserDetails()
         fetchMissedDate()
+        fetchTravelMode()
         
         lblDate.addTarget(target: self, action: #selector(dateAction))
         lblWorkType.addTarget(target: self, action: #selector(workTypeAction))
         
+        lblHeadquarters.addTarget(target: self, action: #selector(headquarterAction))
+        lblDistributor.addTarget(target: self, action: #selector(distributorAction))
+        lblRoute.addTarget(target: self, action: #selector(routeAction))
+        lblTravelMode.addTarget(target: self, action: #selector(TravelModeAction))
+        
         vwOrderListHeightConstraints.constant = 0
         vwOrderList.isHidden = true
+        
+        self.vwTravelMode.isHidden = true
+        self.vwHeadquarters.isHidden = true
+        self.vwDistributor.isHidden = true
+        self.vwRoutes.isHidden = true
+        
+        self.vwTravelHeightConstraint.constant = 0
         
         txtRemarks.delegate = self
         txtRemarks.text = "Enter the remarks"
@@ -96,6 +179,24 @@ class MissedDateSelection : IViewController{
         if let WorkTypeData = LocalStoreage.string(forKey: "Worktype_Master"),
            let list = GlobalFunc.convertToDictionary(text:  WorkTypeData) as? [AnyObject] {
             lstWType = list
+        }
+        
+        if UserSetup.shared.SF_type != 1 {
+            if let HQData = LocalStoreage.string(forKey: "HQ_Master"),
+               let list = GlobalFunc.convertToDictionary(text:  HQData) as? [AnyObject] {
+                lstHQs = list
+            }
+        }
+        
+        if let DistData = LocalStoreage.string(forKey: "Distributors_Master_"+sfCode),
+           let list = GlobalFunc.convertToDictionary(text:  DistData) as? [AnyObject] {
+            lstDist = list
+        }
+        
+        if let RouteData = LocalStoreage.string(forKey: "Route_Master_"+sfCode),
+           let list = GlobalFunc.convertToDictionary(text:  RouteData) as? [AnyObject] {
+            lstRoutes = list
+            
         }
         
         self.lblPrimaryOrder.text = UserSetup.shared.PrimaryCaption
@@ -118,6 +219,107 @@ class MissedDateSelection : IViewController{
         stateCode = prettyJsonData["State_Code"] as? String ?? ""
         divCode = prettyJsonData["divisionCode"] as? String ?? ""
         desig=prettyJsonData["desigCode"] as? String ?? ""
+    }
+    
+    func fetchTravelMode() {
+        let divisionCode = self.divCode.replacingOccurrences(of: ",", with: "")
+        let url =  APIClient.shared.BaseURL+APIClient.shared.DBURL1+"get/travelmode&State_Code=" + self.stateCode + "&Division_Code=" + divisionCode
+        AF.request(url,method: .get).validate(statusCode: 200..<209).responseData { AFData in
+            
+            switch AFData.result {
+                
+            case .success(let value):
+                
+                let apiResponse = try? JSONSerialization.jsonObject(with: AFData.data!)
+                
+                guard let response = apiResponse as? [AnyObject] else {
+                    return
+                }
+                self.lstModeOfTravel = response
+               
+            case .failure(let Error):
+                Toast.show(message:  Error.errorDescription ?? "" , controller: self)
+            }
+        }
+    }
+    func updateDisplay() {
+        var height = 400
+        if UserSetup.shared.SF_type == 1 {
+            self.vwHeadquarters.isHidden = true
+            self.topVwHeadquarterHeightConstraint.constant = 0
+            self.vwHeadquarterHeightConstraint.constant = 0
+            height = height - 100
+        }else {
+            self.vwHeadquarters.isHidden = false
+            self.topVwHeadquarterHeightConstraint.constant = 10
+            self.vwHeadquarterHeightConstraint.constant = 80
+        }
+        
+        if UserSetup.shared.distributorBased == 0 {
+            self.vwDistributor.isHidden = true
+            self.topVwHeadquarterHeightConstraint.constant = 0
+            self.vwDistributorHeightConstraint.constant = 0
+            height = height - 100
+        }else {
+            self.vwDistributor.isHidden = false
+            self.topVwHeadquarterHeightConstraint.constant = 10
+            self.vwDistributorHeightConstraint.constant = 80
+        }
+        
+        self.vwRoutes.isHidden = false
+        self.vwTravelMode.isHidden = false
+        
+        self.vwTravelHeightConstraint.constant = CGFloat(height)
+        
+//        if UserSetup.shared.SrtEndKMNd != 2 {
+//            self.vwTravelMode.isHidden = true
+//            self.vwHeadquarters.isHidden = true
+//            self.vwDistributor.isHidden = true
+//            self.vwRoutes.isHidden = true
+//            
+//            self.vwTravelHeightConstraint.constant = 0
+//        }
+    }
+    
+    func updateRoutes(id : String) {
+        if(LocalStoreage.string(forKey: "Distributors_Master_"+id)==nil){
+            self.ShowLoading(Message: "       Sync Data Please wait...")
+            GlobalFunc.FieldMasterSync(SFCode: id){ [self] in
+                let DistData = self.LocalStoreage.string(forKey: "Distributors_Master_"+id)!
+                let RouteData: String=self.LocalStoreage.string(forKey: "Route_Master_"+id)!
+                let RetailData: String=LocalStoreage.string(forKey: "Retail_Master_"+id)!
+                if let list = GlobalFunc.convertToDictionary(text: DistData) as? [AnyObject] {
+                    self.lstDist = list;
+                    print(list)
+                    
+                }
+                if let list = GlobalFunc.convertToDictionary(text: RouteData) as? [AnyObject] {
+                    self.lstRoutes = list
+                }
+                
+                
+                lblDistributor.text = "Select the Distributor"
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                    self.LoadingDismiss()
+                    self.navigationController?.popViewController(animated: true)
+                }
+            }
+        }else {
+            if let DistData = LocalStoreage.string(forKey: "Distributors_Master_" + id) {
+                if let RouteData = LocalStoreage.string(forKey: "Route_Master_" + id) {
+                    if let list = GlobalFunc.convertToDictionary(text: DistData) as? [AnyObject] {
+                        lstDist = list
+                        print(list)
+                        
+                    }
+                    
+                    if let list = GlobalFunc.convertToDictionary(text: RouteData) as? [AnyObject] {
+                        lstRoutes = list
+                    }
+                }
+            }
+        }
     }
     
     
@@ -148,15 +350,70 @@ class MissedDateSelection : IViewController{
         
     }
     
+    func saveTravelMode() {
+        
+        let url = APIClient.shared.BaseURL+APIClient.shared.DBURL1+"dcr/save&sfCode=\(sfCode)&divisionCode=\(divCode)"
+        
+        
+        let date = (selectedDate["name"] as? String ?? "") + " 00:00:00"
+        let name = self.selectedTravelMode["MOT"] as? String ?? ""
+        let id = self.selectedTravelMode["Sl_No"] as? Int ?? 0
+        let hqcode = selectedHeadquarter?["id"] as? String ?? sfCode
+        
+        let jsonString = "[{\"save_missed_date_trvel_mod\":{\"mode_name\":\"\(name)\",\"mod_id\":\"\(id)\",\"Date_Time\":\"\(date)\",\"Hq_id\":\"\(hqcode)\"}}]"
+        
+        let params: Parameters = [  "data": jsonString ]
+        
+        AF.request(url,method: .post,parameters: params).validate(statusCode: 200..<209).responseData { AFData in
+            
+            switch AFData.result {
+                
+            case .success(let value):
+                do {
+                    let json = try JSON(data: AFData.data!)
+                    print(json)
+                }catch {
+                    print("Error")
+                }
+            case .failure(let error):
+                Toast.show(message: error.errorDescription ?? "", controller: self)
+            }
+        }
+    }
+    
     
     
     @IBAction func secondaryAction(_ sender: UIButton) {
+        
+        if UserSetup.shared.SrtEndKMNd == 2{
+            if self.selectedRoute == nil {
+                Toast.show(message: "Please Select Route", controller: self)
+                return
+            }
+            
+            if self.selectedTravelMode == nil {
+                Toast.show(message: "Please Select Travel Mode", controller: self)
+                return
+            }
+        }
+        
         
         let vc=self.storyboard?.instantiateViewController(withIdentifier: "sbMissedDateRouteSelection") as!  MissedDateRouteSelection
         vc.isFromSecondary = true
         vc.selectedDate = self.selectedDate
         vc.selectedWorktype = self.selectedWorktype
         vc.selectedList = self.secondaryOrderList
+        
+        if UserSetup.shared.SrtEndKMNd == 2{
+            if UserSetup.shared.SF_type != 1 {
+                vc.headquarter = self.selectedHeadquarter
+            }
+            if UserSetup.shared.distributorBased != 0 {
+                vc.distributor = self.selectedDistributor
+            }
+            vc.route = self.selectedRoute
+        }
+        
         vc.missedDateSubmit = { products in
             print(products)
             
@@ -171,11 +428,32 @@ class MissedDateSelection : IViewController{
     
     @IBAction func primaryAction(_ sender: UIButton) {
         
+        if UserSetup.shared.SrtEndKMNd == 2{
+            if self.selectedRoute == nil {
+                Toast.show(message: "Please Select Route", controller: self)
+                return
+            }
+            
+            if self.selectedTravelMode == nil {
+                Toast.show(message: "Please Select Travel Mode", controller: self)
+                return
+            }
+        }
+        
         let vc=self.storyboard?.instantiateViewController(withIdentifier: "sbMissedDateRouteSelection") as!  MissedDateRouteSelection
         vc.isFromSecondary = false
         vc.selectedDate = self.selectedDate
         vc.selectedWorktype = self.selectedWorktype
         vc.selectedList = self.primaryOrderList
+        if UserSetup.shared.SrtEndKMNd == 2{
+            if UserSetup.shared.SF_type != 1 {
+                vc.headquarter = self.selectedHeadquarter
+            }
+            if UserSetup.shared.distributorBased != 0 {
+                vc.distributor = self.selectedDistributor
+            }
+            vc.route = self.selectedRoute
+        }
         vc.missedDateSubmit = { products in
             print(products)
             
@@ -226,6 +504,10 @@ class MissedDateSelection : IViewController{
                     return
                 }
                 
+                if UserSetup.shared.SrtEndKMNd == 2{
+                    self.saveTravelMode()
+                }
+                
                 self.finalSubmit()
             }else {
                 self.finalSubmitNonFieldwork()
@@ -237,9 +519,6 @@ class MissedDateSelection : IViewController{
             return
         })
         self.present(alert, animated: true)
-        
-        
-        
         
     }
     
@@ -392,9 +671,16 @@ class MissedDateSelection : IViewController{
             
             switch fwflg{
                 case "F":
+                    self.updateDisplay()
                     self.vwOrderListHeightConstraints.constant = 120
                     self.vwOrderList.isHidden = false
                 default:
+                    self.vwTravelMode.isHidden = true
+                    self.vwHeadquarters.isHidden = true
+                    self.vwDistributor.isHidden = true
+                    self.vwRoutes.isHidden = true
+                    
+                    self.vwTravelHeightConstraint.constant = 0
                     self.vwOrderListHeightConstraints.constant = 0
                     self.vwOrderList.isHidden = true
             }
@@ -402,6 +688,69 @@ class MissedDateSelection : IViewController{
             self.navigationController?.popViewController(animated: true)
         }
         self.navigationController?.pushViewController(worktypeVC, animated: true)
+    }
+    
+    @objc private func headquarterAction() {
+        
+        
+        let headquarterVC = ItemViewController(items: lstHQs, configure: { (Cell : SingleSelectionTableViewCell, headquarter) in
+            Cell.textLabel?.text = headquarter["name"] as? String
+        })
+        headquarterVC.title = "Select the Headquarter"
+        headquarterVC.didSelect = { selectedHeadquarter in
+            print(selectedHeadquarter)
+            self.selectedHeadquarter = selectedHeadquarter
+            self.updateRoutes(id: selectedHeadquarter["id"] as? String ?? "")
+            self.navigationController?.popViewController(animated: true)
+        }
+        self.navigationController?.pushViewController(headquarterVC, animated: true)
+    }
+    
+    @objc private func distributorAction() {
+        let distributorVC = ItemViewController(items: lstDist, configure: { (Cell : SingleSelectionTableViewCell, distributor) in
+            Cell.textLabel?.text = distributor["name"] as? String
+        })
+        distributorVC.title = "Select the \(UserSetup.shared.StkCap)"
+        distributorVC.didSelect = { selectedDistributor in
+            print(selectedDistributor)
+            self.selectedDistributor = selectedDistributor
+            self.navigationController?.popViewController(animated: true)
+        }
+        self.navigationController?.pushViewController(distributorVC, animated: true)
+    }
+    
+    @objc private func routeAction() {
+        let routeVC = ItemViewController(items: lstRoutes, configure: { (Cell : SingleSelectionTableViewCell, route) in
+            Cell.textLabel?.text = route["name"] as? String
+        })
+        routeVC.title = "Select the \(UserSetup.shared.StkRoute)"
+        routeVC.didSelect = { selectedRoute in
+            print(selectedRoute)
+            self.selectedRoute = selectedRoute
+            self.navigationController?.popViewController(animated: true)
+            
+        }
+        self.navigationController?.pushViewController(routeVC, animated: true)
+    }
+    
+    @objc private func TravelModeAction() {
+        
+        print(self.selectedRoute)
+        
+        print(lstModeOfTravel)
+        
+        let travelMode = lstModeOfTravel.filter{($0["Alw_Eligibilty"] as? String ?? "").contains(self.selectedRoute["Allowance_Type"] as? String ?? "")}
+        
+        let travelModeVC = ItemViewController(items: travelMode, configure: { (Cell : SingleSelectionTableViewCell, travelMode) in
+            Cell.textLabel?.text = travelMode["MOT"] as? String
+        })
+        travelModeVC.title = "Select the Travel Mode"
+        travelModeVC.didSelect = { selectedTravelMode in
+            print(selectedTravelMode)
+            self.selectedTravelMode = selectedTravelMode
+            self.navigationController?.popViewController(animated: true)
+        }
+        self.navigationController?.pushViewController(travelModeVC, animated: true)
     }
     
     @objc func backVC() {

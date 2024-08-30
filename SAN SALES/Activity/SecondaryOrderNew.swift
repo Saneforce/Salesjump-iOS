@@ -340,7 +340,6 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
                            Stockist_Code = filteredArray[0]["Stockist_Code"] as! String
                         }
                         DemoEdite()
-                       // setSecEditeOrder()
                     }
                 case .failure(let error):
                     Toast.show(message: error.errorDescription!)
@@ -745,6 +744,10 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
             var package : String = ""
             
             if UserSetup.shared.SchemeBased == 1 && UserSetup.shared.offerMode == 1 {
+                print(productId)
+              //  print(String(format: "%@", product["PCode"] as? CVarArg ?? ""))
+                print(lstStockistSchemes)
+                print(lstStockistSchemes.count)
                 
                 let schemesItems = lstStockistSchemes.filter({ (product) in
                     let ProdId = String(format: "%@", product["PCode"] as! CVarArg)
@@ -869,6 +872,8 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
                 Cell.lblCl.text = "CL : "
                 Cell.lblQty.text = "Qty : "
             }
+            Cell.txtClQty.text = self.products[indexPath.row].clQty
+            Cell.lblRemarks.text = self.products[indexPath.row].remarks == "" ? "Select the Templete" : self.products[indexPath.row].remarks
             if UserSetup.shared.rateEditable == 0 {
                 Cell.imgRateEdit.isHidden = true
                 Cell.imgRateEditWidthConstraint.constant = 0
@@ -1797,11 +1802,9 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
                 freePCount = product.offerProductCode
                 freePName = product.productName
             }
-             
-//            let w =   "{\"product_code\":\"\(product.productId)\",\"product_Name\":\"\(product.productName)\",\"Product_Rx_Qty\":\(qty),\"UnitId\":\"\(product.unitId)\",\"UnitName\":\"\(product.unitName)\",\"rx_Conqty\":\(product.sampleQty),\"Product_Rx_NQty\":0,\"Product_Sample_Qty\":\"\(totalCount)\",\"vanSalesOrder\":0,\"sale_erp_code\":\"\(product.saleErpCode)\",\"rateedited\":0,\"retailer_price\":\(product.retailerPrice),\"net_weight\":\(product.newWt),\"free\":\(product.freeCount),\"FreePQty\":\(product.offerAvailableCount),\"FreeP_Code\":\"\(freePCount)\",\"Fname\":\"\(freePName)\",\"discount\":\(product.disCountPer),\"discount_price\":\(product.disCountAmount),\"tax\":\(product.taxper),\"tax_price\":\(product.taxAmount),\"Rate\":\(product.rate),\"Mfg_Date\":\"\",\"cb_qty\":\(clQty),\"RcpaId\":0,\"Ccb_qty\":0,\"PromoVal\":0,\"rx_remarks\":\"\(product.remarks)\",\"rx_remarks_Id\":\"\(product.remarksId)\",\"OrdConv\":\(product.unitCount),\"selectedScheme\":\(scheme),\"selectedOffProCode\":\"\(offerProductCode)\",\"selectedOffProName\":\"\(offerProductName)\",\"selectedOffProUnit\":\"\(product.unitCount)\",\"CompetitorDet\":[],\"f_key\":{\"Activity_MSL_Code\":\"Activity_Doctor_Report\"}},"
             
             
-            let productStr = "{\"product\":\"\(product.productId)\",\"UnitId\":\"\(product.unitId)\",\"UnitName\":\"\(product.unitName)\",\"product_Nm\":\"\(product.productName)\",\"OrdConv\":\(product.unitCount),\"free\":\(product.freeCount),\"HSN\":\"\",\"Rate\":\(product.rate),\"imageUri\":\"\",\"Schmval\":0,\"rx_qty\":\(qty),\"recv_qty\":0,\"product_netwt\":\(product.newWt),\"netweightvalue\":0,\"conversionQty\":\(product.unitCount),\"cateid\":\(product.cateId),\"UcQty\":\(product.unitCount),\"rx_Conqty\":\(sampleQty),\"id\":\"\(product.productId)\",\"name\":\"\(product.productName)\",\"rateedited\":0,\"retailer_price\":\(product.retailerPrice),\"rx_remarks\":\"\(product.remarks)\",\"rx_remarks_Id\":\"\(product.remarksId)\",\"sample_qty\":\"\(product.totalCount)\",\"FreeP_Code\":\"\(freePCount)\",\"Fname\":\"\(freePName)\",\"PromoVal\":0,\"discount\":\(product.disCountPer),\"discount_price\":\(product.disCountAmount),\"tax\":\(product.taxper),\"tax_price\":\(product.taxAmount),\"selectedScheme\":0,\"selectedOffProCode\":\"2\",\"selectedOffProName\":\"Piece\",\"selectedOffProUnit\":\"1\"},"
+            let productStr = "{\"product\":\"\(product.productId)\",\"UnitId\":\"\(product.unitId)\",\"UnitName\":\"\(product.unitName)\",\"product_Nm\":\"\(product.productName)\",\"OrdConv\":\(product.unitCount),\"free\":\(product.freeCount),\"HSN\":\"\",\"Rate\":\(product.rate),\"imageUri\":\"\",\"Schmval\":0,\"rx_qty\":\(qty),\"recv_qty\":0,\"product_netwt\":\(product.newWt),\"netweightvalue\":0,\"conversionQty\":\(product.unitCount),\"cateid\":\(product.cateId),\"UcQty\":\(product.unitCount),\"rx_Conqty\":\(sampleQty),\"id\":\"\(product.productId)\",\"name\":\"\(product.productName)\",\"rateedited\":0,\"retailer_price\":\(product.retailerPrice),\"cb_qty\":\(clQty),\"rx_remarks\":\"\(product.remarks)\",\"rx_remarks_Id\":\"\(product.remarksId)\",\"sample_qty\":\"\(product.totalCount)\",\"FreeP_Code\":\"\(freePCount)\",\"Fname\":\"\(freePName)\",\"PromoVal\":0,\"discount\":\(product.disCountPer),\"discount_price\":\(product.disCountAmount),\"tax\":\(product.taxper),\"tax_price\":\(product.taxAmount),\"selectedScheme\":\(scheme),\"selectedOffProCode\":\"\(offerProductCode)\",\"selectedOffProName\":\"\(offerProductName)\",\"selectedOffProUnit\":\"\(product.unitCount)\"},"
             
             
             productString = productString + productStr
@@ -1975,11 +1978,6 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
             let apiResponse = try? JSONSerialization.jsonObject(with: AFdata.data! ,options: JSONSerialization.ReadingOptions.allowFragments)
             print(apiResponse as Any)
             
-//            VisitData.shared.selectedOrders = self.allProducts.filter({ product in
-//                let productQty = Int(product.sampleQty) ?? 0
-//                return productQty > 0
-//            })
-            
             
             Toast.show(message: "Order has been submitted successfully", controller: self)
             VisitData.shared.clear()
@@ -1994,115 +1992,6 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
         }
     }
     }
-    
-    
-//    func  finalSubmit (sLocation: String,sAddress: String) {
-//        
-//        var lstPlnDetail: [AnyObject] = []
-//        if self.LocalStoreage.string(forKey: "Mydayplan") == nil { return }
-//        let PlnDets: String=LocalStoreage.string(forKey: "Mydayplan")!
-//        if let list = GlobalFunc.convertToDictionary(text: PlnDets) as? [AnyObject] {
-//            lstPlnDetail = list
-//            DataSF = lstPlnDetail[0]["subordinateid"] as! String
-//        }
-//        
-//        
-//        var productString = ""
-//        
-//        for product in selectedProducts {
-//            
-//            let qty = product.unitCount * (Int(product.sampleQty) ?? 0)
-//            var scheme : Int = 0
-//            var offerProductCode : String = ""
-//            var offerProductName:String = ""
-//            var freePCount = product.productId
-//            var freePName = product.productName
-//            
-//            if UserSetup.shared.SchemeBased == 1 && UserSetup.shared.offerMode == 1 {
-//                scheme = product.scheme
-//                offerProductCode = product.offerProductCode
-//                offerProductName = product.offerProductName
-//                freePCount = product.offerProductCode
-//                freePName = product.productName
-//            }
-//            
-//            let productStr = "{\"product_code\":\"\(product.productId)\",\"product_Name\":\"\(product.productName) \",\"rx_Conqty\":\(product.sampleQty),\"Qty\":\(qty),\"PQty\":0,\"cb_qty\":0,\"free\":\(product.freeCount),\"Pfree\":0,\"Rate\":\(product.rate),\"PieseRate\":\(product.rate),\"discount\":\(product.disCountPer),\"FreeP_Code\":\"\(freePCount)\",\"Fname\":\"\(freePName)\",\"discount_price\":\(product.disCountAmount),\"tax\":\(product.taxper),\"tax_price\":\(product.taxAmount),\"OrdConv\":\(product.unitCount),\"product_unit_name\":\"\(product.unitName)\",\"selectedScheme\":\(scheme),\"selectedOffProCode\":\"\(offerProductCode)\",\"selectedOffProName\":\"\(offerProductName)\",\"selectedOffProUnit\":\"\(product.unitCount)\",\"f_key\":{\"activity_stockist_code\":\"Activity_Stockist_Report\"}},"
-//            
-//            productString = productString + productStr
-//            
-//        }
-//        
-//        if productString.hasSuffix(","){
-//            productString.removeLast()
-//        }
-//        
-//        self.lblPriceItems.text = "Price (\(self.selectedProducts.count)) items"
-//        
-//        let totalAmount = self.allProducts.map{$0.totalCount}.reduce(0){$0 + $1}
-//        
-//        let taxAmount = self.allProducts.map{$0.taxAmount}.reduce(0){$0 + $1}
-//        
-//        let discountAmount = self.allProducts.map{$0.disCountAmount}.reduce(0){$0 + $1}
-//        
-//        let totalAmountRound = Double(round(100 * totalAmount) / 100)
-//        
-//        let taxAmountRound = Double(round(100 * taxAmount) / 100)
-//        
-//        let discountAmountRound = Double(round(100 * discountAmount) / 100)
-//        
-//        let subTotal = totalAmountRound - taxAmountRound
-//        
-//        print("Ekey===\(self.eKey)") // worked_with_code
-//        
-//        let jsonString = "[{\"Activity_Report_APP\":{\"Worktype_code\":\"\'" + (lstPlnDetail[0]["worktype"] as! String) + "\'\",\"Town_code\":\"\'" + (lstPlnDetail[0]["ClstrName"] as! String) + "\'\",\"RateEditable\":\"\'\'\",\"dcr_activity_date\":\"\'" + VisitData.shared.cInTime + "\'\",\"Daywise_Remarks\":\" " + VisitData.shared.VstRemarks.name.trimmingCharacters(in: .whitespacesAndNewlines) + " \",\"eKey\":\"" + self.eKey + "\",\"rx\":\"\'\'\",\"rx_t\":\"\'\'\",\"DataSF\":\"\'" + self.DataSF + "\'\"}},{\"Activity_Stockist_Report\":{\"Stockist_POB\":\"\",\"Worked_With\":\"\'" + (lstPlnDetail[0]["worked_with_code"] as! String) + "\'\",\"location\":\"\'" + sLocation + "\'\",\"geoaddress\":\"" + sAddress + " \",\"superstockistid\":\"\'\'\",\"Stk_Meet_Time\":\"\'" + VisitData.shared.cInTime + "\'\",\"modified_time\":\"\'" + VisitData.shared.cInTime + "\'\",\"date_of_intrument\":\"\",\"intrumenttype\":\"\",\"orderValue\":\"\(totalAmountRound)\",\"Aob\":0,\"CheckinTime\":\"" + VisitData.shared.cInTime + "\",\"CheckoutTime\":\"" + VisitData.shared.cInTime + "\",\"taxTotalValue\":\"\(taxAmountRound)\",\"discTotalValue\":\"\(discountAmountRound)\",\"subTotal\":\"\(subTotal)\",\"No_Of_items\":\"\(selectedProducts.count)\",\"PhoneOrderTypes\":1,\"doctor_id\":\"\'" + VisitData.shared.CustID + "\'\",\"stockist_code\":\"\'" + VisitData.shared.CustID + "\'\",\"version\":8,\"stockist_name\":\"\'" + VisitData.shared.CustName + " \'\",\"f_key\":{\"Activity_Report_Code\":\"\'Activity_Report_APP\'\"}}},{\"Activity_Stk_POB_Report\":[\(productString)]},{\"Activity_Stk_Sample_Report\":[]},{\"Activity_Event_Captures\":[]},{\"PENDING_Bills\":[]},{\"Compititor_Product\":[]},{\"Activity_Event_Captures_Call\":[]}]"
-//        
-//        print(jsonString)
-//        
-//        let params: Parameters = [
-//            "data": jsonString
-//        ]
-//        
-//        print(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"dcr/save&divisionCode=" + self.DivCode + "&rSF=" + self.SFCode + "&sfCode=" + self.SFCode)
-//        
-//            AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"dcr/save&divisionCode=" + self.DivCode + "&rSF=" + self.SFCode + "&sfCode=" + self.SFCode, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseData {
-//            AFdata in
-//            self.LoadingDismiss()
-//            PhotosCollection.shared.PhotoList = []
-//            switch AFdata.result
-//            {
-//                
-//            case .success(let value):
-//                print(value)
-//                
-//                let apiResponse = try? JSONSerialization.jsonObject(with: AFdata.data! ,options: JSONSerialization.ReadingOptions.allowFragments)
-//                print(apiResponse as Any)
-//                
-//                VisitData.shared.selectedOrders = self.allProducts.filter({ product in
-//                    let productQty = Int(product.sampleQty) ?? 0
-//                    return productQty > 0
-//                })
-//                
-//                
-//                Toast.show(message: "Order has been submitted successfully", controller: self)
-//                print(AFdata.response?.statusCode)
-//                
-//                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-//                    
-//                    let vc=self.storyboard?.instantiateViewController(withIdentifier: "sbCallPreview") as!  CallPreview
-//                    vc.eKey = self.eKey
-//                    self.navigationController?.pushViewController(vc, animated: true)
-//                    return
-//                }
-//                
-//            case .failure(let error):
-//                let alert = UIAlertController(title: "Information", message: error.errorDescription, preferredStyle: .alert)
-//                alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
-//                    return
-//                })
-//                self.present(alert, animated: true)
-//            }
-//        }
-//    }
     
     @IBAction func proceedAction(_ sender: UIButton) {
         if isValid() == false {
@@ -2182,20 +2071,10 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
 
 struct SecondaryOrderNewSelectedList {
     
-//    var productId : String!
-//    var productName : String!
-//    var unitId : String!
-//    var unitName : String!
-//    var unitConversion : String!
-//    var rate : String!
-//    var Qty : String!
-    
     var product: ProductList!
     var distributorId : String!
     var distributorName : String!
     var subtotal : String!
-    
-  //  var selectedProduct : ProductList!
     
     init(product: ProductList!, distributorId: String!, distributorName: String!, subtotal: String!) {
         self.product = product
@@ -2203,21 +2082,5 @@ struct SecondaryOrderNewSelectedList {
         self.distributorName = distributorName
         self.subtotal = subtotal
     }
-    
-//    init(productId: String!,productName: String!, unitId: String!, unitName: String!, unitConversion: String!, rate: String!, Qty: String!, product: AnyObject!,distributorId:String!,distributorName:String!,item:AnyObject!,subtotal:String!,selectedProduct : ProductList!) {
-//        self.productId = productId
-//        self.productName = productName
-//        self.unitId = unitId
-//        self.unitName = unitName
-//        self.unitConversion = unitConversion
-//        self.rate = rate
-//        self.Qty = Qty
-//        self.product = product
-//        self.distributorId = distributorId
-//        self.distributorName = distributorName
-//        self.item = item
-//        self.subtotal = subtotal
-//    }
-    
     
 }

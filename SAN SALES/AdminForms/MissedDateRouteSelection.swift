@@ -84,6 +84,9 @@ class MissedDateRouteSelection : IViewController , UITableViewDelegate,UITableVi
         }
     }
     
+    var route : AnyObject!
+    var distributor : AnyObject?
+    var headquarter : AnyObject!
     
     var selectedWorktype : AnyObject!
     
@@ -108,6 +111,11 @@ class MissedDateRouteSelection : IViewController , UITableViewDelegate,UITableVi
                 self.updateRoutes(id: selectedHeadquarter["id"] as? String ?? "")
             }
         }
+        
+//        selectedHeadquarter = headquarter
+//        selectedDistributor = distributor
+        selectedRoute = route
+        
         
         if let DistData = LocalStoreage.string(forKey: "Distributors_Master_"+sfCode),
            let list = GlobalFunc.convertToDictionary(text:  DistData) as? [AnyObject] {
@@ -139,7 +147,33 @@ class MissedDateRouteSelection : IViewController , UITableViewDelegate,UITableVi
             lstRmksTmpl = list;
         }
         
+        if UserSetup.shared.SrtEndKMNd == 2 {
+            if UserSetup.shared.SF_type != 1 {
+                selectedHeadquarter = headquarter
+                self.updateRoutes(id: selectedHeadquarter["id"] as? String ?? "")
+            }
+            if UserSetup.shared.distributorBased != 0{
+                selectedDistributor = distributor
+            }
+            
+            selectedRoute = route
+            self.update()
+        }
+    }
+    
+    func update() {
+        if self.isFromSecondary == true {
+            self.retailerList = self.allRetailerList.filter{$0.townCode == "\(self.selectedRoute["id"] as? String ?? "")"}
+        }
         
+        if self.isFromSecondary == false {
+            if UserSetup.shared.SF_type != 1{
+                self.retailerList = self.allRetailerList.filter{$0.mapId == self.selectedHeadquarter["id"] as? String ?? ""}
+            }else {
+                self.retailerList = self.allRetailerList
+            }
+        }
+        self.tableViewOrderList.reloadData()
     }
     
     func getUserDetails(){
@@ -291,7 +325,6 @@ class MissedDateRouteSelection : IViewController , UITableViewDelegate,UITableVi
                     if self.isFromSecondary == true {
                         self.updateRetailer(retailers: list, sfcode: id)
                     }
-                    
                 }
             }
         }
@@ -850,9 +883,6 @@ class MissedDateRouteSelection : IViewController , UITableViewDelegate,UITableVi
                     self.retailerList = self.allRetailerList
                 }
             }
-            
-            print("\(self.selectedRoute["id"] as? String ?? "")")
-            print(self.allRetailerList)
             self.tableViewOrderList.reloadData()
         }
         self.navigationController?.pushViewController(routeVC, animated: true)
