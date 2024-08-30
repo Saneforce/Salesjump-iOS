@@ -1182,51 +1182,10 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
         let tbView:UITableView = GlobalFunc.getTableView(view: sender)
         let indxPath: IndexPath = tbView.indexPath(for: cell)!
         
-        
-//        let remarksVC = ItemMultipleSelectionViewController(items: lstProductRemarks, configure: { (Cell : MultipleSelectionTableViewCell, remark) in
-//            Cell.lblName.text = remark["name"] as? String
-//            
-//            let selectedRemarks = self.lstSelectedProductRemarks.filter{$0["id"] as? String == remark["id"] as? String}
-//            
-//            if !selectedRemarks.isEmpty {
-//                Cell.button.isSelected = true
-//            }else{
-//                Cell.button.isSelected = false
-//            }
-//        })
-//        remarksVC.title = "Select the Remarks"
-//        remarksVC.didSelect = { selectedItem in
-//            print(selectedItem)
-//            
-//            if let index = self.lstSelectedProductRemarks.firstIndex(where: { (item) -> Bool in
-//                return selectedItem["id"] as? String == item["id"] as? String
-//            }){
-//                self.lstSelectedProductRemarks.remove(at: index)
-//            }else{
-//                self.lstSelectedProductRemarks.append(selectedItem)
-//            }
-//        }
-//        remarksVC.save = { items in
-//            let remarks = self.lstSelectedProductRemarks.map{$0["name"] as? String ?? ""}.joined(separator: ",")
-//            let remarksId = self.lstSelectedProductRemarks.map{$0["id"] as? String ?? ""}.joined(separator: ",")
-//            
-//            print(remarks)
-//            print(remarksId)
-//            
-//            cell.product.remarks = remarks
-//            cell.product.remarksId = remarksId
-//            
-//            
-//            self.calculationForOrderCell(cell: cell)
-//            
-//            self.tbProductTableView.reloadData()
-//        }
-//        self.navigationController?.pushViewController(remarksVC, animated: true)
-        
         let remarksVC = ItemMultipleSelectionViewController(items: lstProductRemarks, configure: { (Cell : MultipleSelectionTableViewCell, remark) in
             Cell.lblName.text = remark["name"] as? String
             
-            let selectedRemarks = cell.product.selectedRemarks.filter{$0["id"] as? String == remark["id"] as? String}
+            let selectedRemarks = cell.product.selectedRemarks.filter{($0["id"] as? String ?? "") == remark["id"] as? String}
             
             if !selectedRemarks.isEmpty {
                 Cell.button.isSelected = true
@@ -1255,7 +1214,6 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
             
             cell.product.remarks = remarks
             cell.product.remarksId = remarksId
-            cell.product.selectedRemarks = items
             
             
             self.calculationForOrderCell(cell: cell)
