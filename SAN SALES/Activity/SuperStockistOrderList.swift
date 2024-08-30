@@ -1412,9 +1412,9 @@ class SuperStockistOrderListTableViewCell : UITableViewCell {
             
             txtFreeQty.text = "\(product.freeCount)"
             
-            lblRemarks.text = product.remarks == "" ? "Select the Templete" : product.remarks
+//            lblRemarks.text = product.remarks == "" ? "Select the Templete" : product.remarks
             
-            txtClQty.text = product.clQty
+//            txtClQty.text = product.clQty
             
             lblRate.text = "\(product.rate) X ( \(product.unitCount) X \(product.sampleQty == "" ? "0" : product.sampleQty) ) = \(product.totalCount) "
             

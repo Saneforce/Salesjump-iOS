@@ -363,7 +363,7 @@
                             </constraints>
                         </view>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="brX-IM-GjG">
-                            <rect key="frame" x="7" y="48" width="226" height="22.5"/>
+                            <rect key="frame" x="7" y="48" width="226" height="19"/>
                             <fontDescription key="fontDescription" name="Poppins-SemiBold" family="Poppins" pointSize="16"/>
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
@@ -552,7 +552,7 @@
                                                                     <nil key="textColor"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Rate" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5Vf-Uy-CdZ">
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="CL Qty" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5Vf-Uy-CdZ">
                                                                     <rect key="frame" x="0.0" y="28" width="99" height="16"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="16" id="tlV-GM-rda"/>
@@ -611,7 +611,7 @@
                                                                     <nil key="textColor"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="u91-fW-q6X">
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="u91-fW-q6X">
                                                                     <rect key="frame" x="317" y="2" width="70" height="16"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="height" constant="16" id="d0e-nm-744"/>
@@ -646,20 +646,20 @@
                                                             </constraints>
                                                         </tableViewCellContentView>
                                                         <connections>
-                                                            <outlet property="lblActRate" destination="5Vf-Uy-CdZ" id="7Bb-Og-hEg"/>
+                                                            <outlet property="lblActRate" destination="u91-fW-q6X" id="3ee-Ik-h89"/>
                                                             <outlet property="lblAmt" destination="23O-Ob-2lZ" id="UAI-GF-vNA"/>
                                                             <outlet property="lblDisc" destination="3pj-WC-xWd" id="7ck-3x-Slk"/>
                                                             <outlet property="lblQty" destination="D3G-qT-cwb" id="gJ5-NW-Cb3"/>
                                                             <outlet property="lblTax" destination="ctM-7m-fO0" id="RDs-kd-9Xu"/>
                                                             <outlet property="lblText" destination="8mm-dR-eKw" id="0SJ-hf-s0w"/>
-                                                            <outlet property="lblText2" destination="u91-fW-q6X" id="AxB-s0-elh"/>
+                                                            <outlet property="lblText2" destination="5Vf-Uy-CdZ" id="aAH-Gg-5cC"/>
                                                             <outlet property="lblUOM" destination="Rr8-VK-6CZ" id="hWR-jJ-Yd0"/>
                                                             <outlet property="lblValue" destination="d9g-kv-c3b" id="E4d-UU-T3H"/>
                                                         </connections>
                                                     </tableViewCell>
                                                 </prototypes>
                                             </tableView>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="CL Qty" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4Zh-Zj-voa">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Rate" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4Zh-Zj-voa">
                                                 <rect key="frame" x="309" y="181.5" width="80" height="16"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="80" id="mQg-ZZ-jTl"/>
@@ -697,7 +697,7 @@
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Rate" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fFz-n4-q8B">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Cl Qty" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fFz-n4-q8B">
                                                 <rect key="frame" x="2" y="198.5" width="96" height="16"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="16" id="Sfh-rv-2mn"/>
@@ -1077,7 +1077,7 @@
                         <outlet property="OrdHeight" destination="DkM-bY-ObM" id="KR4-IE-i9b"/>
                         <outlet property="TotalOrderView" destination="Lql-5F-kY3" id="rJn-CX-Dri"/>
                         <outlet property="btnBack" destination="i2d-o1-Ggx" id="TND-0D-eUu"/>
-                        <outlet property="lblClQty" destination="4Zh-Zj-voa" id="xe1-Kb-BlQ"/>
+                        <outlet property="lblClQty" destination="fFz-n4-q8B" id="WY4-qC-ZfG"/>
                         <outlet property="lblDate" destination="Vxi-1Z-LlN" id="IZz-un-avn"/>
                         <outlet property="lblFrmAdd" destination="cqW-Cb-ThG" id="VtD-ni-Fyw"/>
                         <outlet property="lblFrmCus" destination="c9U-f4-uXV" id="xsV-qP-ug2"/>
