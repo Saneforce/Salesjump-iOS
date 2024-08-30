@@ -298,8 +298,30 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
         if (SelMod == "MON"){
             let calendar = Calendar.current
             let currentYear = calendar.component(.year, from: Date())
-            cell.lblText.text = Monthtext_and_year[indexPath.row]
-            //MonthPostion.text = Monthtext_and_year[indexPath.row]
+            if (selectYear == "\(currentYear)"){
+            let currentMonthIndex = Calendar.current.component(.month, from: Date()) - 1
+            if indexPath.row == currentMonthIndex || indexPath.row == currentMonthIndex - 1 {
+                cell.lblText.text = Monthtext_and_year[indexPath.row]
+                MonthPostion.text = Monthtext_and_year[indexPath.row]
+                let attributedText = NSAttributedString(string: cell.lblText?.text ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
+                cell.lblText?.attributedText = attributedText
+            } else {
+                cell.lblText.text = Monthtext_and_year[indexPath.row]
+                let attributedText = NSAttributedString(string: cell.lblText?.text ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
+                cell.lblText?.attributedText = attributedText
+            }
+            }else{
+                if indexPath.row == 11 {
+                    cell.lblText.text = Monthtext_and_year[indexPath.row]
+                    MonthPostion.text = Monthtext_and_year[11]
+                    let attributedText = NSAttributedString(string: cell.lblText?.text ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
+                    cell.lblText?.attributedText = attributedText
+                } else {
+                    cell.lblText.text = Monthtext_and_year[indexPath.row]
+                    let attributedText = NSAttributedString(string: cell.lblText?.text ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
+                    cell.lblText?.attributedText = attributedText
+                }
+            }
         }else if (SelMod == "YEAR"){
             cell.lblText.text = Monthtext_and_year[indexPath.row]
             let attributedText = NSAttributedString(string: cell.lblText?.text ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
@@ -313,32 +335,38 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
             let item = Monthtext_and_year[indexPath.row]
             print(item)
             print(Monthtext_and_year)
-            if let position = Monthtext_and_year.firstIndex(where: { $0 == item }) {
-                let formattedPosition = String(format: "%02d", position + 1)
-                SelectMonth = formattedPosition
-                Eff_Month = formattedPosition
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "MM-yyyy"
-                if let date = dateFormatter.date(from: "\(SelectMonth)-\(selectYear)") {
-                    FDate = date
-                    TDate = date
+            let calendars = Calendar.current
+            
+            let currentYear = calendars.component(.year, from: Date())
+            if (selectYear == "\(currentYear)"){
+                let currentMonthIndex = Calendar.current.component(.month, from: Date()) - 1
+                if indexPath.row == currentMonthIndex || indexPath.row == currentMonthIndex - 1{
+                    if let position = Monthtext_and_year.firstIndex(where: { $0 == item }) {
+                        let formattedPosition = String(format: "%02d", position + 1)
+                        SelectMonth = formattedPosition
+                        let dateFormatter = DateFormatter()
+                        dateFormatter.dateFormat = "MM-yyyy"
+                        if let date = dateFormatter.date(from: "\(SelectMonth)-\(selectYear)") {
+                            FDate = date
+                            TDate = date
+                        }
+                        if Sel_Date.text != "\(item)-\(selectYear)" {
+                                          Sel_Period.text = "Select Period"
+                                          Exp_Summary_Data.removeAll()
+                                          Exp_Summary_Data.append(Exp_Sum(Tit: "Total Daily Expense", Amt: "-"))
+                                          Exp_Summary_Data.append(Exp_Sum(Tit: "Total Added (+)", Amt: "-"))
+                                          Exp_Summary_Data.append(Exp_Sum(Tit: "Total Deducted (-)", Amt: "-"))
+                                          Exp_Summary_Data.append(Exp_Sum(Tit: "Payable Amount", Amt: "-"))
+                                          Summary_TB.reloadData()
+                                      }
+                                      
+                                      Sel_Date.text = "\(item)-\(selectYear)"
+                                      removeLabels()
+                                      ClosePopUP()
+                    }
                 }
-                
-                if Sel_Date.text != "\(item)-\(selectYear)" {
-                    Sel_Period.text = "Select Period"
-                    Exp_Summary_Data.removeAll()
-                    Exp_Summary_Data.append(Exp_Sum(Tit: "Total Daily Expense", Amt: "-"))
-                    Exp_Summary_Data.append(Exp_Sum(Tit: "Total Added (+)", Amt: "-"))
-                    Exp_Summary_Data.append(Exp_Sum(Tit: "Total Deducted (-)", Amt: "-"))
-                    Exp_Summary_Data.append(Exp_Sum(Tit: "Payable Amount", Amt: "-"))
-                    Summary_TB.reloadData()
-                }
-                
-                Sel_Date.text = "\(item)-\(selectYear)"
-                //SelPeriod.text = "Select Period"
-                removeLabels()
-                ClosePopUP()
             }
+            
         }else if (SelMod == "YEAR"){
             let currentMonthIndex = Calendar.current.component(.month, from: Date()) - 1
             if (currentMonthIndex == 0){
@@ -367,18 +395,21 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
         dateFormatter.dateFormat = "MMM"
         Monthtext_and_year = dateFormatter.shortMonthSymbols
         Collection_Of_Month.reloadData()
+        print(Monthtext_and_year)
     }
     func yearobj(){
-        Monthtext_and_year.removeAll()
-        let currentYear = Calendar.current.component(.year, from: Date())
-        var yearsArray = [String]()
-        Monthtext_and_year.append(String(currentYear))
-        for i in 1...100 {
-            let previousYear = currentYear - i
-            Monthtext_and_year.append(String(previousYear))
+        let calendar = Calendar.current
+        let currentYear = calendar.component(.year, from: Date())
+        let previousYear = currentYear - 1
+        let currentMonthIndex = Calendar.current.component(.month, from: Date()) - 1
+        if (currentMonthIndex == 0){
+            Monthtext_and_year = [String(previousYear),String(currentYear)]
+        }else{
+            Monthtext_and_year = [String(currentYear)]
         }
-        print(yearsArray)
         Collection_Of_Month.reloadData()
+        
+        print(Monthtext_and_year)
     }
     @objc private func OpenPopUP() {
         MonthaObj()
@@ -1111,7 +1142,6 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
                 let substrings2 = routs.split(separator: ",")
                 print(substrings2)
           
-                
               let Returnrouts = distance_data.filter{$0["Sf_code"] as? String == String(last_hq_id)}
                 if let index = substrings2.firstIndex(of:"\(last_hq_id)") {
                     let outputArray = Array(substrings2[index...])
@@ -1371,6 +1401,7 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
     func collectrout(Getdata:[AnyObject],distance_data:[AnyObject],add_sub_exp:[AnyObject],FromDate:String,ToDate:String,dailyExpense:[AnyObject]){
         print(Getdata)
         Exp_Summary_Data.removeAll()
+        ExpenseDetils.removeAll()
         let past_Place_Types = ""
         var count = 0
         var allow = [String]()
@@ -1380,8 +1411,6 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
         
         var DA_Allowance_amount = ""
         for i in Getdata{
-            let allownace_typ = Getdata[count]["Dayend_Place_Types"] as? String ?? ""
-            allow.append(allownace_typ)
             let Place_Types = i["Place_Types"] as? String ?? ""
             let substrings = Place_Types.split(separator: ",")
             let result = substrings.map { String($0) }
@@ -1603,6 +1632,8 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
                 Total_amts = Total_amts + Double(OS_Allowance_amount)
                 DA_Allowance_amount = String(OS_Allowance_amount)
             }
+            
+            print(Total_amts)
             
             ExpenseDetils.append(ExpenseDatas(date: date, Work_typ: Work_typ,miscellaneous_exp:String(format: "%.2f", miscellaneous_exp), Total_Amt: String(Total_amts), Returnkm: String(Returnkm), Plc_typ: One_day_plac_typ.last ?? "", Fuel_amount: String(per_km_fare), Mot_Name: Mot_Name, status: status, Da_amount: DA_Allowance_amount, SFCdetils:SFCDetils))
             count = count + 1
