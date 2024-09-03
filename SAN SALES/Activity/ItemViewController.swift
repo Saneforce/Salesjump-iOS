@@ -133,7 +133,10 @@ class ItemViewController <Item, Cell : UITableViewCell> : UIViewController ,UITa
         }else{
             self.items = self.originalItems.filter({(product) in
                 let item = product as! [String : Any]
-                let name: String = item["name"] as? String ?? ""
+                var name: String = item["name"] as? String ?? ""
+                if name.isEmpty {
+                    name = item["MOT"] as? String ?? ""
+                }
                 return name.lowercased().contains(txtbx.text!.lowercased())
             })
         }

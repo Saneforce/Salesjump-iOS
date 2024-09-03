@@ -138,6 +138,9 @@ class MissedDateSelection : IViewController{
     var selectedRoute : AnyObject! {
         didSet {
             self.lblRoute.text = selectedRoute?["name"] as? String
+            
+            self.selectedTravelMode = nil
+            self.lblTravelMode.text = "Select Travel Mode"
         }
     }
     
@@ -603,7 +606,7 @@ class MissedDateSelection : IViewController{
         print(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"dcr%2Fsave&divisionCode=\(divCode)&sfCode=\(sfCode)&desig=\(self.desig)")
         print(params)
         
-        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"dcr%2Fsave&divisionCode=\(divCode)&sfCode=\(sfCode)&desig=\(self.desig)",method: .post,parameters: params).validate(statusCode: 200..<209).responseData { AFData in
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"dcr/save&divisionCode=\(divCode)&sfCode=\(sfCode)&desig=\(self.desig)",method: .post,parameters: params).validate(statusCode: 200..<209).responseData { AFData in
             switch AFData.result {
                 
             case .success(let value):
@@ -671,7 +674,10 @@ class MissedDateSelection : IViewController{
             
             switch fwflg{
                 case "F":
-                    self.updateDisplay()
+                
+                    if UserSetup.shared.SrtEndKMNd == 2 {
+                        self.updateDisplay()
+                    }
                     self.vwOrderListHeightConstraints.constant = 120
                     self.vwOrderList.isHidden = false
                 default:
@@ -735,9 +741,10 @@ class MissedDateSelection : IViewController{
     
     @objc private func TravelModeAction() {
         
-        print(self.selectedRoute)
-        
-        print(lstModeOfTravel)
+        if self.selectedRoute == nil {
+            Toast.show(message: "Please Select Route", controller: self)
+            return
+        }
         
         let travelMode = lstModeOfTravel.filter{($0["Alw_Eligibilty"] as? String ?? "").contains(self.selectedRoute["Allowance_Type"] as? String ?? "")}
         
