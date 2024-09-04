@@ -59,6 +59,10 @@ class Expense_approval_SFC: UIViewController, UITableViewDelegate, UITableViewDa
         let Mot_Name:String
         let status:String
         var Da_amount:String
+        var Mot_ID:String
+        var Place_Types:String
+        var Work_place:String
+        var Total_dis:String
         let SFCdetils:[AnyObject]
     }
     
@@ -87,8 +91,8 @@ class Expense_approval_SFC: UIViewController, UITableViewDelegate, UITableViewDa
         var EX_Allowance_amount:Double
         var OS_Allowance_amount:Double
     }
-    var mgrRouts:[MgrRout] = []
     
+    var mgrRouts:[MgrRout] = []
     var AllExpenses:[AllExpenseDatas] = []
     var ExpenseDetils:[ExpenseDatas] = []
     var Exp_Summary_Data:[Exp_Sum] = []
@@ -1380,8 +1384,9 @@ class Expense_approval_SFC: UIViewController, UITableViewDelegate, UITableViewDa
                 Total_amts = Total_amts + Double(x.OS_Allowance_amount)
                 DA_Allowance_amount = String(x.OS_Allowance_amount)
             }
+            let commaSeparatedString = One_day_plac_typ.joined(separator: ",")
 
-            ExpenseDetils.append(ExpenseDatas(date: getdate, Work_typ: Work_typ,miscellaneous_exp:String(format: "%.2f", miscellaneous_exp), Total_Amt: String(Total_amts), Returnkm: String(Returnkm), Plc_typ: Dayend_Place_Types, Fuel_amount: String(Fuel_amount), Mot_Name: MOT_Name, status: status, Da_amount: DA_Allowance_amount, SFCdetils:SFCDetils))
+            ExpenseDetils.append(ExpenseDatas(date: getdate, Work_typ: Work_typ,miscellaneous_exp:String(format: "%.2f", miscellaneous_exp), Total_Amt: String(Total_amts), Returnkm: String(Returnkm), Plc_typ: Dayend_Place_Types, Fuel_amount: String(Fuel_amount), Mot_Name: MOT_Name, status: status, Da_amount: DA_Allowance_amount, Mot_ID: x.Mot_ID, Place_Types: commaSeparatedString, Work_place: x.ClusterName, Total_dis: String(Total_Dis), SFCdetils:SFCDetils))
         }
         
         
@@ -1442,7 +1447,7 @@ class Expense_approval_SFC: UIViewController, UITableViewDelegate, UITableViewDa
                     Plc_typ: "",
                     Fuel_amount: "0.00",
                     Mot_Name: "",
-                    status: "Not Climed", Da_amount: "0",
+                    status: "Not Climed", Da_amount: "0", Mot_ID: "", Place_Types: "", Work_place: "", Total_dis: "",
                     SFCdetils: []
                 ))
             }
@@ -1760,8 +1765,8 @@ class Expense_approval_SFC: UIViewController, UITableViewDelegate, UITableViewDa
                 DA_Allowance_amount = String(OS_Allowance_amount)
             }
             print(Total_amts)
-            
-            ExpenseDetils.append(ExpenseDatas(date: date, Work_typ: Work_typ,miscellaneous_exp:String(format: "%.2f", miscellaneous_exp), Total_Amt: String(Total_amts), Returnkm: String(Returnkm), Plc_typ: Dayend_Place_Types, Fuel_amount: String(per_km_fare), Mot_Name: Mot_Name, status: status, Da_amount: DA_Allowance_amount, SFCdetils:SFCDetils))
+            let commaSeparatedString = One_day_plac_typ.joined(separator: ",")
+            ExpenseDetils.append(ExpenseDatas(date: date, Work_typ: Work_typ,miscellaneous_exp:String(format: "%.2f", miscellaneous_exp), Total_Amt: String(Total_amts), Returnkm: String(Returnkm), Plc_typ: Dayend_Place_Types, Fuel_amount: String(per_km_fare), Mot_Name: Mot_Name, status: status, Da_amount: DA_Allowance_amount, Mot_ID: String(modeid), Place_Types: commaSeparatedString, Work_place: cluster_chart, Total_dis: String(Totalkm), SFCdetils:SFCDetils))
             count = count + 1
         }
         
@@ -1814,7 +1819,7 @@ class Expense_approval_SFC: UIViewController, UITableViewDelegate, UITableViewDa
                     Plc_typ: "",
                     Fuel_amount: "0.00",
                     Mot_Name: "",
-                    status: "NOT CLAIMED", Da_amount: "",
+                    status: "NOT CLAIMED", Da_amount: "", Mot_ID: "", Place_Types: "", Work_place: "", Total_dis: "",
                     SFCdetils: []
                 ))
             }
@@ -1959,12 +1964,36 @@ class Expense_approval_SFC: UIViewController, UITableViewDelegate, UITableViewDa
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd"
             let formattedDateString = dateFormatter.string(from: Date())
+            var sPItems:String = ""
+            
+            let filteredExpenseDetails = ExpenseDetils.filter { $0.status != "NOT CLAIMED" }
+
+            print(filteredExpenseDetails)
+            
+            for j in filteredExpenseDetails{
+                sPItems = sPItems + "{\"WorkType\":\"\(j.Work_typ)\",\"Expense_Date\":\"\(j.date)\",\"Expense_All_Type\":\"\(j.Place_Types)\",\"Expense_Distance\":\"\(j.Total_dis)\",\"Expense_Fare\":\(j.Total_Amt),\"Expense_DA\":\(j.miscellaneous_exp),\"Daily_Total\":\"\(j.Total_Amt)\",\"Dayplan_Work_place\":\"\(j.Work_place)\",\"MOT\":\"\(j.Mot_Name)\",\"mot_id\":\"\(j.Mot_ID)\",\"st_endNeed\":\"0\",\"max_km\":\"0\",\"fuel_charge\":\"\(j.Fuel_amount)\",\"exp_km\":\"\(j.Total_dis)\",\"exp_amount\":\"\(j.miscellaneous_exp)\",\"SF_Code\":\"\(Aprsfcode)\"},"
+            }
+            var sPItems2:String = ""
+            if sPItems.hasSuffix(",") {
+                while sPItems.hasSuffix(",") {
+                    sPItems.removeLast()
+                }
+                sPItems2 = sPItems
+            }
+            
+            let jsonString = "[{\"Expense_New_Sfc\":[" + sPItems2 + "]}]"
+            let params: Parameters = [
+                "data": jsonString //"["+jsonString+"]"//
+            ]
+            
+            print(params)
+            
             let axn = "approv_SFC"
             let apiKey = "\(axn)&sf_code=\(Aprsfcode)&expense_Month=\(Eff_Month)&Expense_Year=\(Eff_Year)&Expense_Amt=\(Expense_Amt)&Exp_Sent_date=\(formattedDateString)&Approval_Date=\(formattedDateString)&Applied_ExpAmnt=\(Applied_ExpAmnt)&Appr_By=\(SFCode)&Periodic_ID=\(Per_Id)&Pri_FrmDt=\(Per_From)&Pri_ToDt=\(Per_To)"
             
             let encodedApiKey = apiKey.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
             print(apiKey)
-            AF.request(APIClient.shared.BaseURL + APIClient.shared.DBURL1 + encodedApiKey!, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+            AF.request(APIClient.shared.BaseURL + APIClient.shared.DBURL1 + encodedApiKey!, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
                 AFdata in
                 switch AFdata.result{
                 case .success(let value):
