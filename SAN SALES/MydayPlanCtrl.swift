@@ -917,6 +917,8 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                 print(lstRoutes)
                 if let indexToDelete = lstRoutes.firstIndex(where: { String(format: "%@", $0["id"] as! CVarArg) == rtid }) {
                     lblRoute.text = lstRoutes[indexToDelete]["name"] as? String
+                    print(lstRoutes[indexToDelete])
+                    Allowance_Type = lstRoutes[indexToDelete]["Allowance_Type"] as? String ?? ""
                     HomePageViewController.selfieLoginActive = 0
                     let rtname: String = lstRoutes[indexToDelete]["name"] as! String
                     print(rtname)
@@ -999,9 +1001,11 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                 lObjSel=lstHQs.filter{($0["id"] as? String ?? "") == code}
             }
             
-            
         }else{
             lObjSel=lstHQs
+            if UserSetup.shared.SF_type == 2 {
+                lblTravelMode.text = "Select Travel Mode"
+            }
         }
        // lObjSel=lstHQs
         
