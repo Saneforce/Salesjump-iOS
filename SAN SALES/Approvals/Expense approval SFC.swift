@@ -1971,7 +1971,7 @@ class Expense_approval_SFC: UIViewController, UITableViewDelegate, UITableViewDa
             print(filteredExpenseDetails)
             
             for j in filteredExpenseDetails{
-                sPItems = sPItems + "{\"WorkType\":\"\(j.Work_typ)\",\"Expense_Date\":\"\(j.date)\",\"Expense_All_Type\":\"\(j.Place_Types)\",\"Expense_Distance\":\"\(j.Total_dis)\",\"Expense_Fare\":\(j.Total_Amt),\"Expense_DA\":\(j.miscellaneous_exp),\"Daily_Total\":\"\(j.Total_Amt)\",\"Dayplan_Work_place\":\"\(j.Work_place)\",\"MOT\":\"\(j.Mot_Name)\",\"mot_id\":\"\(j.Mot_ID)\",\"st_endNeed\":\"0\",\"max_km\":\"0\",\"fuel_charge\":\"\(j.Fuel_amount)\",\"exp_km\":\"\(j.Total_dis)\",\"exp_amount\":\"\(j.miscellaneous_exp)\",\"SF_Code\":\"\(Aprsfcode)\"},"
+                sPItems = sPItems + "{\"WorkType\":\"\(j.Work_typ)\",\"Expense_Date\":\"\(j.date)\",\"Expense_All_Type\":\"\(j.Place_Types)\",\"Expense_Distance\":\"\(j.Total_dis)\",\"Expense_Fare\":\(j.Total_Amt),\"Expense_DA\":\(j.Da_amount),\"Daily_Total\":\"\(j.Total_Amt)\",\"Dayplan_Work_place\":\"\(j.Work_place)\",\"MOT\":\"\(j.Mot_Name)\",\"mot_id\":\"\(j.Mot_ID)\",\"st_endNeed\":\"0\",\"max_km\":\"0\",\"fuel_charge\":\"\(j.Fuel_amount)\",\"exp_km\":\"\(j.Total_dis)\",\"exp_amount\":\"\(j.miscellaneous_exp)\",\"SF_Code\":\"\(Aprsfcode)\"},"
             }
             var sPItems2:String = ""
             if sPItems.hasSuffix(",") {
