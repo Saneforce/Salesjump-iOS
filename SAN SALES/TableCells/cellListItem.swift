@@ -154,5 +154,22 @@ class cellListItem:UITableViewCell{
     
     @IBOutlet weak var Mode_of_trave_in_apr: UILabel!
     
+    
+    // Closing Stock Entry (DB)
+    
+    @IBOutlet weak var Case_Entry: UITextField!
+    @IBOutlet weak var Piece_Entry: UITextField!
+    @IBOutlet weak var DB_Value: UILabel!
+    @IBOutlet weak var Batch_No: UITextField!
+    @IBOutlet weak var Date_Entry: UITextField!
+    
+    // Closing Stock Entry (DB)
+    
+    @IBOutlet weak var Case_Text: UILabel!
+    @IBOutlet weak var Piece_Text: UILabel!
+    @IBOutlet weak var DB_Value_Text: UILabel!
+    @IBOutlet weak var Batch_No_Text: UILabel!
+    @IBOutlet weak var Date_Entry_Text: UILabel!
+    
     var ischeck = false
 }

@@ -87,6 +87,9 @@
 		3F0861C12802B4F5006A30FB /* VisitData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0861C02802B4F5006A30FB /* VisitData.swift */; };
 		3F0861C328053B3A006A30FB /* UserSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0861C228053B3A006A30FB /* UserSetup.swift */; };
 		3F0ED6BE2872F61A00FF4460 /* OrderDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0ED6BD2872F61A00FF4460 /* OrderDetailView.swift */; };
+		3F1056A12C8B67BB000A2E06 /* Closing Stock View (DB).swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F1056A02C8B67BB000A2E06 /* Closing Stock View (DB).swift */; };
+		3F1056A32C8B67D7000A2E06 /* Closing Entry.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3F1056A22C8B67D7000A2E06 /* Closing Entry.storyboard */; };
+		3F1056A62C8B67E3000A2E06 /* Closing Stock Entry (DB).swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F1056A42C8B67E3000A2E06 /* Closing Stock Entry (DB).swift */; };
 		3F14EAEA27F73DAD00B0997B /* SecondaryVisit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F14EAE927F73DAD00B0997B /* SecondaryVisit.swift */; };
 		3F28CBF927D3927E00B95964 /* Poppins-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3F28CBE727D3927E00B95964 /* Poppins-ExtraLight.ttf */; };
 		3F28CBFA27D3927E00B95964 /* Poppins-ThinItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3F28CBE827D3927E00B95964 /* Poppins-ThinItalic.ttf */; };
@@ -234,6 +237,9 @@
 		3F0861C02802B4F5006A30FB /* VisitData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisitData.swift; sourceTree = "<group>"; };
 		3F0861C228053B3A006A30FB /* UserSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSetup.swift; sourceTree = "<group>"; };
 		3F0ED6BD2872F61A00FF4460 /* OrderDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderDetailView.swift; sourceTree = "<group>"; };
+		3F1056A02C8B67BB000A2E06 /* Closing Stock View (DB).swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Closing Stock View (DB).swift"; path = "../../../../Salesjump-iOS Closing Stock Entry/SAN SALES/Reports/Closing Stock View (DB).swift"; sourceTree = "<group>"; };
+		3F1056A22C8B67D7000A2E06 /* Closing Entry.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = "Closing Entry.storyboard"; path = "../../../Salesjump-iOS Closing Stock Entry/SAN SALES/Closing Entry.storyboard"; sourceTree = "<group>"; };
+		3F1056A42C8B67E3000A2E06 /* Closing Stock Entry (DB).swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Closing Stock Entry (DB).swift"; sourceTree = "<group>"; };
 		3F14EAE927F73DAD00B0997B /* SecondaryVisit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondaryVisit.swift; sourceTree = "<group>"; };
 		3F28CBE727D3927E00B95964 /* Poppins-ExtraLight.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-ExtraLight.ttf"; sourceTree = "<group>"; };
 		3F28CBE827D3927E00B95964 /* Poppins-ThinItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-ThinItalic.ttf"; sourceTree = "<group>"; };
@@ -414,6 +420,15 @@
 			path = CollectionCell;
 			sourceTree = "<group>";
 		};
+		3F1056A52C8B67E3000A2E06 /* Closing Entry */ = {
+			isa = PBXGroup;
+			children = (
+				3F1056A42C8B67E3000A2E06 /* Closing Stock Entry (DB).swift */,
+			);
+			name = "Closing Entry";
+			path = "../../../Salesjump-iOS Closing Stock Entry/SAN SALES/Closing Entry";
+			sourceTree = "<group>";
+		};
 		3F14EAE827F73D4500B0997B /* Activity */ = {
 			isa = PBXGroup;
 			children = (
@@ -520,6 +535,7 @@
 				3F0861BD2801D551006A30FB /* CollectionCell */,
 				3F14EAE827F73D4500B0997B /* Activity */,
 				3F619F3A27EAED9000F3D05F /* Service */,
+				3F1056A52C8B67E3000A2E06 /* Closing Entry */,
 				3FBF387327E4480E00900007 /* Common */,
 				3F28CC1227DC96C300B95964 /* TableCells */,
 				3F28CC0D27D74D3B00B95964 /* UI */,
@@ -546,6 +562,7 @@
 				386A43922A1CC3E000CE1833 /* Submittedcalls.storyboard */,
 				38B05F4F2B04CAE50025D4C0 /* ManagerDashboard.storyboard */,
 				384E56BB2BDB669F00B2E8A5 /* Approval.storyboard */,
+				3F1056A22C8B67D7000A2E06 /* Closing Entry.storyboard */,
 			);
 			path = "SAN SALES";
 			sourceTree = "<group>";
@@ -592,6 +609,7 @@
 				159095242BF23AD0001D8347 /* CalendarViewController.xib */,
 				3F30F82D2C4E5786005EFAD9 /* Expense View SFC.swift */,
 				3F8B98992C594C610073D452 /* SFC Details View.swift */,
+				3F1056A02C8B67BB000A2E06 /* Closing Stock View (DB).swift */,
 			);
 			path = Reports;
 			sourceTree = "<group>";
@@ -698,6 +716,7 @@
 				3F28CBFC27D3927E00B95964 /* Poppins-BoldItalic.ttf in Resources */,
 				3F28CBFD27D3927E00B95964 /* Poppins-Light.ttf in Resources */,
 				3F9F379528593C5A002CC408 /* Reports.storyboard in Resources */,
+				3F1056A32C8B67D7000A2E06 /* Closing Entry.storyboard in Resources */,
 				3F28CC0127D3927E00B95964 /* Poppins-ExtraBold.ttf in Resources */,
 				159095262BF23AD0001D8347 /* CalendarViewController.xib in Resources */,
 				3F2F811727CEB30D0015E1CA /* LaunchScreen.storyboard in Resources */,
@@ -802,6 +821,7 @@
 				3FBF387527E4488100900007 /* APIClient.swift in Sources */,
 				3F0861BA28001D47006A30FB /* RoundedCornerView.swift in Sources */,
 				3F14EAEA27F73DAD00B0997B /* SecondaryVisit.swift in Sources */,
+				3F1056A12C8B67BB000A2E06 /* Closing Stock View (DB).swift in Sources */,
 				381EF93D2B19DB9700CED65F /* UI+Constraints.swift in Sources */,
 				1514DF6D2BD7839D00E6B45A /* CustomAlertVCViewController.swift in Sources */,
 				3F3D4DDB27E810880063E271 /* GlobalFunc.swift in Sources */,
@@ -844,6 +864,7 @@
 				155F39752BEA5FED0096139B /* ItemMultipleSelectionViewController.swift in Sources */,
 				3F0861C12802B4F5006A30FB /* VisitData.swift in Sources */,
 				3F5B297A28894AB3002D226C /* GradientView.swift in Sources */,
+				3F1056A62C8B67E3000A2E06 /* Closing Stock Entry (DB).swift in Sources */,
 				15C4B3192BECAA6B001ACBF4 /* RejectReasonViewController.swift in Sources */,
 				15AB213E2C799F4C004437A6 /* RateEditViewController.swift in Sources */,
 				3F063532283F5FEF0027842E /* PrimaryOrder.swift in Sources */,
@@ -1038,7 +1059,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = "3.3 T.5";
+				MARKETING_VERSION = "3.3 T.9";
 				PRODUCT_BUNDLE_IDENTIFIER = com.saneforce.sansales;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1075,7 +1096,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = "3.3 T.5";
+				MARKETING_VERSION = "3.3 T.9";
 				PRODUCT_BUNDLE_IDENTIFIER = com.saneforce.sansales;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

@@ -95,6 +95,7 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
         if(UserSetup.shared.SF_type == 2){
             strMasList.append(mnuItem.init(MasId:17, MasName: "Approvals", MasImage: "AdminForms"))
         }
+        strMasList.append(mnuItem.init(MasId:18, MasName: "Closing Stock Entry (DB)", MasImage: "SubmittedCalls"))
         menuClose.addTarget(target: self, action: #selector(closeMenuWin))
         tbMenuDetail.delegate=self
         tbMenuDetail.dataSource=self
@@ -348,6 +349,10 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
         }else if lItm.MasId == 17{
             let rptstoryboard = UIStoryboard(name: "Approval", bundle: nil)
             let RptMnuVc = rptstoryboard.instantiateViewController(withIdentifier: "ApprovalMenu") as! Approval_Menu
+            viewController.setViewControllers([RptMnuVc], animated: false)
+        }else if lItm.MasId == 18{
+            let rptstoryboard = UIStoryboard(name: "Closing Entry", bundle: nil)
+            let RptMnuVc = rptstoryboard.instantiateViewController(withIdentifier: "Closing_Stock_Entry__DB_") as! Closing_Stock_Entry__DB_
             viewController.setViewControllers([RptMnuVc], animated: false)
         }
         (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
