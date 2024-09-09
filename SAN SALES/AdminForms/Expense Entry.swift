@@ -1037,10 +1037,20 @@ class Expense_Entry: UIViewController, FSCalendarDelegate, FSCalendarDataSource,
                                             apr_flg = "0"
                                            
                                         }else{
-                                            let apr = apr_flags.filter{$0["approve_flag"] as? Int == 1 }
-                                            
-                                            if let approve_flags = apr[0]["approve_flag"] as? Int {
-                                                apr_flg = String(approve_flags)
+                                            let apr = apr_flags.filter {
+                                                if let approveFlag = $0["approve_flag"] as? Int {
+                                                    return approveFlag != 0
+                                                }
+                                                return false
+                                            }
+
+                                            print(apr)
+                                            if !apr.isEmpty{
+                                                if let approve_flags = apr[0]["approve_flag"] as? Int {
+                                                    apr_flg = String(approve_flags)
+                                                }else{
+                                                    apr_flg = "0"
+                                                }
                                             }else{
                                                 apr_flg = "0"
                                             }

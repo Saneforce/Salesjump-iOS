@@ -363,7 +363,7 @@
                             </constraints>
                         </view>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="brX-IM-GjG">
-                            <rect key="frame" x="7" y="48" width="226" height="22.5"/>
+                            <rect key="frame" x="7" y="48" width="226" height="19"/>
                             <fontDescription key="fontDescription" name="Poppins-SemiBold" family="Poppins" pointSize="16"/>
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
@@ -1932,7 +1932,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="20/05/2022" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lRe-NN-rPl">
-                                        <rect key="frame" x="258" y="10" width="99" height="30"/>
+                                        <rect key="frame" x="257" y="10" width="100" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <color key="tintColor" systemColor="systemBlueColor"/>
@@ -7244,7 +7244,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="icb-X5-FYy">
-                                                    <rect key="frame" x="147" y="37" width="120" height="18"/>
+                                                    <rect key="frame" x="147" y="37" width="119" height="18"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="13"/>
                                                     <nil key="textColor"/>
@@ -7265,7 +7265,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="V8J-z6-lNT">
-                                                    <rect key="frame" x="147" y="74" width="120" height="18"/>
+                                                    <rect key="frame" x="147" y="74" width="119" height="18"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="13"/>
                                                     <nil key="textColor"/>
@@ -7333,6 +7333,9 @@
                                         <color key="backgroundColor" red="0.93725490199999995" green="0.95294117649999999" blue="0.98431372549999996" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
+                                        <connections>
+                                            <action selector="searchBytext:" destination="crP-xI-1Tl" eventType="editingChanged" id="lUX-QM-xto"/>
+                                        </connections>
                                     </textField>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="cB5-H1-xet">
                                         <rect key="frame" x="8" y="112" width="398" height="720"/>
@@ -7365,6 +7368,34 @@
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </view>
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zJc-a5-u2w">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Select Date" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KL6-Qh-fmF">
+                                        <rect key="frame" x="16" y="43" width="313" height="23"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" name="Poppins-Bold" family="Poppins" pointSize="20"/>
+                                        <color key="textColor" red="0.21176470589999999" green="0.20784313730000001" blue="0.20784313730000001" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9xB-k4-sPv">
+                                        <rect key="frame" x="376" y="38" width="30" height="32"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                        <color key="tintColor" red="1" green="0.1137254902" blue="0.1450980392" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <state key="normal" image="multiply.circle.fill" catalog="system"/>
+                                        <connections>
+                                            <action selector="Calender_View_Close:" destination="crP-xI-1Tl" eventType="touchUpInside" id="htR-yC-J6g"/>
+                                        </connections>
+                                    </button>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="193-gk-cGP" customClass="FSCalendar">
+                                        <rect key="frame" x="8" y="78" width="398" height="776"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Xu1-mx-qlP"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -7384,8 +7415,11 @@
                             <constraint firstItem="XZJ-Mp-vwX" firstAttribute="centerX" secondItem="HEn-0e-C3O" secondAttribute="centerX" id="DFA-eV-ZFw"/>
                             <constraint firstItem="HEn-0e-C3O" firstAttribute="top" secondItem="BeX-KV-5mE" secondAttribute="top" id="DNr-tm-Vja"/>
                             <constraint firstItem="Xu1-mx-qlP" firstAttribute="trailing" secondItem="zSx-iW-7lj" secondAttribute="trailing" constant="8" id="GJg-EG-cjq"/>
+                            <constraint firstAttribute="bottom" secondItem="zJc-a5-u2w" secondAttribute="bottom" id="GTu-S3-DbJ"/>
                             <constraint firstItem="gXT-Xs-PvH" firstAttribute="top" secondItem="AHb-Rr-gDF" secondAttribute="bottom" constant="8" symbolic="YES" id="IXq-zc-9Eu"/>
                             <constraint firstItem="Xu1-mx-qlP" firstAttribute="bottom" secondItem="XZJ-Mp-vwX" secondAttribute="bottom" constant="58" id="Kou-CR-fee"/>
+                            <constraint firstItem="zJc-a5-u2w" firstAttribute="leading" secondItem="Xu1-mx-qlP" secondAttribute="leading" id="KyB-4h-dXg"/>
+                            <constraint firstItem="zJc-a5-u2w" firstAttribute="trailing" secondItem="Xu1-mx-qlP" secondAttribute="trailing" id="McH-OS-EeZ"/>
                             <constraint firstItem="eQC-Q4-Hc7" firstAttribute="trailing" secondItem="Xu1-mx-qlP" secondAttribute="trailing" id="Oer-Fw-ZXI"/>
                             <constraint firstItem="Xu1-mx-qlP" firstAttribute="trailing" secondItem="AHb-Rr-gDF" secondAttribute="trailing" constant="18" id="OlC-c2-4KK"/>
                             <constraint firstItem="EQB-30-4pC" firstAttribute="leading" secondItem="gXT-Xs-PvH" secondAttribute="trailing" constant="17" id="QvP-ms-TNQ"/>
@@ -7397,6 +7431,7 @@
                             <constraint firstItem="XZJ-Mp-vwX" firstAttribute="top" secondItem="eQC-Q4-Hc7" secondAttribute="bottom" constant="8" symbolic="YES" id="XaK-Ix-4d4"/>
                             <constraint firstItem="Xu1-mx-qlP" firstAttribute="trailing" secondItem="U5U-hE-Wph" secondAttribute="trailing" constant="18" id="YR0-2T-kxc"/>
                             <constraint firstItem="EQB-30-4pC" firstAttribute="top" secondItem="AHb-Rr-gDF" secondAttribute="bottom" constant="8" symbolic="YES" id="YRD-gV-mBm"/>
+                            <constraint firstItem="zJc-a5-u2w" firstAttribute="top" secondItem="BeX-KV-5mE" secondAttribute="top" id="brT-BN-p0j"/>
                             <constraint firstItem="EQB-30-4pC" firstAttribute="leading" secondItem="BeX-KV-5mE" secondAttribute="leading" constant="205" id="f3l-MU-Bfu"/>
                             <constraint firstItem="eQC-Q4-Hc7" firstAttribute="top" secondItem="gXT-Xs-PvH" secondAttribute="bottom" constant="22" id="gk8-aZ-j8R"/>
                             <constraint firstItem="eQC-Q4-Hc7" firstAttribute="leading" secondItem="Xu1-mx-qlP" secondAttribute="leading" id="kmO-Wi-CBA"/>
@@ -7409,12 +7444,15 @@
                     </view>
                     <connections>
                         <outlet property="BTback" destination="FYE-us-DUh" id="f46-xJ-kh9"/>
+                        <outlet property="Calender" destination="193-gk-cGP" id="HwN-Bn-d0q"/>
+                        <outlet property="Calendr_View" destination="zJc-a5-u2w" id="abg-1h-GLl"/>
                         <outlet property="Date" destination="YgJ-JA-1bN" id="Dvf-1e-jtM"/>
                         <outlet property="Date_View" destination="U5U-hE-Wph" id="6ZX-VJ-dvY"/>
                         <outlet property="Detils_TB" destination="XZJ-Mp-vwX" id="ARU-rZ-QJ9"/>
                         <outlet property="Hq_View" destination="gXT-Xs-PvH" id="zin-VY-o8q"/>
                         <outlet property="Select_HQ" destination="wX8-2T-li5" id="mQd-XC-eQ5"/>
                         <outlet property="Select_Stockist" destination="9JZ-fu-MEG" id="OYg-gx-A9X"/>
+                        <outlet property="StkCap" destination="xYe-da-knd" id="5ED-Ya-b3m"/>
                         <outlet property="Stockist_Name" destination="9JZ-fu-MEG" id="lmn-zo-cOY"/>
                         <outlet property="Stockist_View" destination="EQB-30-4pC" id="pTQ-fY-X3d"/>
                         <outlet property="Tit_lbl" destination="Isd-cX-DzS" id="OyP-Ym-nAC"/>
@@ -7423,6 +7461,7 @@
                         <outlet property="Update_Date" destination="VvF-FN-0jY" id="4Cq-i5-Hal"/>
                         <outlet property="Vw_Sel" destination="HEn-0e-C3O" id="wgt-iL-jMO"/>
                         <outlet property="sel_table_view" destination="cB5-H1-xet" id="HWn-OS-Rza"/>
+                        <outlet property="txSearchSel" destination="e44-BF-1rj" id="qVE-t1-olK"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="md5-uy-SCV" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

@@ -375,6 +375,8 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
                                           Exp_Summary_Data.append(Exp_Sum(Tit: "Total Deducted (-)", Amt: "-"))
                                           Exp_Summary_Data.append(Exp_Sum(Tit: "Payable Amount", Amt: "-"))
                                           Summary_TB.reloadData()
+                            ExpenseDetils.removeAll()
+                            ViewDet_TB.reloadData()
                                       }
                                       
                                       Sel_Date.text = "\(item)-\(selectYear)"
@@ -383,7 +385,6 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
                     }
                 }
             }
-            
         }else if (SelMod == "YEAR"){
             let currentMonthIndex = Calendar.current.component(.month, from: Date()) - 1
             if (currentMonthIndex == 0){
@@ -687,6 +688,7 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
     func ExpenseReportDetailsSFC(fromdate:String,todate:String){
         print(ExpenseDetils)
         print(mgrRouts)
+        self.ShowLoading(Message: "Please Wait...")
         ExpenseDetils.removeAll()
         mgrRouts.removeAll()
         
@@ -720,8 +722,14 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
                     }
                     
                 }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                    self.LoadingDismiss()
+                }
             case .failure(let error):
-                Toast.show(message: error.errorDescription!)  //, controller: self
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                    self.LoadingDismiss()
+                }
+                Toast.show(message: error.errorDescription!) 
             }
         }
     }

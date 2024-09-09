@@ -752,6 +752,7 @@ class Expense_approval_SFC: UIViewController, UITableViewDelegate, UITableViewDa
         Sel_Period_Drop_Down.isHidden = false
     }
     func ExpenseReportDetailsSFC(fromdate:String,todate:String,SF_code:String){
+        self.ShowLoading(Message: "Please Wait...")
         ExpenseDetils.removeAll()
         mgrRouts.removeAll()
         let apiKey: String = "getExpenseReportDetailsSFC&sf_code=\(SF_code)&division_code=\(DivCode)&from_date=\(fromdate)&to_date=\(todate)&stateCode=\(StateCode)&Design_code=\(UserSetup.shared.dsg_code)&Mn=\(Eff_Month)&Yr=\(Eff_Year)&PriID=\(period_id)"
@@ -789,7 +790,13 @@ class Expense_approval_SFC: UIViewController, UITableViewDelegate, UITableViewDa
                     }
                     
                 }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                    self.LoadingDismiss()
+                }
             case .failure(let error):
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                    self.LoadingDismiss()
+                }
                 Toast.show(message: error.errorDescription!)  //, controller: self
             }
         }
