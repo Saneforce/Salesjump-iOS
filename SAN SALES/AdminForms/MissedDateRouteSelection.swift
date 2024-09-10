@@ -226,6 +226,7 @@ class MissedDateRouteSelection : IViewController , UITableViewDelegate,UITableVi
                 
                 if !selectedRetailer.isEmpty {
                     
+                    print(selectedRetailer)
                     self.allRetailerList.append(RetailerList(id: selectedRetailer.first?.id ?? "",name: selectedRetailer.first?.name ?? "",townCode: selectedRetailer.first?.townCode ?? "", isSelected: true,routeName: selectedRetailer.first?.routeName ?? "", routeCode: selectedRetailer.first?.routeCode ?? "",hqCode: selectedRetailer.first?.hqCode ?? "",hqName: selectedRetailer.first?.hqName ?? "",distributorCode: selectedRetailer.first?.distributorCode ?? "",distributorName: selectedRetailer.first?.distributorName ?? "",orderList: selectedRetailer.first?.orderList ?? [],secOrderList: selectedRetailer.first?.secOrderList ?? [], params: selectedRetailer.first?.params ?? "", remarks: selectedRetailer.first?.remarks ?? "",remarksId: selectedRetailer.first?.remarksId ?? "",mapId: sfcode))
                 }else{
                     self.allRetailerList.append(RetailerList(id: id,name: name,townCode: townCode, isSelected: false,mapId: sfcode))
@@ -258,6 +259,7 @@ class MissedDateRouteSelection : IViewController , UITableViewDelegate,UITableVi
                 
                 if !selectedRetailer.isEmpty {
                     
+                    print(selectedRetailer.first)
                     self.allRetailerList.append(RetailerList(id: selectedRetailer.first?.id ?? "",name: selectedRetailer.first?.name ?? "",townCode: selectedRetailer.first?.townCode ?? "", isSelected: true,routeName: selectedRetailer.first?.routeName ?? "", routeCode: selectedRetailer.first?.routeCode ?? "",hqCode: selectedRetailer.first?.hqCode ?? "",hqName: selectedRetailer.first?.hqName ?? "",distributorCode: selectedRetailer.first?.distributorCode ?? "",distributorName: selectedRetailer.first?.distributorName ?? "",orderList: selectedRetailer.first?.orderList ?? [],secOrderList: selectedRetailer.first?.secOrderList ?? [], params: selectedRetailer.first?.params ?? "", remarks: selectedRetailer.first?.remarks ?? "",remarksId: selectedRetailer.first?.remarksId ?? "",mapId: sfcode))
                 }else{
                     self.allRetailerList.append(RetailerList(id: id,name: name,townCode: townCode, isSelected: false,mapId: sfcode))
@@ -401,30 +403,10 @@ class MissedDateRouteSelection : IViewController , UITableViewDelegate,UITableVi
             for i in 0..<retailerList.secOrderList.count {
                 
                 print(i)
-//                let item : [String:Any] = retailerList.orderList[i].item as! [String:Any]
-//                
-//                
-//                let id=String(format: "%@", item["id"] as! CVarArg)
-//                let uom=String(format: "%@", item["UOM"] as! CVarArg)
-//                let uomName=String(format: "%@", item["UOMNm"] as! String)
-//                let uomConv=String(format: "%@", item["UOMConv"] as! CVarArg)
-//                let netWt=String(format: "%@", item["NetWt"] as! CVarArg)
-//                let netVal=(String(format: "%.2f", item["NetVal"] as! Double))
-//                let Qty=String(format: "%@", item["Qty"] as? String ?? "")
-//                let saleQty=String(format: "%.0f", item["SalQty"] as! Double)
-//                let offQty=(String(format: "%.2f", item["OffQty"] as! Int))
-//                let fq=String(format: "%@", item["FQ"] as? Int ?? "")
-//                let offProd=String(format: "%@", item["OffProd"] as? CVarArg ?? "")
-//                let rate=(String(format: "%.2f", item["Rate"] as! Double))
-//                let offProdNm=String(format: "%@", item["OffProdNm"] as? CVarArg ?? "")
-//                let scheme1=String(format: "%@", item["Scheme"] as? Int ?? "")
-//                let disc=String(format: "%@", item["Disc"] as? CVarArg ?? "")
-//                let disVal=String(format: "%@", item["DisVal"] as? CVarArg ?? "")
                 
                 stkcode = retailerList.secOrderList[i].distributorId ?? ""
                 stkName = retailerList.secOrderList[i].distributorName ?? ""
                 
-//                let productStr1 = "{\"product_code\":\"\(id)\",\"product_Name\":\"\(retailerList.orderList[i].productName ?? "")\",\"Product_Rx_Qty\":\(saleQty),\"UnitId\":\"\(uom)\",\"UnitName\":\"\(uomName)\",\"rx_Conqty\":\(Qty),\"Product_Rx_NQty\":\"0\",\"Product_Sample_Qty\":\"\(netVal)\",\"vanSalesOrder\":0,\"net_weight\":\"0.0\",\"free\":\"\(offQty)\",\"FreePQty\":\"\(fq)\",\"FreeP_Code\":\"\(offProd)\",\"Fname\":\"\(offProdNm)\",\"discount\":\"\(disc)\",\"discount_price\":\"\(disVal)\",\"tax\":\"0.0\",\"tax_price\":\"0.0\",\"Rate\":\"\(rate)\",\"Mfg_Date\":\"\",\"cb_qty\":\"0\",\"RcpaId\":\"\",\"Ccb_qty\":0,\"PromoVal\":0,\"rx_remarks\":\"\",\"rx_remarks_Id\":\"\",\"OrdConv\":\"\(uomConv)\",\"selectedScheme\":\"\(scheme1)\",\"selectedOffProCode\":\"\(uom)\",\"selectedOffProName\":\"\(uomName)\",\"selectedOffProUnit\":\"1\",\"f_key\":{\"Activity_MSL_Code\":\"Activity_Doctor_Report\"}},"
                 
                 
                 let qty = retailerList.secOrderList[i].product.unitCount * (Int(retailerList.secOrderList[i].product.sampleQty) ?? 0)
@@ -445,7 +427,24 @@ class MissedDateRouteSelection : IViewController , UITableViewDelegate,UITableVi
                     freePName = retailerList.secOrderList[i].product.productName
                 }
                 
-                let productStr =   "{\"product_code\":\"\(retailerList.secOrderList[i].product.productId)\",\"product_Name\":\"\(retailerList.secOrderList[i].product.productName)\",\"Product_Rx_Qty\":\(qty),\"UnitId\":\"\(retailerList.secOrderList[i].product.unitId)\",\"UnitName\":\"\(retailerList.secOrderList[i].product.unitName)\",\"rx_Conqty\":\(retailerList.secOrderList[i].product.sampleQty),\"Product_Rx_NQty\":0,\"Product_Sample_Qty\":\"\(totalCount)\",\"vanSalesOrder\":0,\"sale_erp_code\":\"\(retailerList.secOrderList[i].product.saleErpCode)\",\"rateedited\":0,\"retailer_price\":\(retailerList.secOrderList[i].product.retailerPrice),\"net_weight\":\(retailerList.secOrderList[i].product.newWt),\"free\":\(retailerList.secOrderList[i].product.freeCount),\"FreePQty\":\(retailerList.secOrderList[i].product.offerAvailableCount),\"FreeP_Code\":\"\(freePCount)\",\"Fname\":\"\(freePName)\",\"discount\":\(retailerList.secOrderList[i].product.disCountPer),\"discount_price\":\(retailerList.secOrderList[i].product.disCountAmount),\"tax\":\(retailerList.secOrderList[i].product.taxper),\"tax_price\":\(retailerList.secOrderList[i].product.taxAmount),\"Rate\":\(retailerList.secOrderList[i].product.rate),\"Mfg_Date\":\"\",\"cb_qty\":\(clQty),\"RcpaId\":0,\"Ccb_qty\":0,\"PromoVal\":0,\"rx_remarks\":\"\(retailerList.secOrderList[i].product.remarks)\",\"rx_remarks_Id\":\"\(retailerList.secOrderList[i].product.remarksId)\",\"OrdConv\":\(retailerList.secOrderList[i].product.unitCount),\"selectedScheme\":\(scheme),\"selectedOffProCode\":\"\(offerProductCode)\",\"selectedOffProName\":\"\(offerProductName)\",\"selectedOffProUnit\":\"\(retailerList.secOrderList[i].product.unitCount)\",\"CompetitorDet\":[],\"f_key\":{\"Activity_MSL_Code\":\"Activity_Doctor_Report\"}},"
+                
+                var competitorProductString = ""
+                if !retailerList.secOrderList[i].product.competitorProduct.isEmpty {
+                    
+                    for i in 0..<retailerList.secOrderList[i].product.competitorProduct.count {
+                        
+                        let sampleQty = (Int(retailerList.secOrderList[i].product.competitorProduct[i].qty) ?? 0)
+                        let competitorProductStr = "{\"Competitor_Name\":\"\(retailerList.secOrderList[i].product.competitorProduct[i].competitorName)\",\"Competitor_Product_Name\":\"\(retailerList.secOrderList[i].product.competitorProduct[i].competitorProductName)\",\"Prod_Qty\":\(sampleQty),\"Prod_Rate\":\(retailerList.secOrderList[i].product.competitorProduct[i].rate),\"Prod_Value\":\"\(retailerList.secOrderList[i].product.competitorProduct[i].value)\"},"
+                        
+                        competitorProductString = competitorProductString + competitorProductStr
+                    }
+                    
+                    if competitorProductString.hasSuffix(","){
+                        competitorProductString.removeLast()
+                    }
+                }
+                
+                let productStr =   "{\"product_code\":\"\(retailerList.secOrderList[i].product.productId)\",\"product_Name\":\"\(retailerList.secOrderList[i].product.productName)\",\"Product_Rx_Qty\":\(qty),\"UnitId\":\"\(retailerList.secOrderList[i].product.unitId)\",\"UnitName\":\"\(retailerList.secOrderList[i].product.unitName)\",\"rx_Conqty\":\(retailerList.secOrderList[i].product.sampleQty),\"Product_Rx_NQty\":0,\"Product_Sample_Qty\":\"\(totalCount)\",\"vanSalesOrder\":0,\"sale_erp_code\":\"\(retailerList.secOrderList[i].product.saleErpCode)\",\"rateedited\":0,\"retailer_price\":\(retailerList.secOrderList[i].product.retailerPrice),\"net_weight\":\(retailerList.secOrderList[i].product.newWt),\"free\":\(retailerList.secOrderList[i].product.freeCount),\"FreePQty\":\(retailerList.secOrderList[i].product.offerAvailableCount),\"FreeP_Code\":\"\(freePCount)\",\"Fname\":\"\(freePName)\",\"discount\":\(retailerList.secOrderList[i].product.disCountPer),\"discount_price\":\(retailerList.secOrderList[i].product.disCountAmount),\"tax\":\(retailerList.secOrderList[i].product.taxper),\"tax_price\":\(retailerList.secOrderList[i].product.taxAmount),\"Rate\":\(retailerList.secOrderList[i].product.rate),\"Mfg_Date\":\"\",\"cb_qty\":\(clQty),\"RcpaId\":0,\"Ccb_qty\":0,\"PromoVal\":0,\"rx_remarks\":\"\(retailerList.secOrderList[i].product.remarks)\",\"rx_remarks_Id\":\"\(retailerList.secOrderList[i].product.remarksId)\",\"OrdConv\":\(retailerList.secOrderList[i].product.unitCount),\"selectedScheme\":\(scheme),\"selectedOffProCode\":\"\(offerProductCode)\",\"selectedOffProName\":\"\(offerProductName)\",\"selectedOffProUnit\":\"\(retailerList.secOrderList[i].product.unitCount)\",\"CompetitorDet\":[\(competitorProductString)],\"f_key\":{\"Activity_MSL_Code\":\"Activity_Doctor_Report\"}},"
                 
                 productString = productString + productStr
             }
@@ -477,7 +476,7 @@ class MissedDateRouteSelection : IViewController , UITableViewDelegate,UITableVi
             if let index = self.allRetailerList.firstIndex(where: { (productInfo) -> Bool in
                 return retailerList.id == productInfo.id
             }){
-                self.allRetailerList[index] = (RetailerList(id: retailerList.id,name: retailerList.name,townCode: retailerList.townCode, isSelected: retailerList.isSelected,orderList: retailerList.orderList,params: jsonString,mapId: retailerList.mapId))
+                self.allRetailerList[index] = (RetailerList(id: retailerList.id,name: retailerList.name,townCode: retailerList.townCode, isSelected: retailerList.isSelected,routeName: retailerList.routeName,routeCode: retailerList.routeCode,hqCode: retailerList.hqCode,hqName: retailerList.hqName,distributorCode: retailerList.distributorCode,distributorName: retailerList.distributorName,orderList: retailerList.orderList,secOrderList: retailerList.secOrderList,params: jsonString,remarks: retailerList.remarks,remarksId: retailerList.remarksId,mapId: retailerList.mapId))
             }
             
             
@@ -644,7 +643,9 @@ class MissedDateRouteSelection : IViewController , UITableViewDelegate,UITableVi
             if let index = self.allRetailerList.firstIndex(where: { (productInfo) -> Bool in
                 return retailerList.id == productInfo.id
             }){
-                self.allRetailerList[index] = (RetailerList(id: retailerList.id,name: retailerList.name,townCode: retailerList.townCode, isSelected: retailerList.isSelected,orderList: retailerList.orderList,params: jsonString,mapId: retailerList.mapId))
+               // self.allRetailerList[index] = (RetailerList(id: retailerList.id,name: retailerList.name,townCode: retailerList.townCode, isSelected: retailerList.isSelected,orderList: retailerList.orderList,params: jsonString,mapId: retailerList.mapId))
+                
+                self.allRetailerList[index] = (RetailerList(id: retailerList.id,name: retailerList.name,townCode: retailerList.townCode, isSelected: retailerList.isSelected,routeName: retailerList.routeName,routeCode: retailerList.routeCode,hqCode: retailerList.hqCode,hqName: retailerList.hqName,distributorCode: retailerList.distributorCode,distributorName: retailerList.distributorName,orderList: retailerList.orderList,secOrderList: retailerList.secOrderList,params: jsonString,remarks: retailerList.remarks,remarksId: retailerList.remarksId,mapId: retailerList.mapId))
             }
             
             

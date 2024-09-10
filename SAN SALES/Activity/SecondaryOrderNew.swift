@@ -9,7 +9,7 @@ import UIKit
 import Alamofire
 import CoreLocation
 
-class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataSource ,UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout  {
+class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataSource ,UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIViewControllerTransitioningDelegate  {
     
     
     @IBOutlet weak var lblTitle: UILabel!
@@ -66,6 +66,14 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
     @IBOutlet weak var vwSubmit: UIView!
     
     
+    @IBOutlet weak var vwCompetitorProduct: UIView!
+    
+    @IBOutlet weak var competitorTableView: UITableView!
+    
+    
+    @IBOutlet weak var lblProductName: UILabel!
+    
+    
     
     let LocalStoreage = UserDefaults.standard
     var selectedBrand = ""
@@ -88,12 +96,14 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
     var lstPlnDetail: [AnyObject] = []
     var lstProductRemarks : [AnyObject] = []
     var lstSelectedProductRemarks : [AnyObject] = []
+    var lstCompetitorProduct : [AnyObject] = []
     
     var products = [ProductList]()
     var selectedProducts = [ProductList]()
     var freeProducts = [ProductList]()
     var allProducts = [ProductList]()
-    
+    var competitorProduct = [CompetitorProductList]()
+//    var originalCompetitorProduct = [CompetitorProductList]()
     
     var productData : String?
     var ProdTrans_Sl_No : String?
@@ -124,7 +134,7 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
     override func viewDidLoad() {
         super.viewDidLoad()
         vwSubmit.isHidden = true
-        
+        vwCompetitorProduct.isHidden = true
         freeQtyTableViewHeightConstraint.constant = 0
         loadViewIfNeeded()
         
@@ -153,7 +163,16 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
         let lstProductTaxData : String = LocalStoreage.string(forKey: "ProductTax_Master")!
         let PlnDets: String=LocalStoreage.string(forKey: "Mydayplan")!
         let lstStockistSchemeData : String = LocalStoreage.string(forKey: "Stockist_Schemes")!
-        let lstProductRemarksData : String = LocalStoreage.string(forKey: "Product_Remarks")!
+        
+        if UserSetup.shared.productRemark != 0 {
+            let lstProductRemarksData : String = LocalStoreage.string(forKey: "Product_Remarks")!
+            
+            if let list = GlobalFunc.convertToDictionary(text: lstProductRemarksData) as? [AnyObject] {
+                lstProductRemarks = list
+            }
+        }
+        
+        let lstCompetitorProductData : String = LocalStoreage.string(forKey: "Competitor_Product")!
         
         if let list = GlobalFunc.convertToDictionary(text: PlnDets) as? [AnyObject] {
             lstPlnDetail = list;
@@ -175,15 +194,15 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
         if let list = GlobalFunc.convertToDictionary(text: lstStockistSchemeData) as? [AnyObject] {
             lstStockistSchemes = list
         }
-        if let list = GlobalFunc.convertToDictionary(text: lstProductRemarksData) as? [AnyObject] {
-            lstProductRemarks = list
-        }
+        
         if let list = GlobalFunc.convertToDictionary(text: lstProdData) as? [AnyObject] {
             lstAllProducts = list
             
             self.updateProduct(products: list)
         }
-        
+        if let list = GlobalFunc.convertToDictionary(text: lstCompetitorProductData) as? [AnyObject] {
+            lstCompetitorProduct = list
+        }
         if lstBrands.count > 0 {
             let item: [String: Any]=lstBrands[0] as! [String : Any]
             selectedBrand=String(format: "%@", item["id"] as! CVarArg)
@@ -208,7 +227,7 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
         
         self.EditSecondaryordervalue()
         self.editMissedDateOrder()
-        print(lstStockistSchemes)
+        print(lstCompetitorProduct)
     }
     
     @objc private func distributorSelection(){
@@ -661,7 +680,7 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
         
         
         
-        let EditProduct = ProductList(product: product.first!, productName: productName, productId: productId,cateId: cateId, rate: rate,rateEdited: "0",retailerPrice: retailorPrice,saleErpCode: saleErpCode,newWt: newWt, sampleQty: "\(sQty)",clQty: clQty,remarks: "",remarksId: "", selectedRemarks: [], disCountPer: disCountPer, disCountAmount: discountAmountRound, freeCount: 0, unitId: unitId, unitName: unitName, unitCount: unitCount, taxper: tax, taxAmount: taxAmountRound, totalCount: totalAmountRound, isSchemeActive: isSchemeActive,scheme: scheme,offerAvailableCount: offerAvailableCount,offerUnitName: offerUnitName,offerProductCode: offerProductCode,offerProductName: offerProductName,package: package, isMultiSchemeActive: isMultiSchemeActive, multiScheme: multiScheme)
+        let EditProduct = ProductList(product: product.first!, productName: productName, productId: productId,cateId: cateId, rate: rate,rateEdited: "0",retailerPrice: retailorPrice,saleErpCode: saleErpCode,newWt: newWt, sampleQty: "\(sQty)",clQty: clQty,remarks: "",remarksId: "", selectedRemarks: [], disCountPer: disCountPer, disCountAmount: discountAmountRound, freeCount: 0, unitId: unitId, unitName: unitName, unitCount: unitCount, taxper: tax, taxAmount: taxAmountRound, totalCount: totalAmountRound, isSchemeActive: isSchemeActive,scheme: scheme,offerAvailableCount: offerAvailableCount,offerUnitName: offerUnitName,offerProductCode: offerProductCode,offerProductName: offerProductName,package: package, isMultiSchemeActive: isMultiSchemeActive, multiScheme: multiScheme, competitorProduct: [])
         
 
         
@@ -788,7 +807,7 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
             }
             
             
-            self.allProducts.append(ProductList(product: product, productName: productName, productId: productId,cateId: cateId, rate: rate,rateEdited: "0",retailerPrice: retailorPrice,saleErpCode: saleErpCode,newWt: newWt, sampleQty: "",clQty: "",remarks: "",remarksId: "", selectedRemarks: [], disCountPer: disCountPer, disCountAmount: 0.0, freeCount: 0, unitId: unitId, unitName: unitName, unitCount: unitCount, taxper: tax, taxAmount: 0.0, totalCount: 0.0, isSchemeActive: isSchemeActive,scheme: scheme,offerAvailableCount: offerAvailableCount,offerUnitName: offerUnitName,offerProductCode: offerProductCode,offerProductName: offerProductName,package: package, isMultiSchemeActive: isMultiSchemeActive, multiScheme: multiScheme))
+            self.allProducts.append(ProductList(product: product, productName: productName, productId: productId,cateId: cateId, rate: rate,rateEdited: "0",retailerPrice: retailorPrice,saleErpCode: saleErpCode,newWt: newWt, sampleQty: "",clQty: "",remarks: "",remarksId: "", selectedRemarks: [], disCountPer: disCountPer, disCountAmount: 0.0, freeCount: 0, unitId: unitId, unitName: unitName, unitCount: unitCount, taxper: tax, taxAmount: 0.0, totalCount: 0.0, isSchemeActive: isSchemeActive,scheme: scheme,offerAvailableCount: offerAvailableCount,offerUnitName: offerUnitName,offerProductCode: offerProductCode,offerProductName: offerProductName,package: package, isMultiSchemeActive: isMultiSchemeActive, multiScheme: multiScheme, competitorProduct: []))
         }
     }
     
@@ -830,7 +849,9 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
             return self.selectedProducts.count
         }else if tableView == self.tbProductTableView {
             return self.products.count
-        }else {
+        }else if tableView == self.competitorTableView {
+            return self.competitorProduct.count
+        } else {
             let freeQtyCount = self.allProducts.filter{$0.freeCount != 0}
             freeQtyTableViewHeightConstraint.constant = CGFloat(freeQtyCount.count * 55) + 20
             let height = CGFloat(selectedProducts.count * 120) + CGFloat(freeQtyCount.count * 60) + 350
@@ -863,8 +884,7 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
             Cell.imgRateEdit.addTarget(target: self, action: #selector(rateEditAction))
             Cell.txtClQty.addTarget(self, action: #selector(changeClQty(_:)), for: .editingChanged)
             Cell.btnTemplate.addTarget(self, action: #selector(templateAction(_:)), for: .touchUpInside)
-            // Cell.imgRateEdit.isHidden = true
-            Cell.imgCompetitorProduct.isHidden = true
+            Cell.imgCompetitorProduct.addTarget(target: self, action: #selector(competitorAction))
             if UserSetup.shared.clCap  == "CB"{
                 Cell.lblCl.text = "CB : "
                 Cell.lblQty.text = "Sale : "
@@ -938,6 +958,21 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
             if self.ProdImages[id] != nil{
                 Cell.imgView.image = self.ProdImages[id] as? UIImage
             }
+            return Cell
+        }else if tableView == competitorTableView {
+            let Cell = tableView.dequeueReusableCell(withIdentifier: "CompetitorProductcell", for: indexPath) as! CompetitorProductcell
+            Cell.productDetails = self.competitorProduct[indexPath.row]
+            if indexPath.row == 0 {
+                Cell.btnDelete.isHidden = true
+            }else {
+                Cell.btnDelete.isHidden = false
+            }
+            Cell.txtCompetitorProductName.addTarget(self, action: #selector(competitorProductName(_:)), for: .editingChanged)
+            Cell.txtQty.addTarget(self, action: #selector(competitorQty(_:)), for: .editingChanged)
+            Cell.txtRate.addTarget(self, action: #selector(competitorRate(_:)), for: .editingChanged)
+            Cell.btnDelete.addTarget(self, action: #selector(CompetitorProductDelete(_:)), for: .touchUpInside)
+            Cell.btnCompetitorName.addTarget(self, action: #selector(competitorNameAction(_:)), for: .touchUpInside)
+            
             return Cell
         }else {
             let freeQtyCount = self.allProducts.filter{$0.freeCount != 0}
@@ -1320,6 +1355,26 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
         editView.show()
     }
     
+    @objc private func competitorAction(_ sender : UITapGestureRecognizer){
+        let cell: SuperStockistOrderListTableViewCell = GlobalFunc.getTableViewCell(view: sender.view!) as! SuperStockistOrderListTableViewCell
+        let tbView: UITableView = GlobalFunc.getTableView(view: sender.view!)
+        let indxPath: IndexPath = tbView.indexPath(for: cell)!
+        
+        vwCompetitorProduct.isHidden = false
+        
+        self.competitorProduct = cell.product.competitorProduct
+        self.lblProductName.text = cell.product.productName
+        if self.competitorProduct.isEmpty {
+            self.competitorProduct.append(CompetitorProductList(competitorName: "", competitorProductName: "", qty: "", rate: 0.0, value: 0.0, productId: cell.product.productId))
+        }
+        
+        self.competitorTableView.reloadData()
+        
+//        let competitorProduct = CompetitorProductViewController()
+//        competitorProduct.name = cell.product.productName
+//        competitorProduct.show()
+    }
+    
     @objc private func schemeAction(_ sender : UITapGestureRecognizer){
         let cell: SuperStockistOrderListTableViewCell = GlobalFunc.getTableViewCell(view: sender.view!) as! SuperStockistOrderListTableViewCell
         let tbView: UITableView = GlobalFunc.getTableView(view: sender.view!)
@@ -1355,7 +1410,7 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
         self.selectedProducts.removeAll{$0.productId == cell.product.productId}
         self.allProducts.removeAll{$0.productId == cell.product.productId}
         
-        self.allProducts.append(ProductList(product: cell.product.product, productName: cell.product.productName, productId: cell.product.productId,cateId: cell.product.cateId, rate: cell.product.rate,rateEdited: cell.product.rateEdited,retailerPrice: cell.product.retailerPrice,saleErpCode: cell.product.saleErpCode,newWt: cell.product.newWt, sampleQty: "",clQty: "",remarks: "",remarksId: "", selectedRemarks: cell.product.selectedRemarks, disCountPer: cell.product.disCountPer, disCountAmount: 0.0, freeCount: 0, unitId: cell.product.unitId, unitName: cell.product.unitName, unitCount: cell.product.unitCount, taxper: cell.product.taxper, taxAmount: 0.0, totalCount: 0.0, isSchemeActive: cell.product.isSchemeActive,scheme: cell.product.scheme,offerAvailableCount: cell.product.offerAvailableCount,offerUnitName: cell.product.offerUnitName,offerProductCode: cell.product.offerProductCode,offerProductName: cell.product.offerProductName,package: cell.product.package,isMultiSchemeActive: cell.product.isMultiSchemeActive,multiScheme: cell.product.multiScheme))
+        self.allProducts.append(ProductList(product: cell.product.product, productName: cell.product.productName, productId: cell.product.productId,cateId: cell.product.cateId, rate: cell.product.rate,rateEdited: cell.product.rateEdited,retailerPrice: cell.product.retailerPrice,saleErpCode: cell.product.saleErpCode,newWt: cell.product.newWt, sampleQty: "",clQty: "",remarks: "",remarksId: "", selectedRemarks: cell.product.selectedRemarks, disCountPer: cell.product.disCountPer, disCountAmount: 0.0, freeCount: 0, unitId: cell.product.unitId, unitName: cell.product.unitName, unitCount: cell.product.unitCount, taxper: cell.product.taxper, taxAmount: 0.0, totalCount: 0.0, isSchemeActive: cell.product.isSchemeActive,scheme: cell.product.scheme,offerAvailableCount: cell.product.offerAvailableCount,offerUnitName: cell.product.offerUnitName,offerProductCode: cell.product.offerProductCode,offerProductName: cell.product.offerProductName,package: cell.product.package,isMultiSchemeActive: cell.product.isMultiSchemeActive,multiScheme: cell.product.multiScheme, competitorProduct: []))
         
         
         self.SelectedProductTableView.reloadData()
@@ -1530,7 +1585,95 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
         self.freeQtyTableView.reloadData()
     }
     
+    @objc func competitorProductName(_ sender : UITextField){
+        let buttonPosition:CGPoint = (sender as AnyObject).convert(CGPoint.zero, to: self.competitorTableView)
+        guard let indexPath = self.competitorTableView.indexPathForRow(at: buttonPosition) else{
+            return
+        }
+        
+        self.competitorProduct[indexPath.row].competitorProductName = sender.text!
+        
+      //  self.competitorTableView.reloadRows(at: [indexPath], with: .automatic)
+    }
     
+    @objc func competitorQty (_ sender : UITextField){
+        let buttonPosition:CGPoint = (sender as AnyObject).convert(CGPoint.zero, to: self.competitorTableView)
+        guard let indexPath = self.competitorTableView.indexPathForRow(at: buttonPosition) else{
+            return
+        }
+        
+        self.competitorProduct[indexPath.row].qty = sender.text!
+        
+        let total = (Double(sender.text!) ?? 0) * (Double(self.competitorProduct[indexPath.row].rate))
+        
+        self.competitorProduct[indexPath.row].value = total
+        
+        if let cell = self.competitorTableView.cellForRow(at: indexPath) as? CompetitorProductcell{
+            cell.lblValue.text = "\(total)"
+        }
+    }
+    
+    @objc func competitorRate (_ sender : UITextField){
+        let buttonPosition:CGPoint = (sender as AnyObject).convert(CGPoint.zero, to: self.competitorTableView)
+        guard let indexPath = self.competitorTableView.indexPathForRow(at: buttonPosition) else{
+            return
+        }
+        let value = validateDoubleInput(textField: sender)
+        
+        self.competitorProduct[indexPath.row].rate = (Double(sender.text!) ?? 0)
+        
+        let total = (Double(sender.text!) ?? 0) * (Double(self.competitorProduct[indexPath.row].qty) ?? 0)
+        
+        self.competitorProduct[indexPath.row].value = total
+        
+        if let cell = self.competitorTableView.cellForRow(at: indexPath) as? CompetitorProductcell{
+            cell.lblValue.text = "\(total)"
+        }
+        
+       // self.competitorTableView.reloadRows(at: [indexPath], with: .automatic)
+    }
+    
+    @objc func competitorNameAction(_ sender : UIButton){
+        let buttonPosition:CGPoint = (sender as AnyObject).convert(CGPoint.zero, to: self.competitorTableView)
+        guard let indexPath = self.competitorTableView.indexPathForRow(at: buttonPosition) else{
+            return
+        }
+        
+        let competitorProductVC = ItemViewController(items: lstCompetitorProduct, configure: { (Cell : SingleSelectionTableViewCell, competitorProduct) in
+            Cell.textLabel?.text = competitorProduct["name"] as? String
+        })
+        competitorProductVC.title = "Select Competitor Name"
+        competitorProductVC.didSelect = { selectedCompetitorProduct in
+            let item: [String: Any]=selectedCompetitorProduct as! [String : Any]
+            let name=item["name"] as! String
+            let id=String(format: "%@", item["id"] as! CVarArg)
+            
+            self.competitorProduct[indexPath.row].competitorName = name
+            
+            self.competitorTableView.reloadRows(at: [indexPath], with: .automatic)
+         //   self.originalCompetitorProduct = self.competitorProduct
+            
+            
+            self.competitorTableView.beginUpdates()
+            self.competitorTableView.reloadData()
+            self.competitorTableView.setNeedsDisplay()
+            self.competitorTableView.endUpdates()
+            
+            self.navigationController?.popViewController(animated: true)
+        }
+        self.navigationController?.pushViewController(competitorProductVC, animated: true)
+    }
+    
+    @objc func CompetitorProductDelete(_ sender : UIButton) {
+        let buttonPosition:CGPoint = (sender as AnyObject).convert(CGPoint.zero, to: self.competitorTableView)
+        guard let indexPath = self.competitorTableView.indexPathForRow(at: buttonPosition) else{
+            return
+        }
+        
+        self.competitorProduct.remove(at: indexPath.row)
+        
+        self.competitorTableView.reloadData()
+    }
     
     
     func nextLessThanValue(in array: [Scheme], comparedTo value: Int) -> Scheme? {
@@ -1873,8 +2016,25 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
                 freePCount = product.offerProductCode
                 freePName = product.productName
             }
+            
+            
+            var competitorProductString = ""
+            if !product.competitorProduct.isEmpty {
+                
+                for i in 0..<product.competitorProduct.count {
+                    
+                    let sampleQty = (Int(product.competitorProduct[i].qty) ?? 0)
+                    let competitorProductStr = "{\"Competitor_Name\":\"\(product.competitorProduct[i].competitorName)\",\"Competitor_Product_Name\":\"\(product.competitorProduct[i].competitorProductName)\",\"Prod_Qty\":\(sampleQty),\"Prod_Rate\":\(product.competitorProduct[i].rate),\"Prod_Value\":\"\(product.competitorProduct[i].value)\"},"
+                    
+                    competitorProductString = competitorProductString + competitorProductStr
+                }
+                
+                if competitorProductString.hasSuffix(","){
+                    competitorProductString.removeLast()
+                }
+            }
              
-            let productStr =   "{\"product_code\":\"\(product.productId)\",\"product_Name\":\"\(product.productName)\",\"Product_Rx_Qty\":\(qty),\"UnitId\":\"\(product.unitId)\",\"UnitName\":\"\(product.unitName)\",\"rx_Conqty\":\(product.sampleQty),\"Product_Rx_NQty\":0,\"Product_Sample_Qty\":\"\(totalCount)\",\"vanSalesOrder\":0,\"sale_erp_code\":\"\(product.saleErpCode)\",\"rateedited\":0,\"retailer_price\":\(product.retailerPrice),\"net_weight\":\(product.newWt),\"free\":\(product.freeCount),\"FreePQty\":\(product.offerAvailableCount),\"FreeP_Code\":\"\(freePCount)\",\"Fname\":\"\(freePName)\",\"discount\":\(product.disCountPer),\"discount_price\":\(product.disCountAmount),\"tax\":\(product.taxper),\"tax_price\":\(product.taxAmount),\"Rate\":\(product.rate),\"Mfg_Date\":\"\",\"cb_qty\":\(clQty),\"RcpaId\":0,\"Ccb_qty\":0,\"PromoVal\":0,\"rx_remarks\":\"\(product.remarks)\",\"rx_remarks_Id\":\"\(product.remarksId)\",\"OrdConv\":\(product.unitCount),\"selectedScheme\":\(scheme),\"selectedOffProCode\":\"\(offerProductCode)\",\"selectedOffProName\":\"\(offerProductName)\",\"selectedOffProUnit\":\"\(product.unitCount)\",\"CompetitorDet\":[],\"f_key\":{\"Activity_MSL_Code\":\"Activity_Doctor_Report\"}},"
+            let productStr =   "{\"product_code\":\"\(product.productId)\",\"product_Name\":\"\(product.productName)\",\"Product_Rx_Qty\":\(qty),\"UnitId\":\"\(product.unitId)\",\"UnitName\":\"\(product.unitName)\",\"rx_Conqty\":\(product.sampleQty),\"Product_Rx_NQty\":0,\"Product_Sample_Qty\":\"\(totalCount)\",\"vanSalesOrder\":0,\"sale_erp_code\":\"\(product.saleErpCode)\",\"rateedited\":0,\"retailer_price\":\(product.retailerPrice),\"net_weight\":\(product.newWt),\"free\":\(product.freeCount),\"FreePQty\":\(product.offerAvailableCount),\"FreeP_Code\":\"\(freePCount)\",\"Fname\":\"\(freePName)\",\"discount\":\(product.disCountPer),\"discount_price\":\(product.disCountAmount),\"tax\":\(product.taxper),\"tax_price\":\(product.taxAmount),\"Rate\":\(product.rate),\"Mfg_Date\":\"\",\"cb_qty\":\(clQty),\"RcpaId\":0,\"Ccb_qty\":0,\"PromoVal\":0,\"rx_remarks\":\"\(product.remarks)\",\"rx_remarks_Id\":\"\(product.remarksId)\",\"OrdConv\":\(product.unitCount),\"selectedScheme\":\(scheme),\"selectedOffProCode\":\"\(offerProductCode)\",\"selectedOffProName\":\"\(offerProductName)\",\"selectedOffProUnit\":\"\(product.unitCount)\",\"CompetitorDet\":[\(competitorProductString)],\"f_key\":{\"Activity_MSL_Code\":\"Activity_Doctor_Report\"}},"
             
             productString = productString + productStr
         }
@@ -1980,6 +2140,57 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
         self.present(alert, animated: true)
     }
     
+    
+    @IBAction func CompetitorSave(_ sender: UIButton) {
+        
+        
+        for i in 0..<self.competitorProduct.count {
+            if self.competitorProduct[i].competitorName == "" {
+                Toast.show(message: "Please Select Competitor Name", controller: self)
+                return
+            }else if self.competitorProduct[i].competitorProductName == "" {
+                Toast.show(message: "Please Enter Competitor Product Name", controller: self)
+                return
+            }else if self.competitorProduct[i].qty == "" {
+                Toast.show(message: "Please Enter Qty", controller: self)
+                return
+            }
+        }
+        
+        let productId = self.competitorProduct.first?.productId
+        
+        var product : ProductList!
+        
+        if let index = self.products.firstIndex(where: { (productInfo) -> Bool in
+            return productId == productInfo.productId
+        }){
+            self.products[index].competitorProduct = self.competitorProduct
+            
+            product = self.products[index]
+        }
+        
+        if let index = self.allProducts.firstIndex(where: { (productInfo) -> Bool in
+            return productId == productInfo.productId
+        }){
+            self.allProducts[index] = product
+        }
+        self.tbProductTableView.reloadData()
+        self.competitorProduct = []
+        self.vwCompetitorProduct.isHidden = true
+    }
+    
+    
+    @IBAction func closeActionCompetitor(_ sender: UIButton) {
+        self.competitorProduct = []
+        self.vwCompetitorProduct.isHidden = true
+    }
+    
+    
+    @IBAction func addCompetitor(_ sender: UIButton) {
+        self.competitorProduct.append(CompetitorProductList(competitorName: "", competitorProductName: "", qty: "", rate: 0.0, value: 0.0, productId: ""))
+        self.competitorTableView.reloadData()
+    }
+    
     func integer(from textField: UITextField) -> Int {
         guard let text = textField.text, let number = Int(text) else {
             return 0
@@ -2026,6 +2237,57 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
     
 }
 
+
+
+class CompetitorProductcell : UITableViewCell{
+    
+    
+    @IBOutlet weak var btnCompetitorName: UIButton!
+    
+    @IBOutlet weak var txtCompetitorProductName: UITextField!
+    
+    @IBOutlet weak var txtQty: UITextField!
+    @IBOutlet weak var txtRate: UITextField!
+    @IBOutlet weak var lblValue: UILabel!
+    @IBOutlet weak var lblName: UILabel!
+    
+    @IBOutlet weak var btnDelete: UIButton!
+    
+    var productDetails : CompetitorProductList!{
+        didSet {
+            
+            lblName.text = productDetails.competitorName == "" ? "Competitor Name" : productDetails.competitorName
+            txtCompetitorProductName.text = productDetails.competitorProductName
+            txtQty.text = productDetails.qty
+            txtRate.text = "\(productDetails.rate)"
+            lblValue.text = "\(productDetails.value)"
+        }
+    }
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+    }
+}
+
+struct CompetitorProductList {
+    
+    var competitorName : String
+    var competitorProductName : String
+    var qty : String
+    var rate : Double
+    var value : Double
+    var productId : String
+    
+    init(competitorName: String, competitorProductName: String, qty: String, rate: Double, value: Double, productId : String) {
+        self.competitorName = competitorName
+        self.competitorProductName = competitorProductName
+        self.qty = qty
+        self.rate = rate
+        self.value = value
+        self.productId = productId
+    }
+    
+}
 
 struct SecondaryOrderNewSelectedList {
     
