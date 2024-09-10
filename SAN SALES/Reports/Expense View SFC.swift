@@ -1656,7 +1656,7 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
                         
                     }
                 }
-            }else if Dayend_Place_Types == "OS-EX"{
+            }else if One_day_plac_typ.last ?? "" == "OS-EX"{
                 Returnkm = 0
             }
             

@@ -1330,9 +1330,6 @@ class Expense_approval_SFC: UIViewController, UITableViewDelegate, UITableViewDa
                 }
             }
             
-        print(Total_Dis)
-            print(One_day_plac_typ)
-            
             if One_day_plac_typ.contains("HQ") && !One_day_plac_typ.contains("EX") && !One_day_plac_typ.contains("OS"){
                 print("Cover Only HQ")
                 print(UserSetup.shared.ExpDist_HQ)
@@ -1565,7 +1562,7 @@ class Expense_approval_SFC: UIViewController, UITableViewDelegate, UITableViewDa
             
            
             var Total_amts = miscellaneous_exp
-            let Dayend_Place_Types = i["Place_Types"] as? String ?? ""
+            let Dayend_Place_Types = i["Dayend_Place_Types"] as? String ?? ""
             let Work_typ = i["Work_typ"] as? String ?? ""
             let status = i["status"] as? String ?? ""
             
@@ -1657,9 +1654,10 @@ class Expense_approval_SFC: UIViewController, UITableViewDelegate, UITableViewDa
             }
            // Collect return distance.
             print(Dayend_Place_Types)
+            print(One_day_plac_typ)
             print(date)
             var Returnkm = 0
-            if Dayend_Place_Types == "HQ"{
+            if One_day_plac_typ.last ?? "" == "HQ"{
                 print(Dayend_Place_Types)
                 print(result)
                 print(result2)
@@ -1681,7 +1679,7 @@ class Expense_approval_SFC: UIViewController, UITableViewDelegate, UITableViewDa
                         
                     }
                 }
-            }else if Dayend_Place_Types == "EX"{
+            }else if One_day_plac_typ.last ?? "" == "EX"{
                 print(Dayend_Place_Types)
                 print(result2)
                 let Firstplace = result2.first
@@ -1703,9 +1701,9 @@ class Expense_approval_SFC: UIViewController, UITableViewDelegate, UITableViewDa
                     }
                 }
                 
-            }else if Dayend_Place_Types == "OS"{
+            }else if One_day_plac_typ.last ?? "" == "OS"{
                 Returnkm = 0
-            }else if Dayend_Place_Types == "OX"{
+            }else if One_day_plac_typ.last ?? "" == "OX"{
                 print(Dayend_Place_Types)
                 print(result2)
                 let Firstplace = result2.first
@@ -1726,7 +1724,7 @@ class Expense_approval_SFC: UIViewController, UITableViewDelegate, UITableViewDa
                         
                     }
                 }
-            }else if Dayend_Place_Types == "OS-EX"{
+            }else if One_day_plac_typ.last ?? "" == "OS-EX"{
                 Returnkm = 0
             }
             
