@@ -477,7 +477,8 @@ class MissedDateRouteSelection : IViewController , UITableViewDelegate,UITableVi
             if let index = self.allRetailerList.firstIndex(where: { (productInfo) -> Bool in
                 return retailerList.id == productInfo.id
             }){
-                self.allRetailerList[index] = (RetailerList(id: retailerList.id,name: retailerList.name,townCode: retailerList.townCode, isSelected: retailerList.isSelected,orderList: retailerList.orderList,params: jsonString,mapId: retailerList.mapId))
+               // self.allRetailerList[index] = (RetailerList(id: retailerList.id,name: retailerList.name,townCode: retailerList.townCode, isSelected: retailerList.isSelected,orderList: retailerList.orderList,params: jsonString,mapId: retailerList.mapId))
+                self.allRetailerList[index] = (RetailerList(id: retailerList.id,name: retailerList.name,townCode: retailerList.townCode, isSelected: retailerList.isSelected,routeName: retailerList.routeName,routeCode: retailerList.routeCode,hqCode: retailerList.hqCode,hqName: retailerList.hqName,distributorCode: retailerList.distributorCode,distributorName: retailerList.distributorName,orderList: retailerList.orderList,secOrderList: retailerList.secOrderList,params: jsonString,remarks: retailerList.remarks,remarksId: retailerList.remarksId,mapId: retailerList.mapId))
             }
             
             
@@ -644,7 +645,8 @@ class MissedDateRouteSelection : IViewController , UITableViewDelegate,UITableVi
             if let index = self.allRetailerList.firstIndex(where: { (productInfo) -> Bool in
                 return retailerList.id == productInfo.id
             }){
-                self.allRetailerList[index] = (RetailerList(id: retailerList.id,name: retailerList.name,townCode: retailerList.townCode, isSelected: retailerList.isSelected,orderList: retailerList.orderList,params: jsonString,mapId: retailerList.mapId))
+               // self.allRetailerList[index] = (RetailerList(id: retailerList.id,name: retailerList.name,townCode: retailerList.townCode, isSelected: retailerList.isSelected,orderList: retailerList.orderList,params: jsonString,mapId: retailerList.mapId))
+                self.allRetailerList[index] = (RetailerList(id: retailerList.id,name: retailerList.name,townCode: retailerList.townCode, isSelected: retailerList.isSelected,routeName: retailerList.routeName,routeCode: retailerList.routeCode,hqCode: retailerList.hqCode,hqName: retailerList.hqName,distributorCode: retailerList.distributorCode,distributorName: retailerList.distributorName,orderList: retailerList.orderList,secOrderList: retailerList.secOrderList,params: jsonString,remarks: retailerList.remarks,remarksId: retailerList.remarksId,mapId: retailerList.mapId))
             }
             
             

@@ -1273,6 +1273,8 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
                 
             }else if Dayend_Place_Types == "OS"{
                 Returnkm = 0
+            }else if Dayend_Place_Types == "OS-EX"{
+                Returnkm = 0
             }
             
             print(Returnkm)
@@ -1348,9 +1350,15 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
             }
             if One_day_plac_typ.contains("OX") && !One_day_plac_typ.contains("HQ") && !One_day_plac_typ.contains("EX") && !One_day_plac_typ.contains("OS"){
                 Total_amts = Total_amts+(Double(Total_Dis)  * Double(Fuel_amount))
-                DA_Allowance_amount = "0.0"
+                Total_amts = Total_amts + Double(x.OS_Allowance_amount)
+                DA_Allowance_amount = String(x.OS_Allowance_amount)
             }
-
+            
+            if One_day_plac_typ.contains("OS-EX") && !One_day_plac_typ.contains("HQ") && !One_day_plac_typ.contains("EX") && !One_day_plac_typ.contains("OS"){
+                Total_amts = Total_amts+(Double(Total_Dis)  * Double(Fuel_amount))
+                Total_amts = Total_amts + Double(x.OS_Allowance_amount)
+                DA_Allowance_amount = String(x.OS_Allowance_amount)
+            }
             
             ExpenseDetils.append(ExpenseDatas(date: getdate, Work_typ: Work_typ,miscellaneous_exp:String(format: "%.2f", miscellaneous_exp), Total_Amt: String(Total_amts), Returnkm: String(Returnkm), Plc_typ: Dayend_Place_Types, Fuel_amount: String(Fuel_amount), Mot_Name: MOT_Name, status: status, Da_amount: DA_Allowance_amount, SFCdetils:SFCDetils))
         }
@@ -1421,11 +1429,11 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
         var total_ded = 0.0
         for item3 in add_sub_exp{
             print(item3)
-            let exp_amnt = Double((item3["exp_amnt"] as? String)!)
+            let exp_amnt = Double(truncating: (item3["exp_amnt"] as? NSNumber)!)
             if let add_sub = item3["add_sub"] as? String,add_sub == "+"{
-                total_sum = total_sum + exp_amnt!
+                total_sum = total_sum + exp_amnt
             }else{
-                total_ded = total_ded + exp_amnt!
+                total_ded = total_ded + exp_amnt
             } }
         
         sum_Total_all = sum_Total_all + total_sum
@@ -1648,6 +1656,8 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
                         
                     }
                 }
+            }else if Dayend_Place_Types == "OS-EX"{
+                Returnkm = 0
             }
             
             print(One_day_plac_typ)
@@ -1709,7 +1719,14 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
             }
             if One_day_plac_typ.contains("OX") && !One_day_plac_typ.contains("HQ") && !One_day_plac_typ.contains("EX") && !One_day_plac_typ.contains("OS"){
                 Total_amts = Total_amts+(Double(Totalkm)  * Double(per_km_fare))
-                DA_Allowance_amount = "0.0"
+                Total_amts = Total_amts + Double(OS_Allowance_amount)
+                DA_Allowance_amount = String(OS_Allowance_amount)
+            }
+            
+            if One_day_plac_typ.contains("OS-EX") && !One_day_plac_typ.contains("HQ") && !One_day_plac_typ.contains("EX") && !One_day_plac_typ.contains("OS"){
+                Total_amts = Total_amts+(Double(Totalkm)  * Double(per_km_fare))
+                Total_amts = Total_amts + Double(OS_Allowance_amount)
+                DA_Allowance_amount = String(OS_Allowance_amount)
             }
             
             print(Total_amts)
