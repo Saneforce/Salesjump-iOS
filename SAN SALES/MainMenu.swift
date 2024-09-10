@@ -351,8 +351,8 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
             let RptMnuVc = rptstoryboard.instantiateViewController(withIdentifier: "ApprovalMenu") as! Approval_Menu
             viewController.setViewControllers([RptMnuVc], animated: false)
         }else if lItm.MasId == 18{
-            let rptstoryboard = UIStoryboard(name: "Closing Entry", bundle: nil)
-            let RptMnuVc = rptstoryboard.instantiateViewController(withIdentifier: "Closing_Stock_Entry__DB_") as! Closing_Stock_Entry__DB_
+            let rptstoryboard = UIStoryboard(name: "Main", bundle: nil)
+            let RptMnuVc = rptstoryboard.instantiateViewController(withIdentifier: "ClosingStockEntry__DB_") as! ClosingStockEntry__DB_
             viewController.setViewControllers([RptMnuVc], animated: false)
         }
         (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)

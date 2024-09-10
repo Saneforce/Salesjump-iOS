@@ -735,20 +735,18 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
     }
     
     func getExpenseDisSFC(completion: @escaping (Bool) -> Void) {
-        // Assuming this is an asynchronous operation
         getExpenseDisSFC() { [self] disEnrty in
             if let disEnrty = disEnrty {
                 print(disEnrty)
                 lstdiskm = disEnrty
                 print(lstdiskm)
-                completion(true) // Call the completion handler when done
+                completion(true)
             } else {
                 print("Failed to get disEnrty")
-                completion(false) // Call the completion handler if there was an error
+                completion(false)
             }
         }
     }
-    
     
     func Collect_mgr_rout(Getdata:[AnyObject], distance_data:[AnyObject], add_sub_exp:[AnyObject], FromDate:String, ToDate:String,dailyExpense:[AnyObject]){
         print(Getdata)

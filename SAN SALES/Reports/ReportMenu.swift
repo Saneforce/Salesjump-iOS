@@ -152,7 +152,7 @@ class ReportMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
              (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
         }else if lItm.MasId == 9{
             let RptMnuVc = storyboard.instantiateViewController(withIdentifier: "sbReportsmnu") as! ReportMenu
-            let attenReportVC = storyboard.instantiateViewController(withIdentifier: "Closing_Stock_View__DB_") as! Closing_Stock_View__DB_
+            let attenReportVC = storyboard.instantiateViewController(withIdentifier: "ClosingStockView__DB_") as! ClosingStockView__DB_
             
              viewController.setViewControllers([RptMnuVc,attenReportVC], animated: false)
              (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
