@@ -267,7 +267,7 @@ class SuperStockistOrderList : IViewController , UITableViewDelegate, UITableVie
                 }
             }
             
-            self.allProducts.append(ProductList(product: product, productName: productName, productId: productId,cateId: cateId, rate: rate,rateEdited: "0",retailerPrice: 0,saleErpCode: "",newWt: "", sampleQty: "",clQty: "",remarks: "",remarksId: "",selectedRemarks: [], disCountPer: disCountPer, disCountAmount: 0.0, freeCount: 0, unitId: unitId, unitName: unitName, unitCount: unitCount, taxper: tax, taxAmount: 0.0, totalCount: 0.0, isSchemeActive: isSchemeActive,scheme: scheme,offerAvailableCount: offerAvailableCount,offerUnitName: offerUnitName,offerProductCode: offerProductCode,offerProductName: offerProductName,package: package, isMultiSchemeActive: isMultiSchemeActive, multiScheme: multiScheme))
+            self.allProducts.append(ProductList(product: product, productName: productName, productId: productId,cateId: cateId, rate: rate,rateEdited: "0",retailerPrice: 0,saleErpCode: "",newWt: "", sampleQty: "",clQty: "",remarks: "",remarksId: "",selectedRemarks: [], disCountPer: disCountPer, disCountAmount: 0.0, freeCount: 0, unitId: unitId, unitName: unitName, unitCount: unitCount, taxper: tax, taxAmount: 0.0, totalCount: 0.0, isSchemeActive: isSchemeActive,scheme: scheme,offerAvailableCount: offerAvailableCount,offerUnitName: offerUnitName,offerProductCode: offerProductCode,offerProductName: offerProductName,package: package, isMultiSchemeActive: isMultiSchemeActive, multiScheme: multiScheme, competitorProduct: []))
         }
     }
     
@@ -679,7 +679,7 @@ class SuperStockistOrderList : IViewController , UITableViewDelegate, UITableVie
         self.selectedProducts.removeAll{$0.productId == cell.product.productId}
         self.allProducts.removeAll{$0.productId == cell.product.productId}
         
-        self.allProducts.append(ProductList(product: cell.product.product, productName: cell.product.productName, productId: cell.product.productId,cateId: cell.product.cateId, rate: cell.product.rate, rateEdited: "0",retailerPrice: cell.product.retailerPrice,saleErpCode: cell.product.saleErpCode,newWt: cell.product.newWt, sampleQty: "",clQty: "",remarks: "",remarksId: "",selectedRemarks: [], disCountPer: cell.product.disCountPer, disCountAmount: 0.0, freeCount: 0, unitId: cell.product.unitId, unitName: cell.product.unitName, unitCount: cell.product.unitCount, taxper: cell.product.taxper, taxAmount: 0.0, totalCount: 0.0, isSchemeActive: cell.product.isSchemeActive,scheme: cell.product.scheme,offerAvailableCount: cell.product.offerAvailableCount,offerUnitName: cell.product.offerUnitName,offerProductCode: cell.product.offerProductCode,offerProductName: cell.product.offerProductName,package: cell.product.package,isMultiSchemeActive: cell.product.isMultiSchemeActive,multiScheme: cell.product.multiScheme))
+        self.allProducts.append(ProductList(product: cell.product.product, productName: cell.product.productName, productId: cell.product.productId,cateId: cell.product.cateId, rate: cell.product.rate, rateEdited: "0",retailerPrice: cell.product.retailerPrice,saleErpCode: cell.product.saleErpCode,newWt: cell.product.newWt, sampleQty: "",clQty: "",remarks: "",remarksId: "",selectedRemarks: [], disCountPer: cell.product.disCountPer, disCountAmount: 0.0, freeCount: 0, unitId: cell.product.unitId, unitName: cell.product.unitName, unitCount: cell.product.unitCount, taxper: cell.product.taxper, taxAmount: 0.0, totalCount: 0.0, isSchemeActive: cell.product.isSchemeActive,scheme: cell.product.scheme,offerAvailableCount: cell.product.offerAvailableCount,offerUnitName: cell.product.offerUnitName,offerProductCode: cell.product.offerProductCode,offerProductName: cell.product.offerProductName,package: cell.product.package,isMultiSchemeActive: cell.product.isMultiSchemeActive,multiScheme: cell.product.multiScheme, competitorProduct: []))
         
         
         self.selectedListTableView.reloadData()
@@ -1520,9 +1520,9 @@ struct ProductList {
     var package : String
     
     var multiScheme = [Scheme]()
-        
+    var competitorProduct = [CompetitorProductList]()
     
-    init(product: AnyObject, productName: String, productId: String,cateId : String, rate: Double, rateEdited : String,retailerPrice: Double,saleErpCode : String,newWt: String, sampleQty: String,clQty : String,remarks : String,remarksId : String,selectedRemarks: [AnyObject], disCountPer: Double, disCountAmount: Double, freeCount: Int,unitId: String, unitName: String, unitCount: Int, taxper: Double, taxAmount: Double, totalCount: Double , isSchemeActive : Bool,scheme : Int,offerAvailableCount:Int,offerUnitName: String,offerProductCode:String,offerProductName:String,package: String,isMultiSchemeActive:Bool,multiScheme : [Scheme]) {
+    init(product: AnyObject, productName: String, productId: String,cateId : String, rate: Double, rateEdited : String,retailerPrice: Double,saleErpCode : String,newWt: String, sampleQty: String,clQty : String,remarks : String,remarksId : String,selectedRemarks: [AnyObject], disCountPer: Double, disCountAmount: Double, freeCount: Int,unitId: String, unitName: String, unitCount: Int, taxper: Double, taxAmount: Double, totalCount: Double , isSchemeActive : Bool,scheme : Int,offerAvailableCount:Int,offerUnitName: String,offerProductCode:String,offerProductName:String,package: String,isMultiSchemeActive:Bool,multiScheme : [Scheme],competitorProduct : [CompetitorProductList]) {
         self.product = product
         self.productName = productName
         self.productId = productId
@@ -1555,6 +1555,7 @@ struct ProductList {
         self.package = package
         self.isMultiSchemeActive = isMultiSchemeActive
         self.multiScheme = multiScheme
+        self.competitorProduct = competitorProduct
     }
     
     func totalUnits() -> Int{

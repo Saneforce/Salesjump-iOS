@@ -168,6 +168,12 @@ import BackgroundTasks
             "tableName":"vwProductTemplate","coloumns":"[\"id as id\",\"content as name\"]","where":"[\"isnull(ActFlag,0)=0\"]","sfCode":0,"orderBy":"[\"name asc\"]","desig":"mgr"
          ]))
          
+         strMasList.append(mnuItem.init(MasId: 31, MasName: "Competitor Product", MasImage: "mnuPrimary",StoreKey: "Competitor_Product", ApiKey: "get/Mas_RCPA&divisionCode="+(prettyJsonData["divisionCode"] as? String ?? "")+"&rSF="+SFCode+"&sfCode="+SFCode+"&State_Code="+StateCode+"&desig="+desigCode,fromData: [
+            "tableName":"Mas_RCPA","coloumns":"[\"sf_code as id\",\"sf_name as name\"]","orderBy":"[\"name asc\"]","desig":"mgr"
+         ]))
+         
+  //   http://fmcg.salesjump.in/server/native_Db_V13.php?axn=get%2FMas_RCPA&divisionCode=29%2C&rSF=MR4126&sfCode=MR4126&State_Code=24&desig=MR&appVer=7.6
+
          btnClearData.addTarget(target: self, action: #selector(clearAllData))
          btnSyncAll.addTarget(target: self, action: #selector(callAllApi))
          btnHome.addTarget(target: self, action: #selector(GotoHome))
