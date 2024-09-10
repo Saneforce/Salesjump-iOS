@@ -1391,6 +1391,12 @@ class Expense_approval_SFC: UIViewController, UITableViewDelegate, UITableViewDa
                 Total_amts = Total_amts + Double(x.OS_Allowance_amount)
                 DA_Allowance_amount = String(x.OS_Allowance_amount)
             }
+            
+            if One_day_plac_typ.contains("OX") && !One_day_plac_typ.contains("HQ") && !One_day_plac_typ.contains("EX") && !One_day_plac_typ.contains("OS"){
+                Total_amts = Total_amts+(Double(Total_Dis)  * Double(Fuel_amount))
+                DA_Allowance_amount = "0.0"
+            }
+            
             let commaSeparatedString = One_day_plac_typ.joined(separator: ",")
 
             ExpenseDetils.append(ExpenseDatas(date: getdate, Work_typ: Work_typ,miscellaneous_exp:String(format: "%.2f", miscellaneous_exp), Total_Amt: String(Total_amts), Returnkm: String(Returnkm), Plc_typ: Dayend_Place_Types, Fuel_amount: String(Fuel_amount), Mot_Name: MOT_Name, status: status, Da_amount: DA_Allowance_amount, Mot_ID: x.Mot_ID, Place_Types: commaSeparatedString, Work_place: x.ClusterName, Total_dis: String(Total_Dis), SFCdetils:SFCDetils))
@@ -1771,6 +1777,11 @@ class Expense_approval_SFC: UIViewController, UITableViewDelegate, UITableViewDa
                 Total_amts = Total_amts + Double(OS_Allowance_amount)
                 DA_Allowance_amount = String(OS_Allowance_amount)
             }
+            if One_day_plac_typ.contains("OX") && !One_day_plac_typ.contains("HQ") && !One_day_plac_typ.contains("EX") && !One_day_plac_typ.contains("OS"){
+                Total_amts = Total_amts+(Double(Totalkm)  * Double(per_km_fare))
+                DA_Allowance_amount = "0.0"
+            }
+            
             print(Total_amts)
             let commaSeparatedString = One_day_plac_typ.joined(separator: ",")
             ExpenseDetils.append(ExpenseDatas(date: date, Work_typ: Work_typ,miscellaneous_exp:String(format: "%.2f", miscellaneous_exp), Total_Amt: String(Total_amts), Returnkm: String(Returnkm), Plc_typ: Dayend_Place_Types, Fuel_amount: String(per_km_fare), Mot_Name: Mot_Name, status: status, Da_amount: DA_Allowance_amount, Mot_ID: String(modeid), Place_Types: commaSeparatedString, Work_place: cluster_chart, Total_dis: String(Totalkm), SFCdetils:SFCDetils))
@@ -1851,11 +1862,11 @@ class Expense_approval_SFC: UIViewController, UITableViewDelegate, UITableViewDa
         var total_ded = 0.0
         for item3 in add_sub_exp{
             print(item3)
-            let exp_amnt = Double((item3["exp_amnt"] as? String)!)
+            let exp_amnt = Double(truncating: (item3["exp_amnt"] as? NSNumber)!)
             if let add_sub = item3["add_sub"] as? String,add_sub == "+"{
-                total_sum = total_sum + exp_amnt!
+                total_sum = total_sum + exp_amnt
             }else{
-                total_ded = total_ded + exp_amnt!
+                total_ded = total_ded + exp_amnt
             } }
         
         sum_Total_all = sum_Total_all + total_sum
@@ -2000,6 +2011,7 @@ class Expense_approval_SFC: UIViewController, UITableViewDelegate, UITableViewDa
             
             let encodedApiKey = apiKey.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
             print(apiKey)
+            print("test")
             AF.request(APIClient.shared.BaseURL + APIClient.shared.DBURL1 + encodedApiKey!, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
                 AFdata in
                 switch AFdata.result{
