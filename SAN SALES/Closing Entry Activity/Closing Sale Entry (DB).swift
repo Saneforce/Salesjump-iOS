@@ -67,6 +67,7 @@ class Closing_Sale_Entry__DB_: IViewController, UICollectionViewDelegate, UIColl
    var update_Save:Int = 0
    var Scode:Int = 0
    var Hq_Id:String = ""
+   let dispatchGroup = DispatchGroup()
    var lAllObjSel: [AnyObject] = []
    struct Bill_Photo:Any{
        let imgurl:String
@@ -435,22 +436,25 @@ class Closing_Sale_Entry__DB_: IViewController, UICollectionViewDelegate, UIColl
                Select_Stockist.text = name
                Stockist_Name.text = name
                Scode = item["id"] as? Int ?? 0
-               Edit_Data{ [self] success in
-                   if success {
-                       if editable == 1{
-                           update_Save = 0
-                           Save_Bt.setTitle("Edit", for: .normal)
-                           Collection_View_category.isHidden = true
-                           Entry_table.isHidden = true
-                       }else{
-                           Save_Bt.setTitle("Save", for: .normal)
-                           Collection_View_category.isHidden = false
-                           Entry_table.isHidden = false
-                       }
-                   } else {
-                       print("First function failed, second function won't run.")
-                   }
-               }
+//               Edit_Data{ [self] success in
+//                   if success {
+//                       if editable == 1{
+//                           update_Save = 0
+//                           Save_Bt.setTitle("Edit", for: .normal)
+//                           Collection_View_category.isHidden = true
+//                           Entry_table.isHidden = true
+//                       }else{
+//                           Save_Bt.setTitle("Save", for: .normal)
+//                           Collection_View_category.isHidden = false
+//                           Entry_table.isHidden = false
+//                       }
+//                   } else {
+//                       print("First function failed, second function won't run.")
+//                   }
+//               }
+               Save_Bt.setTitle("Save", for: .normal)
+               Collection_View_category.isHidden = false
+               Entry_table.isHidden = false
            }
        }
        Vw_Sel.isHidden = true
@@ -752,7 +756,7 @@ class Closing_Sale_Entry__DB_: IViewController, UICollectionViewDelegate, UIColl
                let Total_Pic = (cb_qty * (Int(sUomConv) ?? 0)) + pieces
                let Sample_Qty = Double(Total_Pic) * Rate
                
-               let itm: [String: Any] = ["product":product,"product_Nm":product_Nm,"recv_qty":0,"cb_qty":cb_qty,"pieces":pieces,"Rate":Rate,"conversionQty":Int(sUomConv) ?? 0,"MRP_Price":"\(MRP_Price)","sample_qty":Sample_Qty,"Mgf_date":Get_String_date,"batch_no":Get_String]
+               let itm: [String: Any] = ["product":product,"product_Nm":product_Nm,"recv_qty":0,"cb_qty":cb_qty,"pieces":pieces,"Rate":Rate,"conversionQty":Int(sUomConv) ?? 0,"MRP_Price":"\(MRP_Price)","sample_qty":Sample_Qty,"Mgf_date":Get_String_date,"batch_no":Get_String,"total_qty":String(Total_Pic)]
                
                let jitm: AnyObject = itm as AnyObject
                ProductCart[i] = jitm
@@ -785,8 +789,7 @@ class Closing_Sale_Entry__DB_: IViewController, UICollectionViewDelegate, UIColl
            let Total_Pic = (CasQty * (Int(sUomConv) ?? 0)) + PicQty
            let Sample_Qty = Double(Total_Pic) * Rate
            
-           
-           let itm: [String: Any] = ["product":id,"product_Nm":product_Nm,"recv_qty":0,"cb_qty":CasQty,"pieces":PicQty,"Rate":Rate,"conversionQty":Int(sUomConv) ?? 0,"MRP_Price":"\(MRP_Price)","sample_qty":Sample_Qty,"Mgf_date":Get_String_date,"batch_no":Get_String]
+           let itm: [String: Any] = ["product":id,"product_Nm":product_Nm,"recv_qty":0,"cb_qty":CasQty,"pieces":PicQty,"Rate":Rate,"conversionQty":Int(sUomConv) ?? 0,"MRP_Price":"\(MRP_Price)","sample_qty":Sample_Qty,"Mgf_date":Get_String_date,"batch_no":Get_String,"total_qty":String(Total_Pic)]
            
            let jitm: AnyObject = itm as AnyObject
            ProductCart.append(jitm)
@@ -836,7 +839,16 @@ class Closing_Sale_Entry__DB_: IViewController, UICollectionViewDelegate, UIColl
            Entry_table.isHidden = false
          return
        }
-       save_stockUpdation()
+       
+       let alert = UIAlertController(title: "Confirmation", message: "Do you want to Submit?", preferredStyle: .alert)
+       alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
+               self.save_stockUpdation()
+           return
+       })
+       alert.addAction(UIAlertAction(title: "Cancel", style: .destructive) { _ in
+           return
+       })
+       self.present(alert, animated: true)
    }
    
    func save_stockUpdation(){
@@ -846,11 +858,24 @@ class Closing_Sale_Entry__DB_: IViewController, UICollectionViewDelegate, UIColl
        dateFormatter.dateFormat = "yyyy-MM-dd"
        let currentDate = Foundation.Date()
        let formattedDate = dateFormatter.string(from: currentDate)
+       print(Bill_photo_Ned)
        
-       for BillUpolad in Bill_photo_Ned{
-          // self.ShowLoading(Message: "uploading photos Please wait...")
-           ImageUploader().uploadImage(SFCode: self.SFCode, image: BillUpolad.img, fileName: "__\(BillUpolad.imgurl)")
+       for BillUpload in Bill_photo_Ned {
+           dispatchGroup.enter() // Enter the dispatch group before starting the upload
+
+           ImageUploade().uploadImage(SFCode: self.SFCode, image: BillUpload.img, fileName: "__\(BillUpload.imgurl)") { [self] in
+               // This code runs after the image upload is complete
+               DispatchQueue.main.async {
+                   print("Image Uploaded Successfully")
+               }
+               dispatchGroup.leave() // Leave the dispatch group once upload is finished
+           }
        }
+       
+       dispatchGroup.notify(queue: DispatchQueue.main) {
+           print("All images uploaded, proceeding to next step")
+       }
+       
        
        var Bill_Det = ""
        for B in Bill_photo_Ned {
@@ -880,7 +905,8 @@ class Closing_Sale_Entry__DB_: IViewController, UICollectionViewDelegate, UIColl
            sPItems = sPItems + " \"MRP_Price\": \"" + (item["MRP_Price"] as! String) + "\","
            sPItems = sPItems + " \"sample_qty\":" + (String(format: "%.0f", item["sample_qty"] as! Double)) + ","
            sPItems = sPItems + " \"Mgf_date\": \"" + (item["Mgf_date"] as! String) + "\","
-           sPItems = sPItems + " \"batch_no\": \"" + (item["batch_no"] as! String) + "\"},"
+           sPItems = sPItems + " \"batch_no\": \"" + (item["batch_no"] as! String) + "\","
+           sPItems = sPItems + " \"total_qty\": " + (item["total_qty"] as! String) + "},"
        }
        var sPItems2:String = ""
        if sPItems.hasSuffix(",") {
@@ -890,8 +916,7 @@ class Closing_Sale_Entry__DB_: IViewController, UICollectionViewDelegate, UIColl
            sPItems2 = sPItems
        }
        
-       let jsonString = "[{\"stockUpdation\":[" + sPItems2 + "]},{\"Activity_Event_Captures\":[" + Bill_Det + "]}]"
-       
+       let jsonString = "[{\"saleUpdation\":[" + sPItems2 + "]},{\"Activity_Event_Captures\":[" + Bill_Det + "]}]"
        let params: Parameters = [
            "data": jsonString
        ]
@@ -902,7 +927,7 @@ class Closing_Sale_Entry__DB_: IViewController, UICollectionViewDelegate, UIColl
        
        print(apiKey)
        
-       AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+apiKey,method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
+       AF.request(APIClient.shared.BaseURL+APIClient.shared.CustomFieldDB+apiKey,method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
            AFdata in
            self.LoadingDismiss()
            PhotosCollection.shared.PhotoList = []

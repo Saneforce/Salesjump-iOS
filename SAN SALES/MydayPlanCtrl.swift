@@ -280,9 +280,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                 self.vwRmksCtrl.frame.origin.y = vwRmksCtrl.frame.origin.y+vwRmksCtrl.frame.height-155
                 self.vwDeviationCtrl.isHidden = true
                 self.vwRejectReason.isHidden = true
-            }
-            
-               }
+            }}
         if (UserSetup.shared.DistBased == 1){
             vwDistCtrl.isHidden = false
         }

@@ -96,7 +96,7 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
             strMasList.append(mnuItem.init(MasId:17, MasName: "Approvals", MasImage: "AdminForms"))
         }
         strMasList.append(mnuItem.init(MasId:18, MasName: "Closing Stock Entry (DB)", MasImage: "SubmittedCalls"))
-       // strMasList.append(mnuItem.init(MasId:19, MasName: "Closing Sale Entry (DB)", MasImage: "SubmittedCalls"))
+        strMasList.append(mnuItem.init(MasId:19, MasName: "Closing Sale Entry (DB)", MasImage: "SubmittedCalls"))
         menuClose.addTarget(target: self, action: #selector(closeMenuWin))
         tbMenuDetail.delegate=self
         tbMenuDetail.dataSource=self
