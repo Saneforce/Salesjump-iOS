@@ -853,13 +853,10 @@ class Closing_Sale_Entry__DB_: IViewController, UICollectionViewDelegate, UIColl
    
    func save_stockUpdation(){
        self.ShowLoading(Message: "Data Submitting Please wait...")
-       
        let dateFormatter = DateFormatter()
        dateFormatter.dateFormat = "yyyy-MM-dd"
        let currentDate = Foundation.Date()
        let formattedDate = dateFormatter.string(from: currentDate)
-       print(Bill_photo_Ned)
-       
        for BillUpload in Bill_photo_Ned {
            dispatchGroup.enter() // Enter the dispatch group before starting the upload
 
@@ -954,9 +951,6 @@ class Closing_Sale_Entry__DB_: IViewController, UICollectionViewDelegate, UIColl
                self.LoadingDismiss()
            }
        }
-       
-       
-       
    }
    
    func validateForm() -> Bool {
@@ -996,7 +990,6 @@ class Closing_Sale_Entry__DB_: IViewController, UICollectionViewDelegate, UIColl
            Toast.show(message: "Select the \(UserSetup.shared.StkCap)", controller: self)
            return
        }
-       
        Cam_View.isHidden = false
    }
    

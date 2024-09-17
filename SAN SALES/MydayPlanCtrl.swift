@@ -629,7 +629,7 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
                     lblTravelMode.text = "Select Travel Mode"
                     print(item)
                     lblRoute.text = name  //+(item["id"] as! String)
-                    Allowance_Type = item["Allowance_Type"] as! String
+                    Allowance_Type = item["Allowance_Type"] as? String ?? ""
                     
                 }else if SelMode == "HQ" {
                     lblHQ.text = name  //+(item["id"] as! String)
