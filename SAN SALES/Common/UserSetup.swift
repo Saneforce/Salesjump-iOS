@@ -59,6 +59,7 @@ class UserSetup{
     var clCap : String = ""
     var clFilter : String = ""
     var productRemark : Int = 0
+    var productRCPA : String = ""
     var rateEditable : Int = 0
     var Eligibility_Nd:Int = 0
     var hideClosingStockBatch:Int = 0
@@ -110,6 +111,7 @@ class UserSetup{
         clCap = lstSetups[0]["clcap"] as? String ?? ""
         clFilter = lstSetups[0]["Cl_Filter"] as? String ?? ""
         productRemark = lstSetups[0]["Product_Remark"] as? Int ?? 0
+        productRCPA = lstSetups[0]["Product_RCPA"] as? String ?? ""
         rateEditable = lstSetups[0]["RateEditable"] as? Int ?? 0
         ExpDist_HQ = lstSetups[0]["ExpDist_HQ"] as? Int ?? 0
         ExpDist_HQEX = lstSetups[0]["ExpDist_HQEX"] as? Int ?? 0
