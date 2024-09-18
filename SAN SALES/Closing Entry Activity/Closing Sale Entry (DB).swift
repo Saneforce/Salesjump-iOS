@@ -841,8 +841,25 @@ class Closing_Sale_Entry__DB_: IViewController, UICollectionViewDelegate, UIColl
        }
        
        let alert = UIAlertController(title: "Confirmation", message: "Do you want to Submit?", preferredStyle: .alert)
-       alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
+       alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { [self] _ in
+           for BillUpload in Bill_photo_Ned {
+               dispatchGroup.enter() // Enter the dispatch group before starting the upload
+
+               ImageUploade().uploadImage(SFCode: "", image: BillUpload.img, fileName: "\(self.SFCode)__\(BillUpload.imgurl)") { [self] in
+                   // This code runs after the image upload is complete
+                   DispatchQueue.main.async {
+                       print("Image Uploaded Successfully")
+                   }
+                   dispatchGroup.leave() // Leave the dispatch group once upload is finished
+               }
+           }
+           dispatchGroup.notify(queue: DispatchQueue.main) {
+               print("All images uploaded, proceeding to next step")
                self.save_stockUpdation()
+           }
+           if Bill_photo_Ned.count == 0 {
+               self.save_stockUpdation()
+           }
            return
        })
        alert.addAction(UIAlertAction(title: "Cancel", style: .destructive) { _ in
@@ -857,23 +874,6 @@ class Closing_Sale_Entry__DB_: IViewController, UICollectionViewDelegate, UIColl
        dateFormatter.dateFormat = "yyyy-MM-dd"
        let currentDate = Foundation.Date()
        let formattedDate = dateFormatter.string(from: currentDate)
-       for BillUpload in Bill_photo_Ned {
-           dispatchGroup.enter() // Enter the dispatch group before starting the upload
-
-           ImageUploade().uploadImage(SFCode: self.SFCode, image: BillUpload.img, fileName: "__\(BillUpload.imgurl)") { [self] in
-               // This code runs after the image upload is complete
-               DispatchQueue.main.async {
-                   print("Image Uploaded Successfully")
-               }
-               dispatchGroup.leave() // Leave the dispatch group once upload is finished
-           }
-       }
-       
-       dispatchGroup.notify(queue: DispatchQueue.main) {
-           print("All images uploaded, proceeding to next step")
-       }
-       
-       
        var Bill_Det = ""
        for B in Bill_photo_Ned {
            Bill_Det += "{\"imgurl\": \"\(B.imgurl)\","
