@@ -197,21 +197,16 @@ class ClosingStockEntry__DB_: IViewController, UICollectionViewDelegate, UIColle
       imagePickerController.sourceType = .camera
       present(imagePickerController, animated: true, completion: nil)
       
-//        let imagePickerController = UIImagePickerController()
-//        imagePickerController.delegate = self
-//        imagePickerController.sourceType = .photoLibrary
-//        present(imagePickerController, animated: true, completion: nil)
   }
   
   
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-            if let compressedImageData = pickedImage.jpegData(compressionQuality: 0.50) {
+            if let compressedImageData = pickedImage.jpegData(compressionQuality: 0.25) {
                 if let compressedImage = UIImage(data: compressedImageData) {
                     let fileName: String = String(Int(Foundation.Date().timeIntervalSince1970))
                     let filenameno = "\(fileName).jpg"
                     
-                    // Append compressed image to Bill_photo_Ned
                     Bill_photo_Ned.append(Bill_Photo(imgurl: filenameno, title: "", remarks: "", img: compressedImage))
                     Photo_List.reloadData()
                 }
@@ -503,8 +498,6 @@ class ClosingStockEntry__DB_: IViewController, UICollectionViewDelegate, UIColle
                   if let json = value as? [AnyObject]{
                       print(json)
                       if !json.isEmpty{
-                        
-                          
                           if let updateDate = json[0]["updateDate"] as? [String:Any]{
   
                               if let date = updateDate["date"] as? String{
@@ -872,7 +865,7 @@ class ClosingStockEntry__DB_: IViewController, UICollectionViewDelegate, UIColle
       
       var Bill_Det = ""
       for B in Bill_photo_Ned {
-          Bill_Det += "{\"imgurl\": \"\(B.imgurl)\","
+          Bill_Det += "{\"imgurl\": \"_\(B.imgurl)\","
           Bill_Det += " \"title\": \"\(B.title)\","
           Bill_Det += " \"remarks\": \"\(B.remarks)\"},"
       }

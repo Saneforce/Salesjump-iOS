@@ -197,16 +197,12 @@ class Closing_Sale_Entry__DB_: IViewController, UICollectionViewDelegate, UIColl
        imagePickerController.sourceType = .camera
        present(imagePickerController, animated: true, completion: nil)
        
- //        let imagePickerController = UIImagePickerController()
- //        imagePickerController.delegate = self
- //        imagePickerController.sourceType = .photoLibrary
- //        present(imagePickerController, animated: true, completion: nil)
    }
    
    
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-            if let compressedImageData = pickedImage.jpegData(compressionQuality: 0.50) {
+            if let compressedImageData = pickedImage.jpegData(compressionQuality: 0.25) {
                 if let compressedImage = UIImage(data: compressedImageData) {
                     let fileName: String = String(Int(Foundation.Date().timeIntervalSince1970))
                     let filenameno = "\(fileName).jpg"
@@ -879,7 +875,7 @@ class Closing_Sale_Entry__DB_: IViewController, UICollectionViewDelegate, UIColl
        let formattedDate = dateFormatter.string(from: currentDate)
        var Bill_Det = ""
        for B in Bill_photo_Ned {
-           Bill_Det += "{\"imgurl\": \"\(B.imgurl)\","
+           Bill_Det += "{\"imgurl\": \"_\(B.imgurl)\","
            Bill_Det += " \"title\": \"\(B.title)\","
            Bill_Det += " \"remarks\": \"\(B.remarks)\"},"
        }
@@ -895,7 +891,6 @@ class Closing_Sale_Entry__DB_: IViewController, UICollectionViewDelegate, UIColl
        var sPItems:String = ""
        for item in self.ProductCart{
            print(item)
-           
            sPItems = sPItems + "{\"product\":\""+(item["product"] as! String)+"\", \"product_Nm\":\""+(item["product_Nm"] as! String)+"\","
            sPItems = sPItems + " \"recv_qty\":" + (String(format: "%.0f", item["recv_qty"] as! Double)) + ","
            sPItems = sPItems + " \"cb_qty\": " + (String(format: "%.0f", item["cb_qty"] as! Double)) + ","
