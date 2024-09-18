@@ -75,6 +75,7 @@ class ClosingStockEntry__DB_: IViewController, UICollectionViewDelegate, UIColle
       let img:UIImage
   }
   var Bill_photo_Ned:[Bill_Photo] = []
+  let dispatchGroup = DispatchGroup()
   
   override func viewDidLoad(){
       super.viewDidLoad()
@@ -847,9 +848,19 @@ class ClosingStockEntry__DB_: IViewController, UICollectionViewDelegate, UIColle
       let currentDate = Foundation.Date()
       let formattedDate = dateFormatter.string(from: currentDate)
       
-      for BillUpolad in Bill_photo_Ned{
-         // self.ShowLoading(Message: "uploading photos Please wait...")
-          ImageUploader().uploadImage(SFCode: self.SFCode, image: BillUpolad.img, fileName: "__\(BillUpolad.imgurl)")
+      for BillUpload in Bill_photo_Ned {
+          dispatchGroup.enter() // Enter the dispatch group before starting the upload
+
+          ImageUploade().uploadImage(SFCode: self.SFCode, image: BillUpload.img, fileName: "__\(BillUpload.imgurl)") { [self] in
+              // This code runs after the image upload is complete
+              DispatchQueue.main.async {
+                  print("Image Uploaded Successfully")
+              }
+              dispatchGroup.leave() // Leave the dispatch group once upload is finished
+          }
+      }
+      dispatchGroup.notify(queue: DispatchQueue.main){
+          print("All images uploaded, proceeding to next step")
       }
       
       var Bill_Det = ""

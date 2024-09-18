@@ -27,7 +27,6 @@ class ImageUploader {
     }
 }
 
-
 class ImageUploade {
     func uploadImage(SFCode: String, image: UIImage, fileName: String, completion: @escaping () -> Void) {
         let imgData = image.jpegData(compressionQuality: 0.80)

@@ -430,6 +430,4 @@ class Daily_Expense_Entry_SFC: IViewController, UIImagePickerControllerDelegate,
             return false
         }
     }
-    
-    
 }
