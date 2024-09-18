@@ -204,18 +204,22 @@ class Closing_Sale_Entry__DB_: IViewController, UICollectionViewDelegate, UIColl
    }
    
    
-   func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-       if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-         
-               let fileName: String = String(Int(Foundation.Date().timeIntervalSince1970))
-               let filenameno="\(fileName).jpg"
-               Bill_photo_Ned.append(Bill_Photo(imgurl: filenameno, title: "", remarks: "", img: pickedImage))
-               print(Bill_photo_Ned)
-               Photo_List.reloadData()
-           
-       }
-       dismiss(animated: true, completion: nil)
-   }
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            if let compressedImageData = pickedImage.jpegData(compressionQuality: 0.50) {
+                if let compressedImage = UIImage(data: compressedImageData) {
+                    let fileName: String = String(Int(Foundation.Date().timeIntervalSince1970))
+                    let filenameno = "\(fileName).jpg"
+                    
+                    // Append compressed image to Bill_photo_Ned
+                    Bill_photo_Ned.append(Bill_Photo(imgurl: filenameno, title: "", remarks: "", img: compressedImage))
+                    Photo_List.reloadData()
+                }
+            }
+        }
+        dismiss(animated: true, completion: nil)
+    }
+    
    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
        dismiss(animated: true, completion: nil)
    }
@@ -839,7 +843,7 @@ class Closing_Sale_Entry__DB_: IViewController, UICollectionViewDelegate, UIColl
            Entry_table.isHidden = false
          return
        }
-       
+       self.ShowLoading(Message: "Data Submitting Please wait...")
        let alert = UIAlertController(title: "Confirmation", message: "Do you want to Submit?", preferredStyle: .alert)
        alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { [self] _ in
            for BillUpload in Bill_photo_Ned {
@@ -869,7 +873,6 @@ class Closing_Sale_Entry__DB_: IViewController, UICollectionViewDelegate, UIColl
    }
    
    func save_stockUpdation(){
-       self.ShowLoading(Message: "Data Submitting Please wait...")
        let dateFormatter = DateFormatter()
        dateFormatter.dateFormat = "yyyy-MM-dd"
        let currentDate = Foundation.Date()

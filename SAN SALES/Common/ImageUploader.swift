@@ -30,7 +30,6 @@ class ImageUploader {
 class ImageUploade {
     func uploadImage(SFCode: String, image: UIImage, fileName: String, completion: @escaping () -> Void) {
         let imgData = image.jpegData(compressionQuality: 0.80)
-        
         AF.upload(multipartFormData: { multipartFormData in
             multipartFormData.append(imgData!, withName: "imgfile", fileName: fileName, mimeType: "image/jpg")
         }, to: APIClient.shared.BaseURL+APIClient.shared.DBURL1 + "imgupload&sf_code=" + SFCode)
