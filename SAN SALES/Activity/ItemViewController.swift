@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ItemViewController <Item, Cell : UITableViewCell> : UIViewController ,UITableViewDelegate,UITableViewDataSource {
+class ItemViewController <Item, Cell : UITableViewCell> : IViewController ,UITableViewDelegate,UITableViewDataSource {
 
     var items : [Item] = []
     var originalItems : [Item] = []

@@ -100,6 +100,7 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
     
     var products = [ProductList]()
     var selectedProducts = [ProductList]()
+    var selectedCompetitorProducts = [ProductList]()
     var freeProducts = [ProductList]()
     var allProducts = [ProductList]()
     var competitorProduct = [CompetitorProductList]()
@@ -906,6 +907,10 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
                 Cell.viewCl.isHidden = true
                 Cell.vwClQtyHeightConstraint.constant = 0
             }
+            if UserSetup.shared.productRCPA == "0" {
+                Cell.imgCompetitorProduct.isHidden = true
+                Cell.imgCompetitorProductWidthConstraint.constant = 0
+            }
             let id = self.products[indexPath.row].productId
             let productImage = self.products[indexPath.row].product["Product_Image"] as? String
             Cell.imgProduct.image = nil
@@ -1356,6 +1361,10 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
     }
     
     @objc private func competitorAction(_ sender : UITapGestureRecognizer){
+        if self.lstCompetitorProduct.isEmpty {
+            Toast.show(message: "No Data Available", controller: self)
+            return
+        }
         let cell: SuperStockistOrderListTableViewCell = GlobalFunc.getTableViewCell(view: sender.view!) as! SuperStockistOrderListTableViewCell
         let tbView: UITableView = GlobalFunc.getTableView(view: sender.view!)
         let indxPath: IndexPath = tbView.indexPath(for: cell)!
@@ -1591,7 +1600,12 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
             return
         }
         
-        self.competitorProduct[indexPath.row].competitorProductName = sender.text!
+        let name = sender.text!.replacingOccurrences(of: " ", with: "")
+        
+        if name.count > 0 {
+            self.competitorProduct[indexPath.row].competitorProductName = sender.text!
+        }
+        
         
       //  self.competitorTableView.reloadRows(at: [indexPath], with: .automatic)
     }
@@ -1747,18 +1761,42 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
             return productQty > 0
         })
         
-        if(selectedProducts.count<1){
-            Toast.show(message: "Cart is Empty.", controller: self)
-            return false
-        }else {
-            for i in 0..<selectedProducts.count {
-                if selectedProducts[i].rate > 0 {
-                    return true
+        self.selectedCompetitorProducts = self.allProducts.filter({ product in
+            let productQty = product.competitorProduct
+            return !productQty.isEmpty
+        })
+        
+        if UserSetup.shared.productRCPA == "1" {
+            if(selectedProducts.count<1) && (selectedCompetitorProducts.count<1){
+                Toast.show(message: "Cart is Empty.", controller: self)
+                return false
+            }else {
+                if !selectedProducts.isEmpty {
+                    for i in 0..<selectedProducts.count {
+                        if selectedProducts[i].rate > 0 {
+                            return true
+                        }
+                    }
+                    Toast.show(message: "Please select atleast one product with rate", controller: self)
+                    return false
                 }
+                
             }
-            Toast.show(message: "Please select atleast one product with rate", controller: self)
-            return false
+        }else {
+            if(selectedProducts.count<1){
+                Toast.show(message: "Cart is Empty.", controller: self)
+                return false
+            }else {
+                for i in 0..<selectedProducts.count {
+                    if selectedProducts[i].rate > 0 {
+                        return true
+                    }
+                }
+                Toast.show(message: "Please select atleast one product with rate", controller: self)
+                return false
+            }
         }
+        
         return true
     }
     
@@ -1855,12 +1893,14 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
         
         var productString = ""
         
-        for i in 0..<self.selectedProducts.count {
+        var products = self.selectedProducts + self.selectedCompetitorProducts
+        
+        for i in 0..<products.count {
             
             let totalAmount = self.allProducts.map{$0.totalCount}.reduce(0){$0 + $1}
             let totalAmountRound = Double(round(100 * totalAmount) / 100)
             
-            self.productsforMissed.append(SecondaryOrderNewSelectedList(product: selectedProducts[i], distributorId: VisitData.shared.Dist.id, distributorName: VisitData.shared.Dist.name, subtotal: "\(totalAmountRound)"))
+            self.productsforMissed.append(SecondaryOrderNewSelectedList(product: products[i], distributorId: VisitData.shared.Dist.id, distributorName: VisitData.shared.Dist.name, subtotal: "\(totalAmountRound)"))
             
         }
         
@@ -2039,6 +2079,49 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
             productString = productString + productStr
         }
       
+        for product in selectedCompetitorProducts {
+            
+            let qty = product.unitCount * (Int(product.sampleQty) ?? 0)
+            var scheme : Int = 0
+            var offerProductCode : String = ""
+            var offerProductName:String = ""
+            var freePCount = product.productId
+            var freePName = product.productName
+            let sampleQty = (Int(product.sampleQty) ?? 0)
+            let clQty = (Int(product.clQty) ?? 0)
+            let totalCount = product.totalCount
+            
+            if UserSetup.shared.SchemeBased == 1 && UserSetup.shared.offerMode == 1 {
+                scheme = product.scheme
+                offerProductCode = product.offerProductCode
+                offerProductName = product.offerProductName
+                freePCount = product.offerProductCode
+                freePName = product.productName
+            }
+            
+            
+            var competitorProductString = ""
+            if !product.competitorProduct.isEmpty {
+                
+                for i in 0..<product.competitorProduct.count {
+                    
+                    let sampleQty = (Int(product.competitorProduct[i].qty) ?? 0)
+                    let competitorProductStr = "{\"Competitor_Name\":\"\(product.competitorProduct[i].competitorName)\",\"Competitor_Product_Name\":\"\(product.competitorProduct[i].competitorProductName)\",\"Prod_Qty\":\(sampleQty),\"Prod_Rate\":\(product.competitorProduct[i].rate),\"Prod_Value\":\"\(product.competitorProduct[i].value)\"},"
+                    
+                    competitorProductString = competitorProductString + competitorProductStr
+                }
+                
+                if competitorProductString.hasSuffix(","){
+                    competitorProductString.removeLast()
+                }
+            }
+            
+            
+             
+            let productStr =   "{\"product_code\":\"\(product.productId)\",\"product_Name\":\"\(product.productName)\",\"Product_Rx_Qty\":\(qty),\"UnitId\":\"\(product.unitId)\",\"UnitName\":\"\(product.unitName)\",\"rx_Conqty\":\(sampleQty),\"Product_Rx_NQty\":0,\"Product_Sample_Qty\":\"\(totalCount)\",\"vanSalesOrder\":0,\"sale_erp_code\":\"\(product.saleErpCode)\",\"rateedited\":0,\"retailer_price\":\(product.retailerPrice),\"net_weight\":\(product.newWt),\"free\":\(product.freeCount),\"FreePQty\":\(product.offerAvailableCount),\"FreeP_Code\":\"\(freePCount)\",\"Fname\":\"\(freePName)\",\"discount\":\(product.disCountPer),\"discount_price\":\(product.disCountAmount),\"tax\":\(product.taxper),\"tax_price\":\(product.taxAmount),\"Rate\":\(product.rate),\"Mfg_Date\":\"\",\"cb_qty\":\(clQty),\"RcpaId\":0,\"Ccb_qty\":0,\"PromoVal\":0,\"rx_remarks\":\"\(product.remarks)\",\"rx_remarks_Id\":\"\(product.remarksId)\",\"OrdConv\":\(product.unitCount),\"selectedScheme\":\(scheme),\"selectedOffProCode\":\"\(offerProductCode)\",\"selectedOffProName\":\"\(offerProductName)\",\"selectedOffProUnit\":\"\(product.unitCount)\",\"CompetitorDet\":[\(competitorProductString)],\"f_key\":{\"Activity_MSL_Code\":\"Activity_Doctor_Report\"}},"
+            
+            productString = productString + productStr
+        }
         
         if productString.hasSuffix(","){
             productString.removeLast()
@@ -2123,7 +2206,10 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
         SelectedProductTableView.reloadData()
         self.updateTotalPriceList()
         freeQtyTableView.reloadData()
-        SelectedProductTableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .none, animated: false)
+        if !self.selectedProducts.isEmpty {
+            SelectedProductTableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .none, animated: false)
+        }
+        
     }
     
     
