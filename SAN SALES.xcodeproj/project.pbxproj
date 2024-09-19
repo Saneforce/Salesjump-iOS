@@ -138,6 +138,7 @@
 		3F8BF29D27E99CCA00E1C41B /* CameraService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F8BF29C27E99CCA00E1C41B /* CameraService.swift */; };
 		3F97F9F62831B5950097166D /* AddNewCustomer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F97F9F52831B5950097166D /* AddNewCustomer.swift */; };
 		3F97F9F8283216BD0097166D /* EditTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F97F9F7283216BD0097166D /* EditTextField.swift */; };
+		3F9DBA0B2C9BE44B00BDADDB /* Target vs Sales Analysis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9DBA0A2C9BE44B00BDADDB /* Target vs Sales Analysis.swift */; };
 		3F9F379528593C5A002CC408 /* Reports.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3F9F379428593C5A002CC408 /* Reports.storyboard */; };
 		3F9F379828593C99002CC408 /* DayReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9F379728593C99002CC408 /* DayReport.swift */; };
 		3F9F379A285B5FBA002CC408 /* ReportMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9F3799285B5FBA002CC408 /* ReportMenu.swift */; };
@@ -290,6 +291,7 @@
 		3F8BF29C27E99CCA00E1C41B /* CameraService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraService.swift; sourceTree = "<group>"; };
 		3F97F9F52831B5950097166D /* AddNewCustomer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewCustomer.swift; sourceTree = "<group>"; };
 		3F97F9F7283216BD0097166D /* EditTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTextField.swift; sourceTree = "<group>"; };
+		3F9DBA0A2C9BE44B00BDADDB /* Target vs Sales Analysis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Target vs Sales Analysis.swift"; sourceTree = "<group>"; };
 		3F9F379428593C5A002CC408 /* Reports.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Reports.storyboard; sourceTree = "<group>"; };
 		3F9F379728593C99002CC408 /* DayReport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayReport.swift; sourceTree = "<group>"; };
 		3F9F3799285B5FBA002CC408 /* ReportMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportMenu.swift; sourceTree = "<group>"; };
@@ -609,6 +611,7 @@
 				3F30F82D2C4E5786005EFAD9 /* Expense View SFC.swift */,
 				3F8B98992C594C610073D452 /* SFC Details View.swift */,
 				3F886A112C8EEDEB001F9A39 /* ClosingStockView (DB).swift */,
+				3F9DBA0A2C9BE44B00BDADDB /* Target vs Sales Analysis.swift */,
 			);
 			path = Reports;
 			sourceTree = "<group>";
@@ -854,6 +857,7 @@
 				3F28CC1127DC856400B95964 /* MasterSync.swift in Sources */,
 				3883A09C2A176B6300B858CF /* SubmittedCalls.swift in Sources */,
 				15F450502C2A89AB0074D285 /* MissedDateRouteSelection.swift in Sources */,
+				3F9DBA0B2C9BE44B00BDADDB /* Target vs Sales Analysis.swift in Sources */,
 				1514DF762BD785D900E6B45A /* SuperStockistOrderList.swift in Sources */,
 				3F601F3E2C466499002EF90F /* Daily Expense Entry SFC.swift in Sources */,
 				38F6F5AB2B19D2C2007090BF /* Summary.swift in Sources */,
