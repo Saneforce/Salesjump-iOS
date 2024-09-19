@@ -1982,9 +1982,6 @@ class Expense_approval_SFC: UIViewController, UITableViewDelegate, UITableViewDa
                 }
             }
     }
-    
-    
-    
     @IBAction func Appr_sfc(_ sender: Any) {
   
         let First = ExpenseDetils.first?.date
@@ -2059,6 +2056,4 @@ class Expense_approval_SFC: UIViewController, UITableViewDelegate, UITableViewDa
       
         
         }
-    
-
 }

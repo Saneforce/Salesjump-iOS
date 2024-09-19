@@ -131,12 +131,14 @@
 		3F601F3E2C466499002EF90F /* Daily Expense Entry SFC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F601F3D2C466499002EF90F /* Daily Expense Entry SFC.swift */; };
 		3F619F3C27EAEDC000F3D05F /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F619F3B27EAEDC000F3D05F /* LocationService.swift */; };
 		3F619F3E27EB275000F3D05F /* CLocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F619F3D27EB274F00F3D05F /* CLocationService.swift */; };
+		3F61CA692C9157730029CE01 /* Closing Sale Entry (DB).swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F61CA682C9157730029CE01 /* Closing Sale Entry (DB).swift */; };
 		3F7CCF0328F14CA3002A7C03 /* GEOTagging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7CCF0228F14CA3002A7C03 /* GEOTagging.swift */; };
 		3F886A122C8EEDEB001F9A39 /* ClosingStockView (DB).swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F886A112C8EEDEB001F9A39 /* ClosingStockView (DB).swift */; };
 		3F8B989A2C594C610073D452 /* SFC Details View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F8B98992C594C610073D452 /* SFC Details View.swift */; };
 		3F8BF29D27E99CCA00E1C41B /* CameraService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F8BF29C27E99CCA00E1C41B /* CameraService.swift */; };
 		3F97F9F62831B5950097166D /* AddNewCustomer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F97F9F52831B5950097166D /* AddNewCustomer.swift */; };
 		3F97F9F8283216BD0097166D /* EditTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F97F9F7283216BD0097166D /* EditTextField.swift */; };
+		3F9DBA0B2C9BE44B00BDADDB /* Target vs Sales Analysis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9DBA0A2C9BE44B00BDADDB /* Target vs Sales Analysis.swift */; };
 		3F9F379528593C5A002CC408 /* Reports.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3F9F379428593C5A002CC408 /* Reports.storyboard */; };
 		3F9F379828593C99002CC408 /* DayReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9F379728593C99002CC408 /* DayReport.swift */; };
 		3F9F379A285B5FBA002CC408 /* ReportMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9F3799285B5FBA002CC408 /* ReportMenu.swift */; };
@@ -282,12 +284,14 @@
 		3F601F3D2C466499002EF90F /* Daily Expense Entry SFC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Daily Expense Entry SFC.swift"; sourceTree = "<group>"; };
 		3F619F3B27EAEDC000F3D05F /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
 		3F619F3D27EB274F00F3D05F /* CLocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CLocationService.swift; sourceTree = "<group>"; };
+		3F61CA682C9157730029CE01 /* Closing Sale Entry (DB).swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Closing Sale Entry (DB).swift"; sourceTree = "<group>"; };
 		3F7CCF0228F14CA3002A7C03 /* GEOTagging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GEOTagging.swift; sourceTree = "<group>"; };
 		3F886A112C8EEDEB001F9A39 /* ClosingStockView (DB).swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ClosingStockView (DB).swift"; sourceTree = "<group>"; };
 		3F8B98992C594C610073D452 /* SFC Details View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SFC Details View.swift"; sourceTree = "<group>"; };
 		3F8BF29C27E99CCA00E1C41B /* CameraService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraService.swift; sourceTree = "<group>"; };
 		3F97F9F52831B5950097166D /* AddNewCustomer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewCustomer.swift; sourceTree = "<group>"; };
 		3F97F9F7283216BD0097166D /* EditTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTextField.swift; sourceTree = "<group>"; };
+		3F9DBA0A2C9BE44B00BDADDB /* Target vs Sales Analysis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Target vs Sales Analysis.swift"; sourceTree = "<group>"; };
 		3F9F379428593C5A002CC408 /* Reports.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Reports.storyboard; sourceTree = "<group>"; };
 		3F9F379728593C99002CC408 /* DayReport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayReport.swift; sourceTree = "<group>"; };
 		3F9F3799285B5FBA002CC408 /* ReportMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportMenu.swift; sourceTree = "<group>"; };
@@ -443,7 +447,6 @@
 				38A1859C2BB53D4700E01407 /* Start Expense.swift */,
 				38A1859E2BB53D5D00E01407 /* End Expense.swift */,
 				3FCF2AA72C5B5392000D8070 /* Day End SFC.swift */,
-				3FFC65F62C8EEB7D00CC0690 /* ClosingStockEntry (DB).swift */,
 			);
 			path = Activity;
 			sourceTree = "<group>";
@@ -523,6 +526,7 @@
 				3F0635332841710F0027842E /* Model */,
 				3F063528283A8C720027842E /* Style */,
 				3F0861BD2801D551006A30FB /* CollectionCell */,
+				3F61CA672C91572A0029CE01 /* Closing Entry Activity */,
 				3F14EAE827F73D4500B0997B /* Activity */,
 				3F619F3A27EAED9000F3D05F /* Service */,
 				3FBF387327E4480E00900007 /* Common */,
@@ -576,6 +580,15 @@
 			path = Service;
 			sourceTree = "<group>";
 		};
+		3F61CA672C91572A0029CE01 /* Closing Entry Activity */ = {
+			isa = PBXGroup;
+			children = (
+				3FFC65F62C8EEB7D00CC0690 /* ClosingStockEntry (DB).swift */,
+				3F61CA682C9157730029CE01 /* Closing Sale Entry (DB).swift */,
+			);
+			path = "Closing Entry Activity";
+			sourceTree = "<group>";
+		};
 		3F9F379628593C73002CC408 /* Reports */ = {
 			isa = PBXGroup;
 			children = (
@@ -598,6 +611,7 @@
 				3F30F82D2C4E5786005EFAD9 /* Expense View SFC.swift */,
 				3F8B98992C594C610073D452 /* SFC Details View.swift */,
 				3F886A112C8EEDEB001F9A39 /* ClosingStockView (DB).swift */,
+				3F9DBA0A2C9BE44B00BDADDB /* Target vs Sales Analysis.swift */,
 			);
 			path = Reports;
 			sourceTree = "<group>";
@@ -808,6 +822,7 @@
 				3F886A122C8EEDEB001F9A39 /* ClosingStockView (DB).swift in Sources */,
 				3FBF387527E4488100900007 /* APIClient.swift in Sources */,
 				3F0861BA28001D47006A30FB /* RoundedCornerView.swift in Sources */,
+				3F61CA692C9157730029CE01 /* Closing Sale Entry (DB).swift in Sources */,
 				3F14EAEA27F73DAD00B0997B /* SecondaryVisit.swift in Sources */,
 				381EF93D2B19DB9700CED65F /* UI+Constraints.swift in Sources */,
 				1514DF6D2BD7839D00E6B45A /* CustomAlertVCViewController.swift in Sources */,
@@ -842,6 +857,7 @@
 				3F28CC1127DC856400B95964 /* MasterSync.swift in Sources */,
 				3883A09C2A176B6300B858CF /* SubmittedCalls.swift in Sources */,
 				15F450502C2A89AB0074D285 /* MissedDateRouteSelection.swift in Sources */,
+				3F9DBA0B2C9BE44B00BDADDB /* Target vs Sales Analysis.swift in Sources */,
 				1514DF762BD785D900E6B45A /* SuperStockistOrderList.swift in Sources */,
 				3F601F3E2C466499002EF90F /* Daily Expense Entry SFC.swift in Sources */,
 				38F6F5AB2B19D2C2007090BF /* Summary.swift in Sources */,

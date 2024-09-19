@@ -123,9 +123,7 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         getUserDetails()
         
         
-        if UserSetup.shared.SrtEndKMNd == 2{
-            //DayEnd_SFC()
-        }
+      
         
         
         self.tpMandatoryNeed()
@@ -974,46 +972,6 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
             return
         }
 
-    }
-    
-    func DayEnd_SFC(){
-        let axn = "get/dayendsfc"
-        let apiKey: String = "\(axn)&rSF=\(SFCode)&sfCode=\(SFCode)"
-        AF.request(APIClient.shared.BaseURL + APIClient.shared.DBURL2 + apiKey, method: .post, parameters: nil, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self] AFdata in
-            print(AFdata)
-            switch AFdata.result {
-            case .success(let value):
-                if let json = value as? [AnyObject]{
-                    let dateFormatter = DateFormatter()
-                    dateFormatter.dateFormat = "yyyy-MM-dd"
-                    let currentDate = dateFormatter.string(from: Date())
-                    let Date_Time = json[0]["Date_Time"] as? String ?? ""
-                    let Enddateand_time = json[0]["Enddateand_time"] as? String ?? ""
-                    if currentDate == Date_Time{
-                        if Enddateand_time == ""{
-                            DayEnd.isHidden = false
-                        }else{
-                            DayEnd.isHidden = true
-                        }
-                        
-                    }else{
-                        if Enddateand_time == ""{
-                            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                            let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
-                            let myDyPln = storyboard.instantiateViewController(withIdentifier: "Day_End_SFC") as! Day_End_SFC
-                            myDyPln.Date_Time = Date_Time
-                            viewController.setViewControllers([myDyPln], animated: false)
-                            (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
-                            Toast.show(message:"Please submit past day end missing date(\(Date_Time))", controller: self)
-                        }
-                    }
-                } else {
-                    print("Invalid response format")
-                }
-            case .failure(let error):
-                Toast.show(message: error.errorDescription ?? "", controller: self)
-            }
-        }
     }
     
     func allLoacl(){

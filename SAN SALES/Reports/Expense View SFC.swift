@@ -686,15 +686,9 @@ class Expense_View_SFC: UIViewController, UITableViewDelegate, UITableViewDataSo
     }
     
     func ExpenseReportDetailsSFC(fromdate:String,todate:String){
-        print(ExpenseDetils)
-        print(mgrRouts)
         self.ShowLoading(Message: "Please Wait...")
         ExpenseDetils.removeAll()
         mgrRouts.removeAll()
-        
-        print(ExpenseDetils)
-        print(mgrRouts)
-        
         let apiKey: String = "getExpenseReportDetailsSFC&sf_code=\(SFCode)&division_code=\(DivCode)&from_date=\(fromdate)&to_date=\(todate)&stateCode=\(StateCode)&Design_code=\(UserSetup.shared.dsg_code)&Mn=\(Eff_Month)&Yr=\(Eff_Year)&PriID=\(period_id)"
         let apiKeyWithoutCommas = apiKey.replacingOccurrences(of: ",&", with: "&")
         AF.request(APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKeyWithoutCommas, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]

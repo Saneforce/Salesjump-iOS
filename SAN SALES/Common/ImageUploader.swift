@@ -17,7 +17,7 @@ class ImageUploader {
 
         AF.upload(multipartFormData: { multipartFormData in
             multipartFormData.append(imgData!, withName:"imgfile", fileName:fileName, mimeType:"image/jpg")
-        }, to: APIClient.shared.BaseURL+APIClient.shared.DBURL + "imgupload&sf_code=" + SFCode)
+        }, to: APIClient.shared.BaseURL+APIClient.shared.DBURL1 + "imgupload&sf_code=" + SFCode)
         .uploadProgress { progress in
             print(progress)
         }
@@ -27,14 +27,12 @@ class ImageUploader {
     }
 }
 
-
 class ImageUploade {
     func uploadImage(SFCode: String, image: UIImage, fileName: String, completion: @escaping () -> Void) {
-        let imgData = image.jpegData(compressionQuality: 0.80)
-        
+        let imgData = image.jpegData(compressionQuality: 0.25)
         AF.upload(multipartFormData: { multipartFormData in
             multipartFormData.append(imgData!, withName: "imgfile", fileName: fileName, mimeType: "image/jpg")
-        }, to: "http://fmcg.sanfmcg.com" + APIClient.shared.DBURL + "imgupload&sf_code=" + SFCode)
+        }, to: APIClient.shared.BaseURL+APIClient.shared.DBURL1 + "imgupload&sf_code=" + SFCode)
         .uploadProgress { progress in
             print(progress)
         }

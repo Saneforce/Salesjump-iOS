@@ -171,5 +171,11 @@ class cellListItem:UITableViewCell{
     @IBOutlet weak var Batch_No_Text: UILabel!
     @IBOutlet weak var Date_Entry_Text: UILabel!
     
+    
+    // Target vs Sales Analysis
+    @IBOutlet weak var T_qty: UILabel!
+    @IBOutlet weak var t_val: UILabel!
+    @IBOutlet weak var S_qty: UILabel!
+    @IBOutlet weak var S_val: UILabel!
     var ischeck = false
 }

@@ -75,6 +75,7 @@ class ClosingStockEntry__DB_: IViewController, UICollectionViewDelegate, UIColle
       let img:UIImage
   }
   var Bill_photo_Ned:[Bill_Photo] = []
+  let dispatchGroup = DispatchGroup()
   
   override func viewDidLoad(){
       super.viewDidLoad()
@@ -196,25 +197,23 @@ class ClosingStockEntry__DB_: IViewController, UICollectionViewDelegate, UIColle
       imagePickerController.sourceType = .camera
       present(imagePickerController, animated: true, completion: nil)
       
-//        let imagePickerController = UIImagePickerController()
-//        imagePickerController.delegate = self
-//        imagePickerController.sourceType = .photoLibrary
-//        present(imagePickerController, animated: true, completion: nil)
   }
   
   
-  func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-      if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-        
-              let fileName: String = String(Int(Foundation.Date().timeIntervalSince1970))
-              let filenameno="\(fileName).jpg"
-              Bill_photo_Ned.append(Bill_Photo(imgurl: filenameno, title: "", remarks: "", img: pickedImage))
-              print(Bill_photo_Ned)
-              Photo_List.reloadData()
-          
-      }
-      dismiss(animated: true, completion: nil)
-  }
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            if let compressedImageData = pickedImage.jpegData(compressionQuality: 0.25) {
+                if let compressedImage = UIImage(data: compressedImageData) {
+                    let fileName: String = String(Int(Foundation.Date().timeIntervalSince1970))
+                    let filenameno = "\(fileName).jpg"
+                    
+                    Bill_photo_Ned.append(Bill_Photo(imgurl: filenameno, title: "", remarks: "", img: compressedImage))
+                    Photo_List.reloadData()
+                }
+            }
+        }
+        dismiss(animated: true, completion: nil)
+    }
   func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
       dismiss(animated: true, completion: nil)
   }
@@ -499,8 +498,6 @@ class ClosingStockEntry__DB_: IViewController, UICollectionViewDelegate, UIColle
                   if let json = value as? [AnyObject]{
                       print(json)
                       if !json.isEmpty{
-                        
-                          
                           if let updateDate = json[0]["updateDate"] as? [String:Any]{
   
                               if let date = updateDate["date"] as? String{
@@ -836,25 +833,39 @@ class ClosingStockEntry__DB_: IViewController, UICollectionViewDelegate, UIColle
           Entry_table.isHidden = false
         return
       }
-      save_stockUpdation()
+      
+      self.ShowLoading(Message: "Data Submitting Please wait...")
+      for BillUpload in Bill_photo_Ned {
+          dispatchGroup.enter()
+          ImageUploade().uploadImage(SFCode:"", image: BillUpload.img, fileName: "\(self.SFCode)__\(BillUpload.imgurl)") { [self] in
+              DispatchQueue.main.async {
+                  print("Image Uploaded Successfully")
+              }
+              dispatchGroup.leave()
+          }
+      }
+      dispatchGroup.notify(queue: DispatchQueue.main){
+          print("All images uploaded, proceeding to next step")
+              self.save_stockUpdation()
+      }
+      
+      if Bill_photo_Ned.count == 0{
+          self.save_stockUpdation()
+      }
   }
   
   func save_stockUpdation(){
-      self.ShowLoading(Message: "Data Submitting Please wait...")
-      
+     
       let dateFormatter = DateFormatter()
       dateFormatter.dateFormat = "yyyy-MM-dd"
       let currentDate = Foundation.Date()
       let formattedDate = dateFormatter.string(from: currentDate)
       
-      for BillUpolad in Bill_photo_Ned{
-         // self.ShowLoading(Message: "uploading photos Please wait...")
-          ImageUploader().uploadImage(SFCode: self.SFCode, image: BillUpolad.img, fileName: "__\(BillUpolad.imgurl)")
-      }
+
       
       var Bill_Det = ""
       for B in Bill_photo_Ned {
-          Bill_Det += "{\"imgurl\": \"\(B.imgurl)\","
+          Bill_Det += "{\"imgurl\": \"_\(B.imgurl)\","
           Bill_Det += " \"title\": \"\(B.title)\","
           Bill_Det += " \"remarks\": \"\(B.remarks)\"},"
       }
