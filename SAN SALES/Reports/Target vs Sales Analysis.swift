@@ -7,7 +7,8 @@
 
 import UIKit
 import Alamofire
-class Target_vs_Sales_Analysis: UIViewController, UITableViewDelegate, UITableViewDataSource {
+import Foundation
+class Target_vs_Sales_Analysis: IViewController, UITableViewDelegate, UITableViewDataSource {
  
     @IBOutlet weak var BTback: UIImageView!
     @IBOutlet weak var HQ_View: UIView!
@@ -48,9 +49,7 @@ class Target_vs_Sales_Analysis: UIViewController, UITableViewDelegate, UITableVi
         cardViewInstance.styleSummaryView(HQ_View)
         BTback.addTarget(target: self, action: #selector(GotoHome))
         HQ_View.addTarget(target: self, action: #selector(Vw_open))
-        Vw_Sel.addTarget(target: self, action: #selector(Vw_open))
-        
-        
+       // Vw_Sel.addTarget(target: self, action: #selector(Vw_open))
         
         Detils_TB.delegate = self
         Detils_TB.dataSource = self
@@ -165,14 +164,22 @@ class Target_vs_Sales_Analysis: UIViewController, UITableViewDelegate, UITableVi
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
         if tableView == HQ_TB{
             let item=Hq_Det2[indexPath.row]
-            print(item)
             let name=item.Name
             Hq_name.text = name
+            Hq_Id = item.id
+            TargetSales()
         }
         Vw_Sel.isHidden = true
+        
     }
     
-    
+//    @objc private func hqSelection(){
+//        
+//        let distributorVC = ItemViewController(items: Hq_Det2, configure: { (Cell : SingleSelectionTableViewCell, distributor) in
+//            Cell.textLabel?.text = distributor.Name
+//        })
+//        
+//    }
     
     func TargetSales(){
         self.ShowLoading(Message: "Loading...")
