@@ -839,9 +839,10 @@ class Closing_Sale_Entry__DB_: IViewController, UICollectionViewDelegate, UIColl
            Entry_table.isHidden = false
          return
        }
-       self.ShowLoading(Message: "Data Submitting Please wait...")
+      
        let alert = UIAlertController(title: "Confirmation", message: "Do you want to Submit?", preferredStyle: .alert)
        alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { [self] _ in
+           self.ShowLoading(Message: "Data Submitting Please wait...")
            for BillUpload in Bill_photo_Ned {
                dispatchGroup.enter() // Enter the dispatch group before starting the upload
 

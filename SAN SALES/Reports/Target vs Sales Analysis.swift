@@ -87,7 +87,7 @@ class Target_vs_Sales_Analysis: IViewController, UITableViewDelegate, UITableVie
         
         for i in lstAllProducts{
             print(i)
-            Target_Data.append(Datas(Product: i["Product_Description"] as? String ?? "", T_qty:"0", t_val: "0", S_Qty: "0", S_Val: "0", P_Code: i["id"] as? String ?? ""))
+            Target_Data.append(Datas(Product: i["name"] as? String ?? "", T_qty:"0", t_val: "0", S_Qty: "0", S_Val: "0", P_Code: i["id"] as? String ?? ""))
         }
         TargetSales()
     }
@@ -163,10 +163,15 @@ class Target_vs_Sales_Analysis: IViewController, UITableViewDelegate, UITableVie
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
         if tableView == HQ_TB{
+            Target_Data.removeAll()
             let item=Hq_Det2[indexPath.row]
             let name=item.Name
             Hq_name.text = name
             Hq_Id = item.id
+            for i in lstAllProducts{
+                print(i)
+                Target_Data.append(Datas(Product: i["name"] as? String ?? "", T_qty:"0", t_val: "0", S_Qty: "0", S_Val: "0", P_Code: i["id"] as? String ?? ""))
+            }
             TargetSales()
         }
         Vw_Sel.isHidden = true
