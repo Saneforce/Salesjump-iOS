@@ -61,6 +61,7 @@ class UserSetup{
     var productRemark : Int = 0
     var rateEditable : Int = 0
     var Eligibility_Nd:Int = 0
+    var ClSaleEntryNd:Int = 0
     var hideClosingStockBatch:Int = 0
     var hideClosingStockMfg:Int = 0
     func initUserSetup(){
@@ -114,6 +115,7 @@ class UserSetup{
         ExpDist_HQ = lstSetups[0]["ExpDist_HQ"] as? Int ?? 0
         ExpDist_HQEX = lstSetups[0]["ExpDist_HQEX"] as? Int ?? 0
         Eligibility_Nd = lstSetups[0]["Eligibility_Nd"] as? Int ?? 0
+        ClSaleEntryNd = lstSetups[0]["ClSaleEntryNd"] as? Int ?? 0
         hideClosingStockBatch = lstSetups[0]["hideClosingStockBatch"] as? Int ?? 0 //0-->need,1-->not need
         hideClosingStockMfg = lstSetups[0]["hideClosingStockMfg"] as? Int ?? 0 // 0-->need,1-->not need
         if(lstSetups[0]["Geo_Fencing"] as? Int == 1){
