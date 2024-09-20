@@ -59,12 +59,14 @@ class Target_vs_Sales_Analysis: IViewController, UITableViewDelegate, UITableVie
         if let HQData = LocalStoreage.string(forKey: "HQ_Master"),
            let list = GlobalFunc.convertToDictionary(text:  HQData) as? [AnyObject] {
             for i in list{
-                let name = i["name"] as? String ?? ""
+               let name = i["name"] as? String ?? ""
                 let id = i["id"] as? String ?? ""
-                if let range = name.range(of: "\\(\\s*(\\w+)\\s*\\)", options: .regularExpression) {
+                if let range = name.range(of: "\\(\\s*(\\w+)\\s*\\)", options: .regularExpression){
                     let name = String(name[range])
                     let trimmedName = name.replacingOccurrences(of: "( ", with: "").replacingOccurrences(of: " )", with: "")
                     Hq_Det.append(lst_hq(Name:trimmedName, id:id))
+                }else{
+                    Hq_Det.append(lst_hq(Name:name, id:id))
                 }
             }
             if UserSetup.shared.SF_type == 2{
@@ -72,6 +74,9 @@ class Target_vs_Sales_Analysis: IViewController, UITableViewDelegate, UITableVie
                 Hq_Id = SFCode
                 Hq_name.text = sfName
             }else{
+                if Hq_Det.isEmpty{
+                    Hq_Det.append(lst_hq(Name:sfName, id:SFCode))
+                }
                 Hq_Id = Hq_Det[0].id
                 Hq_name.text = Hq_Det[0].Name
             }
