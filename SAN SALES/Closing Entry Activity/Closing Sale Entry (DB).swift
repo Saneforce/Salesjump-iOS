@@ -796,7 +796,7 @@ class Closing_Sale_Entry__DB_: IViewController, UICollectionViewDelegate, UIColl
            for BillUpload in Bill_photo_Ned {
                dispatchGroup.enter() // Enter the dispatch group before starting the upload
 
-               ImageUploade().uploadImage(SFCode: "", image: BillUpload.img, fileName: "\(self.SFCode)__\(BillUpload.imgurl)") { [self] in
+               ImageUploade().uploadImage(SFCode: "\(self.SFCode)", image: BillUpload.img, fileName: "_\(BillUpload.imgurl)") { [self] in
                    // This code runs after the image upload is complete
                    DispatchQueue.main.async {
                        print("Image Uploaded Successfully")

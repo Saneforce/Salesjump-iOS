@@ -837,7 +837,7 @@ class ClosingStockEntry__DB_: IViewController, UICollectionViewDelegate, UIColle
       self.ShowLoading(Message: "Data Submitting Please wait...")
       for BillUpload in Bill_photo_Ned {
           dispatchGroup.enter()
-          ImageUploade().uploadImage(SFCode:"", image: BillUpload.img, fileName: "\(self.SFCode)__\(BillUpload.imgurl)") { [self] in
+          ImageUploade().uploadImage(SFCode:"\(self.SFCode)", image: BillUpload.img, fileName: "_\(BillUpload.imgurl)") { [self] in
               DispatchQueue.main.async {
                   print("Image Uploaded Successfully")
               }
