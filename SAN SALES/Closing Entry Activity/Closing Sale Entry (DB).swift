@@ -655,12 +655,10 @@ class Closing_Sale_Entry__DB_: IViewController, UICollectionViewDelegate, UIColl
        print(RateItems)
        print(lstRateList)
        if(RateItems.count>0){
-           Rate = (RateItems[0]["Distributor_Price"] as! NSString).doubleValue
-           MRP_Price = (RateItems[0]["MRP_Price"] as! NSString).doubleValue
+           Rate = (RateItems[0]["Distributor_Price"] as? NSString ?? "0").doubleValue
+           MRP_Price = (RateItems[0]["MRP_Price"] as? NSString ?? "0").doubleValue
            print(RateItems)
        }
-       
-       
        let items: [AnyObject] = ProductCart.filter ({(item) in
            print(item)
            if item["product"] as! String == id {
