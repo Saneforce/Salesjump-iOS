@@ -61,10 +61,10 @@ class Target_vs_Sales_Analysis: IViewController, UITableViewDelegate, UITableVie
             for i in list{
                let name = i["name"] as? String ?? ""
                 let id = i["id"] as? String ?? ""
-                if let range = name.range(of: "\\(\\s*(\\w+)\\s*\\)", options: .regularExpression){
-                    let name = String(name[range])
-                    let trimmedName = name.replacingOccurrences(of: "( ", with: "").replacingOccurrences(of: " )", with: "")
-                    Hq_Det.append(lst_hq(Name:trimmedName, id:id))
+                if let range = name.range(of: "\\(.*?\\)", options: .regularExpression) {
+                    let substring = String(name[range])
+                    let droppedString = substring.dropFirst().dropLast()
+                    Hq_Det.append(lst_hq(Name:String(droppedString), id:id))
                 }else{
                     Hq_Det.append(lst_hq(Name:name, id:id))
                 }
@@ -211,7 +211,7 @@ class Target_vs_Sales_Analysis: IViewController, UITableViewDelegate, UITableVie
                         if let index = Target_Data.firstIndex(where: { $0.P_Code == Product_Code }){
                             print("Found at position: \(index)")
                             let tarQty = String(describing: j["tarQty"] as? NSNumber ?? 0)
-                            let target = String(describing: j["target"] as? NSNumber ?? 0)
+                            let target = (j["target"] as? NSNumber)?.stringValue ?? (j["target"] as? String) ?? "0"
                             let Quantity = String(describing: j["Quantity"] as? NSNumber ?? 0)
                             let ord_val = String(describing: j["ord_val"] as? NSNumber ?? 0)
                             Target_Data[index].T_qty = tarQty
@@ -237,6 +237,8 @@ class Target_vs_Sales_Analysis: IViewController, UITableViewDelegate, UITableVie
     
     @objc func Vw_open(){
         Search_Text.text = ""
+        Hq_Det2 = Hq_Det
+        HQ_TB.reloadData()
         Vw_Sel.isHidden = false
     }
     
