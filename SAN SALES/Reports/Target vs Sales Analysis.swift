@@ -18,6 +18,8 @@ class Target_vs_Sales_Analysis: IViewController, UITableViewDelegate, UITableVie
     @IBOutlet weak var Search_Text: UITextField!
     @IBOutlet weak var Hq_name: UILabel!
     
+    @IBOutlet weak var Hq_Hight: NSLayoutConstraint!
+    
     struct Datas:Any{
         var Product:String
         var T_qty:String
@@ -34,6 +36,7 @@ class Target_vs_Sales_Analysis: IViewController, UITableViewDelegate, UITableVie
     var Hq_Det:[lst_hq] = []
     var Hq_Det2:[lst_hq] = []
     var Target_Data:[Datas] = []
+    var All_Target_Data:[Datas] = []
     let cardViewInstance = CardViewdata()
     let LocalStoreage = UserDefaults.standard
     
@@ -79,6 +82,9 @@ class Target_vs_Sales_Analysis: IViewController, UITableViewDelegate, UITableVie
                 }
                 Hq_Id = Hq_Det[0].id
                 Hq_name.text = Hq_Det[0].Name
+                
+                Hq_Hight.constant = 0
+                HQ_View.isHidden = true
             }
             Hq_Det=Hq_Det.sorted { $0.Name.lowercased() < $1.Name.lowercased() }
             Hq_Det2 = Hq_Det
@@ -220,9 +226,10 @@ class Target_vs_Sales_Analysis: IViewController, UITableViewDelegate, UITableVie
                             Target_Data[index].S_Val = ord_val
                         }
                     }
-                    Detils_TB.reloadData()
+                    
                 }
-                
+                All_Target_Data = Target_Data
+                Detils_TB.reloadData()
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                     self.LoadingDismiss()
                 }
@@ -264,4 +271,18 @@ class Target_vs_Sales_Analysis: IViewController, UITableViewDelegate, UITableVie
         }
         HQ_TB.reloadData()
     }
+    
+    @IBAction func ProsearchBytext(_ sender: Any){
+        let txtbx: UITextField = sender as! UITextField
+        if txtbx.text!.isEmpty {
+            Target_Data = All_Target_Data
+        }else{
+            Target_Data = All_Target_Data.filter({(product) in
+                let name: String = product.Product
+                    return name.lowercased().contains(txtbx.text!.lowercased())
+                })
+        }
+        Detils_TB.reloadData()
+    }
+    
 }
