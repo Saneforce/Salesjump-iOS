@@ -7525,9 +7525,26 @@
                                     <constraint firstAttribute="height" constant="40" id="Fpu-9o-cpM"/>
                                 </constraints>
                             </view>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Search" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="RyJ-CK-dsQ">
+                                <rect key="frame" x="10" y="138" width="394" height="40"/>
+                                <color key="backgroundColor" red="0.93725490199999995" green="0.95294117649999999" blue="0.98431372549999996" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="OBn-9S-J55"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <action selector="ProsearchBytext:" destination="odU-5K-FAP" eventType="editingChanged" id="Ud5-F5-A4t"/>
+                                </connections>
+                            </textField>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZoD-ts-AbO">
-                                <rect key="frame" x="0.0" y="140" width="414" height="70"/>
+                                <rect key="frame" x="0.0" y="186" width="414" height="70"/>
                                 <subviews>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gJl-fX-bbV">
+                                        <rect key="frame" x="0.0" y="3" width="414" height="1"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" red="0.81960784310000001" green="0.81960784310000001" blue="0.83921568629999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </view>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Product" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Uv-PP-ZWE">
                                         <rect key="frame" x="8" y="8" width="99" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -7575,7 +7592,7 @@
                                 </constraints>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="UCd-IE-rSO">
-                                <rect key="frame" x="0.0" y="218" width="414" height="658"/>
+                                <rect key="frame" x="0.0" y="264" width="414" height="612"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" rowHeight="70" id="fK3-2Q-Tkq" customClass="cellListItem" customModule="SAN_SALES" customModuleProvider="target">
@@ -7703,15 +7720,19 @@
                             <constraint firstItem="8Ml-hP-ia1" firstAttribute="top" secondItem="wg5-ON-fXq" secondAttribute="bottom" constant="10" id="6ta-k6-iek"/>
                             <constraint firstItem="wg5-ON-fXq" firstAttribute="top" secondItem="QNK-76-fcD" secondAttribute="top" constant="30" id="8Xp-fL-z1H"/>
                             <constraint firstItem="ZoD-ts-AbO" firstAttribute="trailing" secondItem="tS5-FO-gaS" secondAttribute="trailing" id="C9f-sq-Bqd"/>
+                            <constraint firstItem="RyJ-CK-dsQ" firstAttribute="top" secondItem="8Ml-hP-ia1" secondAttribute="bottom" constant="8" symbolic="YES" id="GqR-5N-kgy"/>
                             <constraint firstItem="tS5-FO-gaS" firstAttribute="trailing" secondItem="8Ml-hP-ia1" secondAttribute="trailing" constant="10" id="IBb-DF-Ciw"/>
+                            <constraint firstItem="ZoD-ts-AbO" firstAttribute="top" secondItem="RyJ-CK-dsQ" secondAttribute="bottom" constant="8" id="It7-sY-J7O"/>
+                            <constraint firstItem="RyJ-CK-dsQ" firstAttribute="leading" secondItem="tS5-FO-gaS" secondAttribute="leading" constant="10" id="JHx-3u-Aqr"/>
+                            <constraint firstItem="ZoD-ts-AbO" firstAttribute="top" secondItem="RyJ-CK-dsQ" secondAttribute="bottom" constant="8" id="LDr-3V-YEX"/>
                             <constraint firstItem="wg5-ON-fXq" firstAttribute="leading" secondItem="tS5-FO-gaS" secondAttribute="leading" id="NFF-ny-LjW"/>
                             <constraint firstItem="ZoD-ts-AbO" firstAttribute="leading" secondItem="tS5-FO-gaS" secondAttribute="leading" id="WXV-Ss-lTg"/>
                             <constraint firstItem="UCd-IE-rSO" firstAttribute="trailing" secondItem="tS5-FO-gaS" secondAttribute="trailing" id="ZJK-i1-XOX"/>
+                            <constraint firstItem="RyJ-CK-dsQ" firstAttribute="top" secondItem="8Ml-hP-ia1" secondAttribute="bottom" constant="8" symbolic="YES" id="aZo-qo-QMg"/>
                             <constraint firstAttribute="bottom" secondItem="UCd-IE-rSO" secondAttribute="bottom" constant="20" symbolic="YES" id="bF0-oe-CeN"/>
                             <constraint firstItem="UCd-IE-rSO" firstAttribute="top" secondItem="ZoD-ts-AbO" secondAttribute="bottom" constant="8" symbolic="YES" id="f3a-D5-6rK"/>
                             <constraint firstItem="8Ml-hP-ia1" firstAttribute="leading" secondItem="tS5-FO-gaS" secondAttribute="leading" constant="10" id="mog-b4-9s9"/>
-                            <constraint firstItem="ZoD-ts-AbO" firstAttribute="top" secondItem="8Ml-hP-ia1" secondAttribute="bottom" constant="10" id="mtC-5X-qy3"/>
-                            <constraint firstItem="ZoD-ts-AbO" firstAttribute="top" secondItem="8Ml-hP-ia1" secondAttribute="bottom" constant="10" id="oj7-Q7-A3i"/>
+                            <constraint firstItem="tS5-FO-gaS" firstAttribute="trailing" secondItem="RyJ-CK-dsQ" secondAttribute="trailing" constant="10" id="n5r-0G-7Tx"/>
                             <constraint firstItem="tS5-FO-gaS" firstAttribute="trailing" secondItem="wg5-ON-fXq" secondAttribute="trailing" id="p6o-Kn-Qmu"/>
                             <constraint firstItem="UCd-IE-rSO" firstAttribute="leading" secondItem="tS5-FO-gaS" secondAttribute="leading" id="utm-3w-f6g"/>
                         </constraints>
@@ -7721,6 +7742,7 @@
                         <outlet property="Detils_TB" destination="UCd-IE-rSO" id="gTt-K4-jxb"/>
                         <outlet property="HQ_TB" destination="sWJ-PY-Zkb" id="cFs-ma-4k3"/>
                         <outlet property="HQ_View" destination="8Ml-hP-ia1" id="fTR-oN-roK"/>
+                        <outlet property="Hq_Hight" destination="Fpu-9o-cpM" id="Mi6-95-V7r"/>
                         <outlet property="Hq_name" destination="20x-eY-dzv" id="HWD-bU-Wdm"/>
                         <outlet property="Search_Text" destination="Gqe-6h-MJN" id="OVb-Uw-z1a"/>
                         <outlet property="Vw_Sel" destination="D36-2c-Zad" id="Hic-DB-S4s"/>

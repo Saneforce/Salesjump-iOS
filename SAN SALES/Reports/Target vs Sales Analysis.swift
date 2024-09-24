@@ -18,6 +18,8 @@ class Target_vs_Sales_Analysis: IViewController, UITableViewDelegate, UITableVie
     @IBOutlet weak var Search_Text: UITextField!
     @IBOutlet weak var Hq_name: UILabel!
     
+    @IBOutlet weak var Hq_Hight: NSLayoutConstraint!
+    
     struct Datas:Any{
         var Product:String
         var T_qty:String
@@ -34,6 +36,7 @@ class Target_vs_Sales_Analysis: IViewController, UITableViewDelegate, UITableVie
     var Hq_Det:[lst_hq] = []
     var Hq_Det2:[lst_hq] = []
     var Target_Data:[Datas] = []
+    var All_Target_Data:[Datas] = []
     let cardViewInstance = CardViewdata()
     let LocalStoreage = UserDefaults.standard
     
@@ -59,12 +62,14 @@ class Target_vs_Sales_Analysis: IViewController, UITableViewDelegate, UITableVie
         if let HQData = LocalStoreage.string(forKey: "HQ_Master"),
            let list = GlobalFunc.convertToDictionary(text:  HQData) as? [AnyObject] {
             for i in list{
-                let name = i["name"] as? String ?? ""
+               let name = i["name"] as? String ?? ""
                 let id = i["id"] as? String ?? ""
-                if let range = name.range(of: "\\(\\s*(\\w+)\\s*\\)", options: .regularExpression) {
-                    let name = String(name[range])
-                    let trimmedName = name.replacingOccurrences(of: "( ", with: "").replacingOccurrences(of: " )", with: "")
-                    Hq_Det.append(lst_hq(Name:trimmedName, id:id))
+                if let range = name.range(of: "\\(.*?\\)", options: .regularExpression) {
+                    let substring = String(name[range])
+                    let droppedString = substring.dropFirst().dropLast()
+                    Hq_Det.append(lst_hq(Name:String(droppedString), id:id))
+                }else{
+                    Hq_Det.append(lst_hq(Name:name, id:id))
                 }
             }
             if UserSetup.shared.SF_type == 2{
@@ -72,8 +77,14 @@ class Target_vs_Sales_Analysis: IViewController, UITableViewDelegate, UITableVie
                 Hq_Id = SFCode
                 Hq_name.text = sfName
             }else{
+                if Hq_Det.isEmpty{
+                    Hq_Det.append(lst_hq(Name:sfName, id:SFCode))
+                }
                 Hq_Id = Hq_Det[0].id
                 Hq_name.text = Hq_Det[0].Name
+                
+                Hq_Hight.constant = 0
+                HQ_View.isHidden = true
             }
             Hq_Det=Hq_Det.sorted { $0.Name.lowercased() < $1.Name.lowercased() }
             Hq_Det2 = Hq_Det
@@ -87,7 +98,7 @@ class Target_vs_Sales_Analysis: IViewController, UITableViewDelegate, UITableVie
         
         for i in lstAllProducts{
             print(i)
-            Target_Data.append(Datas(Product: i["Product_Description"] as? String ?? "", T_qty:"0", t_val: "0", S_Qty: "0", S_Val: "0", P_Code: i["id"] as? String ?? ""))
+            Target_Data.append(Datas(Product: i["name"] as? String ?? "", T_qty:"0", t_val: "0", S_Qty: "0", S_Val: "0", P_Code: i["id"] as? String ?? ""))
         }
         TargetSales()
     }
@@ -163,10 +174,15 @@ class Target_vs_Sales_Analysis: IViewController, UITableViewDelegate, UITableVie
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
         if tableView == HQ_TB{
+            Target_Data.removeAll()
             let item=Hq_Det2[indexPath.row]
             let name=item.Name
             Hq_name.text = name
             Hq_Id = item.id
+            for i in lstAllProducts{
+                print(i)
+                Target_Data.append(Datas(Product: i["name"] as? String ?? "", T_qty:"0", t_val: "0", S_Qty: "0", S_Val: "0", P_Code: i["id"] as? String ?? ""))
+            }
             TargetSales()
         }
         Vw_Sel.isHidden = true
@@ -201,7 +217,7 @@ class Target_vs_Sales_Analysis: IViewController, UITableViewDelegate, UITableVie
                         if let index = Target_Data.firstIndex(where: { $0.P_Code == Product_Code }){
                             print("Found at position: \(index)")
                             let tarQty = String(describing: j["tarQty"] as? NSNumber ?? 0)
-                            let target = String(describing: j["target"] as? NSNumber ?? 0)
+                            let target = (j["target"] as? NSNumber)?.stringValue ?? (j["target"] as? String) ?? "0"
                             let Quantity = String(describing: j["Quantity"] as? NSNumber ?? 0)
                             let ord_val = String(describing: j["ord_val"] as? NSNumber ?? 0)
                             Target_Data[index].T_qty = tarQty
@@ -210,9 +226,10 @@ class Target_vs_Sales_Analysis: IViewController, UITableViewDelegate, UITableVie
                             Target_Data[index].S_Val = ord_val
                         }
                     }
-                    Detils_TB.reloadData()
+                    
                 }
-                
+                All_Target_Data = Target_Data
+                Detils_TB.reloadData()
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                     self.LoadingDismiss()
                 }
@@ -227,6 +244,8 @@ class Target_vs_Sales_Analysis: IViewController, UITableViewDelegate, UITableVie
     
     @objc func Vw_open(){
         Search_Text.text = ""
+        Hq_Det2 = Hq_Det
+        HQ_TB.reloadData()
         Vw_Sel.isHidden = false
     }
     
@@ -252,4 +271,18 @@ class Target_vs_Sales_Analysis: IViewController, UITableViewDelegate, UITableVie
         }
         HQ_TB.reloadData()
     }
+    
+    @IBAction func ProsearchBytext(_ sender: Any){
+        let txtbx: UITextField = sender as! UITextField
+        if txtbx.text!.isEmpty {
+            Target_Data = All_Target_Data
+        }else{
+            Target_Data = All_Target_Data.filter({(product) in
+                let name: String = product.Product
+                    return name.lowercased().contains(txtbx.text!.lowercased())
+                })
+        }
+        Detils_TB.reloadData()
+    }
+    
 }

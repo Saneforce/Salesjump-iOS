@@ -246,7 +246,7 @@ class ClosingStockEntry__DB_: IViewController, UICollectionViewDelegate, UIColle
       if selBrand == id {
           cell.vwContent.backgroundColor = UIColor(red: 16/255, green: 173/255, blue: 194/255, alpha: 1)
       }
-      cell.lblText?.text = item["name"] as? String
+      cell.lblText?.text = item["name"] as? String ?? ""
       return cell
   }
   
@@ -327,7 +327,7 @@ class ClosingStockEntry__DB_: IViewController, UICollectionViewDelegate, UIColle
           print(item)
           let id=String(format: "%@", item["id"] as! CVarArg)
           
-          cell.lblText?.text = item["name"] as? String
+          cell.lblText?.text = item["name"] as? String ?? ""
           
           cell.Case_Entry.addTarget(self, action: #selector(self.CaseQty(_:)), for: .editingChanged)
           
@@ -581,7 +581,7 @@ class ClosingStockEntry__DB_: IViewController, UICollectionViewDelegate, UIColle
      }) {
          print(maxItem)
         let sUom = String(format: "%@", maxItem["id"] as! CVarArg)
-        let sUomNm = maxItem["name"] as! String
+        let sUomNm = maxItem["name"] as? String ?? ""
         let sUomConv = String(format: "%@", maxItem["ConQty"] as! CVarArg)
          
          
@@ -613,7 +613,7 @@ class ClosingStockEntry__DB_: IViewController, UICollectionViewDelegate, UIColle
      }) {
          print(maxItem)
         let sUom = String(format: "%@", maxItem["id"] as! CVarArg)
-        let sUomNm = maxItem["name"] as! String
+        let sUomNm = maxItem["name"] as? String ?? ""
         let sUomConv = String(format: "%@", maxItem["ConQty"] as! CVarArg)
          updateQty(id: id, sUom: sUom, sUomNm: sUomNm, sUomConv: sUomConv, sNetUnt: "", sQty: String(sQty), ProdItem: lProdItem, SelMod: "PIC", Text_Data: "",row: indxPath[0],section: indxPath[1])
      }
@@ -644,7 +644,7 @@ class ClosingStockEntry__DB_: IViewController, UICollectionViewDelegate, UIColle
      }) {
          print(maxItem)
         let sUom = String(format: "%@", maxItem["id"] as! CVarArg)
-        let sUomNm = maxItem["name"] as! String
+        let sUomNm = maxItem["name"] as? String ?? ""
         let sUomConv = String(format: "%@", maxItem["ConQty"] as! CVarArg)
          updateQty(id: id, sUom: sUom, sUomNm: sUomNm, sUomConv: sUomConv, sNetUnt: "", sQty: "0", ProdItem: lProdItem, SelMod: "BAT", Text_Data: Batch_Text,row: indxPath[0],section: indxPath[1])
      }
@@ -674,7 +674,7 @@ class ClosingStockEntry__DB_: IViewController, UICollectionViewDelegate, UIColle
      }) {
          print(maxItem)
         let sUom = String(format: "%@", maxItem["id"] as! CVarArg)
-        let sUomNm = maxItem["name"] as! String
+        let sUomNm = maxItem["name"] as? String ?? ""
         let sUomConv = String(format: "%@", maxItem["ConQty"] as! CVarArg)
          updateQty(id: id, sUom: sUom, sUomNm: sUomNm, sUomConv: sUomConv, sNetUnt: "", sQty: "0", ProdItem: lProdItem, SelMod: "DAT", Text_Data:Date_Text,row: indxPath[0],section: indxPath[1])
      }
@@ -697,11 +697,10 @@ class ClosingStockEntry__DB_: IViewController, UICollectionViewDelegate, UIColle
           return false
       })
       if(RateItems.count>0){
-          Rate = (RateItems[0]["Retailor_Price"] as! NSString).doubleValue
-          MRP_Price = (RateItems[0]["MRP_Price"] as! NSString).doubleValue
+          Rate = (RateItems[0]["Retailor_Price"] as? NSString ?? "0").doubleValue
+          MRP_Price = (RateItems[0]["MRP_Price"] as? NSString ?? "0").doubleValue
           print(RateItems)
       }
-      
       
       let items: [AnyObject] = ProductCart.filter ({(item) in
           print(item)
@@ -837,7 +836,7 @@ class ClosingStockEntry__DB_: IViewController, UICollectionViewDelegate, UIColle
       self.ShowLoading(Message: "Data Submitting Please wait...")
       for BillUpload in Bill_photo_Ned {
           dispatchGroup.enter()
-          ImageUploade().uploadImage(SFCode:"", image: BillUpload.img, fileName: "\(self.SFCode)__\(BillUpload.imgurl)") { [self] in
+          ImageUploade().uploadImage(SFCode:"\(self.SFCode)", image: BillUpload.img, fileName: "_\(BillUpload.imgurl)") { [self] in
               DispatchQueue.main.async {
                   print("Image Uploaded Successfully")
               }
