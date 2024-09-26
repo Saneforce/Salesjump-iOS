@@ -564,29 +564,15 @@ class ClosingStockEntry__DB_: IViewController, UICollectionViewDelegate, UIColle
       let indxPath: IndexPath = tbView.indexPath(for: cell)!
       var sQty: Int =  integer(from: txtQty)
       let id: String
+      let OrdConv:String
       let lProdItem:[String: Any]
       lProdItem = lstProducts[indxPath.row] as! [String : Any]
       print(lProdItem)
       id=String(format: "%@", lstProducts[indxPath.row]["id"] as! CVarArg)
-     let lstUnitList = lstAllUnitList.filter({(product) in
-          let ProdId: String = String(format: "%@", product["Product_Code"] as! CVarArg)
-          return Bool(ProdId == id)
-      })
-      print(lstUnitList)
-     if let maxItem = lstUnitList.max(by: {
-         guard let firstQty = $0["ConQty"] as? Int, let secondQty = $1["ConQty"] as? Int else {
-             return false
-         }
-         return firstQty < secondQty
-     }) {
-         print(maxItem)
-        let sUom = String(format: "%@", maxItem["id"] as! CVarArg)
-        let sUomNm = maxItem["name"] as? String ?? ""
-        let sUomConv = String(format: "%@", maxItem["ConQty"] as! CVarArg)
+      OrdConv=String(lstProducts[indxPath.row]["OrdConv"] as? Int ?? 0)
          
-         
-         updateQty(id: id, sUom: sUom, sUomNm: sUomNm, sUomConv: sUomConv, sNetUnt: "", sQty: String(sQty), ProdItem: lProdItem, SelMod: "CAS", Text_Data: "",row: indxPath[0],section: indxPath[1])
-     }
+         updateQty(id: id,sUomConv: OrdConv, sNetUnt: "", sQty: String(sQty), ProdItem: lProdItem, SelMod: "CAS", Text_Data: "",row: indxPath[0],section: indxPath[1])
+     
   }
   
   @objc private func PieceQty(_ txtQty: UITextField){
@@ -596,27 +582,14 @@ class ClosingStockEntry__DB_: IViewController, UICollectionViewDelegate, UIColle
       print(indxPath)
       var sQty: Int =  integer(from: txtQty)
       let id: String
+      let OrdConv:String
       let lProdItem:[String: Any]
       lProdItem = lstProducts[indxPath.row] as! [String : Any]
       print(lProdItem)
       id=String(format: "%@", lstProducts[indxPath.row]["id"] as! CVarArg)
-     let lstUnitList = lstAllUnitList.filter({(product) in
-          let ProdId: String = String(format: "%@", product["Product_Code"] as! CVarArg)
-          return Bool(ProdId == id)
-      })
-      print(lstUnitList)
-     if let maxItem = lstUnitList.max(by: {
-         guard let firstQty = $0["ConQty"] as? Int, let secondQty = $1["ConQty"] as? Int else {
-             return false
-         }
-         return firstQty < secondQty
-     }) {
-         print(maxItem)
-        let sUom = String(format: "%@", maxItem["id"] as! CVarArg)
-        let sUomNm = maxItem["name"] as? String ?? ""
-        let sUomConv = String(format: "%@", maxItem["ConQty"] as! CVarArg)
-         updateQty(id: id, sUom: sUom, sUomNm: sUomNm, sUomConv: sUomConv, sNetUnt: "", sQty: String(sQty), ProdItem: lProdItem, SelMod: "PIC", Text_Data: "",row: indxPath[0],section: indxPath[1])
-     }
+      OrdConv=String(lstProducts[indxPath.row]["OrdConv"] as? Int ?? 0)
+         updateQty(id: id, sUomConv: OrdConv, sNetUnt: "", sQty: String(sQty), ProdItem: lProdItem, SelMod: "PIC", Text_Data: "",row: indxPath[0],section: indxPath[1])
+     
   }
   
   @objc private func Update_Batch_No(_ txtQty: UITextField){
@@ -627,27 +600,14 @@ class ClosingStockEntry__DB_: IViewController, UICollectionViewDelegate, UIColle
       let Batch_Text = string(from: txtQty)
       
       let id: String
+      let OrdConv:String
       let lProdItem:[String: Any]
       lProdItem = lstProducts[indxPath.row] as! [String : Any]
       print(lProdItem)
       id=String(format: "%@", lstProducts[indxPath.row]["id"] as! CVarArg)
-     let lstUnitList = lstAllUnitList.filter({(product) in
-          let ProdId: String = String(format: "%@", product["Product_Code"] as! CVarArg)
-          return Bool(ProdId == id)
-      })
-      print(lstUnitList)
-     if let maxItem = lstUnitList.max(by: {
-         guard let firstQty = $0["ConQty"] as? Int, let secondQty = $1["ConQty"] as? Int else {
-             return false
-         }
-         return firstQty < secondQty
-     }) {
-         print(maxItem)
-        let sUom = String(format: "%@", maxItem["id"] as! CVarArg)
-        let sUomNm = maxItem["name"] as? String ?? ""
-        let sUomConv = String(format: "%@", maxItem["ConQty"] as! CVarArg)
-         updateQty(id: id, sUom: sUom, sUomNm: sUomNm, sUomConv: sUomConv, sNetUnt: "", sQty: "0", ProdItem: lProdItem, SelMod: "BAT", Text_Data: Batch_Text,row: indxPath[0],section: indxPath[1])
-     }
+      OrdConv=String(lstProducts[indxPath.row]["OrdConv"] as? Int ?? 0)
+         updateQty(id: id,sUomConv: OrdConv, sNetUnt: "", sQty: "0", ProdItem: lProdItem, SelMod: "BAT", Text_Data: Batch_Text,row: indxPath[0],section: indxPath[1])
+     
       
   }
   
@@ -657,31 +617,18 @@ class ClosingStockEntry__DB_: IViewController, UICollectionViewDelegate, UIColle
       let indxPath: IndexPath = tbView.indexPath(for: cell)!
       let Date_Text = string(from: txtQty)
       let id: String
+      let OrdConv:String
       let lProdItem:[String: Any]
       lProdItem = lstProducts[indxPath.row] as! [String : Any]
       print(lProdItem)
       id=String(format: "%@", lstProducts[indxPath.row]["id"] as! CVarArg)
-     let lstUnitList = lstAllUnitList.filter({(product) in
-          let ProdId: String = String(format: "%@", product["Product_Code"] as! CVarArg)
-          return Bool(ProdId == id)
-      })
-      print(lstUnitList)
-     if let maxItem = lstUnitList.max(by: {
-         guard let firstQty = $0["ConQty"] as? Int, let secondQty = $1["ConQty"] as? Int else {
-             return false
-         }
-         return firstQty < secondQty
-     }) {
-         print(maxItem)
-        let sUom = String(format: "%@", maxItem["id"] as! CVarArg)
-        let sUomNm = maxItem["name"] as? String ?? ""
-        let sUomConv = String(format: "%@", maxItem["ConQty"] as! CVarArg)
-         updateQty(id: id, sUom: sUom, sUomNm: sUomNm, sUomConv: sUomConv, sNetUnt: "", sQty: "0", ProdItem: lProdItem, SelMod: "DAT", Text_Data:Date_Text,row: indxPath[0],section: indxPath[1])
-     }
+      OrdConv=String(lstProducts[indxPath.row]["OrdConv"] as? Int ?? 0)
+         updateQty(id: id, sUomConv: OrdConv, sNetUnt: "", sQty: "0", ProdItem: lProdItem, SelMod: "DAT", Text_Data:Date_Text,row: indxPath[0],section: indxPath[1])
+     
   }
   
   
-  func updateQty(id: String,sUom: String,sUomNm: String,sUomConv: String,sNetUnt: String,sQty: String,ProdItem:[String: Any],SelMod:String,Text_Data:String,row:Int,section:Int){
+  func updateQty(id: String,sUomConv: String,sNetUnt: String,sQty: String,ProdItem:[String: Any],SelMod:String,Text_Data:String,row:Int,section:Int){
       
       print(row)
       print(section)
@@ -696,8 +643,9 @@ class ClosingStockEntry__DB_: IViewController, UICollectionViewDelegate, UIColle
           }
           return false
       })
+      
       if(RateItems.count>0){
-          Rate = (RateItems[0]["Retailor_Price"] as? NSString ?? "0").doubleValue
+          Rate = (RateItems[0]["DistCasePrice"] as? NSString ?? "0").doubleValue
           MRP_Price = (RateItems[0]["MRP_Price"] as? NSString ?? "0").doubleValue
           print(RateItems)
       }
