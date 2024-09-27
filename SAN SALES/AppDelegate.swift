@@ -6,6 +6,9 @@
 //
 
 import UIKit
+import AWSS3
+import AWSCore
+import AWSCognito
 
 @main
 
@@ -17,7 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         
         //declare this inside of viewWillAppear
         NetworkMonitor.Shared.startMonitoring()
-        
+        self.initializeS3()
         return true
     }
 
@@ -34,4 +37,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
     }
+    func initializeS3(){
+          let poolId = "ap-south-1:c4c0fc81-118d-43e3-84cf-051f1bd831b9"
+          let credentialsProvider = AWSCognitoCredentialsProvider(regionType: .APSouth1, identityPoolId: poolId)
+        let configuration = AWSServiceConfiguration(region: .APSouth1, credentialsProvider: credentialsProvider)
+          AWSServiceManager.default().defaultServiceConfiguration = configuration
+}
+    
 }

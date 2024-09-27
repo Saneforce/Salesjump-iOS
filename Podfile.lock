@@ -1,5 +1,10 @@
 PODS:
   - Alamofire (5.8.0)
+  - AWSCognito (2.19.1):
+    - AWSCore (= 2.19.1)
+  - AWSCore (2.19.1)
+  - AWSS3 (2.19.1):
+    - AWSCore (= 2.19.1)
   - Charts (4.1.0):
     - Charts/Core (= 4.1.0)
   - Charts/Core (4.1.0):
@@ -10,6 +15,9 @@ PODS:
 
 DEPENDENCIES:
   - Alamofire
+  - AWSCognito
+  - AWSCore
+  - AWSS3
   - Charts
   - FSCalendar
   - Parchment
@@ -17,6 +25,9 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - Alamofire
+    - AWSCognito
+    - AWSCore
+    - AWSS3
     - Charts
     - FSCalendar
     - Parchment
@@ -24,11 +35,14 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   Alamofire: 0e92e751b3e9e66d7982db43919d01f313b8eb91
+  AWSCognito: f50de600804941d083af37a7568905f31a774727
+  AWSCore: 55c154ae27efc5c98bdc30a0eeea5a35d10a2ab5
+  AWSS3: 2272253b098d07803af8dd20ce6ce7302bcffb47
   Charts: ce0768268078eee0336f122c3c4ca248e4e204c5
   FSCalendar: 2d1d0d9398f12d439f55c1fe0f01525b151b8260
   Parchment: a43c440b22c8a60f7e0196b74339446d4d1d18ea
   SwiftAlgorithms: 38dda4731d19027fdeee1125f973111bf3386b53
 
-PODFILE CHECKSUM: ff989bc87147ed71399f0a21c9aca013098fe088
+PODFILE CHECKSUM: db850a6bbea50cc557cbe066085b7c5afbb6cf1f
 
 COCOAPODS: 1.15.2

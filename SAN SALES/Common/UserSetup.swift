@@ -64,6 +64,7 @@ class UserSetup{
     var ClSaleEntryNd:Int = 0
     var hideClosingStockBatch:Int = 0
     var hideClosingStockMfg:Int = 0
+    var Logo_Name:String = ""
     func initUserSetup(){
         let SetupStoreage = UserDefaults.standard
         let SetupData: String=SetupStoreage.string(forKey: "UserSetup")!
@@ -118,6 +119,7 @@ class UserSetup{
         ClSaleEntryNd = lstSetups[0]["ClSaleEntryNd"] as? Int ?? 0
         hideClosingStockBatch = lstSetups[0]["hideClosingStockBatch"] as? Int ?? 0 //0-->need,1-->not need
         hideClosingStockMfg = lstSetups[0]["hideClosingStockMfg"] as? Int ?? 0 // 0-->need,1-->not need
+        Logo_Name = lstSetups[0]["Logo_Name"] as? String ?? "iOSFile"
         if(lstSetups[0]["Geo_Fencing"] as? Int == 1){
             Fenching = true
         }else{
