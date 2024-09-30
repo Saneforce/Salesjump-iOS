@@ -13,7 +13,8 @@ class ImageUploader {
     func uploadImage(SFCode: String,image: UIImage,fileName: String)
     {
         
-//         let imgData = image.jpegData(compressionQuality: 0.80)
+         let imgData = image.jpegData(compressionQuality: 0.80)
+        let compressedImage = UIImage(data: imgData!)
 //
 //        AF.upload(multipartFormData: { multipartFormData in
 //            multipartFormData.append(imgData!, withName:"imgfile", fileName:fileName, mimeType:"image/jpg")
@@ -26,7 +27,7 @@ class ImageUploader {
 //        }
         
         //New Code
-        AWSS3Manager.shared.uploadImage(image: image, progress: {[weak self] ( uploadProgress) in
+        AWSS3Manager.shared.uploadImage(FileName: SFCode+fileName, image: compressedImage!, progress: {[weak self] ( uploadProgress) in
             
             guard let strongSelf = self else { return }
             
@@ -45,7 +46,8 @@ class ImageUploader {
 
 class ImageUploade {
     func uploadImage(SFCode: String, image: UIImage, fileName: String, completion: @escaping () -> Void) {
-        let imgData = image.jpegData(compressionQuality: 0.25)
+        let imgData = image.jpegData(compressionQuality: 0.70)
+        let compressedImage = UIImage(data: imgData!)
 //        AF.upload(multipartFormData: { multipartFormData in
 //            multipartFormData.append(imgData!, withName: "imgfile", fileName: fileName, mimeType: "image/jpg")
 //        }, to: APIClient.shared.BaseURL+APIClient.shared.DBURL1 + "imgupload&sf_code=" + SFCode)
@@ -58,21 +60,20 @@ class ImageUploade {
 //        }
         
         //New Code
-        AWSS3Manager.shared.uploadImage(image: image, progress: {[weak self] ( uploadProgress) in
-            
-            guard let strongSelf = self else { return }
-            
-        }) {[weak self] (uploadedFileUrl, error) in
-            
-            guard let strongSelf = self else { return }
-            if let finalPath = uploadedFileUrl as? String {
-                print(finalPath)
-                completion()
-            } else {
-                print("\(String(describing: error?.localizedDescription))")
+        AWSS3Manager.shared.uploadImage(FileName: SFCode+fileName, image: compressedImage!, progress: { uploadProgress in
+                print("Upload progress: \(uploadProgress)")
+            }) { (uploadedFileUrl, error) in
+                if let error = error {
+                    print("Error uploading image: \(error.localizedDescription)")
+                    completion()
+                    return
+                }
+                if let finalPath = uploadedFileUrl as? String {
+                    print("Uploaded file URL: \(finalPath)")
+                } else {
+                    print("Uploaded file URL is nil or invalid")
+                }
                 completion()
             }
-        }
-        
     }
 }
