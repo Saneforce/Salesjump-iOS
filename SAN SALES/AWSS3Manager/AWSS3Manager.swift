@@ -22,7 +22,7 @@ class AWSS3Manager {
    // let bucketName = "happic"
     let bucketName = "salesjump"
     
-    func uploadImage(image: UIImage, progress: progressBlock?, completion: completionBlock?) {
+    func uploadImage(FileName:String,image: UIImage, progress: progressBlock?, completion: completionBlock?) {
         
         guard let imageData = image.jpegData(compressionQuality: 1.0) else {
             let error = NSError(domain:"", code:402, userInfo:[NSLocalizedDescriptionKey: "invalid image"])
@@ -31,7 +31,8 @@ class AWSS3Manager {
         }
         
         let tmpPath = NSTemporaryDirectory() as String
-        let fileName: String = ProcessInfo.processInfo.globallyUniqueString + (".jpg")
+       // let fileName: String = ProcessInfo.processInfo.globallyUniqueString + (".jpg")
+        let fileName: String = FileName
         let filePath = tmpPath + "/" + fileName
         let fileUrl = URL(fileURLWithPath: filePath)
         
