@@ -172,7 +172,11 @@ import BackgroundTasks
             "tableName":"Mas_RCPA","coloumns":"[\"sf_code as id\",\"sf_name as name\"]","orderBy":"[\"name asc\"]","desig":"mgr"
          ]))
          
-  //   http://fmcg.salesjump.in/server/native_Db_V13.php?axn=get%2FMas_RCPA&divisionCode=29%2C&rSF=MR4126&sfCode=MR4126&State_Code=24&desig=MR&appVer=7.6
+         strMasList.append(mnuItem.init(MasId: 32, MasName: "Retailer Rate", MasImage: "mnuPrimary",StoreKey: "Retailer_Rate", ApiKey: "get/RetailerwiseRate&divisionCode="+(prettyJsonData["divisionCode"] as? String ?? "")+"&rSF="+SFCode+"&sfCode="+SFCode+"&State_Code="+StateCode+"&desig="+desigCode,fromData: [
+            "orderBy":"[\"name asc\"]","desig":"mgr"
+         ]))
+         
+         
 
          btnClearData.addTarget(target: self, action: #selector(clearAllData))
          btnSyncAll.addTarget(target: self, action: #selector(callAllApi))

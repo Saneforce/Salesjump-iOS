@@ -74,14 +74,17 @@ class CustomAlertVCViewController: UIViewController {
             stackView.spacing = 8
             
             let lblScheme = UILabel()
-            lblScheme.text = "Scheme : \(scheme.scheme)"
+            
+            let schemeType = scheme.schemeType == "Q" ? "Qty" : "₹"
+            lblScheme.text = "Scheme : \(scheme.scheme) \(schemeType)"
             labelFree.textColor = .black
             labelFree.textAlignment = .left
             labelFree.numberOfLines = 0
             labelFree.font = UIFont.systemFont(ofSize: 16)
             
             let lblDicount = UILabel()
-            lblDicount.text = "Discount : \(scheme.disCountPer)%"
+            let discountType = scheme.schemeType == "Q" ? "\(scheme.disCountPer) %" : " \(scheme.disCountValue) ₹"
+            lblDicount.text = "Discount : \(discountType)"
             labelFree.textColor = .black
             labelFree.textAlignment = .left
             labelFree.numberOfLines = 0

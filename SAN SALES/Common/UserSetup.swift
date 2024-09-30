@@ -65,6 +65,7 @@ class UserSetup{
     var ClSaleEntryNd:Int = 0
     var hideClosingStockBatch:Int = 0
     var hideClosingStockMfg:Int = 0
+    var productCard : String = ""
     func initUserSetup(){
         let SetupStoreage = UserDefaults.standard
         let SetupData: String=SetupStoreage.string(forKey: "UserSetup")!
@@ -113,6 +114,7 @@ class UserSetup{
         clFilter = lstSetups[0]["Cl_Filter"] as? String ?? ""
         productRemark = lstSetups[0]["Product_Remark"] as? Int ?? 0
         productRCPA = lstSetups[0]["Product_RCPA"] as? String ?? ""
+        productCard = lstSetups[0]["Prod_Card"] as? String ?? ""
         rateEditable = lstSetups[0]["RateEditable"] as? Int ?? 0
         ExpDist_HQ = lstSetups[0]["ExpDist_HQ"] as? Int ?? 0
         ExpDist_HQEX = lstSetups[0]["ExpDist_HQEX"] as? Int ?? 0
