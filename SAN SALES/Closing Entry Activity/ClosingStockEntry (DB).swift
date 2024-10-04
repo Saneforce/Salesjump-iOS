@@ -645,7 +645,7 @@ class ClosingStockEntry__DB_: IViewController, UICollectionViewDelegate, UIColle
       })
       
       if(RateItems.count>0){
-          Rate = (RateItems[0]["DistCasePrice"] as? NSString ?? "0").doubleValue
+          Rate = (RateItems[0]["Distributor_Price"] as? NSString ?? "0").doubleValue
           MRP_Price = (RateItems[0]["MRP_Price"] as? NSString ?? "0").doubleValue
           print(RateItems)
       }
