@@ -301,6 +301,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         let item: [String: Any]=lstBrands[indexPath.row] as! [String : Any]
         selBrand=String(format: "%@", item["id"] as! CVarArg)
         cell.vwContent.backgroundColor = UIColor(red: 16/255, green: 173/255, blue: 194/255, alpha: 1)
+            print(lstProducts)
         lstProducts = lstAllProducts.filter({(product) in
             let CatId: String = String(format: "%@", product["cateid"] as! CVarArg)
             return Bool(CatId == selBrand)
@@ -310,7 +311,7 @@ class SecondaryOrder: IViewController, UITableViewDelegate, UITableViewDataSourc
         }else{
             collectionView.reloadItems(at: [pCatIndexPath,indexPath])
         }*/
-            
+           print(lstProducts)
         pCatIndexPath = indexPath
         tbProduct.reloadData()
         collectionView.reloadData()
