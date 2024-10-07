@@ -146,6 +146,8 @@
 		3F9F379C28631F2C002CC408 /* layBranswsSal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9F379B28631F2C002CC408 /* layBranswsSal.swift */; };
 		3FBF387527E4488100900007 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FBF387427E4488100900007 /* APIClient.swift */; };
 		3FBF387727E4AA8300900007 /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FBF387627E4AA8300900007 /* Toast.swift */; };
+		3FC32E552CB3A6310092449B /* ClosingStockEntry (SS).swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC32E542CB3A6310092449B /* ClosingStockEntry (SS).swift */; };
+		3FC32E572CB3F2A90092449B /* ClosingStockView (SS).swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC32E562CB3F2A90092449B /* ClosingStockView (SS).swift */; };
 		3FCF2AA82C5B5392000D8070 /* Day End SFC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FCF2AA72C5B5392000D8070 /* Day End SFC.swift */; };
 		3FEA6C312CA6E1A200F1EC2C /* AWSS3Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FEA6C302CA6E1A200F1EC2C /* AWSS3Manager.swift */; };
 		3FEA6C332CA6E1CD00F1EC2C /* AWSS3_Download_Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FEA6C322CA6E1CD00F1EC2C /* AWSS3_Download_Manager.swift */; };
@@ -302,6 +304,8 @@
 		3F9F379B28631F2C002CC408 /* layBranswsSal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = layBranswsSal.swift; sourceTree = "<group>"; };
 		3FBF387427E4488100900007 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
 		3FBF387627E4AA8300900007 /* Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
+		3FC32E542CB3A6310092449B /* ClosingStockEntry (SS).swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ClosingStockEntry (SS).swift"; sourceTree = "<group>"; };
+		3FC32E562CB3F2A90092449B /* ClosingStockView (SS).swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ClosingStockView (SS).swift"; sourceTree = "<group>"; };
 		3FCF2AA72C5B5392000D8070 /* Day End SFC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Day End SFC.swift"; sourceTree = "<group>"; };
 		3FEA6C302CA6E1A200F1EC2C /* AWSS3Manager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AWSS3Manager.swift; sourceTree = "<group>"; };
 		3FEA6C322CA6E1CD00F1EC2C /* AWSS3_Download_Manager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AWSS3_Download_Manager.swift; sourceTree = "<group>"; };
@@ -593,6 +597,7 @@
 			children = (
 				3FFC65F62C8EEB7D00CC0690 /* ClosingStockEntry (DB).swift */,
 				3F61CA682C9157730029CE01 /* Closing Sale Entry (DB).swift */,
+				3FC32E542CB3A6310092449B /* ClosingStockEntry (SS).swift */,
 			);
 			path = "Closing Entry Activity";
 			sourceTree = "<group>";
@@ -620,6 +625,7 @@
 				3F8B98992C594C610073D452 /* SFC Details View.swift */,
 				3F886A112C8EEDEB001F9A39 /* ClosingStockView (DB).swift */,
 				3F9DBA0A2C9BE44B00BDADDB /* Target vs Sales Analysis.swift */,
+				3FC32E562CB3F2A90092449B /* ClosingStockView (SS).swift */,
 			);
 			path = Reports;
 			sourceTree = "<group>";
@@ -838,6 +844,7 @@
 				3F8B989A2C594C610073D452 /* SFC Details View.swift in Sources */,
 				3F886A122C8EEDEB001F9A39 /* ClosingStockView (DB).swift in Sources */,
 				3FBF387527E4488100900007 /* APIClient.swift in Sources */,
+				3FC32E572CB3F2A90092449B /* ClosingStockView (SS).swift in Sources */,
 				3F0861BA28001D47006A30FB /* RoundedCornerView.swift in Sources */,
 				3F61CA692C9157730029CE01 /* Closing Sale Entry (DB).swift in Sources */,
 				3F14EAEA27F73DAD00B0997B /* SecondaryVisit.swift in Sources */,
@@ -907,6 +914,7 @@
 				38F6F5AF2B19D2ED007090BF /* Location.swift in Sources */,
 				3F2F810B27CEB30C0015E1CA /* AppDelegate.swift in Sources */,
 				38A1859F2BB53D5D00E01407 /* End Expense.swift in Sources */,
+				3FC32E552CB3A6310092449B /* ClosingStockEntry (SS).swift in Sources */,
 				159095222BF1E954001D8347 /* TourPlanViewDateWise.swift in Sources */,
 				382103F52BA16B83005C02CD /* Expense Entry.swift in Sources */,
 				3F063530283E04580027842E /* PrimaryVisit.swift in Sources */,

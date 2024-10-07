@@ -150,13 +150,12 @@ class AWSS3Manager {
     }
 
     private func uploadfile(fileUrl: URL, fileName: String, contenType: String, progress: progressBlock?, completion: completionBlock?) {
-        
         // MARK: - upload dynamic path
         //var path = "iosuploadsMani/images"
         let path =  UserSetup.shared.Logo_Name
         let fullFileName = (path.isEmpty ? "" : "\(path)/") + fileName
         
-        // Upload progress block
+        // MARK: -  Upload progress block
         let expression = AWSS3TransferUtilityUploadExpression()
         expression.progressBlock = {(task, awsProgress) in
             guard let uploadProgress = progress else { return }
@@ -164,7 +163,7 @@ class AWSS3Manager {
                 uploadProgress(awsProgress.fractionCompleted)
             }
         }
-        // Completion block
+        // MARK: -  Completion block
         var completionHandler: AWSS3TransferUtilityUploadCompletionHandlerBlock?
         completionHandler = { (task, error) -> Void in
             DispatchQueue.main.async(execute: {
