@@ -2,7 +2,7 @@
 //  ClosingStockView (DB).swift
 //  SAN SALES
 //
-//  Created by Anbu j on 09/09/24.
+//  Created by Mani V on 09/09/24.
 //
 
 import UIKit

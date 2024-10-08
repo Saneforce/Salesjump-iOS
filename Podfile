@@ -10,6 +10,9 @@ target 'SAN SALES' do
   pod 'FSCalendar'
   pod 'Parchment' # Add this line to include the Parchment pod
   pod 'Charts'
+  pod 'AWSS3'
+  pod 'AWSCognito'
+  pod 'AWSCore'
 end
 
 post_install do |installer|
