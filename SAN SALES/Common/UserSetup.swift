@@ -120,6 +120,7 @@ class UserSetup{
         hideClosingStockBatch = lstSetups[0]["hideClosingStockBatch"] as? Int ?? 0 //0-->need,1-->not need
         hideClosingStockMfg = lstSetups[0]["hideClosingStockMfg"] as? Int ?? 0 // 0-->need,1-->not need
         Logo_Name = lstSetups[0]["Logo_Name"] as? String ?? "iOSFile"
+        
         if(lstSetups[0]["Geo_Fencing"] as? Int == 1){
             Fenching = true
         }else{
