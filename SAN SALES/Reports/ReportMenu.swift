@@ -53,8 +53,10 @@ class ReportMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
         strMasList.append(mnuItem.init(MasId: 8, MasName: "Rejected Leave Details", MasImage: "SwitchRoute"))
         strMasList.append(mnuItem.init(MasId: 9, MasName: "Closing Stock View (DB)", MasImage: "SwitchRoute"))
         strMasList.append(mnuItem.init(MasId: 10, MasName: "Target vs Sales Analysis", MasImage: "SwitchRoute"))
-      //  strMasList.append(mnuItem.init(MasId: 11, MasName: "Closing Stock View (SS)", MasImage: "SwitchRoute"))
-        
+        if (UserSetup.shared.CL_SS_ND == 1){
+            strMasList.append(mnuItem.init(MasId: 11, MasName: "Closing Stock View (SS)", MasImage: "SwitchRoute"))
+        }
+        strMasList.append(mnuItem.init(MasId: 12, MasName: "Order Details", MasImage: "SwitchRoute"))
         btnBack.addTarget(target: self, action: #selector(closeMenuWin))
         menuClose.addTarget(target: self, action: #selector(closeMenuWin))
         tbMenuDetail.delegate=self
@@ -89,6 +91,7 @@ class ReportMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
         let lItm: mnuItem=strMasList[indexPath.row]
         self.dismiss(animated: true, completion: nil)
         let storyboard = UIStoryboard(name: "Reports", bundle: nil)
+        let storyboard2 = UIStoryboard(name: "Reports 2", bundle: nil)
         let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
         if lItm.MasId == 1 {
             
@@ -167,6 +170,12 @@ class ReportMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
         }else if lItm.MasId == 11{
             let RptMnuVc = storyboard.instantiateViewController(withIdentifier: "sbReportsmnu") as! ReportMenu
             let attenReportVC = storyboard.instantiateViewController(withIdentifier: "ClosingStockView__SS_") as! ClosingStockView__SS_
+            
+             viewController.setViewControllers([RptMnuVc,attenReportVC], animated: false)
+             (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
+        }else if lItm.MasId == 12{
+            let RptMnuVc = storyboard.instantiateViewController(withIdentifier: "sbReportsmnu") as! ReportMenu
+            let attenReportVC = storyboard2.instantiateViewController(withIdentifier: "Order_Details") as! Order_Details
             
              viewController.setViewControllers([RptMnuVc,attenReportVC], animated: false)
              (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)

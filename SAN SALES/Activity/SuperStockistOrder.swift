@@ -52,6 +52,7 @@ class SuperStockistOrder : IViewController {
         
         if let stockistList = GlobalFunc.convertToDictionary(text: stockistDatas) as? [AnyObject] {
             lstSuperStockist = stockistList
+            print(lstSuperStockist)
         }
         
     }

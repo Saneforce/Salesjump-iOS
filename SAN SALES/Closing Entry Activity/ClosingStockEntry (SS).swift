@@ -63,7 +63,7 @@ class ClosingStockEntry__SS_: IViewController, UICollectionViewDelegate, UIColle
   var ProductCart: [AnyObject] = []
   var editable:Int = 0
   var update_Save:Int = 0
-  var Scode:Int = 0
+  var Scode:String = ""
   var Hq_Id:String = ""
   var lAllObjSel: [AnyObject] = []
   struct Bill_Photo:Any{
@@ -84,9 +84,9 @@ class ClosingStockEntry__SS_: IViewController, UICollectionViewDelegate, UIColle
       let formattedDate = dateFormatter.string(from: currentDate)
       Date.text = formattedDate
       
-      StkCap.text = UserSetup.shared.StkCap
-      Stk_name.text = "\(UserSetup.shared.StkCap) Name:"
-      Select_Stockist.text = "Select \(UserSetup.shared.StkCap)"
+      StkCap.text = "Super Stockist"
+      Stk_name.text = "Super Stockist Name:"
+      Select_Stockist.text = "Select Super Stockist"
       cardViewInstance.styleSummaryView(Date_View)
       cardViewInstance.styleSummaryView(Hq_View)
       cardViewInstance.styleSummaryView(Stockist_View)
@@ -100,7 +100,7 @@ class ClosingStockEntry__SS_: IViewController, UICollectionViewDelegate, UIColle
       
       self.Add_Photo.tintColor = .white
       
-      if let DistData = LocalStoreage.string(forKey: "Distributors_Master_"+SFCode),
+      if let DistData = LocalStoreage.string(forKey: "Supplier_Master_"+SFCode),
          let list = GlobalFunc.convertToDictionary(text:  DistData) as? [AnyObject] {
           lstDist = list;
           print(lstDist)
@@ -117,10 +117,11 @@ class ClosingStockEntry__SS_: IViewController, UICollectionViewDelegate, UIColle
               
               self.ShowLoading(Message: "       Sync Data Please wait...")
               GlobalFunc.FieldMasterSync(SFCode: Hq_Id){ [self] in
-                      if let DistData = LocalStoreage.string(forKey: "Distributors_Master_" + Hq_Id) {
+                      if let DistData = LocalStoreage.string(forKey: "Supplier_Master_" + SFCode) {
                           if let list = GlobalFunc.convertToDictionary(text: DistData) as? [AnyObject] {
                               lstAllDis = list
                               lstDis = list
+                              print(lstDis)
                           }
                       }
                   self.LoadingDismiss()
@@ -410,28 +411,26 @@ class ClosingStockEntry__SS_: IViewController, UICollectionViewDelegate, UIColle
               
               Hq_Id = Hq_Select_ID
               Select_HQ.text = name
-              Select_Stockist.text = "Select \(UserSetup.shared.StkCap)"
-              Scode = 0
+              Select_Stockist.text = "Select Super Stockist"
+              Scode = ""
               Collection_View_category.isHidden = true
               Entry_table.isHidden = true
               Count_Update.text = "0"
               Save_Bt.setTitle("Save", for: .normal)
               self.ShowLoading(Message: "Sync Data Please wait...")
               GlobalFunc.FieldMasterSync(SFCode: Hq_Select_ID){ [self] in
-                      if let DistData = LocalStoreage.string(forKey: "Distributors_Master_" + Hq_Select_ID) {
+                      if let DistData = LocalStoreage.string(forKey: "Supplier_Master_" + SFCode) {
                           if let list = GlobalFunc.convertToDictionary(text: DistData) as? [AnyObject] {
                               lstAllDis = list
                               lstDis = list
-                              print(lstAllDis)
                           }
                       }
-                  
                   self.LoadingDismiss()
               }
           }else if SelMode == "DIS"{
               Select_Stockist.text = name
               Stockist_Name.text = name
-              Scode = item["id"] as? Int ?? 0
+              Scode = item["id"] as? String ?? ""
               Edit_Data{ [self] success in
                   if success {
                       if editable == 1{
@@ -486,7 +485,7 @@ class ClosingStockEntry__SS_: IViewController, UICollectionViewDelegate, UIColle
       let formattedDate = dateFormatter.string(from: currentDate)
       print(formattedDate)
       
-          let axn = "get/currentStock"
+          let axn = "get/currentStockSS"
           let apiKey: String = "\(axn)&State_Code=\(StateCode)&divisionCode=\(DivCode)&scode=\(Scode)&rSF=\(SFCode)&cldt=\(formattedDate)&sfCode=\(Hq_Id)&stateCode=\(StateCode)"
           AF.request(APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKey, method: .post, parameters: nil, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self] AFdata in
               print(AFdata)
@@ -826,8 +825,6 @@ class ClosingStockEntry__SS_: IViewController, UICollectionViewDelegate, UIColle
       
       var sPItems:String = ""
       for item in self.ProductCart{
-          print(item)
-          
           sPItems = sPItems + "{\"product\":\""+(item["product"] as! String)+"\", \"product_Nm\":\""+(item["product_Nm"] as! String)+"\","
           sPItems = sPItems + " \"recv_qty\":" + (String(format: "%.0f", item["recv_qty"] as! Double)) + ","
           sPItems = sPItems + " \"cb_qty\": " + (String(format: "%.0f", item["cb_qty"] as! Double)) + ","
@@ -847,12 +844,11 @@ class ClosingStockEntry__SS_: IViewController, UICollectionViewDelegate, UIColle
           sPItems2 = sPItems
       }
       
-      let jsonString = "[{\"stockUpdation\":[" + sPItems2 + "]},{\"Activity_Event_Captures\":[" + Bill_Det + "]}]"
+      let jsonString = "[{\"stockUpdationSSNative\":[" + sPItems2 + "]},{\"Activity_Event_Captures\":[" + Bill_Det + "]}]"
       
       let params: Parameters = [
           "data": jsonString
       ]
-      
       print(params)
       let axn = "dcr/save"
       let apiKey: String = "\(axn)&State_Code=\(StateCode)&desig=\(UserSetup.shared.Desig)&divisionCode=\(DivCode)&sCode=\(Scode)&rSF=\(SFCode)&editable=\(editable)&sfCode=\(Hq_Id)&stateCode=\(StateCode)&Selectdate=\(formattedDate)"
@@ -896,8 +892,8 @@ class ClosingStockEntry__SS_: IViewController, UICollectionViewDelegate, UIColle
           Toast.show(message: "Select the Headquarter", controller: self)
           return false
       }
-      if  Scode == 0 {
-          Toast.show(message: "Select the \(UserSetup.shared.StkCap)", controller: self)
+      if  Scode == "" {
+          Toast.show(message: "Select the Super Stockist", controller: self)
           return false
       }
       
@@ -924,8 +920,8 @@ class ClosingStockEntry__SS_: IViewController, UICollectionViewDelegate, UIColle
           Toast.show(message: "Select the Headquarter", controller: self)
           return
       }
-      if  Scode == 0 {
-          Toast.show(message: "Select the \(UserSetup.shared.StkCap)", controller: self)
+      if  Scode == "" {
+          Toast.show(message: "Select the Super Stockist", controller: self)
           return
       }
       
@@ -960,7 +956,7 @@ class ClosingStockEntry__SS_: IViewController, UICollectionViewDelegate, UIColle
       }
       SelMode = "DIS"
       lObjSel = lstDis
-      self.Tit_lbl.text = "Select the \(UserSetup.shared.StkCap)"
+      self.Tit_lbl.text = "Select the Super Stockist"
       self.txSearchSel.text = ""
       sel_table_view.reloadData()
       Vw_Sel.isHidden = false
@@ -1001,8 +997,8 @@ class ClosingStockEntry__SS_: IViewController, UICollectionViewDelegate, UIColle
           Pro_txSearchSel.text = ""
           return
       }
-      if  Scode == 0 {
-          Toast.show(message: "Select the \(UserSetup.shared.StkCap)", controller: self)
+      if  Scode == "" {
+          Toast.show(message: "Select the Super Stockist", controller: self)
           Pro_txSearchSel.text = ""
           return
       }

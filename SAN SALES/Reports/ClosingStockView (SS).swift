@@ -43,7 +43,7 @@ class ClosingStockView__SS_:  IViewController, FSCalendarDelegate, FSCalendarDat
     var SFCode: String=""
     var DivCode: String=""
     var StateCode: String = ""
-    var Scode:Int = 0
+    var Scode:String = ""
     var Hq_Id:String = ""
     var Calender_Select_Date:String = ""
     var Total_val:Double = 0.0
@@ -71,8 +71,8 @@ class ClosingStockView__SS_:  IViewController, FSCalendarDelegate, FSCalendarDat
         let formattedDate = dateFormatter.string(from: currentDate)
         Date.text = formattedDate
         
-        StkCap.text = UserSetup.shared.StkCap
-        Select_Stockist.text = "Select \(UserSetup.shared.StkCap)"
+        StkCap.text = "Super Stockist"
+        Select_Stockist.text = "Select Super Stockist"
         
         BTback.addTarget(target: self, action: #selector(GotoHome))
         Select_HQ.addTarget(target: self, action: #selector(Vw_open))
@@ -102,7 +102,7 @@ class ClosingStockView__SS_:  IViewController, FSCalendarDelegate, FSCalendarDat
                 
                 self.ShowLoading(Message: "       Sync Data Please wait...")
                 GlobalFunc.FieldMasterSync(SFCode: Hq_Id){ [self] in
-                        if let DistData = LocalStoreage.string(forKey: "Distributors_Master_" + Hq_Id) {
+                        if let DistData = LocalStoreage.string(forKey: "Supplier_Master_" + SFCode) {
                             if let list = GlobalFunc.convertToDictionary(text: DistData) as? [AnyObject] {
                                 lstAllDis = list
                                 lstDis = list
@@ -113,10 +113,9 @@ class ClosingStockView__SS_:  IViewController, FSCalendarDelegate, FSCalendarDat
             }
         }
         
-        if let DistData = LocalStoreage.string(forKey: "Distributors_Master_"+SFCode),
+        if let DistData = LocalStoreage.string(forKey: "Supplier_Master_"+SFCode),
            let list = GlobalFunc.convertToDictionary(text:  DistData) as? [AnyObject] {
             lstDist = list;
-            print(lstDist)
         }
     }
     
@@ -208,8 +207,8 @@ class ClosingStockView__SS_:  IViewController, FSCalendarDelegate, FSCalendarDat
                     Vw_Sel.isHidden = true
                     return
                 }
-                Select_Stockist.text = "Select \(UserSetup.shared.StkCap)"
-                Scode = 0
+                Select_Stockist.text = "Select Super Stockist"
+                Scode = ""
                 Hq_Id = Hq_Select_ID
                 Select_HQ.text = name
                 Total_Amt.text = "0.00"
@@ -218,7 +217,7 @@ class ClosingStockView__SS_:  IViewController, FSCalendarDelegate, FSCalendarDat
                 Update_Date.text = "Last Updation :"
                 self.ShowLoading(Message: "       Sync Data Please wait...")
                 GlobalFunc.FieldMasterSync(SFCode: Hq_Select_ID){ [self] in
-                        if let DistData = LocalStoreage.string(forKey: "Distributors_Master_" + Hq_Select_ID) {
+                        if let DistData = LocalStoreage.string(forKey: "Supplier_Master_" + SFCode) {
                             if let list = GlobalFunc.convertToDictionary(text: DistData) as? [AnyObject] {
                                 lstAllDis = list
                                 lstDis = list
@@ -231,7 +230,7 @@ class ClosingStockView__SS_:  IViewController, FSCalendarDelegate, FSCalendarDat
             }else if SelMode == "DIS"{
                 Select_Stockist.text = name
                 Stockist_Name.text = name
-                Scode = item["id"] as? Int ?? 0
+                Scode = item["id"] as? String ?? ""
                 View_Data()
             }
         }
@@ -244,7 +243,7 @@ class ClosingStockView__SS_:  IViewController, FSCalendarDelegate, FSCalendarDat
             Toast.show(message: "Select the Headquarter", controller: self)
             return
         }
-        if  Scode == 0 {
+        if  Scode == "" {
             Toast.show(message: "Select the Stockist", controller: self)
             return
         }
@@ -252,13 +251,12 @@ class ClosingStockView__SS_:  IViewController, FSCalendarDelegate, FSCalendarDat
         self.ShowLoading(Message: "Loading...")
         Total_val = 0.0
         Detils_Data.removeAll()
-        
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
         let currentDate = Foundation.Date()
         let formattedDate = dateFormatter.string(from: currentDate)
         print(formattedDate)
-        let axn = "get/StockDetails"
+        let axn = "get/StockDetailsSS"
         let apiKey: String = "\(axn)&State_Code=\(StateCode)&divisionCode=\(DivCode)&scode=\(Scode)&rSF=\(SFCode)&cldt=\(Calender_Select_Date)&sfCode=\(Hq_Id)&stateCode=\(StateCode)"
         AF.request(APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKey, method: .post, parameters: nil, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self] AFdata in
             print(AFdata)
@@ -349,7 +347,7 @@ class ClosingStockView__SS_:  IViewController, FSCalendarDelegate, FSCalendarDat
             Toast.show(message: "Select the Headquarter", controller: self)
             return
         }
-        self.Tit_lbl.text = "Select the \(UserSetup.shared.StkCap)"
+        self.Tit_lbl.text = "Select the Super Stockist"
         SelMode = "DIS"
         lObjSel = lstDis
         self.txSearchSel.text = ""
