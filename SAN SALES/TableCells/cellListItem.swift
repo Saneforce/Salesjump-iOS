@@ -177,5 +177,8 @@ class cellListItem:UITableViewCell{
     @IBOutlet weak var t_val: UILabel!
     @IBOutlet weak var S_qty: UILabel!
     @IBOutlet weak var S_val: UILabel!
+    
+    
+    
     var ischeck = false
 }

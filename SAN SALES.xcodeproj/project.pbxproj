@@ -151,6 +151,7 @@
 		3FC32E552CB3A6310092449B /* ClosingStockEntry (SS).swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC32E542CB3A6310092449B /* ClosingStockEntry (SS).swift */; };
 		3FC32E572CB3F2A90092449B /* ClosingStockView (SS).swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC32E562CB3F2A90092449B /* ClosingStockView (SS).swift */; };
 		3FCF2AA82C5B5392000D8070 /* Day End SFC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FCF2AA72C5B5392000D8070 /* Day End SFC.swift */; };
+		3FD090FC2CBE32F20087CEEB /* Order Details TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD090FB2CBE32F20087CEEB /* Order Details TableViewCell.swift */; };
 		3FEA6C312CA6E1A200F1EC2C /* AWSS3Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FEA6C302CA6E1A200F1EC2C /* AWSS3Manager.swift */; };
 		3FEA6C332CA6E1CD00F1EC2C /* AWSS3_Download_Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FEA6C322CA6E1CD00F1EC2C /* AWSS3_Download_Manager.swift */; };
 		3FF57C1D286C4A76009E3FE5 /* RptVisitDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF57C1C286C4A76009E3FE5 /* RptVisitDetail.swift */; };
@@ -311,6 +312,7 @@
 		3FC32E542CB3A6310092449B /* ClosingStockEntry (SS).swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ClosingStockEntry (SS).swift"; sourceTree = "<group>"; };
 		3FC32E562CB3F2A90092449B /* ClosingStockView (SS).swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ClosingStockView (SS).swift"; sourceTree = "<group>"; };
 		3FCF2AA72C5B5392000D8070 /* Day End SFC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Day End SFC.swift"; sourceTree = "<group>"; };
+		3FD090FB2CBE32F20087CEEB /* Order Details TableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Order Details TableViewCell.swift"; sourceTree = "<group>"; };
 		3FEA6C302CA6E1A200F1EC2C /* AWSS3Manager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AWSS3Manager.swift; sourceTree = "<group>"; };
 		3FEA6C322CA6E1CD00F1EC2C /* AWSS3_Download_Manager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AWSS3_Download_Manager.swift; sourceTree = "<group>"; };
 		3FF57C1C286C4A76009E3FE5 /* RptVisitDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RptVisitDetail.swift; sourceTree = "<group>"; };
@@ -631,7 +633,7 @@
 				3F886A112C8EEDEB001F9A39 /* ClosingStockView (DB).swift */,
 				3F9DBA0A2C9BE44B00BDADDB /* Target vs Sales Analysis.swift */,
 				3FC32E562CB3F2A90092449B /* ClosingStockView (SS).swift */,
-				3F0E5AA92CB64B7300C97D83 /* Order Details.swift */,
+				3FD090FA2CBE32850087CEEB /* Oreder details */,
 			);
 			path = Reports;
 			sourceTree = "<group>";
@@ -648,6 +650,15 @@
 				3F5B2FC2284B59E400574D7C /* MsgLoader.swift */,
 			);
 			path = Common;
+			sourceTree = "<group>";
+		};
+		3FD090FA2CBE32850087CEEB /* Oreder details */ = {
+			isa = PBXGroup;
+			children = (
+				3F0E5AA92CB64B7300C97D83 /* Order Details.swift */,
+				3FD090FB2CBE32F20087CEEB /* Order Details TableViewCell.swift */,
+			);
+			path = "Oreder details";
 			sourceTree = "<group>";
 		};
 		3FEA6C2F2CA6E18300F1EC2C /* AWSS3Manager */ = {
@@ -902,6 +913,7 @@
 				155F39752BEA5FED0096139B /* ItemMultipleSelectionViewController.swift in Sources */,
 				3F0861C12802B4F5006A30FB /* VisitData.swift in Sources */,
 				3F5B297A28894AB3002D226C /* GradientView.swift in Sources */,
+				3FD090FC2CBE32F20087CEEB /* Order Details TableViewCell.swift in Sources */,
 				15C4B3192BECAA6B001ACBF4 /* RejectReasonViewController.swift in Sources */,
 				15AB213E2C799F4C004437A6 /* RateEditViewController.swift in Sources */,
 				3F063532283F5FEF0027842E /* PrimaryOrder.swift in Sources */,

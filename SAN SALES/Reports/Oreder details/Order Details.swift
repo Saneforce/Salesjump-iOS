@@ -52,9 +52,15 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell:cellListItem = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
-        return cell
-    }
+           let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! Order_Details_TableViewCell
+           if tableView == HQ_and_Route_TB {
+               cell.insideTable1Data = ["Item 1", "Item 2", "Item 3","Item 1", "Item 2", "Item 3","Item 1", "Item 2", "Item 3"]
+               //cell.insideTable2Data = ["Mani", "Sivagami", "Madhan 2", "Arun 3"]
+               cell.reloadData() // Reload inside tables
+               
+           }
+           return cell
+       }
     
     @objc private func GotoHome() {
         let storyboard = UIStoryboard(name: "Reports", bundle: nil)
