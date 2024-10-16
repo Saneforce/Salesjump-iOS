@@ -13,6 +13,8 @@ class Order_Details_TableViewCell: UITableViewCell, UITableViewDataSource, UITab
     @IBOutlet weak var insideTable1: UITableView!
     var insideTable1Data: [String] = []
     
+    @IBOutlet weak var Tbale2_height: NSLayoutConstraint!
+    
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -21,6 +23,7 @@ class Order_Details_TableViewCell: UITableViewCell, UITableViewDataSource, UITab
         insideTable1.register(UITableViewCell.self, forCellReuseIdentifier: "InnerCell")
         insideTable1.dataSource = self
         insideTable1.delegate = self
+        Tbale2_height.constant = 50
         
     }
     
