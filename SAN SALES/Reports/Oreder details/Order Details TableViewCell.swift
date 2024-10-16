@@ -35,35 +35,19 @@ class Order_Details_TableViewCell: UITableViewCell, UITableViewDataSource, UITab
     
     @IBOutlet weak var Remark: UILabel!
     
-    
-    
-    @IBOutlet weak var Product_Name: UILabel!
-    @IBOutlet weak var Qty: UILabel!
-    @IBOutlet weak var Free: UILabel!
-    
     override func awakeFromNib() {
         super.awakeFromNib()
-        
-        // Set up insideTable1 (the outer table)
         insideTable1.register(UITableViewCell.self, forCellReuseIdentifier: "InnerCell")
         insideTable1.dataSource = self
         insideTable1.delegate = self
-        print(Tbale2_height.constant)
-    
-       // View_height.constant = 0
-            Tbale2_height.constant = 150
-        
-        print(Tbale2_height.constant)
-        
+        Tbale2_height.constant = 150
     }
     
-    // DataSource for the outer table (insideTable1)
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         print(insideTable1Data)
             return insideTable1Data.count
     }
 
-    // Cell creation for both tables
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
             let cell = tableView.dequeueReusableCell(withIdentifier: "InnerCell", for: indexPath)
         let flg = insideTable1Data[indexPath.row].Routeflg
@@ -72,21 +56,23 @@ class Order_Details_TableViewCell: UITableViewCell, UITableViewDataSource, UITab
         }else{
             View_height.constant = 0
         }
-        
             return cell
-       
     }
 
-    // Delegate method for height
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 44.0
+        return 44
     }
     
-    // Reload Data method for the outer table
     func reloadData() {
         insideTable1.reloadData()
     }
 }
 
 
+
+class Item_summary_TB:UITableViewCell{
+    @IBOutlet weak var Product_Name: UILabel!
+    @IBOutlet weak var Qty: UILabel!
+    @IBOutlet weak var Free: UILabel!
+}
 

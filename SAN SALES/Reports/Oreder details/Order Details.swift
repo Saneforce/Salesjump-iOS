@@ -178,7 +178,7 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if Item_Summary_table == tableView {
-            return 100
+            return 30
         }
         return 500
     }
@@ -188,7 +188,7 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
         for i in Orderdata{
             count = count + i.Orderdata.count
         }
-        Table_height.constant = CGFloat(Oredrdatadetisl.count * 557)
+        Table_height.constant = CGFloat(Oredrdatadetisl.count * 520)
         Scroll_height .constant = Table_height.constant + 100
         
         
@@ -199,8 +199,9 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-           let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! Order_Details_TableViewCell
+        
            if tableView == HQ_and_Route_TB {
+               let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! Order_Details_TableViewCell
                cell.Route_name.text = Oredrdatadetisl[indexPath.row].Route
                cell.Stockets_Name.text = Oredrdatadetisl[indexPath.row].Stockist
                cell.Store_Name_with_order_No.text = Oredrdatadetisl[indexPath.row].name + "(\(Oredrdatadetisl[indexPath.row].nameid))"
@@ -211,12 +212,15 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
                cell.Remark.text =  Oredrdatadetisl[indexPath.row].Remarks
                cell.insideTable1Data = [Oredrdatadetisl[indexPath.row]]
                cell.reloadData()
+               return cell
            }else{
-               cell.Product_Name.text = "Test"
-               cell.Qty.text = "test qty"
-               cell.Free.text = "test free"
+               let cellS = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! Item_summary_TB
+               cellS.Product_Name.text = "Test"
+               cellS.Qty.text = "test qty"
+               cellS.Free.text = "test free"
+               return cellS
            }
-           return cell
+          
        }
     
     @objc private func GotoHome() {
