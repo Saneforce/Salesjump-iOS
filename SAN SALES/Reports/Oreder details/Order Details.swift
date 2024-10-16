@@ -18,9 +18,11 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
     @IBOutlet weak var Date_View: UIView!
     
     @IBOutlet weak var HQ_and_Route_TB: UITableView!
+    @IBOutlet weak var Scroll_height: NSLayoutConstraint!
+    @IBOutlet weak var Table_height: NSLayoutConstraint!
     
+    @IBOutlet weak var Item_Summary_table: UITableView!
     
-   
     struct Id:Any{
         var id:String
         var Stkid:String
@@ -29,6 +31,7 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
     struct OrderDetail:Any{
         var id:String
         var Route:String
+        var Routeflg:String
         var Stockist:String
         var name:String
         var nameid:String
@@ -43,8 +46,8 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
         var Cash_Discount:String
         var Orderlist:[String:Any]
     }
-        var Orderdata:[Id] = []
-    
+    var Orderdata:[Id] = []
+    var Oredrdatadetisl:[OrderDetail] = []
     let cardViewInstance = CardViewdata()
     var SFCode: String=""
     var DivCode: String=""
@@ -58,8 +61,9 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
         BTback.addTarget(target: self, action: #selector(GotoHome))
         HQ_and_Route_TB.dataSource = self
         HQ_and_Route_TB.delegate = self
-        
-       // OrderDayReport()
+        Item_Summary_table.dataSource = self
+        Item_Summary_table.delegate = self
+        OrderDayReport()
     }
     
     func getUserDetails(){
@@ -131,15 +135,20 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
                                     }){
                                       print(i)
                                         var Detils:[String:Any]=["":3]
-                                        Orderdata[i].Orderdata.append(OrderDetail(id: id, Route: Route, Stockist: Stockist, name: name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "3", Tax: "0", Scheme_Discount: "", Cash_Discount: "", Orderlist: Detils))
+                                        Orderdata[i].Orderdata.append(OrderDetail(id: id, Route: Route, Routeflg: "0", Stockist: Stockist, name: name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "3", Tax: "0", Scheme_Discount: "", Cash_Discount: "", Orderlist: Detils))
+                                        
+                                        Oredrdatadetisl.append(OrderDetail(id: id, Route: Route, Routeflg: "0", Stockist: Stockist, name: name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "3", Tax: "0", Scheme_Discount: "", Cash_Discount: "", Orderlist: Detils))
 
                                     }else{
                                         var Detils:[String:Any]=["":3]
-                                        Orderdata.append(Id(id: id, Stkid: Stkid, Orderdata: [OrderDetail(id: id, Route: Route, Stockist: Stockist, name: name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "3", Tax: "0", Scheme_Discount: "", Cash_Discount: "", Orderlist: Detils)]))
+                                        Orderdata.append(Id(id: id, Stkid: Stkid, Orderdata: [OrderDetail(id: id, Route: Route, Routeflg: "1", Stockist: Stockist, name: name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "3", Tax: "0", Scheme_Discount: "", Cash_Discount: "", Orderlist: Detils)]))
+                                        
+                                        Oredrdatadetisl.append(OrderDetail(id: id, Route: Route, Routeflg: "1", Stockist: Stockist, name: name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "3", Tax: "0", Scheme_Discount: "", Cash_Discount: "", Orderlist: Detils))
                                     }
                                 }
                                 
                                 print(Orderdata)
+                                HQ_and_Route_TB.reloadData()
                             }
                             
                             
@@ -168,20 +177,44 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
     
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if Item_Summary_table == tableView {
+            return 100
+        }
         return 500
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
+        var count = 0
+        for i in Orderdata{
+            count = count + i.Orderdata.count
+        }
+        Table_height.constant = CGFloat(Oredrdatadetisl.count * 557)
+        Scroll_height .constant = Table_height.constant + 100
+        
+        
+        if Item_Summary_table == tableView{
+            return 5
+        }
+        return Oredrdatadetisl.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
            let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! Order_Details_TableViewCell
            if tableView == HQ_and_Route_TB {
-               cell.insideTable1Data = ["Item 1", "Item 2", "Item 3","Item 1", "Item 2", "Item 3","Item 1", "Item 2", "Item 3"]
-               //cell.insideTable2Data = ["Mani", "Sivagami", "Madhan 2", "Arun 3"]
-               cell.reloadData() // Reload inside tables
-               
+               cell.Route_name.text = Oredrdatadetisl[indexPath.row].Route
+               cell.Stockets_Name.text = Oredrdatadetisl[indexPath.row].Stockist
+               cell.Store_Name_with_order_No.text = Oredrdatadetisl[indexPath.row].name + "(\(Oredrdatadetisl[indexPath.row].nameid))"
+               cell.Addres.text = Oredrdatadetisl[indexPath.row].Adress
+               cell.Volumes.text = "Volumes: \(Oredrdatadetisl[indexPath.row].Volumes)"
+               cell.Phone.text = "Phone:"+Oredrdatadetisl[indexPath.row].Phone
+               cell.Netamt.text = Oredrdatadetisl[indexPath.row].Net_amount
+               cell.Remark.text =  Oredrdatadetisl[indexPath.row].Remarks
+               cell.insideTable1Data = [Oredrdatadetisl[indexPath.row]]
+               cell.reloadData()
+           }else{
+               cell.Product_Name.text = "Test"
+               cell.Qty.text = "test qty"
+               cell.Free.text = "test free"
            }
            return cell
        }
