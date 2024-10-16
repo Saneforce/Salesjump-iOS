@@ -7,17 +7,47 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "995F9BB3-9292-4F54-932B-53B36D406081"
+            uuid = "7B07D86E-A53F-4383-8475-812FB74813E4"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "SAN SALES/Reports/Oreder details/Order_Details_TableViewCell2.swift"
+            filePath = "SAN SALES/Reports/Oreder details/Order Details.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "37"
-            endingLineNumber = "37"
-            landmarkName = "reloadData()"
+            startingLineNumber = "142"
+            endingLineNumber = "142"
+            landmarkName = "OrderDayReport()"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "7B07D86E-A53F-4383-8475-812FB74813E4 - 41818549b3dba530"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.Order_Details.OrderDayReport() -&gt; ()"
+                  moduleName = "SAN SALES"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/anbuj/Documents/Ios%20Project/Salesjump-iOS/SAN%20SALES/Reports/Oreder%20details/Order%20Details.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "144"
+                  endingLineNumber = "144">
+               </Location>
+               <Location
+                  uuid = "7B07D86E-A53F-4383-8475-812FB74813E4 - 41818549b3dba6fe"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in SAN_SALES.Order_Details.OrderDayReport() -&gt; ()"
+                  moduleName = "SAN SALES"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/anbuj/Documents/Ios%20Project/Salesjump-iOS/SAN%20SALES/Reports/Oreder%20details/Order%20Details.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "142"
+                  endingLineNumber = "142">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
