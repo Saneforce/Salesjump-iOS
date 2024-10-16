@@ -59,7 +59,7 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
         HQ_and_Route_TB.dataSource = self
         HQ_and_Route_TB.delegate = self
         
-        OrderDayReport()
+       // OrderDayReport()
     }
     
     func getUserDetails(){
