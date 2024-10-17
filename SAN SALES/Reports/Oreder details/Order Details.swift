@@ -57,7 +57,7 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
         var Tax:String
         var Scheme_Discount:String
         var Cash_Discount:String
-        var Orderlist:[AnyObject]
+        var Orderlist:[OrderItemModel]
     }
     var Orderdata:[Id] = []
     var Oredrdatadetisl:[OrderDetail] = []
@@ -67,6 +67,22 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
     var StateCode: String = ""
     let LocalStoreage = UserDefaults.standard
     var ProductDetils: [AnyObject] = []
+    
+    struct OrderItemModel {
+        let productName: String
+        let rateValue: Double
+        let qtyValue: Double
+        let freeValue: Double
+        let discValue: Double
+        let totalValue: Double
+        let taxValue: Double
+        let clValue: Int
+        let uomName: String
+        let eQtyValue: Double
+        let litersVal: Double
+        let freeProductName: String
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         getUserDetails()
@@ -183,26 +199,29 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
                                         return false
                                     }){
                                       print(i)
-                                        ProductDetils.removeAll()
-                                        var Detils:[String:Any]=["Product_Name":"Product Name","Rate":"Rate","Qty":"Qty","CL":"CL","Free":"Free","Disc":"Disc","Tax":"Tax","Value":"Value","UOM":"UOM","uomQty":"Qty","Price":"Price","UomFree":"Free","UomDisc":"Disc","UomTax":"Tax","UomTotal":"Total"]
+                                        print(j)
+                                        let products = j["products"] as? String ?? ""
+                                                  let productArray = products.split(separator: ",").map { String($0) }
+                                           print(productArray)
+                                        let taxArray: [String]? = ["0.0", "0.0."]
+                                       let itemList = parseProducts(products, taxArray: taxArray)
+                                        Orderdata[i].Orderdata.append(OrderDetail(id: id, Route: Route, Routeflg: "0", Stockist: Stockist, name: name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "3", Tax: "0", Scheme_Discount: "", Cash_Discount: "", Orderlist: itemList))
                                         
-                                        let jitm: AnyObject = Detils as AnyObject
-                                        ProductDetils.append(jitm)
-                                        Orderdata[i].Orderdata.append(OrderDetail(id: id, Route: Route, Routeflg: "0", Stockist: Stockist, name: name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "3", Tax: "0", Scheme_Discount: "", Cash_Discount: "", Orderlist: ProductDetils))
-                                        
-                                        Oredrdatadetisl.append(OrderDetail(id: id, Route: Route, Routeflg: "0", Stockist: Stockist, name: name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "3", Tax: "0", Scheme_Discount: "", Cash_Discount: "", Orderlist: ProductDetils))
+                                        Oredrdatadetisl.append(OrderDetail(id: id, Route: Route, Routeflg: "0", Stockist: Stockist, name: name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "3", Tax: "0", Scheme_Discount: "", Cash_Discount: "", Orderlist: itemList))
 
                                     }else{
-                                        ProductDetils.removeAll()
                                         
-                                        var Detils:[String:Any]=["Product_Name":"Product Name","Rate":"Rate","Qty":"Qty","CL":"CL","Free":"Free","Disc":"Disc","Tax":"Tax","Value":"Value","UOM":"UOM","uomQty":"Qty","Price":"Price","UomFree":"Free","UomDisc":"Disc","UomTax":"Tax","UomTotal":"Total"]
+                                        let products = j["products"] as? String ?? ""
+                                        let productArray = products.split(separator: ",").map { String($0) }
+                                        print(productArray)
+                                        let taxArray: [String]? = ["0.0", "0.0."]
+
+                                        let itemList = parseProducts(products, taxArray: taxArray)
+                                        print(itemList)
                                         
-                                        let jitm: AnyObject = Detils as AnyObject
-                                        ProductDetils.append(jitm)
+                                        Orderdata.append(Id(id: id, Stkid: Stkid, Orderdata: [OrderDetail(id: id, Route: Route, Routeflg: "1", Stockist: Stockist, name: name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "3", Tax: "0", Scheme_Discount: "", Cash_Discount: "", Orderlist: itemList)]))
                                         
-                                        Orderdata.append(Id(id: id, Stkid: Stkid, Orderdata: [OrderDetail(id: id, Route: Route, Routeflg: "1", Stockist: Stockist, name: name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "3", Tax: "0", Scheme_Discount: "", Cash_Discount: "", Orderlist: ProductDetils)]))
-                                        
-                                        Oredrdatadetisl.append(OrderDetail(id: id, Route: Route, Routeflg: "1", Stockist: Stockist, name: name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "3", Tax: "0", Scheme_Discount: "", Cash_Discount: "", Orderlist: ProductDetils))
+                                        Oredrdatadetisl.append(OrderDetail(id: id, Route: Route, Routeflg: "1", Stockist: Stockist, name: name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "3", Tax: "0", Scheme_Discount: "", Cash_Discount: "", Orderlist: itemList))
                                     }
                                 }
                                 
@@ -233,6 +252,84 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
         }
     }
 
+    
+    func parseProducts(_ products: String, taxArray: [String]?) -> [OrderItemModel] {
+        var itemModelList = [OrderItemModel]()
+        var netAmount: Double = 0
+
+        let productArray = products.split(separator: ",").map { String($0) }
+        print(productArray)
+
+        for (i, product) in productArray.enumerated() {
+            let taxAmt = taxArray?.indices.contains(i) == true ? taxArray![i] : "0"
+
+            let qtyValue = extractDouble(from: product, start: ") (", end: "@")
+            let freeValue = extractDouble(from: product, start: "+", end: "%")
+            let discValue = extractDouble(from: product, start: "-", end: "*")
+            let taxValue = Double(taxAmt.filter { "0123456789.".contains($0) }) ?? 0
+            let rateValue = extractDouble(from: product, start: "*", end: "!")
+            let litersVal = extractDouble(from: product, start: "@", end: "+")
+            let clValue = Int(extractString(from: product, start: "!", end: "!") ?? "0") ?? 0
+            let uomName = extractString(from: product, start: "!", end: "%") ?? ""
+            let eQtyValue = extractDouble(from: product, start: "%", end: "*")
+
+            let totalValue = (rateValue * qtyValue) + taxValue - discValue
+            netAmount += totalValue
+
+            let productName = extractProductName(product, totalValue: totalValue)
+            let freeProductName = extractFreeProductName(product)
+
+            let orderItem = OrderItemModel(
+                productName: productName,
+                rateValue: rateValue,
+                qtyValue: qtyValue,
+                freeValue: freeValue,
+                discValue: discValue,
+                totalValue: totalValue,
+                taxValue: taxValue,
+                clValue: clValue,
+                uomName: uomName,
+                eQtyValue: eQtyValue,
+                litersVal: litersVal,
+                freeProductName: freeProductName
+            )
+
+            itemModelList.append(orderItem)
+        }
+
+        print("Net Amount: \(String(format: "%.2f", netAmount))")
+        return itemModelList
+    }
+
+    // Helper functions
+    func extractDouble(from text: String, start: String, end: String) -> Double {
+        guard let range = extractString(from: text, start: start, end: end),
+              let value = Double(range.filter { "0123456789.".contains($0) }) else {
+            return 0
+        }
+        return value
+    }
+
+    func extractString(from text: String, start: String, end: String) -> String? {
+        guard let startIndex = text.range(of: start)?.upperBound,
+              let endIndex = text.range(of: end, range: startIndex..<text.endIndex)?.lowerBound else {
+            return nil
+        }
+        return String(text[startIndex..<endIndex])
+    }
+
+    func extractProductName(_ product: String, totalValue: Double) -> String {
+        let marker = "( \(Int(totalValue))"
+        guard let range = product.range(of: marker) else { return "" }
+        return String(product[..<range.lowerBound]).trimmingCharacters(in: .whitespaces)
+    }
+
+    func extractFreeProductName(_ product: String) -> String {
+        guard let startIndex = product.range(of: "^")?.upperBound else { return "" }
+        return String(product[startIndex...]).trimmingCharacters(in: .whitespaces)
+    }
+
+    
     
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
