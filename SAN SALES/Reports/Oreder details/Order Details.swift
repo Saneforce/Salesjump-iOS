@@ -7,6 +7,7 @@
 
 import UIKit
 import Alamofire
+import Foundation
 
 
 
@@ -22,6 +23,8 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
     @IBOutlet weak var Table_height: NSLayoutConstraint!
     
     @IBOutlet weak var Item_Summary_table: UITableView!
+    
+    @IBOutlet weak var Day_Report_View: UIView!
     
     struct Id:Any{
         var id:String
@@ -44,7 +47,7 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
         var Tax:String
         var Scheme_Discount:String
         var Cash_Discount:String
-        var Orderlist:[String:Any]
+        var Orderlist:[AnyObject]
     }
     var Orderdata:[Id] = []
     var Oredrdatadetisl:[OrderDetail] = []
@@ -53,6 +56,7 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
     var DivCode: String=""
     var StateCode: String = ""
     let LocalStoreage = UserDefaults.standard
+    var ProductDetils: [AnyObject] = []
     override func viewDidLoad() {
         super.viewDidLoad()
         getUserDetails()
@@ -134,16 +138,26 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
                                         return false
                                     }){
                                       print(i)
-                                        var Detils:[String:Any]=["":3]
-                                        Orderdata[i].Orderdata.append(OrderDetail(id: id, Route: Route, Routeflg: "0", Stockist: Stockist, name: name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "3", Tax: "0", Scheme_Discount: "", Cash_Discount: "", Orderlist: Detils))
+                                        ProductDetils.removeAll()
+                                        var Detils:[String:Any]=["Product_Name":"Product Name","Rate":"Rate","Qty":"Qty","CL":"CL","Free":"Free","Disc":"Disc","Tax":"Tax","Value":"Value","UOM":"UOM","uomQty":"Qty","Price":"Price","UomFree":"Free","UomDisc":"Disc","UomTax":"Tax","UomTotal":"Total"]
                                         
-                                        Oredrdatadetisl.append(OrderDetail(id: id, Route: Route, Routeflg: "0", Stockist: Stockist, name: name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "3", Tax: "0", Scheme_Discount: "", Cash_Discount: "", Orderlist: Detils))
+                                        let jitm: AnyObject = Detils as AnyObject
+                                        ProductDetils.append(jitm)
+                                        Orderdata[i].Orderdata.append(OrderDetail(id: id, Route: Route, Routeflg: "0", Stockist: Stockist, name: name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "3", Tax: "0", Scheme_Discount: "", Cash_Discount: "", Orderlist: ProductDetils))
+                                        
+                                        Oredrdatadetisl.append(OrderDetail(id: id, Route: Route, Routeflg: "0", Stockist: Stockist, name: name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "3", Tax: "0", Scheme_Discount: "", Cash_Discount: "", Orderlist: ProductDetils))
 
                                     }else{
-                                        var Detils:[String:Any]=["":3]
-                                        Orderdata.append(Id(id: id, Stkid: Stkid, Orderdata: [OrderDetail(id: id, Route: Route, Routeflg: "1", Stockist: Stockist, name: name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "3", Tax: "0", Scheme_Discount: "", Cash_Discount: "", Orderlist: Detils)]))
+                                        ProductDetils.removeAll()
                                         
-                                        Oredrdatadetisl.append(OrderDetail(id: id, Route: Route, Routeflg: "1", Stockist: Stockist, name: name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "3", Tax: "0", Scheme_Discount: "", Cash_Discount: "", Orderlist: Detils))
+                                        var Detils:[String:Any]=["Product_Name":"Product Name","Rate":"Rate","Qty":"Qty","CL":"CL","Free":"Free","Disc":"Disc","Tax":"Tax","Value":"Value","UOM":"UOM","uomQty":"Qty","Price":"Price","UomFree":"Free","UomDisc":"Disc","UomTax":"Tax","UomTotal":"Total"]
+                                        
+                                        let jitm: AnyObject = Detils as AnyObject
+                                        ProductDetils.append(jitm)
+                                        
+                                        Orderdata.append(Id(id: id, Stkid: Stkid, Orderdata: [OrderDetail(id: id, Route: Route, Routeflg: "1", Stockist: Stockist, name: name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "3", Tax: "0", Scheme_Discount: "", Cash_Discount: "", Orderlist: ProductDetils)]))
+                                        
+                                        Oredrdatadetisl.append(OrderDetail(id: id, Route: Route, Routeflg: "1", Stockist: Stockist, name: name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "3", Tax: "0", Scheme_Discount: "", Cash_Discount: "", Orderlist: ProductDetils))
                                     }
                                 }
                                 
@@ -210,6 +224,9 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
                cell.Phone.text = "Phone:"+Oredrdatadetisl[indexPath.row].Phone
                cell.Netamt.text = Oredrdatadetisl[indexPath.row].Net_amount
                cell.Remark.text =  Oredrdatadetisl[indexPath.row].Remarks
+               
+               cell.View_Detils.tag = indexPath.row
+               cell.View_Detils.addTarget(self, action: #selector(buttonClicked(_:)), for: .touchUpInside)
                cell.insideTable1Data = [Oredrdatadetisl[indexPath.row]]
                cell.reloadData()
                return cell
@@ -222,6 +239,9 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
            }
           
        }
+    
+    @objc func buttonClicked(_ sender: UIButton) {
+    }
     
     @objc private func GotoHome() {
         let storyboard = UIStoryboard(name: "Reports", bundle: nil)
