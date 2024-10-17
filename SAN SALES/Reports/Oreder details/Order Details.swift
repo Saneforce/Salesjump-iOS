@@ -33,8 +33,9 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
     @IBOutlet weak var das_Border_Line_View: UIView!
     @IBOutlet weak var Day_Report_TB: UITableView!
     
+    @IBOutlet weak var Day_Report_TB_height: NSLayoutConstraint!
     @IBOutlet weak var Strik_Line: UIView!
-    
+    @IBOutlet weak var Scroll_Height_TB: NSLayoutConstraint!
     struct Id:Any{
         var id:String
         var Stkid:String
@@ -74,7 +75,6 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
         Addres_View.layer.cornerRadius = 10
         Addres_View.layer.shadowRadius = 2
         Detils_Scroll_View.layer.cornerRadius = 10
-        
         BTback.addTarget(target: self, action: #selector(GotoHome))
         View_Back.addTarget(target: self, action: #selector(Back_View))
         HQ_and_Route_TB.dataSource = self
@@ -83,12 +83,20 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
         Item_Summary_table.delegate = self
         Day_Report_TB.delegate = self
         Day_Report_TB.dataSource = self
-        
-        
         appendDashedBorder(to: das_Border_Line_View)
-        
         appendDashedBorder(to: Strik_Line)
-        print(das_Border_Line_View.layer.frame.width)
+        
+        print( Day_Report_TB_height.constant)
+        print( Scroll_Height_TB.constant)
+        
+        Scroll_Height_TB.constant = Scroll_Height_TB.constant -  Day_Report_TB_height.constant
+        
+        print( Scroll_Height_TB.constant)
+        
+        Day_Report_TB_height.constant = 1 * 50
+        print( Day_Report_TB_height.constant)
+        Scroll_Height_TB.constant = Scroll_Height_TB.constant + CGFloat(Day_Report_TB_height.constant)
+        print( Scroll_Height_TB.constant)
         OrderDayReport()
     }
     func appendDashedBorder(to view: UIView) {
@@ -97,13 +105,13 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
             let yourViewSize = view.frame.size
             let yourViewShapeRect = CGRect(x: 0, y: 0, width: yourViewSize.width - 10, height: yourViewSize.height)
             yourViewShapeLayer.bounds = yourViewShapeRect
-        yourViewShapeLayer.position = CGPoint(x: yourViewSize.width / 2.1, y: yourViewSize.height / 2)
+            yourViewShapeLayer.position = CGPoint(x: yourViewSize.width / 2.1, y: yourViewSize.height / 2)
             yourViewShapeLayer.fillColor = UIColor.clear.cgColor
             yourViewShapeLayer.strokeColor = borderColor
             yourViewShapeLayer.lineWidth = 1
             yourViewShapeLayer.lineJoin = .round
             yourViewShapeLayer.lineDashPattern = [4, 2]
-            yourViewShapeLayer.path = UIBezierPath(roundedRect: yourViewShapeRect, cornerRadius: 10).cgPath
+            yourViewShapeLayer.path = UIBezierPath(roundedRect: yourViewShapeRect, cornerRadius: 3).cgPath
             view.layer.addSublayer(yourViewShapeLayer)
         }
     
@@ -251,7 +259,7 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
         }
         
         if Day_Report_TB == tableView {
-            return 3
+            return 1
         }
         return Oredrdatadetisl.count
     }
@@ -276,6 +284,14 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
                return cell
            }else if Day_Report_TB == tableView{
                let cellReport = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! Day_Reportdetils
+               cellReport.Item.text = "tEST"
+               cellReport.Uom.text = "BOX"
+               cellReport.Qty.text = "8"
+               cellReport.Price.text = "1.00"
+               cellReport.Free.text = "0"
+               cellReport.Disc.text = "0.00"
+               cellReport.Tax.text = "0.00"
+               cellReport.Total.text = "240.00000"
                return cellReport
            }else{
                let cellS = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! Item_summary_TB
