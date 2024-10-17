@@ -8,15 +8,18 @@
 import UIKit
 import Alamofire
 import Foundation
+import FSCalendar
 
 
-
-class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegate {
-
-    
+class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegate, FSCalendarDelegate, FSCalendarDataSource,OrderDetailsCellDelegate{
+  
     @IBOutlet weak var BTback: UIImageView!
     @IBOutlet weak var Hq_View: UIView!
+    
+    @IBOutlet weak var hq_name_sel: UILabel!
     @IBOutlet weak var Date_View: UIView!
+    
+    @IBOutlet weak var date_sel: UILabel!
     
     @IBOutlet weak var HQ_and_Route_TB: UITableView!
     @IBOutlet weak var Scroll_height: NSLayoutConstraint!
@@ -36,6 +39,40 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
     @IBOutlet weak var Day_Report_TB_height: NSLayoutConstraint!
     @IBOutlet weak var Strik_Line: UIView!
     @IBOutlet weak var Scroll_Height_TB: NSLayoutConstraint!
+    
+    
+    @IBOutlet weak var Calender_View: UIView!
+    @IBOutlet weak var Calender_back: UIImageView!
+    @IBOutlet weak var Calender: FSCalendar!
+    
+    
+    
+    @IBOutlet weak var Sel_Wid: UIView!
+    @IBOutlet weak var Sel_Back: UIImageView!
+    @IBOutlet weak var Text_Search: UITextField!
+    @IBOutlet weak var Hq_Table: UITableView!
+    
+    
+    @IBOutlet weak var Day_View_Stk: UILabel!
+    @IBOutlet weak var From_no: UILabel!
+    @IBOutlet weak var To_Retiler: UILabel!
+    @IBOutlet weak var To_Addres: UILabel!
+    @IBOutlet weak var To_No: UILabel!
+    
+    @IBOutlet weak var Total_item: UILabel!
+    
+    @IBOutlet weak var Tax: UILabel!
+    
+    @IBOutlet weak var Sch_Disc: UILabel!
+    
+    @IBOutlet weak var Cas_disc: UILabel!
+    
+    @IBOutlet weak var Net_Amt: UILabel!
+    
+    @IBOutlet weak var Order_No: UILabel!
+    
+    @IBOutlet weak var Order_Date: UILabel!
+    
     struct Id:Any{
         var id:String
         var Stkid:String
@@ -61,31 +98,43 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
     }
     var Orderdata:[Id] = []
     var Oredrdatadetisl:[OrderDetail] = []
+    var Orderlist:[OrderItemModel] = []
     let cardViewInstance = CardViewdata()
     var SFCode: String=""
     var DivCode: String=""
     var StateCode: String = ""
+    var sfName:String = ""
     let LocalStoreage = UserDefaults.standard
     var ProductDetils: [AnyObject] = []
-    
+    var lstHQs: [AnyObject] = []
+    var lObjSel: [AnyObject] = []
     struct OrderItemModel {
         let productName: String
-        let rateValue: Double
-        let qtyValue: Double
-        let freeValue: Double
-        let discValue: Double
-        let totalValue: Double
-        let taxValue: Double
-        let clValue: Int
+        let rateValue: String
+        let qtyValue: String
+        let freeValue: String
+        let discValue: String
+        let totalValue: String
+        let taxValue: String
+        let clValue: String
         let uomName: String
-        let eQtyValue: Double
-        let litersVal: Double
+        let eQtyValue: String
+        let litersVal: String
         let freeProductName: String
     }
     
+    var Select_Dtae:String = ""
+    var Sf_Id :String = ""
     override func viewDidLoad() {
         super.viewDidLoad()
         getUserDetails()
+        let selectdate = DateFormatter()
+        selectdate.dateFormat = "yyyy-MM-dd"
+        let dates = selectdate.string(from: Date())
+        Select_Dtae = dates
+        date_sel.text = dates
+        Sf_Id = SFCode
+        hq_name_sel.text = sfName
         cardViewInstance.styleSummaryView(Hq_View)
         cardViewInstance.styleSummaryView(Date_View)
         Addres_View.layer.cornerRadius = 10
@@ -93,26 +142,31 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
         Detils_Scroll_View.layer.cornerRadius = 10
         BTback.addTarget(target: self, action: #selector(GotoHome))
         View_Back.addTarget(target: self, action: #selector(Back_View))
+        Date_View.addTarget(target: self, action: #selector(Opend_Calender))
+        Calender_back.addTarget(target: self, action: #selector(Close_Calender))
+        Hq_View.addTarget(target: self, action: #selector(Open_Hq))
+        Sel_Back.addTarget(target: self, action: #selector(Close_Hq))
         HQ_and_Route_TB.dataSource = self
         HQ_and_Route_TB.delegate = self
         Item_Summary_table.dataSource = self
         Item_Summary_table.delegate = self
         Day_Report_TB.delegate = self
         Day_Report_TB.dataSource = self
+        Calender.delegate = self
+        Calender.dataSource = self
+        Hq_Table.dataSource = self
+        Hq_Table.delegate = self
         appendDashedBorder(to: das_Border_Line_View)
         appendDashedBorder(to: Strik_Line)
         
-        print( Day_Report_TB_height.constant)
-        print( Scroll_Height_TB.constant)
         
-        Scroll_Height_TB.constant = Scroll_Height_TB.constant -  Day_Report_TB_height.constant
+        if let HQData = LocalStoreage.string(forKey: "HQ_Master"),
+           let list = GlobalFunc.convertToDictionary(text:  HQData) as? [AnyObject] {
+            lstHQs = list;
+            lObjSel=lstHQs
+        }
         
-        print( Scroll_Height_TB.constant)
         
-        Day_Report_TB_height.constant = 1 * 50
-        print( Day_Report_TB_height.constant)
-        Scroll_Height_TB.constant = Scroll_Height_TB.constant + CGFloat(Day_Report_TB_height.constant)
-        print( Scroll_Height_TB.constant)
         OrderDayReport()
     }
     func appendDashedBorder(to view: UIView) {
@@ -138,12 +192,27 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
     print("Error: Cannot convert JSON object to Pretty JSON data")
     return
     }
+        print(prettyJsonData)
     SFCode = prettyJsonData["sfCode"] as? String ?? ""
     StateCode = prettyJsonData["State_Code"] as? String ?? ""
     DivCode = prettyJsonData["divisionCode"] as? String ?? ""
+    sfName = prettyJsonData["sfName"] as? String ?? ""
+    }
+    func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition){
+        let selectdate = DateFormatter()
+        selectdate.dateFormat = "yyyy-MM-dd"
+        let dates = selectdate.string(from: date)
+        Select_Dtae = dates
+        date_sel.text = dates
+        OrderDayReport()
+        Calender_View.isHidden = true
     }
     
+    
     func OrderDayReport() {
+        
+        Oredrdatadetisl.removeAll()
+        Orderdata.removeAll()
         self.ShowLoading(Message: "Loading...")
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
@@ -152,7 +221,7 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
         print(formattedDate)
         
         let axn = "get/OrderDayReport"
-        let apiKey: String = "\(axn)&State_Code=\(StateCode)&divisionCode=\(DivCode)&rSF=MR4126&sfCode=MR4126&RsfCode=MR4126&rptDt=2024-10-09"
+        let apiKey: String = "\(axn)&State_Code=\(StateCode)&divisionCode=\(DivCode)&rSF=\(SFCode)&sfCode=\(SFCode)&RsfCode=\(Sf_Id)&rptDt=\(Select_Dtae)"
         
         AF.request(APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKey, method: .post, parameters: nil, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self] AFdata in
             print(AFdata)
@@ -162,12 +231,18 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
                 
                 if let json = value as? [String: AnyObject],
                    let dayrepArray = json["dayrep"] as? [[String: AnyObject]] {
-                    
+                    print(json)
                     print(dayrepArray)
+                    if dayrepArray.isEmpty{
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                            self.LoadingDismiss()
+                        }
+                        return
+                    }
                     let ACode = dayrepArray[0]["ACode"] as? String ?? ""
                     
                     let axn = "get/vwVstDet"
-                    let apiKey: String = "\(axn)&State_Code=\(StateCode)&divisionCode=\(DivCode)&ACd=\(ACode)&rSF=MR4126&typ=1&sfCode=MR4126&RsfCode=MR4126"
+                    let apiKey: String = "\(axn)&State_Code=\(StateCode)&divisionCode=\(DivCode)&ACd=\(ACode)&rSF=\(SFCode)&typ=1&sfCode=\(SFCode)&RsfCode=\(Sf_Id)"
                     
                     AF.request(APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKey, method: .post, parameters: nil, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self] AFdata in
                         print(AFdata)
@@ -215,9 +290,12 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
                                         let productArray = products.split(separator: ",").map { String($0) }
                                         print(productArray)
                                         let taxArray: [String]? = ["0.0", "0.0."]
-
                                         let itemList = parseProducts(products, taxArray: taxArray)
+                                        
+                                        
                                         print(itemList)
+                                        
+                                        
                                         
                                         Orderdata.append(Id(id: id, Stkid: Stkid, Orderdata: [OrderDetail(id: id, Route: Route, Routeflg: "1", Stockist: Stockist, name: name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "3", Tax: "0", Scheme_Discount: "", Cash_Discount: "", Orderlist: itemList)]))
                                         
@@ -281,16 +359,16 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
 
             let orderItem = OrderItemModel(
                 productName: productName,
-                rateValue: rateValue,
-                qtyValue: qtyValue,
-                freeValue: freeValue,
-                discValue: discValue,
-                totalValue: totalValue,
-                taxValue: taxValue,
-                clValue: clValue,
-                uomName: uomName,
-                eQtyValue: eQtyValue,
-                litersVal: litersVal,
+                rateValue: String(rateValue),
+                qtyValue: String(qtyValue),
+                freeValue:  String(freeValue),
+                discValue:  String(discValue),
+                totalValue:  String(totalValue),
+                taxValue:  String(taxValue),
+                clValue:  String(clValue),
+                uomName:  String(uomName),
+                eQtyValue:  String(eQtyValue),
+                litersVal:  String(litersVal),
                 freeProductName: freeProductName
             )
 
@@ -339,6 +417,9 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
         if Day_Report_TB ==  tableView{
             return 50
         }
+        if Hq_Table == tableView{
+            return 50
+        }
         return 500
     }
     
@@ -356,7 +437,14 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
         }
         
         if Day_Report_TB == tableView {
-            return 1
+            Scroll_Height_TB.constant = Scroll_Height_TB.constant -  Day_Report_TB_height.constant
+            
+            Day_Report_TB_height.constant = CGFloat(Orderlist.count * 50)
+            Scroll_Height_TB.constant = Scroll_Height_TB.constant + CGFloat(Day_Report_TB_height.constant)
+            return Orderlist.count
+        }
+        if Hq_Table == tableView{
+            return lObjSel.count
         }
         return Oredrdatadetisl.count
     }
@@ -365,6 +453,7 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
         
            if tableView == HQ_and_Route_TB {
                let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! Order_Details_TableViewCell
+               cell.delegate = self
                cell.Route_name.text = Oredrdatadetisl[indexPath.row].Route
                cell.Stockets_Name.text = Oredrdatadetisl[indexPath.row].Stockist
                cell.Store_Name_with_order_No.text = Oredrdatadetisl[indexPath.row].name + "(\(Oredrdatadetisl[indexPath.row].nameid))"
@@ -373,23 +462,27 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
                cell.Phone.text = "Phone:"+Oredrdatadetisl[indexPath.row].Phone
                cell.Netamt.text = Oredrdatadetisl[indexPath.row].Net_amount
                cell.Remark.text =  Oredrdatadetisl[indexPath.row].Remarks
-               
-               cell.View_Detils.tag = indexPath.row
-               cell.View_Detils.addTarget(target: self, action: #selector(buttonClicked(_:)))
                cell.insideTable1Data = [Oredrdatadetisl[indexPath.row]]
                cell.reloadData()
                return cell
            }else if Day_Report_TB == tableView{
                let cellReport = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! Day_Reportdetils
-               cellReport.Item.text = "tEST"
-               cellReport.Uom.text = "BOX"
-               cellReport.Qty.text = "8"
-               cellReport.Price.text = "1.00"
-               cellReport.Free.text = "0"
-               cellReport.Disc.text = "0.00"
-               cellReport.Tax.text = "0.00"
-               cellReport.Total.text = "240.00000"
+               let item = Orderlist[indexPath.row]
+               print(item)
+               cellReport.Item.text = item.productName
+               cellReport.Uom.text = item.uomName
+               cellReport.Qty.text = item.qtyValue
+               cellReport.Price.text = item.rateValue
+               cellReport.Free.text = item.freeValue
+               cellReport.Disc.text = item.discValue
+               cellReport.Tax.text = item.taxValue
+               cellReport.Total.text = item.totalValue
                return cellReport
+           }else if Hq_Table == tableView{
+               let cellText = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! cellListItem
+               let Item = lObjSel[indexPath.row]
+               cellText.lblText.text = Item["name"] as? String ?? ""
+               return cellText
            }else{
                let cellS = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! Item_summary_TB
                cellS.Product_Name.text = "Test"
@@ -399,12 +492,59 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
            }
        }
     
-    @objc func buttonClicked(_ sender: UIButton) {
-        Day_Report_View.isHidden = false
-        print("jnj")
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if Hq_Table == tableView{
+            let Item = lObjSel[indexPath.row]
+            Sf_Id = Item["id"] as? String ?? SFCode
+            hq_name_sel.text = Item["name"] as? String ?? ""
+            Text_Search.text = ""
+            OrderDayReport()
+            Sel_Wid.isHidden = true
+        }
     }
+    
+    // MARK: - OrderDetailsCellDelegate Method
+      func didTapButton(in cell: Order_Details_TableViewCell) {
+          guard let indexPath = HQ_and_Route_TB.indexPath(for: cell) else { return }
+          print("Button tapped in cell at index path: \(indexPath.row)")
+          let Item =  Oredrdatadetisl[indexPath.row]
+          print(Item)
+          Day_View_Stk.text = Item.Stockist
+          From_no.text = Item.Phone
+          To_Retiler.text = Item.name
+          To_Addres.text = Item.Adress
+          To_No.text = Item.Phone
+          Order_No.text = Item.nameid
+          Total_item.text = String(Item.Orderlist.count)
+          Orderlist = Item.Orderlist
+          Tax.text = "0"
+          Sch_Disc.text = "0"
+          Cas_disc.text = "0"
+          Net_Amt.text = "0"
+          Day_Report_TB.reloadData()
+          Day_Report_View.isHidden = false
+      }
+
+    
+    
     @objc func Back_View(){
         Day_Report_View.isHidden = true
+    }
+    
+    @objc func Opend_Calender(){
+        Calender_View.isHidden = false
+    }
+    
+    @objc func Close_Calender(){
+        Calender_View.isHidden = true
+    }
+    
+    @objc func Open_Hq(){
+        Text_Search.text = ""
+        Sel_Wid.isHidden = true
+    }
+    @objc func Close_Hq(){
+        Sel_Wid.isHidden = true
     }
     
     @objc private func GotoHome() {
@@ -413,4 +553,20 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
         UIApplication.shared.windows.first?.rootViewController = viewController
         UIApplication.shared.windows.first?.makeKeyAndVisible()
     }
+    
+    
+    @IBAction func TextSerch(_ sender: Any) {
+        let txtbx: UITextField = sender as! UITextField
+        if txtbx.text!.isEmpty {
+                lObjSel = lstHQs
+        }else{
+            lObjSel = lstHQs.filter({(product) in
+                let name: String = String(format: "%@", product["name"] as! CVarArg)
+                return name.lowercased().contains(txtbx.text!.lowercased())
+            })
+        
+        }
+        Hq_Table.reloadData()
+    }
+    
 }
