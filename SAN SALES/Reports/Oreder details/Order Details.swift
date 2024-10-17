@@ -21,10 +21,19 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
     @IBOutlet weak var HQ_and_Route_TB: UITableView!
     @IBOutlet weak var Scroll_height: NSLayoutConstraint!
     @IBOutlet weak var Table_height: NSLayoutConstraint!
-    
     @IBOutlet weak var Item_Summary_table: UITableView!
-    
     @IBOutlet weak var Day_Report_View: UIView!
+    
+    
+    //Order Detils
+    @IBOutlet weak var View_Back: UIImageView!
+    
+    @IBOutlet weak var Addres_View: UIView!
+    @IBOutlet weak var Detils_Scroll_View: UIScrollView!
+    @IBOutlet weak var das_Border_Line_View: UIView!
+    @IBOutlet weak var Day_Report_TB: UITableView!
+    
+    @IBOutlet weak var Strik_Line: UIView!
     
     struct Id:Any{
         var id:String
@@ -62,13 +71,41 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
         getUserDetails()
         cardViewInstance.styleSummaryView(Hq_View)
         cardViewInstance.styleSummaryView(Date_View)
+        Addres_View.layer.cornerRadius = 10
+        Addres_View.layer.shadowRadius = 2
+        Detils_Scroll_View.layer.cornerRadius = 10
+        
         BTback.addTarget(target: self, action: #selector(GotoHome))
+        View_Back.addTarget(target: self, action: #selector(Back_View))
         HQ_and_Route_TB.dataSource = self
         HQ_and_Route_TB.delegate = self
         Item_Summary_table.dataSource = self
         Item_Summary_table.delegate = self
+        Day_Report_TB.delegate = self
+        Day_Report_TB.dataSource = self
+        
+        
+        appendDashedBorder(to: das_Border_Line_View)
+        
+        appendDashedBorder(to: Strik_Line)
+        print(das_Border_Line_View.layer.frame.width)
         OrderDayReport()
     }
+    func appendDashedBorder(to view: UIView) {
+        let borderColor = UIColor.gray.cgColor
+            let yourViewShapeLayer: CAShapeLayer = CAShapeLayer()
+            let yourViewSize = view.frame.size
+            let yourViewShapeRect = CGRect(x: 0, y: 0, width: yourViewSize.width - 10, height: yourViewSize.height)
+            yourViewShapeLayer.bounds = yourViewShapeRect
+        yourViewShapeLayer.position = CGPoint(x: yourViewSize.width / 2.1, y: yourViewSize.height / 2)
+            yourViewShapeLayer.fillColor = UIColor.clear.cgColor
+            yourViewShapeLayer.strokeColor = borderColor
+            yourViewShapeLayer.lineWidth = 1
+            yourViewShapeLayer.lineJoin = .round
+            yourViewShapeLayer.lineDashPattern = [4, 2]
+            yourViewShapeLayer.path = UIBezierPath(roundedRect: yourViewShapeRect, cornerRadius: 10).cgPath
+            view.layer.addSublayer(yourViewShapeLayer)
+        }
     
     func getUserDetails(){
     let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
@@ -194,6 +231,9 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
         if Item_Summary_table == tableView {
             return 30
         }
+        if Day_Report_TB ==  tableView{
+            return 50
+        }
         return 500
     }
     
@@ -208,6 +248,10 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
         
         if Item_Summary_table == tableView{
             return 5
+        }
+        
+        if Day_Report_TB == tableView {
+            return 3
         }
         return Oredrdatadetisl.count
     }
@@ -226,10 +270,13 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
                cell.Remark.text =  Oredrdatadetisl[indexPath.row].Remarks
                
                cell.View_Detils.tag = indexPath.row
-               cell.View_Detils.addTarget(self, action: #selector(buttonClicked(_:)), for: .touchUpInside)
+               cell.View_Detils.addTarget(target: self, action: #selector(buttonClicked(_:)))
                cell.insideTable1Data = [Oredrdatadetisl[indexPath.row]]
                cell.reloadData()
                return cell
+           }else if Day_Report_TB == tableView{
+               let cellReport = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! Day_Reportdetils
+               return cellReport
            }else{
                let cellS = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! Item_summary_TB
                cellS.Product_Name.text = "Test"
@@ -237,10 +284,14 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
                cellS.Free.text = "test free"
                return cellS
            }
-          
        }
     
     @objc func buttonClicked(_ sender: UIButton) {
+        Day_Report_View.isHidden = false
+        print("jnj")
+    }
+    @objc func Back_View(){
+        Day_Report_View.isHidden = true
     }
     
     @objc private func GotoHome() {
