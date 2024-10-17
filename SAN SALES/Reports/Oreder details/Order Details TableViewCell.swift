@@ -96,7 +96,6 @@ class Inside_TB:UITableViewCell{
     
 }
 
-
 class Day_Reportdetils:UITableViewCell{
     @IBOutlet weak var Item: UILabel!
     @IBOutlet weak var Uom: UILabel!
@@ -108,8 +107,6 @@ class Day_Reportdetils:UITableViewCell{
     @IBOutlet weak var Total: UILabel!
     
 }
-
-
 
 class Item_summary_TB:UITableViewCell{
     @IBOutlet weak var Product_Name: UILabel!
