@@ -8,22 +8,20 @@
 import Foundation
 import UIKit
 
+protocol OrderDetailsCellDelegate: AnyObject {
+    func didTapButton(in cell: Order_Details_TableViewCell)
+}
+
 class Order_Details_TableViewCell: UITableViewCell, UITableViewDataSource, UITableViewDelegate {
 
+    // MARK: - Outlets
     @IBOutlet weak var insideTable1: UITableView!
-    
-    
-    let data = Order_Details()
-    var insideTable1Data: [Order_Details.OrderDetail] = []
-    
     @IBOutlet weak var View_height: NSLayoutConstraint!
     @IBOutlet weak var Tbale2_height: NSLayoutConstraint!
     
     @IBOutlet weak var Route_name: UILabel!
     @IBOutlet weak var Stockets_Name: UILabel!
-    
     @IBOutlet weak var Store_Name_with_order_No: UILabel!
-    
     @IBOutlet weak var Addres: UILabel!
     @IBOutlet weak var Volumes: UILabel!
     @IBOutlet weak var Phone: UILabel!
@@ -32,51 +30,106 @@ class Order_Details_TableViewCell: UITableViewCell, UITableViewDataSource, UITab
     
     @IBOutlet weak var View_Detils: UIImageView!
     
-    var OrderDetils:[Order_Details.OrderItemModel] = []
+    // MARK: - Properties
+    weak var delegate: OrderDetailsCellDelegate?
+    let data = Order_Details()
     
+    var insideTable1Data: [Order_Details.OrderDetail] = []
+    var OrderDetils: [Order_Details.OrderItemModel] = []
+
+    // MARK: - Initialization
     override func awakeFromNib() {
         super.awakeFromNib()
-       // insideTable1.register(UITableViewCell.self, forCellReuseIdentifier: "InnerCell")
+        
         insideTable1.dataSource = self
         insideTable1.delegate = self
-        //Tbale2_height.constant = 150
+
+        // Register cell for the inner table view
+      //  insideTable1.register(UINib(nibName: "Inside_TB", bundle: nil), forCellReuseIdentifier: "Cell")
+
+        // Setup initial constraints
+        Tbale2_height.constant = 1000
+        
+        // Use tap gesture recognizer for UIImageView
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(buttonTapped))
+        View_Detils.isUserInteractionEnabled = true
+        View_Detils.addGestureRecognizer(tapGesture)
     }
-    
+
+    // MARK: - Tap Action Handler
+    @objc private func buttonTapped() {
+        // Animate tap feedback
+        UIView.animate(withDuration: 0.1,
+                       animations: {
+                           self.View_Detils.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
+                       },
+                       completion: { _ in
+                           UIView.animate(withDuration: 0.1) {
+                               self.View_Detils.transform = CGAffineTransform.identity
+                           }
+                       })
+
+        // Notify the delegate
+        delegate?.didTapButton(in: self)
+    }
+
+    // MARK: - UITableView DataSource & Delegate Methods
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return OrderDetils.count
+    }
+
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 50
     }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-            return OrderDetils.count
-    }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! Inside_TB
-        let Item = OrderDetils[indexPath.row]
-        print(Item)
-        cell.Product_Name.text = Item.productName
-        cell.Rate.text = String(Item.rateValue)
-        cell.Qty.text = String(Item.qtyValue)
-        cell.CL.text = String(Item.clValue)
-        cell.Free.text = String(Item.freeValue)
-        cell.Disc.text = String(Item.discValue)
-        cell.Tax.text = String(Item.taxValue)
-        cell.Value.text = String(Item.totalValue)
-            return cell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as? Inside_TB else {
+            return UITableViewCell()
+        }
+        
+        let item = OrderDetils[indexPath.row]
+        cell.Product_Name.text = item.productName
+        cell.Rate.text = String(item.rateValue)
+        cell.Qty.text = String(item.qtyValue)
+        cell.CL.text = String(item.clValue)
+        cell.Free.text = String(item.freeValue)
+        cell.Disc.text = String(item.discValue)
+        cell.Tax.text = String(item.taxValue)
+        cell.Value.text = String(item.totalValue)
+
+        return cell
     }
 
+    // MARK: - Reload Data
     func reloadData() {
-        print(insideTable1Data)
-        let flg = insideTable1Data[0].Routeflg
-        if flg == "1"{
-            View_height.constant = 68
-        }else{
-            View_height.constant = 10
-        }
-        OrderDetils = insideTable1Data[0].Orderlist
+        OrderDetils.removeAll()
+
+        guard let firstDetail = insideTable1Data.first else { return }
+
+        // Adjust view height based on Route flag
+        View_height.constant = (firstDetail.Routeflg == "1") ? 68 : 10
+
+        // Example order item for testing
+        let orderItem = Order_Details.OrderItemModel(
+            productName: "Product Name",
+            rateValue: "Rate",
+            qtyValue: "Qty",
+            freeValue: "Free",
+            discValue: "Disc",
+            totalValue: "Value",
+            taxValue: "Tax",
+            clValue: "CL",
+            uomName: "",
+            eQtyValue: "",
+            litersVal: "",
+            freeProductName: ""
+        )
         
-        print(OrderDetils)
-        
+        // Add the test item and the actual order list items
+        OrderDetils.append(orderItem)
+        OrderDetils.append(contentsOf: firstDetail.Orderlist)
+
+        // Reload the inner table view
         insideTable1.reloadData()
     }
 }

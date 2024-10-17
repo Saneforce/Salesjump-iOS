@@ -568,7 +568,7 @@ CFByb2R1Y3Q
                                     <constraint firstItem="WPq-2S-B5R" firstAttribute="leading" secondItem="qjc-wL-Bpk" secondAttribute="leading" id="piq-6I-6ga"/>
                                 </constraints>
                             </scrollView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GqE-IS-FQn">
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GqE-IS-FQn">
                                 <rect key="frame" x="0.0" y="0.0" width="393" height="1079"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iQS-Hf-yNu">
@@ -1079,6 +1079,110 @@ CFByb2R1Y3Q
                                     <constraint firstItem="yk0-5e-3Od" firstAttribute="leading" secondItem="iQS-Hf-yNu" secondAttribute="leading" constant="8" id="pU0-0E-EAs"/>
                                 </constraints>
                             </view>
+                            <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YdI-zL-ouM">
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="1079"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eVE-px-BFi">
+                                        <rect key="frame" x="0.0" y="30" width="393" height="50"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Select Date" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CLJ-pB-1E2">
+                                                <rect key="frame" x="42" y="0.0" width="338" height="50"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" name="Poppins-Bold" family="Poppins" pointSize="18"/>
+                                                <color key="textColor" red="0.21176470589999999" green="0.20784313730000001" blue="0.20784313730000001" alpha="1" colorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="backsmall" id="YVx-Hk-00G">
+                                                <rect key="frame" x="0.0" y="0.0" width="37" height="50"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <color key="tintColor" red="1" green="0.1137254902" blue="0.1450980392" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            </imageView>
+                                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tHm-aZ-hJB">
+                                                <rect key="frame" x="-13" y="49" width="415" height="1"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                                <color key="backgroundColor" red="0.81960784310000001" green="0.81960784310000001" blue="0.83921568629999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            </view>
+                                        </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </view>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="B9r-Eh-zWM" customClass="FSCalendar">
+                                        <rect key="frame" x="8" y="88" width="377" height="425"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </view>
+                            <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DFH-Dw-gVk">
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="1079"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0C8-b5-lcx">
+                                        <rect key="frame" x="0.0" y="30" width="393" height="50"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Select Headquarters" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="576-NW-WW5">
+                                                <rect key="frame" x="42" y="0.0" width="338" height="50"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" name="Poppins-Bold" family="Poppins" pointSize="18"/>
+                                                <color key="textColor" red="0.21176470589999999" green="0.20784313730000001" blue="0.20784313730000001" alpha="1" colorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="backsmall" id="FLI-lo-wLd">
+                                                <rect key="frame" x="0.0" y="0.0" width="37" height="50"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <color key="tintColor" red="1" green="0.1137254902" blue="0.1450980392" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            </imageView>
+                                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2tr-YI-7fz">
+                                                <rect key="frame" x="-13" y="49" width="415" height="1"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                                <color key="backgroundColor" red="0.81960784310000001" green="0.81960784310000001" blue="0.83921568629999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            </view>
+                                        </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </view>
+                                    <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Search" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="tN5-rS-i7a">
+                                        <rect key="frame" x="8" y="88" width="377" height="34"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" red="0.93725490199999995" green="0.95294117649999999" blue="0.98431372549999996" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                        <connections>
+                                            <action selector="TextSerch:" destination="Y6W-OH-hqX" eventType="editingChanged" id="0Ry-u3-C2r"/>
+                                        </connections>
+                                    </textField>
+                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="nup-KE-yoe">
+                                        <rect key="frame" x="8" y="130" width="377" height="907"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <prototypes>
+                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" id="yK7-Rb-4Ro" customClass="cellListItem" customModule="SAN_SALES" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="50" width="377" height="43.666667938232422"/>
+                                                <autoresizingMask key="autoresizingMask"/>
+                                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="yK7-Rb-4Ro" id="4NC-r2-Aqz">
+                                                    <rect key="frame" x="0.0" y="0.0" width="377" height="43.666667938232422"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <subviews>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CdL-7i-3Xy">
+                                                            <rect key="frame" x="20" y="11" width="337" height="21"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                            <nil key="textColor"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                    </subviews>
+                                                </tableViewCellContentView>
+                                                <connections>
+                                                    <outlet property="lblText" destination="CdL-7i-3Xy" id="9oh-NE-fui"/>
+                                                </connections>
+                                            </tableViewCell>
+                                        </prototypes>
+                                    </tableView>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -1108,20 +1212,41 @@ CFByb2R1Y3Q
                     <connections>
                         <outlet property="Addres_View" destination="khE-b9-O4H" id="8KV-AQ-5WV"/>
                         <outlet property="BTback" destination="QJS-YI-lHU" id="NaL-gc-5tA"/>
+                        <outlet property="Calender" destination="B9r-Eh-zWM" id="v4Q-BG-d9A"/>
+                        <outlet property="Calender_View" destination="YdI-zL-ouM" id="8hO-a8-Bu9"/>
+                        <outlet property="Calender_back" destination="YVx-Hk-00G" id="Neo-tg-aTA"/>
+                        <outlet property="Cas_disc" destination="bVN-kh-xEt" id="RaX-dP-cnP"/>
                         <outlet property="Date_View" destination="Xvz-Xm-QX4" id="o0t-lC-9Ff"/>
                         <outlet property="Day_Report_TB" destination="nxz-Ll-xAI" id="gaF-Pp-jap"/>
                         <outlet property="Day_Report_TB_height" destination="S2G-X7-xLq" id="psM-vo-vhE"/>
                         <outlet property="Day_Report_View" destination="GqE-IS-FQn" id="qle-I2-SOj"/>
+                        <outlet property="Day_View_Stk" destination="EW6-bx-a5j" id="15Q-X1-mE7"/>
                         <outlet property="Detils_Scroll_View" destination="yk0-5e-3Od" id="zmr-eB-by2"/>
+                        <outlet property="From_no" destination="40x-3I-0YE" id="iPG-Lo-p65"/>
                         <outlet property="HQ_and_Route_TB" destination="naO-sb-JE3" id="tkg-q2-pSr"/>
-                        <outlet property="Hq_View" destination="9gu-IG-09P" id="SPT-RO-1Lf"/>
+                        <outlet property="Hq_Table" destination="nup-KE-yoe" id="2LW-dj-Ip6"/>
+                        <outlet property="Hq_View" destination="9gu-IG-09P" id="MvP-fH-hCr"/>
                         <outlet property="Item_Summary_table" destination="YlX-bx-xY6" id="2es-Hj-AlU"/>
+                        <outlet property="Net_Amt" destination="WOD-3N-J9b" id="r6r-2E-all"/>
+                        <outlet property="Order_Date" destination="UNf-Py-GX4" id="5UJ-wK-GBn"/>
+                        <outlet property="Order_No" destination="287-X7-YAW" id="ohy-WD-HVx"/>
+                        <outlet property="Sch_Disc" destination="BmH-tt-4Qy" id="wha-1c-E1B"/>
                         <outlet property="Scroll_Height_TB" destination="3Cu-rh-PHz" id="AUw-Gg-bl6"/>
                         <outlet property="Scroll_height" destination="Y7V-er-raF" id="Buq-Sq-Pp3"/>
+                        <outlet property="Sel_Back" destination="FLI-lo-wLd" id="Yq6-Bv-gjJ"/>
+                        <outlet property="Sel_Wid" destination="DFH-Dw-gVk" id="tWl-Ig-Nmi"/>
                         <outlet property="Strik_Line" destination="KoL-mr-5sP" id="hPY-s9-v3u"/>
                         <outlet property="Table_height" destination="lYH-kx-prg" id="U3E-5T-jab"/>
+                        <outlet property="Tax" destination="fdg-M2-6Ec" id="e1Z-0M-dKY"/>
+                        <outlet property="Text_Search" destination="tN5-rS-i7a" id="W3B-Cw-lCV"/>
+                        <outlet property="To_Addres" destination="kg3-g9-gdW" id="96B-Nk-YXd"/>
+                        <outlet property="To_No" destination="ImU-Nf-c7h" id="j7l-HE-4cd"/>
+                        <outlet property="To_Retiler" destination="lEP-83-lCn" id="bQF-oj-VEY"/>
+                        <outlet property="Total_item" destination="KQ9-Ec-Gg1" id="YIG-Kh-oXp"/>
                         <outlet property="View_Back" destination="tS7-VQ-M4N" id="unB-P0-p9x"/>
                         <outlet property="das_Border_Line_View" destination="ig7-hS-8dd" id="Ugy-hY-tl2"/>
+                        <outlet property="date_sel" destination="Inj-KK-IrH" id="ce2-vX-VGB"/>
+                        <outlet property="hq_name_sel" destination="qWY-En-zn6" id="0Uw-gs-E1U"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
