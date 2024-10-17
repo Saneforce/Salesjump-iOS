@@ -32,7 +32,7 @@ class Order_Details_TableViewCell: UITableViewCell, UITableViewDataSource, UITab
     
     @IBOutlet weak var View_Detils: UIImageView!
     
-    var OrderDetils:[AnyObject] = []
+    var OrderDetils:[Order_Details.OrderItemModel] = []
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -43,7 +43,7 @@ class Order_Details_TableViewCell: UITableViewCell, UITableViewDataSource, UITab
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 44
+        return 50
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -54,25 +54,24 @@ class Order_Details_TableViewCell: UITableViewCell, UITableViewDataSource, UITab
             let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! Inside_TB
         let Item = OrderDetils[indexPath.row]
         print(Item)
-        cell.Product_Name.text = Item["Product_Name"] as? String ?? ""
-        cell.Rate.text = Item["Rate"] as? String ?? ""
-        cell.Qty.text = Item["Qty"] as? String ?? ""
-        cell.CL.text = Item["CL"] as? String ?? ""
-        cell.Free.text = Item["Disc"] as? String ?? ""
-        cell.Tax.text = Item["Tax"] as? String ?? ""
-        cell.Value.text = Item["Value"] as? String ?? ""
+        cell.Product_Name.text = Item.productName
+        cell.Rate.text = String(Item.rateValue)
+        cell.Qty.text = String(Item.qtyValue)
+        cell.CL.text = String(Item.clValue)
+        cell.Free.text = String(Item.freeValue)
+        cell.Disc.text = String(Item.discValue)
+        cell.Tax.text = String(Item.taxValue)
+        cell.Value.text = String(Item.totalValue)
             return cell
     }
 
- 
-    
     func reloadData() {
         print(insideTable1Data)
         let flg = insideTable1Data[0].Routeflg
         if flg == "1"{
             View_height.constant = 68
         }else{
-            View_height.constant = 0
+            View_height.constant = 10
         }
         OrderDetils = insideTable1Data[0].Orderlist
         
