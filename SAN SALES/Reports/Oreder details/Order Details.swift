@@ -94,6 +94,7 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
         var Tax:String
         var Scheme_Discount:String
         var Cash_Discount:String
+        var tlDisAmt:String
         var Orderlist:[OrderItemModel]
     }
     var Orderdata:[Id] = []
@@ -164,9 +165,8 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
            let list = GlobalFunc.convertToDictionary(text:  HQData) as? [AnyObject] {
             lstHQs = list;
             lObjSel=lstHQs
+            print(lObjSel)
         }
-        
-        
         OrderDayReport()
     }
     func appendDashedBorder(to view: UIView) {
@@ -265,7 +265,7 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
                                     let Net_amount = j["finalNetAmnt"] as? String ?? ""
                                     let Remarks = j["remarks"] as? String ?? ""
                                     let Stkid = j["stockist_code"] as? String ?? ""
-                                 
+                                    let tlDisAmt = j["tlDisAmt"] as? String ?? ""
                                     
                                     if let i = Orderdata.firstIndex(where: { (item) in
                                         if item.Stkid == Stkid {
@@ -280,9 +280,9 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
                                            print(productArray)
                                         let taxArray: [String]? = ["0.0", "0.0."]
                                        let itemList = parseProducts(products, taxArray: taxArray)
-                                        Orderdata[i].Orderdata.append(OrderDetail(id: id, Route: Route, Routeflg: "0", Stockist: Stockist, name: name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "3", Tax: "0", Scheme_Discount: "", Cash_Discount: "", Orderlist: itemList))
+                                        Orderdata[i].Orderdata.append(OrderDetail(id: id, Route: Route, Routeflg: "0", Stockist: Stockist, name: name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "3", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: tlDisAmt, Orderlist: itemList))
                                         
-                                        Oredrdatadetisl.append(OrderDetail(id: id, Route: Route, Routeflg: "0", Stockist: Stockist, name: name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "3", Tax: "0", Scheme_Discount: "", Cash_Discount: "", Orderlist: itemList))
+                                        Oredrdatadetisl.append(OrderDetail(id: id, Route: Route, Routeflg: "0", Stockist: Stockist, name: name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "3", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: tlDisAmt, Orderlist: itemList))
 
                                     }else{
                                         
@@ -297,9 +297,9 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
                                         
                                         
                                         
-                                        Orderdata.append(Id(id: id, Stkid: Stkid, Orderdata: [OrderDetail(id: id, Route: Route, Routeflg: "1", Stockist: Stockist, name: name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "3", Tax: "0", Scheme_Discount: "", Cash_Discount: "", Orderlist: itemList)]))
+                                        Orderdata.append(Id(id: id, Stkid: Stkid, Orderdata: [OrderDetail(id: id, Route: Route, Routeflg: "1", Stockist: Stockist, name: name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "3", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: tlDisAmt, Orderlist: itemList)]))
                                         
-                                        Oredrdatadetisl.append(OrderDetail(id: id, Route: Route, Routeflg: "1", Stockist: Stockist, name: name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "3", Tax: "0", Scheme_Discount: "", Cash_Discount: "", Orderlist: itemList))
+                                        Oredrdatadetisl.append(OrderDetail(id: id, Route: Route, Routeflg: "1", Stockist: Stockist, name: name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "3", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: tlDisAmt, Orderlist: itemList))
                                     }
                                 }
                                 
@@ -519,7 +519,7 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
           Orderlist = Item.Orderlist
           Tax.text = "0"
           Sch_Disc.text = "0"
-          Cas_disc.text = "0"
+          Cas_disc.text = Item.tlDisAmt
           Net_Amt.text = "0"
           Day_Report_TB.reloadData()
           Day_Report_View.isHidden = false
