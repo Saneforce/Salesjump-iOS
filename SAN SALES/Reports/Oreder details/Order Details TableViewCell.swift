@@ -27,7 +27,6 @@ class Order_Details_TableViewCell: UITableViewCell, UITableViewDataSource, UITab
     @IBOutlet weak var Phone: UILabel!
     @IBOutlet weak var Netamt: UILabel!
     @IBOutlet weak var Remark: UILabel!
-    
     @IBOutlet weak var View_Detils: UIImageView!
     
     // MARK: - Properties
@@ -44,12 +43,6 @@ class Order_Details_TableViewCell: UITableViewCell, UITableViewDataSource, UITab
         insideTable1.dataSource = self
         insideTable1.delegate = self
 
-        // Register cell for the inner table view
-      //  insideTable1.register(UINib(nibName: "Inside_TB", bundle: nil), forCellReuseIdentifier: "Cell")
-
-        // Setup initial constraints
-       // Tbale2_height.constant = 1000
-        
         // Use tap gesture recognizer for UIImageView
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(buttonTapped))
         View_Detils.isUserInteractionEnabled = true
@@ -75,6 +68,7 @@ class Order_Details_TableViewCell: UITableViewCell, UITableViewDataSource, UITab
 
     // MARK: - UITableView DataSource & Delegate Methods
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        Tbale2_height.constant = CGFloat(50 * OrderDetils.count)
         return OrderDetils.count
     }
 
@@ -103,13 +97,8 @@ class Order_Details_TableViewCell: UITableViewCell, UITableViewDataSource, UITab
     // MARK: - Reload Data
     func reloadData() {
         OrderDetils.removeAll()
-
         guard let firstDetail = insideTable1Data.first else { return }
-
-        // Adjust view height based on Route flag
-        View_height.constant = (firstDetail.Routeflg == "1") ? 68 : 10
-
-        // Example order item for testing
+        View_height.constant = (firstDetail.Routeflg == "1") ? 68 : 0
         let orderItem = Order_Details.OrderItemModel(
             productName: "Product Name", ProductID: "",
             rateValue: "Rate",
