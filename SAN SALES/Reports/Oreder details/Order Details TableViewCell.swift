@@ -48,7 +48,7 @@ class Order_Details_TableViewCell: UITableViewCell, UITableViewDataSource, UITab
       //  insideTable1.register(UINib(nibName: "Inside_TB", bundle: nil), forCellReuseIdentifier: "Cell")
 
         // Setup initial constraints
-        Tbale2_height.constant = 1000
+       // Tbale2_height.constant = 1000
         
         // Use tap gesture recognizer for UIImageView
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(buttonTapped))
@@ -111,7 +111,7 @@ class Order_Details_TableViewCell: UITableViewCell, UITableViewDataSource, UITab
 
         // Example order item for testing
         let orderItem = Order_Details.OrderItemModel(
-            productName: "Product Name",
+            productName: "Product Name", ProductID: "",
             rateValue: "Rate",
             qtyValue: "Qty",
             freeValue: "Free",
