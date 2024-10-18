@@ -31,7 +31,6 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
     @IBOutlet weak var Detils_Scroll_View: UIScrollView!
     @IBOutlet weak var das_Border_Line_View: UIView!
     @IBOutlet weak var Day_Report_TB: UITableView!
-    
     @IBOutlet weak var Day_Report_TB_height: NSLayoutConstraint!
     @IBOutlet weak var Strik_Line: UIView!
     @IBOutlet weak var Scroll_Height_TB: NSLayoutConstraint!
@@ -208,8 +207,7 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
         Calender_View.isHidden = true
     }
     
-    
-    func OrderDayReport() {
+    func OrderDayReport(){
         Oredrdatadetisl.removeAll()
         Orderdata.removeAll()
         Itemwise_Summary_Data.removeAll()
@@ -346,6 +344,7 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
                                     }
                                 }
                                 
+                                Scroll_and_Tb_Height()
                                 HQ_and_Route_TB.reloadData()
                                 Item_Summary_table.reloadData()
                             }
@@ -370,7 +369,6 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
             }
         }
     }
-
     
     func parseProducts(_ products: String,_ Idproducts: String, taxArray: [String]?) -> [OrderItemModel] {
         var itemModelList = [OrderItemModel]()
@@ -470,7 +468,33 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
         if Hq_Table == tableView{
             return 50
         }
-        return 500
+        
+        if HQ_and_Route_TB == tableView{
+            let Row_Height = Oredrdatadetisl[indexPath.row].Orderlist.count * 50
+            let Height = CGFloat(Row_Height + 340)
+            return Height
+        }
+        return 0
+    }
+    
+    func Scroll_and_Tb_Height(){
+        Table_height.constant = 0
+        for i in Oredrdatadetisl{
+            print(Table_height.constant)
+            print(Scroll_height .constant)
+            let Row_Height = i.Orderlist.count * 55
+            let Height = CGFloat(Row_Height + 340)
+            Table_height.constant = Table_height.constant + CGFloat(Height)
+            Scroll_height .constant = Table_height.constant
+            print(Table_height.constant)
+            print(Scroll_height .constant)
+        }
+
+        let Height = Item_Summary_View.constant -   Item_Summary_TB_hEIGHT.constant
+        let Scroll_Height = CGFloat(Height) + CGFloat(Itemwise_Summary_Data.count * 50)
+        Item_Summary_TB_hEIGHT.constant = CGFloat(Itemwise_Summary_Data.count * 50)
+        Item_Summary_View.constant = Scroll_Height
+        Scroll_height .constant =  Scroll_height .constant  +  Item_Summary_View.constant
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -478,20 +502,12 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
         for i in Orderdata{
             count = count + i.Orderdata.count
         }
-        Table_height.constant = CGFloat(Oredrdatadetisl.count * 520)
-        Scroll_height .constant = Table_height.constant + 100
-        
+//        Table_height.constant = CGFloat(Oredrdatadetisl.count * 520)
+//        Scroll_height .constant = Table_height.constant + 100
         if Day_Report_TB == tableView {
-            Item_Summary_View.constant =  Item_Summary_View.constant - Item_Summary_TB_hEIGHT.constant
-            Scroll_Height_TB.constant = Scroll_Height_TB.constant -  Day_Report_TB_height.constant
-            Day_Report_TB_height.constant = CGFloat(Orderlist.count * 50)
-            Scroll_Height_TB.constant = Scroll_Height_TB.constant + CGFloat(Day_Report_TB_height.constant) + Item_Summary_View.constant
             return Orderlist.count
         }
         if Item_Summary_table == tableView{
-            Item_Summary_TB_hEIGHT.constant = CGFloat(Itemwise_Summary_Data.count * 50)
-           Scroll_Height_TB.constant =    Scroll_Height_TB.constant +  Item_Summary_TB_hEIGHT.constant + 200
-            
             return Itemwise_Summary_Data.count
         }
         
