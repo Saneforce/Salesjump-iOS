@@ -71,6 +71,12 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
     
     @IBOutlet weak var Total_Value_Amt: UILabel!
     
+    
+    
+    @IBOutlet weak var Share_Pdf: UIImageView!
+
+    @IBOutlet weak var Share_Orde_Detils: UIImageView!
+    
     struct Id:Any{
         var id:String
         var Stkid:String
@@ -174,10 +180,8 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
         appendDashedBorder(to: das_Border_Line_View)
         appendDashedBorder(to: Strik_Line)
         
-        
-        Hq_Name_lbl.addTarget(target: self, action: #selector(cURRENT_iMG))
-        
-        
+        Share_Pdf.addTarget(target: self, action: #selector(cURRENT_iMG))
+        Share_Orde_Detils.addTarget(target: self, action: #selector(Share_Order_Bill))
         
         
         if let HQData = LocalStoreage.string(forKey: "HQ_Master"),
@@ -579,7 +583,7 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
         let Scroll_Height = CGFloat(Height) + CGFloat(Itemwise_Summary_Data.count * 32)
         Item_Summary_TB_hEIGHT.constant = CGFloat(Itemwise_Summary_Data.count * 32)
         Item_Summary_View.constant = Scroll_Height
-        Scroll_height .constant =  Scroll_height .constant  +  Item_Summary_View.constant
+        Scroll_height .constant =  Scroll_height .constant  +  Item_Summary_View.constant + 100
         print(Item_Summary_View.constant)
         print(Item_Summary_TB_hEIGHT.constant)
         
@@ -783,7 +787,7 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
     
     
     
-    
+    // MARK: -  Full screan Share
     
     @objc func cURRENT_iMG(){
         sharePDF(from: Scroll_View)
@@ -856,5 +860,83 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
 
         self.present(activityVC, animated: true, completion: nil)
     }
+    
+    
+    
+        //MARK: -  Order Detils Share
+    
+    @objc func Share_Order_Bill() {
+        sharePDF_Detils()
+    }
+
+    func captureViewsAsImage() -> UIImage? {
+        // Create a new graphics context with the size of both views combined
+        let totalHeight = Addres_View.frame.height + Detils_Scroll_View.contentSize.height
+        let totalSize = CGSize(width: max(Addres_View.frame.width, Detils_Scroll_View.frame.width), height: totalHeight)
+
+        UIGraphicsBeginImageContextWithOptions(totalSize, false, 0.0)
+
+        // Save the current graphics context
+        guard let context = UIGraphicsGetCurrentContext() else { return nil }
+
+        // Render the Addres_View
+        context.saveGState()
+        context.translateBy(x: 0, y: 0) // Position the Addres_View at the top
+        Addres_View.layer.render(in: context)
+        context.restoreGState()
+
+        // Set the correct position for Detils_Scroll_View
+        let originalOffset = Detils_Scroll_View.contentOffset
+        Detils_Scroll_View.contentOffset = .zero
+
+        // Render the Detils_Scroll_View below the Addres_View
+        context.saveGState()
+        context.translateBy(x: 0, y: Addres_View.frame.height) // Position below Addres_View
+        for subview in Detils_Scroll_View.subviews {
+            subview.layer.render(in: context)
+        }
+        context.restoreGState()
+
+        // Restore the original scroll position
+        Detils_Scroll_View.contentOffset = originalOffset
+
+        // Capture the generated image from the context
+        let capturedImage = UIGraphicsGetImageFromCurrentImageContext()
+
+        // End the image context to release resources
+        UIGraphicsEndImageContext()
+
+        return capturedImage
+    }
+
+
+    func sharePDF_Detils() {
+        guard let image = captureViewsAsImage(),
+              let pdfData = createPDF(from: image) else { return }
+
+        let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent("OrderDetails.pdf")
+        do {
+            try pdfData.write(to: tempURL)
+        } catch {
+            print("Error writing PDF: \(error)")
+            return
+        }
+
+        let activityVC = UIActivityViewController(activityItems: [tempURL], applicationActivities: nil)
+
+        // For iPads: Set source view to avoid crashes
+        if let popoverController = activityVC.popoverPresentationController {
+            popoverController.sourceView = self.view
+            popoverController.sourceRect = CGRect(x: self.view.frame.size.width / 2,
+                                                  y: self.view.frame.size.height / 2,
+                                                  width: 0, height: 0)
+            popoverController.permittedArrowDirections = []
+        }
+
+        self.present(activityVC, animated: true, completion: nil)
+    }
+
+    
+
     
 }
