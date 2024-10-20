@@ -146,6 +146,9 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
     var Select_Dtae:String = ""
     var Sf_Id :String = ""
     var Total_Value:Double = 0
+    
+    @IBOutlet weak var Text_Share: UIImageView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         getUserDetails()
@@ -184,6 +187,8 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
         Share_Orde_Detils.addTarget(target: self, action: #selector(Share_Order_Bill))
         
         
+        Text_Share.addTarget(target: self, action: #selector(Textshare))
+        
         if let HQData = LocalStoreage.string(forKey: "HQ_Master"),
            let list = GlobalFunc.convertToDictionary(text:  HQData) as? [AnyObject] {
             lstHQs = list;
@@ -192,6 +197,8 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
             
             if UserSetup.shared.SF_type == 1{
                 Hq_Name_lbl.text = lstHQs[0]["name"] as? String ?? ""
+            }else{
+                Hq_Name_lbl.text = UserSetup.shared.SF_Name
             }
         }
         OrderDayReport()
@@ -430,6 +437,8 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
                                     Total_Value_Amt.text = formattedValue
                                 }
                                 
+                                
+                                print(Oredrdatadetisl)
                                 Scroll_and_Tb_Height()
                                 HQ_and_Route_TB.reloadData()
                                 Item_Summary_table.reloadData()
@@ -595,9 +604,9 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
         for i in Orderdata{
             count = count + i.Orderdata.count
         }
-//        Table_height.constant = CGFloat(Oredrdatadetisl.count * 520)
-//        Scroll_height .constant = Table_height.constant + 100
         if Day_Report_TB == tableView {
+            Day_Report_TB_height.constant = CGFloat(Orderlist.count * 50)
+            Scroll_Height_TB.constant =  Day_Report_TB_height.constant + 300
             return Orderlist.count
         }
         if Item_Summary_table == tableView{
@@ -676,8 +685,8 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
                            .font: font
                        ]
                    )
-                   let attributedqty = NSAttributedString(string: cellS.Qty?.text ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor.green])
-                   let attributedRate = NSAttributedString(string:  cellS.Free?.text ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor.green])
+                   let attributedqty = NSAttributedString(string: cellS.Qty?.text ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor(red: 0.09, green: 0.64, blue: 0.29, alpha: 1.00)])
+                   let attributedRate = NSAttributedString(string:  cellS.Free?.text ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor(red: 0.09, green: 0.64, blue: 0.29, alpha: 1.00)])
                    cellS.Product_Name?.attributedText = attributedText
                    cellS.Qty?.attributedText = attributedqty
                    cellS.Free?.attributedText = attributedRate
@@ -712,6 +721,7 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
             let Item = lObjSel[indexPath.row]
             Sf_Id = Item["id"] as? String ?? SFCode
             hq_name_sel.text = Item["name"] as? String ?? ""
+            Hq_Name_lbl.text = Item["name"] as? String ?? ""
             Text_Search.text = ""
             OrderDayReport()
             Sel_Wid.isHidden = true
@@ -785,6 +795,65 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
         Hq_Table.reloadData()
     }
     
+    
+    
+    
+    @objc func Textshare() {
+        let data: String = formatOrdersForSharing(orders: Oredrdatadetisl)
+        
+        // Share to WhatsApp if available
+        if let urlEncodedText = data.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+           let whatsappURL = URL(string: "whatsapp://send?text=\(urlEncodedText)"),
+           UIApplication.shared.canOpenURL(whatsappURL) {
+            
+            // Open WhatsApp with the formatted text
+            UIApplication.shared.open(whatsappURL, options: [:], completionHandler: nil)
+        } else {
+            // If WhatsApp is not installed, use UIActivityViewController
+            let activityViewController = UIActivityViewController(activityItems: [data], applicationActivities: nil)
+            
+            // Exclude unnecessary activity types (optional)
+            activityViewController.excludedActivityTypes = [
+                .postToFacebook,
+                .postToTwitter,
+                .assignToContact,
+                .print
+            ]
+            
+            // Present the activity view controller
+            if let topController = UIApplication.shared.keyWindow?.rootViewController {
+                topController.present(activityViewController, animated: true, completion: nil)
+            }
+        }
+    }
+    
+    
+    // Function to format the orders for sharing
+    func formatOrdersForSharing(orders: [OrderDetail]) -> String {
+        var formattedText = ""
+        
+        for order in orders {
+            if order.Orderlist.count == 0{
+                break
+            }
+            
+            formattedText += "Distributor : \(order.Stockist)\n"
+            formattedText += "Retailer : \(order.name)\n"
+            formattedText += "Route : \(order.Route)\n"
+            
+            for item in order.Orderlist {
+                formattedText += "\(item.productName)\n"
+                formattedText += "Rate : \(item.rateValue) Qty : \(item.qtyValue) Value : \(item.totalValue)\n"
+            }
+            
+            formattedText += "Net Amount : \(order.Net_amount)\n"
+            formattedText += "------------**------------\n"
+        }
+        
+      //  formattedText += "Order Taken By : \(hq_name_sel.text)"
+        
+        return formattedText
+    }
     
     
     // MARK: -  Full screan Share
@@ -935,8 +1004,6 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
 
         self.present(activityVC, animated: true, completion: nil)
     }
-
-    
 
     
 }
