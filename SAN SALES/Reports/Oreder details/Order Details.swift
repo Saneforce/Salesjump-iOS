@@ -24,6 +24,11 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
     @IBOutlet weak var Item_Summary_table: UITableView!
     @IBOutlet weak var Day_Report_View: UIView!
     
+    @IBOutlet weak var Scroll_View: UIScrollView!
+    
+    
+    @IBOutlet weak var Hq_Name_lbl: UILabel!
+    
     //Order Detils
     
     @IBOutlet weak var View_Back: UIImageView!
@@ -61,6 +66,11 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
     @IBOutlet weak var Item_Summary_View: NSLayoutConstraint!
     @IBOutlet weak var Item_Summary_TB_hEIGHT: NSLayoutConstraint!
     
+    
+    
+    
+    @IBOutlet weak var Total_Value_Amt: UILabel!
+    
     struct Id:Any{
         var id:String
         var Stkid:String
@@ -83,6 +93,10 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
         var Scheme_Discount:String
         var Cash_Discount:String
         var tlDisAmt:String
+        var Order_date:String
+        var Order_Count:Int
+        var Total_Dic:Double
+        var Total_Tax:Double
         var Orderlist:[OrderItemModel]
     }
     
@@ -125,6 +139,7 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
     
     var Select_Dtae:String = ""
     var Sf_Id :String = ""
+    var Total_Value:Double = 0
     override func viewDidLoad() {
         super.viewDidLoad()
         getUserDetails()
@@ -160,11 +175,20 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
         appendDashedBorder(to: Strik_Line)
         
         
+        Hq_Name_lbl.addTarget(target: self, action: #selector(cURRENT_iMG))
+        
+        
+        
+        
         if let HQData = LocalStoreage.string(forKey: "HQ_Master"),
            let list = GlobalFunc.convertToDictionary(text:  HQData) as? [AnyObject] {
             lstHQs = list;
             lObjSel=lstHQs
             print(lObjSel)
+            
+            if UserSetup.shared.SF_type == 1{
+                Hq_Name_lbl.text = lstHQs[0]["name"] as? String ?? ""
+            }
         }
         OrderDayReport()
     }
@@ -252,18 +276,13 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
                                     let name = j["name"] as? String ?? ""
                                     let nameid = j["Order_No"] as? String ?? ""
                                     let Adress = j["Address"] as? String ?? ""
-                                    let Volumes = j["liters"] as? Double ?? 0
+                                    let liters = j["liters"] as? Double ?? 0
+                                    let Volumes = (liters * 100).rounded() / 100
                                     let Phone = j["phoneNo"] as? String ??  ""
                                     let Net_amount = j["finalNetAmnt"] as? String ?? ""
                                     let Remarks = j["remarks"] as? String ?? ""
                                     let Stkid = j["stockist_code"] as? String ?? ""
                                     let tlDisAmt = j["tlDisAmt"] as? String ?? ""
-                                    
-                                    
-                                    if nameid == "MR4126-24-25-SO-1785"{
-                                        print("hdgh")
-                                    }
-                                    
                                     if let i = Orderdata.firstIndex(where: { (item) in
                                         if item.Stkid == Stkid {
                                             return true
@@ -274,10 +293,19 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
                                         print(j)
                                         let products = j["products"] as? String ?? ""
                                         let Additional_Prod_Code = j["Additional_Prod_Code"] as? String ?? ""
-                                        
                                         let Additional_Prod_Code_Array = products.split(separator: "~").map { String($0) }
                                         let productArray = products.split(separator: ",").map { String($0) }
-                                        let taxArray: [String]? = ["0.0", "0.0."]
+                                        
+                                        let tax_price = j["tax_price"] as? String ?? ""
+                                        var taxArray: [String] = []
+                                        if !tax_price.isEmpty {
+                                            taxArray = tax_price.split(separator: "#").map { String($0) }
+                                        }
+                                        print(taxArray)
+                                        
+                                        let Order_date = j["Order_date"] as? String ?? ""
+                                        
+                                        
                                         let itemList = parseProducts(products, Additional_Prod_Code, taxArray: taxArray)
                                         
                                         for item in itemList {
@@ -300,12 +328,29 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
                                                 Itemwise_Summary_Data.append(newItem)
                                             }
                                         }
-
-
                                         
-                                        Orderdata[i].Orderdata.append(OrderDetail(id: id, Route: Route, Routeflg: "0", Stockist: Stockist, name: name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "3", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: tlDisAmt, Orderlist: itemList))
+                                        let Order_Count = Oredrdatadetisl[i].Order_Count + 1
+
+                                        var Total_discValue = 0.0
+                                        var Total_taxValue = 0.0
                                         
-                                        Oredrdatadetisl.append(OrderDetail(id: id, Route: Route, Routeflg: "0", Stockist: Stockist, name: name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "3", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: tlDisAmt, Orderlist: itemList))
+                                        for k in itemList{
+                                            Total_discValue = Total_discValue + Double(k.discValue)!
+                                            Total_taxValue = Total_taxValue + Double(k.taxValue)!
+                                        }
+                                        
+                                        
+                                        Orderdata[i].Orderdata.append(OrderDetail(id: id, Route: Route, Routeflg: "0", Stockist: Stockist, name: "\(Order_Count). "+name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "\(itemList.count)", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: tlDisAmt, Order_date: Order_date, Order_Count: Order_Count,Total_Dic: Total_discValue,Total_Tax: Total_taxValue, Orderlist: itemList))
+                                        
+                                        Oredrdatadetisl.append(OrderDetail(id: id, Route: Route, Routeflg: "0", Stockist: Stockist, name: "\(Order_Count). "+name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "\(itemList.count)", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: tlDisAmt, Order_date: Order_date, Order_Count: Order_Count,Total_Dic: Total_discValue,Total_Tax: Total_taxValue,Orderlist: itemList))
+                                        
+                                        
+                                        print(Total_Value)
+                                        // second
+                                        print(Net_amount)
+                                        Total_Value = Total_Value + Double(Net_amount)!
+                                        
+                                        print(Total_Value)
 
                                     }else{
                                         
@@ -314,7 +359,13 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
                                         let products = j["products"] as? String ?? ""
                                         let productArray = products.split(separator: ",").map { String($0) }
                                         print(productArray)
-                                        let taxArray: [String]? = ["0.0", "0.0."]
+                                        let tax_price = j["tax_price"] as? String ?? ""
+                                        var taxArray: [String] = []
+                                        if !tax_price.isEmpty {
+                                            taxArray = tax_price.split(separator: "#").map { String($0) }
+                                        }
+                                        print(taxArray)
+                                        let Order_date = j["Order_date"] as? String ?? ""
                                         let itemList = parseProducts(products, Additional_Prod_Code, taxArray: taxArray)
                                              
                                         for item in itemList {
@@ -338,10 +389,41 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
                                             }
                                         }
                                         
-                                        Orderdata.append(Id(id: id, Stkid: Stkid, Orderdata: [OrderDetail(id: id, Route: Route, Routeflg: "1", Stockist: Stockist, name: name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "3", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: tlDisAmt, Orderlist: itemList)]))
+                                        print(itemList)
+                                        var Total_discValue = 0.0
+                                        var Total_taxValue = 0.0
                                         
-                                        Oredrdatadetisl.append(OrderDetail(id: id, Route: Route, Routeflg: "1", Stockist: Stockist, name: name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "3", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: tlDisAmt, Orderlist: itemList))
+                                        for k in itemList{
+                                            Total_discValue = Total_discValue + Double(k.discValue)!
+                                            Total_taxValue = Total_taxValue + Double(k.taxValue)!
+                                        }
+                                        
+                                        Orderdata.append(Id(id: id, Stkid: Stkid, Orderdata: [OrderDetail(id: id, Route: Route, Routeflg: "1", Stockist: Stockist, name: "1. "+name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "\(itemList.count)", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: tlDisAmt, Order_date: Order_date, Order_Count: 1,Total_Dic: Total_discValue,Total_Tax: Total_taxValue, Orderlist: itemList)]))
+                                        
+                                        Oredrdatadetisl.append(OrderDetail(id: id, Route: Route, Routeflg: "1", Stockist: Stockist, name: "1. "+name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "\(itemList.count)", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: tlDisAmt, Order_date: Order_date, Order_Count: 1,Total_Dic: Total_discValue,Total_Tax: Total_taxValue,Orderlist: itemList))
+                                        
+                                        Total_Value += Double(Net_amount) ?? 0.0
+                                        
                                     }
+                                }
+                                
+                                var QtyTotal = 0
+                                var FreeTota = 0
+                                for item in Itemwise_Summary_Data{
+                                    QtyTotal = QtyTotal + Int(item.Qty)
+                                    FreeTota = FreeTota + Int(item.Free)
+                                    
+                                }
+                                
+                                Itemwise_Summary_Data.append(Itemwise_Summary(productName: "Total", ProductID: "", Qty: Double(QtyTotal), Free: Double(FreeTota)))
+
+                                let formatter = NumberFormatter()
+                                formatter.numberStyle = .currency
+                                formatter.locale = Locale(identifier: "en_IN") // Indian locale
+                                print(Total_Value)
+                                
+                                if let formattedValue = formatter.string(from: NSNumber(value: Total_Value)) {
+                                    Total_Value_Amt.text = formattedValue
                                 }
                                 
                                 Scroll_and_Tb_Height()
@@ -371,9 +453,10 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
     }
     
     func parseProducts(_ products: String,_ Idproducts: String, taxArray: [String]?) -> [OrderItemModel] {
+        print(products)
+        
         var itemModelList = [OrderItemModel]()
         var netAmount: Double = 0
-
         let productArray = products.split(separator: ",").map { String($0) }
         let Additional_Prod_Code_Array = Idproducts.split(separator: "#")
         var prodcode = [String]()
@@ -381,8 +464,6 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
             let Product_Id = j.split(separator: "~").map { String($0) }
             prodcode.append(Product_Id[0])
         }
-        
-        print(prodcode)
         
         for (i, product) in productArray.enumerated() {
             let taxAmt = taxArray?.indices.contains(i) == true ? taxArray![i] : "0"
@@ -395,9 +476,10 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
             let rateValue = extractDouble(from: product, start: "*", end: "!")
             let litersVal = extractDouble(from: product, start: "@", end: "+")
             let clValue = Int(extractString(from: product, start: "!", end: "!") ?? "0") ?? 0
-            let uomName = extractString(from: product, start: "!", end: "%") ?? ""
+            let uomNames = extractString(from: product, start: "!", end: "%") ?? ""
+            let name = uomNames.split(separator: "!").map { String($0) }
+            let uomName = name[1]
             let eQtyValue = extractDouble(from: product, start: "%", end: "*")
-
             let totalValue = (rateValue * qtyValue) + taxValue - discValue
             netAmount += totalValue
 
@@ -489,12 +571,19 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
             print(Table_height.constant)
             print(Scroll_height .constant)
         }
-
+        print(Item_Summary_View.constant)
+        print(Item_Summary_TB_hEIGHT.constant)
+        
+        
         let Height = Item_Summary_View.constant -   Item_Summary_TB_hEIGHT.constant
-        let Scroll_Height = CGFloat(Height) + CGFloat(Itemwise_Summary_Data.count * 50)
-        Item_Summary_TB_hEIGHT.constant = CGFloat(Itemwise_Summary_Data.count * 50)
+        let Scroll_Height = CGFloat(Height) + CGFloat(Itemwise_Summary_Data.count * 32)
+        Item_Summary_TB_hEIGHT.constant = CGFloat(Itemwise_Summary_Data.count * 32)
         Item_Summary_View.constant = Scroll_Height
         Scroll_height .constant =  Scroll_height .constant  +  Item_Summary_View.constant
+        print(Item_Summary_View.constant)
+        print(Item_Summary_TB_hEIGHT.constant)
+        
+        
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -528,9 +617,24 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
                cell.Addres.text = Oredrdatadetisl[indexPath.row].Adress
                cell.Volumes.text = "Volumes: \(Oredrdatadetisl[indexPath.row].Volumes)"
                cell.Phone.text = "Phone:"+Oredrdatadetisl[indexPath.row].Phone
-               cell.Netamt.text = Oredrdatadetisl[indexPath.row].Net_amount
+               if  let NetValue = Float(Oredrdatadetisl[indexPath.row].Net_amount){
+                   
+                   cell.Netamt.text = "₹\(NetValue)"
+               }else{
+                   cell.Netamt.text = "₹\(Oredrdatadetisl[indexPath.row].Net_amount)"
+               }
+               
                cell.Remark.text =  Oredrdatadetisl[indexPath.row].Remarks
                cell.insideTable1Data = [Oredrdatadetisl[indexPath.row]]
+               
+               if Oredrdatadetisl[indexPath.row].Orderlist.count == 0 {
+                   cell.View_Detils.isHidden = true
+                   cell.Start_Image.isHidden = true
+               }else{
+                   cell.View_Detils.isHidden = false
+                   cell.Start_Image.isHidden = false
+               }
+               
                cell.reloadData()
                return cell
            }else if Day_Report_TB == tableView{
@@ -553,9 +657,48 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
                return cellText
            }else{
                let cellS = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! Item_summary_TB
-               cellS.Product_Name.text = Itemwise_Summary_Data[indexPath.row].productName
-               cellS.Qty.text = String(Itemwise_Summary_Data[indexPath.row].Qty)
-               cellS.Free.text = String(Itemwise_Summary_Data[indexPath.row].Free)
+ 
+               if Itemwise_Summary_Data[indexPath.row].productName == "Total" && Itemwise_Summary_Data[indexPath.row].ProductID == "" {
+                   // Set the text properties first
+                   cellS.Product_Name.text = Itemwise_Summary_Data[indexPath.row].productName
+                   cellS.Qty.text = String(Itemwise_Summary_Data[indexPath.row].Qty)
+                   cellS.Free.text = String(Itemwise_Summary_Data[indexPath.row].Free)
+                   // Apply attributed text (font color in this case)
+                   let font = UIFont.systemFont(ofSize: 14, weight: .bold)
+                   let attributedText = NSAttributedString(
+                       string: cellS.Product_Name?.text ?? "",
+                       attributes: [
+                           .foregroundColor: UIColor.black,
+                           .font: font
+                       ]
+                   )
+                   let attributedqty = NSAttributedString(string: cellS.Qty?.text ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor.green])
+                   let attributedRate = NSAttributedString(string:  cellS.Free?.text ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor.green])
+                   cellS.Product_Name?.attributedText = attributedText
+                   cellS.Qty?.attributedText = attributedqty
+                   cellS.Free?.attributedText = attributedRate
+               } else {
+                   cellS.Product_Name.text = Itemwise_Summary_Data[indexPath.row].productName
+                   cellS.Qty.text = String(Itemwise_Summary_Data[indexPath.row].Qty)
+                   cellS.Free.text = String(Itemwise_Summary_Data[indexPath.row].Free)
+                   // Apply attributed text (font color in this case)
+                   let font = UIFont.systemFont(ofSize: 14, weight: .regular)
+                   let attributedText = NSAttributedString(
+                       string: cellS.Product_Name?.text ?? "",
+                       attributes: [
+                           .foregroundColor: UIColor.black,
+                           .font: font
+                       ]
+                   )
+                   let attributedqty = NSAttributedString(string: cellS.Qty?.text ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
+                   let attributedRate = NSAttributedString(string:  cellS.Free?.text ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
+                   cellS.Product_Name?.attributedText = attributedText
+                   cellS.Qty?.attributedText = attributedqty
+                   cellS.Free?.attributedText = attributedRate
+                   
+               }
+               
+               
                return cellS
            }
        }
@@ -583,12 +726,13 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
           To_Addres.text = Item.Adress
           To_No.text = Item.Phone
           Order_No.text = Item.nameid
+          Order_Date.text = Item.Order_date
           Total_item.text = String(Item.Orderlist.count)
           Orderlist = Item.Orderlist
-          Tax.text = "0"
-          Sch_Disc.text = "0"
+          Tax.text = String(Item.Total_Tax)
+          Sch_Disc.text = String(Item.Total_Dic)
           Cas_disc.text = Item.tlDisAmt
-          Net_Amt.text = "0"
+          Net_Amt.text = "₹ " + Item.Net_amount
           Day_Report_TB.reloadData()
           Day_Report_View.isHidden = false
       }
@@ -635,6 +779,82 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
         
         }
         Hq_Table.reloadData()
+    }
+    
+    
+    
+    
+    
+    @objc func cURRENT_iMG(){
+        sharePDF(from: Scroll_View)
+    }
+    
+    
+    // MARK: - Capture Scroll View Content as Image
+
+    func captureScrollViewContent(scrollView: UIScrollView) -> UIImage? {
+        // Start image context with the full content size of the scroll view
+        UIGraphicsBeginImageContextWithOptions(scrollView.contentSize, false, 0.0)
+        
+        // Save the original scroll position to restore later
+        let originalOffset = scrollView.contentOffset
+        scrollView.contentOffset = .zero
+        
+        // Loop through all subviews in the scroll view
+        for subview in scrollView.subviews {
+            // Render each subview into the current context
+            subview.layer.render(in: UIGraphicsGetCurrentContext()!)
+        }
+        
+        // Capture the generated image from the context
+        let capturedImage = UIGraphicsGetImageFromCurrentImageContext()
+        
+        // End the image context to release resources
+        UIGraphicsEndImageContext()
+        
+        // Restore the original scroll position
+        scrollView.contentOffset = originalOffset
+        
+        return capturedImage
+    }
+
+
+
+    // MARK: - Create PDF from Image
+    func createPDF(from image: UIImage) -> Data? {
+        let pdfData = NSMutableData()
+        UIGraphicsBeginPDFContextToData(pdfData, CGRect(origin: .zero, size: image.size), nil)
+        UIGraphicsBeginPDFPage()
+        image.draw(in: CGRect(origin: .zero, size: image.size))
+        UIGraphicsEndPDFContext()
+        return pdfData as Data
+    }
+
+    // MARK: - Share PDF using UIActivityViewController
+    func sharePDF(from scrollView: UIScrollView) {
+        guard let image = captureScrollViewContent(scrollView: scrollView),
+              let pdfData = createPDF(from: image) else { return }
+
+        let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent("OrderDetails.pdf")
+        do {
+            try pdfData.write(to: tempURL)
+        } catch {
+            print("Error writing PDF: \(error)")
+            return
+        }
+
+        let activityVC = UIActivityViewController(activityItems: [tempURL], applicationActivities: nil)
+
+        // For iPads: Set source view to avoid crashes
+        if let popoverController = activityVC.popoverPresentationController {
+            popoverController.sourceView = self.view
+            popoverController.sourceRect = CGRect(x: self.view.frame.size.width / 2,
+                                                  y: self.view.frame.size.height / 2,
+                                                  width: 0, height: 0)
+            popoverController.permittedArrowDirections = []
+        }
+
+        self.present(activityVC, animated: true, completion: nil)
     }
     
 }
