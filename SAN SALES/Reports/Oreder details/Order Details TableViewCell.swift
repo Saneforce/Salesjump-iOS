@@ -28,6 +28,7 @@ class Order_Details_TableViewCell: UITableViewCell, UITableViewDataSource, UITab
     @IBOutlet weak var Netamt: UILabel!
     @IBOutlet weak var Remark: UILabel!
     @IBOutlet weak var View_Detils: UIImageView!
+    @IBOutlet weak var Start_Image: UIImageView!
     
     // MARK: - Properties
     weak var delegate: OrderDetailsCellDelegate?
@@ -117,6 +118,11 @@ class Order_Details_TableViewCell: UITableViewCell, UITableViewDataSource, UITab
         // Add the test item and the actual order list items
         OrderDetils.append(orderItem)
         OrderDetils.append(contentsOf: firstDetail.Orderlist)
+        
+        print(OrderDetils.count)
+        if OrderDetils.count == 1 {
+            OrderDetils.removeAll()
+        }
 
         // Reload the inner table view
         insideTable1.reloadData()
