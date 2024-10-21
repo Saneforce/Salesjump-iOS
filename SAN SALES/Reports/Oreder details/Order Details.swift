@@ -80,6 +80,7 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
     struct Id:Any{
         var id:String
         var Stkid:String
+        var RouteId:String
         var Orderdata:[OrderDetail]
     }
     struct OrderDetail:Any{
@@ -294,8 +295,20 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
                                     let Remarks = j["remarks"] as? String ?? ""
                                     let Stkid = j["stockist_code"] as? String ?? ""
                                     let tlDisAmt = j["tlDisAmt"] as? String ?? ""
+                                    
+                                   
+                                    
+                                    
+                                    if nameid == "MR4126-24-25-SO-1784"{
+                                        print(j)
+                                    }
+                                    
+                                    
                                     if let i = Orderdata.firstIndex(where: { (item) in
-                                        if item.Stkid == Stkid {
+                                        
+                                        print(item.Stkid)
+                                        print(Stkid)
+                                        if item.Stkid == Stockist && item.RouteId == Route {
                                             return true
                                         }
                                         return false
@@ -350,6 +363,7 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
                                             Total_taxValue = Total_taxValue + Double(k.taxValue)!
                                         }
                                         
+                                        print(Orderdata[i].Orderdata)
                                         
                                         Orderdata[i].Orderdata.append(OrderDetail(id: id, Route: Route, Routeflg: "0", Stockist: Stockist, name: "\(Order_Count). "+name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "\(itemList.count)", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: tlDisAmt, Order_date: Order_date, Order_Count: Order_Count,Total_Dic: Total_discValue,Total_Tax: Total_taxValue, Orderlist: itemList))
                                         
@@ -409,7 +423,7 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
                                             Total_taxValue = Total_taxValue + Double(k.taxValue)!
                                         }
                                         
-                                        Orderdata.append(Id(id: id, Stkid: Stkid, Orderdata: [OrderDetail(id: id, Route: Route, Routeflg: "1", Stockist: Stockist, name: "1. "+name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "\(itemList.count)", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: tlDisAmt, Order_date: Order_date, Order_Count: 1,Total_Dic: Total_discValue,Total_Tax: Total_taxValue, Orderlist: itemList)]))
+                                        Orderdata.append(Id(id: id, Stkid: Stockist, RouteId: Route, Orderdata: [OrderDetail(id: id, Route: Route, Routeflg: "1", Stockist: Stockist, name: "1. "+name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "\(itemList.count)", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: tlDisAmt, Order_date: Order_date, Order_Count: 1,Total_Dic: Total_discValue,Total_Tax: Total_taxValue, Orderlist: itemList)]))
                                         
                                         Oredrdatadetisl.append(OrderDetail(id: id, Route: Route, Routeflg: "1", Stockist: Stockist, name: "1. "+name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "\(itemList.count)", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: tlDisAmt, Order_date: Order_date, Order_Count: 1,Total_Dic: Total_discValue,Total_Tax: Total_taxValue,Orderlist: itemList))
                                         
