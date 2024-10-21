@@ -39,22 +39,18 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
     @IBOutlet weak var Day_Report_TB_height: NSLayoutConstraint!
     @IBOutlet weak var Strik_Line: UIView!
     @IBOutlet weak var Scroll_Height_TB: NSLayoutConstraint!
-    
     @IBOutlet weak var Calender_View: UIView!
     @IBOutlet weak var Calender_back: UIImageView!
     @IBOutlet weak var Calender: FSCalendar!
-    
     @IBOutlet weak var Sel_Wid: UIView!
     @IBOutlet weak var Sel_Back: UIImageView!
     @IBOutlet weak var Text_Search: UITextField!
     @IBOutlet weak var Hq_Table: UITableView!
-    
     @IBOutlet weak var Day_View_Stk: UILabel!
     @IBOutlet weak var From_no: UILabel!
     @IBOutlet weak var To_Retiler: UILabel!
     @IBOutlet weak var To_Addres: UILabel!
     @IBOutlet weak var To_No: UILabel!
-    
     @IBOutlet weak var Total_item: UILabel!
     @IBOutlet weak var Tax: UILabel!
     @IBOutlet weak var Sch_Disc: UILabel!
@@ -62,19 +58,10 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
     @IBOutlet weak var Net_Amt: UILabel!
     @IBOutlet weak var Order_No: UILabel!
     @IBOutlet weak var Order_Date: UILabel!
-    
     @IBOutlet weak var Item_Summary_View: NSLayoutConstraint!
     @IBOutlet weak var Item_Summary_TB_hEIGHT: NSLayoutConstraint!
-    
-    
-    
-    
     @IBOutlet weak var Total_Value_Amt: UILabel!
-    
-    
-    
     @IBOutlet weak var Share_Pdf: UIImageView!
-
     @IBOutlet weak var Share_Orde_Detils: UIImageView!
     
     struct Id:Any{
@@ -83,6 +70,7 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
         var RouteId:String
         var Orderdata:[OrderDetail]
     }
+    
     struct OrderDetail:Any{
         var id:String
         var Route:String
@@ -317,7 +305,7 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
                                         print(j)
                                         let products = j["products"] as? String ?? ""
                                         let Additional_Prod_Code = j["Additional_Prod_Code"] as? String ?? ""
-                                        let Additional_Prod_Code_Array = products.split(separator: "~").map { String($0) }
+                                        let Additional_Prod_Code_Array = products.split(separator: "~").map {String($0)}
                                         let productArray = products.split(separator: ",").map { String($0) }
                                         
                                         let tax_price = j["tax_price"] as? String ?? ""

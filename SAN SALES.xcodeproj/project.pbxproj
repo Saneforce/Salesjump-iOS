@@ -122,6 +122,7 @@
 		3F2F811F27D0E7430015E1CA /* HomePageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F2F811E27D0E7430015E1CA /* HomePageViewController.swift */; };
 		3F2F812127D0E9670015E1CA /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F2F812027D0E9670015E1CA /* RootViewController.swift */; };
 		3F30F82E2C4E5786005EFAD9 /* Expense View SFC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F30F82D2C4E5786005EFAD9 /* Expense View SFC.swift */; };
+		3F3127AC2CC675B2000F756A /* DAY REPORT WITH DATE RANGE.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3127AB2CC675B2000F756A /* DAY REPORT WITH DATE RANGE.swift */; };
 		3F3D4DDB27E810880063E271 /* GlobalFunc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3D4DDA27E810880063E271 /* GlobalFunc.swift */; };
 		3F4CC1932875580100BA2B4E /* AppTrackingTransparency.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F4CC1922875580100BA2B4E /* AppTrackingTransparency.framework */; };
 		3F4CC1952875581400BA2B4E /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F4CC1942875581400BA2B4E /* AdSupport.framework */; };
@@ -283,6 +284,7 @@
 		3F2F811E27D0E7430015E1CA /* HomePageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageViewController.swift; sourceTree = "<group>"; };
 		3F2F812027D0E9670015E1CA /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
 		3F30F82D2C4E5786005EFAD9 /* Expense View SFC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Expense View SFC.swift"; sourceTree = "<group>"; };
+		3F3127AB2CC675B2000F756A /* DAY REPORT WITH DATE RANGE.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DAY REPORT WITH DATE RANGE.swift"; sourceTree = "<group>"; };
 		3F3D4DDA27E810880063E271 /* GlobalFunc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalFunc.swift; sourceTree = "<group>"; };
 		3F4CC1922875580100BA2B4E /* AppTrackingTransparency.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppTrackingTransparency.framework; path = System/Library/Frameworks/AppTrackingTransparency.framework; sourceTree = SDKROOT; };
 		3F4CC1942875581400BA2B4E /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
@@ -578,6 +580,14 @@
 			path = "SAN SALES";
 			sourceTree = "<group>";
 		};
+		3F3127AA2CC67561000F756A /* DAY REPORT WITH DATE RANGE */ = {
+			isa = PBXGroup;
+			children = (
+				3F3127AB2CC675B2000F756A /* DAY REPORT WITH DATE RANGE.swift */,
+			);
+			path = "DAY REPORT WITH DATE RANGE";
+			sourceTree = "<group>";
+		};
 		3F3B818C197DE753883A89FB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -634,6 +644,7 @@
 				3F9DBA0A2C9BE44B00BDADDB /* Target vs Sales Analysis.swift */,
 				3FC32E562CB3F2A90092449B /* ClosingStockView (SS).swift */,
 				3FD090FA2CBE32850087CEEB /* Oreder details */,
+				3F3127AA2CC67561000F756A /* DAY REPORT WITH DATE RANGE */,
 			);
 			path = Reports;
 			sourceTree = "<group>";
@@ -923,6 +934,7 @@
 				1514DF6C2BD7839D00E6B45A /* CallPreview.swift in Sources */,
 				3F0822BD29000872009C33EA /* AdminMenus.swift in Sources */,
 				15F4504E2C2A88DF0074D285 /* MissedDateSelection.swift in Sources */,
+				3F3127AC2CC675B2000F756A /* DAY REPORT WITH DATE RANGE.swift in Sources */,
 				3F063535284171800027842E /* NewOutlet.swift in Sources */,
 				386A43952A1CC63100CE1833 /* PrimarySubmittedDCR.swift in Sources */,
 				386A43912A1CBB0200CE1833 /* SubmittedDCR.swift in Sources */,
