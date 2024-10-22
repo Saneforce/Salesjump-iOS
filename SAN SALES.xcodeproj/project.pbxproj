@@ -137,6 +137,7 @@
 		3F619F3E27EB275000F3D05F /* CLocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F619F3D27EB274F00F3D05F /* CLocationService.swift */; };
 		3F61CA692C9157730029CE01 /* Closing Sale Entry (DB).swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F61CA682C9157730029CE01 /* Closing Sale Entry (DB).swift */; };
 		3F7CCF0328F14CA3002A7C03 /* GEOTagging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7CCF0228F14CA3002A7C03 /* GEOTagging.swift */; };
+		3F8292FF2CC786100098B191 /* DAY REPORT WITH DATE RANGE CELL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F8292FE2CC786100098B191 /* DAY REPORT WITH DATE RANGE CELL.swift */; };
 		3F886A122C8EEDEB001F9A39 /* ClosingStockView (DB).swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F886A112C8EEDEB001F9A39 /* ClosingStockView (DB).swift */; };
 		3F8B989A2C594C610073D452 /* SFC Details View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F8B98992C594C610073D452 /* SFC Details View.swift */; };
 		3F8BF29D27E99CCA00E1C41B /* CameraService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F8BF29C27E99CCA00E1C41B /* CameraService.swift */; };
@@ -299,6 +300,7 @@
 		3F619F3D27EB274F00F3D05F /* CLocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CLocationService.swift; sourceTree = "<group>"; };
 		3F61CA682C9157730029CE01 /* Closing Sale Entry (DB).swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Closing Sale Entry (DB).swift"; sourceTree = "<group>"; };
 		3F7CCF0228F14CA3002A7C03 /* GEOTagging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GEOTagging.swift; sourceTree = "<group>"; };
+		3F8292FE2CC786100098B191 /* DAY REPORT WITH DATE RANGE CELL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DAY REPORT WITH DATE RANGE CELL.swift"; sourceTree = "<group>"; };
 		3F886A112C8EEDEB001F9A39 /* ClosingStockView (DB).swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ClosingStockView (DB).swift"; sourceTree = "<group>"; };
 		3F8B98992C594C610073D452 /* SFC Details View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SFC Details View.swift"; sourceTree = "<group>"; };
 		3F8BF29C27E99CCA00E1C41B /* CameraService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraService.swift; sourceTree = "<group>"; };
@@ -580,12 +582,13 @@
 			path = "SAN SALES";
 			sourceTree = "<group>";
 		};
-		3F3127AA2CC67561000F756A /* DAY REPORT WITH DATE RANGE */ = {
+		3F3127AA2CC67561000F756A /* DAY REPORT WITH DATE */ = {
 			isa = PBXGroup;
 			children = (
 				3F3127AB2CC675B2000F756A /* DAY REPORT WITH DATE RANGE.swift */,
+				3F8292FE2CC786100098B191 /* DAY REPORT WITH DATE RANGE CELL.swift */,
 			);
-			path = "DAY REPORT WITH DATE RANGE";
+			path = "DAY REPORT WITH DATE";
 			sourceTree = "<group>";
 		};
 		3F3B818C197DE753883A89FB /* Frameworks */ = {
@@ -644,7 +647,7 @@
 				3F9DBA0A2C9BE44B00BDADDB /* Target vs Sales Analysis.swift */,
 				3FC32E562CB3F2A90092449B /* ClosingStockView (SS).swift */,
 				3FD090FA2CBE32850087CEEB /* Oreder details */,
-				3F3127AA2CC67561000F756A /* DAY REPORT WITH DATE RANGE */,
+				3F3127AA2CC67561000F756A /* DAY REPORT WITH DATE */,
 			);
 			path = Reports;
 			sourceTree = "<group>";
@@ -857,6 +860,7 @@
 				3F06352E283BF36A0027842E /* FlowLayout.swift in Sources */,
 				3F06352A283A8C920027842E /* ColorTheme.swift in Sources */,
 				38D0F76829BB2447003EEB03 /* BrandReviewVisit.swift in Sources */,
+				3F8292FF2CC786100098B191 /* DAY REPORT WITH DATE RANGE CELL.swift in Sources */,
 				388CD9292BDA3A7C003A06F9 /* SuperStockistOrderSubmittedDetails.swift in Sources */,
 				3F97F9F62831B5950097166D /* AddNewCustomer.swift in Sources */,
 				15F9E7B32C5399D70057D4C6 /* MyResourcesRetailerList.swift in Sources */,
