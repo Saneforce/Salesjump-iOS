@@ -7,17 +7,41 @@
 
 import UIKit
 
-class DAY_REPORT_WITH_DATE_RANGE_CELL: UITableViewCell {
-
+class DAY_REPORT_WITH_DATE_RANGE_CELL: UITableViewCell, UICollectionViewDataSource, UICollectionViewDelegate {
+ 
+    @IBOutlet weak var Name: UILabel!
+    @IBOutlet weak var Date: UILabel!
+    
+    @IBOutlet weak var Collection_View: UICollectionView!
+    
+    let data = [
+            ["TC:", "PC:", "O. Value", "Pri Ord", "Pri. Value"],
+            ["1", "1", "50.09", "0", "0"]
+        ]
+    
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+        
+        Collection_View.dataSource = self
+        Collection_View.delegate = self
     }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
+    
+    
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+            return data.count
+        }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+            return data[section].count
+        }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! CollectionCell
+        if Collection_View == collectionView{
+            cell.lblText.text = data[indexPath.section][indexPath.item]
+        }
+        return cell
     }
-
+    
 }

@@ -15,8 +15,9 @@ class ReportMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
     @IBOutlet weak var imgProf: UIImageView!
     @IBOutlet weak var lblSFName: UILabel!
     @IBOutlet weak var lblDesig: UILabel!
-    
     @IBOutlet weak var menuClose: UIImageView!
+    
+    
     
     struct mnuItem: Any {
         let MasId: Int
@@ -57,6 +58,8 @@ class ReportMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
             strMasList.append(mnuItem.init(MasId: 11, MasName: "Closing Stock View (SS)", MasImage: "SwitchRoute"))
         }
         strMasList.append(mnuItem.init(MasId: 12, MasName: "Order Details", MasImage: "SwitchRoute"))
+        
+        strMasList.append(mnuItem.init(MasId: 13, MasName: "DAY REPORT WITH DATE RANGE", MasImage: "SwitchRoute"))
         btnBack.addTarget(target: self, action: #selector(closeMenuWin))
         menuClose.addTarget(target: self, action: #selector(closeMenuWin))
         tbMenuDetail.delegate=self
@@ -176,6 +179,12 @@ class ReportMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
         }else if lItm.MasId == 12{
             let RptMnuVc = storyboard.instantiateViewController(withIdentifier: "sbReportsmnu") as! ReportMenu
             let attenReportVC = storyboard2.instantiateViewController(withIdentifier: "Order_Details") as! Order_Details
+            
+             viewController.setViewControllers([RptMnuVc,attenReportVC], animated: false)
+             (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
+        }else if lItm.MasId == 13{
+            let RptMnuVc = storyboard.instantiateViewController(withIdentifier: "sbReportsmnu") as! ReportMenu
+            let attenReportVC = storyboard2.instantiateViewController(withIdentifier: "DAY_REPORT_WITH_DATE_RANGE") as! DAY_REPORT_WITH_DATE_RANGE
             
              viewController.setViewControllers([RptMnuVc,attenReportVC], animated: false)
              (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
