@@ -830,198 +830,225 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
     }
     
     func updateProduct( products: [AnyObject]) {
-        
-        for product in products {
-            
-            print(product)
-            let productName = String(format: "%@", product["name"] as! CVarArg)
-            let productId = String(format: "%@", product["id"] as! CVarArg)
-            let cateId = String(format: "%@", product["cateid"] as! CVarArg)
-            let saleErpCode = String(format: "%@", product["Sale_Erp_Code"] as! CVarArg)
-            let newWt = String(format: "%@", product["product_netwt"] as! CVarArg)
-            
-            
-            let Units = lstAllUnits.filter({(product) in
-                let ProdId = String(format: "%@", product["Product_Code"] as! CVarArg)
-                return Bool(ProdId == productId)
-            })
-            
-            var unitName = ""
-            var unitId = ""
-            var unitCount = 0
-            if Units.count > 0 {
-                print(Units)
-                unitName = String(format: "%@", Units.first!["name"] as! CVarArg)
-                unitId = String(format: "%@", Units.first!["id"] as! CVarArg)
-                let conQty = String(format: "%@", Units.first!["ConQty"] as! CVarArg)
-                unitCount = Int(conQty) ?? 0
-            }
-            
-            let RateItems: [AnyObject] = lstProductsRates.filter ({ (Rate) in
-                if Rate["Product_Detail_Code"] as! String == productId {
-                    return true
-                }
-                return false
-            })
-            
-            let retailerRateItems: [AnyObject] = lstRetailerRates.filter ({ (Rate) in
-                if Rate["Product_Detail_Code"] as! String == productId {
-                    return true
-                }
-                return false
-            })
-            
-            let marginRateItems: [AnyObject] = lstMarginRates.filter ({ (Rate) in
-                if Rate["Product_Detail_Code"] as! String == productId {
-                    return true
-                }
-                return false
-            })
-            
-            
-            
-            var rate : Double = 0
-            var retailorPrice : Double = 0
-            if(RateItems.count>0){
-                print(RateItems)
-                rate = (RateItems.first!["Retailor_Price"] as! NSString).doubleValue
-                retailorPrice = (RateItems.first!["Retailor_Price"] as! NSString).doubleValue
-            }
-            
-            if(retailerRateItems.count>0){
-                print(retailerRateItems)
-                rate = (retailerRateItems.first!["Retailor_Price"] as! NSString).doubleValue
-                retailorPrice = (retailerRateItems.first!["Retailor_Price"] as! NSString).doubleValue
-            }
-            
-            var tax : Double = 0
-            
-            let taxItems = lstProductTax.filter({ (product) in
-                let ProdId = String(format: "%@", product["Product_Code"] as! CVarArg)
-                return Bool(ProdId == productId)
-            })
-            
-            if taxItems.count > 0 {
-                tax = (taxItems.first!["Value"] as! Double)
-                tax = Double(round(100 * tax) / 100)
-            }
-            
-            var disCountPer : Double = 0
-            var disCountValue : Double = 0
-            var isSchemeActive = false
-            
-            var isMultiSchemeActive = false
-            var multiScheme = [Scheme]()
-            
-            var scheme : Int = 0
-            var offerAvailableCount : Int = 0
-            var offerUnitName : String = ""
-            var offerProductCode : String = ""
-            var offerProductName:String = ""
-            var package : String = ""
-            var schemeType : String = ""
-            var discountType : String = ""
-            
-            if UserSetup.shared.SchemeBased == 1 && UserSetup.shared.offerMode == 1 {
-                print(productId)
-                print(lstStockistSchemes)
-                print(lstStockistSchemes.count)
+            for product in products {
+                print(product)
+                let productName = String(format: "%@", product["name"] as! CVarArg)
+                let productId = String(format: "%@", product["id"] as! CVarArg)
+                let cateId = String(format: "%@", product["cateid"] as! CVarArg)
+                let saleErpCode = String(format: "%@", product["Sale_Erp_Code"] as! CVarArg)
+                let newWt = String(format: "%@", product["product_netwt"] as! CVarArg)
+                let baseUnit = String(format: "%@", product["Base_Unit_code"] as! CVarArg)
                 
-                let schemesItems = lstStockistSchemes.filter({ (product) in
-                    let ProdId = String(format: "%@", product["PCode"] as! CVarArg)
+                let Units = lstAllUnits.filter({(product) in
+                    print(product)
+                    let ProdId = String(format: "%@", product["Product_Code"] as! CVarArg)
+                    let id = String(format: "%@", product["id"] as! CVarArg)
+                    return Bool(ProdId == productId && baseUnit == id)
+                })
+                
+                if productId == "SJQA13334" {
+                    print("P")
+                }
+                var unitName = ""
+                var unitId = ""
+                var unitCount = 0
+                if Units.count > 0 {
+                    print(Units)
+                    unitName = String(format: "%@", Units.first!["name"] as! CVarArg)
+                    unitId = String(format: "%@", Units.first!["id"] as! CVarArg)
+                    let conQty = String(format: "%@", Units.first!["ConQty"] as! CVarArg)
+                    unitCount = Int(conQty) ?? 0
+                }
+                
+                let RateItems: [AnyObject] = lstProductsRates.filter ({ (Rate) in
+                    if Rate["Product_Detail_Code"] as! String == productId {
+                        return true
+                    }
+                    return false
+                })
+                
+                let retailerRateItems: [AnyObject] = lstRetailerRates.filter ({ (Rate) in
+                    if Rate["Product_Detail_Code"] as! String == productId {
+                        return true
+                    }
+                    return false
+                })
+                
+                let marginRateItems: [AnyObject] = lstMarginRates.filter ({ (Rate) in
+                    if Rate["Product_Detail_Code"] as! String == productId {
+                        return true
+                    }
+                    return false
+                })
+                
+                
+                
+                var rate : Double = 0
+                var retailorPrice : Double = 0
+                if(RateItems.count>0){
+                    print(RateItems)
+                    rate = (RateItems.first!["Retailor_Price"] as! NSString).doubleValue
+                    retailorPrice = (RateItems.first!["Retailor_Price"] as! NSString).doubleValue
+                }
+                
+                if(retailerRateItems.count>0){
+                    print(retailerRateItems)
+                    print(product)
+                    rate = (retailerRateItems.first!["Retailor_Price"] as! NSString).doubleValue
+                    retailorPrice = (retailerRateItems.first!["Retailor_Price"] as! NSString).doubleValue
+                }
+                
+                var tax : Double = 0
+                
+                let taxItems = lstProductTax.filter({ (product) in
+                    let ProdId = String(format: "%@", product["Product_Code"] as! CVarArg)
                     return Bool(ProdId == productId)
                 })
                 
-                if schemesItems.count > 0 {
+                if taxItems.count > 0 {
+                    tax = (taxItems.first!["Value"] as! Double)
+                    tax = Double(round(100 * tax) / 100)
+                }
+                
+                var disCountPer : Double = 0
+                var disCountValue : Double = 0
+                var isSchemeActive = false
+                
+                var isMultiSchemeActive = false
+                var multiScheme = [Scheme]()
+                
+                var scheme : Int = 0
+                var offerAvailableCount : Int = 0
+                var offerUnitName : String = ""
+                var offerProductCode : String = ""
+                var offerProductName:String = ""
+                var package : String = ""
+                var schemeType : String = ""
+                var discountType : String = ""
+                
+                if UserSetup.shared.SchemeBased == 1 && UserSetup.shared.offerMode == 1 {
                     
-                    isSchemeActive = true
-                    scheme = (schemesItems.first!["Scheme"] as! NSString).integerValue
-                    offerAvailableCount = (schemesItems.first!["FQ"] as! NSString).integerValue
-                    offerUnitName = schemesItems.first!["FreeUnit"] as? String ?? ""
-                    offerProductCode = schemesItems.first!["OffProd"] as? String ?? ""
-                    offerProductName = schemesItems.first!["OffProdNm"] as? String ?? ""
-                    package = schemesItems.first!["pkg"] as? String ?? ""
-                    schemeType = schemesItems.first!["schemeType"] as? String ?? ""
-                    discountType = schemesItems.first!["Discount_Type"] as? String ?? ""
-                    print(package)
+                    let schemesItems = lstStockistSchemes.filter({ (product) in
+                        let ProdId = String(format: "%@", product["PCode"] as! CVarArg)
+                        return Bool(ProdId == productId)
+                    })
                     
-                    if discountType == "%" {
-                        disCountPer = (schemesItems.first!["Disc"] as! NSString).doubleValue
-                        disCountPer = Double(round(100 * disCountPer) / 100)
-                    }else{
-                        disCountValue = (schemesItems.first!["Disc"] as! NSString).doubleValue
-                        disCountValue = Double(round(100 * disCountValue) / 100)
-                    }
-                    
-                    if schemesItems.count > 1 {
-                        
-                        for schemesItem in schemesItems {
-                            isMultiSchemeActive = true
-                            
-                            let scheme = (schemesItem["Scheme"] as! NSString).integerValue
-                            let offerAvailableCount = (schemesItem["FQ"] as! NSString).integerValue
-                            let offerUnitName = schemesItem["FreeUnit"] as? String ?? ""
-                            let offerProductCode = schemesItem["OffProd"] as? String ?? ""
-                            let offerProductName = schemesItem["OffProdNm"] as? String ?? ""
-                            let package = schemesItem["pkg"] as? String ?? ""
-                            let schemeType = schemesItem["schemeType"] as? String ?? ""
-                            let discountType = schemesItem["Discount_Type"] as? String ?? ""
-                            
-                            var disCountPert : Double = 0
-                            var discountValue : Double = 0
-                            if discountType == "%" {
-                                disCountPert = (schemesItem["Disc"] as! NSString).doubleValue
-                                disCountPert = Double(round(100 * disCountPer) / 100)
-                            }else {
-                                discountValue = (schemesItem["Disc"] as! NSString).doubleValue
-                                discountValue = Double(round(100 * discountValue) / 100)
-                            }
-                            
-                            multiScheme.append(Scheme(disCountPer: disCountPert,disCountValue: discountValue, scheme: scheme, offerAvailableCount: offerAvailableCount, offerUnitName: offerUnitName, offerProductCode: offerProductCode, offerProductName: offerProductName, package: package,schemeType: schemeType,discountType: discountType))
+                    if schemesItems.count > 0 {
+                        isSchemeActive = true
+                        if let schValue = schemesItems.first!["Scheme"] as? String {
+                            scheme = Int(schValue) ?? 0
+                        }else if let schValue = schemesItems.first!["Scheme"] as? Int {
+                            scheme = schValue
                         }
-                    }
-                    
-                }
-            }
-            
-            if UserSetup.shared.productCard == "1" {
-                if(marginRateItems.count>0){
-                    print(marginRateItems)
-                    rate = (marginRateItems.first!["MRP_Price"] as! NSString).doubleValue
-                    retailorPrice = (marginRateItems.first!["MRP_Price"] as! NSString).doubleValue
-                    
-                    for item in marginRateItems {
-                        print("Gooood")
-                        rate = (item["MRP_Price"] as! NSString).doubleValue
-                        retailorPrice = (item["MRP_Price"] as! NSString).doubleValue
+                     //   scheme = (schemesItems.first!["Scheme"] as? NSString  ?? "").integerValue
+                      //  offerAvailableCount = (schemesItems.first!["FQ"] as? NSString ?? "").integerValue
+                        if let freeValue = schemesItems.first!["FQ"] as? String {
+                            offerAvailableCount = Int(freeValue) ?? 0
+                        }else if let freeValue = schemesItems.first!["FQ"] as? Int {
+                            offerAvailableCount = freeValue
+                        }
+                        offerUnitName = schemesItems.first!["FreeUnit"] as? String ?? ""
+                        offerProductCode = schemesItems.first!["OffProd"] as? String ?? ""
+                        offerProductName = schemesItems.first!["OffProdNm"] as? String ?? ""
+                        package = schemesItems.first!["pkg"] as? String ?? ""
+                        schemeType = schemesItems.first!["schemeType"] as? String ?? ""
+                        discountType = schemesItems.first!["Discount_Type"] as? String ?? ""
+                        print(package)
                         
-                        self.allProducts.append(ProductList(product: product, productName: productName, productId: productId,cateId: cateId, rate: rate,rateEdited: "0",retailerPrice: retailorPrice,saleErpCode: saleErpCode,newWt: newWt, sampleQty: "",clQty: "",remarks: "",remarksId: "", selectedRemarks: [], disCountPer: disCountPer, disCountValue: disCountValue, disCountAmount: 0.0, freeCount: 0, unitId: unitId, unitName: unitName, unitCount: unitCount, taxper: tax, taxAmount: 0.0, totalCount: 0.0, isSchemeActive: isSchemeActive,scheme: scheme,offerAvailableCount: offerAvailableCount,offerUnitName: offerUnitName,offerProductCode: offerProductCode,offerProductName: offerProductName,package: package,schemeType: schemeType,discountType: discountType, isMultiSchemeActive: isMultiSchemeActive, multiScheme: multiScheme, competitorProduct: []))
-                    }
-                    
-                }
-            }else {
-                if(retailerRateItems.count>0){
-                    print(retailerRateItems)
-                    rate = (retailerRateItems.first!["Retailor_Price"] as! NSString).doubleValue
-                    retailorPrice = (retailerRateItems.first!["Retailor_Price"] as! NSString).doubleValue
-                    
-                    for item in retailerRateItems {
-                        print("Gooood")
-                        rate = (item["Retailor_Price"] as! NSString).doubleValue
-                        retailorPrice = (item["Retailor_Price"] as! NSString).doubleValue
+                        if discountType == "%" {
+                            disCountPer = (schemesItems.first!["Disc"] as! NSString).doubleValue
+                            disCountPer = Double(round(100 * disCountPer) / 100)
+                        }else{
+                            disCountValue = (schemesItems.first!["Disc"] as! NSString).doubleValue
+                            disCountValue = Double(round(100 * disCountValue) / 100)
+                        }
                         
-                        self.allProducts.append(ProductList(product: product, productName: productName, productId: productId,cateId: cateId, rate: rate,rateEdited: "0",retailerPrice: retailorPrice,saleErpCode: saleErpCode,newWt: newWt, sampleQty: "",clQty: "",remarks: "",remarksId: "", selectedRemarks: [], disCountPer: disCountPer, disCountValue: disCountValue, disCountAmount: 0.0, freeCount: 0, unitId: unitId, unitName: unitName, unitCount: unitCount, taxper: tax, taxAmount: 0.0, totalCount: 0.0, isSchemeActive: isSchemeActive,scheme: scheme,offerAvailableCount: offerAvailableCount,offerUnitName: offerUnitName,offerProductCode: offerProductCode,offerProductName: offerProductName,package: package,schemeType: schemeType,discountType: discountType, isMultiSchemeActive: isMultiSchemeActive, multiScheme: multiScheme, competitorProduct: []))
+                        if schemesItems.count > 1 {
+                            
+                            for schemesItem in schemesItems {
+                                isMultiSchemeActive = true
+                                
+                                var scheme = 0 //(schemesItem["Scheme"] as? NSString ?? "").integerValue
+                                if let schValue = schemesItems.first!["Scheme"] as? String {
+                                    scheme = Int(schValue) ?? 0
+                                }else if let schValue = schemesItems.first!["Scheme"] as? Int {
+                                    scheme = schValue
+                                }
+                                var offerAvailableCount = 0 // (schemesItem["FQ"] as? NSString ?? "").integerValue
+                                if let freeValue = schemesItems.first!["FQ"] as? String {
+                                    offerAvailableCount = Int(freeValue) ?? 0
+                                }else if let freeValue = schemesItems.first!["FQ"] as? Int {
+                                    offerAvailableCount = freeValue
+                                }
+                                let offerUnitName = schemesItem["FreeUnit"] as? String ?? ""
+                                let offerProductCode = schemesItem["OffProd"] as? String ?? ""
+                                let offerProductName = schemesItem["OffProdNm"] as? String ?? ""
+                                let package = schemesItem["pkg"] as? String ?? ""
+                                let schemeType = schemesItem["schemeType"] as? String ?? ""
+                                let discountType = schemesItem["Discount_Type"] as? String ?? ""
+                                
+                                var disCountPert : Double = 0
+                                var discountValue : Double = 0
+                                if discountType == "%" {
+                                    disCountPert = (schemesItem["Disc"] as! NSString).doubleValue
+                                    disCountPert = Double(round(100 * disCountPer) / 100)
+                                }else {
+                                    discountValue = (schemesItem["Disc"] as! NSString).doubleValue
+                                    discountValue = Double(round(100 * discountValue) / 100)
+                                }
+                                
+                                multiScheme.append(Scheme(disCountPer: disCountPert,disCountValue: discountValue, scheme: scheme, offerAvailableCount: offerAvailableCount, offerUnitName: offerUnitName, offerProductCode: offerProductCode, offerProductName: offerProductName, package: package,schemeType: schemeType,discountType: discountType))
+                            }
+                        }
+                        
                     }
-                    
                 }
+                print(UserSetup.shared.productCard)
+                if UserSetup.shared.productCard == "1"{
+                    if(marginRateItems.count>0){
+                        print(marginRateItems)
+                        print(product)
+                        print((marginRateItems.first!["Retailor_Price"] as! Int))
+                        print((marginRateItems.first!["Retailor_Price"] as! Int))
+                        rate = Double((marginRateItems.first!["Retailor_Price"] as! Int)) //(marginRateItems.first!["Retailor_Price"] as! NSString).doubleValue
+                        retailorPrice = Double((marginRateItems.first!["Retailor_Price"] as! Int)) //(marginRateItems.first!["Retailor_Price"] as! NSString).doubleValue
+                        
+                        print(rate)
+                        print(retailorPrice)
+                        for item in marginRateItems {
+                            print("Gooood")
+                            rate = Double((marginRateItems.first!["Retailor_Price"] as! Int))
+                            retailorPrice = Double((marginRateItems.first!["Retailor_Price"] as! Int))
+    //                        rate = (item["Retailor_Price"] as! NSString).doubleValue
+    //                        retailorPrice = (item["Retailor_Price"] as! NSString).doubleValue
+                            
+                            self.allProducts.append(ProductList(product: product, productName: productName, productId: productId,cateId: cateId, rate: rate,rateEdited: "0",retailerPrice: retailorPrice,saleErpCode: saleErpCode,newWt: newWt, sampleQty: "",clQty: "",remarks: "",remarksId: "", selectedRemarks: [], disCountPer: disCountPer, disCountValue: disCountValue, disCountAmount: 0.0, freeCount: 0, unitId: unitId, unitName: unitName, unitCount: unitCount, taxper: tax, taxAmount: 0.0, totalCount: 0.0, isSchemeActive: isSchemeActive,scheme: scheme,offerAvailableCount: offerAvailableCount,offerUnitName: offerUnitName,offerProductCode: offerProductCode,offerProductName: offerProductName,package: package,schemeType: schemeType,discountType: discountType, isMultiSchemeActive: isMultiSchemeActive, multiScheme: multiScheme, competitorProduct: []))
+                        }
+                        
+                    }
+                }else {
+                    if(retailerRateItems.count>0){
+                        print(retailerRateItems)
+                        rate = (retailerRateItems.first!["Retailor_Price"] as! NSString).doubleValue
+                        retailorPrice = (retailerRateItems.first!["Retailor_Price"] as! NSString).doubleValue
+                        
+                        for item in retailerRateItems {
+                            print("Gooood")
+                            rate = (item["Retailor_Price"] as! NSString).doubleValue
+                            retailorPrice = (item["Retailor_Price"] as! NSString).doubleValue
+                            
+                            self.allProducts.append(ProductList(product: product, productName: productName, productId: productId,cateId: cateId, rate: rate,rateEdited: "0",retailerPrice: retailorPrice,saleErpCode: saleErpCode,newWt: newWt, sampleQty: "",clQty: "",remarks: "",remarksId: "", selectedRemarks: [], disCountPer: disCountPer, disCountValue: disCountValue, disCountAmount: 0.0, freeCount: 0, unitId: unitId, unitName: unitName, unitCount: unitCount, taxper: tax, taxAmount: 0.0, totalCount: 0.0, isSchemeActive: isSchemeActive,scheme: scheme,offerAvailableCount: offerAvailableCount,offerUnitName: offerUnitName,offerProductCode: offerProductCode,offerProductName: offerProductName,package: package,schemeType: schemeType,discountType: discountType, isMultiSchemeActive: isMultiSchemeActive, multiScheme: multiScheme, competitorProduct: []))
+                        }
+                        
+                    }
+                }
+                
+                
+                
+                
+       //         self.allProducts.append(ProductList(product: product, productName: productName, productId: productId,cateId: cateId, rate: rate,rateEdited: "0",retailerPrice: retailorPrice,saleErpCode: saleErpCode,newWt: newWt, sampleQty: "",clQty: "",remarks: "",remarksId: "", selectedRemarks: [], disCountPer: disCountPer, disCountAmount: 0.0, freeCount: 0, unitId: unitId, unitName: unitName, unitCount: unitCount, taxper: tax, taxAmount: 0.0, totalCount: 0.0, isSchemeActive: isSchemeActive,scheme: scheme,offerAvailableCount: offerAvailableCount,offerUnitName: offerUnitName,offerProductCode: offerProductCode,offerProductName: offerProductName,package: package, isMultiSchemeActive: isMultiSchemeActive, multiScheme: multiScheme, competitorProduct: []))
             }
-            
-            
-            
-            
-   //         self.allProducts.append(ProductList(product: product, productName: productName, productId: productId,cateId: cateId, rate: rate,rateEdited: "0",retailerPrice: retailorPrice,saleErpCode: saleErpCode,newWt: newWt, sampleQty: "",clQty: "",remarks: "",remarksId: "", selectedRemarks: [], disCountPer: disCountPer, disCountAmount: 0.0, freeCount: 0, unitId: unitId, unitName: unitName, unitCount: unitCount, taxper: tax, taxAmount: 0.0, totalCount: 0.0, isSchemeActive: isSchemeActive,scheme: scheme,offerAvailableCount: offerAvailableCount,offerUnitName: offerUnitName,offerProductCode: offerProductCode,offerProductName: offerProductName,package: package, isMultiSchemeActive: isMultiSchemeActive, multiScheme: multiScheme, competitorProduct: []))
         }
-    }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.lstBrands.count
