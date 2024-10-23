@@ -92,6 +92,10 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
         var Order_Count:Int
         var Total_Dic:Double
         var Total_Tax:Double
+        
+        var Total_disc_lbl:String
+        var Final_Amt:String
+        
         var Orderlist:[OrderItemModel]
     }
     
@@ -287,7 +291,8 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
                                     
                                     let minsAmount = Double(netAmount.isEmpty ? "0" : netAmount)! - Double(j["tlDisAmt"] as? String ?? "0")!
                                     
-                                  let  Net_amount = String(format: "%.2f", minsAmount)
+                                  let  Net_amount = netAmount.isEmpty ? "0" : netAmount
+                                   let Final_Amt = String(format: "%.2f", minsAmount)
                                     
                                     print(minsAmount)
                                    
@@ -352,9 +357,9 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
                                         
                                         print(Orderdata[i].Orderdata)
                                         
-                                        Orderdata[i].Orderdata.append(OrderDetail(id: id, Route: Route, Routeflg: "0", Stockist: Stockist, name: "\(Order_Count). "+name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "\(itemList.count)", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: tlDisAmt, Order_date: Order_date, Order_Count: Order_Count,Total_Dic: Total_discValue,Total_Tax: Total_taxValue, Orderlist: itemList))
+                                        Orderdata[i].Orderdata.append(OrderDetail(id: id, Route: Route, Routeflg: "0", Stockist: Stockist, name: "\(Order_Count). "+name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "\(itemList.count)", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: tlDisAmt, Order_date: Order_date, Order_Count: Order_Count,Total_Dic: Total_discValue,Total_Tax: Total_taxValue,Total_disc_lbl:"Total Discount (10%)", Final_Amt: Final_Amt, Orderlist: itemList))
                                         
-                                        Oredrdatadetisl.append(OrderDetail(id: id, Route: Route, Routeflg: "0", Stockist: Stockist, name: "\(Order_Count). "+name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "\(itemList.count)", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: tlDisAmt, Order_date: Order_date, Order_Count: Order_Count,Total_Dic: Total_discValue,Total_Tax: Total_taxValue,Orderlist: itemList))
+                                        Oredrdatadetisl.append(OrderDetail(id: id, Route: Route, Routeflg: "0", Stockist: Stockist, name: "\(Order_Count). "+name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "\(itemList.count)", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: tlDisAmt, Order_date: Order_date, Order_Count: Order_Count,Total_Dic: Total_discValue,Total_Tax: Total_taxValue,Total_disc_lbl:"Total Discount (10%)", Final_Amt: Final_Amt,Orderlist: itemList))
                                         
                                         
                                         print(Total_Value)
@@ -411,9 +416,9 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
                                             Total_taxValue = Total_taxValue + Double(k.taxValue)!
                                         }
                                         
-                                        Orderdata.append(Id(id: id, Stkid: Stockist, RouteId: Route, Orderdata: [OrderDetail(id: id, Route: Route, Routeflg: "1", Stockist: Stockist, name: "1. "+name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "\(itemList.count)", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: tlDisAmt, Order_date: Order_date, Order_Count: 1,Total_Dic: Total_discValue,Total_Tax: Total_taxValue, Orderlist: itemList)]))
+                                        Orderdata.append(Id(id: id, Stkid: Stockist, RouteId: Route, Orderdata: [OrderDetail(id: id, Route: Route, Routeflg: "1", Stockist: Stockist, name: "1. "+name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "\(itemList.count)", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: tlDisAmt, Order_date: Order_date, Order_Count: 1,Total_Dic: Total_discValue,Total_Tax: Total_taxValue,Total_disc_lbl:"Total Discount (10%)", Final_Amt: Final_Amt, Orderlist: itemList)]))
                                         
-                                        Oredrdatadetisl.append(OrderDetail(id: id, Route: Route, Routeflg: "1", Stockist: Stockist, name: "1. "+name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "\(itemList.count)", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: tlDisAmt, Order_date: Order_date, Order_Count: 1,Total_Dic: Total_discValue,Total_Tax: Total_taxValue,Orderlist: itemList))
+                                        Oredrdatadetisl.append(OrderDetail(id: id, Route: Route, Routeflg: "1", Stockist: Stockist, name: "1. "+name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "\(itemList.count)", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: tlDisAmt, Order_date: Order_date, Order_Count: 1,Total_Dic: Total_discValue,Total_Tax: Total_taxValue,Total_disc_lbl:"Total Discount (10%)", Final_Amt: Final_Amt,Orderlist: itemList))
                                         
                                         Total_Value += Double(Net_amount) ?? 0.0
                                         
@@ -587,7 +592,7 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
         if HQ_and_Route_TB == tableView{
             let Row_Height = Oredrdatadetisl[indexPath.row].Orderlist.count * 50
             let Height = CGFloat(Row_Height + 340)
-            return Height
+            return Height + 80
         }
         return 0
     }
@@ -656,6 +661,12 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
                }else{
                    cell.Netamt.text = "₹\(Oredrdatadetisl[indexPath.row].Net_amount)"
                }
+               
+               cell.Total_Disc_Val_lbl.text = Oredrdatadetisl[indexPath.row].Total_disc_lbl
+               cell.Total_Disc.text = Oredrdatadetisl[indexPath.row].tlDisAmt
+               cell.Final_Amout.text = Oredrdatadetisl[indexPath.row].Final_Amt
+               
+               
                
                cell.Remark.text =  Oredrdatadetisl[indexPath.row].Remarks
                cell.insideTable1Data = [Oredrdatadetisl[indexPath.row]]
@@ -766,7 +777,7 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
           Tax.text = String(Item.Total_Tax)
           Sch_Disc.text = String(Item.Total_Dic)
           Cas_disc.text = Item.tlDisAmt
-          Net_Amt.text = "₹ " + Item.Net_amount
+          Net_Amt.text = "₹ " + Item.Final_Amt
           Day_Report_TB.reloadData()
           Day_Report_View.isHidden = false
       }

@@ -915,6 +915,7 @@
                                                         <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                                         <connections>
                                                             <outlet property="Addres" destination="Zbf-nQ-xSY" id="2lz-YW-Pct"/>
+                                                            <outlet property="Final_Amout" destination="2ej-QK-zdh" id="Hmr-h7-YQe"/>
                                                             <outlet property="Netamt" destination="sGp-t7-zHO" id="lH4-nT-pDy"/>
                                                             <outlet property="Phone" destination="Q4n-VK-yNF" id="hXN-Sl-BZP"/>
                                                             <outlet property="Remark" destination="Sbw-Yq-EM6" id="Dfc-J1-Gxk"/>
@@ -923,6 +924,8 @@
                                                             <outlet property="Stockets_Name" destination="HJ5-F5-vYF" id="Oa0-XU-I9z"/>
                                                             <outlet property="Store_Name_with_order_No" destination="cju-Ad-fKy" id="fwQ-5Q-UmS"/>
                                                             <outlet property="Tbale2_height" destination="M5Z-p4-J2q" id="RKq-rU-5Fb"/>
+                                                            <outlet property="Total_Disc" destination="nnS-EU-uMs" id="VbC-hl-BEw"/>
+                                                            <outlet property="Total_Disc_Val_lbl" destination="gW2-pX-Po5" id="oLU-Dh-SgS"/>
                                                             <outlet property="View_Detils" destination="TGq-bp-avi" id="gjv-QF-rQ0"/>
                                                             <outlet property="View_height" destination="ncJ-ke-bR2" id="MIG-Ax-I91"/>
                                                             <outlet property="Volumes" destination="5mP-8P-ZtX" id="noJ-ib-b7c"/>
@@ -1032,7 +1035,7 @@ CFByb2R1Y3Q
                                                                 <nil key="highlightedColor"/>
                                                             </label>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Qty" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="p0M-Dm-gX8">
-                                                                <rect key="frame" x="216" y="2" width="150" height="20"/>
+                                                                <rect key="frame" x="216" y="2" width="149" height="20"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
                                                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="14"/>
                                                                 <color key="textColor" red="0.086274509799999996" green="0.63921568630000003" blue="0.2901960784" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
