@@ -30,6 +30,11 @@ class Order_Details_TableViewCell: UITableViewCell, UITableViewDataSource, UITab
     @IBOutlet weak var View_Detils: UIImageView!
     @IBOutlet weak var Start_Image: UIImageView!
     
+    
+    @IBOutlet weak var Total_Disc_Val_lbl: UILabel!
+    @IBOutlet weak var Total_Disc: UILabel!
+    @IBOutlet weak var Final_Amout: UILabel!
+    
     // MARK: - Properties
     weak var delegate: OrderDetailsCellDelegate?
     let data = Order_Details()
