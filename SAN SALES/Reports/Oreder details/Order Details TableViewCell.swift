@@ -29,17 +29,18 @@ class Order_Details_TableViewCell: UITableViewCell, UITableViewDataSource, UITab
     @IBOutlet weak var Remark: UILabel!
     @IBOutlet weak var View_Detils: UIImageView!
     @IBOutlet weak var Start_Image: UIImageView!
-    
-    
     @IBOutlet weak var Total_Disc_Val_lbl: UILabel!
     @IBOutlet weak var Total_Disc: UILabel!
     @IBOutlet weak var Final_Amout: UILabel!
-    
     @IBOutlet weak var Final_amt_height: NSLayoutConstraint!
-    
     @IBOutlet weak var Net_amt_height: NSLayoutConstraint!
-    
     @IBOutlet weak var final_net_amt_view: UIView!
+    
+    
+    @IBOutlet weak var Net_Amount_View: UIView!
+    
+    @IBOutlet weak var Net_Amount_View_Height: NSLayoutConstraint!
+    
     
     
     // MARK: - Properties
@@ -138,9 +139,16 @@ class Order_Details_TableViewCell: UITableViewCell, UITableViewDataSource, UITab
         
         print(OrderDetils.count)
         if OrderDetils.count == 1 {
+            
+            
             OrderDetils.removeAll()
         }
-
+        
+        
+        Net_Amount_View.isHidden =  OrderDetils.isEmpty ? true : false
+        Net_Amount_View_Height.constant = OrderDetils.isEmpty ? 0 : 23
+        Volumes.isHidden =  OrderDetils.isEmpty ? true : false
+        
         // Reload the inner table view
         insideTable1.reloadData()
     }
