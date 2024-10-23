@@ -15,6 +15,9 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
   
     @IBOutlet weak var BTback: UIImageView!
     @IBOutlet weak var Hq_View: UIView!
+    
+    @IBOutlet weak var Hq_View_height: NSLayoutConstraint!
+    
     @IBOutlet weak var hq_name_sel: UILabel!
     @IBOutlet weak var Date_View: UIView!
     @IBOutlet weak var date_sel: UILabel!
@@ -102,8 +105,8 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
     struct Itemwise_Summary:Any{
         let productName: String
         let ProductID:String
-        var Qty:Double
-        var Free:Double
+        var Qty:Int
+        var Free:Int
     }
     
     var Itemwise_Summary_Data:[Itemwise_Summary] = []
@@ -152,6 +155,13 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
         date_sel.text = dates
         Sf_Id = SFCode
         hq_name_sel.text = sfName
+        
+        if UserSetup.shared.SF_type == 1{
+            Hq_View.isHidden = true
+            Hq_View_height.constant = 0
+        }
+        
+        
         cardViewInstance.styleSummaryView(Hq_View)
         cardViewInstance.styleSummaryView(Date_View)
         Addres_View.layer.cornerRadius = 10
@@ -284,10 +294,13 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
                                     let Volumes = (liters * 100).rounded() / 100
                                     let Phone = j["phoneNo"] as? String ??  ""
                                     let netAmount = j["finalNetAmnt"] as? String ?? ""
-                                    let Remarks = j["remarks"] as? String ?? ""
+                                    let Remarks = j["secOrdRemark"] as? String ?? ""
                                     let Stkid = j["stockist_code"] as? String ?? ""
                                     let tlDisAmt = j["tlDisAmt"] as? String ?? ""
                                     
+                                    if nameid == "GLLMR0007-24-25-SO-87"{
+                                        print("jn")
+                                    }
                                     
                                     let minsAmount = Double(netAmount.isEmpty ? "0" : netAmount)! - Double(j["tlDisAmt"] as? String ?? "0")!
                                     
@@ -325,8 +338,8 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
                                         let itemList = parseProducts(products, Additional_Prod_Code, taxArray: taxArray)
                                         
                                         for item in itemList {
-                                            let qty = Double(item.qtyValue) ?? 0
-                                            let free = Double(item.freeValue) ?? 0
+                                            let qty = Int(item.qtyValue) ?? 0
+                                            let free = Int(item.freeValue) ?? 0
                                             let productID = item.ProductID.trimmingCharacters(in: .whitespacesAndNewlines)
 
                                             if let index = Itemwise_Summary_Data.firstIndex(where: {
@@ -335,6 +348,8 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
                                                 Itemwise_Summary_Data[index].Qty += qty
                                                 Itemwise_Summary_Data[index].Free += free
                                             } else {
+                                               
+                                                
                                                 let newItem = Itemwise_Summary(
                                                     productName: item.productName,
                                                     ProductID: productID,
@@ -394,14 +409,14 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
                                             if let index = Itemwise_Summary_Data.firstIndex(where: {
                                                 $0.ProductID.trimmingCharacters(in: .whitespacesAndNewlines) == productID
                                             }) {
-                                                Itemwise_Summary_Data[index].Qty += qty
-                                                Itemwise_Summary_Data[index].Free += free
+                                                Itemwise_Summary_Data[index].Qty += Int(qty)
+                                                Itemwise_Summary_Data[index].Free += Int(free)
                                             } else {
                                                 let newItem = Itemwise_Summary(
                                                     productName: item.productName,
                                                     ProductID: productID,
-                                                    Qty: qty,
-                                                    Free: free
+                                                    Qty: Int(qty),
+                                                    Free: Int(free)
                                                 )
                                                 Itemwise_Summary_Data.append(newItem)
                                             }
@@ -433,7 +448,7 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
                                     
                                 }
                                 
-                                Itemwise_Summary_Data.append(Itemwise_Summary(productName: "Total", ProductID: "", Qty: Double(QtyTotal), Free: Double(FreeTota)))
+                                Itemwise_Summary_Data.append(Itemwise_Summary(productName: "Total", ProductID: "", Qty: Int(Double(QtyTotal)), Free: Int(Double(FreeTota))))
 
                                 let formatter = NumberFormatter()
                                 formatter.numberStyle = .currency
@@ -470,6 +485,10 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
                 }
             }
         }
+    }
+    
+    func maximumDate(for calendar: FSCalendar) -> Date {
+        return Date()
     }
     
     func parseProducts(_ products: String,_ Idproducts: String, taxArray: [String]?) -> [OrderItemModel] {
@@ -813,7 +832,9 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
     }
     
     @objc func Open_Hq(){
+        lObjSel = lstHQs
         Text_Search.text = ""
+        Hq_Table.reloadData()
         Sel_Wid.isHidden = false
     }
     @objc func Close_Hq(){

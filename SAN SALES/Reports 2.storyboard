@@ -581,9 +581,9 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qWY-En-zn6">
-                                        <rect key="frame" x="138" y="9" width="248" height="20"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
+                                        <rect key="frame" x="138" y="9" width="223" height="20"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
@@ -892,10 +892,10 @@
                                                                                             <nil key="highlightedColor"/>
                                                                                         </label>
                                                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Test" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PEf-iQ-cEO">
-                                                                                            <rect key="frame" x="214" y="3" width="171" height="16"/>
+                                                                                            <rect key="frame" x="76" y="3" width="309" height="16"/>
                                                                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                                                                             <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                                                                            <nil key="textColor"/>
+                                                                                            <color key="textColor" red="0.086274509799999996" green="0.63921568630000003" blue="0.2901960784" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                                             <nil key="highlightedColor"/>
                                                                                         </label>
                                                                                     </subviews>
@@ -955,6 +955,8 @@
                                                             <outlet property="Addres" destination="Zbf-nQ-xSY" id="2lz-YW-Pct"/>
                                                             <outlet property="Final_Amout" destination="arM-be-E49" id="W5j-oR-mgy"/>
                                                             <outlet property="Final_amt_height" destination="Qhb-tk-yRO" id="xG9-6f-k2r"/>
+                                                            <outlet property="Net_Amount_View" destination="c06-xm-zNM" id="NFJ-zF-IAH"/>
+                                                            <outlet property="Net_Amount_View_Height" destination="syH-19-qzS" id="ifa-Ob-iBL"/>
                                                             <outlet property="Net_amt_height" destination="m5P-yr-tjy" id="vB7-3b-gLb"/>
                                                             <outlet property="Netamt" destination="aTj-J1-rH8" id="pOV-Fu-vcB"/>
                                                             <outlet property="Phone" destination="Q4n-VK-yNF" id="hXN-Sl-BZP"/>
@@ -1118,7 +1120,7 @@ CFByb2R1Y3Q
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                         <color key="tintColor" red="0.062745098040000002" green="0.67843137249999996" blue="0.76078431369999999" alpha="1" colorSpace="calibratedRGB"/>
                                                     </imageView>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Pdf Share" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KcE-f4-pSH">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="WhatsApp Pdf Share" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KcE-f4-pSH">
                                                         <rect key="frame" x="8" y="56" width="179" height="16"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -1837,6 +1839,7 @@ CFByb2R1Y3Q
                         <outlet property="Hq_Name_lbl" destination="kuE-Ai-cjU" id="Lbd-bX-zN2"/>
                         <outlet property="Hq_Table" destination="nup-KE-yoe" id="2LW-dj-Ip6"/>
                         <outlet property="Hq_View" destination="9gu-IG-09P" id="MvP-fH-hCr"/>
+                        <outlet property="Hq_View_height" destination="i8U-Mn-MQ2" id="CRT-2K-ECc"/>
                         <outlet property="Item_Summary_TB_hEIGHT" destination="joc-bP-uvH" id="Yv5-Ou-koR"/>
                         <outlet property="Item_Summary_View" destination="7Cw-14-Ddm" id="xA3-la-V17"/>
                         <outlet property="Item_Summary_table" destination="YlX-bx-xY6" id="2es-Hj-AlU"/>
