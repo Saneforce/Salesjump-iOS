@@ -601,8 +601,11 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
         
         if HQ_and_Route_TB == tableView{
             let Row_Height = Oredrdatadetisl[indexPath.row].Orderlist.count * 50
+            
+            let height:CGFloat = (Oredrdatadetisl[indexPath.row].tlDisAmt == "0") ? 20 : 70
+            
             let Height = CGFloat(Row_Height + 340)
-            return Height //+ 80
+            return Height + height
         }
         return 0
     }
@@ -614,8 +617,11 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
             print(Scroll_height .constant)
             let Row_Height = i.Orderlist.count * 55
             let Height = CGFloat(Row_Height + 340)
+            let height:CGFloat = (i.tlDisAmt == "0") ? 20 : 70
             Table_height.constant = Table_height.constant + CGFloat(Height)
+            Table_height.constant = Table_height.constant + height
             Scroll_height .constant = Table_height.constant
+
             print(Table_height.constant)
             print(Scroll_height .constant)
         }
