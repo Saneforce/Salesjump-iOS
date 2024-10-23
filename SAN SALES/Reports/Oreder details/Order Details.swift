@@ -249,6 +249,7 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
         Oredrdatadetisl.removeAll()
         Orderdata.removeAll()
         Itemwise_Summary_Data.removeAll()
+        Total_Value_Amt.text = "0.0"
         self.ShowLoading(Message: "Loading...")
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
@@ -538,6 +539,8 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
             let productName = extractProductName(product, totalValue: Value)
             let freeProductName = extractFreeProductName(product)
 
+            print(productName)
+            
             let orderItem = OrderItemModel(
                 productName: productName, 
                 ProductID: ProductId,
@@ -588,12 +591,14 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
         
         print(splitprod)
         
+        print(splitprod[0])
         
-        let marker = "( \(Int(totalValue))"
-        print(marker)
-        guard let range = product.range(of: marker) else { return "" }
         
-        print(range)
+//        let marker = "( \(Int(totalValue))"
+//        print(marker)
+//        guard let range = product.range(of: marker) else { return "" }
+//        
+//        print(range)
         //return String(product[..<range.lowerBound]).trimmingCharacters(in: .whitespaces)
         
         return splitprod[0].trimmingCharacters(in: .whitespaces)
