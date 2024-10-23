@@ -279,19 +279,18 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
                                     let liters = j["liters"] as? Double ?? 0
                                     let Volumes = (liters * 100).rounded() / 100
                                     let Phone = j["phoneNo"] as? String ??  ""
-                                    let Net_amount = j["finalNetAmnt"] as? String ?? ""
+                                    let netAmount = j["finalNetAmnt"] as? String ?? ""
                                     let Remarks = j["remarks"] as? String ?? ""
                                     let Stkid = j["stockist_code"] as? String ?? ""
                                     let tlDisAmt = j["tlDisAmt"] as? String ?? ""
                                     
+                                    
+                                    let minsAmount = Double(netAmount.isEmpty ? "0" : netAmount)! - Double(j["tlDisAmt"] as? String ?? "0")!
+                                    
+                                  let  Net_amount = String(format: "%.2f", minsAmount)
+                                    
+                                    print(minsAmount)
                                    
-                                    
-                                    
-                                    if nameid == "MR4126-24-25-SO-1784"{
-                                        print(j)
-                                    }
-                                    
-                                    
                                     if let i = Orderdata.firstIndex(where: { (item) in
                                         
                                         print(item.Stkid)
@@ -378,6 +377,7 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
                                             taxArray = tax_price.split(separator: "#").map { String($0) }
                                         }
                                         print(taxArray)
+                                        print(products)
                                         let Order_date = j["Order_date"] as? String ?? ""
                                         let itemList = parseProducts(products, Additional_Prod_Code, taxArray: taxArray)
                                              
@@ -469,7 +469,7 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
     
     func parseProducts(_ products: String,_ Idproducts: String, taxArray: [String]?) -> [OrderItemModel] {
         print(products)
-        
+        print(taxArray)
         var itemModelList = [OrderItemModel]()
         var netAmount: Double = 0
         let productArray = products.split(separator: ",").map { String($0) }
@@ -481,13 +481,20 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
         }
         
         for (i, product) in productArray.enumerated() {
-            let taxAmt = taxArray?.indices.contains(i) == true ? taxArray![i] : "0"
+            var taxAmt = "0"
             
+            if let taxAmount = taxArray?[i] {
+                taxAmt = taxAmount
+            }
             let ProductId = prodcode[i]
             let qtyValue = extractDouble(from: product, start: ") (", end: "@")
             let freeValue = extractDouble(from: product, start: "+", end: "%")
-            let discValue = extractDouble(from: product, start: "-", end: "*")
-            let taxValue = Double(taxAmt.filter { "0123456789.".contains($0) }) ?? 0
+          
+            
+            let splitdisc = product.split(separator: "*").map { String($0) }
+            let splitdisc2 = splitdisc[0].split(separator: "-").map { String($0) }
+            let discValue = Double(splitdisc2.last ?? "0") ?? 0
+            let taxValue = Double(taxAmt) ?? 0
             let rateValue = extractDouble(from: product, start: "*", end: "!")
             let litersVal = extractDouble(from: product, start: "@", end: "+")
             let clValue = Int(extractString(from: product, start: "!", end: "!") ?? "0") ?? 0
@@ -495,10 +502,14 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
             let name = uomNames.split(separator: "!").map { String($0) }
             let uomName = name[1]
             let eQtyValue = extractDouble(from: product, start: "%", end: "*")
-            let totalValue = (rateValue * qtyValue) + taxValue - discValue
+            let Value =  extractDouble(from: product, start: "(", end: ")")
+            
+            
+            let totalValue = Value + taxValue - discValue
             netAmount += totalValue
-
-            let productName = extractProductName(product, totalValue: totalValue)
+            
+            
+            let productName = extractProductName(product, totalValue: Value)
             let freeProductName = extractFreeProductName(product)
 
             let orderItem = OrderItemModel(
@@ -516,6 +527,7 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
                 litersVal: String(litersVal),
                 freeProductName: freeProductName
             )
+            print(orderItem)
 
             itemModelList.append(orderItem)
         }
@@ -542,8 +554,14 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
     }
 
     func extractProductName(_ product: String, totalValue: Double) -> String {
+        
+        print(product)
+        
         let marker = "( \(Int(totalValue))"
+        print(marker)
         guard let range = product.range(of: marker) else { return "" }
+        
+        print(range)
         return String(product[..<range.lowerBound]).trimmingCharacters(in: .whitespaces)
     }
 
