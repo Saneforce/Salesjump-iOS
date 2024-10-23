@@ -510,7 +510,9 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
             let Value =  extractDouble(from: product, start: "(", end: ")")
             
             
-            let totalValue = Value + taxValue - discValue
+            //let totalValue = Value + taxValue - discValue
+            
+            let totalValue = Value
             netAmount += totalValue
             
             
@@ -562,12 +564,20 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
         
         print(product)
         
+        
+        let splitprod = product.split(separator: "(").map { String($0) }
+        
+        print(splitprod)
+        
+        
         let marker = "( \(Int(totalValue))"
         print(marker)
         guard let range = product.range(of: marker) else { return "" }
         
         print(range)
-        return String(product[..<range.lowerBound]).trimmingCharacters(in: .whitespaces)
+        //return String(product[..<range.lowerBound]).trimmingCharacters(in: .whitespaces)
+        
+        return splitprod[0].trimmingCharacters(in: .whitespaces)
     }
 
     func extractFreeProductName(_ product: String) -> String {
@@ -592,7 +602,7 @@ class Order_Details: UIViewController, UITableViewDataSource, UITableViewDelegat
         if HQ_and_Route_TB == tableView{
             let Row_Height = Oredrdatadetisl[indexPath.row].Orderlist.count * 50
             let Height = CGFloat(Row_Height + 340)
-            return Height + 80
+            return Height //+ 80
         }
         return 0
     }
