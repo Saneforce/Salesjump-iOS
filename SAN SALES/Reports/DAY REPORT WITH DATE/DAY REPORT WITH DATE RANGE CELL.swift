@@ -28,6 +28,10 @@ class DAY_REPORT_WITH_DATE_RANGE_CELL: UITableViewCell, UICollectionViewDataSour
     let test1 =  ["TC:", "PC:", "O. Value", "Pri Ord", "Pri. Value", "PC:", "O. Value", "Pri Ord", "Pri. Value"]
     let test2 =  ["1", "1", "   50.09  ", "0", "0", "1", "50.09", "0", "0"]
     
+    
+   
+    
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         Chart_View.delegate = self

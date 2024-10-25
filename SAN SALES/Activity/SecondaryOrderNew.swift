@@ -209,6 +209,7 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
         if let list = GlobalFunc.convertToDictionary(text: lstProdData) as? [AnyObject] {
             lstAllProducts = list
             
+            print(lstAllProducts.count)
             self.updateProduct(products: list)
         }
         if let list = GlobalFunc.convertToDictionary(text: lstCompetitorProductData) as? [AnyObject] {
