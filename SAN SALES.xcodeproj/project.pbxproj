@@ -148,6 +148,8 @@
 		3F9F379828593C99002CC408 /* DayReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9F379728593C99002CC408 /* DayReport.swift */; };
 		3F9F379A285B5FBA002CC408 /* ReportMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9F3799285B5FBA002CC408 /* ReportMenu.swift */; };
 		3F9F379C28631F2C002CC408 /* layBranswsSal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9F379B28631F2C002CC408 /* layBranswsSal.swift */; };
+		3FB83A752CCD0BF8008EB529 /* DAY REPORT WITH DATE RANGE DETAILSViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB83A742CCD0BF8008EB529 /* DAY REPORT WITH DATE RANGE DETAILSViewController.swift */; };
+		3FB83A772CCD0D3E008EB529 /* DATE RANGE  CELL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB83A762CCD0D3E008EB529 /* DATE RANGE  CELL.swift */; };
 		3FBF387527E4488100900007 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FBF387427E4488100900007 /* APIClient.swift */; };
 		3FBF387727E4AA8300900007 /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FBF387627E4AA8300900007 /* Toast.swift */; };
 		3FC32E552CB3A6310092449B /* ClosingStockEntry (SS).swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC32E542CB3A6310092449B /* ClosingStockEntry (SS).swift */; };
@@ -311,6 +313,8 @@
 		3F9F379728593C99002CC408 /* DayReport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayReport.swift; sourceTree = "<group>"; };
 		3F9F3799285B5FBA002CC408 /* ReportMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportMenu.swift; sourceTree = "<group>"; };
 		3F9F379B28631F2C002CC408 /* layBranswsSal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = layBranswsSal.swift; sourceTree = "<group>"; };
+		3FB83A742CCD0BF8008EB529 /* DAY REPORT WITH DATE RANGE DETAILSViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DAY REPORT WITH DATE RANGE DETAILSViewController.swift"; sourceTree = "<group>"; };
+		3FB83A762CCD0D3E008EB529 /* DATE RANGE  CELL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DATE RANGE  CELL.swift"; sourceTree = "<group>"; };
 		3FBF387427E4488100900007 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
 		3FBF387627E4AA8300900007 /* Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
 		3FC32E542CB3A6310092449B /* ClosingStockEntry (SS).swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ClosingStockEntry (SS).swift"; sourceTree = "<group>"; };
@@ -587,6 +591,8 @@
 			children = (
 				3F3127AB2CC675B2000F756A /* DAY REPORT WITH DATE RANGE.swift */,
 				3F8292FE2CC786100098B191 /* DAY REPORT WITH DATE RANGE CELL.swift */,
+				3FB83A742CCD0BF8008EB529 /* DAY REPORT WITH DATE RANGE DETAILSViewController.swift */,
+				3FB83A762CCD0D3E008EB529 /* DATE RANGE  CELL.swift */,
 			);
 			path = "DAY REPORT WITH DATE";
 			sourceTree = "<group>";
@@ -871,6 +877,7 @@
 				384E56BF2BDB674700B2E8A5 /* Approval Menu.swift in Sources */,
 				3F28CC0C27D5302100B95964 /* MydayPlanCtrl.swift in Sources */,
 				3FCF2AA82C5B5392000D8070 /* Day End SFC.swift in Sources */,
+				3FB83A772CCD0D3E008EB529 /* DATE RANGE  CELL.swift in Sources */,
 				384E56C12BDB7ABF00B2E8A5 /* New Expense Approval.swift in Sources */,
 				3F0822BF29000D65009C33EA /* LeaveForm.swift in Sources */,
 				386889E22B1868F90015F20C /* RottPageViewController.swift in Sources */,
@@ -922,6 +929,7 @@
 				1514DF762BD785D900E6B45A /* SuperStockistOrderList.swift in Sources */,
 				3F601F3E2C466499002EF90F /* Daily Expense Entry SFC.swift in Sources */,
 				38F6F5AB2B19D2C2007090BF /* Summary.swift in Sources */,
+				3FB83A752CCD0BF8008EB529 /* DAY REPORT WITH DATE RANGE DETAILSViewController.swift in Sources */,
 				3F28CC1427DC97F000B95964 /* cellListItem.swift in Sources */,
 				3F06352C283BC9790027842E /* PhotoGallary.swift in Sources */,
 				3F9F379828593C99002CC408 /* DayReport.swift in Sources */,

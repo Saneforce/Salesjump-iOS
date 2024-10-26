@@ -37,6 +37,7 @@ class Order_Details_TableViewCell: UITableViewCell, UITableViewDataSource, UITab
     @IBOutlet weak var final_net_amt_view: UIView!
     
     
+    
     @IBOutlet weak var Net_Amount_View: UIView!
     
     @IBOutlet weak var Net_Amount_View_Height: NSLayoutConstraint!
