@@ -18,19 +18,26 @@ class DAY_REPORT_WITH_DATE_RANGE_CELL: UITableViewCell, UICollectionViewDataSour
     @IBOutlet weak var Collection_View_Two: UICollectionView!
     
     @IBOutlet weak var Chart_View: BarChartView!
+ 
+    var data:[[String]] = []
+
+    var  BraindList:[AnyObject]=[]
+    
+    var RangData: DAY_REPORT_WITH_DATE_RANGE.Day_Report_Detils?
     
     
-    let data = [
-            ["TC:", "PC:", "O. Value", "Pri Ord", "Pri. Value"],
-            ["1", "1", "   50.09  ", "0", "0"]
-        ]
+    @IBOutlet weak var Total_lines: UILabel!
     
-    let test1 =  ["TC:", "PC:", "O. Value", "Pri Ord", "Pri. Value", "PC:", "O. Value", "Pri Ord", "Pri. Value"]
-    let test2 =  ["1", "1", "   50.09  ", "0", "0", "1", "50.09", "0", "0"]
+    @IBOutlet weak var Total_Pro_sol: UILabel!
     
     
-   
+    @IBOutlet weak var Total_lbl: UILabel!
+    @IBOutlet weak var Effective_lbl: UILabel!
     
+    
+    
+    var Tc:Int = 0
+    var PC:Int = 0
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -78,18 +85,21 @@ class DAY_REPORT_WITH_DATE_RANGE_CELL: UITableViewCell, UICollectionViewDataSour
         var dataEntries: [BarChartDataEntry] = []
         var dataEntries1: [BarChartDataEntry] = []  
         
-        let dataEntry = BarChartDataEntry(x: Double(10), y: Double(10))
+        
+        
+        
+        let dataEntry = BarChartDataEntry(x: Double(Tc), y: Double(Tc))
         dataEntries.append(dataEntry)
-        let dataEntry1 = BarChartDataEntry(x: Double(10), y: Double(10))
+        let dataEntry1 = BarChartDataEntry(x: Double(PC), y: Double(PC))
         dataEntries1.append(dataEntry1)
         
         
-        let chartDataSet = BarChartDataSet(entries: dataEntries, label: "Target")
-        let chartDataSet1 = BarChartDataSet(entries: dataEntries1, label: "Achievement")
+        let chartDataSet = BarChartDataSet(entries: dataEntries, label: "Total:\(Tc)")
+        let chartDataSet1 = BarChartDataSet(entries: dataEntries1, label: "Effective:\(PC)")
         
         let dataSetColors: [NSUIColor] = [
             NSUIColor(red: 0.06, green: 0.68, blue: 0.76, alpha: 1.00),
-            NSUIColor(red: 1.00, green: 0.00, blue: 0.00, alpha: 1.00)
+            NSUIColor(red: 1.00, green: 0.58, blue: 0.00, alpha: 1.00)
         ]
         
         let dataSets: [BarChartDataSet] = [chartDataSet, chartDataSet1]
@@ -124,6 +134,7 @@ class DAY_REPORT_WITH_DATE_RANGE_CELL: UITableViewCell, UICollectionViewDataSour
            Chart_View.setVisibleXRangeMinimum(1)
            Chart_View.setVisibleXRangeMaximum(5)
            Chart_View.setScaleMinima(1.0, scaleY: 1.0)
+        
     }
     
     
@@ -132,22 +143,87 @@ class DAY_REPORT_WITH_DATE_RANGE_CELL: UITableViewCell, UICollectionViewDataSour
             return 1
         }
         
-            return data.count
+            return 1
         }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if Collection_View_Two == collectionView{
-            return test1.count
+            return BraindList.count
         }
             return data[section].count
         }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! CollectionCell
         if Collection_View == collectionView{
-            cell.lblText.text = data[indexPath.section][indexPath.item]
+            cell.lblText.text = data[0][indexPath.row]
+            cell.Test.text = data[1][indexPath.row]
+            
+            if data[0][indexPath.row] == "TC" || data[0][indexPath.row] == "PC" || data[0][indexPath.row] == "Pri Ord" {
+                cell.lblText.text = data[0][indexPath.row]
+                cell.Test.text = data[1][indexPath.row]
+    
+                let attributedText = NSAttributedString(string: cell.lblText?.text ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
+                let attributedqty = NSAttributedString(string: cell.Test?.text ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor.blue])
+                cell.lblText?.attributedText = attributedText
+                cell.Test?.attributedText = attributedqty
+            }else{
+                // Set the text properties first
+                cell.lblText.text = data[0][indexPath.row]
+                cell.Test.text = data[1][indexPath.row]
+                // Apply attributed text (font color in this case)
+                let attributedText = NSAttributedString(string: cell.lblText?.text ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
+                let attributedqty = NSAttributedString(string: cell.Test?.text ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
+                cell.lblText?.attributedText = attributedText
+                cell.Test?.attributedText = attributedqty
+            }
+            
+            
+            
         }else if Collection_View_Two == collectionView{
-            cell.lblText.text = test1[indexPath.row]
-            cell.Test.text = test2[indexPath.row]
+            let Item = BraindList[indexPath.row]
+            print(Item)
+            cell.lblText.text = Item["product_brd_name"] as? String ?? ""
+            cell.Test.text =  String(Item["RetailCount"] as? Int ?? 0)
         }
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if Collection_View == collectionView{
+            
+            
+            
+            if indexPath.row == 0{
+                
+                
+                
+            }else if indexPath.row == 1{
+                
+            }else if indexPath.row == 3{
+                
+            }
+            
+            
+            
+        }
+    }
+    
+    
+    func Reload(){
+        
+        if let datas = RangData{
+            
+            data = [
+                ["TC:", "PC:", "O. Value", "Pri Ord", "Pri. Value"],
+                ["\(datas.Tc)","\(datas.pc)","\(datas.Order_Value)","\(datas.Pri_Ord)","0"]
+            ]
+            
+            Tc = datas.Tc
+            PC = datas.pc
+            
+        }
+
+        Collection_View.reloadData()
+        Collection_View_Two.reloadData()
+        Chart_Data()
     }
 }
