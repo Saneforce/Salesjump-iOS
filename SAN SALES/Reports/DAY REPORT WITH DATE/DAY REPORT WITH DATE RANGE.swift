@@ -13,7 +13,9 @@ import FSCalendar
 
 
 
-class DAY_REPORT_WITH_DATE_RANGE: UIViewController, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource, FSCalendarDelegate {
+class DAY_REPORT_WITH_DATE_RANGE: IViewController, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource, FSCalendarDelegate,DayReportCellDelegate {
+  
+    
 
     @IBOutlet weak var BtBack: UIImageView!
     @IBOutlet weak var Hq_View: UIView!
@@ -351,7 +353,7 @@ class DAY_REPORT_WITH_DATE_RANGE: UIViewController, UITableViewDelegate, UITable
         cell.Total_lbl.text = "Total:\(Report_Detils[indexPath.row].Tc)"
         cell.Effective_lbl.text = "Effective:\(Report_Detils[indexPath.row].pc)"
         cell.Total_Pro_sol.text = String(Report_Detils[indexPath.row].total_lines)
-        
+        cell.delegate = self  
         cell.Reload()
         return cell
     }
@@ -410,6 +412,42 @@ class DAY_REPORT_WITH_DATE_RANGE: UIViewController, UITableViewDelegate, UITable
         }
         self.navigationController?.pushViewController(distributorVC, animated: true)
     }
+    
+    
+    func navigateToDetails(data: Day_Report_Detils?, id: String) {
+        
+        print(data)
+        
+        var Axn:String = ""
+        let Code:String = data!.ACode
+        var typ:String = ""
+        if id=="TC:"{
+            Axn = "get/vwVstDetNative"
+            typ = "1"
+        }else if id == "PC:"{
+            Axn = "get/vwVstDetNative"
+            typ = "1"
+        }else if id == "Pri Ord" {
+            Axn = "get/vwVstDetNative"
+            typ = "3"
+        }else if id == "Pri. Value" {
+            Axn = "get/vwVstDetNative"
+            typ = "3"
+        }
+        
+        
+        
+          let storyboard = UIStoryboard(name: "Reports 2", bundle: nil)
+          let navController = storyboard.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
+          let myDyPln = storyboard.instantiateViewController(withIdentifier: "DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController") as! DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController
+          myDyPln.ACCode = Code
+         myDyPln.axn = Axn
+          myDyPln.Typ = typ
+        myDyPln.CodeDate = data!.Date
+          navController.setViewControllers([myDyPln], animated: false)
+
+          (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(navController)
+      }
     
 }
 
