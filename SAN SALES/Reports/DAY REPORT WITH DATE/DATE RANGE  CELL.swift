@@ -46,7 +46,7 @@ class Order_Range_TableViewCell: UITableViewCell, UITableViewDataSource, UITable
     
     // MARK: - Properties
     weak var delegate: OrderRangeCellDelegate?
-    let data = Order_Details()
+    let data = DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController()
     
     var insideTable1Data: [DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController.OrderDetail] = []
     var OrderDetils: [DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController.OrderItemModel] = []
@@ -92,7 +92,7 @@ class Order_Range_TableViewCell: UITableViewCell, UITableViewDataSource, UITable
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as? Inside_TB else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as? Range_Inside_TB else {
             return UITableViewCell()
         }
         
@@ -111,6 +111,9 @@ class Order_Range_TableViewCell: UITableViewCell, UITableViewDataSource, UITable
 
     // MARK: - Reload Data
     func reloadData() {
+        
+        print(insideTable1Data)
+        
         OrderDetils.removeAll()
         guard let firstDetail = insideTable1Data.first else { return }
         View_height.constant = (firstDetail.Routeflg == "1") ? 68 : 0

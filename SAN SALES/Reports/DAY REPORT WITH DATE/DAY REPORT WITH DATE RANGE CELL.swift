@@ -8,6 +8,12 @@
 import UIKit
 import Charts
 
+// Delegate Protocol to Handle Navigation
+protocol DayReportCellDelegate: AnyObject {
+    func navigateToDetails(data:DAY_REPORT_WITH_DATE_RANGE.Day_Report_Detils?,id:String)
+}
+
+
 class DAY_REPORT_WITH_DATE_RANGE_CELL: UITableViewCell, UICollectionViewDataSource, UICollectionViewDelegate, ChartViewDelegate {
  
     @IBOutlet weak var Name: UILabel!
@@ -35,7 +41,8 @@ class DAY_REPORT_WITH_DATE_RANGE_CELL: UITableViewCell, UICollectionViewDataSour
     @IBOutlet weak var Effective_lbl: UILabel!
     
     
-    
+    // MARK: - Properties
+     weak var delegate: DayReportCellDelegate?
     var Tc:Int = 0
     var PC:Int = 0
     
@@ -189,21 +196,10 @@ class DAY_REPORT_WITH_DATE_RANGE_CELL: UITableViewCell, UICollectionViewDataSour
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if Collection_View == collectionView{
+         let item = data[0][indexPath.row]
             
-            
-            
-            if indexPath.row == 0{
-                
-                
-                
-            }else if indexPath.row == 1{
-                
-            }else if indexPath.row == 3{
-                
-            }
-            
-            
-            
+            print(item)
+            delegate?.navigateToDetails(data: RangData, id: item)
         }
     }
     
