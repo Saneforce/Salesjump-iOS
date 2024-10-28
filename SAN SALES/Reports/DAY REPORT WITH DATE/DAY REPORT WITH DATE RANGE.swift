@@ -41,13 +41,7 @@ class DAY_REPORT_WITH_DATE_RANGE: IViewController, UITableViewDelegate, UITableV
     
     @IBOutlet weak var Hq_Selection: UILabel!
     
-    
-    
-    let data2 = [
-        ["TC:", "PC:", "O. Value", "Pri Ord"],
-        ["7", "6", "96.82", "0"]
-    ]
-    
+    var data2:[[String]] = []
     
     var SFCode: String=""
     var DivCode: String=""
@@ -87,6 +81,10 @@ class DAY_REPORT_WITH_DATE_RANGE: IViewController, UITableViewDelegate, UITableV
         [Hq_View, Date_View, Table_View, Total_Call_View].forEach { view in
             view?.layer.cornerRadius = 10
         }
+        data2 = [
+            ["TC:", "PC:", "O. Value", "Pri Ord"],
+            ["","","",""]
+        ]
         Table_View.delegate = self
         Table_View.dataSource = self
         
@@ -306,7 +304,36 @@ class DAY_REPORT_WITH_DATE_RANGE: IViewController, UITableViewDelegate, UITableV
                     }
                 }
                 
+                var Tccall: Int = 0
+                var Pccall: Int = 0
+                var ovalue: Double = 0
+                var Privalue: Int = 0
+
+                for k in Report_Detils {
+                    print(k)
+                    Tccall += k.Tc
+                    Pccall += k.pc
+
+                    // Remove commas and convert to Double
+                    let orderValueString = k.Order_Value.replacingOccurrences(of: ",", with: "")
+                    if let orderValue = Double(orderValueString) {
+                        ovalue += orderValue
+                    } else {
+                        print("Invalid order value: \(k.Order_Value)")
+                    }
+
+                    Privalue += k.Pri_Ord
+                }
+
+                
+                data2 = [
+                    ["TC:", "PC:", "O. Value", "Pri Ord"],
+                    ["\(Tccall)","\(Pccall)","\(ovalue)","\(Privalue)"]
+                ]
+                
+                
                 Table_View.reloadData()
+                Total_Collection.reloadData()
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                     self.LoadingDismiss()
                 }
@@ -444,6 +471,7 @@ class DAY_REPORT_WITH_DATE_RANGE: IViewController, UITableViewDelegate, UITableV
          myDyPln.axn = Axn
           myDyPln.Typ = typ
         myDyPln.CodeDate = data!.Date
+        myDyPln.Hqname =  Hq_Selection.text
           navController.setViewControllers([myDyPln], animated: false)
 
           (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(navController)
