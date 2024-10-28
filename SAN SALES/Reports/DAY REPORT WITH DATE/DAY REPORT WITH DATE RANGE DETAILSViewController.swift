@@ -862,13 +862,19 @@ var Desig: String=""
         Sel_Wid.isHidden = true
     }
     
-    @objc private func GotoHome(){
-        let storyboard = UIStoryboard(name: "Reports 2", bundle: nil)
-        let viewController = storyboard.instantiateViewController(withIdentifier: "DAY_REPORT_WITH_DATE_RANGE") as! DAY_REPORT_WITH_DATE_RANGE
-        UIApplication.shared.windows.first?.rootViewController = viewController
-        UIApplication.shared.windows.first?.makeKeyAndVisible()
-        
+    @objc private func GotoHome() {
+        if let navigationController = self.navigationController {
+            navigationController.popViewController(animated: true)
+        } else {
+            let storyboard = UIStoryboard(name: "Reports 2", bundle: nil)
+            let viewController = storyboard.instantiateViewController(withIdentifier: "DAY_REPORT_WITH_DATE_RANGE") as! DAY_REPORT_WITH_DATE_RANGE
+            let navController = UINavigationController(rootViewController: viewController)
+            
+            UIApplication.shared.windows.first?.rootViewController = navController
+            UIApplication.shared.windows.first?.makeKeyAndVisible()
+        }
     }
+
     @objc func Textshare() {
         let data: String = formatOrdersForSharing(orders: Oredrdatadetisl)
         
