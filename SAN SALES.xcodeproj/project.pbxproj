@@ -130,6 +130,7 @@
 		3F5B297828891D5C002D226C /* CheckPermissions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5B297728891D5C002D226C /* CheckPermissions.swift */; };
 		3F5B297A28894AB3002D226C /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5B297928894AB3002D226C /* GradientView.swift */; };
 		3F5B2FC3284B59E400574D7C /* MsgLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5B2FC2284B59E400574D7C /* MsgLoader.swift */; };
+		3F5C50E32CCF541700A956BB /* RangeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5C50E22CCF541700A956BB /* RangeData.swift */; };
 		3F5D05E02C6F21EE00457642 /* Leave Approval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5D05DF2C6F21EE00457642 /* Leave Approval.swift */; };
 		3F601F3E2C466499002EF90F /* Daily Expense Entry SFC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F601F3D2C466499002EF90F /* Daily Expense Entry SFC.swift */; };
 		3F619F3C27EAEDC000F3D05F /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F619F3B27EAEDC000F3D05F /* LocationService.swift */; };
@@ -294,6 +295,7 @@
 		3F5B297728891D5C002D226C /* CheckPermissions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckPermissions.swift; sourceTree = "<group>"; };
 		3F5B297928894AB3002D226C /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 		3F5B2FC2284B59E400574D7C /* MsgLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MsgLoader.swift; sourceTree = "<group>"; };
+		3F5C50E22CCF541700A956BB /* RangeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RangeData.swift; sourceTree = "<group>"; };
 		3F5D05DF2C6F21EE00457642 /* Leave Approval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Leave Approval.swift"; sourceTree = "<group>"; };
 		3F601F3D2C466499002EF90F /* Daily Expense Entry SFC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Daily Expense Entry SFC.swift"; sourceTree = "<group>"; };
 		3F619F3B27EAEDC000F3D05F /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
@@ -590,6 +592,7 @@
 				3F8292FE2CC786100098B191 /* DAY REPORT WITH DATE RANGE CELL.swift */,
 				3FB83A742CCD0BF8008EB529 /* DAY REPORT WITH DATE RANGE DETAILSViewController.swift */,
 				3FB83A762CCD0D3E008EB529 /* DATE RANGE  CELL.swift */,
+				3F5C50E22CCF541700A956BB /* RangeData.swift */,
 			);
 			path = "DAY REPORT WITH DATE";
 			sourceTree = "<group>";
@@ -876,6 +879,7 @@
 				3FCF2AA82C5B5392000D8070 /* Day End SFC.swift in Sources */,
 				3FB83A772CCD0D3E008EB529 /* DATE RANGE  CELL.swift in Sources */,
 				384E56C12BDB7ABF00B2E8A5 /* New Expense Approval.swift in Sources */,
+				3F5C50E32CCF541700A956BB /* RangeData.swift in Sources */,
 				3F0822BF29000D65009C33EA /* LeaveForm.swift in Sources */,
 				386889E22B1868F90015F20C /* RottPageViewController.swift in Sources */,
 				3F8B989A2C594C610073D452 /* SFC Details View.swift in Sources */,
@@ -1130,7 +1134,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = "3.5 T.11";
+				MARKETING_VERSION = "3.5 T.12";
 				PRODUCT_BUNDLE_IDENTIFIER = com.saneforce.sansales;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1167,7 +1171,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = "3.5 T.11";
+				MARKETING_VERSION = "3.5 T.12";
 				PRODUCT_BUNDLE_IDENTIFIER = com.saneforce.sansales;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
