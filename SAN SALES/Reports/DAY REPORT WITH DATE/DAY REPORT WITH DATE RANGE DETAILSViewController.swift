@@ -862,14 +862,13 @@ var Desig: String=""
         Sel_Wid.isHidden = true
     }
     
-    @objc private func GotoHome() {
+    @objc private func GotoHome(){
         let storyboard = UIStoryboard(name: "Reports 2", bundle: nil)
         let viewController = storyboard.instantiateViewController(withIdentifier: "DAY_REPORT_WITH_DATE_RANGE") as! DAY_REPORT_WITH_DATE_RANGE
         UIApplication.shared.windows.first?.rootViewController = viewController
         UIApplication.shared.windows.first?.makeKeyAndVisible()
+        
     }
-    
-
     @objc func Textshare() {
         let data: String = formatOrdersForSharing(orders: Oredrdatadetisl)
         

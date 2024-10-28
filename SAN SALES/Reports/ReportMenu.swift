@@ -27,8 +27,12 @@ class ReportMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
     
     var strMasList:[mnuItem]=[]
     var downloadCount: Int = 0
+    let LocalStoreage = UserDefaults.standard
     
+    var SFCode: String=""
+    var sfName:String = ""
     override func viewDidLoad() {
+        getUserDetails()
         let LocalStoreage = UserDefaults.standard
         let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
         let data = Data(prettyPrintedJson!.utf8)
@@ -64,6 +68,18 @@ class ReportMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
         tbMenuDetail.delegate=self
         tbMenuDetail.dataSource=self
         
+    }
+    
+    
+    func getUserDetails(){
+    let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
+    let data = Data(prettyPrintedJson!.utf8)
+    guard let prettyJsonData = try? JSONSerialization.jsonObject(with: data, options:[]) as? [String: Any] else {
+    print("Error: Cannot convert JSON object to Pretty JSON data")
+    return
+    }
+    SFCode = prettyJsonData["sfCode"] as? String ?? ""
+    sfName = prettyJsonData["sfName"] as? String ?? ""
     }
     @IBAction func userLogout(_ sender: Any) {
         dismiss(animated: true)
@@ -181,6 +197,17 @@ class ReportMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
              viewController.setViewControllers([RptMnuVc,attenReportVC], animated: false)
              (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
         }else if lItm.MasId == 13{
+            
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd"
+            let currentDate = Foundation.Date()
+            let formattedDate = dateFormatter.string(from: currentDate)
+            RangeData.shared.Hq_Name = sfName
+            RangeData.shared.Hq_Id = SFCode
+            RangeData.shared.from_Date = formattedDate
+            RangeData.shared.To_Date = formattedDate
+            
+            
             let RptMnuVc = storyboard.instantiateViewController(withIdentifier: "sbReportsmnu") as! ReportMenu
             let attenReportVC = storyboard2.instantiateViewController(withIdentifier: "DAY_REPORT_WITH_DATE_RANGE") as! DAY_REPORT_WITH_DATE_RANGE
             

@@ -103,9 +103,6 @@ class DAY_REPORT_WITH_DATE_RANGE: IViewController, UITableViewDelegate, UITableV
         
         Hq_Selection.addTarget(target: self, action: #selector(HqSelection))
         
-        
-        Hq_Selection.text = sfName
-        
         if let HQData = LocalStoreage.string(forKey: "HQ_Master"),
            let list = GlobalFunc.convertToDictionary(text:  HQData) as? [AnyObject] {
             lstHQs = list;
@@ -115,11 +112,10 @@ class DAY_REPORT_WITH_DATE_RANGE: IViewController, UITableViewDelegate, UITableV
         dateFormatter.dateFormat = "yyyy-MM-dd"
         let currentDate = Foundation.Date()
         let formattedDate = dateFormatter.string(from: currentDate)
-        FDate = formattedDate
-        TDate = formattedDate
-        Start_Date.text = formattedDate
-        End_Date.text = formattedDate
-        HQ_Id = SFCode
+        
+        Hq_Selection.text = RangeData.shared.Hq_Name
+        Start_Date.text = RangeData.shared.from_Date
+        End_Date.text =  RangeData.shared.To_Date
         DayRangeReport()
     }
     
@@ -147,9 +143,11 @@ class DAY_REPORT_WITH_DATE_RANGE: IViewController, UITableViewDelegate, UITableV
         if Sel_Mod == "F"{
             Start_Date.text = dates
             FDate = dates
+            RangeData.shared.from_Date = dates
         }else{
             End_Date.text = dates
             TDate = dates
+            RangeData.shared.To_Date = dates
         }
         
         print(dates)
@@ -162,7 +160,7 @@ class DAY_REPORT_WITH_DATE_RANGE: IViewController, UITableViewDelegate, UITableV
         self.ShowLoading(Message: "Loading...")
         Report_Detils.removeAll()
         let axn = "get/DayRangeReport"
-        let apiKey: String = "\(axn)&rptDt=\(FDate)&rptToDt=\(TDate)&divisionCode=\(DivCode)&rSF=\(HQ_Id)&sfCode=\(HQ_Id)&State_Code=\(StateCode)"
+        let apiKey: String = "\(axn)&rptDt=\(RangeData.shared.from_Date)&rptToDt=\(RangeData.shared.To_Date)&divisionCode=\(DivCode)&rSF=\(RangeData.shared.Hq_Id)&sfCode=\(RangeData.shared.Hq_Id)&State_Code=\(StateCode)"
         
         AF.request(APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKey, method: .post, parameters: nil, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self] AFdata in
             print(AFdata)
@@ -427,12 +425,13 @@ class DAY_REPORT_WITH_DATE_RANGE: IViewController, UITableViewDelegate, UITableV
         let distributorVC = ItemViewController(items: lstHQs, configure: { (Cell : SingleSelectionTableViewCell, distributor) in
             Cell.textLabel?.text = distributor["name"] as? String
         })
-        distributorVC.title = "Select the HQ"
+        distributorVC.title = "Select the Headquarters"
         distributorVC.didSelect = { [self] selectedDistributor in
             let item: [String: Any]=selectedDistributor as! [String : Any]
             HQ_Id = item["id"] as? String ?? ""
             Hq_Selection.text = item["name"] as? String ?? ""
-            
+            RangeData.shared.Hq_Name = item["name"] as? String ?? ""
+            RangeData.shared.Hq_Id = HQ_Id
             DayRangeReport()
             
             self.navigationController?.popViewController(animated: true)
@@ -440,10 +439,7 @@ class DAY_REPORT_WITH_DATE_RANGE: IViewController, UITableViewDelegate, UITableV
         self.navigationController?.pushViewController(distributorVC, animated: true)
     }
     
-    
     func navigateToDetails(data: Day_Report_Detils?, id: String) {
-        
-        print(data)
         
         var Axn:String = ""
         let Code:String = data!.ACode
@@ -461,8 +457,6 @@ class DAY_REPORT_WITH_DATE_RANGE: IViewController, UITableViewDelegate, UITableV
             Axn = "get/vwVstDetNative"
             typ = "3"
         }
-        
-        
         
           let storyboard = UIStoryboard(name: "Reports 2", bundle: nil)
           let navController = storyboard.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
