@@ -111,17 +111,12 @@ class Order_Range_TableViewCell: UITableViewCell, UITableViewDataSource, UITable
 
     // MARK: - Reload Data
     func reloadData() {
-        
-        print(insideTable1Data)
-        
         OrderDetils.removeAll()
         guard let firstDetail = insideTable1Data.first else { return }
         View_height.constant = (firstDetail.Routeflg == "1") ? 68 : 0
         final_net_amt_view .isHidden = (firstDetail.tlDisAmt == "0") ? true : false
         Final_amt_height.constant = (firstDetail.tlDisAmt == "0") ? 0 : 46
         Net_amt_height.constant = (firstDetail.tlDisAmt == "0") ? 79 : 125
-        
-        
         let orderItem = DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController.OrderItemModel(
             productName: "Product Name", ProductID: "",
             rateValue: "Rate",
