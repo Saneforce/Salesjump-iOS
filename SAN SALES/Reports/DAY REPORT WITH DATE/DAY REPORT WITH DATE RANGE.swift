@@ -421,55 +421,51 @@ class DAY_REPORT_WITH_DATE_RANGE: IViewController, UITableViewDelegate, UITableV
         Date_Selection_View.isHidden = true
     }
     
-    @objc private func HqSelection(){
-        let distributorVC = ItemViewController(items: lstHQs, configure: { (Cell : SingleSelectionTableViewCell, distributor) in
-            Cell.textLabel?.text = distributor["name"] as? String
-        })
+    @objc private func HqSelection() {
+        let distributorVC = ItemViewController(items: lstHQs) { (cell: SingleSelectionTableViewCell, distributor) in
+            cell.textLabel?.text = distributor["name"] as? String
+        }
         distributorVC.title = "Select the Headquarters"
-        distributorVC.didSelect = { [self] selectedDistributor in
-            let item: [String: Any]=selectedDistributor as! [String : Any]
-            HQ_Id = item["id"] as? String ?? ""
-            Hq_Selection.text = item["name"] as? String ?? ""
+        distributorVC.didSelect = { [weak self] selectedDistributor in
+            guard let self = self else { return }
+            let item = selectedDistributor as! [String: Any]
+            self.HQ_Id = item["id"] as? String ?? ""
+            self.Hq_Selection.text = item["name"] as? String ?? ""
             RangeData.shared.Hq_Name = item["name"] as? String ?? ""
-            RangeData.shared.Hq_Id = HQ_Id
-            DayRangeReport()
-            
+            RangeData.shared.Hq_Id = self.HQ_Id
             self.navigationController?.popViewController(animated: true)
+            self.DayRangeReport()
         }
         self.navigationController?.pushViewController(distributorVC, animated: true)
     }
     
     func navigateToDetails(data: Day_Report_Detils?, id: String) {
+        guard let data = data else { return }
+        var axn = ""
+        var typ = ""
         
-        var Axn:String = ""
-        let Code:String = data!.ACode
-        var typ:String = ""
-        if id=="TC:"{
-            Axn = "get/vwVstDetNative"
+        switch id {
+        case "TC:", "PC:":
+            axn = "get/vwVstDetNative"
             typ = "1"
-        }else if id == "PC:"{
-            Axn = "get/vwVstDetNative"
-            typ = "1"
-        }else if id == "Pri Ord" {
-            Axn = "get/vwVstDetNative"
+        case "Pri Ord", "Pri. Value":
+            axn = "get/vwVstDetNative"
             typ = "3"
-        }else if id == "Pri. Value" {
-            Axn = "get/vwVstDetNative"
-            typ = "3"
+        default:
+            break
         }
         
-          let storyboard = UIStoryboard(name: "Reports 2", bundle: nil)
-          let navController = storyboard.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
-          let myDyPln = storyboard.instantiateViewController(withIdentifier: "DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController") as! DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController
-          myDyPln.ACCode = Code
-         myDyPln.axn = Axn
-          myDyPln.Typ = typ
-        myDyPln.CodeDate = data!.Date
-        myDyPln.Hqname =  Hq_Selection.text
-          navController.setViewControllers([myDyPln], animated: false)
+        let storyboard = UIStoryboard(name: "Reports 2", bundle: nil)
+        let myDyPln = storyboard.instantiateViewController(withIdentifier: "DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController") as! DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController
+        myDyPln.ACCode = data.ACode
+        myDyPln.axn = axn
+        myDyPln.Typ = typ
+        myDyPln.CodeDate = data.Date
+        myDyPln.Hqname = Hq_Selection.text
+        
+        self.navigationController?.pushViewController(myDyPln, animated: true)
+    }
 
-          (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(navController)
-      }
     
 }
 
