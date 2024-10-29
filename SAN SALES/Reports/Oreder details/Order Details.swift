@@ -250,6 +250,7 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
         Orderdata.removeAll()
         Itemwise_Summary_Data.removeAll()
         Total_Value_Amt.text = "0.0"
+        Total_Value = 0
         self.ShowLoading(Message: "Loading...")
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
@@ -299,9 +300,6 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
                                     let Stkid = j["stockist_code"] as? String ?? ""
                                     let tlDisAmt = j["tlDisAmt"] as? String ?? ""
                                     
-                                    if nameid == "GLLMR0007-24-25-SO-87"{
-                                        print("jn")
-                                    }
                                     
                                     let minsAmount = Double(netAmount.isEmpty ? "0" : netAmount)! - Double(j["tlDisAmt"] as? String ?? "0")!
                                     
@@ -338,6 +336,8 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
                                         
                                         let itemList = parseProducts(products, Additional_Prod_Code, taxArray: taxArray)
                                         
+                                        print(itemList)
+                                        
                                         for item in itemList {
                                             let qty = Int(item.qtyValue) ?? 0
                                             let free = Int(item.freeValue) ?? 0
@@ -350,7 +350,6 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
                                                 Itemwise_Summary_Data[index].Free += free
                                             } else {
                                                
-                                                
                                                 let newItem = Itemwise_Summary(
                                                     productName: item.productName,
                                                     ProductID: productID,
@@ -360,6 +359,7 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
                                                 Itemwise_Summary_Data.append(newItem)
                                             }
                                         }
+                                        print(Itemwise_Summary_Data)
                                         
                                         let Order_Count = Oredrdatadetisl[i].Order_Count + 1
 
@@ -402,6 +402,8 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
                                         let Order_date = j["Order_date"] as? String ?? ""
                                         let itemList = parseProducts(products, Additional_Prod_Code, taxArray: taxArray)
                                              
+                                        print(itemList)
+                                        
                                         for item in itemList {
                                             let qty = Double(item.qtyValue) ?? 0
                                             let free = Double(item.freeValue) ?? 0
@@ -423,7 +425,6 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
                                             }
                                         }
                                         
-                                        print(itemList)
                                         var Total_discValue = 0.0
                                         var Total_taxValue = 0.0
                                         
@@ -436,7 +437,8 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
                                         
                                         Oredrdatadetisl.append(OrderDetail(id: id, Route: Route, Routeflg: "1", Stockist: Stockist, name: "1. "+name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "\(itemList.count)", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: tlDisAmt, Order_date: Order_date, Order_Count: 1,Total_Dic: Total_discValue,Total_Tax: Total_taxValue,Total_disc_lbl:"Total Discount", Final_Amt: Final_Amt,Orderlist: itemList))
                                         
-                                        Total_Value += Double(Net_amount) ?? 0.0
+                                        print(Net_amount)
+                                        Total_Value = Total_Value + Double(Net_amount)!
                                         
                                     }
                                 }
@@ -446,7 +448,6 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
                                 for item in Itemwise_Summary_Data{
                                     QtyTotal = QtyTotal + Int(item.Qty)
                                     FreeTota = FreeTota + Int(item.Free)
-                                    
                                 }
                                 
                                 
@@ -459,8 +460,13 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
                                 if let formattedValue = formatter.string(from: NSNumber(value: Total_Value)) {
                                     Total_Value_Amt.text = formattedValue
                                 }
+                                
+                                print(Total_Value)
                                 Scroll_and_Tb_Height()
                                 HQ_and_Route_TB.reloadData()
+                                
+                                print(Itemwise_Summary_Data)
+                                
                                 Item_Summary_table.reloadData()
                             }
                         case .failure(let error):
