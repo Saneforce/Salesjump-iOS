@@ -65,7 +65,7 @@ class CustomAlertVCViewController: UIViewController {
             
             labelFree.frame = newFrame
             
-            
+            print(scheme)
             let stackView = UIStackView()
             
             stackView.axis = .horizontal
@@ -83,7 +83,7 @@ class CustomAlertVCViewController: UIViewController {
             labelFree.font = UIFont.systemFont(ofSize: 16)
             
             let lblDicount = UILabel()
-            let discountType = scheme.schemeType == "Q" ? "\(scheme.disCountPer) %" : " \(scheme.disCountValue) ₹"
+            let discountType = scheme.discountType == "%" ? "\(scheme.disCountPer) %" : " \(scheme.disCountValue) ₹"
             lblDicount.text = "Discount : \(discountType)"
             labelFree.textColor = .black
             labelFree.textAlignment = .left
