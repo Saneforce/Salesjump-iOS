@@ -198,20 +198,21 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
         if let list = GlobalFunc.convertToDictionary(text: lstStockistSchemeData) as? [AnyObject] {
             lstStockistSchemes = list
             
-            lstStockistSchemes = lstStockistSchemes.filter{($0["schemeFor"] as? String ?? "") == "S"}
-            print(lstStockistSchemes.count)
-            print(list.count)
-            print(list)
+           // lstStockistSchemes = lstStockistSchemes.filter{($0["schemeFor"] as? String ?? "") == "S"}
         }
         if let list = GlobalFunc.convertToDictionary(text: lstRetailersRateData) as? [AnyObject]{
             lstRetailerRates = list
-            print(list)
         }
         
         if let list = GlobalFunc.convertToDictionary(text: lstProdData) as? [AnyObject] {
             lstAllProducts = list
             
-            self.updateProduct(products: list)
+            DispatchQueue.main.async {
+                // self.ShowLoading(Message: "Loading")
+                self.updateProduct(products: list)
+               // self.LoadingDismiss()
+            }
+            
         }
         if let list = GlobalFunc.convertToDictionary(text: lstCompetitorProductData) as? [AnyObject] {
             lstCompetitorProduct = list
@@ -235,7 +236,6 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
         if let lstDistData = LocalStoreage.string(forKey: "Distributors_Master_"+DataSF),
            let list = GlobalFunc.convertToDictionary(text:  lstDistData) as? [AnyObject] {
             lstDistList = list
-            print(lstDistList)
         }
         
         
@@ -245,7 +245,6 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
         
         self.EditSecondaryordervalue()
         self.editMissedDateOrder()
-        print(lstStockistSchemes)
     }
     
     @objc private func distributorSelection(){
@@ -630,8 +629,18 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
             if schemesItems.count > 0 {
                 
                 isSchemeActive = true
-                scheme = (schemesItems.first!["Scheme"] as! NSString).integerValue
-                offerAvailableCount = (schemesItems.first!["FQ"] as! NSString).integerValue
+               // scheme = (schemesItems.first!["Scheme"] as! NSString).integerValue
+                if let schValue = schemesItems.first!["Scheme"] as? String {
+                    scheme = Int(schValue) ?? 0
+                }else if let schValue = schemesItems.first!["Scheme"] as? Int {
+                    scheme = schValue
+                }
+                if let freeValue = schemesItems.first!["FQ"] as? String {
+                    offerAvailableCount = Int(freeValue) ?? 0
+                }else if let freeValue = schemesItems.first!["FQ"] as? Int {
+                    offerAvailableCount = freeValue
+                }
+                // offerAvailableCount = (schemesItems.first!["FQ"] as! NSString).integerValue
                 offerUnitName = schemesItems.first!["FreeUnit"] as? String ?? ""
                 offerProductCode = schemesItems.first!["OffProd"] as? String ?? ""
                 offerProductName = schemesItems.first!["OffProdNm"] as? String ?? ""
@@ -654,8 +663,20 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
                         isMultiSchemeActive = true
 //                        var disCountPert = (schemesItem["Disc"] as! NSString).doubleValue
 //                        disCountPert = Double(round(100 * disCountPer) / 100)
-                        let scheme = (schemesItem["Scheme"] as! NSString).integerValue
-                        let offerAvailableCount = (schemesItem["FQ"] as! NSString).integerValue
+//                        let scheme = (schemesItem["Scheme"] as! NSString).integerValue
+//                        let offerAvailableCount = (schemesItem["FQ"] as! NSString).integerValue
+                        var scheme = 0 //(schemesItem["Scheme"] as? NSString ?? "").integerValue
+                        if let schValue = schemesItems.first!["Scheme"] as? String {
+                            scheme = Int(schValue) ?? 0
+                        }else if let schValue = schemesItems.first!["Scheme"] as? Int {
+                            scheme = schValue
+                        }
+                        var offerAvailableCount = 0 // (schemesItem["FQ"] as? NSString ?? "").integerValue
+                        if let freeValue = schemesItems.first!["FQ"] as? String {
+                            offerAvailableCount = Int(freeValue) ?? 0
+                        }else if let freeValue = schemesItems.first!["FQ"] as? Int {
+                            offerAvailableCount = freeValue
+                        }
                         let offerUnitName = schemesItem["FreeUnit"] as? String ?? ""
                         let offerProductCode = schemesItem["OffProd"] as? String ?? ""
                         let offerProductName = schemesItem["OffProdNm"] as? String ?? ""
@@ -688,7 +709,7 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
         
         if isMultiSchemeActive == true {
             let totalQty = unitCount * sQty
-            let scheme = self.nextLessThanValue(in: multiScheme, comparedTo: totalQty)
+            let scheme = self.nextLessThanValue(in: multiScheme, comparedTo: totalQty, rate: rate)
             if scheme != nil {
                 discountPer = scheme!.disCountPer
                 
@@ -700,78 +721,283 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
         
         
         var freeCount : Int = 0
+//        if isSchemeActive == true {
+//            let totalQty = unitCount * sQty
+//            
+//            if package == "N" {
+//                if isMultiSchemeActive == true {
+//                    
+//                    let scheme = self.nextLessThanValue(in: multiScheme, comparedTo: totalQty, rate: rate)
+//                    
+//                    if scheme != nil {
+//                        let schQty = scheme!.scheme
+//                        let value = Double(totalQty) /  Double(schQty)
+//                        freeCount = Int(value * Double(scheme!.offerAvailableCount))
+//                    }else{
+//                        freeCount = 0
+//                    }
+//                }else {
+//                    let schQty = scheme
+//                    let value = Double(totalQty) /  Double(schQty)
+//                    if Double(totalQty) >= Double(schQty){
+//                        freeCount = Int(value * Double(offerAvailableCount))
+//                    }
+//                    
+//                }
+//            }else {
+//                if isMultiSchemeActive == true {
+//                    let scheme = self.nextLessThanValue(in: multiScheme, comparedTo: totalQty, rate: rate)
+//                    
+//                    if scheme != nil {
+//                        let schemeQty = totalQty / scheme!.scheme
+//                        freeCount = schemeQty * scheme!.offerAvailableCount //  Int(value * Double(scheme!.offerAvailableCount))
+//                    }else{
+//                        freeCount = 0
+//                    }
+//                }else {
+//                    let schemeQty = totalQty / scheme
+//                    if totalQty >= scheme{
+//                        freeCount = schemeQty * offerAvailableCount
+//                    }
+//                    
+//                    if schemeType == "Q" {
+//                        let schemeQty = totalQty / scheme
+//                        if totalQty >= scheme{
+//                            freeCount = schemeQty * offerAvailableCount
+//                        }
+//                    }else {
+//                        let total = Double(sQty) * rate * Double(unitCount)
+//                        
+//                        print(total)
+//                        if Int(total / Double(scheme)) > 1 {
+//                            print(Int(total / Double(scheme)))
+//                            freeCount = Int(total / Double(scheme)) * offerAvailableCount
+//                            
+//                            let amt = Int(total / Double(scheme))
+//                            let disCountValuePer = Double(amt) * disCountValue
+//                            
+//                            let disCountPercentage = (disCountValuePer / total) * 100
+//                            print(disCountPercentage)
+//                            let discountPerRound =   Double(round(100 * disCountPercentage) / 100)
+//                            disCountPer = discountPerRound
+//                            disCountValue = disCountValuePer
+//                            discountPer = discountPerRound
+//                        }else {
+//                            freeCount = 0
+//                            disCountPer = 0
+//                            disCountValue = 0
+//                        }
+//                    }
+//                }
+//                
+//            }
+//        }
+        
         if isSchemeActive == true {
             let totalQty = unitCount * sQty
             
             if package == "N" {
                 if isMultiSchemeActive == true {
                     
-                    let scheme = self.nextLessThanValue(in: multiScheme, comparedTo: totalQty)
+                    let scheme = self.nextLessThanValue(in: multiScheme, comparedTo: totalQty, rate: rate)
                     
                     if scheme != nil {
-                        let schQty = scheme!.scheme
-                        let value = Double(totalQty) /  Double(schQty)
-                        freeCount = Int(value * Double(scheme!.offerAvailableCount))
+                        print(scheme)
+                        if scheme!.schemeType == "Q" {
+                            if scheme!.discountType == "%" {
+                                let schQty = scheme!.scheme
+                                let value = Double(totalQty) /  Double(schQty)
+                                freeCount = Int(value * Double(scheme!.offerAvailableCount))
+                            }else {
+                                let schQty = scheme!.scheme
+                                let value = Double(totalQty) /  Double(schQty)
+                                freeCount = Int(value * Double(scheme!.offerAvailableCount))
+                            }
+                            
+                        }else {
+                            if scheme!.discountType == "%" {
+                                let schQty = scheme!.scheme
+                                let value = Double(totalQty) /  Double(schQty)
+                                freeCount = Int(value * Double(scheme!.offerAvailableCount))
+                            }else {
+                                let schQty = scheme!.scheme
+                                let value = Double(totalQty) /  Double(schQty)
+                                freeCount = Int(value * Double(scheme!.offerAvailableCount))
+                            }
+                        }
+                        
                     }else{
                         freeCount = 0
                     }
                 }else {
-                    let schQty = scheme
-                    let value = Double(totalQty) /  Double(schQty)
-                    if Double(totalQty) >= Double(schQty){
-                        freeCount = Int(value * Double(offerAvailableCount))
+                    if schemeType == "Q" {
+                        if discountType == "%" {
+                            let schQty = scheme
+                            let value = Double(totalQty) /  Double(schQty)
+                            if Double(totalQty) >= Double(schQty){
+                                freeCount = Int(value * Double(offerAvailableCount))
+                            }else {
+                                freeCount = 0
+                            }
+                        }else {
+                            let schQty = scheme
+                            let value = Double(totalQty) /  Double(schQty)
+                            if Double(totalQty) >= Double(schQty){
+                                freeCount = Int(value * Double(offerAvailableCount))
+                                
+                                let total = Double(sQty) * rate * Double(unitCount)
+                                
+                                let amt = Int(Double(totalQty) / Double(scheme))
+                                let disCountValuePer = Double(amt)  * disCountValue
+                                
+                                let disCountPercentage = (disCountValuePer / total) * 100
+                                print(disCountPercentage)
+                                let discountPerRound =   Double(round(100 * disCountPercentage) / 100)
+                                disCountPer = discountPerRound
+                                disCountValue = disCountValuePer
+                                discountPer = discountPerRound
+                            }else {
+                                freeCount = 0
+                                disCountPer = 0
+                                disCountValue = 0
+                            }
+                        }
+                    }else if schemeType == "V" {
+                        if discountType == "%" {
+                            let schQty = scheme
+                            let total = Double(sQty) * rate * Double(unitCount)
+                            let value = Int(Double(total) /  Double(schQty))
+                            if Double(total) >= Double(schQty){
+                                freeCount = Int(Double(value) * Double(offerAvailableCount))
+                            }
+                        }else {
+                            let schQty = scheme
+                            let total = Double(sQty) * rate * Double(unitCount)
+                            let value = Int(Double(total) /  Double(schQty))
+                            if Double(total) >= Double(schQty){
+                                freeCount = Int(Double(value) * Double(offerAvailableCount))
+                                
+                                let total = Double(sQty) * rate * Double(unitCount)
+                                
+                                let amt = Int(Double(total) / Double(scheme))
+                                let disCountValuePer = Double(amt)  * disCountValue
+                                
+                                let disCountPercentage = (disCountValuePer / total) * 100
+                                print(disCountPercentage)
+                                let discountPerRound =   Double(round(100 * disCountPercentage) / 100)
+                                disCountPer = discountPerRound
+                                disCountValue = disCountValuePer
+                                discountPer = discountPerRound
+                            }
+                        }
                     }
                     
                 }
             }else {
                 if isMultiSchemeActive == true {
-                    let scheme = self.nextLessThanValue(in: multiScheme, comparedTo: totalQty)
+                    let scheme = self.nextLessThanValue(in: multiScheme, comparedTo: totalQty, rate: rate)
                     
                     if scheme != nil {
-                        let schemeQty = totalQty / scheme!.scheme
-                        freeCount = schemeQty * scheme!.offerAvailableCount //  Int(value * Double(scheme!.offerAvailableCount))
+                        if scheme?.schemeType == "Q" {
+                            let schemeQty = totalQty / scheme!.scheme
+                            freeCount = schemeQty * scheme!.offerAvailableCount //  Int(value * Double(scheme!.offerAvailableCount))
+                        }else {
+                            let total = Double(sQty) * rate * Double(unitCount)
+                            
+                            print(total)
+                            if Int(total / Double(scheme!.scheme)) > 1 {
+                                print(Int(total / Double(scheme!.scheme)))
+                                freeCount = Int(total / Double(scheme!.scheme)) * offerAvailableCount
+                                
+                                let amt = Int(total / Double(scheme!.scheme))
+                                let disCountValuePer = Double(amt)  * disCountValue
+                                
+                                let disCountPercentage = (disCountValuePer / total) * 100
+                                print(disCountPercentage)
+                                let discountPerRound =   Double(round(100 * disCountPercentage) / 100)
+                                disCountPer = discountPerRound
+                                disCountValue = disCountValuePer
+                                discountPer = discountPerRound
+                            }else {
+                                freeCount = 0
+                                disCountPer = 0
+                                disCountValue = 0
+                            }
+                        }
+                        
                     }else{
                         freeCount = 0
                     }
                 }else {
-                    let schemeQty = totalQty / scheme
-                    if totalQty >= scheme{
-                        freeCount = schemeQty * offerAvailableCount
-                    }
                     
                     if schemeType == "Q" {
-                        let schemeQty = totalQty / scheme
-                        if totalQty >= scheme{
-                            freeCount = schemeQty * offerAvailableCount
-                        }
-                    }else {
-                        let total = Double(sQty) * rate * Double(unitCount)
                         
-                        print(total)
-                        if Int(total / Double(scheme)) > 1 {
-                            print(Int(total / Double(scheme)))
-                            freeCount = Int(total / Double(scheme)) * offerAvailableCount
-                            
-                            let amt = Int(total / Double(scheme))
-                            let disCountValuePer = Double(amt) * disCountValue
-                            
-                            let disCountPercentage = (disCountValuePer / total) * 100
-                            print(disCountPercentage)
-                            let discountPerRound =   Double(round(100 * disCountPercentage) / 100)
-                            disCountPer = discountPerRound
-                            disCountValue = disCountValuePer
-                            discountPer = discountPerRound
+                        if discountType == "%" {
+                            let schemeQty = totalQty / scheme
+                            if totalQty >= scheme{
+                                freeCount = schemeQty * offerAvailableCount
+                            }
                         }else {
-                            freeCount = 0
-                            disCountPer = 0
-                            disCountValue = 0
+                            let total = Double(sQty) * rate * Double(unitCount)
+                            
+                            print(total)
+                            if Int(Double(totalQty) / Double(scheme)) >= 1 {
+                                print(Int(total / Double(scheme)))
+                                freeCount = Int(Double(totalQty) / Double(scheme)) * offerAvailableCount
+                                
+                                let amt = Int(Double(totalQty) / Double(scheme))
+                                let disCountValuePer = Double(amt)  * disCountValue
+                                
+                                let disCountPercentage = (disCountValuePer / total) * 100
+                                print(disCountPercentage)
+                                let discountPerRound =   Double(round(100 * disCountPercentage) / 100)
+                                disCountPer = discountPerRound
+                                disCountValue = disCountValuePer
+                                discountPer = discountPerRound
+                            }else {
+                                freeCount = 0
+                                disCountPer = 0
+                                disCountValue = 0
+                            }
                         }
+                        
+                    }else {
+                        if discountType == "%" {
+                            let schemeQty = totalQty / scheme
+                            if totalQty >= scheme{
+                                freeCount = schemeQty * offerAvailableCount
+                            }
+                        }else {
+                            let total = Double(sQty) * rate * Double(unitCount)
+                            
+                            print(total)
+                            if Int(total / Double(scheme)) > 1 {
+                                print(Int(total / Double(scheme)))
+                                freeCount = Int(total / Double(scheme)) * offerAvailableCount
+                                
+                                let amt = Int(total / Double(scheme))
+                                let disCountValuePer = Double(amt)  * disCountValue
+                                
+                                let disCountPercentage = (disCountValuePer / total) * 100
+                                print(disCountPercentage)
+                                let discountPerRound =   Double(round(100 * disCountPercentage) / 100)
+                                disCountPer = discountPerRound
+                                disCountValue = disCountValuePer
+                                discountPer = discountPerRound
+                            }else {
+                                freeCount = 0
+                                disCountPer = 0
+                                disCountValue = 0
+                            }
+                        }
+                        
                     }
+                    
+                    
                 }
                 
             }
         }
-        
         var discountAmountRound : Double = 0
         var taxAmountRound : Double = 0
         var totalAmountRound : Double = 0
@@ -839,13 +1065,18 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
             let cateId = String(format: "%@", product["cateid"] as! CVarArg)
             let saleErpCode = String(format: "%@", product["Sale_Erp_Code"] as! CVarArg)
             let newWt = String(format: "%@", product["product_netwt"] as! CVarArg)
-            
+            let baseUnit = String(format: "%@", product["Base_Unit_code"] as! CVarArg)
             
             let Units = lstAllUnits.filter({(product) in
+                print(product)
                 let ProdId = String(format: "%@", product["Product_Code"] as! CVarArg)
-                return Bool(ProdId == productId)
+                let id = String(format: "%@", product["id"] as! CVarArg)
+                return Bool(ProdId == productId && baseUnit == id)
             })
             
+            if productId == "SJQA13334" {
+                print("P")
+            }
             var unitName = ""
             var unitId = ""
             var unitCount = 0
@@ -890,6 +1121,7 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
             
             if(retailerRateItems.count>0){
                 print(retailerRateItems)
+                print(product)
                 rate = (retailerRateItems.first!["Retailor_Price"] as! NSString).doubleValue
                 retailorPrice = (retailerRateItems.first!["Retailor_Price"] as! NSString).doubleValue
             }
@@ -923,9 +1155,6 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
             var discountType : String = ""
             
             if UserSetup.shared.SchemeBased == 1 && UserSetup.shared.offerMode == 1 {
-                print(productId)
-                print(lstStockistSchemes)
-                print(lstStockistSchemes.count)
                 
                 let schemesItems = lstStockistSchemes.filter({ (product) in
                     let ProdId = String(format: "%@", product["PCode"] as! CVarArg)
@@ -933,10 +1162,19 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
                 })
                 
                 if schemesItems.count > 0 {
-                    
                     isSchemeActive = true
-                    scheme = (schemesItems.first!["Scheme"] as! NSString).integerValue
-                    offerAvailableCount = (schemesItems.first!["FQ"] as! NSString).integerValue
+                    if let schValue = schemesItems.first!["Scheme"] as? String {
+                        scheme = Int(schValue) ?? 0
+                    }else if let schValue = schemesItems.first!["Scheme"] as? Int {
+                        scheme = schValue
+                    }
+                 //   scheme = (schemesItems.first!["Scheme"] as? NSString  ?? "").integerValue
+                  //  offerAvailableCount = (schemesItems.first!["FQ"] as? NSString ?? "").integerValue
+                    if let freeValue = schemesItems.first!["FQ"] as? String {
+                        offerAvailableCount = Int(freeValue) ?? 0
+                    }else if let freeValue = schemesItems.first!["FQ"] as? Int {
+                        offerAvailableCount = freeValue
+                    }
                     offerUnitName = schemesItems.first!["FreeUnit"] as? String ?? ""
                     offerProductCode = schemesItems.first!["OffProd"] as? String ?? ""
                     offerProductName = schemesItems.first!["OffProdNm"] as? String ?? ""
@@ -958,8 +1196,18 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
                         for schemesItem in schemesItems {
                             isMultiSchemeActive = true
                             
-                            let scheme = (schemesItem["Scheme"] as! NSString).integerValue
-                            let offerAvailableCount = (schemesItem["FQ"] as! NSString).integerValue
+                            var scheme = 0 //(schemesItem["Scheme"] as? NSString ?? "").integerValue
+                            if let schValue = schemesItems.first!["Scheme"] as? String {
+                                scheme = Int(schValue) ?? 0
+                            }else if let schValue = schemesItems.first!["Scheme"] as? Int {
+                                scheme = schValue
+                            }
+                            var offerAvailableCount = 0 // (schemesItem["FQ"] as? NSString ?? "").integerValue
+                            if let freeValue = schemesItems.first!["FQ"] as? String {
+                                offerAvailableCount = Int(freeValue) ?? 0
+                            }else if let freeValue = schemesItems.first!["FQ"] as? Int {
+                                offerAvailableCount = freeValue
+                            }
                             let offerUnitName = schemesItem["FreeUnit"] as? String ?? ""
                             let offerProductCode = schemesItem["OffProd"] as? String ?? ""
                             let offerProductName = schemesItem["OffProdNm"] as? String ?? ""
@@ -983,17 +1231,24 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
                     
                 }
             }
-            
+            print(UserSetup.shared.productCard)
             if UserSetup.shared.productCard == "1" {
                 if(marginRateItems.count>0){
-                    print(marginRateItems)
-                    rate = (marginRateItems.first!["MRP_Price"] as! NSString).doubleValue
-                    retailorPrice = (marginRateItems.first!["MRP_Price"] as! NSString).doubleValue
+//                    print(marginRateItems)
+//                    print(product)
+//                    print((marginRateItems.first!["Retailor_Price"] as! Int))
+//                    print((marginRateItems.first!["Retailor_Price"] as! Int))
+                    rate = Double((marginRateItems.first!["Retailor_Price"] as? Int ?? 0))  //(marginRateItems.first!["Retailor_Price"] as! NSString).doubleValue
+                    retailorPrice = Double((marginRateItems.first!["Retailor_Price"] as? Int ?? 0)) //(marginRateItems.first!["Retailor_Price"] as! NSString).doubleValue
                     
+                    print(rate)
+                    print(retailorPrice)
                     for item in marginRateItems {
                         print("Gooood")
-                        rate = (item["MRP_Price"] as! NSString).doubleValue
-                        retailorPrice = (item["MRP_Price"] as! NSString).doubleValue
+                        rate = Double((marginRateItems.first!["Retailor_Price"] as? Int ?? 0))
+                        retailorPrice = Double((marginRateItems.first!["Retailor_Price"] as? Int ?? 0))
+//                        rate = (item["Retailor_Price"] as! NSString).doubleValue
+//                        retailorPrice = (item["Retailor_Price"] as! NSString).doubleValue
                         
                         self.allProducts.append(ProductList(product: product, productName: productName, productId: productId,cateId: cateId, rate: rate,rateEdited: "0",retailerPrice: retailorPrice,saleErpCode: saleErpCode,newWt: newWt, sampleQty: "",clQty: "",remarks: "",remarksId: "", selectedRemarks: [], disCountPer: disCountPer, disCountValue: disCountValue, disCountAmount: 0.0, freeCount: 0, unitId: unitId, unitName: unitName, unitCount: unitCount, taxper: tax, taxAmount: 0.0, totalCount: 0.0, isSchemeActive: isSchemeActive,scheme: scheme,offerAvailableCount: offerAvailableCount,offerUnitName: offerUnitName,offerProductCode: offerProductCode,offerProductName: offerProductName,package: package,schemeType: schemeType,discountType: discountType, isMultiSchemeActive: isMultiSchemeActive, multiScheme: multiScheme, competitorProduct: []))
                     }
@@ -1207,7 +1462,7 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
     }
     
     func calculationForOrderCell(cell : SuperStockistOrderListTableViewCell) {
-        
+        print(cell.product.productId)
         var discountPer : Double = 0
         
         let taxPer = cell.product.taxper
@@ -1218,7 +1473,7 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
         
         if cell.product.isMultiSchemeActive == true {
             let totalQty = unitCount * sQty
-            let scheme = self.nextLessThanValue(in: cell.product.multiScheme, comparedTo: totalQty)
+            let scheme = self.nextLessThanValue(in: cell.product.multiScheme, comparedTo: totalQty,rate: rate)
             if scheme != nil {
                 discountPer = scheme!.disCountPer
                 cell.product.disCountPer = scheme!.disCountPer
@@ -1234,62 +1489,240 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
             if cell.product.package == "N" {
                 if cell.product.isMultiSchemeActive == true {
                     
-                    let scheme = self.nextLessThanValue(in: cell.product.multiScheme, comparedTo: totalQty)
+                    let scheme = self.nextLessThanValue(in: cell.product.multiScheme, comparedTo: totalQty, rate: rate)
                     
                     if scheme != nil {
-                        let schQty = scheme!.scheme
-                        let value = Double(totalQty) /  Double(schQty)
-                        cell.product.freeCount = Int(value * Double(scheme!.offerAvailableCount))
+                        print(scheme)
+                        if scheme!.schemeType == "Q" {
+                            if scheme!.discountType == "%" {
+                                let schQty = scheme!.scheme
+                                let value = Double(totalQty) /  Double(schQty)
+                                cell.product.freeCount = Int(value * Double(scheme!.offerAvailableCount))
+                            }else {
+                                let schQty = scheme!.scheme
+                                let value = Double(totalQty) /  Double(schQty)
+                                cell.product.freeCount = Int(value * Double(scheme!.offerAvailableCount))
+                                if Double(totalQty) >= Double(schQty){
+                                    cell.product.freeCount = Int(value * Double(scheme!.offerAvailableCount))
+                                    
+                                    let total = Double(sQty) * rate * Double(unitCount)
+                                    
+                                    let amt = Int(Double(totalQty) / Double(scheme!.scheme))
+                                    let disCountValuePer = Double(amt)  * scheme!.disCountValue
+                                    
+                                    let disCountPercentage = (disCountValuePer / total) * 100
+                                    print(disCountPercentage)
+                                    let discountPerRound =   Double(round(100 * disCountPercentage) / 100)
+                                    cell.product.disCountPer = discountPerRound
+                                    cell.product.disCountAmount = disCountValuePer
+                                    discountPer = discountPerRound
+                                }else {
+                                    cell.product.freeCount = 0
+                                    cell.product.disCountPer = 0
+                                    cell.product.disCountAmount = 0
+                                }
+                            }
+                            
+                        }else {
+                            if scheme!.discountType == "%" {
+                                let schQty = scheme!.scheme
+                                let value = Double(totalQty) /  Double(schQty)
+                                cell.product.freeCount = Int(value * Double(scheme!.offerAvailableCount))
+                            }else {
+//                                let schQty = scheme!.scheme
+//                                let value = Double(totalQty) /  Double(schQty)
+//                                cell.product.freeCount = Int(value * Double(scheme!.offerAvailableCount))
+                                
+                                let schQty = scheme!.scheme
+                                let total = Double(sQty) * rate * Double(unitCount)
+                                let value = Int(Double(total) /  Double(schQty))
+                                if Double(total) >= Double(schQty){
+                                    cell.product.freeCount = Int(Double(value) * Double(scheme!.offerAvailableCount))
+                                    
+                                    let total = Double(sQty) * rate * Double(unitCount)
+                                    
+                                    let amt = Int(Double(total) / Double(scheme!.scheme))
+                                    let disCountValuePer = Double(amt)  * scheme!.disCountValue
+                                    
+                                    let disCountPercentage = (disCountValuePer / total) * 100
+                                    print(disCountPercentage)
+                                    let discountPerRound =   Double(round(100 * disCountPercentage) / 100)
+                                    cell.product.disCountPer = discountPerRound
+                                    cell.product.disCountAmount = disCountValuePer
+                                    discountPer = discountPerRound
+                                }
+                            }
+                        }
+                        
                     }else{
                         cell.product.freeCount = 0
                     }
                 }else {
-                    let schQty = cell.product.scheme
-                    let value = Double(totalQty) /  Double(schQty)
-                    if Double(totalQty) >= Double(schQty){
-                        cell.product.freeCount = Int(value * Double(cell.product.offerAvailableCount))
+                    if cell.product.schemeType == "Q" {
+                        if cell.product.discountType == "%" {
+                            let schQty = cell.product.scheme
+                            let value = Double(totalQty) /  Double(schQty)
+                            if Double(totalQty) >= Double(schQty){
+                                cell.product.freeCount = Int(value * Double(cell.product.offerAvailableCount))
+                            }else {
+                                cell.product.freeCount = 0
+                            }
+                        }else {
+                            let schQty = cell.product.scheme
+                            let value = Double(totalQty) /  Double(schQty)
+                            if Double(totalQty) >= Double(schQty){
+                                cell.product.freeCount = Int(value * Double(cell.product.offerAvailableCount))
+                                
+                                let total = Double(sQty) * rate * Double(unitCount)
+                                
+                                let amt = Int(Double(totalQty) / Double(cell.product.scheme))
+                                let disCountValuePer = Double(amt)  * cell.product.disCountValue
+                                
+                                let disCountPercentage = (disCountValuePer / total) * 100
+                                print(disCountPercentage)
+                                let discountPerRound =   Double(round(100 * disCountPercentage) / 100)
+                                cell.product.disCountPer = discountPerRound
+                                cell.product.disCountAmount = disCountValuePer
+                                discountPer = discountPerRound
+                            }else {
+                                cell.product.freeCount = 0
+                                cell.product.disCountPer = 0
+                                cell.product.disCountAmount = 0
+                            }
+                        }
+                    }else if cell.product.schemeType == "V" {
+                        if cell.product.discountType == "%" {
+                            let schQty = cell.product.scheme
+                            let total = Double(sQty) * rate * Double(unitCount)
+                            let value = Int(Double(total) /  Double(schQty))
+                            if Double(total) >= Double(schQty){
+                                cell.product.freeCount = Int(Double(value) * Double(cell.product.offerAvailableCount))
+                            }
+                        }else {
+                            let schQty = cell.product.scheme
+                            let total = Double(sQty) * rate * Double(unitCount)
+                            let value = Int(Double(total) /  Double(schQty))
+                            if Double(total) >= Double(schQty){
+                                cell.product.freeCount = Int(Double(value) * Double(cell.product.offerAvailableCount))
+                                
+                                let total = Double(sQty) * rate * Double(unitCount)
+                                
+                                let amt = Int(Double(total) / Double(cell.product.scheme))
+                                let disCountValuePer = Double(amt)  * cell.product.disCountValue
+                                
+                                let disCountPercentage = (disCountValuePer / total) * 100
+                                print(disCountPercentage)
+                                let discountPerRound =   Double(round(100 * disCountPercentage) / 100)
+                                cell.product.disCountPer = discountPerRound
+                                cell.product.disCountAmount = disCountValuePer
+                                discountPer = discountPerRound
+                            }
+                        }
                     }
                     
                 }
             }else {
                 if cell.product.isMultiSchemeActive == true {
-                    let scheme = self.nextLessThanValue(in: cell.product.multiScheme, comparedTo: totalQty)
+                    let scheme = self.nextLessThanValue(in: cell.product.multiScheme, comparedTo: totalQty, rate: rate)
                     
                     if scheme != nil {
-                        let schemeQty = totalQty / scheme!.scheme
-                        cell.product.freeCount = schemeQty * scheme!.offerAvailableCount //  Int(value * Double(scheme!.offerAvailableCount))
+                        if scheme?.schemeType == "Q" {
+                            let schemeQty = totalQty / scheme!.scheme
+                            cell.product.freeCount = schemeQty * scheme!.offerAvailableCount //  Int(value * Double(scheme!.offerAvailableCount))
+                        }else {
+                            let total = Double(sQty) * rate * Double(unitCount)
+                            
+                            print(total)
+                            if Int(total / Double(cell.product.scheme)) >= 1 {
+                                print(Int(total / Double(cell.product.scheme)))
+                                cell.product.freeCount = Int(total / Double(cell.product.scheme)) * cell.product.offerAvailableCount
+                                
+                                let amt = Int(total / Double(cell.product.scheme))
+                                let disCountValuePer = Double(amt)  * cell.product.disCountValue
+                                
+                                let disCountPercentage = (disCountValuePer / total) * 100
+                                print(disCountPercentage)
+                                let discountPerRound =   Double(round(100 * disCountPercentage) / 100)
+                                cell.product.disCountPer = discountPerRound
+                                cell.product.disCountAmount = disCountValuePer
+                                discountPer = discountPerRound
+                            }else {
+                                cell.product.freeCount = 0
+                                cell.product.disCountPer = 0
+                                cell.product.disCountAmount = 0
+                            }
+                        }
+                        
                     }else{
                         cell.product.freeCount = 0
                     }
                 }else {
                     
                     if cell.product.schemeType == "Q" {
-                        let schemeQty = totalQty / cell.product.scheme
-                        if totalQty >= cell.product.scheme{
-                            cell.product.freeCount = schemeQty * cell.product.offerAvailableCount
-                        }
-                    }else {
-                        let total = Double(sQty) * rate * Double(unitCount)
                         
-                        print(total)
-                        if Int(total / Double(cell.product.scheme)) > 1 {
-                            print(Int(total / Double(cell.product.scheme)))
-                            cell.product.freeCount = Int(total / Double(cell.product.scheme)) * cell.product.offerAvailableCount
-                            
-                            let amt = Int(total / Double(cell.product.scheme))
-                            let disCountValuePer = Double(amt)  * cell.product.disCountValue
-                            
-                            let disCountPercentage = (disCountValuePer / total) * 100
-                            print(disCountPercentage)
-                            let discountPerRound =   Double(round(100 * disCountPercentage) / 100)
-                            cell.product.disCountPer = discountPerRound
-                            cell.product.disCountAmount = disCountValuePer
-                            discountPer = discountPerRound
+                        if cell.product.discountType == "%" {
+                            let schemeQty = totalQty / cell.product.scheme
+                            if totalQty >= cell.product.scheme{
+                                cell.product.freeCount = schemeQty * cell.product.offerAvailableCount
+                            }else {
+                                cell.product.freeCount = 0
+                            }
                         }else {
-                            cell.product.freeCount = 0
-                            cell.product.disCountPer = 0
-                            cell.product.disCountAmount = 0
+                            let total = Double(sQty) * rate * Double(unitCount)
+                            
+                            print(total)
+                            if Int(Double(totalQty) / Double(cell.product.scheme)) >= 1 {
+                                print(Int(total / Double(cell.product.scheme)))
+                                cell.product.freeCount = Int(Double(totalQty) / Double(cell.product.scheme)) * cell.product.offerAvailableCount
+                                
+                                let amt = Int(Double(totalQty) / Double(cell.product.scheme))
+                                let disCountValuePer = Double(amt)  * cell.product.disCountValue
+                                
+                                let disCountPercentage = (disCountValuePer / total) * 100
+                                print(disCountPercentage)
+                                let discountPerRound =   Double(round(100 * disCountPercentage) / 100)
+                                cell.product.disCountPer = discountPerRound
+                                cell.product.disCountAmount = disCountValuePer
+                                discountPer = discountPerRound
+                            }else {
+                                cell.product.freeCount = 0
+                                cell.product.disCountPer = 0
+                                cell.product.disCountAmount = 0
+                            }
                         }
+                        
+                    }else {
+                        if cell.product.discountType == "%" {
+                            let schemeQty = totalQty / cell.product.scheme
+                            if totalQty >= cell.product.scheme{
+                                cell.product.freeCount = schemeQty * cell.product.offerAvailableCount
+                            }else {
+                                cell.product.freeCount = 0
+                            }
+                        }else {
+                            let total = Double(sQty) * rate * Double(unitCount)
+                            
+                            print(total)
+                            if Int(total / Double(cell.product.scheme)) >= 1 {
+                                print(Int(total / Double(cell.product.scheme)))
+                                cell.product.freeCount = Int(total / Double(cell.product.scheme)) * cell.product.offerAvailableCount
+                                
+                                let amt = Int(total / Double(cell.product.scheme))
+                                let disCountValuePer = Double(amt)  * cell.product.disCountValue
+                                
+                                let disCountPercentage = (disCountValuePer / total) * 100
+                                print(disCountPercentage)
+                                let discountPerRound =   Double(round(100 * disCountPercentage) / 100)
+                                cell.product.disCountPer = discountPerRound
+                                cell.product.disCountAmount = disCountValuePer
+                                discountPer = discountPerRound
+                            }else {
+                                cell.product.freeCount = 0
+                                cell.product.disCountPer = 0
+                                cell.product.disCountAmount = 0
+                            }
+                        }
+                        
                     }
                     
                     
@@ -1300,61 +1733,125 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
         
         
         if cell.product.schemeType == "Q" {
-            let discountAmount = discountPer * Double(unitCount) * rate * Double(sQty) / 100
             
+            if cell.product.discountType == "%" {
+                let discountAmount = discountPer * Double(unitCount) * rate * Double(sQty) / 100
+                
+                
+                
+                let discountPerOneUnit = discountPer *  rate / 100
+                
+                let rateMinusDiscount = rate - discountPerOneUnit
+                
+                let taxAmount = taxPer * Double(unitCount) * rateMinusDiscount * Double(sQty) / 100
+                
+                var total = Double(sQty) * rateMinusDiscount * Double(unitCount)
+                
+                total = total + taxAmount
+                
+                let discountAmountRound = Double(round(100 * discountAmount) / 100)
+                let taxAmountRound = Double(round(100 * taxAmount) / 100)
+                let totalAmountRound = Double(round(100 * total) / 100)
+                
+                
+                
+                
+                cell.txtDisAmt.text = "\(discountAmountRound)"
+                cell.txtTaxAmt.text = "\(taxAmountRound)"
+                cell.product.taxAmount = taxAmountRound
+                cell.product.disCountAmount = discountAmountRound
+                cell.product.totalCount =  totalAmountRound
+                cell.lblRate.text = "\(cell.product.rate) x ( \(unitCount) x \(sQty) )  =  \(totalAmountRound)"
+            }else {
+                let discountAmount = cell.product.disCountAmount // discountPer * Double(unitCount) * rate * Double(sQty) / 100
+                
+                
+                
+                let discountPerOneUnit = discountPer *  rate / 100
+                
+                let rateMinusDiscount = rate - discountPerOneUnit
+                
+                let taxAmount = taxPer * Double(unitCount) * rate * Double(sQty) / 100
+                
+                var total = Double(sQty) * rate * Double(unitCount)
+                total = total - discountAmount
+                total = total + taxAmount
+                
+                let discountAmountRound = Double(round(100 * discountAmount) / 100)
+                let taxAmountRound = Double(round(100 * taxAmount) / 100)
+                let totalAmountRound = Double(round(100 * total) / 100)
+                
+                
+                
+                
+                cell.txtDisAmt.text = "\(discountAmountRound)"
+                cell.txtTaxAmt.text = "\(taxAmountRound)"
+                cell.product.taxAmount = taxAmountRound
+                cell.product.disCountAmount = discountAmountRound
+                cell.product.totalCount =  totalAmountRound
+                cell.lblRate.text = "\(cell.product.rate) x ( \(unitCount) x \(sQty) )  =  \(totalAmountRound)"
+            }
             
-            
-            let discountPerOneUnit = discountPer *  rate / 100
-            
-            let rateMinusDiscount = rate - discountPerOneUnit
-            
-            let taxAmount = taxPer * Double(unitCount) * rateMinusDiscount * Double(sQty) / 100
-            
-            var total = Double(sQty) * rateMinusDiscount * Double(unitCount)
-            
-            total = total + taxAmount
-            
-            let discountAmountRound = Double(round(100 * discountAmount) / 100)
-            let taxAmountRound = Double(round(100 * taxAmount) / 100)
-            let totalAmountRound = Double(round(100 * total) / 100)
-            
-            
-            
-            
-            cell.txtDisAmt.text = "\(discountAmountRound)"
-            cell.txtTaxAmt.text = "\(taxAmountRound)"
-            cell.product.taxAmount = taxAmountRound
-            cell.product.disCountAmount = discountAmountRound
-            cell.product.totalCount =  totalAmountRound
-            cell.lblRate.text = "\(cell.product.rate) x ( \(unitCount) x \(sQty) )  =  \(totalAmountRound)"
         }else {
-            let discountAmount = cell.product.disCountAmount // discountPer * Double(unitCount) * rate * Double(sQty) / 100
             
+            if cell.product.discountType == "%" {
+                let discountAmount = discountPer * Double(unitCount) * rate * Double(sQty) / 100
+                
+                
+                
+                let discountPerOneUnit = discountPer *  rate / 100
+                
+                let rateMinusDiscount = rate - discountPerOneUnit
+                
+                let taxAmount = taxPer * Double(unitCount) * rateMinusDiscount * Double(sQty) / 100
+                
+                var total = Double(sQty) * rateMinusDiscount * Double(unitCount)
+                
+                total = total + taxAmount
+                
+                let discountAmountRound = Double(round(100 * discountAmount) / 100)
+                let taxAmountRound = Double(round(100 * taxAmount) / 100)
+                let totalAmountRound = Double(round(100 * total) / 100)
+                
+                
+                
+                
+                cell.txtDisAmt.text = "\(discountAmountRound)"
+                cell.txtTaxAmt.text = "\(taxAmountRound)"
+                cell.product.taxAmount = taxAmountRound
+                cell.product.disCountAmount = discountAmountRound
+                cell.product.totalCount =  totalAmountRound
+                cell.lblRate.text = "\(cell.product.rate) x ( \(unitCount) x \(sQty) )  =  \(totalAmountRound)"
+            }else {
+                let discountAmount = cell.product.disCountAmount // discountPer * Double(unitCount) * rate * Double(sQty) / 100
+                
+                
+                
+                let discountPerOneUnit = discountPer *  rate / 100
+                
+                let rateMinusDiscount = rate - discountPerOneUnit
+                
+                let taxAmount = taxPer * Double(unitCount) * rate * Double(sQty) / 100
+                
+                var total = Double(sQty) * rate * Double(unitCount)
+                total = total - discountAmount
+                total = total + taxAmount
+                
+                let discountAmountRound = Double(round(100 * discountAmount) / 100)
+                let taxAmountRound = Double(round(100 * taxAmount) / 100)
+                let totalAmountRound = Double(round(100 * total) / 100)
+                
+                
+                
+                
+                cell.txtDisAmt.text = "\(discountAmountRound)"
+                cell.txtTaxAmt.text = "\(taxAmountRound)"
+                cell.product.taxAmount = taxAmountRound
+                cell.product.disCountAmount = discountAmountRound
+                cell.product.totalCount =  totalAmountRound
+                cell.lblRate.text = "\(cell.product.rate) x ( \(unitCount) x \(sQty) )  =  \(totalAmountRound)"
+            }
             
-            
-            let discountPerOneUnit = discountPer *  rate / 100
-            
-            let rateMinusDiscount = rate - discountPerOneUnit
-            
-            let taxAmount = taxPer * Double(unitCount) * rate * Double(sQty) / 100
-            
-            var total = Double(sQty) * rate * Double(unitCount)
-            total = total - discountAmount
-            total = total + taxAmount
-            
-            let discountAmountRound = Double(round(100 * discountAmount) / 100)
-            let taxAmountRound = Double(round(100 * taxAmount) / 100)
-            let totalAmountRound = Double(round(100 * total) / 100)
-            
-            
-            
-            
-            cell.txtDisAmt.text = "\(discountAmountRound)"
-            cell.txtTaxAmt.text = "\(taxAmountRound)"
-            cell.product.taxAmount = taxAmountRound
-            cell.product.disCountAmount = discountAmountRound
-            cell.product.totalCount =  totalAmountRound
-            cell.lblRate.text = "\(cell.product.rate) x ( \(unitCount) x \(sQty) )  =  \(totalAmountRound)"
         }
         
         
@@ -1764,7 +2261,7 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
         print("QTYYYY \(sQty)")
         if cell.product.isMultiSchemeActive == true {
             let totalQty = unitCount * sQty
-            let scheme = self.nextLessThanValue(in: cell.product.multiScheme, comparedTo: totalQty)
+            let scheme = self.nextLessThanValue(in: cell.product.multiScheme, comparedTo: totalQty, rate: rate)
             if scheme != nil {
                 discountPer = scheme!.disCountPer
                 cell.product.disCountPer = scheme!.disCountPer
@@ -1781,124 +2278,304 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
             if cell.product.package == "N" {
                 if cell.product.isMultiSchemeActive == true {
                     
-                    let scheme = self.nextLessThanValue(in: cell.product.multiScheme, comparedTo: totalQty)
+                    let scheme = self.nextLessThanValue(in: cell.product.multiScheme, comparedTo: totalQty, rate: rate)
                     
                     if scheme != nil {
+                        print(scheme)
+                        if scheme!.schemeType == "Q" {
+                            if scheme!.discountType == "%" {
+                                let schQty = scheme!.scheme
+                                let value = Double(totalQty) /  Double(schQty)
+                                cell.product.freeCount = Int(value * Double(scheme!.offerAvailableCount))
+                            }else {
+                                let schQty = scheme!.scheme
+                                let value = Double(totalQty) /  Double(schQty)
+                                cell.product.freeCount = Int(value * Double(scheme!.offerAvailableCount))
+                            }
+                            
+                        }else {
+                            if scheme!.discountType == "%" {
+                                let schQty = scheme!.scheme
+                                let value = Double(totalQty) /  Double(schQty)
+                                cell.product.freeCount = Int(value * Double(scheme!.offerAvailableCount))
+                            }else {
+                                let schQty = scheme!.scheme
+                                let value = Double(totalQty) /  Double(schQty)
+                                cell.product.freeCount = Int(value * Double(scheme!.offerAvailableCount))
+                            }
+                        }
                         
-                        let schQty = scheme!.scheme
-                        let value = Double(totalQty) /  Double(schQty)
-                        cell.product.freeCount = Int(value * Double(scheme!.offerAvailableCount))
-                        cell.product.scheme = scheme!.scheme
-                        cell.product.offerProductCode = scheme!.offerProductCode
-                        cell.product.offerProductName = scheme!.offerProductName
-                        
-                    }else {
+                    }else{
                         cell.product.freeCount = 0
                     }
                 }else {
-                    
-                    let schQty = cell.product.scheme
-                    let value = Double(totalQty) /  Double(schQty)
-                    if Double(totalQty) >  Double(schQty) {
-                        cell.product.freeCount = Int(value * Double(cell.product.offerAvailableCount))
+                    if cell.product.schemeType == "Q" {
+                        if cell.product.discountType == "%" {
+                            let schQty = cell.product.scheme
+                            let value = Double(totalQty) /  Double(schQty)
+                            if Double(totalQty) >= Double(schQty){
+                                cell.product.freeCount = Int(value * Double(cell.product.offerAvailableCount))
+                            }else {
+                                cell.product.freeCount = 0
+                            }
+                        }else {
+                            let schQty = cell.product.scheme
+                            let value = Double(totalQty) /  Double(schQty)
+                            if Double(totalQty) >= Double(schQty){
+                                cell.product.freeCount = Int(value * Double(cell.product.offerAvailableCount))
+                                
+                                let total = Double(sQty) * rate * Double(unitCount)
+                                
+                                let amt = Int(Double(totalQty) / Double(cell.product.scheme))
+                                let disCountValuePer = Double(amt)  * cell.product.disCountValue
+                                
+                                let disCountPercentage = (disCountValuePer / total) * 100
+                                print(disCountPercentage)
+                                let discountPerRound =   Double(round(100 * disCountPercentage) / 100)
+                                cell.product.disCountPer = discountPerRound
+                                cell.product.disCountAmount = disCountValuePer
+                                discountPer = discountPerRound
+                            }else {
+                                cell.product.freeCount = 0
+                                cell.product.disCountPer = 0
+                                cell.product.disCountAmount = 0
+                            }
+                        }
+                    }else if cell.product.schemeType == "V" {
+                        if cell.product.discountType == "%" {
+                            let schQty = cell.product.scheme
+                            let total = Double(sQty) * rate * Double(unitCount)
+                            let value = Int(Double(total) /  Double(schQty))
+                            if Double(total) >= Double(schQty){
+                                cell.product.freeCount = Int(Double(value) * Double(cell.product.offerAvailableCount))
+                            }
+                        }else {
+                            let schQty = cell.product.scheme
+                            let total = Double(sQty) * rate * Double(unitCount)
+                            let value = Int(Double(total) /  Double(schQty))
+                            if Double(total) >= Double(schQty){
+                                cell.product.freeCount = Int(Double(value) * Double(cell.product.offerAvailableCount))
+                                
+                                let total = Double(sQty) * rate * Double(unitCount)
+                                
+                                let amt = Int(Double(total) / Double(cell.product.scheme))
+                                let disCountValuePer = Double(amt)  * cell.product.disCountValue
+                                
+                                let disCountPercentage = (disCountValuePer / total) * 100
+                                print(disCountPercentage)
+                                let discountPerRound =   Double(round(100 * disCountPercentage) / 100)
+                                cell.product.disCountPer = discountPerRound
+                                cell.product.disCountAmount = disCountValuePer
+                                discountPer = discountPerRound
+                            }
+                        }
                     }
                     
                 }
             }else {
                 if cell.product.isMultiSchemeActive == true {
-                    let scheme = self.nextLessThanValue(in: cell.product.multiScheme, comparedTo: totalQty)
+                    let scheme = self.nextLessThanValue(in: cell.product.multiScheme, comparedTo: totalQty, rate: rate)
                     
                     if scheme != nil {
-                        let schemeQty = totalQty / scheme!.scheme
+                        if scheme?.schemeType == "Q" {
+                            let schemeQty = totalQty / scheme!.scheme
+                            cell.product.freeCount = schemeQty * scheme!.offerAvailableCount //  Int(value * Double(scheme!.offerAvailableCount))
+                        }else {
+                            let total = Double(sQty) * rate * Double(unitCount)
+                            
+                            print(total)
+                            if Int(total / Double(cell.product.scheme)) > 1 {
+                                print(Int(total / Double(cell.product.scheme)))
+                                cell.product.freeCount = Int(total / Double(cell.product.scheme)) * cell.product.offerAvailableCount
+                                
+                                let amt = Int(total / Double(cell.product.scheme))
+                                let disCountValuePer = Double(amt)  * cell.product.disCountValue
+                                
+                                let disCountPercentage = (disCountValuePer / total) * 100
+                                print(disCountPercentage)
+                                let discountPerRound =   Double(round(100 * disCountPercentage) / 100)
+                                cell.product.disCountPer = discountPerRound
+                                cell.product.disCountAmount = disCountValuePer
+                                discountPer = discountPerRound
+                            }else {
+                                cell.product.freeCount = 0
+                                cell.product.disCountPer = 0
+                                cell.product.disCountAmount = 0
+                            }
+                        }
                         
-                        cell.product.freeCount = schemeQty * scheme!.offerAvailableCount
-                        cell.product.scheme = scheme!.scheme
-                        cell.product.offerProductCode = scheme!.offerProductCode
-                        cell.product.offerProductName = scheme!.offerProductName
-                    }else {
+                    }else{
                         cell.product.freeCount = 0
                     }
                 }else {
                     
                     if cell.product.schemeType == "Q" {
-                        let schemeQty = totalQty / cell.product.scheme
-                        if totalQty >= cell.product.scheme{
-                            cell.product.freeCount = schemeQty * cell.product.offerAvailableCount
-                        }
-                    }else {
-                        let total = Double(sQty) * rate * Double(unitCount)
                         
-                        print(total)
-                        if Int(total / Double(cell.product.scheme)) > 1 {
-                            print(Int(total / Double(cell.product.scheme)))
-                            cell.product.freeCount = Int(total / Double(cell.product.scheme)) * cell.product.offerAvailableCount
-                            
-                            let amt = Int(total / Double(cell.product.scheme))
-                            let disCountValuePer = Double(amt)  * cell.product.disCountValue
-                            
-                            let disCountPercentage = (disCountValuePer / total) * 100
-                            print(disCountPercentage)
-                            let discountPerRound =   Double(round(100 * disCountPercentage) / 100)
-                            cell.product.disCountPer = discountPerRound
-                            cell.product.disCountAmount = disCountValuePer
-                            discountPer = discountPerRound
+                        if cell.product.discountType == "%" {
+                            let schemeQty = totalQty / cell.product.scheme
+                            if totalQty >= cell.product.scheme{
+                                cell.product.freeCount = schemeQty * cell.product.offerAvailableCount
+                            }
                         }else {
-                            cell.product.freeCount = 0
-                            cell.product.disCountPer = 0
-                            cell.product.disCountAmount = 0
+                            let total = Double(sQty) * rate * Double(unitCount)
+                            
+                            print(total)
+                            if Int(Double(totalQty) / Double(cell.product.scheme)) >= 1 {
+                                print(Int(total / Double(cell.product.scheme)))
+                                cell.product.freeCount = Int(Double(totalQty) / Double(cell.product.scheme)) * cell.product.offerAvailableCount
+                                
+                                let amt = Int(Double(totalQty) / Double(cell.product.scheme))
+                                let disCountValuePer = Double(amt)  * cell.product.disCountValue
+                                
+                                let disCountPercentage = (disCountValuePer / total) * 100
+                                print(disCountPercentage)
+                                let discountPerRound =   Double(round(100 * disCountPercentage) / 100)
+                                cell.product.disCountPer = discountPerRound
+                                cell.product.disCountAmount = disCountValuePer
+                                discountPer = discountPerRound
+                            }else {
+                                cell.product.freeCount = 0
+                                cell.product.disCountPer = 0
+                                cell.product.disCountAmount = 0
+                            }
                         }
+                        
+                    }else {
+                        if cell.product.discountType == "%" {
+                            let schemeQty = totalQty / cell.product.scheme
+                            if totalQty >= cell.product.scheme{
+                                cell.product.freeCount = schemeQty * cell.product.offerAvailableCount
+                            }
+                        }else {
+                            let total = Double(sQty) * rate * Double(unitCount)
+                            
+                            print(total)
+                            if Int(total / Double(cell.product.scheme)) > 1 {
+                                print(Int(total / Double(cell.product.scheme)))
+                                cell.product.freeCount = Int(total / Double(cell.product.scheme)) * cell.product.offerAvailableCount
+                                
+                                let amt = Int(total / Double(cell.product.scheme))
+                                let disCountValuePer = Double(amt)  * cell.product.disCountValue
+                                
+                                let disCountPercentage = (disCountValuePer / total) * 100
+                                print(disCountPercentage)
+                                let discountPerRound =   Double(round(100 * disCountPercentage) / 100)
+                                cell.product.disCountPer = discountPerRound
+                                cell.product.disCountAmount = disCountValuePer
+                                discountPer = discountPerRound
+                            }else {
+                                cell.product.freeCount = 0
+                                cell.product.disCountPer = 0
+                                cell.product.disCountAmount = 0
+                            }
+                        }
+                        
                     }
+                    
+                    
                 }
                 
             }
         }
         
         if cell.product.schemeType == "Q" {
-            let discountAmount = discountPer * Double(unitCount) * rate * Double(sQty) / 100
+            if cell.product.discountType == "%" {
+                let discountAmount = discountPer * Double(unitCount) * rate * Double(sQty) / 100
+                
+                let discountPerOneUnit = discountPer *  rate / 100
+                
+                let rateMinusDiscount = rate - discountPerOneUnit
+                
+                let taxAmount = taxPer * Double(unitCount) * rateMinusDiscount * Double(sQty) / 100
+                
+                var total = Double(sQty) * rateMinusDiscount * Double(unitCount)
+                
+                total = total + taxAmount
+                
+                let discountAmountRound = Double(round(100 * discountAmount) / 100)
+                let taxAmountRound = Double(round(100 * taxAmount) / 100)
+                let totalAmountRound = Double(round(100 * total) / 100)
+                
+                cell.lblDisc.text = "₹ " + "\(discountAmountRound)"
+                cell.lblTax.text = "₹ " + "\(taxAmountRound)"
+                cell.product.taxAmount = taxAmountRound
+                cell.product.disCountAmount = discountAmountRound
+                cell.product.totalCount = totalAmountRound
+                cell.lblTotal.text = "₹ " + "\(totalAmountRound)"
+            }else {
+                let discountAmount = cell.product.disCountValue
+                
+                let discountPerOneUnit = discountPer *  rate / 100
+                
+                let rateMinusDiscount = rate - discountPerOneUnit
+                
+                let taxAmount = taxPer * Double(unitCount) * rate * Double(sQty) / 100
+                
+                var total = Double(sQty) * rate * Double(unitCount)
+                total = total - discountAmount
+                total = total + taxAmount
+                
+                let discountAmountRound = Double(round(100 * discountAmount) / 100)
+                let taxAmountRound = Double(round(100 * taxAmount) / 100)
+                let totalAmountRound = Double(round(100 * total) / 100)
+                
+                cell.lblDisc.text = "₹ " + "\(discountAmountRound)"
+                cell.lblTax.text = "₹ " + "\(taxAmountRound)"
+                cell.product.taxAmount = taxAmountRound
+                cell.product.disCountAmount = discountAmountRound
+                cell.product.totalCount = totalAmountRound
+                cell.lblTotal.text = "₹ " + "\(totalAmountRound)"
+            }
             
-            let discountPerOneUnit = discountPer *  rate / 100
-            
-            let rateMinusDiscount = rate - discountPerOneUnit
-            
-            let taxAmount = taxPer * Double(unitCount) * rateMinusDiscount * Double(sQty) / 100
-            
-            var total = Double(sQty) * rateMinusDiscount * Double(unitCount)
-            
-            total = total + taxAmount
-            
-            let discountAmountRound = Double(round(100 * discountAmount) / 100)
-            let taxAmountRound = Double(round(100 * taxAmount) / 100)
-            let totalAmountRound = Double(round(100 * total) / 100)
-            
-            cell.lblDisc.text = "₹ " + "\(discountAmountRound)"
-            cell.lblTax.text = "₹ " + "\(taxAmountRound)"
-            cell.product.taxAmount = taxAmountRound
-            cell.product.disCountAmount = discountAmountRound
-            cell.product.totalCount = totalAmountRound
-            cell.lblTotal.text = "₹ " + "\(totalAmountRound)"
         }else {
-            let discountAmount = cell.product.disCountValue
+            if cell.product.discountType == "%" {
+                let discountAmount = discountPer * Double(unitCount) * rate * Double(sQty) / 100
+                
+                let discountPerOneUnit = discountPer *  rate / 100
+                
+                let rateMinusDiscount = rate - discountPerOneUnit
+                
+                let taxAmount = taxPer * Double(unitCount) * rateMinusDiscount * Double(sQty) / 100
+                
+                var total = Double(sQty) * rateMinusDiscount * Double(unitCount)
+                
+                total = total + taxAmount
+                
+                let discountAmountRound = Double(round(100 * discountAmount) / 100)
+                let taxAmountRound = Double(round(100 * taxAmount) / 100)
+                let totalAmountRound = Double(round(100 * total) / 100)
+                
+                cell.lblDisc.text = "₹ " + "\(discountAmountRound)"
+                cell.lblTax.text = "₹ " + "\(taxAmountRound)"
+                cell.product.taxAmount = taxAmountRound
+                cell.product.disCountAmount = discountAmountRound
+                cell.product.totalCount = totalAmountRound
+                cell.lblTotal.text = "₹ " + "\(totalAmountRound)"
+            }else {
+                let discountAmount = cell.product.disCountValue
+                
+                let discountPerOneUnit = discountPer *  rate / 100
+                
+                let rateMinusDiscount = rate - discountPerOneUnit
+                
+                let taxAmount = taxPer * Double(unitCount) * rate * Double(sQty) / 100
+                
+                var total = Double(sQty) * rate * Double(unitCount)
+                total = total - discountAmount
+                total = total + taxAmount
+                
+                let discountAmountRound = Double(round(100 * discountAmount) / 100)
+                let taxAmountRound = Double(round(100 * taxAmount) / 100)
+                let totalAmountRound = Double(round(100 * total) / 100)
+                
+                cell.lblDisc.text = "₹ " + "\(discountAmountRound)"
+                cell.lblTax.text = "₹ " + "\(taxAmountRound)"
+                cell.product.taxAmount = taxAmountRound
+                cell.product.disCountAmount = discountAmountRound
+                cell.product.totalCount = totalAmountRound
+                cell.lblTotal.text = "₹ " + "\(totalAmountRound)"
+            }
             
-            let discountPerOneUnit = discountPer *  rate / 100
-            
-            let rateMinusDiscount = rate - discountPerOneUnit
-            
-            let taxAmount = taxPer * Double(unitCount) * rate * Double(sQty) / 100
-            
-            var total = Double(sQty) * rate * Double(unitCount)
-            total = total - discountAmount
-            total = total + taxAmount
-            
-            let discountAmountRound = Double(round(100 * discountAmount) / 100)
-            let taxAmountRound = Double(round(100 * taxAmount) / 100)
-            let totalAmountRound = Double(round(100 * total) / 100)
-            
-            cell.lblDisc.text = "₹ " + "\(discountAmountRound)"
-            cell.lblTax.text = "₹ " + "\(taxAmountRound)"
-            cell.product.taxAmount = taxAmountRound
-            cell.product.disCountAmount = discountAmountRound
-            cell.product.totalCount = totalAmountRound
-            cell.lblTotal.text = "₹ " + "\(totalAmountRound)"
         }
         
         
@@ -2011,15 +2688,33 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
     }
     
     
-    func nextLessThanValue(in array: [Scheme], comparedTo value: Int) -> Scheme? {
+    func nextLessThanValue(in array: [Scheme], comparedTo value: Int,rate : Double) -> Scheme? {
         var nextLessThan: Scheme?
         
         for element in array {
-            if element.scheme <= value {
-                if nextLessThan == nil || element.scheme >= (nextLessThan?.scheme ?? 0) {
-                    nextLessThan = element
+            print(element)
+            if element.schemeType == "V" {
+                print(Double(element.scheme))
+                print((Double(value) * rate))
+                if Double(element.scheme) <= (Double(value) * rate) {
+                    if nextLessThan == nil || element.scheme >= (nextLessThan?.scheme ?? 0) {
+                        nextLessThan = element
+                    }
+                }
+            }else {
+                print(value)
+                print(element.scheme)
+                print((nextLessThan?.scheme ?? 0))
+                if element.scheme <= value {
+                    if nextLessThan?.schemeType == "V" {
+                        nextLessThan = nil
+                    }
+                    if nextLessThan == nil || element.scheme >= (nextLessThan?.scheme ?? 0) {
+                        nextLessThan = element
+                    }
                 }
             }
+            
         }
         
         return nextLessThan
