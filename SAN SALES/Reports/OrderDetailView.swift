@@ -473,7 +473,9 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                             }
                             let Additional_Prod_Dtls = json[indexToDelete]["productList"] as! [AnyObject]
                             for Item2 in Additional_Prod_Dtls {
-                                detail.append(viewDet(Prname: Item2["Product_Name"] as! String, rate: Item2["Rate"] as! Double, Cl: Item2["Product_Unit_Name"] as! String, Free:Item2["discount"] as! Int, Disc: Item2["discount"] as! Int, Tax: Int(Item2["taxval"] as! Double), qty: Item2["Quantity"] as! Int, value: Item2["sub_total"] as! Double,Product_Code: Item2["Product_Code"] as! String, ClQty: Item2["cl_value"] as! Int))
+//                                detail.append(viewDet(Prname: Item2["Product_Name"] as! String, rate: Item2["Rate"] as! Double, Cl: Item2["Product_Unit_Name"] as! String, Free:Item2["discount"] as! Int, Disc: Item2["discount"] as! Int, Tax: Int(Item2["taxval"] as! Double), qty: Item2["Quantity"] as! Int, value: Item2["sub_total"] as! Double,Product_Code: Item2["Product_Code"] as! String, ClQty: Item2["cl_value"] as! Int))
+                                detail.append(viewDet(Prname: Item2["Product_Name"] as? String ?? "", rate: Item2["Rate"] as? Double ?? 0, Cl: Item2["Product_Unit_Name"] as? String ?? "", Free:Item2["discount"] as? Int ?? 0, Disc: Item2["discount"] as? Int ?? 0, Tax: Int(Item2["taxval"] as? Double ?? 0), qty: Item2["Quantity"] as? Int ?? 0, value: Item2["sub_total"] as? Double ?? 0,Product_Code: Item2["Product_Code"] as? String ?? "", ClQty: Item2["cl_value"] as? Int ?? 0))
+                                self.lblTotAmt.text = String(Item2["OrderVal"] as? Double ?? 0)
                                 self.lblTotAmt.text = String(Item2["OrderVal"] as! Double)
                             }
                             tbOrderDetail.reloadData()
@@ -561,7 +563,8 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                             print(Additional_Prod_Dtls)
                             for Item2 in Additional_Prod_Dtls {
                                 if let clBalString = Item2["Product_Unit_Name"] as? String {
-                                    detail.append(viewDet(Prname: Item2["Product_Name"] as! String, rate: Item2["Rate"] as! Double, Cl:clBalString, Free:Item2["discount"] as! Int, Disc: Item2["discount"] as! Int, Tax: Int(Item2["taxval"] as! Double), qty: Item2["Quantity"] as! Int, value: Item2["sub_total"] as! Double,Product_Code: Item2["Product_Code"] as! String, ClQty: Item2["cl_value"] as! Int))
+//                                    detail.append(viewDet(Prname: Item2["Product_Name"] as! String, rate: Item2["Rate"] as! Double, Cl:clBalString, Free:Item2["discount"] as! Int, Disc: Item2["discount"] as! Int, Tax: Int(Item2["taxval"] as! Double), qty: Item2["Quantity"] as! Int, value: Item2["sub_total"] as! Double,Product_Code: Item2["Product_Code"] as! String, ClQty: Item2["cl_value"] as! Int))
+                                    detail.append(viewDet(Prname: Item2["Product_Name"] as? String ?? "", rate: Item2["Rate"] as? Double ?? 0, Cl:clBalString, Free:Item2["discount"] as? Int ?? 0, Disc: Item2["discount"] as? Int ?? 0, Tax: Int(Item2["taxval"] as? Double ?? 0), qty: Item2["Quantity"] as? Int ?? 0, value: Item2["sub_total"] as? Double ?? 0,Product_Code: Item2["Product_Code"] as? String ?? "", ClQty: Item2["cl_value"] as? Int ?? 0))
                                 } else {
                                     print("Error: 'Cl_bal' key not found in the dictionary.")
                                 }
@@ -663,8 +666,8 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                                 
                                 if let clBalString = Item2["Product_Unit_Name"] as? String {
                                    
-                                    detail.append(viewDet(Prname: Item2["Product_Name"] as! String, rate: Item2["Rate"] as! Double, Cl:clBalString, Free:Item2["discount"] as! Int, Disc: Item2["discount"] as! Int, Tax: Int(Item2["taxval"] as! Double), qty: Item2["Quantity"] as! Int, value: Item2["sub_total"] as! Double,Product_Code: Item2["Product_Code"] as! String, ClQty: Item2["cl_value"] as! Int))
-                                        
+//                                    detail.append(viewDet(Prname: Item2["Product_Name"] as! String, rate: Item2["Rate"] as! Double, Cl:clBalString, Free:Item2["discount"] as! Int, Disc: Item2["discount"] as! Int, Tax: Int(Item2["taxval"] as! Double), qty: Item2["Quantity"] as! Int, value: Item2["sub_total"] as! Double,Product_Code: Item2["Product_Code"] as! String, ClQty: Item2["cl_value"] as! Int))
+                                    detail.append(viewDet(Prname: Item2["Product_Name"] as? String ?? "", rate: Item2["Rate"] as? Double ?? 0, Cl:clBalString, Free:Item2["discount"] as? Int ?? 0, Disc: Item2["discount"] as? Int ?? 0, Tax: Int(Item2["taxval"] as? Double ?? 0), qty: Item2["Quantity"] as? Int ?? 0, value: Item2["sub_total"] as? Double ?? 0,Product_Code: Item2["Product_Code"] as? String ?? "", ClQty: Item2["cl_value"] as? Int ?? 0))
                                         print(ContentHeight as Any)
                                    
                                 } else {

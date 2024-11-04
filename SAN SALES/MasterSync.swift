@@ -129,7 +129,7 @@ import BackgroundTasks
             "orderBy":"[\"name asc\"]","desig":"mgr"
          ]))
          
-         strMasList.append(mnuItem.init(MasId: 21, MasName: "Schemes", MasImage: "mnuPrimary",StoreKey: "Schemes_Master", ApiKey: "get/Scheme&divisionCode="+(prettyJsonData["divisionCode"] as? String ?? "")+"&rSF="+SFCode+"&sfCode="+SFCode,fromData: [
+         strMasList.append(mnuItem.init(MasId: 21, MasName: "Schemes", MasImage: "mnuPrimary",StoreKey: "Schemes_Master", ApiKey: "get/Scheme&divisionCode="+(prettyJsonData["divisionCode"] as? String ?? "")+"&rSF="+SFCode+"&sfCode="+SFCode+"&State_Code="+StateCode+"&desig="+desigCode,fromData: [
             "orderBy":"[\"name asc\"]","desig":"mgr"
          ]))
          
