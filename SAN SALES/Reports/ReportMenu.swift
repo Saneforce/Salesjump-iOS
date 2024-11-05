@@ -63,13 +63,12 @@ class ReportMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
         }
         strMasList.append(mnuItem.init(MasId: 12, MasName: "Order Details", MasImage: "SwitchRoute"))
         strMasList.append(mnuItem.init(MasId: 13, MasName: "DAY REPORT WITH DATE RANGE", MasImage: "SwitchRoute"))
+        strMasList.append(mnuItem.init(MasId: 14, MasName: "Distributor Order Details", MasImage: "SwitchRoute"))
         btnBack.addTarget(target: self, action: #selector(closeMenuWin))
         menuClose.addTarget(target: self, action: #selector(closeMenuWin))
         tbMenuDetail.delegate=self
         tbMenuDetail.dataSource=self
-        
     }
-    
     
     func getUserDetails(){
     let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
@@ -210,6 +209,16 @@ class ReportMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
             
             let RptMnuVc = storyboard.instantiateViewController(withIdentifier: "sbReportsmnu") as! ReportMenu
             let attenReportVC = storyboard2.instantiateViewController(withIdentifier: "DAY_REPORT_WITH_DATE_RANGE") as! DAY_REPORT_WITH_DATE_RANGE
+            
+             viewController.setViewControllers([RptMnuVc,attenReportVC], animated: false)
+             (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
+        }else if lItm.MasId == 14{
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd"
+            let currentDate = Foundation.Date()
+            let formattedDate = dateFormatter.string(from: currentDate)
+            let RptMnuVc = storyboard.instantiateViewController(withIdentifier: "sbReportsmnu") as! ReportMenu
+            let attenReportVC = storyboard2.instantiateViewController(withIdentifier: "Distributor_Order_Details") as! Distributor_Order_Details
             
              viewController.setViewControllers([RptMnuVc,attenReportVC], animated: false)
              (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)

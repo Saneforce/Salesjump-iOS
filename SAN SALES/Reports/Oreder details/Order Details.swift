@@ -10,14 +10,10 @@ import Alamofire
 import Foundation
 import FSCalendar
 
-
 class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate, FSCalendarDelegate, FSCalendarDataSource,OrderDetailsCellDelegate{
-  
     @IBOutlet weak var BTback: UIImageView!
     @IBOutlet weak var Hq_View: UIView!
-    
     @IBOutlet weak var Hq_View_height: NSLayoutConstraint!
-    
     @IBOutlet weak var hq_name_sel: UILabel!
     @IBOutlet weak var Date_View: UIView!
     @IBOutlet weak var date_sel: UILabel!
@@ -26,14 +22,9 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
     @IBOutlet weak var Table_height: NSLayoutConstraint!
     @IBOutlet weak var Item_Summary_table: UITableView!
     @IBOutlet weak var Day_Report_View: UIView!
-    
     @IBOutlet weak var Scroll_View: UIScrollView!
-    
-    
     @IBOutlet weak var Hq_Name_lbl: UILabel!
-    
     //Order Detils
-    
     @IBOutlet weak var View_Back: UIImageView!
     @IBOutlet weak var Addres_View: UIView!
     @IBOutlet weak var Detils_Scroll_View: UIScrollView!
@@ -66,14 +57,15 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
     @IBOutlet weak var Total_Value_Amt: UILabel!
     @IBOutlet weak var Share_Pdf: UIImageView!
     @IBOutlet weak var Share_Orde_Detils: UIImageView!
-    
+    @IBOutlet weak var Free_TB: UITableView!
+    @IBOutlet weak var height_for_Free_Tb: NSLayoutConstraint!
+    @IBOutlet weak var free_view: UIView!
     struct Id:Any{
         var id:String
         var Stkid:String
         var RouteId:String
         var Orderdata:[OrderDetail]
     }
-    
     struct OrderDetail:Any{
         var id:String
         var Route:String
@@ -95,13 +87,12 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
         var Order_Count:Int
         var Total_Dic:Double
         var Total_Tax:Double
-        
+        var stkmob:String
         var Total_disc_lbl:String
         var Final_Amt:String
         
         var Orderlist:[OrderItemModel]
     }
-    
     struct Itemwise_Summary:Any{
         let productName: String
         let ProductID:String
@@ -110,10 +101,11 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
     }
     
     var Itemwise_Summary_Data:[Itemwise_Summary] = []
-    
     var Orderdata:[Id] = []
     var Oredrdatadetisl:[OrderDetail] = []
     var Orderlist:[OrderItemModel] = []
+    var FreeDetils:[Itemwise_Summary] = []
+    
     let cardViewInstance = CardViewdata()
     var SFCode: String=""
     var DivCode: String=""
@@ -160,7 +152,8 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
             Hq_View.isHidden = true
             Hq_View_height.constant = 0
         }
-        
+        Free_TB.delegate = self
+        Free_TB.dataSource = self
         
         cardViewInstance.styleSummaryView(Hq_View)
         cardViewInstance.styleSummaryView(Date_View)
@@ -272,6 +265,10 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                             self.LoadingDismiss()
                         }
+                        Scroll_and_Tb_Height()
+                        HQ_and_Route_TB.reloadData()
+                        Item_Summary_table.reloadData()
+                        Scroll_View.setContentOffset(.zero, animated: true)
                         return
                     }
                     let ACode = dayrepArray[0]["ACode"] as? String ?? ""
@@ -296,29 +293,24 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
                                     let Volumes = (liters * 100).rounded() / 100
                                     let Phone = j["phoneNo"] as? String ??  ""
                                     let netAmount = j["finalNetAmnt"] as? String ?? ""
-                                    let Remarks = j["remarks"] as? String ?? ""
+                                    var Remarks = j["remarks"] as? String ?? ""
+                                    if Remarks == "Enter the Remarks"{
+                                        Remarks = ""
+                                    }
                                     let Stkid = j["stockist_code"] as? String ?? ""
                                     let tlDisAmt = j["tlDisAmt"] as? String ?? ""
-                                    
-                                    
                                     let minsAmount = Double(netAmount.isEmpty ? "0" : netAmount)! - Double(j["tlDisAmt"] as? String ?? "0")!
                                     
+                                let stkMobNo = j["stkMobNo"] as? String ?? ""
                                   let  Net_amount = netAmount.isEmpty ? "0" : netAmount
                                    let Final_Amt = String(format: "%.2f", minsAmount)
-                                    
-                                    print(minsAmount)
-                                   
                                     if let i = Orderdata.firstIndex(where: { (item) in
-                                        
-                                        print(item.Stkid)
-                                        print(Stkid)
                                         if item.Stkid == Stockist && item.RouteId == Route {
                                             return true
                                         }
                                         return false
                                     }){
-                                      print(i)
-                                        print(j)
+                                      
                                         let products = j["products"] as? String ?? ""
                                         let Additional_Prod_Code = j["Additional_Prod_Code"] as? String ?? ""
                                         let Additional_Prod_Code_Array = products.split(separator: "~").map {String($0)}
@@ -329,37 +321,10 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
                                         if !tax_price.isEmpty {
                                             taxArray = tax_price.split(separator: "#").map { String($0) }
                                         }
-                                        print(taxArray)
                                         
                                         let Order_date = j["Order_date"] as? String ?? ""
                                         
-                                        
                                         let itemList = parseProducts(products, Additional_Prod_Code, taxArray: taxArray)
-                                        
-                                        print(itemList)
-                                        
-                                        for item in itemList {
-                                            let qty = Int(item.qtyValue) ?? 0
-                                            let free = Int(item.freeValue) ?? 0
-                                            let productID = item.ProductID.trimmingCharacters(in: .whitespacesAndNewlines)
-
-                                            if let index = Itemwise_Summary_Data.firstIndex(where: {
-                                                $0.ProductID.trimmingCharacters(in: .whitespacesAndNewlines) == productID
-                                            }) {
-                                                Itemwise_Summary_Data[index].Qty += qty
-                                                Itemwise_Summary_Data[index].Free += free
-                                            } else {
-                                               
-                                                let newItem = Itemwise_Summary(
-                                                    productName: item.productName,
-                                                    ProductID: productID,
-                                                    Qty: qty,
-                                                    Free: free
-                                                )
-                                                Itemwise_Summary_Data.append(newItem)
-                                            }
-                                        }
-                                        print(Itemwise_Summary_Data)
                                         
                                         let Order_Count = Oredrdatadetisl[i].Order_Count + 1
 
@@ -371,24 +336,12 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
                                             Total_taxValue = Total_taxValue + Double(k.taxValue)!
                                         }
                                         
-                                        print(Orderdata[i].Orderdata)
+                                        Orderdata[i].Orderdata.append(OrderDetail(id: id, Route: Route, Routeflg: "0", Stockist: Stockist, name: "\(Order_Count). "+name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "\(itemList.count)", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: tlDisAmt, Order_date: Order_date, Order_Count: Order_Count,Total_Dic: Total_discValue,Total_Tax: Total_taxValue, stkmob: stkMobNo,Total_disc_lbl:"Total Discount", Final_Amt: Final_Amt, Orderlist: itemList))
                                         
-                                        Orderdata[i].Orderdata.append(OrderDetail(id: id, Route: Route, Routeflg: "0", Stockist: Stockist, name: "\(Order_Count). "+name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "\(itemList.count)", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: tlDisAmt, Order_date: Order_date, Order_Count: Order_Count,Total_Dic: Total_discValue,Total_Tax: Total_taxValue,Total_disc_lbl:"Total Discount", Final_Amt: Final_Amt, Orderlist: itemList))
-                                        
-                                        Oredrdatadetisl.append(OrderDetail(id: id, Route: Route, Routeflg: "0", Stockist: Stockist, name: "\(Order_Count). "+name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "\(itemList.count)", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: tlDisAmt, Order_date: Order_date, Order_Count: Order_Count,Total_Dic: Total_discValue,Total_Tax: Total_taxValue,Total_disc_lbl:"Total Discount", Final_Amt: Final_Amt,Orderlist: itemList))
-                                        
-                                        
-                                        print(Total_Value)
-                                        // second
-                                        print(Net_amount)
-                                        Total_Value = Total_Value + Double(Net_amount)!
-                                        
-                                        print(Total_Value)
-
+                                        Oredrdatadetisl.append(OrderDetail(id: id, Route: Route, Routeflg: "0", Stockist: Stockist, name: "\(Order_Count). "+name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "\(itemList.count)", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: tlDisAmt, Order_date: Order_date, Order_Count: Order_Count,Total_Dic: Total_discValue,Total_Tax: Total_taxValue, stkmob: stkMobNo,Total_disc_lbl:"Total Discount", Final_Amt: Final_Amt,Orderlist: itemList))
+                                        Total_Value = Total_Value + minsAmount
                                     }else{
-                                        
                                         let Additional_Prod_Code = j["Additional_Prod_Code"] as? String ?? ""
-                                        
                                         let products = j["products"] as? String ?? ""
                                         let productArray = products.split(separator: ",").map { String($0) }
                                         print(productArray)
@@ -404,26 +357,6 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
                                              
                                         print(itemList)
                                         
-                                        for item in itemList {
-                                            let qty = Double(item.qtyValue) ?? 0
-                                            let free = Double(item.freeValue) ?? 0
-                                            let productID = item.ProductID.trimmingCharacters(in: .whitespacesAndNewlines)
-
-                                            if let index = Itemwise_Summary_Data.firstIndex(where: {
-                                                $0.ProductID.trimmingCharacters(in: .whitespacesAndNewlines) == productID
-                                            }) {
-                                                Itemwise_Summary_Data[index].Qty += Int(qty)
-                                                Itemwise_Summary_Data[index].Free += Int(free)
-                                            } else {
-                                                let newItem = Itemwise_Summary(
-                                                    productName: item.productName,
-                                                    ProductID: productID,
-                                                    Qty: Int(qty),
-                                                    Free: Int(free)
-                                                )
-                                                Itemwise_Summary_Data.append(newItem)
-                                            }
-                                        }
                                         
                                         var Total_discValue = 0.0
                                         var Total_taxValue = 0.0
@@ -433,13 +366,34 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
                                             Total_taxValue = Total_taxValue + Double(k.taxValue)!
                                         }
                                         
-                                        Orderdata.append(Id(id: id, Stkid: Stockist, RouteId: Route, Orderdata: [OrderDetail(id: id, Route: Route, Routeflg: "1", Stockist: Stockist, name: "1. "+name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "\(itemList.count)", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: tlDisAmt, Order_date: Order_date, Order_Count: 1,Total_Dic: Total_discValue,Total_Tax: Total_taxValue,Total_disc_lbl:"Total Discount", Final_Amt: Final_Amt, Orderlist: itemList)]))
+                                        Orderdata.append(Id(id: id, Stkid: Stockist, RouteId: Route, Orderdata: [OrderDetail(id: id, Route: Route, Routeflg: "1", Stockist: Stockist, name: "1. "+name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "\(itemList.count)", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: tlDisAmt, Order_date: Order_date, Order_Count: 1,Total_Dic: Total_discValue,Total_Tax: Total_taxValue, stkmob: stkMobNo,Total_disc_lbl:"Total Discount", Final_Amt: Final_Amt, Orderlist: itemList)]))
                                         
-                                        Oredrdatadetisl.append(OrderDetail(id: id, Route: Route, Routeflg: "1", Stockist: Stockist, name: "1. "+name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "\(itemList.count)", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: tlDisAmt, Order_date: Order_date, Order_Count: 1,Total_Dic: Total_discValue,Total_Tax: Total_taxValue,Total_disc_lbl:"Total Discount", Final_Amt: Final_Amt,Orderlist: itemList))
+                                        Oredrdatadetisl.append(OrderDetail(id: id, Route: Route, Routeflg: "1", Stockist: Stockist, name: "1. "+name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "\(itemList.count)", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: tlDisAmt, Order_date: Order_date, Order_Count: 1,Total_Dic: Total_discValue,Total_Tax: Total_taxValue, stkmob: stkMobNo,Total_disc_lbl:"Total Discount", Final_Amt: Final_Amt,Orderlist: itemList))
                                         
-                                        print(Net_amount)
-                                        Total_Value = Total_Value + Double(Net_amount)!
-                                        
+                                        Total_Value = Total_Value + minsAmount
+                                    }
+                                }
+                                
+                                for item in Oredrdatadetisl{
+                                    for j in item.Orderlist{
+                                            let qty = Double(j.qtyValue) ?? 0
+                                            let free = Double(j.freeValue) ?? 0
+                                            let productID = j.ProductID.trimmingCharacters(in: .whitespacesAndNewlines)
+
+                                            if let index = Itemwise_Summary_Data.firstIndex(where: {
+                                                $0.ProductID.trimmingCharacters(in: .whitespacesAndNewlines) == productID
+                                            }) {
+                                                Itemwise_Summary_Data[index].Qty += Int(qty)
+                                                Itemwise_Summary_Data[index].Free += Int(free)
+                                            } else {
+                                                let newItem = Itemwise_Summary(
+                                                    productName: j.productName,
+                                                    ProductID: productID,
+                                                    Qty: Int(qty),
+                                                    Free: Int(free)
+                                                )
+                                                Itemwise_Summary_Data.append(newItem)
+                                            }
                                     }
                                 }
                                 
@@ -450,24 +404,18 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
                                     FreeTota = FreeTota + Int(item.Free)
                                 }
                                 
-                                
-                                
                                 Itemwise_Summary_Data.append(Itemwise_Summary(productName: "Total", ProductID: "", Qty: Int(Double(QtyTotal)), Free: Int(Double(FreeTota))))
 
                                 let formatter = NumberFormatter()
                                 formatter.numberStyle = .currency
                                 formatter.locale = Locale(identifier: "en_IN") // Indian locale
-                                if let formattedValue = formatter.string(from: NSNumber(value: Total_Value)) {
+                                if let formattedValue = formatter.string(from: NSNumber(value: Total_Value)){
                                     Total_Value_Amt.text = formattedValue
                                 }
-                                
-                                print(Total_Value)
                                 Scroll_and_Tb_Height()
                                 HQ_and_Route_TB.reloadData()
-                                
-                                print(Itemwise_Summary_Data)
-                                
                                 Item_Summary_table.reloadData()
+                                Scroll_View.setContentOffset(.zero, animated: true)
                             }
                         case .failure(let error):
                             Toast.show(message: error.errorDescription ?? "", controller: self)
@@ -634,7 +582,7 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
             let Height = CGFloat(Row_Height + 340)
             return Height + height
         }
-        return 0
+        return 30
     }
     
     func Scroll_and_Tb_Height(){
@@ -683,6 +631,10 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
         
         if Hq_Table == tableView{
             return lObjSel.count
+        }
+        
+       if Free_TB == tableView{
+          return FreeDetils.count
         }
         return Oredrdatadetisl.count
     }
@@ -742,6 +694,14 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
                let Item = lObjSel[indexPath.row]
                cellText.lblText.text = Item["name"] as? String ?? ""
                return cellText
+           }else if Free_TB == tableView{
+               let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! cellListItem
+               print(FreeDetils[indexPath.row].productName)
+               
+               cell.lblText.text = FreeDetils[indexPath.row].productName
+               cell.lblText2.text = String(FreeDetils[indexPath.row].Free)
+               
+               return cell
            }else{
                let cellS = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! Item_summary_TB
  
@@ -804,12 +764,11 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
     
     // MARK: - OrderDetailsCellDelegate Method
       func didTapButton(in cell: Order_Details_TableViewCell) {
+          FreeDetils.removeAll()
           guard let indexPath = HQ_and_Route_TB.indexPath(for: cell) else { return }
-          print("Button tapped in cell at index path: \(indexPath.row)")
           let Item =  Oredrdatadetisl[indexPath.row]
-          print(Item)
           Day_View_Stk.text = Item.Stockist
-          From_no.text = Item.Phone
+          From_no.text = Item.stkmob
           To_Retiler.text = Item.name
           To_Addres.text = Item.Adress
           To_No.text = Item.Phone
@@ -822,11 +781,22 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
           Cas_disc.text = Item.tlDisAmt
           Net_Amt.text = "₹ " + Item.Final_Amt
           Day_Report_TB.reloadData()
+          for i in Item.Orderlist{
+              let free: Double = Double(i.freeValue) ?? 0
+              if free != 0 {
+                  FreeDetils.append(Itemwise_Summary(productName: i.productName, ProductID: "", Qty: 0, Free: Int(free)))
+              }}
+          if FreeDetils.isEmpty {
+              height_for_Free_Tb.constant = 0
+              free_view.isHidden = true
+          }else{
+              height_for_Free_Tb.constant = 154
+              free_view.isHidden = false
+          }
+          Free_TB.reloadData()
           Day_Report_View.isHidden = false
+          Detils_Scroll_View.setContentOffset(.zero, animated: true)
       }
-
-    
-    
     @objc func Back_View(){
         Day_Report_View.isHidden = true
     }
