@@ -147,6 +147,17 @@ class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UI
     
     @IBOutlet weak var Text_Share: UIImageView!
     
+    
+    @IBOutlet weak var height_for_Free_Tb: NSLayoutConstraint!
+    
+    @IBOutlet weak var free_view: UIView!
+    
+    
+    @IBOutlet weak var Free_TB: UITableView!
+    
+    
+    var FreeDetils:[Itemwise_Summary] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         getUserDetails()
@@ -160,6 +171,8 @@ class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UI
         Hq_Height.constant = 0
         Hq_Name_lbl.isHidden = true
         
+        
+        
         if let date = CodeDate{
             GetDate = date
         }
@@ -168,6 +181,23 @@ class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UI
             print(Order_Detis2l)
             
         }
+        
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .currency
+        formatter.locale = Locale(identifier: "en_IN") // Indian locale
+        let Total: Double = Double(Order_Detis2l[0].Final_Amt) ?? 0
+
+       print(Total)
+
+        if let formattedValue = formatter.string(from: NSNumber(value: Total)) {
+            Total_Value_Amt.text = formattedValue
+        }
+
+        
+        print(Order_Detis2l[0].Final_Amt)
+        
+        Free_TB.delegate = self
+        Free_TB.dataSource = self
         
         
         
@@ -274,12 +304,6 @@ class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UI
         
         Itemwise_Summary_Data.append(Itemwise_Summary(productName: "Total", ProductID: "", Qty: Int(Double(QtyTotal)), Free: Int(Double(FreeTota))))
 
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .currency
-        formatter.locale = Locale(identifier: "en_IN") // Indian locale
-        if let formattedValue = formatter.string(from: NSNumber(value: Total_Value)){
-            Total_Value_Amt.text = formattedValue
-        }
         HQ_and_Route_TB.reloadData()
         Item_Summary_table.reloadData()
     }
@@ -399,7 +423,7 @@ class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UI
             let Height = CGFloat(Row_Height + 340)
             return Height + height
         }
-        return 0
+        return 30
     }
     
     func Scroll_and_Tb_Height(){
@@ -441,6 +465,9 @@ class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UI
         if Item_Summary_table == tableView{
             return Itemwise_Summary_Data.count
         }
+        if Free_TB == tableView{
+           return FreeDetils.count
+         }
         
         return Order_Detis2l.count
     }
@@ -495,6 +522,14 @@ class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UI
                cellReport.Tax.text = item.taxValue
                cellReport.Total.text = item.totalValue
                return cellReport
+           }else if Free_TB == tableView{
+               let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! cellListItem
+               print(FreeDetils[indexPath.row].productName)
+               
+               cell.lblText.text = FreeDetils[indexPath.row].productName
+               cell.lblText2.text = String(FreeDetils[indexPath.row].Free)
+               
+               return cell
            }else{
                let cellS = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! Dis_Item_summary_TB
  
@@ -565,6 +600,22 @@ class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UI
           Sch_Disc.text = String(Item.Total_Dic)
           Cas_disc.text = Item.tlDisAmt
           Net_Amt.text = "₹ " + Item.Final_Amt
+          
+          for i in Item.Orderlist{
+              let free: Double = Double(i.freeValue) ?? 0
+              if free != 0 {
+                  FreeDetils.append(Itemwise_Summary(productName: i.productName, ProductID: "", Qty: 0, Free: Int(free)))
+              }}
+          if FreeDetils.isEmpty {
+              height_for_Free_Tb.constant = 0
+              free_view.isHidden = true
+          }else{
+              height_for_Free_Tb.constant = 154
+              free_view.isHidden = false
+          }
+          
+          
+          Free_TB.reloadData()
           Day_Report_TB.reloadData()
           Day_Report_View.isHidden = false
       }
