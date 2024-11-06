@@ -186,7 +186,11 @@ class CameraService: IViewController , AVCapturePhotoCaptureDelegate{
     
     func takePicture(){
         let settings = AVCapturePhotoSettings()
-        settings.flashMode = .auto
+        if output.supportedFlashModes.contains(.auto) {
+               settings.flashMode = .auto
+           } else {
+               settings.flashMode = .off
+           }
         output.capturePhoto(with: settings, delegate: self)
     }
     func displayCapturedPhoto(capturedPhoto: UIImage){

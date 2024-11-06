@@ -55,6 +55,8 @@ class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UI
     @IBOutlet weak var Share_Pdf: UIImageView!
     @IBOutlet weak var Share_Orde_Detils: UIImageView!
     
+    @IBOutlet weak var Hq_Height: NSLayoutConstraint!
+    
     struct Id:Any{
         var id:String
         var Stkid:String
@@ -155,13 +157,11 @@ class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UI
         date_sel.text = dates
         Sf_Id = SFCode
         
+        Hq_Height.constant = 0
+        Hq_Name_lbl.isHidden = true
         
-        if let a = axn,let A = ACCode,let Typ = Typ, let date = CodeDate, let name = Hqname {
-            getaxn = a
-            GetCode = A
-            GetTyp = Typ
+        if let date = CodeDate{
             GetDate = date
-            Hq_Name_lbl.text = name
         }
         if let Item = Order_Detisl{
             Order_Detis2l = Item
@@ -453,8 +453,6 @@ class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UI
                cell.Route_name.text = Order_Detis2l[indexPath.row].Route
                cell.Stockets_Name.text = Order_Detis2l[indexPath.row].Stockist
                cell.Store_Name_with_order_No.text = Order_Detis2l[indexPath.row].name + "(\(Order_Detis2l[indexPath.row].nameid))"
-               cell.Addres.text = Order_Detis2l[indexPath.row].Adress
-               cell.Volumes.text = "Volumes: \(Order_Detis2l[indexPath.row].Volumes)"
                cell.Phone.text = "Phone:"+Order_Detis2l[indexPath.row].Phone
                if  let NetValue = Float(Order_Detis2l[indexPath.row].Net_amount){
                    

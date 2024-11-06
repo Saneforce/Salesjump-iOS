@@ -463,6 +463,7 @@ class Distributor_Order_Details: IViewController, UITableViewDelegate, UITableVi
             
             let storyboard = UIStoryboard(name: "Reports 2", bundle: nil)
             let myDyPln = storyboard.instantiateViewController(withIdentifier: "Distributor_Order_Details_cell") as! Distributor_Order_Details_cell
+            myDyPln.CodeDate = Select_Dtae
             myDyPln.Order_Detisl = Oredrdatadetisl2
             self.navigationController?.pushViewController(myDyPln, animated: true)
             
