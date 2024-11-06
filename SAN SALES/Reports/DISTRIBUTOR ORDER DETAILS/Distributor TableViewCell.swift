@@ -145,9 +145,6 @@ class Distributor_TableViewCell: UITableViewCell, UITableViewDataSource, UITable
         
         Net_Amount_View.isHidden =  OrderDetils.isEmpty ? true : false
         Net_Amount_View_Height.constant = OrderDetils.isEmpty ? 0 : 23
-        Volumes.isHidden =  OrderDetils.isEmpty ? true : false
-        
-        Volumes.isHidden = UserSetup.shared.Liters_Need == 0 ? true : false
         
         // Reload the inner table view
         insideTable1.reloadData()
