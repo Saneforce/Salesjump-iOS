@@ -196,7 +196,7 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
         if let list = GlobalFunc.convertToDictionary(text: lstStockistSchemeData) as? [AnyObject] {
             lstStockistSchemes = list
             
-           // lstStockistSchemes = lstStockistSchemes.filter{($0["schemeFor"] as? String ?? "") == "S"}
+            lstStockistSchemes = lstStockistSchemes.filter{($0["schemeFor"] as? String ?? "") == "S"}
         }
         if let list = GlobalFunc.convertToDictionary(text: lstRetailersRateData) as? [AnyObject]{
             lstRetailerRates = list
@@ -206,9 +206,9 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
             lstAllProducts = list
             
             DispatchQueue.main.async {
-                // self.ShowLoading(Message: "Loading")
-                self.updateProduct(products: list)
-               // self.LoadingDismiss()
+                if UserSetup.shared.productCard != "1"{
+                    self.updateProduct(products: list)
+                }
             }
             
         }
@@ -269,13 +269,19 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
     func fetchMarginWiseRate(code : String) {
         
         // http://sjqa.salesjump.in/server/native_Db_V13.php?axn=get%2FMarginwiseRate&retailerCode=997&divisionCode=258%2C&sfCode=SJQAMGR0002
-        
+        self.ShowLoading(Message: "Loading")
         let url = APIClient.shared.BaseURL+APIClient.shared.DBURL1+"get/MarginwiseRate&retailerCode=\(code)&divisionCode=\(self.DivCode)&sfCode=\(self.SFCode)"
         
         AF.request(url,method: .get).validate(statusCode: 200..<209).responseData { AFData in
+            DispatchQueue.main.asyncAfter(deadline: .now()+5) {
+                self.LoadingDismiss()
+            }
             switch AFData.result {
                 
             case .success(let value):
+//                DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+//                    self.LoadingDismiss()
+//                }
                 let apiResponse = try? JSONSerialization.jsonObject(with: AFData.data!)
                 
                 print(apiResponse)
@@ -287,8 +293,16 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
                 self.lstMarginRates = response
                 print(self.lstMarginRates)
                 self.updateProduct(products: self.lstAllProducts)
-                self.DemoEdite()
+            
+                if let unwrappedProduct = self.productData {
+                    print(unwrappedProduct)
+                    self.DemoEdite()
+                }
+                
             case .failure(let error):
+                DispatchQueue.main.asyncAfter(deadline: .now()) {
+                    self.LoadingDismiss()
+                }
                 Toast.show(message: error.errorDescription ?? "", controller: self)
             }
         }
@@ -1083,12 +1097,12 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
                 unitCount = Int(conQty) ?? 0
             }
             
-            let RateItems: [AnyObject] = lstProductsRates.filter ({ (Rate) in
-                if Rate["Product_Detail_Code"] as! String == productId {
-                    return true
-                }
-                return false
-            })
+//            let RateItems: [AnyObject] = lstProductsRates.filter ({ (Rate) in
+//                if Rate["Product_Detail_Code"] as! String == productId {
+//                    return true
+//                }
+//                return false
+//            })
             
             let retailerRateItems: [AnyObject] = lstRetailerRates.filter ({ (Rate) in
                 if Rate["Product_Detail_Code"] as! String == productId {
@@ -1108,11 +1122,11 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
             
             var rate : Double = 0
             var retailorPrice : Double = 0
-            if(RateItems.count>0){
-                print(RateItems)
-                rate = (RateItems.first!["Retailor_Price"] as! NSString).doubleValue
-                retailorPrice = (RateItems.first!["Retailor_Price"] as! NSString).doubleValue
-            }
+//            if(RateItems.count>0){
+//                print(RateItems)
+//                rate = (RateItems.first!["Retailor_Price"] as! NSString).doubleValue
+//                retailorPrice = (RateItems.first!["Retailor_Price"] as! NSString).doubleValue
+//            }
             
             if(retailerRateItems.count>0){
                 print(retailerRateItems)
@@ -1163,8 +1177,6 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
                     }else if let schValue = schemesItems.first!["Scheme"] as? Int {
                         scheme = schValue
                     }
-                 //   scheme = (schemesItems.first!["Scheme"] as? NSString  ?? "").integerValue
-                  //  offerAvailableCount = (schemesItems.first!["FQ"] as? NSString ?? "").integerValue
                     if let freeValue = schemesItems.first!["FQ"] as? String {
                         offerAvailableCount = Int(freeValue) ?? 0
                     }else if let freeValue = schemesItems.first!["FQ"] as? Int {
@@ -1229,21 +1241,14 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
             print(UserSetup.shared.productCard)
             if UserSetup.shared.productCard == "1" {
                 if(marginRateItems.count>0){
-//                    print(marginRateItems)
-//                    print(product)
-//                    print((marginRateItems.first!["Retailor_Price"] as! Int))
-//                    print((marginRateItems.first!["Retailor_Price"] as! Int))
-                    rate = Double((marginRateItems.first!["Retailor_Price"] as? Int ?? 0))  //(marginRateItems.first!["Retailor_Price"] as! NSString).doubleValue
-                    retailorPrice = Double((marginRateItems.first!["Retailor_Price"] as? Int ?? 0)) //(marginRateItems.first!["Retailor_Price"] as! NSString).doubleValue
-                    
-                    print(rate)
-                    print(retailorPrice)
+
+                    rate = Double((marginRateItems.first!["Retailor_Price"] as? Int ?? 0))
+                    retailorPrice = Double((marginRateItems.first!["Retailor_Price"] as? Int ?? 0))
                     for item in marginRateItems {
                         print("Gooood")
                         rate = Double((marginRateItems.first!["Retailor_Price"] as? Int ?? 0))
                         retailorPrice = Double((marginRateItems.first!["Retailor_Price"] as? Int ?? 0))
-//                        rate = (item["Retailor_Price"] as! NSString).doubleValue
-//                        retailorPrice = (item["Retailor_Price"] as! NSString).doubleValue
+
                         
                         self.allProducts.append(ProductList(product: product, productName: productName, productId: productId,cateId: cateId, rate: rate,rateEdited: "0",retailerPrice: retailorPrice,saleErpCode: saleErpCode,newWt: newWt, sampleQty: "",clQty: "",remarks: "",remarksId: "", selectedRemarks: [], disCountPer: disCountPer, disCountValue: disCountValue, disCountAmount: 0.0, freeCount: 0, unitId: unitId, unitName: unitName, unitCount: unitCount, taxper: tax, taxAmount: 0.0, totalCount: 0.0, isSchemeActive: isSchemeActive,scheme: scheme,offerAvailableCount: offerAvailableCount,offerUnitName: offerUnitName,offerProductCode: offerProductCode,offerProductName: offerProductName,package: package,schemeType: schemeType,discountType: discountType, isMultiSchemeActive: isMultiSchemeActive, multiScheme: multiScheme, competitorProduct: []))
                     }
