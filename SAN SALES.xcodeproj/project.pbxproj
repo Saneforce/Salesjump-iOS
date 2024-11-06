@@ -123,6 +123,7 @@
 		3F30F82E2C4E5786005EFAD9 /* Expense View SFC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F30F82D2C4E5786005EFAD9 /* Expense View SFC.swift */; };
 		3F3127AC2CC675B2000F756A /* DAY REPORT WITH DATE RANGE.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3127AB2CC675B2000F756A /* DAY REPORT WITH DATE RANGE.swift */; };
 		3F3D4DDB27E810880063E271 /* GlobalFunc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3D4DDA27E810880063E271 /* GlobalFunc.swift */; };
+		3F447B522CD91252004FF91D /* Distributor Order Details.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F447B512CD91252004FF91D /* Distributor Order Details.swift */; };
 		3F4CC1932875580100BA2B4E /* AppTrackingTransparency.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F4CC1922875580100BA2B4E /* AppTrackingTransparency.framework */; };
 		3F4CC1952875581400BA2B4E /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F4CC1942875581400BA2B4E /* AdSupport.framework */; };
 		3F4CC197287B297A00BA2B4E /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F4CC196287B297A00BA2B4E /* NetworkMonitor.swift */; };
@@ -136,11 +137,13 @@
 		3F619F3C27EAEDC000F3D05F /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F619F3B27EAEDC000F3D05F /* LocationService.swift */; };
 		3F619F3E27EB275000F3D05F /* CLocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F619F3D27EB274F00F3D05F /* CLocationService.swift */; };
 		3F61CA692C9157730029CE01 /* Closing Sale Entry (DB).swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F61CA682C9157730029CE01 /* Closing Sale Entry (DB).swift */; };
+		3F6CD0522CD9BD91008AEACE /* Distributor Order Details cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F6CD0512CD9BD91008AEACE /* Distributor Order Details cell.swift */; };
 		3F7CCF0328F14CA3002A7C03 /* GEOTagging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7CCF0228F14CA3002A7C03 /* GEOTagging.swift */; };
 		3F8292FF2CC786100098B191 /* DAY REPORT WITH DATE RANGE CELL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F8292FE2CC786100098B191 /* DAY REPORT WITH DATE RANGE CELL.swift */; };
 		3F886A122C8EEDEB001F9A39 /* ClosingStockView (DB).swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F886A112C8EEDEB001F9A39 /* ClosingStockView (DB).swift */; };
 		3F8B989A2C594C610073D452 /* SFC Details View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F8B98992C594C610073D452 /* SFC Details View.swift */; };
 		3F8BF29D27E99CCA00E1C41B /* CameraService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F8BF29C27E99CCA00E1C41B /* CameraService.swift */; };
+		3F94523A2CD9EEDE001A6C53 /* Distributor TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9452392CD9EEDE001A6C53 /* Distributor TableViewCell.swift */; };
 		3F97F9F62831B5950097166D /* AddNewCustomer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F97F9F52831B5950097166D /* AddNewCustomer.swift */; };
 		3F97F9F8283216BD0097166D /* EditTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F97F9F7283216BD0097166D /* EditTextField.swift */; };
 		3F9DBA0B2C9BE44B00BDADDB /* Target vs Sales Analysis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9DBA0A2C9BE44B00BDADDB /* Target vs Sales Analysis.swift */; };
@@ -288,6 +291,7 @@
 		3F30F82D2C4E5786005EFAD9 /* Expense View SFC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Expense View SFC.swift"; sourceTree = "<group>"; };
 		3F3127AB2CC675B2000F756A /* DAY REPORT WITH DATE RANGE.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DAY REPORT WITH DATE RANGE.swift"; sourceTree = "<group>"; };
 		3F3D4DDA27E810880063E271 /* GlobalFunc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalFunc.swift; sourceTree = "<group>"; };
+		3F447B512CD91252004FF91D /* Distributor Order Details.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Distributor Order Details.swift"; sourceTree = "<group>"; };
 		3F4CC1922875580100BA2B4E /* AppTrackingTransparency.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppTrackingTransparency.framework; path = System/Library/Frameworks/AppTrackingTransparency.framework; sourceTree = SDKROOT; };
 		3F4CC1942875581400BA2B4E /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		3F4CC196287B297A00BA2B4E /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
@@ -301,11 +305,13 @@
 		3F619F3B27EAEDC000F3D05F /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
 		3F619F3D27EB274F00F3D05F /* CLocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CLocationService.swift; sourceTree = "<group>"; };
 		3F61CA682C9157730029CE01 /* Closing Sale Entry (DB).swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Closing Sale Entry (DB).swift"; sourceTree = "<group>"; };
+		3F6CD0512CD9BD91008AEACE /* Distributor Order Details cell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Distributor Order Details cell.swift"; sourceTree = "<group>"; };
 		3F7CCF0228F14CA3002A7C03 /* GEOTagging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GEOTagging.swift; sourceTree = "<group>"; };
 		3F8292FE2CC786100098B191 /* DAY REPORT WITH DATE RANGE CELL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DAY REPORT WITH DATE RANGE CELL.swift"; sourceTree = "<group>"; };
 		3F886A112C8EEDEB001F9A39 /* ClosingStockView (DB).swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ClosingStockView (DB).swift"; sourceTree = "<group>"; };
 		3F8B98992C594C610073D452 /* SFC Details View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SFC Details View.swift"; sourceTree = "<group>"; };
 		3F8BF29C27E99CCA00E1C41B /* CameraService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraService.swift; sourceTree = "<group>"; };
+		3F9452392CD9EEDE001A6C53 /* Distributor TableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Distributor TableViewCell.swift"; sourceTree = "<group>"; };
 		3F97F9F52831B5950097166D /* AddNewCustomer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewCustomer.swift; sourceTree = "<group>"; };
 		3F97F9F7283216BD0097166D /* EditTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTextField.swift; sourceTree = "<group>"; };
 		3F9DBA0A2C9BE44B00BDADDB /* Target vs Sales Analysis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Target vs Sales Analysis.swift"; sourceTree = "<group>"; };
@@ -608,6 +614,16 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		3F447B502CD9121B004FF91D /* DISTRIBUTOR ORDER DETAILS */ = {
+			isa = PBXGroup;
+			children = (
+				3F447B512CD91252004FF91D /* Distributor Order Details.swift */,
+				3F6CD0512CD9BD91008AEACE /* Distributor Order Details cell.swift */,
+				3F9452392CD9EEDE001A6C53 /* Distributor TableViewCell.swift */,
+			);
+			path = "DISTRIBUTOR ORDER DETAILS";
+			sourceTree = "<group>";
+		};
 		3F619F3A27EAED9000F3D05F /* Service */ = {
 			isa = PBXGroup;
 			children = (
@@ -653,6 +669,7 @@
 				3F9DBA0A2C9BE44B00BDADDB /* Target vs Sales Analysis.swift */,
 				3FC32E562CB3F2A90092449B /* ClosingStockView (SS).swift */,
 				3FD090FA2CBE32850087CEEB /* Oreder details */,
+				3F447B502CD9121B004FF91D /* DISTRIBUTOR ORDER DETAILS */,
 				3F3127AA2CC67561000F756A /* DAY REPORT WITH DATE */,
 			);
 			path = Reports;
@@ -858,6 +875,7 @@
 				1514DF722BD7853B00E6B45A /* ItemViewController.swift in Sources */,
 				15C03D9E2C745DB500079DE7 /* SecondaryOrderNew.swift in Sources */,
 				3F2F811F27D0E7430015E1CA /* HomePageViewController.swift in Sources */,
+				3F447B522CD91252004FF91D /* Distributor Order Details.swift in Sources */,
 				38A2E9B22A0E1B940061B854 /* Brand Availability.swift in Sources */,
 				15B518BC2C13305D00DD75C1 /* DeviationRemarks.swift in Sources */,
 				1597B4802C6623A400EAB640 /* RejectedAndCancelledLeaveDetails.swift in Sources */,
@@ -878,6 +896,7 @@
 				3F28CC0C27D5302100B95964 /* MydayPlanCtrl.swift in Sources */,
 				3FCF2AA82C5B5392000D8070 /* Day End SFC.swift in Sources */,
 				3FB83A772CCD0D3E008EB529 /* DATE RANGE  CELL.swift in Sources */,
+				3F6CD0522CD9BD91008AEACE /* Distributor Order Details cell.swift in Sources */,
 				384E56C12BDB7ABF00B2E8A5 /* New Expense Approval.swift in Sources */,
 				3F5C50E32CCF541700A956BB /* RangeData.swift in Sources */,
 				3F0822BF29000D65009C33EA /* LeaveForm.swift in Sources */,
@@ -951,6 +970,7 @@
 				386A43952A1CC63100CE1833 /* PrimarySubmittedDCR.swift in Sources */,
 				386A43912A1CBB0200CE1833 /* SubmittedDCR.swift in Sources */,
 				159095252BF23AD0001D8347 /* CalendarViewController.swift in Sources */,
+				3F94523A2CD9EEDE001A6C53 /* Distributor TableViewCell.swift in Sources */,
 				3F7CCF0328F14CA3002A7C03 /* GEOTagging.swift in Sources */,
 				3F5D05E02C6F21EE00457642 /* Leave Approval.swift in Sources */,
 				3F0861C328053B3A006A30FB /* UserSetup.swift in Sources */,
@@ -1134,7 +1154,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = "3.4 T.8";
+				MARKETING_VERSION = "3.5 T.14";
 				PRODUCT_BUNDLE_IDENTIFIER = com.saneforce.sansales;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1171,7 +1191,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = "3.4 T.8";
+				MARKETING_VERSION = "3.5 T.14";
 				PRODUCT_BUNDLE_IDENTIFIER = com.saneforce.sansales;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

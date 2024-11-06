@@ -104,7 +104,6 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
     }
     
     var Itemwise_Summary_Data:[Itemwise_Summary] = []
-    
     var Orderdata:[Id] = []
     var Oredrdatadetisl:[OrderDetail] = []
     var Orderlist:[OrderItemModel] = []
@@ -112,7 +111,7 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
     var SFCode: String=""
     var DivCode: String=""
     var StateCode: String = ""
-var Desig: String=""
+    var Desig: String=""
     var sfName:String = ""
     let LocalStoreage = UserDefaults.standard
     var ProductDetils: [AnyObject] = []
