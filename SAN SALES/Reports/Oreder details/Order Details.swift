@@ -136,7 +136,7 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
     var Total_Value:Double = 0
     
     @IBOutlet weak var Text_Share: UIImageView!
-    
+    var lstAllProducts: [AnyObject] = []
     override func viewDidLoad(){
         super.viewDidLoad()
         getUserDetails()
@@ -185,6 +185,13 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
         
         Text_Share.addTarget(target: self, action: #selector(Textshare))
         
+        
+        let lstProdData: String = LocalStoreage.string(forKey: "Products_Master")!
+        
+        if let list = GlobalFunc.convertToDictionary(text: lstProdData) as? [AnyObject] {
+            lstAllProducts = list;
+            print(lstProdData)
+        }
         if let HQData = LocalStoreage.string(forKey: "HQ_Master"),
            let list = GlobalFunc.convertToDictionary(text:  HQData) as? [AnyObject] {
             lstHQs = list;
@@ -300,6 +307,9 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
                                     let Stkid = j["stockist_code"] as? String ?? ""
                                     let tlDisAmt = j["tlDisAmt"] as? String ?? ""
                                     
+                                    if nameid == "GLLMR0012-24-25-SO-70"{
+                                        print("m")
+                                    }
                                     
                                     var minsAmount = Double(netAmount.isEmpty ? "0" : netAmount)! - Double(tlDisAmt.isEmpty ? "0" : tlDisAmt)!
                                     
@@ -507,7 +517,7 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
             
             
             let productName = extractProductName(product, totalValue: Value)
-            let freeProductName = extractFreeProductName(product)
+            let freeProductName = extractFreeProductName(product, name: productName)
 
             print(productName)
             
@@ -574,16 +584,20 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
         return splitprod[0].trimmingCharacters(in: .whitespaces)
     }
 
-    func extractFreeProductName(_ product: String) -> String {
-        guard let startIndex = product.range(of: "^")?.upperBound else { return "" }
-        print(product)
+    func extractFreeProductName(_ product: String,name:String) -> String {
         let parts = product.components(separatedBy: "^")
-        print(parts)
-        return String(product[startIndex...]).trimmingCharacters(in: .whitespaces)
+        let Get_id = parts[1]
+        let sort_id = Get_id.components(separatedBy: ")")
+        let without_whitespace = sort_id[0].trimmingCharacters(in: .whitespacesAndNewlines)
+        let filterProduct = lstAllProducts.filter { ($0["id"] as? String ?? "") == without_whitespace }
+       var free_product_name = ""
+        if !filterProduct.isEmpty{
+            free_product_name = filterProduct[0]["name"] as? String ?? ""
+        }else{
+            free_product_name = name
+        }
+        return free_product_name
     }
-
-    
-    
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if Item_Summary_table == tableView {
@@ -806,7 +820,7 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
           for i in Item.Orderlist{
               let free: Double = Double(i.freeValue) ?? 0
               if free != 0 {
-                  FreeDetils.append(Itemwise_Summary(productName: i.productName, ProductID: "", Qty: 0, Free: Int(free)))
+                  FreeDetils.append(Itemwise_Summary(productName: i.freeProductName, ProductID: "", Qty: 0, Free: Int(free)))
               }}
           if FreeDetils.isEmpty {
               height_for_Free_Tb.constant = 0
