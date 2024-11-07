@@ -137,7 +137,7 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
     
     @IBOutlet weak var Text_Share: UIImageView!
     
-    override func viewDidLoad() {
+    override func viewDidLoad(){
         super.viewDidLoad()
         getUserDetails()
         let selectdate = DateFormatter()
@@ -299,11 +299,13 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
                                     }
                                     let Stkid = j["stockist_code"] as? String ?? ""
                                     let tlDisAmt = j["tlDisAmt"] as? String ?? ""
-                                    let minsAmount = Double(netAmount.isEmpty ? "0" : netAmount)! - Double(j["tlDisAmt"] as? String ?? "0")!
+                                    
+                                    
+                                    var minsAmount = Double(netAmount.isEmpty ? "0" : netAmount)! - Double(tlDisAmt.isEmpty ? "0" : tlDisAmt)!
                                     
                                 let stkMobNo = j["stkMobNo"] as? String ?? ""
-                                  let  Net_amount = netAmount.isEmpty ? "0" : netAmount
-                                   let Final_Amt = String(format: "%.2f", minsAmount)
+                                    var  Net_amount = netAmount.isEmpty ? "0" : netAmount
+                                    var Final_Amt = String(format: "%.2f", minsAmount)
                                     if let i = Orderdata.firstIndex(where: { (item) in
                                         if item.Stkid == Stockist && item.RouteId == Route {
                                             return true
@@ -330,12 +332,18 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
 
                                         var Total_discValue = 0.0
                                         var Total_taxValue = 0.0
-                                        
+                                        var Total_Amount = 0.0
                                         for k in itemList{
                                             Total_discValue = Total_discValue + Double(k.discValue)!
                                             Total_taxValue = Total_taxValue + Double(k.taxValue)!
+                                            Total_Amount = Total_Amount + Double(k.totalValue)!
+                                            
                                         }
-                                        
+                                        if minsAmount == 0{
+                                            minsAmount =  Total_Amount
+                                            Final_Amt = String(Total_Amount)
+                                            Net_amount = String(Total_Amount)
+                                        }
                                         Orderdata[i].Orderdata.append(OrderDetail(id: id, Route: Route, Routeflg: "0", Stockist: Stockist, name: "\(Order_Count). "+name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "\(itemList.count)", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: tlDisAmt, Order_date: Order_date, Order_Count: Order_Count,Total_Dic: Total_discValue,Total_Tax: Total_taxValue, stkmob: stkMobNo,Total_disc_lbl:"Total Discount", Final_Amt: Final_Amt, Orderlist: itemList))
                                         
                                         Oredrdatadetisl.append(OrderDetail(id: id, Route: Route, Routeflg: "0", Stockist: Stockist, name: "\(Order_Count). "+name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "\(itemList.count)", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: tlDisAmt, Order_date: Order_date, Order_Count: Order_Count,Total_Dic: Total_discValue,Total_Tax: Total_taxValue, stkmob: stkMobNo,Total_disc_lbl:"Total Discount", Final_Amt: Final_Amt,Orderlist: itemList))
@@ -360,17 +368,29 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
                                         
                                         var Total_discValue = 0.0
                                         var Total_taxValue = 0.0
+                                        var Total_Amount = 0.0
+                                        
+                                        
                                         
                                         for k in itemList{
                                             Total_discValue = Total_discValue + Double(k.discValue)!
                                             Total_taxValue = Total_taxValue + Double(k.taxValue)!
+                                            Total_Amount = Total_Amount + Double(k.totalValue)!
+                                            
                                         }
+                                        if minsAmount == 0{
+                                            minsAmount =  Total_Amount
+                                            Final_Amt = String(Total_Amount)
+                                            Net_amount = String(Total_Amount)
+                                        }
+                                        
+                                        print(minsAmount)
                                         
                                         Orderdata.append(Id(id: id, Stkid: Stockist, RouteId: Route, Orderdata: [OrderDetail(id: id, Route: Route, Routeflg: "1", Stockist: Stockist, name: "1. "+name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "\(itemList.count)", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: tlDisAmt, Order_date: Order_date, Order_Count: 1,Total_Dic: Total_discValue,Total_Tax: Total_taxValue, stkmob: stkMobNo,Total_disc_lbl:"Total Discount", Final_Amt: Final_Amt, Orderlist: itemList)]))
                                         
                                         Oredrdatadetisl.append(OrderDetail(id: id, Route: Route, Routeflg: "1", Stockist: Stockist, name: "1. "+name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "\(itemList.count)", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: tlDisAmt, Order_date: Order_date, Order_Count: 1,Total_Dic: Total_discValue,Total_Tax: Total_taxValue, stkmob: stkMobNo,Total_disc_lbl:"Total Discount", Final_Amt: Final_Amt,Orderlist: itemList))
                                         
-                                        Total_Value = Total_Value + minsAmount
+                                           Total_Value = Total_Value + minsAmount
                                     }
                                 }
                                 
@@ -480,7 +500,6 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
             let eQtyValue = extractDouble(from: product, start: "%", end: "*")
             let Value =  extractDouble(from: product, start: "(", end: ")")
             
-            
             //let totalValue = Value + taxValue - discValue
             
             let totalValue = Value
@@ -557,6 +576,9 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
 
     func extractFreeProductName(_ product: String) -> String {
         guard let startIndex = product.range(of: "^")?.upperBound else { return "" }
+        print(product)
+        let parts = product.components(separatedBy: "^")
+        print(parts)
         return String(product[startIndex...]).trimmingCharacters(in: .whitespaces)
     }
 
