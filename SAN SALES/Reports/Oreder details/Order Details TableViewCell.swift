@@ -113,10 +113,12 @@ class Order_Details_TableViewCell: UITableViewCell, UITableViewDataSource, UITab
     func reloadData() {
         OrderDetils.removeAll()
         guard let firstDetail = insideTable1Data.first else { return }
+        print(firstDetail)
+        
         View_height.constant = (firstDetail.Routeflg == "1") ? 68 : 0
-        final_net_amt_view .isHidden = (firstDetail.tlDisAmt == "0") ? true : false
-        Final_amt_height.constant = (firstDetail.tlDisAmt == "0") ? 0 : 46
-        Net_amt_height.constant = (firstDetail.tlDisAmt == "0") ? 79 : 125
+        final_net_amt_view .isHidden = (firstDetail.tlDisAmt == "0" || firstDetail.tlDisAmt == "") ? true : false
+        Final_amt_height.constant = (firstDetail.tlDisAmt == "0"  || firstDetail.tlDisAmt == "") ? 0 : 46
+        Net_amt_height.constant = (firstDetail.tlDisAmt == "0"  || firstDetail.tlDisAmt == "") ? 79 : 125
         
         
         let orderItem = Order_Details.OrderItemModel(
