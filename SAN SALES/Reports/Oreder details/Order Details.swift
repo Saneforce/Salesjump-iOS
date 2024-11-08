@@ -624,31 +624,18 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
     func Scroll_and_Tb_Height(){
         Table_height.constant = 0
         for i in Oredrdatadetisl{
-            print(Table_height.constant)
-            print(Scroll_height .constant)
             let Row_Height = i.Orderlist.count * 55
             let Height = CGFloat(Row_Height + 340)
             let height:CGFloat = (i.tlDisAmt == "0") ? 20 : 70
             Table_height.constant = Table_height.constant + CGFloat(Height)
             Table_height.constant = Table_height.constant + height
             Scroll_height .constant = Table_height.constant
-
-            print(Table_height.constant)
-            print(Scroll_height .constant)
         }
-        print(Item_Summary_View.constant)
-        print(Item_Summary_TB_hEIGHT.constant)
-        
-        
         let Height = Item_Summary_View.constant -   Item_Summary_TB_hEIGHT.constant
         let Scroll_Height = CGFloat(Height) + CGFloat(Itemwise_Summary_Data.count * 32)
         Item_Summary_TB_hEIGHT.constant = CGFloat(Itemwise_Summary_Data.count * 32)
         Item_Summary_View.constant = Scroll_Height
         Scroll_height .constant =  Scroll_height .constant  +  Item_Summary_View.constant + 100
-        print(Item_Summary_View.constant)
-        print(Item_Summary_TB_hEIGHT.constant)
-        
-        
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
