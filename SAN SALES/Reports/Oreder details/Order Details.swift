@@ -307,9 +307,6 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
                                     let Stkid = j["stockist_code"] as? String ?? ""
                                     let tlDisAmt = j["tlDisAmt"] as? String ?? ""
                                     
-                                    if nameid == "GLLMR0012-24-25-SO-70"{
-                                        print("m")
-                                    }
                                     
                                     var minsAmount = Double(netAmount.isEmpty ? "0" : netAmount)! - Double(tlDisAmt.isEmpty ? "0" : tlDisAmt)!
                                     
