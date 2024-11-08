@@ -303,19 +303,16 @@ class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UI
         }
         
         Itemwise_Summary_Data.append(Itemwise_Summary(productName: "Total", ProductID: "", Qty: Int(Double(QtyTotal)), Free: Int(Double(FreeTota))))
-
         HQ_and_Route_TB.reloadData()
         Item_Summary_table.reloadData()
+        Scroll_and_Tb_Height()
     }
     
     func parseProducts(_ products: String,_ Idproducts: String, taxArray: [String]?) -> [OrderItemModel] {
-        print(products)
-        print(taxArray)
         var itemModelList = [OrderItemModel]()
         var netAmount: Double = 0
         let productArray = products.split(separator: ",").map { String($0) }
         let Additional_Prod_Code_Array = Idproducts.split(separator: "#")
-        print(Additional_Prod_Code_Array)
         var prodcode = [String]()
         for j in Additional_Prod_Code_Array{
             let Product_Id = j.split(separator: "~").map { String($0) }
@@ -356,8 +353,6 @@ class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UI
             let productName = extractProductName(product, totalValue: Value)
             let freeProductName = extractFreeProductName(product)
 
-            print(productName)
-            
             let orderItem = OrderItemModel(
                 productName: productName,
                 ProductID: ProductId,
