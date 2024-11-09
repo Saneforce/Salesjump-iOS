@@ -58,6 +58,9 @@ class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UI
     
     @IBOutlet weak var Hq_Height: NSLayoutConstraint!
     
+    
+    @IBOutlet weak var Order_Detils_Addres: NSLayoutConstraint!
+    
     struct Id:Any{
         var id:String
         var Stkid:String
@@ -240,8 +243,6 @@ class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UI
         Item_Summary_table.delegate = self
         Day_Report_TB.delegate = self
         Day_Report_TB.dataSource = self
-        appendDashedBorder(to: das_Border_Line_View)
-        appendDashedBorder(to: Strik_Line)
         
         Share_Pdf.addTarget(target: self, action: #selector(cURRENT_iMG))
         Share_Orde_Detils.addTarget(target: self, action: #selector(Share_Order_Bill))
@@ -256,7 +257,7 @@ class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UI
         
       //  OrderDayReport()
        // ViewOrder()
-        
+        Order_Detils_Addres.constant = 60
         vwVstDet_order()
         
     }
@@ -319,7 +320,7 @@ class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UI
                     Total_Dis = Total_Dis + (discValue ?? 0)
                 }
                 
-                OrderDetils_For_Distributor.append(Distobutor_OrderDetail(Dis_Name: json[0]["name"] as? String ?? "", Order_Id: json[0]["trans_sl_no"] as? String ?? "", Amt: json[0]["orderValue"] as? String ?? "", Remark: "", date: json[0]["Order_date"] as? String ?? "", Phone_No: json[0]["mobNo"] as? String ?? "", Tax: String(Total_Tax), Dis: String(Total_Dis), Orderitem: orderItems))
+                OrderDetils_For_Distributor.append(Distobutor_OrderDetail(Dis_Name: json[0]["name"] as? String ?? "", Order_Id: json[0]["trans_sl_no"] as? String ?? "", Amt: String(json[0]["orderValue"] as? Double ?? 0), Remark: "", date: json[0]["Order_date"] as? String ?? "", Phone_No: json[0]["mobNo"] as? String ?? "", Tax: String(Total_Tax), Dis: String(Total_Dis), Orderitem: orderItems))
                 
                 
                 print(OrderDetils_For_Distributor)
@@ -680,9 +681,8 @@ class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UI
         
            if tableView == HQ_and_Route_TB {
                let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! Distributor_TableViewCell
+               
                cell.delegate = self
-               cell.Route_name.isHidden = true
-               cell.Stockets_Name.isHidden = true
                cell.View_height.constant = 0
                
                cell.Store_Name_with_order_No.text = ""
@@ -789,18 +789,15 @@ class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UI
           guard let indexPath = HQ_and_Route_TB.indexPath(for: cell) else { return }
           print("Button tapped in cell at index path: \(indexPath.row)")
           let Item =  OrderDetils_For_Distributor[indexPath.row]
-          print(Item)
+          Order_No.text = Item.Order_Id
+          Order_Date.text = Item.date
           Day_View_Stk.text = Item.Dis_Name
           From_no.text = Item.Phone_No
           Total_item.text = String(Item.Orderitem.count)
-          
-          
           Orderlist = Item.Orderitem
           Tax.text = String(Item.Tax)
           Sch_Disc.text = String(Item.Dis)
-          Cas_disc.text = ""
           Net_Amt.text = "₹ " + Item.Amt
-          
           for i in Item.Orderitem{
               let free: Double = Double(i.freeValue) ?? 0
               if free != 0 {
@@ -813,8 +810,6 @@ class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UI
               height_for_Free_Tb.constant = 154
               free_view.isHidden = false
           }
-          
-          
           Free_TB.reloadData()
           Day_Report_TB.reloadData()
           Day_Report_View.isHidden = false
