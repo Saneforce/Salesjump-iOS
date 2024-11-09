@@ -47,8 +47,8 @@ class Distributor_TableViewCell: UITableViewCell, UITableViewDataSource, UITable
     weak var delegate: DistobutorCellDelegate?
     let data = Distributor_Order_Details()
     
-    var insideTable1Data: [Distributor_Order_Details.OrderDetail] = []
-    var OrderDetils: [Distributor_Order_Details.OrderItemModel] = []
+    var insideTable1Data: [Distributor_Order_Details_cell.Distobutor_OrderDetail] = []
+    var OrderDetils: [Distributor_Order_Details_cell.OrderItemModels] = []
 
     // MARK: - Initialization
     override func awakeFromNib() {
@@ -111,14 +111,13 @@ class Distributor_TableViewCell: UITableViewCell, UITableViewDataSource, UITable
 
     // MARK: - Reload Data
     func reloadData() {
-        OrderDetils.removeAll()
         guard let firstDetail = insideTable1Data.first else { return }
-        View_height.constant = (firstDetail.Routeflg == "1") ? 68 : 0
-        final_net_amt_view .isHidden = (firstDetail.tlDisAmt == "0") ? true : false
-        Final_amt_height.constant = (firstDetail.tlDisAmt == "0") ? 0 : 46
-        Net_amt_height.constant = (firstDetail.tlDisAmt == "0") ? 79 : 125
-        let orderItem = Distributor_Order_Details.OrderItemModel(
-            productName: "Product Name", ProductID: "",
+        View_height.constant =  68
+        final_net_amt_view .isHidden =  true
+        Final_amt_height.constant =  0
+        Net_amt_height.constant =  79
+        let orderItem = Distributor_Order_Details_cell.OrderItemModels(
+            productName: "Product Name", productId: "",
             rateValue: "Rate",
             qtyValue: "Qty",
             freeValue: "Free",
@@ -128,18 +127,14 @@ class Distributor_TableViewCell: UITableViewCell, UITableViewDataSource, UITable
             clValue: "CL",
             uomName: "",
             eQtyValue: "",
-            litersVal: "",
+            liter: "",
             freeProductName: ""
         )
         
         // Add the test item and the actual order list items
         OrderDetils.append(orderItem)
-        OrderDetils.append(contentsOf: firstDetail.Orderlist)
-        
-        print(OrderDetils.count)
+        OrderDetils.append(contentsOf: firstDetail.Orderitem)
         if OrderDetils.count == 1 {
-            
-            
             OrderDetils.removeAll()
         }
         

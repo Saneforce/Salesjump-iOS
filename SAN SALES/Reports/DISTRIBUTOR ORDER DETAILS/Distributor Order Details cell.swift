@@ -7,6 +7,7 @@
 
 import UIKit
 import Foundation
+import Alamofire
 
 class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UITableViewDelegate,  DistobutorCellDelegate{
  
@@ -102,7 +103,7 @@ class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UI
     var Itemwise_Summary_Data:[Itemwise_Summary] = []
     var Orderdata:[Id] = []
     var Oredrdatadetisl:[OrderDetail] = []
-    var Orderlist:[Distributor_Order_Details.OrderItemModel] = []
+    var Orderlist:[Distributor_Order_Details_cell.OrderItemModels] = []
     let cardViewInstance = CardViewdata()
     var SFCode: String=""
     var DivCode: String=""
@@ -138,12 +139,47 @@ class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UI
     var Typ:String?
     var CodeDate:String?
     var Hqname:String?
-    var Order_Detisl:[Distributor_Order_Details.OrderDetail]?
-    var Order_Detis2l:[Distributor_Order_Details.OrderDetail] = []
-    var getaxn:String = ""
-    var GetCode:String = ""
-    var GetTyp:String = ""
     var GetDate:String = ""
+    
+    var Orderid:String?
+    var Orderid2:String = ""
+    var Stkid:String?
+    var Stkid2:String = ""
+    
+    
+    struct OrderItemModels {
+        var productName: String
+        var productId:String
+        var rateValue: String
+        var qtyValue: String
+        var freeValue: String
+        var discValue: String
+        var totalValue: String
+        var taxValue: String
+        var clValue: String
+        var uomName: String
+        var eQtyValue: String
+        var liter: String
+        var freeProductName: String
+    }
+    
+    
+    
+    struct Distobutor_OrderDetail:Any{
+        var Dis_Name: String
+        var Order_Id:String
+        var Amt:String
+        var Remark:String
+        var date:String
+        var Phone_No:String
+        var Tax:String
+        var Dis:String
+        var Orderitem:[OrderItemModels]
+    }
+    
+    
+    
+    var OrderDetils_For_Distributor:[Distobutor_OrderDetail] = []
     
     @IBOutlet weak var Text_Share: UIImageView!
     
@@ -173,28 +209,11 @@ class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UI
         
         
         
-        if let date = CodeDate{
+        if let date = CodeDate,let id = Orderid,let stkid = Stkid{
             GetDate = date
+            Orderid2 = id
+            Stkid2 = stkid
         }
-        if let Item = Order_Detisl{
-            Order_Detis2l = Item
-            print(Order_Detis2l)
-            
-        }
-        
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .currency
-        formatter.locale = Locale(identifier: "en_IN") // Indian locale
-        let Total: Double = Double(Order_Detis2l[0].Final_Amt) ?? 0
-
-       print(Total)
-
-        if let formattedValue = formatter.string(from: NSNumber(value: Total)) {
-            Total_Value_Amt.text = formattedValue
-        }
-
-        
-        print(Order_Detis2l[0].Final_Amt)
         
         Free_TB.delegate = self
         Free_TB.dataSource = self
@@ -236,7 +255,9 @@ class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UI
         
         
       //  OrderDayReport()
-        ViewOrder()
+       // ViewOrder()
+        
+        vwVstDet_order()
         
     }
     func appendDashedBorder(to view: UIView) {
@@ -270,43 +291,231 @@ class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UI
     Desig=prettyJsonData["desigCode"] as? String ?? ""
     }
     
-    
-    func ViewOrder(){
-        for item in Order_Detis2l{
-            for j in item.Orderlist{
-                    let qty = Double(j.qtyValue) ?? 0
-                    let free = Double(j.freeValue) ?? 0
-                    let productID = j.ProductID.trimmingCharacters(in: .whitespacesAndNewlines)
+    func vwVstDet_order(){
+       // self.ShowLoading(Message: "Loading...")
+        let apiKey: String = "get%2FvwVstDet_order&State_Code=\(StateCode)&stockist_code=\(Stkid2)&divisionCode=\(DivCode)&orderDt=\(GetDate)&orderNo=\(Orderid2)&code=undefined&rSF=\(SFCode)&typ=3&sfCode=\(SFCode)"
+        
+        AF.request(APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKey, method: .post, parameters: nil, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self] AFdata in
+            switch AFdata.result {
+            case .success(let value):
+               let json = (value as? [AnyObject])!
+                
+                print(json)
+                let productDetail = json[0]["Product_Detail"] as? String ?? ""
+                let productCode = json[0]["Product_Code"] as? String ?? ""
+                
+                let reportType = 1
+                let orderItems = parseProductDetails(productCode: productCode, productDetail: productDetail, reportType: reportType)
+                
+                
+                
+                var Total_Tax:Double = 0
+                var Total_Dis:Double = 0
+                
+                for i in orderItems{
+                    let taxValue = Double(i.taxValue)
+                    Total_Tax = Total_Tax + (taxValue ?? 0)
+                    let discValue =  Double(i.discValue)
+                    Total_Dis = Total_Dis + (discValue ?? 0)
+                }
+                
+                OrderDetils_For_Distributor.append(Distobutor_OrderDetail(Dis_Name: json[0]["name"] as? String ?? "", Order_Id: json[0]["trans_sl_no"] as? String ?? "", Amt: json[0]["orderValue"] as? String ?? "", Remark: "", date: json[0]["Order_date"] as? String ?? "", Phone_No: json[0]["mobNo"] as? String ?? "", Tax: String(Total_Tax), Dis: String(Total_Dis), Orderitem: orderItems))
+                
+                
+                print(OrderDetils_For_Distributor)
+                
+                
+                for item in OrderDetils_For_Distributor{
+                    for j in item.Orderitem{
+                        let qty = Double(j.qtyValue)
+                        let free = Double(j.freeValue)
+                            let productID = j.productId.trimmingCharacters(in: .whitespacesAndNewlines)
 
-                    if let index = Itemwise_Summary_Data.firstIndex(where: {
-                        $0.ProductID.trimmingCharacters(in: .whitespacesAndNewlines) == productID
-                    }) {
-                        Itemwise_Summary_Data[index].Qty += Int(qty)
-                        Itemwise_Summary_Data[index].Free += Int(free)
-                    } else {
-                        let newItem = Itemwise_Summary(
-                            productName: j.productName,
-                            ProductID: productID,
-                            Qty: Int(qty),
-                            Free: Int(free)
-                        )
-                        Itemwise_Summary_Data.append(newItem)
+                            if let index = Itemwise_Summary_Data.firstIndex(where: {
+                                $0.ProductID.trimmingCharacters(in: .whitespacesAndNewlines) == productID
+                            }) {
+                                Itemwise_Summary_Data[index].Qty += Int(qty ?? 0)
+                                Itemwise_Summary_Data[index].Free += Int(free ?? 0)
+                            } else {
+                                let newItem = Itemwise_Summary(
+                                    productName: j.productName,
+                                    ProductID: productID,
+                                    Qty: Int(qty ?? 0),
+                                    Free: Int(free ?? 0)
+                                )
+                                Itemwise_Summary_Data.append(newItem)
+                            }
                     }
+                }
+                var QtyTotal = 0
+                var FreeTota = 0
+                for item in Itemwise_Summary_Data{
+                    QtyTotal = QtyTotal + Int(item.Qty)
+                    FreeTota = FreeTota + Int(item.Free)
+                }
+                
+                Itemwise_Summary_Data.append(Itemwise_Summary(productName: "Total", ProductID: "", Qty: Int(Double(QtyTotal)), Free: Int(Double(FreeTota))))
+                
+                let formatter = NumberFormatter()
+                formatter.numberStyle = .currency
+                formatter.locale = Locale(identifier: "en_IN") // Indian locale
+                
+                let Total: Double = Double(OrderDetils_For_Distributor[0].Amt) ?? 0
+
+               print(Total)
+
+                if let formattedValue = formatter.string(from: NSNumber(value: Total)) {
+                    Total_Value_Amt.text = formattedValue
+                }
+                
+                
+                HQ_and_Route_TB.reloadData()
+                Item_Summary_table.reloadData()
+                Scroll_and_Tb_Height()
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    self.LoadingDismiss()
+                }
+            case .failure(let error):
+                Toast.show(message: error.errorDescription ?? "", controller: self)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    self.LoadingDismiss()
+                }
             }
         }
         
-        var QtyTotal = 0
-        var FreeTota = 0
-        for item in Itemwise_Summary_Data{
-            QtyTotal = QtyTotal + Int(item.Qty)
-            FreeTota = FreeTota + Int(item.Free)
-        }
-        
-        Itemwise_Summary_Data.append(Itemwise_Summary(productName: "Total", ProductID: "", Qty: Int(Double(QtyTotal)), Free: Int(Double(FreeTota))))
-        HQ_and_Route_TB.reloadData()
-        Item_Summary_table.reloadData()
-        Scroll_and_Tb_Height()
+       
     }
+    
+    
+    // Function to parse product details
+    func parseProductDetails(productCode: String,productDetail: String, reportType: Int) -> [OrderItemModels] {
+        var orderItemModelsss: [OrderItemModels] = []
+
+        // Split the main product details using the "#" delimiter
+        let productArray = productDetail.split(separator: "#").map { String($0) }
+        let product_Code_Array = productCode.split(separator: "#").map { String($0) }
+        
+        print(product_Code_Array)
+        for (product, productCode) in zip(productArray, product_Code_Array) {
+            var qtyValue: Double = 0
+            var freeValue: Double = 0
+            var discValue: Double = 0
+            var taxValue: Double = 0
+            var rateValue: Double = 0
+            var totalValue: Double = 0
+            var clValue: Int = 0
+            var eQtyValue: Double = 0
+            var liter: Double = 0
+            var productName = ""
+            var uomName = ""
+            var freeProductName = ""
+
+            // Extract values using substrings and regex
+            do {
+                // Extract quantity
+                if let qtyRange = product.range(of: "\\$.*?@", options: .regularExpression) {
+                    let qty = String(product[qtyRange]).replacingOccurrences(of: ["$", "@"], with: "")
+                    qtyValue = Double(qty) ?? 0
+                }
+
+                // Extract free value
+                if let freeRange = product.range(of: "\\+.*?%", options: .regularExpression) {
+                    let free = String(product[freeRange]).replacingOccurrences(of: ["+", "%"], with: "")
+                    freeValue = Double(free) ?? 0
+                }
+
+                // Extract discount
+                if let discRange = product.range(of: "-.*?\\*", options: .regularExpression) {
+                    let disc = String(product[discRange]).replacingOccurrences(of: ["-", "*"], with: "")
+                    discValue = Double(disc) ?? 0
+                }
+
+                // Extract tax amount
+                if let taxRange = product.range(of: "%.*?-", options: .regularExpression) {
+                    let tax = String(product[taxRange]).replacingOccurrences(of: ["%", "-"], with: "")
+                    taxValue = Double(tax) ?? 0
+                }
+
+                // Extract rate
+                if let rateRange = product.range(of: "\\*.*?!", options: .regularExpression) {
+                    let rate = String(product[rateRange]).replacingOccurrences(of: ["*", "!"], with: "")
+                    rateValue = Double(rate) ?? 0
+                }
+
+                // Extract total value
+                if let totalRange = product.range(of: "~.*?\\$", options: .regularExpression) {
+                    let total = String(product[totalRange]).replacingOccurrences(of: ["~", "$"], with: "")
+                    totalValue = Double(total) ?? 0
+                }
+
+                // Extract product name
+                if let nameRange = product.range(of: "^.*?~", options: .regularExpression) {
+                    productName = String(product[nameRange]).replacingOccurrences(of: "~", with: "").trimmingCharacters(in: .whitespaces)
+                }
+
+                // Extract CL value
+                if let clRange = product.range(of: "!.*?!", options: .regularExpression) {
+                    let cl = String(product[clRange]).replacingOccurrences(of: "!", with: "")
+                    clValue = Int(cl) ?? 0
+                }
+
+                // Extract UOM name
+                if let uomRange = product.range(of: "!.*?%", options: .regularExpression) {
+                    uomName = String(product[uomRange]).replacingOccurrences(of: ["!", "%"], with: "").trimmingCharacters(in: .whitespaces)
+                }
+
+                // Extract eQty value
+                if let eQtyRange = product.range(of: "%.*?\\*", options: .regularExpression) {
+                    let eQty = String(product[eQtyRange]).replacingOccurrences(of: ["%", "*"], with: "")
+                    eQtyValue = Double(eQty) ?? 0
+                }
+
+                // Extract liter value
+                if let literRange = product.range(of: "@.*?\\+", options: .regularExpression) {
+                    let lit = String(product[literRange]).replacingOccurrences(of: ["@", "+"], with: "")
+                    liter = Double(lit) ?? 0
+                }
+
+                // Extract free product name (if available)
+                if let freeNameRange = product.range(of: "\\?\\?.*?~~", options: .regularExpression) {
+                    freeProductName = String(product[freeNameRange]).replacingOccurrences(of: ["??", "~~"], with: "").trimmingCharacters(in: .whitespaces)
+                }
+
+            } catch {
+                print("Error parsing product details: \(error)")
+            }
+
+            // Calculate liter value if required
+            liter = qtyValue * liter
+
+            // Create OrderItemModel and add to list
+           
+            let Code = productCode.split(separator: "~").map { String($0) }
+        
+            let orderItem = OrderItemModels(
+                productName: productName, productId: Code[0].trimmingCharacters(in: .whitespacesAndNewlines),
+                rateValue: String(rateValue),
+                qtyValue: String(qtyValue),
+                freeValue: String(freeValue),
+                discValue: String(discValue),
+                totalValue: String(totalValue),
+                taxValue: String(taxValue),
+                clValue: String(clValue),
+                uomName: String(uomName),
+                eQtyValue: String(eQtyValue),
+                liter: String(liter),
+                freeProductName: freeProductName
+            )
+
+            orderItemModelsss.append(orderItem)
+        }
+
+        return orderItemModelsss
+    }
+    
+    
+    
     
     func parseProducts(_ products: String,_ Idproducts: String, taxArray: [String]?) -> [OrderItemModel] {
         var itemModelList = [OrderItemModel]()
@@ -413,8 +622,8 @@ class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UI
         }
         
         if HQ_and_Route_TB == tableView{
-            let Row_Height = Order_Detis2l[indexPath.row].Orderlist.count * 50
-            let height:CGFloat = (Order_Detis2l[indexPath.row].tlDisAmt == "0") ? 20 : 70
+            let Row_Height = OrderDetils_For_Distributor[indexPath.row].Orderitem.count * 50
+            let height:CGFloat =  0
             let Height = CGFloat(Row_Height + 340)
             return Height + height
         }
@@ -423,12 +632,12 @@ class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UI
     
     func Scroll_and_Tb_Height(){
         Table_height.constant = 0
-        for i in Order_Detis2l{
+        for i in OrderDetils_For_Distributor{
             print(Table_height.constant)
             print(Scroll_height .constant)
-            let Row_Height = i.Orderlist.count * 55
+            let Row_Height = i.Orderitem.count * 55
             let Height = CGFloat(Row_Height + 340)
-            let height:CGFloat = (i.tlDisAmt == "0") ? 20 : 70
+            let height:CGFloat = 0
             Table_height.constant = Table_height.constant + CGFloat(Height)
             Table_height.constant = Table_height.constant + height
             Scroll_height .constant = Table_height.constant
@@ -464,7 +673,7 @@ class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UI
            return FreeDetils.count
          }
         
-        return Order_Detis2l.count
+        return OrderDetils_For_Distributor.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -472,29 +681,30 @@ class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UI
            if tableView == HQ_and_Route_TB {
                let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! Distributor_TableViewCell
                cell.delegate = self
-               cell.Route_name.text = Order_Detis2l[indexPath.row].Route
-               cell.Stockets_Name.text = Order_Detis2l[indexPath.row].Stockist
-               cell.Store_Name_with_order_No.text = Order_Detis2l[indexPath.row].name + "(\(Order_Detis2l[indexPath.row].nameid))"
-               cell.Phone.text = "Phone:"+Order_Detis2l[indexPath.row].Phone
-               if  let NetValue = Float(Order_Detis2l[indexPath.row].Net_amount){
+               cell.Route_name.isHidden = true
+               cell.Stockets_Name.isHidden = true
+               cell.View_height.constant = 0
+               
+               cell.Store_Name_with_order_No.text = ""
+               cell.Phone.text = "Phone:"+OrderDetils_For_Distributor[indexPath.row].Phone_No
+               if  let NetValue = Float(OrderDetils_For_Distributor[indexPath.row].Amt){
                    
                    cell.Netamt.text = "₹\(NetValue)"
                }else{
-                   cell.Netamt.text = "₹\(Order_Detis2l[indexPath.row].Net_amount)"
+                   cell.Netamt.text = "₹\(OrderDetils_For_Distributor[indexPath.row].Amt)"
                }
                
-               cell.Total_Disc_Val_lbl.text = Order_Detis2l[indexPath.row].Total_disc_lbl
-               cell.Total_Disc.text = Order_Detis2l[indexPath.row].tlDisAmt
-               cell.Final_Amout.text = Order_Detis2l[indexPath.row].Final_Amt
+               cell.Total_Disc_Val_lbl.text = OrderDetils_For_Distributor[indexPath.row].Dis
+               cell.Total_Disc.text = ""
+               cell.Final_Amout.text = OrderDetils_For_Distributor[indexPath.row].Amt
                
                
+               cell.Remark.text =  OrderDetils_For_Distributor[indexPath.row].Remark
                
-               cell.Remark.text =  Order_Detis2l[indexPath.row].Remarks
-               
-               cell.insideTable1Data = [Order_Detis2l[indexPath.row]]
+               cell.insideTable1Data = [OrderDetils_For_Distributor[indexPath.row]]
                
                
-               if Order_Detis2l[indexPath.row].Orderlist.count == 0 {
+               if OrderDetils_For_Distributor[indexPath.row].Orderitem.count == 0 {
                    cell.View_Detils.isHidden = true
                    cell.Start_Image.isHidden = true
                }else{
@@ -578,25 +788,20 @@ class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UI
       func didTapButton(in cell: Distributor_TableViewCell) {
           guard let indexPath = HQ_and_Route_TB.indexPath(for: cell) else { return }
           print("Button tapped in cell at index path: \(indexPath.row)")
-          let Item =  Order_Detis2l[indexPath.row]
+          let Item =  OrderDetils_For_Distributor[indexPath.row]
           print(Item)
-          Day_View_Stk.text = Item.Stockist
-          From_no.text = Item.Phone
-          To_Retiler.text = Item.name
-          To_Addres.text = Item.Adress
-          To_No.text = Item.Phone
-          Order_No.text = Item.nameid
-          Order_Date.text = Item.Order_date
-          Total_item.text = String(Item.Orderlist.count)
+          Day_View_Stk.text = Item.Dis_Name
+          From_no.text = Item.Phone_No
+          Total_item.text = String(Item.Orderitem.count)
           
           
-          Orderlist = Item.Orderlist
-          Tax.text = String(Item.Total_Tax)
-          Sch_Disc.text = String(Item.Total_Dic)
-          Cas_disc.text = Item.tlDisAmt
-          Net_Amt.text = "₹ " + Item.Final_Amt
+          Orderlist = Item.Orderitem
+          Tax.text = String(Item.Tax)
+          Sch_Disc.text = String(Item.Dis)
+          Cas_disc.text = ""
+          Net_Amt.text = "₹ " + Item.Amt
           
-          for i in Item.Orderlist{
+          for i in Item.Orderitem{
               let free: Double = Double(i.freeValue) ?? 0
               if free != 0 {
                   FreeDetils.append(Itemwise_Summary(productName: i.productName, ProductID: "", Qty: 0, Free: Int(free)))
@@ -852,4 +1057,15 @@ class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UI
     }
 
     
+}
+
+
+extension String {
+    func replacingOccurrences(of targets: [String], with replacement: String) -> String {
+        var newString = self
+        for target in targets {
+            newString = newString.replacingOccurrences(of: target, with: replacement)
+        }
+        return newString
+    }
 }

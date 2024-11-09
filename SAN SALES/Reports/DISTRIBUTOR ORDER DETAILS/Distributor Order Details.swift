@@ -11,12 +11,8 @@ import Foundation
 import FSCalendar
 class Distributor_Order_Details: IViewController, UITableViewDelegate, UITableViewDataSource,FSCalendarDelegate {
    
-    
     @IBOutlet weak var BTback: UIImageView!
     @IBOutlet weak var TB_view: UITableView!
-    
-    
-    
     @IBOutlet weak var Invoice_View: UIView!
     @IBOutlet weak var Invoice_BT: UIImageView!
     @IBOutlet weak var iNVOICE_tb: UITableView!
@@ -111,6 +107,8 @@ class Distributor_Order_Details: IViewController, UITableViewDelegate, UITableVi
     struct Invoice:Any{
         var orderid:String
         var invoice_Status:String
+        var Stkid:String
+        var Date:String
         var total_amt:String
     }
     
@@ -151,7 +149,6 @@ class Distributor_Order_Details: IViewController, UITableViewDelegate, UITableVi
         TB_view.sectionHeaderHeight = 10
         TB_view.sectionFooterHeight = 10
         OrderDayReport()
-        Afcode()
 
     }
     
@@ -179,7 +176,6 @@ class Distributor_Order_Details: IViewController, UITableViewDelegate, UITableVi
         Select_Dtae = dates
         Select_Date.text = dates
         OrderDayReport()
-        Afcode()
         Calender_View.isHidden = true
     }
     
@@ -193,183 +189,6 @@ class Distributor_Order_Details: IViewController, UITableViewDelegate, UITableVi
         return Date()
     }
     
-    
-    func Afcode(){
-      
-        self.ShowLoading(Message: "Loading...")
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        let currentDate = Foundation.Date()
-        let formattedDate = dateFormatter.string(from: currentDate)
-        print(formattedDate)
-        
-        let axn = "get/OrderDayReport"
-        let apiKey: String = "\(axn)&State_Code=\(StateCode)&divisionCode=\(DivCode)&rSF=\(SFCode)&sfCode=\(SFCode)&RsfCode=\(SFCode)&rptDt=\(Select_Dtae)"
-        
-        AF.request(APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKey, method: .post, parameters: nil, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self] AFdata in
-            switch AFdata.result {
-            case .success(let value):
-                if let json = value as? [String: AnyObject],
-                   let dayrepArray = json["dayrep"] as? [[String: AnyObject]] {
-                    print(json)
-                    print(dayrepArray)
-                    if dayrepArray.isEmpty{
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                            self.LoadingDismiss()
-                        }
-                        return
-                    }
-                    let ACode = dayrepArray[0]["ACode"] as? String ?? ""
-                    DisOrder(ACode: ACode)
-                }
-                
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                    self.LoadingDismiss()
-                }
-                
-            case .failure(let error):
-                Toast.show(message: error.errorDescription ?? "", controller: self)
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                    self.LoadingDismiss()
-                }
-            }
-        }
-    }
-    
-    
-    
-    func DisOrder(ACode:String){
-        Oredrdatadetisl.removeAll()
-        Orderdata.removeAll()
-        Itemwise_Summary_Data.removeAll()
-    
-        self.ShowLoading(Message: "Loading...")
-        let axn:String = "get/vwVstDetNative"
-       let apiKey: String = "\(axn)&desig=\(Desig)&divisionCode=\(DivCode)&ACd=\(ACode)&rSF=\(SFCode)&typ=3&sfCode=\(SFCode)&State_Code=\(StateCode)"
-        
-            let aFormData: [String: Any] = [
-                "orderBy":"[\"name asc\"]","desig":"mgr"
-            ]
-            let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
-            let jsonString = String(data: jsonData!, encoding: .utf8)!
-            let params: Parameters = [
-                "data": jsonString
-            ]
-            
-            AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
-                AFdata in
-                switch AFdata.result
-                {
-                case .success(let value):
-                    print(value)
-                    
-                    if let json = value as? [AnyObject]{
-                        for j in json{
-                            let id = j["id"] as? String ?? ""
-                            let Route = j["Territory"] as? String ?? ""
-                            let Stockist = j["stockist_name"] as? String ?? ""
-                            let name = j["name"] as? String ?? ""
-                            let nameid = j["Order_No"] as? String ?? ""
-                            let Adress = j["Address"] as? String ?? ""
-                            let liters = j["liters"] as? Double ?? 0
-                            let Volumes = (liters * 100).rounded() / 100
-                            let Phone = j["phoneNo"] as? String ??  ""
-                            var netAmount = ""
-                            
-                           
-                                netAmount = String(j["orderValue"] as? Double ?? 0)
-                           
-                            
-                            let Remarks = j["secOrdRemark"] as? String ?? ""
-                            let Stkid = j["stockist_code"] as? String ?? ""
-                            let tlDisAmt = j["tlDisAmt"] as? String ?? ""
-                            let Order_date = j["Order_date"] as? String ?? ""
-                            
-                            let minsAmount = Double(netAmount.isEmpty ? "0" : netAmount)! - Double(j["tlDisAmt"] as? String ?? "0")!
-                            
-                            let  Net_amount = netAmount.isEmpty ? "0" : netAmount
-                            let Final_Amt = String(format: "%.2f", minsAmount)
-                            
-                            print(minsAmount)
-                            
-                           
-                            let Additional_Prod_Dtls = j["productList"] as! [AnyObject]
-                            var itemModelList = [OrderItemModel]()
-                            for Item2 in Additional_Prod_Dtls {
-                                let orderItem = OrderItemModel(
-                                    productName: Item2["Product_Name"] as? String ?? "",
-                                    ProductID: Item2["Product_Code"] as? String ?? "",
-                                    rateValue: String(Item2["Rate"] as? Double ?? 0),
-                                    qtyValue: String(Item2["Quantity"] as? Int ?? 0),
-                                    freeValue: String(Item2["Free"] as? Int ?? 0),
-                                    discValue: String(Item2["discount"] as? Double ?? 0),
-                                    totalValue: String(Item2["sub_total"] as?  Double ?? 0),
-                                    taxValue: String(Item2["taxval"] as? Double ?? 0),
-                                    clValue: Item2["Cl_bal"] as? String ?? "",
-                                    uomName: Item2["Product_Unit_Name"] as? String ?? "",
-                                    eQtyValue:String(Item2["eqty"] as? Int ?? 0),
-                                    litersVal: String(0),
-                                    freeProductName: Item2["Offer_ProductNm"] as? String ?? ""
-                                )
-                                print(orderItem)
-
-                                itemModelList.append(orderItem)
-                            }
-                            
-                            let itemList = itemModelList
-                            
-                            for item in itemList {
-                                let qty = Int(item.qtyValue) ?? 0
-                                let free = Int(item.freeValue) ?? 0
-                                let productID = item.ProductID.trimmingCharacters(in: .whitespacesAndNewlines)
-                                
-                                if let index = Itemwise_Summary_Data.firstIndex(where: {
-                                    $0.ProductID.trimmingCharacters(in: .whitespacesAndNewlines) == productID
-                                }) {
-                                    Itemwise_Summary_Data[index].Qty += qty
-                                    Itemwise_Summary_Data[index].Free += free
-                                } else {
-                                    
-                                    
-                                    let newItem = Itemwise_Summary(
-                                        productName: item.productName,
-                                        ProductID: productID,
-                                        Qty: qty,
-                                        Free: free
-                                    )
-                                    Itemwise_Summary_Data.append(newItem)
-                                }
-                            }
-                            
-                            
-                            var Total_discValue = 0.0
-                            var Total_taxValue = 0.0
-                            
-                            for k in itemList{
-                                Total_discValue = Total_discValue + Double(k.discValue)!
-                                Total_taxValue = Total_taxValue + Double(k.taxValue)!
-                            }
-                            
-                            
-                            Orderdata.append(Id(id: id, Stkid: Stockist, RouteId: Route, Orderdata: [OrderDetail(id: id, Route: Route, Routeflg: "0", Stockist: Stockist, name: name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "\(itemList.count)", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: tlDisAmt, Order_date: Order_date, Order_Count: 1,Total_Dic: Total_discValue,Total_Tax: Total_taxValue,Total_disc_lbl:"Total Discount (10%)", Final_Amt: Final_Amt, Orderlist: itemList)]))
-                            
-                            Oredrdatadetisl.append(OrderDetail(id: id, Route: Route, Routeflg: "0", Stockist: Stockist, name: name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "\(itemList.count)", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: tlDisAmt, Order_date: Order_date, Order_Count: 1,Total_Dic: Total_discValue,Total_Tax: Total_taxValue,Total_disc_lbl:"Total Discount ()", Final_Amt: Final_Amt,Orderlist: itemList))
-                            
-                            
-                        }
-                        print(Oredrdatadetisl)
-                    }
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                        self.LoadingDismiss()
-                    }
-                case .failure(let error):
-                    Toast.show(message: error.errorDescription!)
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                        self.LoadingDismiss()
-                    }
-                }
-            }
-    }
     
     
     func OrderDayReport(){
@@ -390,6 +209,17 @@ class Distributor_Order_Details: IViewController, UITableViewDelegate, UITableVi
                     let  Order_No = Oredr["Order_No"] as? String ?? ""
                     let Status = Oredr["Status"] as? String ?? ""
                     let Order_Value = String(Oredr["Order_Value"] as? Double ?? 0)
+                    let Order_date = Oredr["Order_date"] as? String ?? ""
+                    
+                    
+                    var outputDate:String = ""
+                    let dateFormatter = DateFormatter()
+                    dateFormatter.dateFormat = "dd/MM/yyyy"
+                    if let date = dateFormatter.date(from: Order_date) {
+                        dateFormatter.dateFormat = "yyyy-MM-dd"
+                    outputDate = dateFormatter.string(from: date)
+                    }
+                    
                     
                     if let i = Invoice_Detils.firstIndex(where: { (item) in
                         if item.id == id {
@@ -398,10 +228,10 @@ class Distributor_Order_Details: IViewController, UITableViewDelegate, UITableVi
                         return false
                     })
                     {
-                        Invoice_Detils[i].Invoice.append(Invoice(orderid: Order_No, invoice_Status: Status, total_amt: Order_Value))
+                        Invoice_Detils[i].Invoice.append(Invoice(orderid: Order_No, invoice_Status: Status,Stkid: id,Date: outputDate, total_amt: Order_Value))
                         
                     }else{
-                        Invoice_Detils.append(Dsitdetils(Name: StockistName, id: id, Invoice: [Invoice(orderid: Order_No, invoice_Status: Status, total_amt: Order_Value)]))
+                        Invoice_Detils.append(Dsitdetils(Name: StockistName, id: id, Invoice: [Invoice(orderid: Order_No, invoice_Status: Status,Stkid: id,Date: outputDate, total_amt: Order_Value)]))
                     }
                 }
                 print(Invoice_Detils)
@@ -451,22 +281,15 @@ class Distributor_Order_Details: IViewController, UITableViewDelegate, UITableVi
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if iNVOICE_tb == tableView {
             let item = Tb_Invoice[indexPath.row]
-            print(item)
-            print(Oredrdatadetisl)
-            print(Oredrdatadetisl2)
             Oredrdatadetisl2 =  Oredrdatadetisl.filter { order in
                 order.nameid == item.orderid
             }
-            print(Oredrdatadetisl2)
-            
-            print(Oredrdatadetisl)
-            
             let storyboard = UIStoryboard(name: "Reports 2", bundle: nil)
             let myDyPln = storyboard.instantiateViewController(withIdentifier: "Distributor_Order_Details_cell") as! Distributor_Order_Details_cell
-            myDyPln.CodeDate = Select_Dtae
-            myDyPln.Order_Detisl = Oredrdatadetisl2
+            myDyPln.CodeDate = item.Date
+            myDyPln.Orderid = item.orderid
+            myDyPln.Stkid = item.Stkid
             self.navigationController?.pushViewController(myDyPln, animated: true)
-            
         }else{
             Tb_Invoice = Invoice_Detils[indexPath.row].Invoice
             iNVOICE_tb.reloadData()
