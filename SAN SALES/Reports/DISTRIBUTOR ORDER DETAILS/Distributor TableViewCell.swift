@@ -61,6 +61,7 @@ class Distributor_TableViewCell: UITableViewCell, UITableViewDataSource, UITable
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(buttonTapped))
         View_Detils.isUserInteractionEnabled = true
         View_Detils.addGestureRecognizer(tapGesture)
+        View_height.constant = 0
     }
 
     // MARK: - Tap Action Handler
