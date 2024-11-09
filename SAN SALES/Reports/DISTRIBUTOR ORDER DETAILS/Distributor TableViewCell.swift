@@ -21,6 +21,9 @@ class Distributor_TableViewCell: UITableViewCell, UITableViewDataSource, UITable
     @IBOutlet weak var Route_name: UILabel!
     @IBOutlet weak var Stockets_Name: UILabel!
     @IBOutlet weak var Store_Name_with_order_No: UILabel!
+    
+    @IBOutlet weak var Supplylbl: UILabel!
+    
     @IBOutlet weak var Addres: UILabel!
     @IBOutlet weak var Volumes: UILabel!
     @IBOutlet weak var Phone: UILabel!
@@ -53,10 +56,8 @@ class Distributor_TableViewCell: UITableViewCell, UITableViewDataSource, UITable
     // MARK: - Initialization
     override func awakeFromNib() {
         super.awakeFromNib()
-        
         insideTable1.dataSource = self
         insideTable1.delegate = self
-
         // Use tap gesture recognizer for UIImageView
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(buttonTapped))
         View_Detils.isUserInteractionEnabled = true
@@ -113,7 +114,7 @@ class Distributor_TableViewCell: UITableViewCell, UITableViewDataSource, UITable
     // MARK: - Reload Data
     func reloadData() {
         guard let firstDetail = insideTable1Data.first else { return }
-        View_height.constant =  68
+        View_height.constant =  0
         final_net_amt_view .isHidden =  true
         Final_amt_height.constant =  0
         Net_amt_height.constant =  79
@@ -177,4 +178,5 @@ class Dis_Item_summary_TB:UITableViewCell{
     @IBOutlet weak var Product_Name: UILabel!
     @IBOutlet weak var Qty: UILabel!
     @IBOutlet weak var Free: UILabel!
+    @IBOutlet weak var Volumes: UILabel!
 }
