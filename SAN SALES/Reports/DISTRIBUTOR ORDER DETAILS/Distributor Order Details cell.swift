@@ -685,7 +685,13 @@ class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UI
                cell.delegate = self
                cell.View_height.constant = 0
                
-               cell.Store_Name_with_order_No.text = ""
+               print(OrderDetils_For_Distributor[indexPath.row])
+               
+              
+               cell.Store_Name_with_order_No.text = "\(OrderDetils_For_Distributor[indexPath.row].Dis_Name)(\(OrderDetils_For_Distributor[indexPath.row].Order_Id))"
+               
+               cell.Supplylbl.text = "Supply From: \(OrderDetils_For_Distributor[indexPath.row].Dis_Name)"
+               
                cell.Phone.text = "Phone:"+OrderDetils_For_Distributor[indexPath.row].Phone_No
                if  let NetValue = Float(OrderDetils_For_Distributor[indexPath.row].Amt){
                    
@@ -743,6 +749,7 @@ class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UI
                    cellS.Product_Name.text = Itemwise_Summary_Data[indexPath.row].productName
                    cellS.Qty.text = String(Itemwise_Summary_Data[indexPath.row].Qty)
                    cellS.Free.text = String(Itemwise_Summary_Data[indexPath.row].Free)
+                   cellS.Volumes.text = "0.00"
                    // Apply attributed text (font color in this case)
                    let font = UIFont.systemFont(ofSize: 14, weight: .bold)
                    let attributedText = NSAttributedString(
@@ -757,10 +764,12 @@ class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UI
                    cellS.Product_Name?.attributedText = attributedText
                    cellS.Qty?.attributedText = attributedqty
                    cellS.Free?.attributedText = attributedRate
+                   cellS.Volumes.text = "0.00"
                } else {
                    cellS.Product_Name.text = Itemwise_Summary_Data[indexPath.row].productName
                    cellS.Qty.text = String(Itemwise_Summary_Data[indexPath.row].Qty)
                    cellS.Free.text = String(Itemwise_Summary_Data[indexPath.row].Free)
+                   cellS.Volumes.text = "0.00"
                    // Apply attributed text (font color in this case)
                    let font = UIFont.systemFont(ofSize: 14, weight: .regular)
                    let attributedText = NSAttributedString(
