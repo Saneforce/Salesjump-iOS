@@ -64,6 +64,7 @@ class DAY_REPORT_WITH_DATE_RANGE_CELL: UITableViewCell, UICollectionViewDataSour
         legend.verticalAlignment = .top
         legend.orientation = .vertical
         legend.drawInside = true
+       
         legend.yOffset = 10.0;
         legend.xOffset = 10.0;
         legend.yEntrySpace = 0.0;
@@ -85,6 +86,8 @@ class DAY_REPORT_WITH_DATE_RANGE_CELL: UITableViewCell, UICollectionViewDataSour
         yaxis.drawGridLinesEnabled = true
 
         Chart_View.rightAxis.enabled = false
+       // Chart_View.xAxis.enabled = false
+        Chart_View.xAxis.drawLabelsEnabled = false
         
         Chart_View.noDataText = "You need to provide data for the chart."
         

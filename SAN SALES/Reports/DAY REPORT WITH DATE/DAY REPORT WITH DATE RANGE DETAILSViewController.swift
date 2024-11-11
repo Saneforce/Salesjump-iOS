@@ -61,6 +61,9 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
     @IBOutlet weak var Share_Pdf: UIImageView!
     @IBOutlet weak var Share_Orde_Detils: UIImageView!
     
+    
+    @IBOutlet weak var Cash_Discount_Height: NSLayoutConstraint!
+    
     struct Id:Any{
         var id:String
         var Stkid:String
@@ -168,6 +171,10 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
             GetTyp = Typ
             GetDate = date
             Hq_Name_lbl.text = name
+            
+            if GetTyp == "3"{
+                Cash_Discount_Height.constant = 0
+            }
         }
         date_sel.text = GetDate
         

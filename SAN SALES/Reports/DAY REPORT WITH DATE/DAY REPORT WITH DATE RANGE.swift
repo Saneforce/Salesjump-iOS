@@ -45,6 +45,9 @@ class DAY_REPORT_WITH_DATE_RANGE: IViewController, UITableViewDelegate, UITableV
     
     @IBOutlet weak var hq_view_height: NSLayoutConstraint!
     
+    
+    
+    
     var data2:[[String]] = []
     
     var SFCode: String=""
