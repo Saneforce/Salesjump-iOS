@@ -205,11 +205,15 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
         if let list = GlobalFunc.convertToDictionary(text: lstProdData) as? [AnyObject] {
             lstAllProducts = list
             
+            print(lstAllProducts)
+            print(UserSetup.shared.productCard)
             DispatchQueue.main.async {
                 if UserSetup.shared.productCard != "1"{
                     self.updateProduct(products: list)
                 }
             }
+            print(UserSetup.shared.productCard)
+            print(lstAllProducts)
             
         }
         if let list = GlobalFunc.convertToDictionary(text: lstCompetitorProductData) as? [AnyObject] {
@@ -399,12 +403,9 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
                         if let ProdCode = ProdTrans_Sl_No {
                             let filteredArray = json.filter { ($0["Trans_Sl_No"] as? String) == ProdCode }
                             self.Editobjcalls = filteredArray
-                            print(filteredArray)
-                           // net_weight_value = filteredArray[0]["net_weight_value"] as! Int
                             Cust_Code = filteredArray[0]["Cust_Code"] as! String
                             DCR_Code = filteredArray[0]["DCR_Code"] as! String
                             Trans_Sl_No = filteredArray[0]["Trans_Sl_No"] as! String
-                           
                             if let route = filteredArray[0]["Route"] as? String {
                                 Route = route
                             } else {

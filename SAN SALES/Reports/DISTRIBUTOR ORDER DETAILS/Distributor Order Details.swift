@@ -252,7 +252,7 @@ class Distributor_Order_Details: IViewController, UITableViewDelegate, UITableVi
         if iNVOICE_tb == tableView {
             return 90
         }
-       return 80
+       return 70
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
