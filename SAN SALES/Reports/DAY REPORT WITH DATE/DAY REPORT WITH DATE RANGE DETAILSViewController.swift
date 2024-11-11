@@ -246,7 +246,7 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
         Orderdata.removeAll()
         Itemwise_Summary_Data.removeAll()
         Total_Value_Amt.text = "0.0"
-        self.ShowLoading(Message: "Loading...")
+       // self.ShowLoading(Message: "Loading...")
        let apiKey: String = "\(getaxn)&desig=\(Desig)&divisionCode=\(DivCode)&ACd=\(GetCode)&rSF=\(SFCode)&typ=\(GetTyp)&sfCode=\(SFCode)&State_Code=\(StateCode)"
         
             let aFormData: [String: Any] = [
@@ -284,7 +284,7 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
                                 netAmount = String(j["orderValue"] as? Double ?? 0)
                             }
                             
-                            let Remarks = j["secOrdRemark"] as? String ?? ""
+                            let Remarks = j["remarks"] as? String ?? ""
                             let Stkid = j["stockist_code"] as? String ?? ""
                             let tlDisAmt = j["tlDisAmt"] as? String ?? ""
                             let Order_date = j["Order_date"] as? String ?? ""
@@ -373,7 +373,7 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
                                 
                                 Orderdata[i].Orderdata.append(OrderDetail(id: id, Route: Route, Routeflg: "0", Stockist: Stockist, name: "\(Order_Count). "+name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "\(itemList.count)", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: tlDisAmt, Order_date: Order_date, Order_Count: Order_Count,Total_Dic: Total_discValue,Total_Tax: Total_taxValue,Total_disc_lbl:"Total Discount (10%)", Final_Amt: Final_Amt, Orderlist: itemList))
                                 
-                                Oredrdatadetisl.append(OrderDetail(id: id, Route: Route, Routeflg: "0", Stockist: Stockist, name: "\(Order_Count). "+name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "\(itemList.count)", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: tlDisAmt, Order_date: Order_date, Order_Count: Order_Count,Total_Dic: Total_discValue,Total_Tax: Total_taxValue,Total_disc_lbl:"Total Discount (10%)", Final_Amt: Final_Amt,Orderlist: itemList))
+                                Oredrdatadetisl.append(OrderDetail(id: id, Route: Route, Routeflg: "0", Stockist: Stockist, name: "\(Order_Count). "+name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "\(itemList.count)", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: tlDisAmt, Order_date: Order_date, Order_Count: Order_Count,Total_Dic: Total_discValue,Total_Tax: Total_taxValue,Total_disc_lbl:"Total Discount ()", Final_Amt: Final_Amt,Orderlist: itemList))
                                 
                                 
                                 print(Total_Value)
@@ -460,7 +460,7 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
                                     rateValue: String(Item2["Rate"] as? Double ?? 0),
                                     qtyValue: String(Item2["Quantity"] as? Int ?? 0),
                                     freeValue: String(Item2["Free"] as? Int ?? 0),
-                                    discValue: String(Item2["discount"] as? Double ?? 0),
+                                    discValue: String(Item2["discount_price"] as? Double ?? 0),
                                     totalValue: String(Item2["sub_total"] as?  Double ?? 0),
                                     taxValue: String(Item2["taxval"] as? Double ?? 0),
                                     clValue: Item2["Cl_bal"] as? String ?? "",
@@ -736,7 +736,7 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
                cell.Phone.text = "Phone:"+Oredrdatadetisl[indexPath.row].Phone
                if  let NetValue = Float(Oredrdatadetisl[indexPath.row].Net_amount){
                    
-                   cell.Netamt.text = "₹\(NetValue)"
+                   cell.Netamt.text = "₹\(String(format: "%.2f",NetValue))"
                }else{
                    cell.Netamt.text = "₹\(Oredrdatadetisl[indexPath.row].Net_amount)"
                }

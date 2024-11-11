@@ -8,12 +8,13 @@
 import UIKit
 import Alamofire
 import FSCalendar
+import Foundation
 
 
 
 
 
-class DAY_REPORT_WITH_DATE_RANGE: IViewController, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource, FSCalendarDelegate,DayReportCellDelegate {
+class DAY_REPORT_WITH_DATE_RANGE: IViewController, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource, FSCalendarDelegate,FSCalendarDataSource,DayReportCellDelegate {
   
     
 
@@ -40,6 +41,9 @@ class DAY_REPORT_WITH_DATE_RANGE: IViewController, UITableViewDelegate, UITableV
     
     
     @IBOutlet weak var Hq_Selection: UILabel!
+    
+    
+    @IBOutlet weak var hq_view_height: NSLayoutConstraint!
     
     var data2:[[String]] = []
     
@@ -82,7 +86,7 @@ class DAY_REPORT_WITH_DATE_RANGE: IViewController, UITableViewDelegate, UITableV
             view?.layer.cornerRadius = 10
         }
         data2 = [
-            ["TC:", "PC:", "O. Value", "Pri Ord"],
+            ["TC:", "PC:", "O. Value   ", "Pri Ord"],
             ["","","",""]
         ]
         Table_View.delegate = self
@@ -90,8 +94,10 @@ class DAY_REPORT_WITH_DATE_RANGE: IViewController, UITableViewDelegate, UITableV
         
         Total_Collection.delegate = self
         Total_Collection.dataSource = self
+
         
-        Calendar.delegate = self
+        Calendar.delegate=self
+        Calendar.dataSource=self
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(GotoHome))
         BtBack.isUserInteractionEnabled = true
@@ -116,6 +122,11 @@ class DAY_REPORT_WITH_DATE_RANGE: IViewController, UITableViewDelegate, UITableV
         Hq_Selection.text = RangeData.shared.Hq_Name
         Start_Date.text = RangeData.shared.from_Date
         End_Date.text =  RangeData.shared.To_Date
+        
+        if   UserSetup.shared.SF_type == 1{
+            hq_view_height.constant = 0
+        }
+        
         DayRangeReport()
     }
     
@@ -144,19 +155,58 @@ class DAY_REPORT_WITH_DATE_RANGE: IViewController, UITableViewDelegate, UITableV
             Start_Date.text = dates
             FDate = dates
             RangeData.shared.from_Date = dates
+            RangeData.shared.from_Date = dates
+            
         }else{
             End_Date.text = dates
             TDate = dates
             RangeData.shared.To_Date = dates
         }
         
+        
+        let From = selectdate.date(from:  RangeData.shared.from_Date)
+        let To = selectdate.date(from: TDate)
+
+        if let fromDate = From, let toDate = To, fromDate > toDate {
+            RangeData.shared.from_Date = "-"
+            Start_Date.text = "-"
+        }
+        
+        Calendar.reloadData()
         print(dates)
         DayRangeReport()
         Date_Selection_View.isHidden = true
     }
     
-    func DayRangeReport() {
+    
+    
+
+
+    func maximumDate(for calendar: FSCalendar) -> Date {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        if Sel_Mod == "F" {
+            if let date = dateFormatter.date(from: TDate) {
+                return date
+            }
+        }
+        return Date()
+    }
+
+    func minimumDate(for calendar: FSCalendar) -> Date {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
         
+        if Sel_Mod == "T"{
+            if let date = dateFormatter.date(from: FDate) {
+                return date
+            }
+        }
+        return dateFormatter.date(from: "1999-02-28")!
+    }
+    
+    
+    func DayRangeReport(){
         self.ShowLoading(Message: "Loading...")
         Report_Detils.removeAll()
         let axn = "get/DayRangeReport"
@@ -344,7 +394,6 @@ class DAY_REPORT_WITH_DATE_RANGE: IViewController, UITableViewDelegate, UITableV
         }
     }
     
-    
     // MARK: - Collection View DataSource & Delegate Methods
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -402,18 +451,22 @@ class DAY_REPORT_WITH_DATE_RANGE: IViewController, UITableViewDelegate, UITableV
     }
     
     @objc func FromDate() {
-        
         Sel_Mod = "F"
-        
         Date_lbl.text = "Select From Date"
+        if !TDate.isEmpty{
+            Calendar.reloadData()
+        }
         
         Date_Selection_View.isHidden = false
-        
     }
     
     @objc func ToDate() {
         Sel_Mod = "T"
         Date_lbl.text = "Select To Date"
+        
+        if !FDate.isEmpty{
+            Calendar.reloadData()
+        }
         Date_Selection_View.isHidden = false
     }
     
