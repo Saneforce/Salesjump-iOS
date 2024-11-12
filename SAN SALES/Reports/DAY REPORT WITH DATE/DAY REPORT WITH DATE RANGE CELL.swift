@@ -212,8 +212,8 @@ class DAY_REPORT_WITH_DATE_RANGE_CELL: UITableViewCell, UICollectionViewDataSour
         if let datas = RangData{
             
             data = [
-                ["TC:", "PC:", "O. Value", "Pri Ord", "Pri. Value"],
-                ["\(datas.Tc)","\(datas.pc)","\(datas.Order_Value)","\(datas.Pri_Ord)","0"]
+                ["TC:", "PC:", "O. Value", "Pri Ord"],
+                ["\(datas.Tc)","\(datas.pc)","\(datas.Order_Value)","\(datas.Pri_Ord)"]
             ]
             
             Tc = datas.Tc
