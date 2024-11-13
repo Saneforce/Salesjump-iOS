@@ -565,6 +565,98 @@ class MissedDateRouteSelection : IViewController , UITableViewDelegate,UITableVi
     
     
     
+<<<<<<< HEAD
+||||||| parent of 4d7de3b (v)
+    func savePrimaryOrder() {
+        let retailerLists = self.allRetailerList.filter{$0.isSelected}
+        
+        for retailerList in retailerLists {
+            
+            var productString = ""
+            
+            var stkcode = ""
+            var stkName = ""
+            
+            for i in 0..<retailerList.orderList.count {
+                
+                print(i)
+                let item : [String:Any] = retailerList.orderList[i].item as! [String:Any]
+                
+                let id=String(format: "%@", item["id"] as! CVarArg)
+                let uom=String(format: "%@", item["UOM"] as! String)
+                let uomName=String(format: "%@", item["UOMNm"] as! String)
+                let uomConv=String(format: "%@", item["UOMConv"] as! String)
+                let netWt=String(format: "%@", item["NetWt"] as! CVarArg)
+                let netVal=(String(format: "%.2f", item["NetVal"] as! Double))
+                let Qty=String(format: "%@", item["Qty"] as? String ?? "")
+                let saleQty=String(format: "%.0f", item["SalQty"] as! Double)
+                let offQty=(String(format: "%.2f", item["OffQty"] as! Int))
+                let fq=String(format: "%@", item["FQ"] as? Int ?? "")
+                let offProd=String(format: "%@", item["OffProd"] as? String ?? "")
+                let rate=(String(format: "%.2f", item["Rate"] as! Double))
+                let offProdNm=String(format: "%@", item["OffProdNm"] as? String ?? "")
+                let scheme=(String(format: "%.0f", item["Scheme"] as! Double))
+                let disc=String(format: "%@", item["Disc"] as? String ?? "")
+                let disVal=String(format: "%@", item["DisVal"] as? String ?? "")
+                
+                stkcode = retailerList.orderList[i].distributorId ?? ""
+                stkName = retailerList.orderList[i].distributorName ?? ""
+                
+              //  let productStr = "{\"product_code\":\"\(id)\",\"product_Name\":\"\(retailerList.orderList[i].productName ?? "")\",\"Product_Rx_Qty\":\(saleQty),\"UnitId\":\"\(uom)\",\"UnitName\":\"\(uomName)\",\"rx_Conqty\":\(Qty),\"Product_Rx_NQty\":\"0\",\"Product_Sample_Qty\":\"\(netVal)\",\"vanSalesOrder\":0,\"net_weight\":\"0.0\",\"free\":\"\(offQty)\",\"FreePQty\":\"\(fq)\",\"FreeP_Code\":\"\(offProd)\",\"Fname\":\"\(offProdNm)\",\"discount\":\"\(disc)\",\"discount_price\":\"\(disVal)\",\"tax\":\"0.0\",\"tax_price\":\"0.0\",\"Rate\":\"\(rate)\",\"Mfg_Date\":\"\",\"cb_qty\":\"0\",\"RcpaId\":\"\",\"Ccb_qty\":0,\"PromoVal\":0,\"rx_remarks\":\"\",\"rx_remarks_Id\":\"\",\"OrdConv\":\"\(uomConv)\",\"selectedScheme\":\"\(scheme)\",\"selectedOffProCode\":\"\(uom)\",\"selectedOffProName\":\"\(uomName)\",\"selectedOffProUnit\":\"1\",\"f_key\":{\"Activity_MSL_Code\":\"Activity_Doctor_Report\"}},"
+                
+                
+                let productStr = "{\"product_code\":\"\(id)\",\"product_Name\":\"\(retailerList.orderList[i].productName ?? "")\",\"rx_Conqty\":\"\(Qty)\",\"Qty\":\"\(saleQty)\",\"PQty\":0,\"cb_qty\":0,\"free\":\"\(offQty)\",\"Pfree\":0,\"Rate\":\"\(rate)\",\"PieseRate\":\"\(rate)\",\"discount\":\"\(disc)\",\"FreeP_Code\":\"\(offProd)\",\"Fname\":\"\(offProdNm)\",\"discount_price\":\"\(disVal)\",\"tax\":\"0.0\",\"tax_price\":\"0.0\",\"OrdConv\":\"\(uomConv)\",\"product_unit_name\":\"\(uomName)\",\"selectedScheme\":\"\(scheme)\",\"selectedOffProCode\":\"\(uom)\",\"selectedOffProName\":\"\(uomName)\",\"selectedOffProUnit\":\"\(uomConv)\",\"f_key\":{\"activity_stockist_code\":\"Activity_Stockist_Report\"}},"
+                
+                
+                
+                
+                productString = productString + productStr
+=======
+    func savePrimaryOrder() {
+        let retailerLists = self.allRetailerList.filter{$0.isSelected}
+        
+        for retailerList in retailerLists {
+            
+            var productString = ""
+            
+            var stkcode = ""
+            var stkName = ""
+            
+            for i in 0..<retailerList.orderList.count {
+                
+                print(i)
+                let item : [String:Any] = retailerList.orderList[i].item as! [String:Any]
+                
+                let id=String(format: "%@", item["id"] as! CVarArg)
+                let uom=String(format: "%@", item["UOM"] as! String)
+                let uomName=String(format: "%@", item["UOMNm"] as! String)
+                let uomConv=String(format: "%@", item["UOMConv"] as! String)
+                let netWt=String(format: "%@", item["NetWt"] as! CVarArg)
+                let netVal=(String(format: "%.2f", item["NetVal"] as! Double))
+                let Qty=String(format: "%@", item["Qty"] as? String ?? "")
+                let saleQty=String(format: "%.0f", item["SalQty"] as! Double)
+                let offQty=(String(format: "%.2f", item["OffQty"] as! Int))
+                let fq=String(format: "%@", item["FQ"] as? Int ?? 0)
+                let offProd=String(format: "%@", item["OffProd"] as? String ?? "")
+                let rate=(String(format: "%.2f", item["Rate"] as! Double))
+                let offProdNm=String(format: "%@", item["OffProdNm"] as? String ?? "")
+                let scheme=(String(format: "%.0f", item["Scheme"] as! Double))
+                let disc=String(format: "%@", item["Disc"] as? String ?? "")
+                let disVal=String(format: "%@", item["DisVal"] as? String ?? "")
+                
+                stkcode = retailerList.orderList[i].distributorId ?? ""
+                stkName = retailerList.orderList[i].distributorName ?? ""
+                
+              //  let productStr = "{\"product_code\":\"\(id)\",\"product_Name\":\"\(retailerList.orderList[i].productName ?? "")\",\"Product_Rx_Qty\":\(saleQty),\"UnitId\":\"\(uom)\",\"UnitName\":\"\(uomName)\",\"rx_Conqty\":\(Qty),\"Product_Rx_NQty\":\"0\",\"Product_Sample_Qty\":\"\(netVal)\",\"vanSalesOrder\":0,\"net_weight\":\"0.0\",\"free\":\"\(offQty)\",\"FreePQty\":\"\(fq)\",\"FreeP_Code\":\"\(offProd)\",\"Fname\":\"\(offProdNm)\",\"discount\":\"\(disc)\",\"discount_price\":\"\(disVal)\",\"tax\":\"0.0\",\"tax_price\":\"0.0\",\"Rate\":\"\(rate)\",\"Mfg_Date\":\"\",\"cb_qty\":\"0\",\"RcpaId\":\"\",\"Ccb_qty\":0,\"PromoVal\":0,\"rx_remarks\":\"\",\"rx_remarks_Id\":\"\",\"OrdConv\":\"\(uomConv)\",\"selectedScheme\":\"\(scheme)\",\"selectedOffProCode\":\"\(uom)\",\"selectedOffProName\":\"\(uomName)\",\"selectedOffProUnit\":\"1\",\"f_key\":{\"Activity_MSL_Code\":\"Activity_Doctor_Report\"}},"
+                
+                
+                let productStr = "{\"product_code\":\"\(id)\",\"product_Name\":\"\(retailerList.orderList[i].productName ?? "")\",\"rx_Conqty\":\"\(Qty)\",\"Qty\":\"\(saleQty)\",\"PQty\":0,\"cb_qty\":0,\"free\":\"\(offQty)\",\"Pfree\":0,\"Rate\":\"\(rate)\",\"PieseRate\":\"\(rate)\",\"discount\":\"\(disc)\",\"FreeP_Code\":\"\(offProd)\",\"Fname\":\"\(offProdNm)\",\"discount_price\":\"\(disVal)\",\"tax\":\"0.0\",\"tax_price\":\"0.0\",\"OrdConv\":\"\(uomConv)\",\"product_unit_name\":\"\(uomName)\",\"selectedScheme\":\"\(scheme)\",\"selectedOffProCode\":\"\(uom)\",\"selectedOffProName\":\"\(uomName)\",\"selectedOffProUnit\":\"\(uomConv)\",\"f_key\":{\"activity_stockist_code\":\"Activity_Stockist_Report\"}},"
+                
+                
+                
+                
+                productString = productString + productStr
+>>>>>>> 4d7de3b (v)
             }
     
     
@@ -878,6 +970,8 @@ class MissedDateRouteSelection : IViewController , UITableViewDelegate,UITableVi
             secondaryOrderNew.isFromMissedEntry = true
             secondaryOrderNew.selectedProductsforMissed = self.retailerList[indexPath.row].secOrderList
             secondaryOrderNew.selectedSf = self.retailerList[indexPath.row].mapId
+            VisitData.shared.CustID = retailerList[indexPath.row].id
+            print(retailerList[indexPath.row])
             secondaryOrderNew.missedDateEditData = { products in
                 
                 self.retailerList[indexPath.row].secOrderList = products
