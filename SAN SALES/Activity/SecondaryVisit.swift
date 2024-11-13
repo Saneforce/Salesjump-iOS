@@ -206,6 +206,7 @@ class SecondaryVisit: IViewController, UITableViewDelegate, UITableViewDataSourc
         let item: [String: Any]=lObjSel[indexPath.row] as! [String : Any]
         let name=item["name"] as! String
         let id=String(format: "%@", item["id"] as! CVarArg)
+        print(item)
         if isMulti==true {
             if SelMode == "JWK" {
                 let sid=(item["id"] as! String)

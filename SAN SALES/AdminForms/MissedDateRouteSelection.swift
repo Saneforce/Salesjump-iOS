@@ -597,7 +597,7 @@ class MissedDateRouteSelection : IViewController , UITableViewDelegate,UITableVi
                 let Qty=String(format: "%@", item["Qty"] as? String ?? "")
                 let saleQty=String(format: "%.0f", item["SalQty"] as! Double)
                 let offQty=(String(format: "%.2f", item["OffQty"] as! Int))
-                let fq=String(format: "%@", item["FQ"] as? Int ?? "")
+                let fq=String(format: "%@", item["FQ"] as? Int ?? 0)
                 let offProd=String(format: "%@", item["OffProd"] as? String ?? "")
                 let rate=(String(format: "%.2f", item["Rate"] as! Double))
                 let offProdNm=String(format: "%@", item["OffProdNm"] as? String ?? "")
@@ -798,6 +798,8 @@ class MissedDateRouteSelection : IViewController , UITableViewDelegate,UITableVi
             secondaryOrderNew.isFromMissedEntry = true
             secondaryOrderNew.selectedProductsforMissed = self.retailerList[indexPath.row].secOrderList
             secondaryOrderNew.selectedSf = self.retailerList[indexPath.row].mapId
+            VisitData.shared.CustID = retailerList[indexPath.row].id
+            print(retailerList[indexPath.row])
             secondaryOrderNew.missedDateEditData = { products in
                 
                 self.retailerList[indexPath.row].secOrderList = products
