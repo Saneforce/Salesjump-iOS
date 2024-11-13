@@ -199,7 +199,12 @@ class SuperStockistOrderList : IViewController , UITableViewDelegate, UITableVie
             var rate : Double = 0
             
             if(RateItems.count>0){
-                rate = (RateItems.first!["SS_Base_Rate"] as! NSString).doubleValue
+                if let rateValue = RateItems.first!["SS_Base_Rate"] as? String {
+                    rate = Double(rateValue) ?? 0
+                }else if let rateValue = RateItems.first!["SS_Base_Rate"] as? Int {
+                    rate = Double(rateValue)
+                }
+               // rate = (RateItems.first!["SS_Base_Rate"] as! NSString).doubleValue
             }
             
             var tax : Double = 0
@@ -262,14 +267,14 @@ class SuperStockistOrderList : IViewController , UITableViewDelegate, UITableVie
                             
                             
                             
-                            multiScheme.append(Scheme(disCountPer: disCountPert, disCountValue: 0, scheme: scheme, offerAvailableCount: offerAvailableCount, offerUnitName: offerUnitName, offerProductCode: offerProductCode, offerProductName: offerProductName, package: package,schemeType: "",discountType: ""))
+                            multiScheme.append(Scheme(disCountPer: disCountPert, disCountValue: 0, scheme: scheme, offerAvailableCount: offerAvailableCount, offerUnitName: offerUnitName, offerProductCode: offerProductCode, offerProductName: offerProductName, package: package, stockistCode: "",schemeType: "",discountType: ""))
                         }
                     }
                     
                 }
             }
             
-            self.allProducts.append(ProductList(product: product, productName: productName, productId: productId,cateId: cateId, rate: rate,rateEdited: "0",retailerPrice: 0,saleErpCode: "",newWt: "", sampleQty: "",clQty: "",remarks: "",remarksId: "",selectedRemarks: [], disCountPer: disCountPer, disCountValue: 0.0, disCountAmount: 0.0, freeCount: 0, unitId: unitId, unitName: unitName, unitCount: unitCount, taxper: tax, taxAmount: 0.0, totalCount: 0.0, isSchemeActive: isSchemeActive,scheme: scheme,offerAvailableCount: offerAvailableCount,offerUnitName: offerUnitName,offerProductCode: offerProductCode,offerProductName: offerProductName,package: package,schemeType: "",discountType: "", isMultiSchemeActive: isMultiSchemeActive, multiScheme: multiScheme, competitorProduct: []))
+            self.allProducts.append(ProductList(product: product, productName: productName, productId: productId,cateId: cateId, rate: rate,rateEdited: "0",retailerPrice: 0,saleErpCode: "",newWt: "", sampleQty: "",clQty: "",remarks: "",remarksId: "",selectedRemarks: [], disCountPer: disCountPer, disCountValue: 0.0, disCountAmount: 0.0, freeCount: 0, unitId: unitId, unitName: unitName, unitCount: unitCount, taxper: tax, taxAmount: 0.0, totalCount: 0.0, isSchemeActive: isSchemeActive,scheme: scheme,offerAvailableCount: offerAvailableCount,offerUnitName: offerUnitName,offerProductCode: offerProductCode,offerProductName: offerProductName,package: package,schemeType: "",discountType: "", isMultiSchemeActive: isMultiSchemeActive, stockistCode: "", multiScheme: multiScheme, competitorProduct: []))
         }
     }
     
@@ -681,7 +686,7 @@ class SuperStockistOrderList : IViewController , UITableViewDelegate, UITableVie
         self.selectedProducts.removeAll{$0.productId == cell.product.productId}
         self.allProducts.removeAll{$0.productId == cell.product.productId}
         
-        self.allProducts.append(ProductList(product: cell.product.product, productName: cell.product.productName, productId: cell.product.productId,cateId: cell.product.cateId, rate: cell.product.rate, rateEdited: "0",retailerPrice: cell.product.retailerPrice,saleErpCode: cell.product.saleErpCode,newWt: cell.product.newWt, sampleQty: "",clQty: "",remarks: "",remarksId: "",selectedRemarks: [], disCountPer: cell.product.disCountPer, disCountValue: cell.product.disCountValue, disCountAmount: 0.0, freeCount: 0, unitId: cell.product.unitId, unitName: cell.product.unitName, unitCount: cell.product.unitCount, taxper: cell.product.taxper, taxAmount: 0.0, totalCount: 0.0, isSchemeActive: cell.product.isSchemeActive,scheme: cell.product.scheme,offerAvailableCount: cell.product.offerAvailableCount,offerUnitName: cell.product.offerUnitName,offerProductCode: cell.product.offerProductCode,offerProductName: cell.product.offerProductName,package: cell.product.package,schemeType: cell.product.schemeType,discountType: cell.product.discountType,isMultiSchemeActive: cell.product.isMultiSchemeActive,multiScheme: cell.product.multiScheme, competitorProduct: []))
+        self.allProducts.append(ProductList(product: cell.product.product, productName: cell.product.productName, productId: cell.product.productId,cateId: cell.product.cateId, rate: cell.product.rate, rateEdited: "0",retailerPrice: cell.product.retailerPrice,saleErpCode: cell.product.saleErpCode,newWt: cell.product.newWt, sampleQty: "",clQty: "",remarks: "",remarksId: "",selectedRemarks: [], disCountPer: cell.product.disCountPer, disCountValue: cell.product.disCountValue, disCountAmount: 0.0, freeCount: 0, unitId: cell.product.unitId, unitName: cell.product.unitName, unitCount: cell.product.unitCount, taxper: cell.product.taxper, taxAmount: 0.0, totalCount: 0.0, isSchemeActive: cell.product.isSchemeActive,scheme: cell.product.scheme,offerAvailableCount: cell.product.offerAvailableCount,offerUnitName: cell.product.offerUnitName,offerProductCode: cell.product.offerProductCode,offerProductName: cell.product.offerProductName,package: cell.product.package,schemeType: cell.product.schemeType,discountType: cell.product.discountType,isMultiSchemeActive: cell.product.isMultiSchemeActive, stockistCode: "",multiScheme: cell.product.multiScheme, competitorProduct: []))
         
         
         self.selectedListTableView.reloadData()
@@ -985,7 +990,7 @@ class SuperStockistOrderList : IViewController , UITableViewDelegate, UITableVie
             
             AlertData.shared.title = cell.product.productName
             
-            let scheme = Scheme(disCountPer: cell.product.disCountPer, disCountValue: cell.product.disCountValue, scheme: cell.product.scheme, offerAvailableCount: cell.product.offerAvailableCount, offerUnitName: cell.product.offerUnitName, offerProductCode: cell.product.offerProductCode, offerProductName: cell.product.offerProductName, package: cell.product.package,schemeType: "",discountType: "")
+            let scheme = Scheme(disCountPer: cell.product.disCountPer, disCountValue: cell.product.disCountValue, scheme: cell.product.scheme, offerAvailableCount: cell.product.offerAvailableCount, offerUnitName: cell.product.offerUnitName, offerProductCode: cell.product.offerProductCode, offerProductName: cell.product.offerProductName, package: cell.product.package, stockistCode: "",schemeType: "",discountType: "")
             
             var schemes = [Scheme]()
             schemes.append(scheme)
@@ -1421,8 +1426,8 @@ class SuperStockistOrderListTableViewCell : UITableViewCell {
             lblRate.text = "\(product.rate) X ( \(product.unitCount) X \(product.sampleQty == "" ? "0" : product.sampleQty) ) = \(product.totalCount) "
             
             print(product.isSchemeActive)
-            imgScheme.isHidden = product.isSchemeActive == true ? false : true
-            imgSchemeWidthConstraint.constant = product.isSchemeActive ==  true ? 25 : 0
+        //    imgScheme.isHidden = product.isSchemeActive == true ? false : true
+          //  imgSchemeWidthConstraint.constant = product.isSchemeActive ==  true ? 25 : 0
             
             if product.freeCount != 0 {
                 lblFreeProductName.text = product.offerProductName != product.productName ? product.offerProductName : ""
@@ -1523,11 +1528,12 @@ struct ProductList {
     var package : String
     var schemeType : String
     var discountType : String
+    var stockistCode : String
     
     var multiScheme = [Scheme]()
     var competitorProduct = [CompetitorProductList]()
     
-    init(product: AnyObject, productName: String, productId: String,cateId : String, rate: Double, rateEdited : String,retailerPrice: Double,saleErpCode : String,newWt: String, sampleQty: String,clQty : String,remarks : String,remarksId : String,selectedRemarks: [AnyObject], disCountPer: Double,disCountValue: Double, disCountAmount: Double, freeCount: Int,unitId: String, unitName: String, unitCount: Int, taxper: Double, taxAmount: Double, totalCount: Double , isSchemeActive : Bool,scheme : Int,offerAvailableCount:Int,offerUnitName: String,offerProductCode:String,offerProductName:String,package: String,schemeType :String,discountType : String,isMultiSchemeActive:Bool,multiScheme : [Scheme],competitorProduct : [CompetitorProductList]) {
+    init(product: AnyObject, productName: String, productId: String,cateId : String, rate: Double, rateEdited : String,retailerPrice: Double,saleErpCode : String,newWt: String, sampleQty: String,clQty : String,remarks : String,remarksId : String,selectedRemarks: [AnyObject], disCountPer: Double,disCountValue: Double, disCountAmount: Double, freeCount: Int,unitId: String, unitName: String, unitCount: Int, taxper: Double, taxAmount: Double, totalCount: Double , isSchemeActive : Bool,scheme : Int,offerAvailableCount:Int,offerUnitName: String,offerProductCode:String,offerProductName:String,package: String,schemeType :String,discountType : String,isMultiSchemeActive:Bool,stockistCode : String,multiScheme : [Scheme],competitorProduct : [CompetitorProductList]) {
         self.product = product
         self.productName = productName
         self.productId = productId
@@ -1562,6 +1568,7 @@ struct ProductList {
         self.schemeType = schemeType
         self.discountType = discountType
         self.isMultiSchemeActive = isMultiSchemeActive
+        self.stockistCode = stockistCode
         self.multiScheme = multiScheme
         self.competitorProduct = competitorProduct
     }
@@ -1581,12 +1588,12 @@ struct Scheme  {
     var offerProductCode : String
     var offerProductName : String
     var package : String
-    
+    var stockistCode : String
     var schemeType : String
     var discountType : String
     
     
-    init(disCountPer : Double,disCountValue : Double,scheme: Int, offerAvailableCount: Int, offerUnitName: String, offerProductCode: String, offerProductName: String, package: String,schemeType : String,discountType : String) {
+    init(disCountPer : Double,disCountValue : Double,scheme: Int, offerAvailableCount: Int, offerUnitName: String, offerProductCode: String, offerProductName: String, package: String,stockistCode : String,schemeType : String,discountType : String) {
         self.disCountPer = disCountPer
         self.disCountValue = disCountValue
         self.scheme = scheme
@@ -1595,6 +1602,7 @@ struct Scheme  {
         self.offerProductCode = offerProductCode
         self.offerProductName = offerProductName
         self.package = package
+        self.stockistCode = stockistCode
         self.schemeType = schemeType
         self.discountType = discountType
     }

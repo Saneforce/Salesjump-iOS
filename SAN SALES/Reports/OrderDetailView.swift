@@ -331,6 +331,7 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
             } else {
                 self.lblFrmMob.text = ""
             }
+            print(todayData["Items"] as! [AnyObject])
             self.objOrderDetail = todayData["Items"] as! [AnyObject]
             var totAmt: Double = 0
 //            for i in 0...objOrderDetail.count-1 {
@@ -347,9 +348,11 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
             OrdHeight.constant = CGFloat(55 * self.objOrderDetail.count)
 
 
+            print(objOrderDetail)
             objOfferDetail = objOrderDetail.filter({(fitem) in
                 return Bool(fitem["offQty"] as! Int > 0)
             })
+            print(objOfferDetail)
             tbZeroOrd.reloadData()
             OfferHeight.constant = CGFloat(24 * self.objOrderDetail.count)
 //            ContentHeight.constant = CGFloat(800+(60 * self.objOrderDetail.count
