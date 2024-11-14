@@ -675,9 +675,17 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
         if HQ_and_Route_TB == tableView{
             let Row_Height = Oredrdatadetisl[indexPath.row].Orderlist.count * 50
             
-            let height:CGFloat = (Oredrdatadetisl[indexPath.row].tlDisAmt == "0") ? 20 : 70
+            let height:CGFloat = (Oredrdatadetisl[indexPath.row].tlDisAmt == "0") ? 0 : 70
             
-            let Height = CGFloat(Row_Height + 340)
+            
+            var row_height = 0
+            if Oredrdatadetisl[indexPath.row].Orderlist.isEmpty{
+                row_height = 290
+            }else{
+                row_height = 340
+            }
+            
+            let Height = CGFloat(Row_Height + row_height)
             return Height + height
         }
         return 0
@@ -689,8 +697,16 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
             print(Table_height.constant)
             print(Scroll_height .constant)
             let Row_Height = i.Orderlist.count * 55
-            let Height = CGFloat(Row_Height + 340)
-            let height:CGFloat = (i.tlDisAmt == "0") ? 20 : 70
+            var Row_hight_tb = 0
+            
+            if  i.Orderlist.isEmpty {
+                Row_hight_tb = 290
+            }else{
+                Row_hight_tb = 340
+            }
+            
+            let Height = CGFloat(Row_Height + Row_hight_tb)
+            let height:CGFloat = (i.tlDisAmt == "0") ? 0 : 70
             Table_height.constant = Table_height.constant + CGFloat(Height)
             Table_height.constant = Table_height.constant + height
             Scroll_height .constant = Table_height.constant
