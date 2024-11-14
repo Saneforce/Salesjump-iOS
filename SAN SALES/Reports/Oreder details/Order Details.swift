@@ -300,15 +300,14 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
                                     let Volumes = (liters * 100).rounded() / 100
                                     let Phone = j["phoneNo"] as? String ??  ""
                                     let netAmount = j["finalNetAmnt"] as? String ?? ""
-                                    var Remarks = j["remarks"] as? String ?? ""
-                                    
-                                    if Remarks  == "" {
-                                        Remarks =  j["secOrdRemark"] as? String ?? ""
+                                    var Remarks = ""
+
+                                    if let Product_Detail = j["products"] as? String, !Product_Detail.isEmpty {
+                                        Remarks = j["secOrdRemark"] as? String ?? ""
+                                    } else {
+                                        Remarks = j["remarks"] as? String ?? ""
                                     }
-                                    
-                                    if Remarks == "Enter the Remarks"{
-                                        Remarks = ""
-                                    }
+
                                     
                                     let Stkid = j["stockist_code"] as? String ?? ""
                                     let tlDisAmt = j["tlDisAmt"] as? String ?? ""

@@ -291,7 +291,16 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
                                 netAmount = String(j["orderValue"] as? Double ?? 0)
                             }
                             
-                            let Remarks = j["remarks"] as? String ?? ""
+                            var Remarks = ""
+
+                            if let secRemark = j["secOrdRemark"] as? String, !secRemark.isEmpty {
+                                Remarks = secRemark
+                            } else {
+                                Remarks = j["remarks"] as? String ?? ""
+                            }
+
+                            
+                            
                             let Stkid = j["stockist_code"] as? String ?? ""
                             let tlDisAmt = j["tlDisAmt"] as? String ?? ""
                             let Order_date = j["Order_date"] as? String ?? ""
@@ -675,8 +684,7 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
         if HQ_and_Route_TB == tableView{
             let Row_Height = Oredrdatadetisl[indexPath.row].Orderlist.count * 50
             
-            let height:CGFloat = (Oredrdatadetisl[indexPath.row].tlDisAmt == "0") ? 0 : 70
-            
+            let height:CGFloat = (Oredrdatadetisl[indexPath.row].tlDisAmt == "0") ? 10 : 70
             
             var row_height = 0
             if Oredrdatadetisl[indexPath.row].Orderlist.isEmpty{
@@ -706,7 +714,7 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
             }
             
             let Height = CGFloat(Row_Height + Row_hight_tb)
-            let height:CGFloat = (i.tlDisAmt == "0") ? 0 : 70
+            let height:CGFloat = (i.tlDisAmt == "0") ? 10 : 70
             Table_height.constant = Table_height.constant + CGFloat(Height)
             Table_height.constant = Table_height.constant + height
             Scroll_height .constant = Table_height.constant
