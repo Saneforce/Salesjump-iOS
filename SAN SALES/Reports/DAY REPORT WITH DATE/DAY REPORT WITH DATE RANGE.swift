@@ -378,8 +378,8 @@ class DAY_REPORT_WITH_DATE_RANGE: IViewController, UITableViewDelegate, UITableV
 
                 
                 data2 = [
-                    ["TC:", "PC:", "O. Value", "Pri Ord"],
-                    ["\(Tccall)","\(Pccall)","\(ovalue)","\(Privalue)"]
+                    ["TC:", "PC:", "O. Value       ", "Pri Ord"],
+                    ["\(Tccall)","\(Pccall)","\(ovalue)   ","\(Privalue)"]
                 ]
                 
                 
