@@ -69,6 +69,7 @@ class UserSetup{
     var productCard : String = ""
     var CL_SS_ND:Int = 0
     var Liters_Need:Int = 0
+    var StkNeed:Int = 0
     func initUserSetup(){
         let SetupStoreage = UserDefaults.standard
         let SetupData: String=SetupStoreage.string(forKey: "UserSetup")!
@@ -128,6 +129,7 @@ class UserSetup{
         Logo_Name = lstSetups[0]["Logo_Name"] as? String ?? "iOSFile"
         CL_SS_ND = lstSetups[0]["CL_SS_ND"] as? Int ?? 0
         Liters_Need = lstSetups[0]["Liters_Need"] as? Int ?? 0
+        StkNeed = lstSetups[0]["StkNeed"] as? Int ?? 0
         if(lstSetups[0]["Geo_Fencing"] as? Int == 1){
             Fenching = true
         }else{
