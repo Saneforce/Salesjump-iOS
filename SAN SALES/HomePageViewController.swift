@@ -135,7 +135,11 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
             }*/
         
         strMenuList.append(mnuItem.init(MnuId: 1, MenuName: UserSetup.shared.SecondaryCaption, MenuImage: "mnuPrimary"))
-        strMenuList.append(mnuItem.init(MnuId: 2, MenuName: UserSetup.shared.PrimaryCaption, MenuImage: "mnuPrimary"))
+        
+        if (UserSetup.shared.StkNeed == 1) {
+            strMenuList.append(mnuItem.init(MnuId: 2, MenuName: UserSetup.shared.PrimaryCaption, MenuImage: "mnuPrimary"))
+        }
+        
         print(UserSetup.shared.BrndRvwNd)
         if (UserSetup.shared.BrndRvwNd > 0) {
             strMenuList.append(mnuItem.init(MnuId: 3, MenuName: UserSetup.shared.BrandReviewVisit, MenuImage: "mnuPrimary"))

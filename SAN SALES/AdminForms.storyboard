@@ -925,7 +925,7 @@
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Cc3-eJ-Zpu">
                                         <rect key="frame" x="284" y="6" width="102" height="44"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="13"/>
                                         <color key="tintColor" red="0.062745098040000002" green="0.67843137249999996" blue="0.76078431369999999" alpha="1" colorSpace="calibratedRGB"/>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="20" maxY="0.0"/>
@@ -1223,15 +1223,10 @@
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
-                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Select" translatesAutoresizingMaskIntoConstraints="NO" id="xh3-vZ-1tt">
-                                                            <rect key="frame" x="9" y="7" width="0.0" height="30"/>
-                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                        </imageView>
                                                     </subviews>
                                                 </tableViewCellContentView>
                                                 <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                                 <connections>
-                                                    <outlet property="imgSelect" destination="xh3-vZ-1tt" id="MaN-Tz-phj"/>
                                                     <outlet property="lblText" destination="bLY-zD-4vc" id="18J-0h-fP1"/>
                                                 </connections>
                                             </tableViewCell>
@@ -1814,7 +1809,7 @@
                                                     </label>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="*" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oOK-Or-LvI">
                                                         <rect key="frame" x="140" y="11" width="8" height="10"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                                         <color key="textColor" systemColor="systemRedColor"/>
                                                         <color key="highlightedColor" systemColor="systemRedColor"/>
@@ -2252,7 +2247,7 @@
                                                                     <textInputTraits key="textInputTraits"/>
                                                                 </textField>
                                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="camera.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="Jnd-Zu-Hei">
-                                                                    <rect key="frame" x="288" y="15.333333333333334" width="25" height="18.999999999999993"/>
+                                                                    <rect key="frame" x="288" y="15.333333333333336" width="25" height="18.999999999999986"/>
                                                                     <color key="tintColor" red="0.062745098040000002" green="0.67843137249999996" blue="0.76078431369999999" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="width" constant="25" id="l5j-MQ-OVN"/>
@@ -3029,7 +3024,7 @@
                                                     <textInputTraits key="textInputTraits"/>
                                                 </textField>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="camera.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="1aO-Ss-ygl">
-                                                    <rect key="frame" x="295" y="15.333333333333334" width="25" height="21.999999999999993"/>
+                                                    <rect key="frame" x="295" y="15.333333333333336" width="25" height="21.999999999999986"/>
                                                     <color key="tintColor" red="0.062745098040000002" green="0.67843137249999996" blue="0.76078431369999999" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="25" id="8SG-MV-EUp"/>
@@ -4124,7 +4119,6 @@
         <image name="EditRetailer" width="20" height="20"/>
         <image name="MenuButton" width="137" height="95"/>
         <image name="Outbox" width="20" height="20"/>
-        <image name="Select" width="30" height="30"/>
         <image name="accountant" width="375" height="275"/>
         <image name="arrow" width="128" height="128"/>
         <image name="arrow.left" catalog="system" width="128" height="95"/>
