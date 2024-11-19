@@ -1003,6 +1003,13 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
             print("\(key): \(value)")
         }
     }
+    
+    func formatCurrency_test(){
+        let formattedCurrency = CurrencyUtils.formatCurrency(amount: 100000, currencySymbol: UserSetup.shared.currency_symbol)
+        print(formattedCurrency)
+        
+    }
+    
 }
 
 //Username: Sankafo2,aachi-testso2

@@ -869,18 +869,23 @@ class SuperStockistOrderList : IViewController , UITableViewDelegate, UITableVie
         self.lblPriceItems.text = "Price (\(selectedProducts.count)) items"
         
         let totalAmount = self.allProducts.map{$0.totalCount}.reduce(0){$0 + $1}
-        self.lblPriceAmount.text = "₹ " + "\(Double(round(100 * totalAmount) / 100))"
+      //  self.lblPriceAmount.text = "₹ " + "\(Double(round(100 * totalAmount) / 100))"
         
+        self.lblPriceAmount.text =  CurrencyUtils.formatCurrency(amount: (Double(round(100 * totalAmount) / 100)), currencySymbol: UserSetup.shared.currency_symbol)
         
         
         let totalUnits = selectedProducts.map{$0.totalUnits()}.reduce(0){$0 + $1}
         self.lblTotalQty.text = "\(totalUnits)"
         
-        self.lblTotalPayment.text = "₹ " + "\(Double(round(100 * totalAmount) / 100))"
+        //self.lblTotalPayment.text = "₹ " + "\(Double(round(100 * totalAmount) / 100))"
+        
+        self.lblTotalPayment.text =  CurrencyUtils.formatCurrency(amount: (Double(round(100 * totalAmount) / 100)), currencySymbol: UserSetup.shared.currency_symbol)
         
         self.lblFinalItems.text = "Items : \(selectedProducts.count)"
         
-        self.lblFinalRate.text = "₹ " + "\(Double(round(100 * totalAmount) / 100))"
+       // self.lblFinalRate.text = "₹ " + "\(Double(round(100 * totalAmount) / 100))"
+        
+        self.lblFinalRate.text =  CurrencyUtils.formatCurrency(amount: (Double(round(100 * totalAmount) / 100)), currencySymbol: UserSetup.shared.currency_symbol)
         
     }
     
@@ -1318,15 +1323,21 @@ class SuperStockistOrderSelectedListViewCell : UITableViewCell{
             
             print("Good\(product.sampleQty)")
             lblQty.text = product.sampleQty
-            lblRate.text = "₹ " + "\(product.rate)"
+            //lblRate.text = "₹ " + "\(product.rate)"
+            lblRate.text = CurrencyUtils.formatCurrency(amount: product.rate, currencySymbol: UserSetup.shared.currency_symbol)
+            
             lblCl.text = product.clQty
             
             lblFree.text = "\(product.freeCount)"
             
-            lblDisc.text =  "₹ " + "\(product.disCountAmount)"
-            lblTax.text = "₹ " + "\(product.taxAmount)"
+            //lblDisc.text =  "₹ " + "\(product.disCountAmount)"
+            lblDisc.text =  CurrencyUtils.formatCurrency(amount: product.disCountAmount, currencySymbol: UserSetup.shared.currency_symbol)
             
-            lblTotal.text = "₹ " + "\(product.totalCount)"
+           // lblTax.text = "₹ " + "\(product.taxAmount)"
+            lblTax.text =  CurrencyUtils.formatCurrency(amount:product.taxAmount, currencySymbol: UserSetup.shared.currency_symbol)
+           // lblTotal.text = "₹ " + "\(product.totalCount)"
+            
+            lblTotal.text = CurrencyUtils.formatCurrency(amount:product.totalCount, currencySymbol: UserSetup.shared.currency_symbol)
         }
     }
     
