@@ -64,6 +64,14 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
     
     @IBOutlet weak var Cash_Discount_Height: NSLayoutConstraint!
     
+    
+    @IBOutlet weak var Free_TB: UITableView!
+    
+    
+    @IBOutlet weak var height_for_Free_Tb: NSLayoutConstraint!
+    
+    @IBOutlet weak var free_view: UIView!
+    
     struct Id:Any{
         var id:String
         var Stkid:String
@@ -95,7 +103,7 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
         
         var Total_disc_lbl:String
         var Final_Amt:String
-        
+        var stkmob:String
         var Orderlist:[OrderItemModel]
     }
     
@@ -104,6 +112,7 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
         let ProductID:String
         var Qty:Int
         var Free:Int
+        var Vol:Double
     }
     
     var Itemwise_Summary_Data:[Itemwise_Summary] = []
@@ -146,14 +155,19 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
     var Typ:String?
     var CodeDate:String?
     var Hqname:String?
+    var Total_and_Non_Total:String?
     
     var getaxn:String = ""
     var GetCode:String = ""
     var GetTyp:String = ""
     var GetDate:String = ""
     
-    @IBOutlet weak var Text_Share: UIImageView!
+    var Pc_Id:String = ""
     
+    var FreeDetils:[Itemwise_Summary] = []
+    
+    @IBOutlet weak var Text_Share: UIImageView!
+    var lstAllProducts: [AnyObject] = []
     override func viewDidLoad() {
         super.viewDidLoad()
         getUserDetails()
@@ -165,18 +179,26 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
         Sf_Id = SFCode
         
         
-        if let a = axn,let A = ACCode,let Typ = Typ, let date = CodeDate, let name = Hqname {
+        if let a = axn,let A = ACCode,let Typ = Typ, let date = CodeDate, let name = Hqname,let Pc = Total_and_Non_Total {
             getaxn = a
             GetCode = A
             GetTyp = Typ
             GetDate = date
             Hq_Name_lbl.text = name
+            Pc_Id = Pc
             
             if GetTyp == "3"{
                 Cash_Discount_Height.constant = 0
             }
         }
         date_sel.text = GetDate
+        
+        let lstProdData: String = LocalStoreage.string(forKey: "Products_Master")!
+        
+        if let list = GlobalFunc.convertToDictionary(text: lstProdData) as? [AnyObject] {
+            lstAllProducts = list;
+            print(lstProdData)
+        }
         
         
         if UserSetup.shared.SF_type == 1{
@@ -198,6 +220,9 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
         Item_Summary_table.delegate = self
         Day_Report_TB.delegate = self
         Day_Report_TB.dataSource = self
+        
+        Free_TB.delegate = self
+        Free_TB.dataSource = self
         appendDashedBorder(to: das_Border_Line_View)
         appendDashedBorder(to: Strik_Line)
         
@@ -254,7 +279,14 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
         Itemwise_Summary_Data.removeAll()
         Total_Value_Amt.text = "0.0"
        // self.ShowLoading(Message: "Loading...")
-       let apiKey: String = "\(getaxn)&desig=\(Desig)&divisionCode=\(DivCode)&ACd=\(GetCode)&rSF=\(SFCode)&typ=\(GetTyp)&sfCode=\(SFCode)&State_Code=\(StateCode)"
+        
+        var get_Hq_Id = SFCode
+        if GetTyp == "3"{
+            get_Hq_Id =  RangeData.shared.Hq_Id
+        }
+        
+        
+       let apiKey: String = "\(getaxn)&desig=\(Desig)&divisionCode=\(DivCode)&ACd=\(GetCode)&rSF=\(SFCode)&typ=\(GetTyp)&sfCode=\(get_Hq_Id)&State_Code=\(StateCode)"
         
             let aFormData: [String: Any] = [
                 "orderBy":"[\"name asc\"]","desig":"mgr"
@@ -313,7 +345,10 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
                             print(minsAmount)
                             
                             if GetTyp == "1"{
-                            
+                                
+                               
+                                let Getproducts = j["products"] as? String ?? ""
+                                
                             if let i = Orderdata.firstIndex(where: { (item) in
                                 
                                 print(item.Stkid)
@@ -338,7 +373,11 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
                                     }
                                     
                                     Additional_Prod_Code =  j["Additional_Prod_Code"] as? String ?? ""
-                                    print(taxArray)
+                                    if nameid == "SJQAMGR0024-24-25-SO-176"{
+                                        print(taxArray)
+                                    }
+                                    
+                                    
                                 }else{
                                     let tax_price = j["tax_price_free"] as? String ?? ""
                                     if !tax_price.isEmpty {
@@ -352,6 +391,8 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
                                 
                                 let itemList = parseProducts(products, Additional_Prod_Code, taxArray: taxArray)
                                 
+                                print(itemList)
+                                
                                 for item in itemList {
                                     let qty = Int(item.qtyValue) ?? 0
                                     let free = Int(item.freeValue) ?? 0
@@ -364,12 +405,11 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
                                         Itemwise_Summary_Data[index].Free += free
                                     } else {
                                         
-                                        
                                         let newItem = Itemwise_Summary(
                                             productName: item.productName,
                                             ProductID: productID,
                                             Qty: qty,
-                                            Free: free
+                                            Free: free, Vol: 0
                                         )
                                         Itemwise_Summary_Data.append(newItem)
                                     }
@@ -387,9 +427,19 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
                                 
                                 print(Orderdata[i].Orderdata)
                                 
-                                Orderdata[i].Orderdata.append(OrderDetail(id: id, Route: Route, Routeflg: "0", Stockist: Stockist, name: "\(Order_Count). "+name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "\(itemList.count)", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: tlDisAmt, Order_date: Order_date, Order_Count: Order_Count,Total_Dic: Total_discValue,Total_Tax: Total_taxValue,Total_disc_lbl:"Total Discount (10%)", Final_Amt: Final_Amt, Orderlist: itemList))
+                                print(Pc_Id)
+                                let stkMobNo = j["stkMobNo"] as? String ?? ""
                                 
-                                Oredrdatadetisl.append(OrderDetail(id: id, Route: Route, Routeflg: "0", Stockist: Stockist, name: "\(Order_Count). "+name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "\(itemList.count)", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: tlDisAmt, Order_date: Order_date, Order_Count: Order_Count,Total_Dic: Total_discValue,Total_Tax: Total_taxValue,Total_disc_lbl:"Total Discount ()", Final_Amt: Final_Amt,Orderlist: itemList))
+                                if !Getproducts.isEmpty && Pc_Id == "PC:"{
+                                    
+                                    Orderdata[i].Orderdata.append(OrderDetail(id: id, Route: Route, Routeflg: "0", Stockist: Stockist, name: "\(Order_Count). "+name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "\(itemList.count)", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: tlDisAmt, Order_date: Order_date, Order_Count: Order_Count,Total_Dic: Total_discValue,Total_Tax: Total_taxValue,Total_disc_lbl:"Total Discount ()", Final_Amt: Final_Amt, stkmob: stkMobNo, Orderlist: itemList))
+                                    
+                                    Oredrdatadetisl.append(OrderDetail(id: id, Route: Route, Routeflg: "0", Stockist: Stockist, name: "\(Order_Count). "+name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "\(itemList.count)", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: tlDisAmt, Order_date: Order_date, Order_Count: Order_Count,Total_Dic: Total_discValue,Total_Tax: Total_taxValue,Total_disc_lbl:"Total Discount ()", Final_Amt: Final_Amt, stkmob: stkMobNo,Orderlist: itemList))
+                                }else if Pc_Id == "TC:"{
+                                    Orderdata[i].Orderdata.append(OrderDetail(id: id, Route: Route, Routeflg: "0", Stockist: Stockist, name: "\(Order_Count). "+name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "\(itemList.count)", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: tlDisAmt, Order_date: Order_date, Order_Count: Order_Count,Total_Dic: Total_discValue,Total_Tax: Total_taxValue,Total_disc_lbl:"Total Discount ()", Final_Amt: Final_Amt, stkmob: stkMobNo, Orderlist: itemList))
+                                    
+                                    Oredrdatadetisl.append(OrderDetail(id: id, Route: Route, Routeflg: "0", Stockist: Stockist, name: "\(Order_Count). "+name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "\(itemList.count)", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: tlDisAmt, Order_date: Order_date, Order_Count: Order_Count,Total_Dic: Total_discValue,Total_Tax: Total_taxValue,Total_disc_lbl:"Total Discount ()", Final_Amt: Final_Amt, stkmob: stkMobNo,Orderlist: itemList))
+                                }
                                 
                                 
                                 print(Total_Value)
@@ -398,6 +448,7 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
                                 Total_Value = Total_Value + Double(Net_amount)!
                                 
                                 print(Total_Value)
+                                print(Oredrdatadetisl)
                                 
                             }else{
                                 
@@ -429,27 +480,6 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
                                 let Order_date = j["Order_date"] as? String ?? ""
                                 let itemList = parseProducts(products, Additional_Prod_Code, taxArray: taxArray)
                                 
-                                for item in itemList {
-                                    let qty = Double(item.qtyValue) ?? 0
-                                    let free = Double(item.freeValue) ?? 0
-                                    let productID = item.ProductID.trimmingCharacters(in: .whitespacesAndNewlines)
-                                    
-                                    if let index = Itemwise_Summary_Data.firstIndex(where: {
-                                        $0.ProductID.trimmingCharacters(in: .whitespacesAndNewlines) == productID
-                                    }) {
-                                        Itemwise_Summary_Data[index].Qty += Int(qty)
-                                        Itemwise_Summary_Data[index].Free += Int(free)
-                                    } else {
-                                        let newItem = Itemwise_Summary(
-                                            productName: item.productName,
-                                            ProductID: productID,
-                                            Qty: Int(qty),
-                                            Free: Int(free)
-                                        )
-                                        Itemwise_Summary_Data.append(newItem)
-                                    }
-                                }
-                                
                                 print(itemList)
                                 var Total_discValue = 0.0
                                 var Total_taxValue = 0.0
@@ -459,13 +489,28 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
                                     Total_taxValue = Total_taxValue + Double(k.taxValue)!
                                 }
                                 
-                                Orderdata.append(Id(id: id, Stkid: Stockist, RouteId: Route, Orderdata: [OrderDetail(id: id, Route: Route, Routeflg: "1", Stockist: Stockist, name: "1. "+name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "\(itemList.count)", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: tlDisAmt, Order_date: Order_date, Order_Count: 1,Total_Dic: Total_discValue,Total_Tax: Total_taxValue,Total_disc_lbl:"Total Discount ()", Final_Amt: Final_Amt, Orderlist: itemList)]))
+                                print(Pc_Id)
                                 
-                                Oredrdatadetisl.append(OrderDetail(id: id, Route: Route, Routeflg: "1", Stockist: Stockist, name: "1. "+name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "\(itemList.count)", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: tlDisAmt, Order_date: Order_date, Order_Count: 1,Total_Dic: Total_discValue,Total_Tax: Total_taxValue,Total_disc_lbl:"Total Discount ()", Final_Amt: Final_Amt,Orderlist: itemList))
+                                let stkMobNo = j["stkMobNo"] as? String ?? ""
+                                
+                                if !Getproducts.isEmpty && Pc_Id == "PC:"{
+                                    
+                                    
+                                    Orderdata.append(Id(id: id, Stkid: Stockist, RouteId: Route, Orderdata: [OrderDetail(id: id, Route: Route, Routeflg: "1", Stockist: Stockist, name: "1. "+name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "\(itemList.count)", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: tlDisAmt, Order_date: Order_date, Order_Count: 1,Total_Dic: Total_discValue,Total_Tax: Total_taxValue,Total_disc_lbl:"Total Discount ()", Final_Amt: Final_Amt, stkmob: stkMobNo, Orderlist: itemList)]))
+                                    
+                                    Oredrdatadetisl.append(OrderDetail(id: id, Route: Route, Routeflg: "1", Stockist: Stockist, name: "1. "+name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "\(itemList.count)", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: tlDisAmt, Order_date: Order_date, Order_Count: 1,Total_Dic: Total_discValue,Total_Tax: Total_taxValue,Total_disc_lbl:"Total Discount ()", Final_Amt: Final_Amt, stkmob: stkMobNo,Orderlist: itemList))
+                                }else if Pc_Id == "TC:"{
+                                    Orderdata.append(Id(id: id, Stkid: Stockist, RouteId: Route, Orderdata: [OrderDetail(id: id, Route: Route, Routeflg: "1", Stockist: Stockist, name: "1. "+name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "\(itemList.count)", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: tlDisAmt, Order_date: Order_date, Order_Count: 1,Total_Dic: Total_discValue,Total_Tax: Total_taxValue,Total_disc_lbl:"Total Discount ()", Final_Amt: Final_Amt, stkmob: stkMobNo, Orderlist: itemList)]))
+                                    
+                                    Oredrdatadetisl.append(OrderDetail(id: id, Route: Route, Routeflg: "1", Stockist: Stockist, name: "1. "+name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "\(itemList.count)", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: tlDisAmt, Order_date: Order_date, Order_Count: 1,Total_Dic: Total_discValue,Total_Tax: Total_taxValue,Total_disc_lbl:"Total Discount ()", Final_Amt: Final_Amt, stkmob: stkMobNo,Orderlist: itemList))
+                                }
                                 
                                 Total_Value += Double(Net_amount) ?? 0.0
                                 
                             }
+                                
+                              
+                                
                         }else{
                             let Additional_Prod_Dtls = j["productList"] as! [AnyObject]
                             var itemModelList = [OrderItemModel]()
@@ -492,29 +537,6 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
                             
                             let itemList = itemModelList
                             
-                            for item in itemList {
-                                let qty = Int(item.qtyValue) ?? 0
-                                let free = Int(item.freeValue) ?? 0
-                                let productID = item.ProductID.trimmingCharacters(in: .whitespacesAndNewlines)
-                                
-                                if let index = Itemwise_Summary_Data.firstIndex(where: {
-                                    $0.ProductID.trimmingCharacters(in: .whitespacesAndNewlines) == productID
-                                }) {
-                                    Itemwise_Summary_Data[index].Qty += qty
-                                    Itemwise_Summary_Data[index].Free += free
-                                } else {
-                                    
-                                    
-                                    let newItem = Itemwise_Summary(
-                                        productName: item.productName,
-                                        ProductID: productID,
-                                        Qty: qty,
-                                        Free: free
-                                    )
-                                    Itemwise_Summary_Data.append(newItem)
-                                }
-                            }
-                            
                             
                             var Total_discValue = 0.0
                             var Total_taxValue = 0.0
@@ -525,14 +547,41 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
                             }
                             
                             
-                            Orderdata.append(Id(id: id, Stkid: Stockist, RouteId: Route, Orderdata: [OrderDetail(id: id, Route: Route, Routeflg: "0", Stockist: Stockist, name: "1. "+name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "\(itemList.count)", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: tlDisAmt, Order_date: Order_date, Order_Count: 1,Total_Dic: Total_discValue,Total_Tax: Total_taxValue,Total_disc_lbl:"Total Discount (10%)", Final_Amt: Final_Amt, Orderlist: itemList)]))
+                            Orderdata.append(Id(id: id, Stkid: Stockist, RouteId: Route, Orderdata: [OrderDetail(id: id, Route: Route, Routeflg: "0", Stockist: Stockist, name: "1. "+name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "\(itemList.count)", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: tlDisAmt, Order_date: Order_date, Order_Count: 1,Total_Dic: Total_discValue,Total_Tax: Total_taxValue,Total_disc_lbl:"Total Discount (10%)", Final_Amt: Final_Amt, stkmob: "", Orderlist: itemList)]))
                             
-                            Oredrdatadetisl.append(OrderDetail(id: id, Route: Route, Routeflg: "0", Stockist: Stockist, name: "1. "+name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "\(itemList.count)", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: tlDisAmt, Order_date: Order_date, Order_Count: 1,Total_Dic: Total_discValue,Total_Tax: Total_taxValue,Total_disc_lbl:"Total Discount ()", Final_Amt: Final_Amt,Orderlist: itemList))
+                            Oredrdatadetisl.append(OrderDetail(id: id, Route: Route, Routeflg: "0", Stockist: Stockist, name: "1. "+name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "\(itemList.count)", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: tlDisAmt, Order_date: Order_date, Order_Count: 1,Total_Dic: Total_discValue,Total_Tax: Total_taxValue,Total_disc_lbl:"Total Discount ()", Final_Amt: Final_Amt, stkmob: "",Orderlist: itemList))
                             
                             Total_Value += Double(Net_amount) ?? 0.0
                             
                         }
                             
+                        }
+                        
+                        
+                        
+                        
+                        
+                        for item in Oredrdatadetisl{
+                            for j in item.Orderlist{
+                                    let qty = Double(j.qtyValue) ?? 0
+                                    let free = Double(j.freeValue) ?? 0
+                                    let productID = j.ProductID.trimmingCharacters(in: .whitespacesAndNewlines)
+
+                                    if let index = Itemwise_Summary_Data.firstIndex(where: {
+                                        $0.ProductID.trimmingCharacters(in: .whitespacesAndNewlines) == productID
+                                    }) {
+                                        Itemwise_Summary_Data[index].Qty += Int(qty)
+                                        Itemwise_Summary_Data[index].Free += Int(free)
+                                    } else {
+                                        let newItem = Itemwise_Summary(
+                                            productName: j.productName,
+                                            ProductID: productID,
+                                            Qty: Int(qty),
+                                            Free: Int(free), Vol: 0
+                                        )
+                                        Itemwise_Summary_Data.append(newItem)
+                                    }
+                            }
                         }
                         
                         var QtyTotal = 0
@@ -543,7 +592,7 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
                             
                         }
                         
-                        Itemwise_Summary_Data.append(Itemwise_Summary(productName: "Total", ProductID: "", Qty: Int(Double(QtyTotal)), Free: Int(Double(FreeTota))))
+                        Itemwise_Summary_Data.append(Itemwise_Summary(productName: "Total", ProductID: "", Qty: Int(Double(QtyTotal)), Free: Int(Double(FreeTota)), Vol: 0))
 
 //                        let formatter = NumberFormatter()
 //                        formatter.numberStyle = .currency
@@ -591,7 +640,7 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
             var taxAmt = "0"
             
             if let taxAmount = taxArray?[i] {
-                taxAmt = taxAmount
+                taxAmt = taxAmount.trimmingCharacters(in: .whitespaces)
             }
             let ProductId = prodcode[i]
             let qtyValue = extractDouble(from: product, start: ") (", end: "@")
@@ -601,7 +650,7 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
             let splitdisc = product.split(separator: "*").map { String($0) }
             let splitdisc2 = splitdisc[0].split(separator: "-").map { String($0) }
             let discValue = Double(splitdisc2.last ?? "0") ?? 0
-            let taxValue = Double(taxAmt) ?? 0
+            let taxValue = taxAmt
             let rateValue = extractDouble(from: product, start: "*", end: "!")
             let litersVal = extractDouble(from: product, start: "@", end: "+")
             let clValue = Int(extractString(from: product, start: "!", end: "!") ?? "0") ?? 0
@@ -619,7 +668,7 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
             
             
             let productName = extractProductName(product, totalValue: Value)
-            let freeProductName = extractFreeProductName(product)
+            let freeProductName = extractFreeProductName(product, name: productName)
 
             print(productName)
             
@@ -669,14 +718,24 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
         return splitprod[0].trimmingCharacters(in: .whitespaces)
     }
 
-    func extractFreeProductName(_ product: String) -> String {
-        guard let startIndex = product.range(of: "^")?.upperBound else { return "" }
-        return String(product[startIndex...]).trimmingCharacters(in: .whitespaces)
+    func extractFreeProductName(_ product: String,name:String) -> String {
+        let parts = product.components(separatedBy: "^")
+        let Get_id = parts[1]
+        let sort_id = Get_id.components(separatedBy: ")")
+        let without_whitespace = sort_id[0].trimmingCharacters(in: .whitespacesAndNewlines)
+        let filterProduct = lstAllProducts.filter { ($0["id"] as? String ?? "") == without_whitespace }
+       var free_product_name = ""
+        if !filterProduct.isEmpty{
+            free_product_name = filterProduct[0]["name"] as? String ?? ""
+        }else{
+            free_product_name = name
+        }
+        return free_product_name
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if Item_Summary_table == tableView {
-            return 30
+            return 40
         }
         if Day_Report_TB ==  tableView{
             return 50
@@ -697,7 +756,7 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
             let Height = CGFloat(Row_Height + row_height)
             return Height + height
         }
-        return 0
+        return 30
     }
     
     func Scroll_and_Tb_Height(){
@@ -728,8 +787,8 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
         
         
         let Height = Item_Summary_View.constant -   Item_Summary_TB_hEIGHT.constant
-        let Scroll_Height = CGFloat(Height) + CGFloat(Itemwise_Summary_Data.count * 32)
-        Item_Summary_TB_hEIGHT.constant = CGFloat(Itemwise_Summary_Data.count * 32)
+        let Scroll_Height = CGFloat(Height) + CGFloat(Itemwise_Summary_Data.count * 42)
+        Item_Summary_TB_hEIGHT.constant = CGFloat(Itemwise_Summary_Data.count * 42)
         Item_Summary_View.constant = Scroll_Height
         Scroll_height .constant =  Scroll_height .constant  +  Item_Summary_View.constant + 100
         print(Item_Summary_View.constant)
@@ -751,6 +810,9 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
         if Item_Summary_table == tableView{
             return Itemwise_Summary_Data.count
         }
+        if Free_TB == tableView{
+           return FreeDetils.count
+         }
         
         return Oredrdatadetisl.count
     }
@@ -809,6 +871,14 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
                cellReport.Tax.text = item.taxValue
                cellReport.Total.text = item.totalValue
                return cellReport
+           }else if Free_TB == tableView{
+               let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! cellListItem
+               print(FreeDetils[indexPath.row].productName)
+               
+               cell.lblText.text = FreeDetils[indexPath.row].productName
+               cell.lblText2.text = String(FreeDetils[indexPath.row].Free)
+               
+               return cell
            }else{
                let cellS = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! Range_Item_summary_TB
  
@@ -817,6 +887,8 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
                    cellS.Product_Name.text = Itemwise_Summary_Data[indexPath.row].productName
                    cellS.Qty.text = String(Itemwise_Summary_Data[indexPath.row].Qty)
                    cellS.Free.text = String(Itemwise_Summary_Data[indexPath.row].Free)
+                   cellS.Vol.text = "0"
+                   
                    // Apply attributed text (font color in this case)
                    let font = UIFont.systemFont(ofSize: 14, weight: .bold)
                    let attributedText = NSAttributedString(
@@ -828,13 +900,16 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
                    )
                    let attributedqty = NSAttributedString(string: cellS.Qty?.text ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor(red: 0.09, green: 0.64, blue: 0.29, alpha: 1.00)])
                    let attributedRate = NSAttributedString(string:  cellS.Free?.text ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor(red: 0.09, green: 0.64, blue: 0.29, alpha: 1.00)])
+                   let attributedVol = NSAttributedString(string:  cellS.Vol?.text ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor(red: 0.09, green: 0.64, blue: 0.29, alpha: 1.00)])
                    cellS.Product_Name?.attributedText = attributedText
                    cellS.Qty?.attributedText = attributedqty
                    cellS.Free?.attributedText = attributedRate
+                   cellS.Vol?.attributedText = attributedVol
                } else {
                    cellS.Product_Name.text = Itemwise_Summary_Data[indexPath.row].productName
                    cellS.Qty.text = String(Itemwise_Summary_Data[indexPath.row].Qty)
                    cellS.Free.text = String(Itemwise_Summary_Data[indexPath.row].Free)
+                   cellS.Vol.text = "0"
                    // Apply attributed text (font color in this case)
                    let font = UIFont.systemFont(ofSize: 14, weight: .regular)
                    let attributedText = NSAttributedString(
@@ -846,9 +921,12 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
                    )
                    let attributedqty = NSAttributedString(string: cellS.Qty?.text ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
                    let attributedRate = NSAttributedString(string:  cellS.Free?.text ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
+                   let attributedVol = NSAttributedString(string:  cellS.Vol?.text ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
+                   
                    cellS.Product_Name?.attributedText = attributedText
                    cellS.Qty?.attributedText = attributedqty
                    cellS.Free?.attributedText = attributedRate
+                   cellS.Vol?.attributedText = attributedVol
                    
                }
                
@@ -864,8 +942,9 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
           print("Button tapped in cell at index path: \(indexPath.row)")
           let Item =  Oredrdatadetisl[indexPath.row]
           print(Item)
+          FreeDetils.removeAll()
           Day_View_Stk.text = Item.Stockist
-          From_no.text = Item.Phone
+          From_no.text = Item.stkmob
           To_Retiler.text = Item.name
           To_Addres.text = Item.Adress
           To_No.text = Item.Phone
@@ -881,6 +960,25 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
           Net_Amt.text = CurrencyUtils.formatCurrency(amount: Item.Final_Amt, currencySymbol: UserSetup.shared.currency_symbol)
           
           Day_Report_TB.reloadData()
+          
+          for i in Item.Orderlist{
+              let free: Double = Double(i.freeValue) ?? 0
+              let Volumes:Double = Double(i.litersVal) ?? 0
+              if free != 0 {
+                  FreeDetils.append(Itemwise_Summary(productName: i.freeProductName, ProductID: "", Qty: 0, Free: Int(free), Vol: Volumes))
+              }}
+          
+          print(FreeDetils)
+          
+          if FreeDetils.isEmpty {
+              height_for_Free_Tb.constant = 0
+              free_view.isHidden = true
+          }else{
+              height_for_Free_Tb.constant = 154
+              free_view.isHidden = false
+          }
+          Free_TB.reloadData()
+          
           Day_Report_View.isHidden = false
       }
 
