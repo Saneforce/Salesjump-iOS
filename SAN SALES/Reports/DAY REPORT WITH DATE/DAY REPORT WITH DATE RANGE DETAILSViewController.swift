@@ -545,15 +545,16 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
                         
                         Itemwise_Summary_Data.append(Itemwise_Summary(productName: "Total", ProductID: "", Qty: Int(Double(QtyTotal)), Free: Int(Double(FreeTota))))
 
-                        let formatter = NumberFormatter()
-                        formatter.numberStyle = .currency
-                        formatter.locale = Locale(identifier: "en_IN") // Indian locale
-                        print(Total_Value)
-                        
-                        if let formattedValue = formatter.string(from: NSNumber(value: Total_Value)) {
-                            Total_Value_Amt.text = formattedValue
-                        }
-                        
+//                        let formatter = NumberFormatter()
+//                        formatter.numberStyle = .currency
+//                        formatter.locale = Locale(identifier: "en_IN") // Indian locale
+//                        print(Total_Value)
+//                        
+//                        if let formattedValue = formatter.string(from: NSNumber(value: Total_Value)) {
+//                            Total_Value_Amt.text = formattedValue
+//                        }
+//                        
+                        Total_Value_Amt.text =   CurrencyUtils.formatCurrency(amount: Total_Value, currencySymbol: UserSetup.shared.currency_symbol)
                         
                         print(Oredrdatadetisl)
                         Scroll_and_Tb_Height()
@@ -767,9 +768,13 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
                cell.Phone.text = "Phone:"+Oredrdatadetisl[indexPath.row].Phone
                if  let NetValue = Float(Oredrdatadetisl[indexPath.row].Net_amount){
                    
-                   cell.Netamt.text = "₹\(String(format: "%.2f",NetValue))"
+                   //cell.Netamt.text = "₹\(String(format: "%.2f",NetValue))"
+                   cell.Netamt.text = CurrencyUtils.formatCurrency(amount: NetValue, currencySymbol: UserSetup.shared.currency_symbol)
+                   
                }else{
-                   cell.Netamt.text = "₹\(Oredrdatadetisl[indexPath.row].Net_amount)"
+                  // cell.Netamt.text = "₹\(Oredrdatadetisl[indexPath.row].Net_amount)"
+                   cell.Netamt.text = CurrencyUtils.formatCurrency(amount: Oredrdatadetisl[indexPath.row].Net_amount, currencySymbol: UserSetup.shared.currency_symbol)
+                   
                }
                
                cell.Total_Disc_Val_lbl.text = Oredrdatadetisl[indexPath.row].Total_disc_lbl
@@ -871,7 +876,10 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
           Tax.text = String(Item.Total_Tax)
           Sch_Disc.text = String(Item.Total_Dic)
           Cas_disc.text = Item.tlDisAmt
-          Net_Amt.text = "₹ " + Item.Final_Amt
+         // Net_Amt.text = "₹ " + Item.Final_Amt
+          
+          Net_Amt.text = CurrencyUtils.formatCurrency(amount: Item.Final_Amt, currencySymbol: UserSetup.shared.currency_symbol)
+          
           Day_Report_TB.reloadData()
           Day_Report_View.isHidden = false
       }

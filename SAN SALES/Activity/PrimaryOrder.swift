@@ -336,14 +336,20 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
                 if(ProdItems.count>0){
                     cell.lblText?.text = ProdItems[0]["name"] as? String
                 }
-                cell.lblMRP.text="MRP Rs. 0.00"
-                cell.lblSellRate.text="Rs. 0.00"
+               // cell.lblMRP.text="MRP Rs. 0.00"
+                
+                cell.lblMRP.text = CurrencyUtils.formatCurrency(amount: "0.00", currencySymbol: UserSetup.shared.currency_symbol)
+                
+               // cell.lblSellRate.text="Rs. 0.00"
+                cell.lblSellRate.text = CurrencyUtils.formatCurrency(amount: "0.00", currencySymbol: UserSetup.shared.currency_symbol)
+                
                 let attrRedStrikethroughStyle = [
                     NSAttributedString.Key.strikethroughStyle: NSNumber(value: NSUnderlineStyle.single.rawValue)
                 ]
                 let text = NSAttributedString(string: "Rs. 0.00",
                                               attributes: attrRedStrikethroughStyle)
-                cell.lblActRate.attributedText = text
+                //cell.lblActRate.attributedText = text
+                cell.lblActRate.text = CurrencyUtils.formatCurrency(amount: "0.00", currencySymbol: UserSetup.shared.currency_symbol)
                 let RateItems: [AnyObject] = lstRateList.filter ({ (Rate) in
                     
                     if Rate["Product_Detail_Code"] as! String == id {
@@ -354,12 +360,20 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
                 var rate: Double = 0
                 
                 if(RateItems.count>0){
-                    cell.lblMRP.text = String(format: "MRP Rs. %.02f",(RateItems[0]["Retailor_Price"] as! NSString).doubleValue)
+                    //cell.lblMRP.text = String(format: "MRP Rs. %.02f",(RateItems[0]["Retailor_Price"] as! NSString).doubleValue)
+                    
+                    cell.lblMRP.text = "MRP " + CurrencyUtils.formatCurrency(amount: (RateItems[0]["Retailor_Price"] as! NSString), currencySymbol: UserSetup.shared.currency_symbol)
+                    
                     rate = (RateItems[0]["Retailor_Price"] as! NSString).doubleValue
-                    cell.lblSellRate.text = String(format: "Rs. %.02f", rate)
+                   // cell.lblSellRate.text = String(format: "Rs. %.02f", rate)
+                    
+                    cell.lblSellRate.text = CurrencyUtils.formatCurrency(amount: rate, currencySymbol: UserSetup.shared.currency_symbol)
+                    
                     let text = NSAttributedString(string: String(format: "Rs. %.02f", rate),
                                                   attributes: attrRedStrikethroughStyle)
-                    cell.lblActRate.attributedText = text
+                   // cell.lblActRate.attributedText = text
+                    
+                    cell.lblActRate.text = CurrencyUtils.formatCurrency(amount: rate, currencySymbol: UserSetup.shared.currency_symbol)
                 }
                 cell.lblFreeQty.text = "0"
                 cell.lblFreeProd.text = ""
@@ -400,21 +414,26 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
                     rate = rate - dis;
                     if(Disc != "" && Disc != "0") { Disc=String(format: "%@%% OFF",Disc) } else { Disc = "" }
                     cell.lblDisc?.text = Disc
-                    cell.lblSellRate.text = String(format: "Rs. %.02f", rate)
+                  //  cell.lblSellRate.text = String(format: "Rs. %.02f", rate)
+                    
+                    cell.lblSellRate.text = CurrencyUtils.formatCurrency(amount: rate, currencySymbol: UserSetup.shared.currency_symbol)
                 }
                 
             }else{
-                
-                
                 let item: [String: Any]=lstProducts[indexPath.row] as! [String : Any]
-                
                 let id=String(format: "%@", item["id"] as! CVarArg)
                 cell.lblText?.text = item["name"] as? String
                 cell.lblUOM.text = item["Product_Sale_Unit"] as? String
                 cell.btnPlus.layer.cornerRadius = 17
                 cell.btnMinus.layer.cornerRadius = 17
-                cell.lblMRP.text="MRP Rs. 0.00"
-                cell.lblSellRate.text="Rs. 0.00"
+               // cell.lblMRP.text="MRP Rs. 0.00"
+                
+                cell.lblMRP.text = "MRP " + CurrencyUtils.formatCurrency(amount: "0.00", currencySymbol: UserSetup.shared.currency_symbol)
+                
+               // cell.lblSellRate.text="Rs. 0.00"
+                
+                cell.lblSellRate.text=CurrencyUtils.formatCurrency(amount: "0.00", currencySymbol: UserSetup.shared.currency_symbol)
+                
                 cell.lblDisc.text = ""
                 cell.lblDisc.layer.cornerRadius = 10
                 cell.lblDisc.isHidden = true
@@ -425,7 +444,10 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
                 ]
                 let text = NSAttributedString(string: "Rs. 0.00",
                                               attributes: attrRedStrikethroughStyle)
-                cell.lblActRate.attributedText = text
+                //cell.lblActRate.attributedText = text
+                
+                cell.lblActRate.text = CurrencyUtils.formatCurrency(amount: "0.00", currencySymbol: UserSetup.shared.currency_symbol)
+                
                 let RateItems: [AnyObject] = lstRateList.filter ({ (Rate) in
                     
                     if Rate["Product_Detail_Code"] as! String == id {
@@ -435,12 +457,22 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
                 })
                 var rate: Double = 0
                 if(RateItems.count>0){
-                    cell.lblMRP.text = String(format: "MRP Rs. %.02f",(RateItems[0]["Retailor_Price"] as! NSString).doubleValue)
+                   // cell.lblMRP.text = String(format: "MRP Rs. %.02f",(RateItems[0]["Retailor_Price"] as! NSString).doubleValue)
+                    
+                    
+                    cell.lblMRP.text = "MRP " + CurrencyUtils.formatCurrency(amount: (RateItems[0]["Retailor_Price"] as! NSString), currencySymbol: UserSetup.shared.currency_symbol)
+                    
+                    
                     rate = (RateItems[0]["Retailor_Price"] as! NSString).doubleValue
-                    cell.lblSellRate.text = String(format: "Rs. %.02f", rate)
+                  //  cell.lblSellRate.text = String(format: "Rs. %.02f", rate)
+                    
+                    cell.lblSellRate.text =  CurrencyUtils.formatCurrency(amount: rate, currencySymbol: UserSetup.shared.currency_symbol)
+                    
                     let text = NSAttributedString(string: String(format: "Rs. %.02f", rate),
                                                   attributes: attrRedStrikethroughStyle)
-                    cell.lblActRate.attributedText = text
+                  //  cell.lblActRate.attributedText = text
+                    
+                    cell.lblActRate.text = CurrencyUtils.formatCurrency(amount: rate, currencySymbol: UserSetup.shared.currency_symbol)
                 }
                 cell.lblFreeQty.text = "0"
                 cell.lblFreeProd.text = ""
@@ -521,7 +553,9 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
                     rate = rate - dis;
                     if(Disc != "" && Disc != "0") { Disc=String(format: "%@%% OFF",Disc) } else { Disc = "" }
                     cell.lblDisc?.text = Disc
-                    cell.lblSellRate.text = String(format: "Rs. %.02f", rate)
+                   // cell.lblSellRate.text = String(format: "Rs. %.02f", rate)
+                    
+                    cell.lblSellRate.text =  CurrencyUtils.formatCurrency(amount: rate, currencySymbol: UserSetup.shared.currency_symbol)
                 }
                 
                 //cell.imgBtnDel.addTarget(target: self, action: #selector(self.delJWK(_:)))

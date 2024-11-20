@@ -1223,7 +1223,9 @@ class SuperStockistOrderList : IViewController , UITableViewDelegate, UITableVie
     func updateTotal() {
         
         let totalAmount = self.allProducts.map{$0.totalCount}.reduce(0){$0 + $1}
-        self.lblTotalRate.text = "₹ " + "\(Double(round(100 * totalAmount) / 100))"
+       // self.lblTotalRate.text = "₹ " + "\(Double(round(100 * totalAmount) / 100))"
+        
+        self.lblTotalRate.text =  CurrencyUtils.formatCurrency(amount: (Double(round(100 * totalAmount) / 100)), currencySymbol: UserSetup.shared.currency_symbol)
         
         
         let totalItems = self.allProducts.filter({ product in

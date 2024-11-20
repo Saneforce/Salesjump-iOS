@@ -107,7 +107,10 @@ class RptVisitDetail: IViewController, UITableViewDelegate, UITableViewDataSourc
             print(item)
             cell.lblText?.text = item["OutletName"] as? String
             cell.lblTime?.text = item["VstTime"] as? String
-            cell.lblActRate?.text = String(format: "Rs. %.02f", item["OrdVal"] as! Double)
+           // cell.lblActRate?.text = String(format: "Rs. %.02f", item["OrdVal"] as! Double)
+            
+            cell.lblActRate?.text = CurrencyUtils.formatCurrency(amount: item["OrdVal"] as! Double, currencySymbol: UserSetup.shared.currency_symbol)
+            
             cell.lblremark?.text = item["Activity_Remarks"] as? String
             cell.lblremark.addTarget(target: self, action: #selector(ShowPopUp(_:)))
             //cell.btnViewDet.addTarget(target: self, action:  )
@@ -130,7 +133,9 @@ class RptVisitDetail: IViewController, UITableViewDelegate, UITableViewDataSourc
                 // Set the text properties first
                 cell.lblText?.text = RptVisitDetail.objItmSmryDetail[indexPath.row].PName
                 cell.lblQty?.text = RptVisitDetail.objItmSmryDetail[indexPath.row].Qty
-                cell.lblActRate?.text = RptVisitDetail.objItmSmryDetail[indexPath.row].Val
+                //cell.lblActRate?.text = RptVisitDetail.objItmSmryDetail[indexPath.row].Val
+                
+                cell.lblActRate?.text =  CurrencyUtils.formatCurrency(amount: RptVisitDetail.objItmSmryDetail[indexPath.row].Val, currencySymbol: UserSetup.shared.currency_symbol)
 
                 // Apply attributed text (font color in this case)
                 let attributedText = NSAttributedString(string: cell.lblText?.text ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor.red])
@@ -142,7 +147,9 @@ class RptVisitDetail: IViewController, UITableViewDelegate, UITableViewDataSourc
             } else {
                 cell.lblText?.text = RptVisitDetail.objItmSmryDetail[indexPath.row].PName
                 cell.lblQty?.text = RptVisitDetail.objItmSmryDetail[indexPath.row].Qty
-                cell.lblActRate?.text = RptVisitDetail.objItmSmryDetail[indexPath.row].Val
+               // cell.lblActRate?.text = RptVisitDetail.objItmSmryDetail[indexPath.row].Val
+                cell.lblActRate?.text =  CurrencyUtils.formatCurrency(amount: RptVisitDetail.objItmSmryDetail[indexPath.row].Val, currencySymbol: UserSetup.shared.currency_symbol)
+                
                 let attributedText = NSAttributedString(string: cell.lblText?.text ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
                 let attributedqty = NSAttributedString(string: cell.lblQty?.text ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
                 let attributedRate = NSAttributedString(string: cell.lblActRate?.text ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
@@ -261,7 +268,7 @@ class RptVisitDetail: IViewController, UITableViewDelegate, UITableViewDataSourc
                             if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
                                 for item in jsonArray {
                                     
-                                    RptVisitDetail.objItmSmryDetail.append(ItemSumary(Qty: String(format: "%i", item["Qty"] as! Int), PCode: (item["PCode"] as? String)!, PName: (item["PName"] as? String)!, Val: String(format: "Rs. %.02f", item["Val"] as! Double)))
+                                    RptVisitDetail.objItmSmryDetail.append(ItemSumary(Qty: String(format: "%i", item["Qty"] as! Int), PCode: (item["PCode"] as? String)!, PName: (item["PName"] as? String)!, Val: String( item["Val"] as! Double)))
                                     ToatQty += item["Qty"] as! Int
                                     TotVal += item["Val"] as! Double
                                 }
@@ -275,7 +282,7 @@ class RptVisitDetail: IViewController, UITableViewDelegate, UITableViewDataSourc
                         print("Error: \(error.localizedDescription)")
                     }
                     if (RptVisitDetail.objItmSmryDetail.count != 0){
-                        RptVisitDetail.objItmSmryDetail.append(ItemSumary(Qty: String(ToatQty), PCode:"" , PName: "TOTAL", Val: String(format: "Rs. %.02f",TotVal)))
+                        RptVisitDetail.objItmSmryDetail.append(ItemSumary(Qty: String(ToatQty), PCode:"" , PName: "TOTAL", Val: String(TotVal)))
                     }
                     //RptVisitDetail.objItmSmryDetail = json
                     tbItemSumry.reloadData()
