@@ -152,7 +152,11 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
             let cell:cellListItem = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
             if ListOforderTB == tableView{
                 cell.lblText.text = TotaOrderDet[indexPath.row].OrderId
-                cell.lblAmt.text = "Rs. "+TotaOrderDet[indexPath.row].TotAmt
+                //cell.lblAmt.text = "Rs. "+TotaOrderDet[indexPath.row].TotAmt
+                
+                cell.lblAmt.text = CurrencyUtils.formatCurrency(amount: TotaOrderDet[indexPath.row].TotAmt, currencySymbol: UserSetup.shared.currency_symbol)
+                
+                
                 cell.ordertime.text = TotaOrderDet[indexPath.row].Date
                 cell.btnViewDet.addTarget(target: self, action: #selector(ShowOrderDet(_:)))
                 if (TotaOrderDet[indexPath.row].OrdFlg == 1){

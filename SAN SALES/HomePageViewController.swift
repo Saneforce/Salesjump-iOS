@@ -533,7 +533,9 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
             cell.TotalCalls.text = String(todayDetail.TCvalue)
             cell.PcCalls.text = String(todayDetail.PCvalue)
             cell.BAC.text = String(todayDetail.BACvalue)
-            cell.Toalvalue.text = String(todayDetail.valuesTotal)
+           // cell.Toalvalue.text = String(todayDetail.valuesTotal)
+            
+            cell.Toalvalue.text =  CurrencyUtils.formatCurrency(amount: todayDetail.valuesTotal, currencySymbol: UserSetup.shared.currency_symbol)
         }
         
         return cell
@@ -994,10 +996,7 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
     
     func formatCurrency_test(){
         let formattedCurrency = CurrencyUtils.formatCurrency(amount: 100000, currencySymbol: UserSetup.shared.currency_symbol)
-        print(formattedCurrency)
-        
     }
-    
 }
 
 //Username: Sankafo2,aachi-testso2

@@ -199,7 +199,9 @@ class SuperStockistOrderList : IViewController , UITableViewDelegate, UITableVie
             var rate : Double = 0
             
             if(RateItems.count>0){
-                rate = (RateItems.first!["SS_Base_Rate"] as! NSString).doubleValue
+                print(RateItems)
+                
+                rate = (RateItems.first!["SS_Base_Rate"] as? NSString ?? "0").doubleValue
             }
             
             var tax : Double = 0
@@ -1218,7 +1220,9 @@ class SuperStockistOrderList : IViewController , UITableViewDelegate, UITableVie
     func updateTotal() {
         
         let totalAmount = self.allProducts.map{$0.totalCount}.reduce(0){$0 + $1}
-        self.lblTotalRate.text = "₹ " + "\(Double(round(100 * totalAmount) / 100))"
+       // self.lblTotalRate.text = "₹ " + "\(Double(round(100 * totalAmount) / 100))"
+        
+        self.lblTotalRate.text =  CurrencyUtils.formatCurrency(amount: (Double(round(100 * totalAmount) / 100)), currencySymbol: UserSetup.shared.currency_symbol)
         
         
         let totalItems = self.allProducts.filter({ product in
