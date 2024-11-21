@@ -47,6 +47,13 @@ class AddNewCustomer: IViewController, UITableViewDelegate, UITableViewDataSourc
     @IBOutlet weak var Outlet_Class: UILabel!
     @IBOutlet weak var Outlet_Category: UILabel!
     
+    @IBOutlet weak var Dis: UILabel!
+    
+    // placeHolder
+    
+    @IBOutlet weak var Select_dis: LabelSelect!
+    
+    
     struct lItem: Any {
         let id: String
         let name: String
@@ -136,6 +143,13 @@ class AddNewCustomer: IViewController, UITableViewDelegate, UITableViewDataSourc
         
         Outlet_Class.text = "\(UserSetup.shared.DrCap) Calss"
         Outlet_Category.text = "\(UserSetup.shared.DrCap) Category"
+        Dis.text =   UserSetup.shared.StkCap
+        
+        
+        Select_dis.text = "Select the \(UserSetup.shared.StkCap)"
+        txOutletNm.placeholder = "Enter the \(UserSetup.shared.DrCap) Name"
+        lblCls.text = "Select the \(UserSetup.shared.DrCap) Calss"
+        lblCats.text = "Select the \(UserSetup.shared.DrCap) Category"
         
     }
     override func viewDidDisappear(_ animated: Bool) {
