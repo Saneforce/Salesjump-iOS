@@ -71,6 +71,7 @@ class UserSetup{
     var Liters_Need:Int = 0
     var StkNeed:Int = 0
     var currency_symbol:String = ""
+    var DrCap:String = ""
     func initUserSetup(){
         let SetupStoreage = UserDefaults.standard
         let SetupData: String=SetupStoreage.string(forKey: "UserSetup")!
@@ -132,6 +133,7 @@ class UserSetup{
         Liters_Need = lstSetups[0]["Liters_Need"] as? Int ?? 0
         StkNeed = lstSetups[0]["StkNeed"] as? Int ?? 0
         currency_symbol = lstSetups[0]["currency_symbol"] as? String ?? ""
+        DrCap = lstSetups[0]["DrCap"] as? String ?? ""
         if(lstSetups[0]["Geo_Fencing"] as? Int == 1){
             Fenching = true
         }else{

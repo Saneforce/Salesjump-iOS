@@ -39,6 +39,14 @@ class AddNewCustomer: IViewController, UITableViewDelegate, UITableViewDataSourc
     
     @IBOutlet weak var SetSalValu: UIButton!
     
+    
+    
+    // Dynamic Caption
+    
+    @IBOutlet weak var Outlet_Nmae: UILabel!
+    @IBOutlet weak var Outlet_Class: UILabel!
+    @IBOutlet weak var Outlet_Category: UILabel!
+    
     struct lItem: Any {
         let id: String
         let name: String
@@ -121,6 +129,13 @@ class AddNewCustomer: IViewController, UITableViewDelegate, UITableViewDataSourc
         tbDataSelect.dataSource=self
         
        // imgOutlet.image = UIImage(imageLiteralResourceName: "")
+        
+        lblTitleCap.text = "Add New \(UserSetup.shared.DrCap)"
+        
+        Outlet_Nmae.text = "\(UserSetup.shared.DrCap) Name"
+        
+        Outlet_Class.text = "\(UserSetup.shared.DrCap) Calss"
+        Outlet_Category.text = "\(UserSetup.shared.DrCap) Category"
         
     }
     override func viewDidDisappear(_ animated: Bool) {
@@ -418,11 +433,11 @@ class AddNewCustomer: IViewController, UITableViewDelegate, UITableViewDataSourc
         }
         
         if NewOutlet.shared.OutletName == "" {
-            Toast.show(message: "Enter the Outlet Name", controller: self)
+            Toast.show(message: "Enter the \(UserSetup.shared.DrCap) Name", controller: self)
             return false
         }
         if(NewOutlet.shared.ImgFileName == ""){
-            Toast.show(message: "Take Retailer Photo", controller: self)
+            Toast.show(message: "Take \(UserSetup.shared.DrCap) Photo", controller: self)
             return false
         }
         if NewOutlet.shared.OwnerName == "" {
