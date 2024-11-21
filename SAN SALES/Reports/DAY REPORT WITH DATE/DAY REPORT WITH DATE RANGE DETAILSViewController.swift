@@ -73,9 +73,11 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
     @IBOutlet weak var Stk_lbl_hi: NSLayoutConstraint!
     @IBOutlet weak var Stk_Mob_Sym_Hi: NSLayoutConstraint!
     @IBOutlet weak var Stk_From_Mob_Hi: NSLayoutConstraint!
-    
     @IBOutlet weak var phone_img: UIImageView!
     @IBOutlet weak var Address_Hi: NSLayoutConstraint!
+    
+    @IBOutlet weak var Bill_To_hi: NSLayoutConstraint!
+    @IBOutlet weak var To_Addres_hi: NSLayoutConstraint!
     
     struct Id:Any{
         var id:String
@@ -194,12 +196,17 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
             
             if GetTyp == "3"{
                 Cash_Discount_Height.constant = 0
-                
                 Stk_lbl_hi.constant = 0
                 Stk_Mob_Sym_Hi.constant = 0
                 Stk_From_Mob_Hi.constant = 0
                 phone_img.isHidden = true
-               // Address_Hi.constant = 120
+                Address_Hi.constant = 90
+                Bill_To_hi.constant = 0
+                To_Addres_hi.constant = 0
+                
+            }else{
+                appendDashedBorder(to: das_Border_Line_View)
+                appendDashedBorder(to: Strik_Line)
             }
         }
         date_sel.text = GetDate
@@ -234,8 +241,7 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
         
         Free_TB.delegate = self
         Free_TB.dataSource = self
-        appendDashedBorder(to: das_Border_Line_View)
-        appendDashedBorder(to: Strik_Line)
+      
         
         Share_Pdf.addTarget(target: self, action: #selector(cURRENT_iMG))
         Share_Orde_Detils.addTarget(target: self, action: #selector(Share_Order_Bill))
