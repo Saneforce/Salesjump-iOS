@@ -131,6 +131,7 @@ class AddNewCustomer: IViewController, UITableViewDelegate, UITableViewDataSourc
         lblDOB.addTarget(target: self, action: #selector(selDOB))
         lblCls.addTarget(target: self, action: #selector(selCls))
         lblCats.addTarget(target: self, action: #selector(selCats))
+        Select_dis.addTarget(target: self, action: #selector(selDistributor))
         
         tbDataSelect.delegate=self
         tbDataSelect.dataSource=self
@@ -202,15 +203,19 @@ class AddNewCustomer: IViewController, UITableViewDelegate, UITableViewDataSourc
             lblDist.text = name
             NewOutlet.shared.Dist.id = id
             NewOutlet.shared.Dist.name = name
+            Select_dis.text = name
             
-//            lstRoutes = lstAllRoutes.filter({(fitem) in
-//                let StkId: String = String(format: ",%@,", fitem["stockist_code"] as! CVarArg)
-//                return Bool(StkId.range(of: String(format: ",%@,", id))?.lowerBound != nil )
-//            })
+            lstRoutes = lstAllRoutes.filter({(fitem) in
+                let StkId: String = String(format: ",%@,", fitem["stockist_code"] as! CVarArg)
+                return Bool(StkId.range(of: String(format: ",%@,", id))?.lowerBound != nil )
+            })
         } else if SelMode == "RUT" {
+            print(item)
+            
             lblRoute.text = name  //+(item["id"] as! String)
             NewOutlet.shared.Route.id = id
             NewOutlet.shared.Route.name = name
+            NewOutlet.shared.Route.Stk_Id = item["stockist_code"] as! String
         }else if SelMode == "HQ" {
             lblHQ.text = name  //+(item["id"] as! String)
             NewOutlet.shared.HQ.id = id
@@ -299,10 +304,14 @@ class AddNewCustomer: IViewController, UITableViewDelegate, UITableViewDataSourc
     
     @objc private func selDistributor() {
         isDate=false
+//        lstDist = lstDist.filter({(fitem) in
+//                        let StkId: String = String(format: ",%@,", fitem["id"] as! CVarArg)
+//            return Bool(StkId.range(of: String(format: ",%@,", NewOutlet.shared.Route.Stk_Id as CVarArg))?.lowerBound != nil )
+//                    })
         lObjSel = lstDist
         openWin(Mode: "DIS")
         tbDataSelect.reloadData()
-        lblSelTitle.text="Select the Distributor"
+        lblSelTitle.text="Select the \(UserSetup.shared.StkCap)"
     }
     
     @objc private func selRoutes() {
@@ -437,10 +446,10 @@ class AddNewCustomer: IViewController, UITableViewDelegate, UITableViewDataSourc
             Toast.show(message: "Select the Headquarter", controller: self)
             return false
         }
-//        if NewOutlet.shared.Dist.id == "" {
-//            Toast.show(message: "Select the Distributor", controller: self)
-//            return false
-//        }
+        if NewOutlet.shared.Dist.id == "" {
+            Toast.show(message: "Select the \(UserSetup.shared.StkCap)", controller: self)
+            return false
+        }
         if NewOutlet.shared.Route.id == "" {
             Toast.show(message: "Select the Route", controller: self)
             return false
