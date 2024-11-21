@@ -54,6 +54,9 @@ class AddNewCustomer: IViewController, UITableViewDelegate, UITableViewDataSourc
     @IBOutlet weak var Select_dis: LabelSelect!
     
     
+    @IBOutlet weak var Mobile_man: UILabel!
+    
+    
     struct lItem: Any {
         let id: String
         let name: String
@@ -151,6 +154,12 @@ class AddNewCustomer: IViewController, UITableViewDelegate, UITableViewDataSourc
         txOutletNm.placeholder = "Enter the \(UserSetup.shared.DrCap) Name"
         lblCls.text = "Select the \(UserSetup.shared.DrCap) Calss"
         lblCats.text = "Select the \(UserSetup.shared.DrCap) Category"
+        
+        if UserSetup.shared.Mandator == "phone"{
+            Mobile_man.isHidden = false
+        }else{
+            Mobile_man.isHidden = true
+        }
         
     }
     override func viewDidDisappear(_ animated: Bool) {
@@ -482,6 +491,11 @@ class AddNewCustomer: IViewController, UITableViewDelegate, UITableViewDataSourc
         }
         if NewOutlet.shared.Pincode == "" {
             Toast.show(message: "Enter the Pincode", controller: self)
+            return false
+        }
+        
+        if UserSetup.shared.Mandatory == "phone" && txMobile.text == "" {
+            
             return false
         }
         
