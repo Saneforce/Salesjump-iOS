@@ -127,6 +127,7 @@
 		3F4CC1932875580100BA2B4E /* AppTrackingTransparency.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F4CC1922875580100BA2B4E /* AppTrackingTransparency.framework */; };
 		3F4CC1952875581400BA2B4E /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F4CC1942875581400BA2B4E /* AdSupport.framework */; };
 		3F4CC197287B297A00BA2B4E /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F4CC196287B297A00BA2B4E /* NetworkMonitor.swift */; };
+		3F5160E12CEC95BA0047E35E /* CurrencyUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5160E02CEC95BA0047E35E /* CurrencyUtils.swift */; };
 		3F5816F0281172C400659510 /* MainMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5816EF281172C400659510 /* MainMenu.swift */; };
 		3F5B297828891D5C002D226C /* CheckPermissions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5B297728891D5C002D226C /* CheckPermissions.swift */; };
 		3F5B297A28894AB3002D226C /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5B297928894AB3002D226C /* GradientView.swift */; };
@@ -295,6 +296,7 @@
 		3F4CC1922875580100BA2B4E /* AppTrackingTransparency.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppTrackingTransparency.framework; path = System/Library/Frameworks/AppTrackingTransparency.framework; sourceTree = SDKROOT; };
 		3F4CC1942875581400BA2B4E /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		3F4CC196287B297A00BA2B4E /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
+		3F5160E02CEC95BA0047E35E /* CurrencyUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyUtils.swift; sourceTree = "<group>"; };
 		3F5816EF281172C400659510 /* MainMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenu.swift; sourceTree = "<group>"; };
 		3F5B297728891D5C002D226C /* CheckPermissions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckPermissions.swift; sourceTree = "<group>"; };
 		3F5B297928894AB3002D226C /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
@@ -685,6 +687,7 @@
 				3F0861C228053B3A006A30FB /* UserSetup.swift */,
 				3F06353628421D870027842E /* ImageUploader.swift */,
 				3F5B2FC2284B59E400574D7C /* MsgLoader.swift */,
+				3F5160E02CEC95BA0047E35E /* CurrencyUtils.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -909,6 +912,7 @@
 				3F61CA692C9157730029CE01 /* Closing Sale Entry (DB).swift in Sources */,
 				3F14EAEA27F73DAD00B0997B /* SecondaryVisit.swift in Sources */,
 				381EF93D2B19DB9700CED65F /* UI+Constraints.swift in Sources */,
+				3F5160E12CEC95BA0047E35E /* CurrencyUtils.swift in Sources */,
 				1514DF6D2BD7839D00E6B45A /* CustomAlertVCViewController.swift in Sources */,
 				3FEA6C312CA6E1A200F1EC2C /* AWSS3Manager.swift in Sources */,
 				3F3D4DDB27E810880063E271 /* GlobalFunc.swift in Sources */,

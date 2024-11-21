@@ -68,6 +68,7 @@ class DAY_REPORT_WITH_DATE_RANGE: IViewController, UITableViewDelegate, UITableV
         var Pri_Ord:Int
         var total_lines:Int
         var ACode:String
+        var liters:String
         var Brd_Wise_Orde:[AnyObject]
         
     }
@@ -224,7 +225,7 @@ class DAY_REPORT_WITH_DATE_RANGE: IViewController, UITableViewDelegate, UITableV
                     print(dayrepArray)
                     
                     for Data in dayrepArray{
-                        Report_Detils.append(Day_Report_Detils(Sf_Name: Data["SF_Name"] as? String ?? "", Date: Data["Adate"] as? String ?? "", Tc: Data["Drs"] as? Int ?? 0, pc: Data["orders"] as? Int ?? 0, Order_Value:  Data["orderValue"] as? String ?? "", Pri_Ord: Data["Stk"] as? Int ?? 0,total_lines: 0 ,ACode: Data["ACode"] as? String ?? "",Brd_Wise_Orde: []))
+                        Report_Detils.append(Day_Report_Detils(Sf_Name: Data["SF_Name"] as? String ?? "", Date: Data["Adate"] as? String ?? "", Tc: Data["Drs"] as? Int ?? 0, pc: Data["orders"] as? Int ?? 0, Order_Value:  Data["orderValue"] as? String ?? "", Pri_Ord: Data["Stk"] as? Int ?? 0,total_lines: 0 ,ACode: Data["ACode"] as? String ?? "", liters: String(Data["liters"] as? Double ?? 0),Brd_Wise_Orde: []))
                     }
                     
                     if let brndwise = json["brndwise"] as? [[String: Any]]{
@@ -378,8 +379,8 @@ class DAY_REPORT_WITH_DATE_RANGE: IViewController, UITableViewDelegate, UITableV
 
                 
                 data2 = [
-                    ["TC:", "PC:", "O. Value", "Pri Ord"],
-                    ["\(Tccall)","\(Pccall)","\(ovalue)","\(Privalue)"]
+                    ["TC:", "PC:", "O. Value       ", "Pri Ord"],
+                    ["\(Tccall)","\(Pccall)","\(ovalue)   ","\(Privalue)"]
                 ]
                 
                 
@@ -517,6 +518,7 @@ class DAY_REPORT_WITH_DATE_RANGE: IViewController, UITableViewDelegate, UITableV
         myDyPln.axn = axn
         myDyPln.Typ = typ
         myDyPln.CodeDate = data.Date
+        myDyPln.Total_and_Non_Total = id
         myDyPln.Hqname = Hq_Selection.text
         
         self.navigationController?.pushViewController(myDyPln, animated: true)

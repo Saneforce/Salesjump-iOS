@@ -176,8 +176,11 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
         Calender.dataSource = self
         Hq_Table.dataSource = self
         Hq_Table.delegate = self
-        appendDashedBorder(to: das_Border_Line_View)
-        appendDashedBorder(to: Strik_Line)
+        
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            appendDashedBorder(to: das_Border_Line_View)
+            appendDashedBorder(to: Strik_Line)
+            }
         
         Share_Pdf.addTarget(target: self, action: #selector(cURRENT_iMG))
         Share_Orde_Detils.addTarget(target: self, action: #selector(Share_Order_Bill))
@@ -300,15 +303,14 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
                                     let Volumes = (liters * 100).rounded() / 100
                                     let Phone = j["phoneNo"] as? String ??  ""
                                     let netAmount = j["finalNetAmnt"] as? String ?? ""
-                                    var Remarks = j["remarks"] as? String ?? ""
-                                    
-                                    if Remarks  == "" {
-                                        Remarks =  j["secOrdRemark"] as? String ?? ""
+                                    var Remarks = ""
+
+                                    if let Product_Detail = j["products"] as? String, !Product_Detail.isEmpty {
+                                        Remarks = j["secOrdRemark"] as? String ?? ""
+                                    } else {
+                                        Remarks = j["remarks"] as? String ?? ""
                                     }
-                                    
-                                    if Remarks == "Enter the Remarks"{
-                                        Remarks = ""
-                                    }
+
                                     
                                     let Stkid = j["stockist_code"] as? String ?? ""
                                     let tlDisAmt = j["tlDisAmt"] as? String ?? ""
@@ -439,12 +441,15 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
                                 
                                 Itemwise_Summary_Data.append(Itemwise_Summary(productName: "Total", ProductID: "", Qty: Int(Double(QtyTotal)), Free: Int(Double(FreeTota))))
 
-                                let formatter = NumberFormatter()
-                                formatter.numberStyle = .currency
-                                formatter.locale = Locale(identifier: "en_IN") // Indian locale
-                                if let formattedValue = formatter.string(from: NSNumber(value: Total_Value)){
-                                    Total_Value_Amt.text = formattedValue
-                                }
+//                                let formatter = NumberFormatter()
+//                                formatter.numberStyle = .currency
+//                                formatter.locale = Locale(identifier: "en_IN") // Indian locale
+//                                if let formattedValue = formatter.string(from: NSNumber(value: Total_Value)){
+//                                    Total_Value_Amt.text = formattedValue
+//                                }
+                                
+                                Total_Value_Amt.text = CurrencyUtils.formatCurrency(amount: Total_Value, currencySymbol: UserSetup.shared.currency_symbol)
+                                
                                 Scroll_and_Tb_Height()
                                 HQ_and_Route_TB.reloadData()
                                 Item_Summary_table.reloadData()
@@ -678,9 +683,13 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
                cell.Phone.text = "Phone:"+Oredrdatadetisl[indexPath.row].Phone
                if  let NetValue = Float(Oredrdatadetisl[indexPath.row].Net_amount){
                    
-                   cell.Netamt.text = "₹\(NetValue)"
+                 //  cell.Netamt.text = "₹\(NetValue)"
+                   cell.Netamt.text = CurrencyUtils.formatCurrency(amount: NetValue, currencySymbol: UserSetup.shared.currency_symbol)
+                   
                }else{
-                   cell.Netamt.text = "₹\(Oredrdatadetisl[indexPath.row].Net_amount)"
+                  // cell.Netamt.text = "₹\(Oredrdatadetisl[indexPath.row].Net_amount)"
+                   
+                   cell.Netamt.text = CurrencyUtils.formatCurrency(amount: (Oredrdatadetisl[indexPath.row].Net_amount), currencySymbol: UserSetup.shared.currency_symbol)
                }
                
                cell.Total_Disc_Val_lbl.text = Oredrdatadetisl[indexPath.row].Total_disc_lbl
@@ -805,7 +814,9 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
           Tax.text = String(Item.Total_Tax)
           Sch_Disc.text = String(Item.Total_Dic)
           Cas_disc.text = Item.tlDisAmt
-          Net_Amt.text = "₹ " + Item.Final_Amt
+          //Net_Amt.text = "₹ " + Item.Final_Amt
+          Net_Amt.text = CurrencyUtils.formatCurrency(amount: Item.Final_Amt, currencySymbol: UserSetup.shared.currency_symbol)
+          
           Day_Report_TB.reloadData()
           for i in Item.Orderlist{
               let free: Double = Double(i.freeValue) ?? 0

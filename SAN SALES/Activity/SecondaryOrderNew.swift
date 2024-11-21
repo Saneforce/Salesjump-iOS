@@ -2997,12 +2997,19 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
                 let taxAmountRound = Double(round(100 * taxAmount) / 100)
                 let totalAmountRound = Double(round(100 * total) / 100)
                 
-                cell.lblDisc.text = "₹ " + "\(discountAmountRound)"
-                cell.lblTax.text = "₹ " + "\(taxAmountRound)"
+              //  cell.lblDisc.text = "₹ " + "\(discountAmountRound)"
+                cell.lblDisc.text =   CurrencyUtils.formatCurrency(amount: (discountAmountRound), currencySymbol: UserSetup.shared.currency_symbol)
+                
+               // cell.lblTax.text = "₹ " + "\(taxAmountRound)"
+                cell.lblTax.text =  CurrencyUtils.formatCurrency(amount: taxAmountRound, currencySymbol: UserSetup.shared.currency_symbol)
+                
                 cell.product.taxAmount = taxAmountRound
                 cell.product.disCountAmount = discountAmountRound
                 cell.product.totalCount = totalAmountRound
-                cell.lblTotal.text = "₹ " + "\(totalAmountRound)"
+               // cell.lblTotal.text = "₹ " + "\(totalAmountRound)"
+                
+                cell.lblTotal.text = CurrencyUtils.formatCurrency(amount: totalAmountRound, currencySymbol: UserSetup.shared.currency_symbol)
+                
             }else {
                 let discountAmount = cell.product.disCountValue
                 
@@ -3020,12 +3027,20 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
                 let taxAmountRound = Double(round(100 * taxAmount) / 100)
                 let totalAmountRound = Double(round(100 * total) / 100)
                 
-                cell.lblDisc.text = "₹ " + "\(discountAmountRound)"
-                cell.lblTax.text = "₹ " + "\(taxAmountRound)"
+               // cell.lblDisc.text = "₹ " + "\(discountAmountRound)"
+                
+                cell.lblDisc.text = CurrencyUtils.formatCurrency(amount: discountAmountRound, currencySymbol: UserSetup.shared.currency_symbol)
+                
+               // cell.lblTax.text = "₹ " + "\(taxAmountRound)"
+                
+                cell.lblTax.text = CurrencyUtils.formatCurrency(amount: taxAmountRound, currencySymbol: UserSetup.shared.currency_symbol)
                 cell.product.taxAmount = taxAmountRound
                 cell.product.disCountAmount = discountAmountRound
                 cell.product.totalCount = totalAmountRound
-                cell.lblTotal.text = "₹ " + "\(totalAmountRound)"
+                
+               // cell.lblTotal.text = "₹ " + "\(totalAmountRound)"
+                
+                cell.lblTotal.text = CurrencyUtils.formatCurrency(amount: totalAmountRound, currencySymbol: UserSetup.shared.currency_symbol)
             }
             
         }else {
@@ -3238,25 +3253,34 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
         self.lblPriceItems.text = "Price (\(selectedProducts.count)) items"
         
         let totalAmount = self.allProducts.map{$0.totalCount}.reduce(0){$0 + $1}
-        self.lblPriceAmount.text = "₹ " + "\(Double(round(100 * totalAmount) / 100))"
+       // self.lblPriceAmount.text = "₹ " + "\(Double(round(100 * totalAmount) / 100))"
         
-        
+        self.lblPriceAmount.text = CurrencyUtils.formatCurrency(amount:(Double(round(100 * totalAmount) / 100)), currencySymbol: UserSetup.shared.currency_symbol)
         
         let totalUnits = selectedProducts.map{$0.totalUnits()}.reduce(0){$0 + $1}
         self.lblTotalQty.text = "\(totalUnits)"
         
-        self.lblTotalPayment.text = "₹ " + "\(Double(round(100 * totalAmount) / 100))"
+       // self.lblTotalPayment.text = "₹ " + "\(Double(round(100 * totalAmount) / 100))"
+        
+        self.lblTotalPayment.text = CurrencyUtils.formatCurrency(amount:(Double(round(100 * totalAmount) / 100)), currencySymbol: UserSetup.shared.currency_symbol)
         
         self.lblFinalItems.text = "Items : \(selectedProducts.count)"
         
-        self.lblFinalRate.text = "₹ " + "\(Double(round(100 * totalAmount) / 100))"
+       // self.lblFinalRate.text = "₹ " + "\(Double(round(100 * totalAmount) / 100))"
+        
+        self.lblFinalRate.text = CurrencyUtils.formatCurrency(amount:(Double(round(100 * totalAmount) / 100)), currencySymbol: UserSetup.shared.currency_symbol)
         
     }
     
     func updateTotal() {
         
         let totalAmount = self.allProducts.map{$0.totalCount}.reduce(0){$0 + $1}
-        self.lblTotalRate.text = "₹ " + "\(Double(round(100 * totalAmount) / 100))"
+        
+        // Old
+       // self.lblTotalRate.text = "₹ " + "\(Double(round(100 * totalAmount) / 100))"
+        
+        // New
+        self.lblTotalRate.text =  CurrencyUtils.formatCurrency(amount: (Double(round(100 * totalAmount) / 100)), currencySymbol: UserSetup.shared.currency_symbol)
         
         
         let totalItems = self.allProducts.filter({ product in

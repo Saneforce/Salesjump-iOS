@@ -365,9 +365,11 @@ class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UI
 
                print(Total)
 
-                if let formattedValue = formatter.string(from: NSNumber(value: Total)) {
-                    Total_Value_Amt.text = formattedValue
-                }
+//                if let formattedValue = formatter.string(from: NSNumber(value: Total)) {
+//                    Total_Value_Amt.text = formattedValue
+//                }
+                
+                Total_Value_Amt.text = CurrencyUtils.formatCurrency(amount: Total, currencySymbol: UserSetup.shared.currency_symbol)
                 
                 
                 HQ_and_Route_TB.reloadData()
@@ -695,9 +697,14 @@ class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UI
                cell.Phone.text = "Phone:"+OrderDetils_For_Distributor[indexPath.row].Phone_No
                if  let NetValue = Float(OrderDetils_For_Distributor[indexPath.row].Amt){
                    
-                   cell.Netamt.text = "₹\(NetValue)"
+               //    cell.Netamt.text = "₹\(NetValue)"
+                   
+                   cell.Netamt.text = CurrencyUtils.formatCurrency(amount: NetValue, currencySymbol: UserSetup.shared.currency_symbol)
+                   
                }else{
-                   cell.Netamt.text = "₹\(OrderDetils_For_Distributor[indexPath.row].Amt)"
+                 //  cell.Netamt.text = "₹\(OrderDetils_For_Distributor[indexPath.row].Amt)"
+                   cell.Netamt.text = CurrencyUtils.formatCurrency(amount: (OrderDetils_For_Distributor[indexPath.row].Amt), currencySymbol: UserSetup.shared.currency_symbol)
+                   
                }
                
                cell.Total_Disc_Val_lbl.text = OrderDetils_For_Distributor[indexPath.row].Dis
@@ -806,7 +813,9 @@ class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UI
           Orderlist = Item.Orderitem
           Tax.text = String(Item.Tax)
           Sch_Disc.text = String(Item.Dis)
-          Net_Amt.text = "₹ " + Item.Amt
+         // Net_Amt.text = "₹ " + Item.Amt
+          Net_Amt.text = CurrencyUtils.formatCurrency(amount: Item.Amt, currencySymbol: UserSetup.shared.currency_symbol)
+          
           for i in Item.Orderitem{
               let free: Double = Double(i.freeValue) ?? 0
               if free != 0 {
@@ -823,15 +832,9 @@ class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UI
           Day_Report_TB.reloadData()
           Day_Report_View.isHidden = false
       }
-
-    
-    
     @objc func Back_View(){
         Day_Report_View.isHidden = true
     }
-    
-    
-    
     @objc func Close_Calender(){
         Calender_View.isHidden = true
     }
@@ -843,7 +846,7 @@ class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UI
     @objc private func GotoHome() {
         if let navigationController = self.navigationController {
             navigationController.popViewController(animated: true)
-        } else {
+        }else{
             let storyboard = UIStoryboard(name: "Reports 2", bundle: nil)
             let viewController = storyboard.instantiateViewController(withIdentifier: "DAY_REPORT_WITH_DATE_RANGE") as! DAY_REPORT_WITH_DATE_RANGE
             let navController = UINavigationController(rootViewController: viewController)
