@@ -1924,6 +1924,9 @@
                     </view>
                     <size key="freeformSize" width="414" height="1800"/>
                     <connections>
+                        <outlet property="Outlet_Category" destination="Nc1-5O-cU4" id="jLy-VO-tPE"/>
+                        <outlet property="Outlet_Class" destination="POc-dY-YlU" id="rWm-wR-IqV"/>
+                        <outlet property="Outlet_Nmae" destination="2Xl-qi-Cy9" id="Hu3-Fu-pCI"/>
                         <outlet property="SetSalValu" destination="12g-5l-FaN" id="s40-zQ-D2c"/>
                         <outlet property="btnBack" destination="cKw-x5-8f9" id="UK6-HA-K4i"/>
                         <outlet property="calendar" destination="Vf5-Vs-mQI" id="Zl8-gc-dFS"/>
@@ -2466,6 +2469,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="Retailer_Tit" destination="tvF-QC-nNi" id="aaa-L6-pXJ"/>
                         <outlet property="SetVal" destination="CKa-sz-LfA" id="3yg-2g-6DC"/>
                         <outlet property="btnAdd" destination="AYt-lB-pQr" id="SXe-xd-ESf"/>
                         <outlet property="btnBack" destination="Bap-ia-VmB" id="VOF-lG-lIE"/>
@@ -9561,7 +9565,7 @@
                                                                                                                     <rect key="frame" x="0.0" y="0.0" width="30" height="64"/>
                                                                                                                     <subviews>
                                                                                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="+" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MSh-45-Mgm">
-                                                                                                                            <rect key="frame" x="0.0" y="0.0" width="30" height="64"/>
+                                                                                                                            <rect key="frame" x="0.0" y="0.0" width="30" height="63"/>
                                                                                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                                                                                                             <fontDescription key="fontDescription" name="Poppins-SemiBold" family="Poppins" pointSize="18"/>
                                                                                                                             <color key="textColor" systemColor="systemGreenColor"/>
@@ -9583,7 +9587,7 @@
                                                                                                                     <rect key="frame" x="122" y="0.0" width="30" height="64"/>
                                                                                                                     <subviews>
                                                                                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="-" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kFg-1e-Ea2">
-                                                                                                                            <rect key="frame" x="0.0" y="0.0" width="31" height="64"/>
+                                                                                                                            <rect key="frame" x="0.0" y="0.0" width="31" height="63"/>
                                                                                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                                                                                                             <fontDescription key="fontDescription" name="Poppins-Bold" family="Poppins" pointSize="18"/>
                                                                                                                             <color key="textColor" systemColor="systemRedColor"/>

@@ -79,6 +79,19 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
     @IBOutlet weak var Bill_To_hi: NSLayoutConstraint!
     @IBOutlet weak var To_Addres_hi: NSLayoutConstraint!
     
+    
+    @IBOutlet weak var Zero_Billing_summary: UITableView!
+    
+
+    @IBOutlet weak var Zero_Billing_addres_Tb_Hi: NSLayoutConstraint!
+    
+    
+    @IBOutlet weak var Zero_Billing_Summary_View_Hi: NSLayoutConstraint!
+    
+    
+    
+    @IBOutlet weak var Zero_Billing_View: UIView!
+    
     struct Id:Any{
         var id:String
         var Stkid:String
@@ -123,6 +136,8 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
     }
     
     var Itemwise_Summary_Data:[Itemwise_Summary] = []
+    var Zero_Billing_Product:[Itemwise_Summary] = []
+    
     var Orderdata:[Id] = []
     var Oredrdatadetisl:[OrderDetail] = []
     var Orderlist:[OrderItemModel] = []
@@ -242,6 +257,9 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
         Free_TB.delegate = self
         Free_TB.dataSource = self
       
+        
+        Zero_Billing_summary.delegate = self
+        Zero_Billing_summary.dataSource = self
         
         Share_Pdf.addTarget(target: self, action: #selector(cURRENT_iMG))
         Share_Orde_Detils.addTarget(target: self, action: #selector(Share_Order_Bill))
@@ -788,6 +806,11 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
             let Height = CGFloat(Row_Height + row_height)
             return Height + height
         }
+        
+        if Zero_Billing_summary == tableView{
+            return 30
+        }
+        
         return 30
     }
     
@@ -827,6 +850,23 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
         print(Item_Summary_TB_hEIGHT.constant)
         
         
+        //Zero Billing addres height
+        
+        if Zero_Billing_Product.isEmpty{
+            Zero_Billing_View.isHidden = true
+            Zero_Billing_Summary_View_Hi.constant = 0
+            Scroll_height .constant =  Scroll_height .constant  +  Zero_Billing_Summary_View_Hi.constant
+        }else{
+            Zero_Billing_View.isHidden = false
+            let Zero_Billing_Height = Zero_Billing_Summary_View_Hi.constant -   Zero_Billing_addres_Tb_Hi.constant
+            let Zero_Scroll_Height = CGFloat(Height) + CGFloat(Zero_Billing_Product.count * 32)
+            Zero_Billing_addres_Tb_Hi.constant =  CGFloat(Zero_Billing_Product.count * 32)
+            Zero_Billing_Summary_View_Hi.constant =  Zero_Scroll_Height
+            Scroll_height .constant =  Scroll_height .constant  +  Zero_Billing_Summary_View_Hi.constant + 100
+        }
+        
+        
+
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -845,6 +885,9 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
         if Free_TB == tableView{
            return FreeDetils.count
          }
+        if Zero_Billing_summary == tableView{
+            return Zero_Billing_Product.count
+        }
         
         return Oredrdatadetisl.count
     }
@@ -911,6 +954,12 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
                cell.lblText2.text = String(FreeDetils[indexPath.row].Free)
                
                return cell
+           }else if Zero_Billing_summary == tableView {
+               let cellS = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! Range_Item_summary_TB
+               cellS.Product_Name.text = Zero_Billing_Product[indexPath.row].productName
+               cellS.Vol.text =  String(Zero_Billing_Product[indexPath.row].Qty)
+               return cellS
+               
            }else{
                let cellS = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! Range_Item_summary_TB
  
