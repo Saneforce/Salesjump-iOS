@@ -155,7 +155,7 @@ class AddNewCustomer: IViewController, UITableViewDelegate, UITableViewDataSourc
         lblCls.text = "Select the \(UserSetup.shared.DrCap) Calss"
         lblCats.text = "Select the \(UserSetup.shared.DrCap) Category"
         
-        if UserSetup.shared.Mandator == "phone"{
+        if UserSetup.shared.Mandator != "phone"{
             Mobile_man.isHidden = false
         }else{
             Mobile_man.isHidden = true
@@ -494,8 +494,8 @@ class AddNewCustomer: IViewController, UITableViewDelegate, UITableViewDataSourc
             return false
         }
         
-        if UserSetup.shared.Mandatory == "phone" && txMobile.text == "" {
-            
+        if UserSetup.shared.Mandatory != "phone" && txMobile.text == "" {
+            Toast.show(message: "Enter the Mobile Number", controller: self)
             return false
         }
         

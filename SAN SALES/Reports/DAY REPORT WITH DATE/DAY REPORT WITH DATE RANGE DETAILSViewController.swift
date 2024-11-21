@@ -220,8 +220,11 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
                 To_Addres_hi.constant = 0
                 
             }else{
-                appendDashedBorder(to: das_Border_Line_View)
-                appendDashedBorder(to: Strik_Line)
+                
+            if UIDevice.current.userInterfaceIdiom == .phone {
+                    appendDashedBorder(to: das_Border_Line_View)
+                    appendDashedBorder(to: Strik_Line)
+                }
             }
         }
         date_sel.text = GetDate
