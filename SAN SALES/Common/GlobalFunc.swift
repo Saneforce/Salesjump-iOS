@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 import Alamofire
+import Reachability
 
 extension String {
     func sizeOfString(maxWidth: CGFloat, font: UIFont) -> CGSize {
@@ -256,6 +257,17 @@ extension UIResponder {
 }
 
 class GlobalFunc{
+    
+    func hasInternet() -> Bool {
+        do{
+            let reachability = try Reachability.init()
+            let networkStatus = reachability.connection
+            return (networkStatus != .unavailable)
+        }
+        catch{
+            return false
+        }
+    }
     
     //MARK:- Convert it with JsonConverter
     static func convertToDictionary(text: String) -> Any? {

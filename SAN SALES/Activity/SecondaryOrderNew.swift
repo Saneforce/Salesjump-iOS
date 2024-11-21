@@ -3348,14 +3348,14 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
             return
         }
         
-        if(NetworkMonitor.Shared.isConnected != true){
-            let alert = UIAlertController(title: "Information", message: "Check the Internet Connection", preferredStyle: .alert)
-                 alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
-                     return
-                 })
-                 self.present(alert, animated: true)
-                return
-        }
+//        if(NetworkMonitor.Shared.isConnected != true){
+//            let alert = UIAlertController(title: "Information", message: "Check the Internet Connection", preferredStyle: .alert)
+//                 alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
+//                     return
+//                 })
+//                 self.present(alert, animated: true)
+//                return
+//        }
         
         let alert = UIAlertController(title: "Confirmation", message: "Do you want to submit order?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
@@ -3694,32 +3694,66 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
         
         print(params)
         
-        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"dcr/save&divisionCode=" + self.DivCode + "&rSF=" + self.SFCode + "&sfCode=" + self.SFCode, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseData {
-        AFdata in
-        self.LoadingDismiss()
-        PhotosCollection.shared.PhotoList = []
-        switch AFdata.result
-        {
+        if GlobalFunc().hasInternet() {
+            AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"dcr/save&divisionCode=" + self.DivCode + "&rSF=" + self.SFCode + "&sfCode=" + self.SFCode, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseData {
+            AFdata in
+            self.LoadingDismiss()
+            PhotosCollection.shared.PhotoList = []
+            switch AFdata.result
+            {
+                
+            case .success(let value):
+                print(value)
+                
+                let apiResponse = try? JSONSerialization.jsonObject(with: AFdata.data! ,options: JSONSerialization.ReadingOptions.allowFragments)
+                print(apiResponse as Any)
+                
+                
+                
+                
+                Toast.show(message: "Order has been submitted successfully", controller: self)
+                VisitData.shared.clear()
+                GlobalFunc.movetoHomePage()
+                
+            case .failure(let error):
+                let alert = UIAlertController(title: "Information", message: error.errorDescription, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
+                    return
+                })
+                self.present(alert, animated: true)
+            }
+        }
+        }else {
+            self.LoadingDismiss()
             
-        case .success(let value):
-            print(value)
+            var offlineCallData : [String : Any]!
             
-            let apiResponse = try? JSONSerialization.jsonObject(with: AFdata.data! ,options: JSONSerialization.ReadingOptions.allowFragments)
-            print(apiResponse as Any)
+            print(lstPlnDetail[0])
+            let route = (lstPlnDetail[0]["ClstrName"] as? String ?? "")
+            offlineCallData = ["params": params,"name": VisitData.shared.CustName,"route": route,"date": Date().toString(format: "yyyy-MM-dd HH:mm:ss"),"activityDate" : Date().toString(format: "yyyy-MM-dd 00:00:00"),"distributorName" : VisitData.shared.Dist.name,"status" : "Sending"]
             
+            var totalCalls = [[String : Any]]()
             
-            Toast.show(message: "Order has been submitted successfully", controller: self)
+            //totalCalls = UserDefaults.standard.object(forKey: "SecondaryOrderData") as? [[String : Any]]
+            
+            if let list = UserDefaults.standard.object(forKey: "SecondaryOrderData") as? [[String : Any]] {
+                totalCalls = list
+            }
+            
+            totalCalls.append(offlineCallData)
+            
+            print(totalCalls)
+            UserDefaults.standard.set(totalCalls, forKey: "SecondaryOrderData")
+            UserDefaults.standard.synchronize()
+            
+           // AppDefaults.shared.save(key: .OutBox, value: T)
+            
+            Toast.show(message: "Internet is disconnected...Now in offline mode", controller: self)
             VisitData.shared.clear()
             GlobalFunc.movetoHomePage()
-            
-        case .failure(let error):
-            let alert = UIAlertController(title: "Information", message: error.errorDescription, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
-                return
-            })
-            self.present(alert, animated: true)
         }
-    }
+        
+        
     }
     
     @IBAction func proceedAction(_ sender: UIButton) {
@@ -3918,3 +3952,38 @@ struct SecondaryOrderNewSelectedList {
     }
     
 }
+
+
+//enum DefaultKeys:String {
+//    case OutBox = "OutBox"
+//}
+//
+//class AppDefaults {
+//    
+//    static let shared = AppDefaults()
+//    
+//    let userdefaults = UserDefaults.standard
+//    
+//    func getOutBoxes() -> [[String: Any]]{
+//        guard let outboxArray = self.get(key: .OutBox, type: [[String: Any]]()) else {
+//            return [[String: Any]]()
+//        }
+//        return outboxArray
+//    }
+//    
+//    
+//    
+//    
+//    func save<T>(key:DefaultKeys,value:T) {
+//        self.userdefaults.set(value, forKey: key.rawValue)
+//        self.userdefaults.synchronize()
+//    }
+//    
+//    func get<T>(key:DefaultKeys,type:T) -> T? {
+//        if let data = self.userdefaults.value(forKey: key.rawValue) as? T {
+//            return data
+//        }
+//        return nil
+//    }
+//    
+//}

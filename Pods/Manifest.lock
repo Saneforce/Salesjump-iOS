@@ -11,6 +11,7 @@ PODS:
     - SwiftAlgorithms (~> 1.0)
   - FSCalendar (2.8.4)
   - Parchment (3.2.0)
+  - ReachabilitySwift (5.2.4)
   - SwiftAlgorithms (1.0.0)
 
 DEPENDENCIES:
@@ -21,6 +22,7 @@ DEPENDENCIES:
   - Charts
   - FSCalendar
   - Parchment
+  - ReachabilitySwift
 
 SPEC REPOS:
   trunk:
@@ -31,6 +33,7 @@ SPEC REPOS:
     - Charts
     - FSCalendar
     - Parchment
+    - ReachabilitySwift
     - SwiftAlgorithms
 
 SPEC CHECKSUMS:
@@ -41,8 +44,9 @@ SPEC CHECKSUMS:
   Charts: ce0768268078eee0336f122c3c4ca248e4e204c5
   FSCalendar: 2d1d0d9398f12d439f55c1fe0f01525b151b8260
   Parchment: a43c440b22c8a60f7e0196b74339446d4d1d18ea
+  ReachabilitySwift: 32793e867593cfc1177f5d16491e3a197d2fccda
   SwiftAlgorithms: 38dda4731d19027fdeee1125f973111bf3386b53
 
-PODFILE CHECKSUM: db850a6bbea50cc557cbe066085b7c5afbb6cf1f
+PODFILE CHECKSUM: 0b22fa630c106791c16224c78c81d9e1f90e29dc
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.16.2
