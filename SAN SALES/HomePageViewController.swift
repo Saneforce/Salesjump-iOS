@@ -125,8 +125,12 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         
       
         
-        
-        self.tpMandatoryNeed()
+        if !GlobalFunc().hasInternet() {
+            Toast.show(message: "Internet is disconnected...Now in offline mode", controller: self)
+        }else{
+            self.tpMandatoryNeed()
+        }
+        // self.tpMandatoryNeed()
         /*if let json = try JSONSerialization.jsonObject(with: prettyPrintedJson!, options: []) as? [String: Any] {
                 // try to read out a string array
                 if let names = json["names"] as? [String] {
@@ -233,14 +237,18 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
             Dashboard()
         }
         
-        Navstartfrom()
-        DashboardNew()
-        if UserSetup.shared.SrtEndKMNd != 2{
-            LOG_OUTMODE()
-        }
-        neededMOT()
+        if !GlobalFunc().hasInternet() {
+            Toast.show(message: "Internet is disconnected...Now in offline mode", controller: self)
+        }else{
+            Navstartfrom()
+            DashboardNew()
+            if UserSetup.shared.SrtEndKMNd != 2{
+                LOG_OUTMODE()
+            }
+            neededMOT()
         
         formatCurrency_test()
+        }
     }
     
     func tpMandatoryNeed() {

@@ -13,6 +13,7 @@ target 'SAN SALES' do
   pod 'AWSS3'
   pod 'AWSCognito'
   pod 'AWSCore'
+  pod 'ReachabilitySwift'
 end
 
 post_install do |installer|

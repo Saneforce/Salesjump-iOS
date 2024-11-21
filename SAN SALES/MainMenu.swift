@@ -102,6 +102,7 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
         if (UserSetup.shared.CL_SS_ND == 1){
             strMasList.append(mnuItem.init(MasId:20, MasName: "Closing Stock Entry (SS)", MasImage: "SubmittedCalls"))
         }
+        strMasList.append(mnuItem.init(MasId: 21, MasName: "Outbox", MasImage: "SwitchRoute"))
         menuClose.addTarget(target: self, action: #selector(closeMenuWin))
         tbMenuDetail.delegate=self
         tbMenuDetail.dataSource=self
@@ -367,6 +368,10 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
         }else if lItm.MasId == 20{
             let rptstoryboard = UIStoryboard(name: "Main", bundle: nil)
             let RptMnuVc = rptstoryboard.instantiateViewController(withIdentifier: "ClosingStockEntry__SS_") as! ClosingStockEntry__SS_
+            viewController.setViewControllers([RptMnuVc], animated: false)
+        }else if lItm.MasId == 21{
+            let rptstoryboard = UIStoryboard(name: "Main", bundle: nil)
+            let RptMnuVc = rptstoryboard.instantiateViewController(withIdentifier: "sbOutbox") as! OutBox
             viewController.setViewControllers([RptMnuVc], animated: false)
         }
         (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)

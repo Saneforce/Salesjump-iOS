@@ -198,7 +198,8 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
             if tbZeroOrd == tableView {
                 let item: [String: Any] = objOfferDetail[indexPath.row] as! [String : Any]
                 print(item)
-                cell.lblText?.text = item["OffPName"] as? String
+                let name = (item["OffUntID"] as? String) != "" ? (item["OffUntID"] as? String) : (item["OffPName"] as? String)
+                cell.lblText?.text = name//  item["OffUntID"] as? String
                 cell.lblUOM?.text = String(format: "%@",item["OffUntName"] as! String)
                 cell.lblQty?.text = String(format: "%i", item["offQty"] as! Int)
                 
