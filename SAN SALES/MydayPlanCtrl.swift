@@ -1015,9 +1015,8 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
         isMulti=false
         if UserSetup.shared.tpDcrDeviationNeed == 0 && !switchDeviate.isOn{
             let code = self.tpDatas.tp.first?.Worked_with_Code.string ?? ""
-            
             lObjSel=lstDist.filter{($0["id"] as? Int ?? 0) == Int(code)}
-        }else {
+        }else{
             lObjSel=lstDist
         }
         
