@@ -60,17 +60,22 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
     @IBOutlet weak var Total_Value_Amt: UILabel!
     @IBOutlet weak var Share_Pdf: UIImageView!
     @IBOutlet weak var Share_Orde_Detils: UIImageView!
-    
-    
     @IBOutlet weak var Cash_Discount_Height: NSLayoutConstraint!
-    
-    
     @IBOutlet weak var Free_TB: UITableView!
-    
-    
     @IBOutlet weak var height_for_Free_Tb: NSLayoutConstraint!
-    
     @IBOutlet weak var free_view: UIView!
+    
+    
+    
+    // View Open BY Primary Order
+    
+    
+    @IBOutlet weak var Stk_lbl_hi: NSLayoutConstraint!
+    @IBOutlet weak var Stk_Mob_Sym_Hi: NSLayoutConstraint!
+    @IBOutlet weak var Stk_From_Mob_Hi: NSLayoutConstraint!
+    
+    @IBOutlet weak var phone_img: UIImageView!
+    @IBOutlet weak var Address_Hi: NSLayoutConstraint!
     
     struct Id:Any{
         var id:String
@@ -189,6 +194,12 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
             
             if GetTyp == "3"{
                 Cash_Discount_Height.constant = 0
+                
+                Stk_lbl_hi.constant = 0
+                Stk_Mob_Sym_Hi.constant = 0
+                Stk_From_Mob_Hi.constant = 0
+                phone_img.isHidden = true
+               // Address_Hi.constant = 120
             }
         }
         date_sel.text = GetDate
@@ -278,6 +289,7 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
         Orderdata.removeAll()
         Itemwise_Summary_Data.removeAll()
         Total_Value_Amt.text = "0.0"
+        Total_Value = 0
        // self.ShowLoading(Message: "Loading...")
         
         var get_Hq_Id = SFCode
@@ -337,10 +349,12 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
                             let tlDisAmt = j["tlDisAmt"] as? String ?? ""
                             let Order_date = j["Order_date"] as? String ?? ""
                             
-                            let minsAmount = Double(netAmount.isEmpty ? "0" : netAmount)! - Double(j["tlDisAmt"] as? String ?? "0")!
                             
-                            let  Net_amount = netAmount.isEmpty ? "0" : netAmount
-                            let Final_Amt = String(format: "%.2f", minsAmount)
+                            
+                            var minsAmount = Double(netAmount.isEmpty ? "0" : netAmount)! - Double(tlDisAmt.isEmpty ? "0" :tlDisAmt)!
+                            
+                            var  Net_amount = netAmount.isEmpty ? "0" : netAmount
+                            var Final_Amt = String(format: "%.2f", minsAmount)
                             
                             print(minsAmount)
                             
@@ -419,10 +433,17 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
                                 
                                 var Total_discValue = 0.0
                                 var Total_taxValue = 0.0
-                                
+                                var Total_Amount = 0.0
                                 for k in itemList{
                                     Total_discValue = Total_discValue + Double(k.discValue)!
                                     Total_taxValue = Total_taxValue + Double(k.taxValue)!
+                                    Total_Amount = Total_Amount + Double(k.totalValue)!
+                                }
+                                
+                                if minsAmount == 0{
+                                    minsAmount =  Total_Amount
+                                    Final_Amt = String(Total_Amount)
+                                    Net_amount = String(Total_Amount)
                                 }
                                 
                                 print(Orderdata[i].Orderdata)
@@ -445,7 +466,7 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
                                 print(Total_Value)
                                 // second
                                 print(Net_amount)
-                                Total_Value = Total_Value + Double(Net_amount)!
+                                Total_Value = Total_Value + minsAmount
                                 
                                 print(Total_Value)
                                 print(Oredrdatadetisl)
@@ -483,13 +504,18 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
                                 print(itemList)
                                 var Total_discValue = 0.0
                                 var Total_taxValue = 0.0
-                                
+                                var Total_Amount = 0.0
                                 for k in itemList{
                                     Total_discValue = Total_discValue + Double(k.discValue)!
                                     Total_taxValue = Total_taxValue + Double(k.taxValue)!
+                                    Total_Amount = Total_Amount + Double(k.totalValue)!
+                                }
+                                if minsAmount == 0{
+                                    minsAmount =  Total_Amount
+                                    Final_Amt = String(Total_Amount)
+                                    Net_amount = String(Total_Amount)
                                 }
                                 
-                                print(Pc_Id)
                                 
                                 let stkMobNo = j["stkMobNo"] as? String ?? ""
                                 
@@ -504,8 +530,8 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
                                     
                                     Oredrdatadetisl.append(OrderDetail(id: id, Route: Route, Routeflg: "1", Stockist: Stockist, name: "1. "+name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "\(itemList.count)", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: tlDisAmt, Order_date: Order_date, Order_Count: 1,Total_Dic: Total_discValue,Total_Tax: Total_taxValue,Total_disc_lbl:"Total Discount ()", Final_Amt: Final_Amt, stkmob: stkMobNo,Orderlist: itemList))
                                 }
-                                
-                                Total_Value += Double(Net_amount) ?? 0.0
+                           
+                                Total_Value += minsAmount
                                 
                             }
                                 
