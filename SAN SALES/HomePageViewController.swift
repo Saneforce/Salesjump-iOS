@@ -151,7 +151,16 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         if (UserSetup.shared.SuperStockistNeed > 0){
             strMenuList.append(mnuItem.init(MnuId: 4, MenuName: UserSetup.shared.SuperStockistOrder, MenuImage: "mnuPrimary"))
         }
-        mnulist.constant = CGFloat(87*self.strMenuList.count)
+        
+        
+        if strMenuList.count == 1{
+            mnulist.constant = CGFloat(87*2)
+        }else{
+            
+            mnulist.constant = CGFloat(87*self.strMenuList.count)
+        }
+        
+        
                          self.view.layoutIfNeeded()
         var moveMyPln: Bool=false
         if LocalStoreage.string(forKey: "Mydayplan") == nil {

@@ -176,8 +176,11 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
         Calender.dataSource = self
         Hq_Table.dataSource = self
         Hq_Table.delegate = self
-        appendDashedBorder(to: das_Border_Line_View)
-        appendDashedBorder(to: Strik_Line)
+        
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            appendDashedBorder(to: das_Border_Line_View)
+            appendDashedBorder(to: Strik_Line)
+            }
         
         Share_Pdf.addTarget(target: self, action: #selector(cURRENT_iMG))
         Share_Orde_Detils.addTarget(target: self, action: #selector(Share_Order_Bill))
