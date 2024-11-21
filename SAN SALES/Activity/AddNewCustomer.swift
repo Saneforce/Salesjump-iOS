@@ -39,6 +39,24 @@ class AddNewCustomer: IViewController, UITableViewDelegate, UITableViewDataSourc
     
     @IBOutlet weak var SetSalValu: UIButton!
     
+    
+    
+    // Dynamic Caption
+    
+    @IBOutlet weak var Outlet_Nmae: UILabel!
+    @IBOutlet weak var Outlet_Class: UILabel!
+    @IBOutlet weak var Outlet_Category: UILabel!
+    
+    @IBOutlet weak var Dis: UILabel!
+    
+    // placeHolder
+    
+    @IBOutlet weak var Select_dis: LabelSelect!
+    
+    
+    @IBOutlet weak var Mobile_man: UILabel!
+    
+    
     struct lItem: Any {
         let id: String
         let name: String
@@ -116,11 +134,32 @@ class AddNewCustomer: IViewController, UITableViewDelegate, UITableViewDataSourc
         lblDOB.addTarget(target: self, action: #selector(selDOB))
         lblCls.addTarget(target: self, action: #selector(selCls))
         lblCats.addTarget(target: self, action: #selector(selCats))
+        Select_dis.addTarget(target: self, action: #selector(selDistributor))
         
         tbDataSelect.delegate=self
         tbDataSelect.dataSource=self
         
        // imgOutlet.image = UIImage(imageLiteralResourceName: "")
+        
+        lblTitleCap.text = "Add New \(UserSetup.shared.DrCap)"
+        
+        Outlet_Nmae.text = "\(UserSetup.shared.DrCap) Name"
+        
+        Outlet_Class.text = "\(UserSetup.shared.DrCap) Calss"
+        Outlet_Category.text = "\(UserSetup.shared.DrCap) Category"
+        Dis.text =   UserSetup.shared.StkCap
+        
+        
+        Select_dis.text = "Select the \(UserSetup.shared.StkCap)"
+        txOutletNm.placeholder = "Enter the \(UserSetup.shared.DrCap) Name"
+        lblCls.text = "Select the \(UserSetup.shared.DrCap) Calss"
+        lblCats.text = "Select the \(UserSetup.shared.DrCap) Category"
+        
+        if UserSetup.shared.Mandator != "phone"{
+            Mobile_man.isHidden = false
+        }else{
+            Mobile_man.isHidden = true
+        }
         
     }
     override func viewDidDisappear(_ animated: Bool) {
@@ -173,15 +212,19 @@ class AddNewCustomer: IViewController, UITableViewDelegate, UITableViewDataSourc
             lblDist.text = name
             NewOutlet.shared.Dist.id = id
             NewOutlet.shared.Dist.name = name
+            Select_dis.text = name
             
-//            lstRoutes = lstAllRoutes.filter({(fitem) in
-//                let StkId: String = String(format: ",%@,", fitem["stockist_code"] as! CVarArg)
-//                return Bool(StkId.range(of: String(format: ",%@,", id))?.lowerBound != nil )
-//            })
+            lstRoutes = lstAllRoutes.filter({(fitem) in
+                let StkId: String = String(format: ",%@,", fitem["stockist_code"] as! CVarArg)
+                return Bool(StkId.range(of: String(format: ",%@,", id))?.lowerBound != nil )
+            })
         } else if SelMode == "RUT" {
+            print(item)
+            
             lblRoute.text = name  //+(item["id"] as! String)
             NewOutlet.shared.Route.id = id
             NewOutlet.shared.Route.name = name
+            NewOutlet.shared.Route.Stk_Id = item["stockist_code"] as! String
         }else if SelMode == "HQ" {
             lblHQ.text = name  //+(item["id"] as! String)
             NewOutlet.shared.HQ.id = id
@@ -270,10 +313,14 @@ class AddNewCustomer: IViewController, UITableViewDelegate, UITableViewDataSourc
     
     @objc private func selDistributor() {
         isDate=false
+//        lstDist = lstDist.filter({(fitem) in
+//                        let StkId: String = String(format: ",%@,", fitem["id"] as! CVarArg)
+//            return Bool(StkId.range(of: String(format: ",%@,", NewOutlet.shared.Route.Stk_Id as CVarArg))?.lowerBound != nil )
+//                    })
         lObjSel = lstDist
         openWin(Mode: "DIS")
         tbDataSelect.reloadData()
-        lblSelTitle.text="Select the Distributor"
+        lblSelTitle.text="Select the \(UserSetup.shared.StkCap)"
     }
     
     @objc private func selRoutes() {
@@ -408,21 +455,21 @@ class AddNewCustomer: IViewController, UITableViewDelegate, UITableViewDataSourc
             Toast.show(message: "Select the Headquarter", controller: self)
             return false
         }
-//        if NewOutlet.shared.Dist.id == "" {
-//            Toast.show(message: "Select the Distributor", controller: self)
-//            return false
-//        }
+        if NewOutlet.shared.Dist.id == "" {
+            Toast.show(message: "Select the \(UserSetup.shared.StkCap)", controller: self)
+            return false
+        }
         if NewOutlet.shared.Route.id == "" {
             Toast.show(message: "Select the Route", controller: self)
             return false
         }
         
         if NewOutlet.shared.OutletName == "" {
-            Toast.show(message: "Enter the Outlet Name", controller: self)
+            Toast.show(message: "Enter the \(UserSetup.shared.DrCap) Name", controller: self)
             return false
         }
         if(NewOutlet.shared.ImgFileName == ""){
-            Toast.show(message: "Take Retailer Photo", controller: self)
+            Toast.show(message: "Take \(UserSetup.shared.DrCap) Photo", controller: self)
             return false
         }
         if NewOutlet.shared.OwnerName == "" {
@@ -444,6 +491,11 @@ class AddNewCustomer: IViewController, UITableViewDelegate, UITableViewDataSourc
         }
         if NewOutlet.shared.Pincode == "" {
             Toast.show(message: "Enter the Pincode", controller: self)
+            return false
+        }
+        
+        if UserSetup.shared.Mandatory != "phone" && txMobile.text == "" {
+            Toast.show(message: "Enter the Mobile Number", controller: self)
             return false
         }
         

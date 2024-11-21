@@ -31,11 +31,11 @@ class SecondaryVisit: IViewController, UITableViewDelegate, UITableViewDataSourc
     @IBOutlet weak var swOrderMode: UISwitch!
     @IBOutlet weak var txSearchSel: UITextField!
     @IBOutlet weak var btnBack: UIImageView!
-    
     @IBOutlet weak var vwBtnOrder: RoundedCornerView!
     @IBOutlet weak var vwBtnCam: RoundedCornerView!
-    
     @IBOutlet weak var SetVal: UIButton!
+    @IBOutlet weak var Retailer_Tit: UILabel!
+    
     
     struct lItem: Any {
         let id: String
@@ -71,6 +71,10 @@ class SecondaryVisit: IViewController, UITableViewDelegate, UITableViewDataSourc
     var sAddress: String = ""
     let LocalStoreage = UserDefaults.standard
     override func viewDidLoad() {
+        
+        Retailer_Tit.text = UserSetup.shared.drCap
+        lblRetailNm.text = "Select the \(UserSetup.shared.drCap)"
+        
         SetVal.isHidden = true
         lcLastvistHeight.constant = 0
         //lcContentHeight.constant = -400
@@ -285,7 +289,7 @@ class SecondaryVisit: IViewController, UITableViewDelegate, UITableViewDataSourc
     func validateForm() -> Bool {
         VisitData.shared.VstRemarks.name = txvRmks.text
         if VisitData.shared.CustID == "" {
-            Toast.show(message: "Select the Retailer", controller: self)
+            Toast.show(message: "Select the \(UserSetup.shared.DrCap)", controller: self)
             return false
         }
         return true
@@ -566,7 +570,7 @@ class SecondaryVisit: IViewController, UITableViewDelegate, UITableViewDataSourc
             self.tbDataSelect.reloadData()
         }
         
-        lblSelTitle.text="Select the Retailer"
+        lblSelTitle.text="Select the \(UserSetup.shared.drCap)"
         openWin(Mode: "RET")
     }
     

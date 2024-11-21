@@ -184,4 +184,5 @@ class Range_Item_summary_TB:UITableViewCell{
     @IBOutlet weak var Product_Name: UILabel!
     @IBOutlet weak var Qty: UILabel!
     @IBOutlet weak var Free: UILabel!
+    @IBOutlet weak var Vol: UILabel!
 }

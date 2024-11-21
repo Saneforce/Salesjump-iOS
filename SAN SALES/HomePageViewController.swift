@@ -139,7 +139,11 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
             }*/
         
         strMenuList.append(mnuItem.init(MnuId: 1, MenuName: UserSetup.shared.SecondaryCaption, MenuImage: "mnuPrimary"))
-        strMenuList.append(mnuItem.init(MnuId: 2, MenuName: UserSetup.shared.PrimaryCaption, MenuImage: "mnuPrimary"))
+        
+        if (UserSetup.shared.StkNeed == 1) {
+            strMenuList.append(mnuItem.init(MnuId: 2, MenuName: UserSetup.shared.PrimaryCaption, MenuImage: "mnuPrimary"))
+        }
+        
         print(UserSetup.shared.BrndRvwNd)
         if (UserSetup.shared.BrndRvwNd > 0) {
             strMenuList.append(mnuItem.init(MnuId: 3, MenuName: UserSetup.shared.BrandReviewVisit, MenuImage: "mnuPrimary"))
@@ -147,7 +151,16 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         if (UserSetup.shared.SuperStockistNeed > 0){
             strMenuList.append(mnuItem.init(MnuId: 4, MenuName: UserSetup.shared.SuperStockistOrder, MenuImage: "mnuPrimary"))
         }
-        mnulist.constant = CGFloat(87*self.strMenuList.count)
+        
+        
+        if strMenuList.count == 1{
+            mnulist.constant = CGFloat(87*2)
+        }else{
+            
+            mnulist.constant = CGFloat(87*self.strMenuList.count)
+        }
+        
+        
                          self.view.layoutIfNeeded()
         var moveMyPln: Bool=false
         if LocalStoreage.string(forKey: "Mydayplan") == nil {
@@ -233,13 +246,9 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
                 LOG_OUTMODE()
             }
             neededMOT()
+        
+        formatCurrency_test()
         }
-//        Navstartfrom()
-//        DashboardNew()
-//        if UserSetup.shared.SrtEndKMNd != 2{
-//            LOG_OUTMODE()
-//        }
-//        neededMOT()
     }
     
     func tpMandatoryNeed() {
@@ -541,7 +550,9 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
             cell.TotalCalls.text = String(todayDetail.TCvalue)
             cell.PcCalls.text = String(todayDetail.PCvalue)
             cell.BAC.text = String(todayDetail.BACvalue)
-            cell.Toalvalue.text = String(todayDetail.valuesTotal)
+           // cell.Toalvalue.text = String(todayDetail.valuesTotal)
+            
+            cell.Toalvalue.text =  CurrencyUtils.formatCurrency(amount: todayDetail.valuesTotal, currencySymbol: UserSetup.shared.currency_symbol)
         }
         
         return cell
@@ -998,6 +1009,10 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         for (key, value) in allItems {
             print("\(key): \(value)")
         }
+    }
+    
+    func formatCurrency_test(){
+        let formattedCurrency = CurrencyUtils.formatCurrency(amount: 100000, currencySymbol: UserSetup.shared.currency_symbol)
     }
 }
 

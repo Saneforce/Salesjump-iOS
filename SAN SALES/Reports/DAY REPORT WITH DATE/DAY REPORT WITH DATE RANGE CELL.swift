@@ -185,9 +185,6 @@ class DAY_REPORT_WITH_DATE_RANGE_CELL: UITableViewCell, UICollectionViewDataSour
                 cell.lblText?.attributedText = attributedText
                 cell.Test?.attributedText = attributedqty
             }
-            
-            
-            
         }else if Collection_View_Two == collectionView{
             let Item = BraindList[indexPath.row]
             print(Item)
@@ -208,19 +205,24 @@ class DAY_REPORT_WITH_DATE_RANGE_CELL: UITableViewCell, UICollectionViewDataSour
     
     
     func Reload(){
-        
         if let datas = RangData{
             
-            data = [
-                ["TC:", "PC:", "O. Value", "Pri Ord"],
-                ["\(datas.Tc)","\(datas.pc)","\(datas.Order_Value)","\(datas.Pri_Ord)"]
-            ]
-            
+            if UserSetup.shared.Liters_Need == 1{
+                data = [
+                    ["TC:", "PC:", "O. Value           ","Volumes  ", "Pri Ord"],
+                    ["\(datas.Tc)","\(datas.pc)","\(datas.Order_Value)  ","\(datas.liters)  ","\(datas.Pri_Ord)"]
+                ]
+            }else{
+                
+                
+                data = [
+                    ["TC:", "PC:", "O. Value           ", "Pri Ord"],
+                    ["\(datas.Tc)","\(datas.pc)","\(datas.Order_Value)  ","\(datas.Pri_Ord)"]
+                ]
+            }
             Tc = datas.Tc
             PC = datas.pc
-            
         }
-
         Collection_View.reloadData()
         Collection_View_Two.reloadData()
         Chart_Data()

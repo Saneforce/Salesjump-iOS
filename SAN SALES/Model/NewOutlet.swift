@@ -12,6 +12,7 @@ class NewOutlet{
     struct item: Any {
         var id: String=""
         var name: String=""
+        var Stk_Id:String = ""
     }
     
     var HQ: item = item()
