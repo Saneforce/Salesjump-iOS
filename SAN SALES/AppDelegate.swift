@@ -18,8 +18,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         // Override point for customization after application launch.
         //declare this property where it won't go out of scope relative to your listener
         
+        OfflineCallSync.shared
         //declare this inside of viewWillAppear
-        NetworkMonitor.Shared.startMonitoring()
+       // NetworkMonitor.Shared.startMonitoring()
         self.initializeS3()
         return true
     }
