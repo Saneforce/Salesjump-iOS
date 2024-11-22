@@ -20,7 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         
         OfflineCallSync.shared
         //declare this inside of viewWillAppear
-       // NetworkMonitor.Shared.startMonitoring()
+        NetworkMonitor.Shared.startMonitoring()
         self.initializeS3()
         return true
     }
