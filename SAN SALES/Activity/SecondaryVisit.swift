@@ -308,14 +308,14 @@ class SecondaryVisit: IViewController, UITableViewDelegate, UITableViewDataSourc
             Toast.show(message: "Please Enter or Select the Remarks", controller: self)
             return
         }
-        if(NetworkMonitor.Shared.isConnected != true){
-            let alert = UIAlertController(title: "Information", message: "Check the Internet Connection", preferredStyle: .alert)
-                 alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
-                     return
-                 })
-                 self.present(alert, animated: true)
-                return
-        }
+//        if(NetworkMonitor.Shared.isConnected != true){
+//            let alert = UIAlertController(title: "Information", message: "Check the Internet Connection", preferredStyle: .alert)
+//                 alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
+//                     return
+//                 })
+//                 self.present(alert, animated: true)
+//                return
+//        }
         
             let alert = UIAlertController(title: "Confirmation", message: "Do you want to submit this Visit Without Order ?", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
@@ -470,30 +470,59 @@ class SecondaryVisit: IViewController, UITableViewDelegate, UITableViewDataSourc
             "data": jsonString //"["+jsonString+"]"//
             ]
         print(params)
-        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"dcr/save&divisionCode=" + self.DivCode + "&rSF="+self.SFCode+"&sfCode="+self.SFCode, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
-            AFdata in
-            self.LoadingDismiss()
-            switch AFdata.result
-            {
-            case .success(let value):
-                print(value)
-                if let json = value as? [String: Any] {
-                    PhotosCollection.shared.PhotoList = []
-                    VisitData.shared.clear()
-                    Toast.show(message: "Call Visit has been submitted successfully", controller: self)
-                    let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
-                    UIApplication.shared.windows.first?.rootViewController = viewController
-                    UIApplication.shared.windows.first?.makeKeyAndVisible()
+        
+        if GlobalFunc().hasInternet() {
+            AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"dcr/save&divisionCode=" + self.DivCode + "&rSF="+self.SFCode+"&sfCode="+self.SFCode, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
+                AFdata in
+                self.LoadingDismiss()
+                switch AFdata.result
+                {
+                case .success(let value):
+                    print(value)
+                    if let json = value as? [String: Any] {
+                        PhotosCollection.shared.PhotoList = []
+                        VisitData.shared.clear()
+                        Toast.show(message: "Call Visit has been submitted successfully", controller: self)
+                        let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
+                        UIApplication.shared.windows.first?.rootViewController = viewController
+                        UIApplication.shared.windows.first?.makeKeyAndVisible()
+                    }
+                case .failure(let error):
+                    Toast.show(message: error.errorDescription ?? "", controller: self)
+                    /*let alert = UIAlertController(title: "Information", message: error.errorDescription, preferredStyle: .alert)
+                     alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
+                     return
+                     })
+                     self.present(alert, animated: true)*/
                 }
-            case .failure(let error):
-                Toast.show(message: error.errorDescription ?? "", controller: self)
-                /*let alert = UIAlertController(title: "Information", message: error.errorDescription, preferredStyle: .alert)
-                 alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
-                 return
-                 })
-                 self.present(alert, animated: true)*/
             }
+        }else {
+            self.LoadingDismiss()
+            
+            var offlineCallData : [String : Any]!
+            
+            print(lstPlnDetail[0])
+            let route = (lstPlnDetail[0]["ClstrName"] as? String ?? "")
+            offlineCallData = ["params": params,"name": VisitData.shared.CustName,"route": route,"date": Date().toString(format: "yyyy-MM-dd HH:mm:ss"),"activityDate" : Date().toString(format: "yyyy-MM-dd 00:00:00"),"distributorName" : VisitData.shared.Dist.name,"status" : "Sending"]
+            
+            var totalCalls = [[String : Any]]()
+            
+            
+            if let list = UserDefaults.standard.object(forKey: "SecondaryOrderData") as? [[String : Any]] {
+                totalCalls = list
+            }
+            
+            totalCalls.append(offlineCallData)
+            
+            print(totalCalls)
+            UserDefaults.standard.set(totalCalls, forKey: "SecondaryOrderData")
+            UserDefaults.standard.synchronize()
+            
+            Toast.show(message: "Internet is disconnected...Order has been submitted offline", controller: self)
+            VisitData.shared.clear()
+            GlobalFunc.movetoHomePage()
         }
+        
         
 //        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+"dcr/save&divisionCode=" + self.DivCode + "&rSF="+self.SFCode+"&sfCode="+self.SFCode, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseData { AFdata in
 //            self.LoadingDismiss()

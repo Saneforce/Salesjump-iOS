@@ -3772,7 +3772,7 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
             
            // AppDefaults.shared.save(key: .OutBox, value: T)
             
-            Toast.show(message: "Internet is disconnected...Now in offline mode", controller: self)
+            Toast.show(message: "Internet is disconnected...Order has been submitted offline", controller: self)
             VisitData.shared.clear()
             GlobalFunc.movetoHomePage()
         }
@@ -3977,37 +3977,3 @@ struct SecondaryOrderNewSelectedList {
     
 }
 
-
-//enum DefaultKeys:String {
-//    case OutBox = "OutBox"
-//}
-//
-//class AppDefaults {
-//    
-//    static let shared = AppDefaults()
-//    
-//    let userdefaults = UserDefaults.standard
-//    
-//    func getOutBoxes() -> [[String: Any]]{
-//        guard let outboxArray = self.get(key: .OutBox, type: [[String: Any]]()) else {
-//            return [[String: Any]]()
-//        }
-//        return outboxArray
-//    }
-//    
-//    
-//    
-//    
-//    func save<T>(key:DefaultKeys,value:T) {
-//        self.userdefaults.set(value, forKey: key.rawValue)
-//        self.userdefaults.synchronize()
-//    }
-//    
-//    func get<T>(key:DefaultKeys,type:T) -> T? {
-//        if let data = self.userdefaults.value(forKey: key.rawValue) as? T {
-//            return data
-//        }
-//        return nil
-//    }
-//    
-//}

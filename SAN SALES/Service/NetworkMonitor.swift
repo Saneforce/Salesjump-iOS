@@ -35,6 +35,8 @@ final class NetworkMonitor{
             self?.getConnectionType(path)
             if self?.isConnected == false {
                 Toast.showToast(message: "Internet Not Connect")
+                
+                self?.stopMonitoring()
             }else{
                 Toast.removeNotification()
             }
@@ -42,6 +44,7 @@ final class NetworkMonitor{
     }
     public func stopMonitoring(){
         monitor.cancel()
+        Toast.removeNotification()
     }
     private func getConnectionType(_ path: NWPath){
         if path.usesInterfaceType(.wifi) {
