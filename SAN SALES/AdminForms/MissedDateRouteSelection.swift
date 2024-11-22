@@ -624,9 +624,7 @@ class MissedDateRouteSelection : IViewController , UITableViewDelegate,UITableVi
             
             for i in 0..<retailerList.orderList.count {
                 
-                print(i)
                 let item : [String:Any] = retailerList.orderList[i].item as! [String:Any]
-                
                 let id=String(format: "%@", item["id"] as! CVarArg)
                 let uom=String(format: "%@", item["UOM"] as! String)
                 let uomName=String(format: "%@", item["UOMNm"] as! String)
@@ -636,7 +634,7 @@ class MissedDateRouteSelection : IViewController , UITableViewDelegate,UITableVi
                 let Qty=String(format: "%@", item["Qty"] as? String ?? "")
                 let saleQty=String(format: "%.0f", item["SalQty"] as! Double)
                 let offQty=(String(format: "%.2f", item["OffQty"] as! Int))
-                let fq=String(format: "%@", item["FQ"] as? Int ?? 0)
+               // let fq=String(format: "%@", item["FQ"] as? Int ?? 0)
                 let offProd=String(format: "%@", item["OffProd"] as? String ?? "")
                 let rate=(String(format: "%.2f", item["Rate"] as! Double))
                 let offProdNm=String(format: "%@", item["OffProdNm"] as? String ?? "")
