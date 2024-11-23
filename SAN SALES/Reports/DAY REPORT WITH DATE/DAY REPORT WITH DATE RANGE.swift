@@ -47,6 +47,8 @@ class DAY_REPORT_WITH_DATE_RANGE: IViewController, UITableViewDelegate, UITableV
     
     
     
+    @IBOutlet weak var Nodata_Lbl: UILabel!
+    @IBOutlet weak var Nodataavil_Height: NSLayoutConstraint!
     
     var data2:[[String]] = []
     
@@ -67,8 +69,10 @@ class DAY_REPORT_WITH_DATE_RANGE: IViewController, UITableViewDelegate, UITableV
         var Order_Value:String
         var Pri_Ord:Int
         var total_lines:Int
+        var Total_Product_Sold:Int
         var ACode:String
         var liters:String
+        var Disamt:String
         var Brd_Wise_Orde:[AnyObject]
         
     }
@@ -89,6 +93,9 @@ class DAY_REPORT_WITH_DATE_RANGE: IViewController, UITableViewDelegate, UITableV
         [Hq_View, Date_View, Table_View, Total_Call_View].forEach { view in
             view?.layer.cornerRadius = 10
         }
+        
+        Nodata_Lbl.isHidden = true
+        Nodataavil_Height.constant = 0
         data2 = [
             ["TC:", "PC:", "O. Value   ", "Pri Ord"],
             ["","","",""]
@@ -119,13 +126,16 @@ class DAY_REPORT_WITH_DATE_RANGE: IViewController, UITableViewDelegate, UITableV
         }
         
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
+        dateFormatter.dateFormat = "dd/MM/yyyy"
         let currentDate = Foundation.Date()
         let formattedDate = dateFormatter.string(from: currentDate)
         
         Hq_Selection.text = RangeData.shared.Hq_Name
-        Start_Date.text = RangeData.shared.from_Date
-        End_Date.text =  RangeData.shared.To_Date
+//        Start_Date.text = RangeData.shared.from_Date
+//        End_Date.text =  RangeData.shared.To_Date
+        Start_Date.text = formattedDate
+        End_Date.text = formattedDate
+        
         
         if   UserSetup.shared.SF_type == 1{
             hq_view_height.constant = 0
@@ -155,14 +165,18 @@ class DAY_REPORT_WITH_DATE_RANGE: IViewController, UITableViewDelegate, UITableV
         let dates = selectdate.string(from: date)
         
         
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd/MM/yyyy"
+        let currentDate = date
+        let formattedDate = dateFormatter.string(from: currentDate)
+        
         if Sel_Mod == "F"{
-            Start_Date.text = dates
+            Start_Date.text = formattedDate
             FDate = dates
             RangeData.shared.from_Date = dates
             RangeData.shared.from_Date = dates
-            
         }else{
-            End_Date.text = dates
+            End_Date.text = formattedDate
             TDate = dates
             RangeData.shared.To_Date = dates
         }
@@ -225,8 +239,10 @@ class DAY_REPORT_WITH_DATE_RANGE: IViewController, UITableViewDelegate, UITableV
                     print(dayrepArray)
                     
                     for Data in dayrepArray{
-                        Report_Detils.append(Day_Report_Detils(Sf_Name: Data["SF_Name"] as? String ?? "", Date: Data["Adate"] as? String ?? "", Tc: Data["Drs"] as? Int ?? 0, pc: Data["orders"] as? Int ?? 0, Order_Value:  Data["orderValue"] as? String ?? "", Pri_Ord: Data["Stk"] as? Int ?? 0,total_lines: 0 ,ACode: Data["ACode"] as? String ?? "", liters: String(Data["liters"] as? Double ?? 0),Brd_Wise_Orde: []))
+                        Report_Detils.append(Day_Report_Detils(Sf_Name: Data["SF_Name"] as? String ?? "", Date: Data["Adate"] as? String ?? "", Tc: Data["Drs"] as? Int ?? 0, pc: Data["orders"] as? Int ?? 0, Order_Value:  Data["orderValue"] as? String ?? "", Pri_Ord: Data["Stk"] as? Int ?? 0,total_lines: 0, Total_Product_Sold: 0 ,ACode: Data["ACode"] as? String ?? "", liters: String(Data["liters"] as? Double ?? 0), Disamt: String(Data["DisAmt"] as? Double ?? 0),Brd_Wise_Orde: []))
                     }
+                    
+                    print(Report_Detils)
                     
                     if let brndwise = json["brndwise"] as? [[String: Any]]{
                         
@@ -242,7 +258,6 @@ class DAY_REPORT_WITH_DATE_RANGE: IViewController, UITableViewDelegate, UITableV
                                 outputFormatter.dateFormat = "yyyy-MM-dd"
                                 let formattedDateString = outputFormatter.string(from: date)
                                 
-                                print(formattedDateString)
                                 Date = formattedDateString
                             } else {
                                 print("Invalid date format")
@@ -275,9 +290,7 @@ class DAY_REPORT_WITH_DATE_RANGE: IViewController, UITableViewDelegate, UITableV
                                 }
                                 return false
                             }){
-                                print(i)
                                 
-                                print(filteredData)
                                 if !filteredData.isEmpty{
                                 
                                 for H in filteredData{
@@ -291,15 +304,11 @@ class DAY_REPORT_WITH_DATE_RANGE: IViewController, UITableViewDelegate, UITableV
                                 
                                 Report_Detils[i].Brd_Wise_Orde = Brind_List
                             }
-                                
                             }
                         }
                     }
                     
-                    
-                    
                     if let Total_lines = json["DCR_TLSD"] as? [[String: Any]]{
-                        print(Total_lines)
                         for Brand_Wise in Report_Detils{
                             var Date:String = ""
                             let dateString = Brand_Wise.Date
@@ -310,8 +319,7 @@ class DAY_REPORT_WITH_DATE_RANGE: IViewController, UITableViewDelegate, UITableV
                                 let outputFormatter = DateFormatter()
                                 outputFormatter.dateFormat = "yyyy-MM-dd"
                                 let formattedDateString = outputFormatter.string(from: date)
-                                
-                                print(formattedDateString)
+                             
                                 Date = formattedDateString
                             } else {
                                 print("Invalid date format")
@@ -335,8 +343,6 @@ class DAY_REPORT_WITH_DATE_RANGE: IViewController, UITableViewDelegate, UITableV
                                 return false
                             }
                             
-                            print(filteredData)
-                            
                             if let i = Report_Detils.firstIndex(where: { (item) in
                                 
                                 if item.Date == dateString  {
@@ -344,9 +350,7 @@ class DAY_REPORT_WITH_DATE_RANGE: IViewController, UITableViewDelegate, UITableV
                                 }
                                 return false
                             }){
-                                
-                                print(filteredData)
-                                
+                             
                                 if !filteredData.isEmpty{
                                     
                                     Report_Detils[i].total_lines = filteredData[0]["total_lines"] as? Int ?? 0
@@ -354,6 +358,53 @@ class DAY_REPORT_WITH_DATE_RANGE: IViewController, UITableViewDelegate, UITableV
                             }
                         }
                     }
+                    
+                    if let Total_lines = json["DCR_LPC"] as? [[String: Any]]{
+                        for Brand_Wise in Report_Detils{
+                            var Date:String = ""
+                            let dateString = Brand_Wise.Date
+                            let inputFormatter = DateFormatter()
+                            inputFormatter.dateFormat = "dd/MM/yyyy"
+
+                            if let date = inputFormatter.date(from: dateString) {
+                                let outputFormatter = DateFormatter()
+                                outputFormatter.dateFormat = "yyyy-MM-dd"
+                                let formattedDateString = outputFormatter.string(from: date)
+                             
+                                Date = formattedDateString
+                            } else {
+                                print("Invalid date format")
+                            }
+                            
+                            let dateFormatter = DateFormatter()
+                            dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+                            dateFormatter.timeZone = TimeZone(identifier: "Asia/Kolkata")
+                            
+                            let targetFormatter = DateFormatter()
+                            targetFormatter.dateFormat = "yyyy-MM-dd"
+                            
+                            let filteredData = Total_lines.filter { item in
+                                if let dt = item[""] as? [String: Any]{
+                                   let dateString = dt["date"] as? String
+                                    let date = dateFormatter.date(from: dateString!)
+                                    return targetFormatter.string(from: date!) == Date
+                                }
+                                return false
+                            }
+                            
+                            if let i = Report_Detils.firstIndex(where: { (item) in
+                                if item.Date == dateString  {
+                                    return true
+                                }
+                                return false
+                            }){
+                                if !filteredData.isEmpty{
+                                    Report_Detils[i].Total_Product_Sold = filteredData.count
+                                }
+                            }
+                        }
+                    }
+                    
                 }
                 
                 var Tccall: Int = 0
@@ -383,6 +434,16 @@ class DAY_REPORT_WITH_DATE_RANGE: IViewController, UITableViewDelegate, UITableV
                     ["\(Tccall)","\(Pccall)","\(ovalue)   ","\(Privalue)"]
                 ]
                 
+
+                if Report_Detils.isEmpty{
+                    Nodata_Lbl.isHidden = false
+                    Nodataavil_Height.constant = 100
+                    Table_View.isHidden = true
+                }else{
+                    Nodata_Lbl.isHidden = true
+                    Nodataavil_Height.constant = 0
+                    Table_View.isHidden = false
+                }
                 
                 Table_View.reloadData()
                 Total_Collection.reloadData()
@@ -430,8 +491,8 @@ class DAY_REPORT_WITH_DATE_RANGE: IViewController, UITableViewDelegate, UITableV
         cell.Total_lines.text = String(Report_Detils[indexPath.row].total_lines)
         cell.Total_lbl.text = "Total:\(Report_Detils[indexPath.row].Tc)"
         cell.Effective_lbl.text = "Effective:\(Report_Detils[indexPath.row].pc)"
-        cell.Total_Pro_sol.text = String(Report_Detils[indexPath.row].total_lines)
-        cell.delegate = self  
+        cell.Total_Pro_sol.text = String(Report_Detils[indexPath.row].Total_Product_Sold)
+        cell.delegate = self
         cell.Reload()
         return cell
     }

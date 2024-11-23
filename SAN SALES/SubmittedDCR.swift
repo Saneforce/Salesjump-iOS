@@ -617,8 +617,13 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
             print(product)
           //  Trans_Sl_No = product["Trans_Sl_No"] as! String? ?? "0"
             
+            let formatter = DateFormatter()
+            let date = Date()
+           
+            formatter.dateFormat = "yyyy-MM-dd"
+            let getDate = formatter.string(from: date)
             
-            let apiKey: String = "\(self.axndelet1)&desig=\(self.Desig)&divisionCode=\(self.DivCode)&rSF=\(self.SFCode)&sfCode=\(self.SFCode)&stateCod=\(self.StateCode)"
+            let apiKey: String = "\(self.axndelet1)&desig=\(self.Desig)&divisionCode=\(self.DivCode)&rSF=\(self.SFCode)&sfCode=\(self.SFCode)&stateCod=\(self.StateCode)&getdate=\(getDate)"
             
         if let transid = product["Trans_SlNo"] as? String,let transid2 = product["Trans_Detail_Slno"] as? String,let Trans_Detail_Info_Code = product["Trans_Detail_Info_Code"]{
                 print(transid)//SEF1-81
@@ -657,6 +662,8 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
                     "data": jsonString
                 ]
                 
+            print(params)
+            
                 AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
                     AFdata in
                     switch AFdata.result
