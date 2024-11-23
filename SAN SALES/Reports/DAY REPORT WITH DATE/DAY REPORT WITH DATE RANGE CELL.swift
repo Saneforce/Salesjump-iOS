@@ -201,18 +201,13 @@ class DAY_REPORT_WITH_DATE_RANGE_CELL: UITableViewCell, UICollectionViewDataSour
         }
     }
     
-    
     func Reload(){
         if let datas = RangData{
             
             let Disamount:Double = Double(datas.Disamt)!
             
             if UserSetup.shared.Liters_Need == 1{
-                
-                
-                
                 if Disamount > 0{
-                  
                     data = [
                         ["TC:", "PC:", "O. Value           ","Volumes  ", "Pri Ord", "Pri.Value"],
                         ["\(datas.Tc)","\(datas.pc)","\(datas.Order_Value)  ","\(datas.liters)  ","\(datas.Pri_Ord)","\(datas.Disamt)"]
@@ -240,8 +235,6 @@ class DAY_REPORT_WITH_DATE_RANGE_CELL: UITableViewCell, UICollectionViewDataSour
                         ["\(datas.Tc)","\(datas.pc)","\(datas.Order_Value)  ","\(datas.Pri_Ord)"]
                     ]
                 }
-                
-                
             }
             Tc = datas.Tc
             PC = datas.pc

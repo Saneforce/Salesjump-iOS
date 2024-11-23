@@ -411,6 +411,8 @@ class DAY_REPORT_WITH_DATE_RANGE: IViewController, UITableViewDelegate, UITableV
                 var Pccall: Int = 0
                 var ovalue: Double = 0
                 var Privalue: Int = 0
+                var Priamt:Double = 0
+                var liter:Double = 0
 
                 for k in Report_Detils {
                     print(k)
@@ -419,21 +421,45 @@ class DAY_REPORT_WITH_DATE_RANGE: IViewController, UITableViewDelegate, UITableV
 
                     // Remove commas and convert to Double
                     let orderValueString = k.Order_Value.replacingOccurrences(of: ",", with: "")
-                    if let orderValue = Double(orderValueString) {
+                    let DisorderValueString = k.Disamt.replacingOccurrences(of: ",", with: "")
+                    let liters = Double(k.liters)
+                    if let orderValue = Double(orderValueString), let DisorderValue = Double(DisorderValueString){
                         ovalue += orderValue
+                        Priamt += DisorderValue
+                        liter += liters!
                     } else {
                         print("Invalid order value: \(k.Order_Value)")
                     }
 
                     Privalue += k.Pri_Ord
+                   // Priamt + =
                 }
 
-                
-                data2 = [
-                    ["TC:", "PC:", "O. Value       ", "Pri Ord"],
-                    ["\(Tccall)","\(Pccall)","\(ovalue)   ","\(Privalue)"]
-                ]
-                
+                if UserSetup.shared.Liters_Need == 1{
+                    if Priamt > 0 {
+                        data2 = [
+                            ["TC:", "PC:", "O. Value       ","Volumes  ", "Pri Ord","Pri.Value"],
+                            ["\(Tccall)","\(Pccall)","\(ovalue)   ","\(liter)","\(Privalue)","\(Priamt)"]
+                        ]
+                    }else{
+                        data2 = [
+                            ["TC:", "PC:", "O. Value       ","Volumes  ", "Pri Ord"],
+                            ["\(Tccall)","\(Pccall)","\(ovalue)   ","\(liter)","\(Privalue)"]
+                        ]
+                    }
+                }else{
+                    if Priamt > 0 {
+                        data2 = [
+                            ["TC:", "PC:", "O. Value       ", "Pri Ord","Pri.Value"],
+                            ["\(Tccall)","\(Pccall)","\(ovalue)   ","\(Privalue)","\(Priamt)"]
+                        ]
+                    }else{
+                        data2 = [
+                            ["TC:", "PC:", "O. Value       ", "Pri Ord"],
+                            ["\(Tccall)","\(Pccall)","\(ovalue)   ","\(Privalue)"]
+                        ]
+                    }
+                }
 
                 if Report_Detils.isEmpty{
                     Nodata_Lbl.isHidden = false

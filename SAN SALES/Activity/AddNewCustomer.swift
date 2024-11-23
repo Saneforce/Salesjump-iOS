@@ -79,6 +79,23 @@ class AddNewCustomer: IViewController, UITableViewDelegate, UITableViewDataSourc
     var SFCode: String = ""
     var DivCode: String = ""
     
+    @IBOutlet weak var Hq_View: UIView!
+    
+    @IBOutlet weak var Dis_View: UIView!
+    @IBOutlet weak var Route_View: UIView!
+    @IBOutlet weak var Image_and_Outlet_View: UIView!
+    @IBOutlet weak var Onwer_Nmae: UIView!
+    @IBOutlet weak var Key_OUTLET: UIView!
+    @IBOutlet weak var Map_Outlet: MKMapView!
+    @IBOutlet weak var Address: UIView!
+    @IBOutlet weak var street_view: UIView!
+    @IBOutlet weak var Citty_Vew: UIView!
+    @IBOutlet weak var Pin_Code_View: UIView!
+    @IBOutlet weak var Mboile_NO_VIEW: UIView!
+    @IBOutlet weak var dOB_VIEW: UIView!
+    @IBOutlet weak var Class_View: UIView!
+    @IBOutlet weak var Category_View: UIView!
+    
     override func viewDidLoad() {
         vwScroll.contentSize = CGSize(width: view.frame.width, height: vwContent.frame.height)
         btnBack.addTarget(target: self, action: #selector(GotoHome))
@@ -161,6 +178,22 @@ class AddNewCustomer: IViewController, UITableViewDelegate, UITableViewDataSourc
             Mobile_man.isHidden = true
         }
         
+        if UserSetup.shared.DistBased == 0{
+            Dis_View.isHidden = true
+            self.Route_View.frame.origin.y = Hq_View.frame.origin.y + 90
+            self.Image_and_Outlet_View.frame.origin.y = self.Route_View.frame.origin.y+90
+            self.Onwer_Nmae.frame.origin.y =  self.Image_and_Outlet_View.frame.origin.y + 90
+            self.Key_OUTLET.frame.origin.y = self.Onwer_Nmae.frame.origin.y + 90
+            self.Map_Outlet.frame.origin.y =  self.Key_OUTLET.frame.origin.y + 90
+            self.Address.frame.origin.y =  self.Map_Outlet.frame.origin.y + 90
+            self.street_view.frame.origin.y =  self.Address.frame.origin.y + 90
+            self.Citty_Vew.frame.origin.y = self.street_view.frame.origin.y + 90
+            self.Pin_Code_View.frame.origin.y = self.Citty_Vew.frame.origin.y + 90
+            self.Mboile_NO_VIEW.frame.origin.y = self.Pin_Code_View.frame.origin.y + 90
+            self.dOB_VIEW.frame.origin.y = self.Mboile_NO_VIEW.frame.origin.y + 90
+            self.Class_View.frame.origin.y =  self.dOB_VIEW.frame.origin.y + 90
+            self.Category_View.frame.origin.y =  self.Class_View.frame.origin.y + 90
+        }
     }
     override func viewDidDisappear(_ animated: Bool) {
         vwScroll = nil
@@ -455,10 +488,14 @@ class AddNewCustomer: IViewController, UITableViewDelegate, UITableViewDataSourc
             Toast.show(message: "Select the Headquarter", controller: self)
             return false
         }
-        if NewOutlet.shared.Dist.id == "" {
-            Toast.show(message: "Select the \(UserSetup.shared.StkCap)", controller: self)
-            return false
+        
+        if UserSetup.shared.DistBased == 1{
+            if NewOutlet.shared.Dist.id == "" {
+                Toast.show(message: "Select the \(UserSetup.shared.StkCap)", controller: self)
+                return false
+            }
         }
+       
         if NewOutlet.shared.Route.id == "" {
             Toast.show(message: "Select the Route", controller: self)
             return false
