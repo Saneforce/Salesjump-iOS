@@ -159,7 +159,7 @@
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="65" id="2ru-yz-jvT"/>
                                                     </constraints>
-                                                    <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="5QX-E8-U9i">
+                                                    <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" automaticEstimatedItemSize="YES" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="5QX-E8-U9i">
                                                         <size key="itemSize" width="81" height="30"/>
                                                         <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                                         <size key="footerReferenceSize" width="0.0" height="0.0"/>
@@ -167,7 +167,7 @@
                                                     </collectionViewFlowLayout>
                                                     <cells>
                                                         <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Cell" id="QUg-8q-9fG" customClass="CollectionCell" customModule="SAN_SALES" customModuleProvider="target">
-                                                            <rect key="frame" x="0.0" y="0.0" width="81" height="60"/>
+                                                            <rect key="frame" x="0.0" y="2.6666666666666665" width="81" height="60"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="G1j-JK-ICq">
                                                                 <rect key="frame" x="0.0" y="0.0" width="81" height="60"/>

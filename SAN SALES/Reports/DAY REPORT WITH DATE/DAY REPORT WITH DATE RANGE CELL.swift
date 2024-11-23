@@ -197,8 +197,6 @@ class DAY_REPORT_WITH_DATE_RANGE_CELL: UITableViewCell, UICollectionViewDataSour
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if Collection_View == collectionView{
          let item = data[0][indexPath.row]
-            
-            print(item)
             delegate?.navigateToDetails(data: RangData, id: item)
         }
     }
@@ -207,18 +205,43 @@ class DAY_REPORT_WITH_DATE_RANGE_CELL: UITableViewCell, UICollectionViewDataSour
     func Reload(){
         if let datas = RangData{
             
+            let Disamount:Double = Double(datas.Disamt)!
+            
             if UserSetup.shared.Liters_Need == 1{
-                data = [
-                    ["TC:", "PC:", "O. Value           ","Volumes  ", "Pri Ord"],
-                    ["\(datas.Tc)","\(datas.pc)","\(datas.Order_Value)  ","\(datas.liters)  ","\(datas.Pri_Ord)"]
-                ]
+                
+                
+                
+                if Disamount > 0{
+                  
+                    data = [
+                        ["TC:", "PC:", "O. Value           ","Volumes  ", "Pri Ord", "Pri.Value"],
+                        ["\(datas.Tc)","\(datas.pc)","\(datas.Order_Value)  ","\(datas.liters)  ","\(datas.Pri_Ord)","\(datas.Disamt)"]
+                    ]
+                }else{
+                    data = [
+                        ["TC:", "PC:", "O. Value           ","Volumes  ", "Pri Ord"],
+                        ["\(datas.Tc)","\(datas.pc)","\(datas.Order_Value)  ","\(datas.liters)  ","\(datas.Pri_Ord)"]
+                    ]
+                    
+                }
+                
+                
+                
             }else{
+                if Disamount > 0{
+                    data = [
+                        ["TC:", "PC:", "O. Value           ", "Pri Ord", "Pri.Value"],
+                        ["\(datas.Tc)","\(datas.pc)","\(datas.Order_Value)  ","\(datas.Pri_Ord)","\(datas.Disamt)"]
+                    ]
+                }else{
+                   
+                    data = [
+                        ["TC:", "PC:", "O. Value           ", "Pri Ord"],
+                        ["\(datas.Tc)","\(datas.pc)","\(datas.Order_Value)  ","\(datas.Pri_Ord)"]
+                    ]
+                }
                 
                 
-                data = [
-                    ["TC:", "PC:", "O. Value           ", "Pri Ord"],
-                    ["\(datas.Tc)","\(datas.pc)","\(datas.Order_Value)  ","\(datas.Pri_Ord)"]
-                ]
             }
             Tc = datas.Tc
             PC = datas.pc

@@ -72,6 +72,7 @@ class DAY_REPORT_WITH_DATE_RANGE: IViewController, UITableViewDelegate, UITableV
         var Total_Product_Sold:Int
         var ACode:String
         var liters:String
+        var Disamt:String
         var Brd_Wise_Orde:[AnyObject]
         
     }
@@ -238,8 +239,10 @@ class DAY_REPORT_WITH_DATE_RANGE: IViewController, UITableViewDelegate, UITableV
                     print(dayrepArray)
                     
                     for Data in dayrepArray{
-                        Report_Detils.append(Day_Report_Detils(Sf_Name: Data["SF_Name"] as? String ?? "", Date: Data["Adate"] as? String ?? "", Tc: Data["Drs"] as? Int ?? 0, pc: Data["orders"] as? Int ?? 0, Order_Value:  Data["orderValue"] as? String ?? "", Pri_Ord: Data["Stk"] as? Int ?? 0,total_lines: 0, Total_Product_Sold: 0 ,ACode: Data["ACode"] as? String ?? "", liters: String(Data["liters"] as? Double ?? 0),Brd_Wise_Orde: []))
+                        Report_Detils.append(Day_Report_Detils(Sf_Name: Data["SF_Name"] as? String ?? "", Date: Data["Adate"] as? String ?? "", Tc: Data["Drs"] as? Int ?? 0, pc: Data["orders"] as? Int ?? 0, Order_Value:  Data["orderValue"] as? String ?? "", Pri_Ord: Data["Stk"] as? Int ?? 0,total_lines: 0, Total_Product_Sold: 0 ,ACode: Data["ACode"] as? String ?? "", liters: String(Data["liters"] as? Double ?? 0), Disamt: String(Data["DisAmt"] as? Double ?? 0),Brd_Wise_Orde: []))
                     }
+                    
+                    print(Report_Detils)
                     
                     if let brndwise = json["brndwise"] as? [[String: Any]]{
                         
