@@ -50,6 +50,7 @@ class Order_Range_TableViewCell: UITableViewCell, UITableViewDataSource, UITable
     
     var insideTable1Data: [DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController.OrderDetail] = []
     var OrderDetils: [DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController.OrderItemModel] = []
+    var Sftyp:String = ""
 
     // MARK: - Initialization
     override func awakeFromNib() {
@@ -147,7 +148,13 @@ class Order_Range_TableViewCell: UITableViewCell, UITableViewDataSource, UITable
         Net_Amount_View_Height.constant = OrderDetils.isEmpty ? 0 : 23
         Volumes.isHidden =  OrderDetils.isEmpty ? true : false
         
-        Volumes.isHidden = UserSetup.shared.Liters_Need == 0 ? true : false
+        if Sftyp == "3"{
+            Volumes.isHidden = false
+        }else{
+            Volumes.isHidden = UserSetup.shared.Liters_Need == 0 ? true : false
+        }
+        
+       
         
         // Reload the inner table view
         insideTable1.reloadData()
