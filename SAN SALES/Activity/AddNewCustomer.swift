@@ -54,7 +54,7 @@ class AddNewCustomer: IViewController, UITableViewDelegate, UITableViewDataSourc
     @IBOutlet weak var Select_dis: LabelSelect!
     
     
-    @IBOutlet weak var Mobile_man: UILabel!
+    @IBOutlet weak var Mobile_Mandator: UILabel!
     
     
     struct lItem: Any {
@@ -166,16 +166,15 @@ class AddNewCustomer: IViewController, UITableViewDelegate, UITableViewDataSourc
         Outlet_Category.text = "\(UserSetup.shared.DrCap) Category"
         Dis.text =   UserSetup.shared.StkCap
         
-        
         Select_dis.text = "Select the \(UserSetup.shared.StkCap)"
         txOutletNm.placeholder = "Enter the \(UserSetup.shared.DrCap) Name"
         lblCls.text = "Select the \(UserSetup.shared.DrCap) Calss"
         lblCats.text = "Select the \(UserSetup.shared.DrCap) Category"
         
         if UserSetup.shared.Mandator != "phone"{
-            Mobile_man.isHidden = false
+            Mobile_Mandator.isHidden = true
         }else{
-            Mobile_man.isHidden = true
+            Mobile_Mandator.isHidden = false
         }
         
         if UserSetup.shared.DistBased == 0{
@@ -531,7 +530,7 @@ class AddNewCustomer: IViewController, UITableViewDelegate, UITableViewDataSourc
             return false
         }
         
-        if UserSetup.shared.Mandatory != "phone" && txMobile.text == "" {
+        if UserSetup.shared.Mandator == "phone" && txMobile.text == "" {
             Toast.show(message: "Enter the Mobile Number", controller: self)
             return false
         }
