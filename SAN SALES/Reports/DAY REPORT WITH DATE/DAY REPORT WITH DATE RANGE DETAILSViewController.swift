@@ -320,9 +320,9 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
        // self.ShowLoading(Message: "Loading...")
         
         var get_Hq_Id = SFCode
-        if GetTyp == "3"{
+       // if GetTyp == "3"{
             get_Hq_Id =  RangeData.shared.Hq_Id
-        }
+        //}
         
         
        let apiKey: String = "\(getaxn)&desig=\(Desig)&divisionCode=\(DivCode)&ACd=\(GetCode)&rSF=\(SFCode)&typ=\(GetTyp)&sfCode=\(get_Hq_Id)&State_Code=\(StateCode)"

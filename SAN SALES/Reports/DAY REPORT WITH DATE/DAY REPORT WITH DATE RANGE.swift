@@ -473,12 +473,12 @@ class DAY_REPORT_WITH_DATE_RANGE: IViewController, UITableViewDelegate, UITableV
                 
                 Table_View.reloadData()
                 Total_Collection.reloadData()
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                     self.LoadingDismiss()
                 }
             case .failure(let error):
                 Toast.show(message: error.errorDescription ?? "", controller: self)
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                     self.LoadingDismiss()
                 }
             }
