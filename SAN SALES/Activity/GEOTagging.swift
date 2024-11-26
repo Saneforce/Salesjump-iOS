@@ -101,6 +101,8 @@ class GEOTagging: IViewController, UITableViewDelegate, UITableViewDataSource, M
         tbPopDataSelect.delegate=self
         tbPopDataSelect.dataSource=self
         self.mapView.delegate=self
+        
+        segui.setTitle(UserSetup.shared.DrCap, forSegmentAt: 0)
     }
     @objc private func selHeadquaters() {
         tlObjSel=lstHQs

@@ -933,6 +933,9 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
             Scroll_height .constant =  Scroll_height .constant  +  Zero_Billing_Summary_View_Hi.constant + 100
         }
         
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            Scroll_height .constant =  Scroll_height .constant  + 60
+        }
         
 
     }
