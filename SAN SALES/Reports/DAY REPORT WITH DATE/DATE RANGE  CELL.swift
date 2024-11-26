@@ -42,6 +42,8 @@ class Order_Range_TableViewCell: UITableViewCell, UITableViewDataSource, UITable
     
     @IBOutlet weak var Net_Amount_View_Height: NSLayoutConstraint!
     
+    @IBOutlet weak var Remark_View_height: NSLayoutConstraint!
+    
     
     
     // MARK: - Properties
