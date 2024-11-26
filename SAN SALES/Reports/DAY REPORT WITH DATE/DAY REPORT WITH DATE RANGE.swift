@@ -435,31 +435,29 @@ class DAY_REPORT_WITH_DATE_RANGE: IViewController, UITableViewDelegate, UITableV
                    // Priamt + =
                 }
 
-                if UserSetup.shared.Liters_Need == 1{
-                    if Priamt > 0 {
-                        data2 = [
-                            ["TC:", "PC:", "O. Value       ","Volumes  ", "Pri Ord","Pri.Value"],
-                            ["\(Tccall)","\(Pccall)","\(ovalue)   ","\(liter)","\(Privalue)","\(Priamt)"]
-                        ]
-                    }else{
-                        data2 = [
-                            ["TC:", "PC:", "O. Value       ","Volumes  ", "Pri Ord"],
-                            ["\(Tccall)","\(Pccall)","\(ovalue)   ","\(liter)","\(Privalue)"]
-                        ]
-                    }
-                }else{
-                    if Priamt > 0 {
-                        data2 = [
-                            ["TC:", "PC:", "O. Value       ", "Pri Ord","Pri.Value"],
-                            ["\(Tccall)","\(Pccall)","\(ovalue)   ","\(Privalue)","\(Priamt)"]
-                        ]
-                    }else{
-                        data2 = [
-                            ["TC:", "PC:", "O. Value       ", "Pri Ord"],
-                            ["\(Tccall)","\(Pccall)","\(ovalue)   ","\(Privalue)"]
-                        ]
-                    }
+                var headers: [String] = ["TC:", "PC:", "O. Value           "]
+                var values: [String] = ["\(Tccall)", "\(Pccall)", "\(ovalue)"]
+
+                if UserSetup.shared.Liters_Need == 1 {
+                    headers.append("Volumes")
+                    values.append("\(liter)")
                 }
+
+                if Priamt > 0 {
+                    headers.append("Pri Ord")
+                    values.append("\(Privalue)")
+                    
+                    if UserSetup.shared.StkNeed == 1 {
+                        headers.append("Pri.Value")
+                        values.append("\(Priamt)")
+                    }
+                } else if UserSetup.shared.StkNeed == 1 {
+                    headers.append("Pri Ord")
+                    values.append("\(Privalue)")
+                }
+
+                data2 = [headers, values]
+
 
                 if Report_Detils.isEmpty{
                     Nodata_Lbl.isHidden = false

@@ -165,7 +165,11 @@ class SubmittedCalls: UIViewController, UITableViewDelegate, UITableViewDataSour
                 }
 
                         strMasList.append(mnuItem.init(MasId: 1, MasName: "Secondary Order", MasImage: "SwitchRoute",BTC: String(Secondary_order_Count)))
+                    
+                    if (UserSetup.shared.StkNeed == 1) {
+                        
                         strMasList.append(mnuItem.init(MasId: 2, MasName: "Primary Order", MasImage: "SwitchRoute",BTC: String(Primary_Order_Count)))
+                    }
                         if (UserSetup.shared.SuperStockistNeed == 1) {
                             strMasList.append(mnuItem.init(MasId: 3, MasName: "Super Stockist Order", MasImage: "SwitchRoute",BTC: String(Super_Stockist_Order_Count)))
                         }

@@ -63,7 +63,9 @@ class ReportMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
         }
         strMasList.append(mnuItem.init(MasId: 12, MasName: "Order Details", MasImage: "SwitchRoute"))
         strMasList.append(mnuItem.init(MasId: 13, MasName: "Day Report With date range", MasImage: "SwitchRoute"))
-        strMasList.append(mnuItem.init(MasId: 14, MasName: "Distributor Order Details", MasImage: "SwitchRoute"))
+        if (UserSetup.shared.StkNeed == 1) {
+            strMasList.append(mnuItem.init(MasId: 14, MasName: "Distributor Order Details", MasImage: "SwitchRoute"))
+        }
         btnBack.addTarget(target: self, action: #selector(closeMenuWin))
         menuClose.addTarget(target: self, action: #selector(closeMenuWin))
         tbMenuDetail.delegate=self

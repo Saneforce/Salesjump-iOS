@@ -516,18 +516,18 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
             let name = uomNames.split(separator: "!").map { String($0) }
             let uomName = name[1]
             let eQtyValue = extractDouble(from: product, start: "%", end: "*")
-            let Value =  extractDouble(from: product, start: "(", end: ")")
+            var Value =  extractDouble(from: product, start: "(", end: ")")
             
             //let totalValue = Value + taxValue - discValue
             
+            let Total_Value = Double(qtyValue) * Double(rateValue)
+            Value = Total_Value
             let totalValue = Value
             netAmount += totalValue
-            
-            
             let productName = extractProductName(product, totalValue: Value)
             let freeProductName = extractFreeProductName(product, name: productName)
-
-            print(productName)
+       
+           
             
             let orderItem = OrderItemModel(
                 productName: productName, 
