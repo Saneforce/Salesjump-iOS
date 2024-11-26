@@ -162,13 +162,13 @@ class AddNewCustomer: IViewController, UITableViewDelegate, UITableViewDataSourc
         
         Outlet_Nmae.text = "\(UserSetup.shared.DrCap) Name"
         
-        Outlet_Class.text = "\(UserSetup.shared.DrCap) Calss"
+        Outlet_Class.text = "\(UserSetup.shared.DrCap) Class"
         Outlet_Category.text = "\(UserSetup.shared.DrCap) Category"
         Dis.text =   UserSetup.shared.StkCap
         
         Select_dis.text = "Select the \(UserSetup.shared.StkCap)"
         txOutletNm.placeholder = "Enter the \(UserSetup.shared.DrCap) Name"
-        lblCls.text = "Select the \(UserSetup.shared.DrCap) Calss"
+        lblCls.text = "Select the \(UserSetup.shared.DrCap) Class"
         lblCats.text = "Select the \(UserSetup.shared.DrCap) Category"
         
         if UserSetup.shared.Mandator != "phone"{
@@ -579,14 +579,17 @@ class AddNewCustomer: IViewController, UITableViewDelegate, UITableViewDataSourc
             return
         }
         
-        if(NetworkMonitor.Shared.isConnected != true){
-            let alert = UIAlertController(title: "Information", message: "Check the Internet Connection", preferredStyle: .alert)
-                 alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
-                     return
-                 })
-                 self.present(alert, animated: true)
-                return
-        }
+        
+//        if(NetworkMonitor.Shared.isConnected != true){
+//            let alert = UIAlertController(title: "Information", message: "Check the Internet Connection", preferredStyle: .alert)
+//                 alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
+//                     return
+//                 })
+//                 self.present(alert, animated: true)
+//                return
+//        }
+        
+        
         self.ShowLoading(Message: "Data Submitting Please wait...")
         fnCreateNewOutlet()
         

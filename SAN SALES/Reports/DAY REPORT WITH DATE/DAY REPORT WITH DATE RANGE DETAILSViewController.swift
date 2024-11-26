@@ -89,7 +89,6 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
     @IBOutlet weak var Zero_Billing_Summary_View_Hi: NSLayoutConstraint!
     
     
-    
     @IBOutlet weak var Zero_Billing_View: UIView!
     
     struct Id:Any{
@@ -720,10 +719,11 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
                         Total_Value_Amt.text =   CurrencyUtils.formatCurrency(amount: Total_Value, currencySymbol: UserSetup.shared.currency_symbol)
                         
                         print(Oredrdatadetisl)
-                        Scroll_and_Tb_Height()
+                       
                         Zero_Billing_summary.reloadData()
                         HQ_and_Route_TB.reloadData()
                         Item_Summary_table.reloadData()
+                        Scroll_and_Tb_Height()
                     }
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                         self.LoadingDismiss()
@@ -868,7 +868,7 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
             if Oredrdatadetisl[indexPath.row].Orderlist.isEmpty{
                 row_height = 290
             }else{
-                row_height = 340
+                row_height = 360
             }
             
             let Height = CGFloat(Row_Height + row_height)
@@ -893,7 +893,7 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
             if  i.Orderlist.isEmpty {
                 Row_hight_tb = 290
             }else{
-                Row_hight_tb = 340
+                Row_hight_tb = 360
             }
             
             let Height = CGFloat(Row_Height + Row_hight_tb)
@@ -1001,6 +1001,14 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
                
                cell.Remark.text =  Oredrdatadetisl[indexPath.row].Remarks
                cell.insideTable1Data = [Oredrdatadetisl[indexPath.row]]
+               
+//               print(Oredrdatadetisl[indexPath.row].Remarks)
+//               
+//               if Oredrdatadetisl[indexPath.row].Remarks != ""{
+//                   DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+//                       cell.Remark_View_height.constant = cell.Remark.layer.frame.height
+//                   }
+//               }
                
                if Oredrdatadetisl[indexPath.row].Orderlist.count == 0 {
                    cell.View_Detils.isHidden = true

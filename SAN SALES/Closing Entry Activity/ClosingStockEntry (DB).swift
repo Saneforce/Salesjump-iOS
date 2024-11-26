@@ -252,10 +252,10 @@ class ClosingStockEntry__DB_: IViewController, UICollectionViewDelegate, UIColle
   
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
       autoreleasepool{
-      let cell:CollectionCell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! CollectionCell
+     // let cell:CollectionCell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! CollectionCell
       let item: [String: Any]=lstBrands[indexPath.row] as! [String : Any]
       selBrand=String(format: "%@", item["id"] as! CVarArg)
-      cell.vwContent.backgroundColor = UIColor(red: 16/255, green: 173/255, blue: 194/255, alpha: 1)
+     // cell.vwContent.backgroundColor = UIColor(red: 16/255, green: 173/255, blue: 194/255, alpha: 1)
       lstProducts = lstAllProducts.filter({(product) in
           let CatId: String = String(format: "%@", product["cateid"] as! CVarArg)
           return Bool(CatId == selBrand)
