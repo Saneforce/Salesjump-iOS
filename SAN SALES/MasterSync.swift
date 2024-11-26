@@ -82,7 +82,7 @@ import BackgroundTasks
          ]))
          
          
-         strMasList.append(mnuItem.init(MasId: 9, MasName: "Retailers List", MasImage: "mnuPrimary",StoreKey: "Retail_Master_"+SFCode, ApiKey: "table/list&divisionCode="+(prettyJsonData["divisionCode"] as? String ?? "")+"&rSF="+SFCode+"&sfCode="+SFCode,fromData: [
+         strMasList.append(mnuItem.init(MasId: 9, MasName: "\(UserSetup.shared.DrCap) List", MasImage: "mnuPrimary",StoreKey: "Retail_Master_"+SFCode, ApiKey: "table/list&divisionCode="+(prettyJsonData["divisionCode"] as? String ?? "")+"&rSF="+SFCode+"&sfCode="+SFCode,fromData: [
          "tableName":"vwDoctor_Master_APP","coloumns":"[\"doctor_code as id\", \"doctor_name as name\",\"town_code\",\"town_name\",\"lat\",\"long\",\"addrs\",\"ListedDr_Address1\",\"ListedDr_Sl_No\",\"Mobile_Number\",\"Doc_cat_code\",\"ContactPersion\",\"Doc_Special_Code\",\"Distributor_Code\",\"Doctor_Code\",\"gst\",\"createdDate\",\"Doctor_Active_flag\",\"ListedDr_Email\",\"Spec_Doc_Code\",\"debtor_code\"]","where":"[\"isnull(Doctor_Active_flag,0)=0\"]","orderBy":"[\"name asc\"]","desig":"mgr"
          ]))
          
@@ -97,11 +97,11 @@ import BackgroundTasks
             "tableName":"Doctor_Specialty","coloumns":"[\"Specialty_Code as id\", \"Specialty_Name as name\"]","where":"[\"isnull(Deactivate_flag,0)=0\"]","sfCode":0,"orderBy":"[\"name asc\"]","desig":"mgr"
          ]))
          
-         strMasList.append(mnuItem.init(MasId: 13, MasName: "Retail Category List", MasImage: "mnuPrimary",StoreKey: "Category_Master", ApiKey: "table/list&divisionCode="+(prettyJsonData["divisionCode"] as? String ?? "")+"&rSF="+SFCode+"&sfCode="+SFCode,fromData: [
+         strMasList.append(mnuItem.init(MasId: 13, MasName: "\(UserSetup.shared.DrCap) Category List", MasImage: "mnuPrimary",StoreKey: "Category_Master", ApiKey: "table/list&divisionCode="+(prettyJsonData["divisionCode"] as? String ?? "")+"&rSF="+SFCode+"&sfCode="+SFCode,fromData: [
             "tableName":"Doctor_Category","coloumns":"[\"Cat_Code as id\", \"Cat_Name as name\"]","where":"[\"isnull(Cat_Flag,0)=0\"]","sfCode":0,"orderBy":"[\"name asc\"]","desig":"mgr"
          ]))
          
-         strMasList.append(mnuItem.init(MasId: 14, MasName: "Retail Class List", MasImage: "mnuPrimary",StoreKey: "Class_Master", ApiKey: "table/list&divisionCode="+(prettyJsonData["divisionCode"] as? String ?? "")+"&rSF="+SFCode+"&sfCode="+SFCode,fromData: [
+         strMasList.append(mnuItem.init(MasId: 14, MasName: "\(UserSetup.shared.DrCap) Class List", MasImage: "mnuPrimary",StoreKey: "Class_Master", ApiKey: "table/list&divisionCode="+(prettyJsonData["divisionCode"] as? String ?? "")+"&rSF="+SFCode+"&sfCode="+SFCode,fromData: [
             "tableName":"Mas_Doc_Class","coloumns":"[\"Doc_ClsCode as id\", \"Doc_ClsSName as name\"]","orderBy":"[\"name asc\"]","desig":"mgr"
          ]))
          
@@ -172,7 +172,7 @@ import BackgroundTasks
             "tableName":"Mas_RCPA","coloumns":"[\"sf_code as id\",\"sf_name as name\"]","orderBy":"[\"name asc\"]","desig":"mgr"
          ]))
          
-         strMasList.append(mnuItem.init(MasId: 32, MasName: "Retailer Rate", MasImage: "mnuPrimary",StoreKey: "Retailer_Rate", ApiKey: "get/RetailerwiseRate&divisionCode="+(prettyJsonData["divisionCode"] as? String ?? "")+"&rSF="+SFCode+"&sfCode="+SFCode+"&State_Code="+StateCode+"&desig="+desigCode,fromData: [
+         strMasList.append(mnuItem.init(MasId: 32, MasName: "\(UserSetup.shared.DrCap) Rate", MasImage: "mnuPrimary",StoreKey: "Retailer_Rate", ApiKey: "get/RetailerwiseRate&divisionCode="+(prettyJsonData["divisionCode"] as? String ?? "")+"&rSF="+SFCode+"&sfCode="+SFCode+"&State_Code="+StateCode+"&desig="+desigCode,fromData: [
             "orderBy":"[\"name asc\"]","desig":"mgr"
          ]))
          

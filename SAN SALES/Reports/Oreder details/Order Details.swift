@@ -502,8 +502,8 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
             }
             let ProductId = prodcode[i]
             let qtyValue = extractDouble(from: product, start: ") (", end: "@")
-            let freeValue = extractDouble(from: product, start: "+", end: "%")
-          
+            var freeValue = extractDouble(from: product, start: "+", end: "%")
+            
             
             let splitdisc = product.split(separator: "*").map { String($0) }
             let splitdisc2 = splitdisc[0].split(separator: "-").map { String($0) }
@@ -526,26 +526,30 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
             netAmount += totalValue
             let productName = extractProductName(product, totalValue: Value)
             let freeProductName = extractFreeProductName(product, name: productName)
-       
-           
             
+            let allProducts = product.split(separator: "%").map { String($0) }
+            if let firstProduct = allProducts.first {
+                let freeQtyProduct = firstProduct.split(separator: "+").map { String($0) }
+                if freeQtyProduct.count > 1 {
+                    freeValue = Double(freeQtyProduct[1]) ?? 0
+                }
+            }
+
             let orderItem = OrderItemModel(
                 productName: productName, 
                 ProductID: ProductId,
-                rateValue: String(rateValue),
-                qtyValue: String(qtyValue),
-                freeValue: String(freeValue),
-                discValue: String(discValue),
-                totalValue: String(totalValue),
-                taxValue: String(taxValue),
-                clValue: String(clValue),
+                rateValue: String(format: "%.2f", rateValue),
+                qtyValue: String(Int(qtyValue)),
+                freeValue: String(format: "%.2f", freeValue),
+                discValue: String(format: "%.2f", discValue),
+                totalValue: String(format: "%.2f", totalValue),
+                taxValue: String(format: "%.2f", taxValue),
+                clValue: String(format: "%.2f",clValue),
                 uomName: String(uomName),
-                eQtyValue: String(eQtyValue),
-                litersVal: String(litersVal),
+                eQtyValue: String(format: "%.2f",eQtyValue),
+                litersVal: String(format: "%.2f",litersVal),
                 freeProductName: freeProductName
             )
-            print(orderItem)
-
             itemModelList.append(orderItem)
         }
 
@@ -644,6 +648,10 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
         Item_Summary_TB_hEIGHT.constant = CGFloat(Itemwise_Summary_Data.count * 32)
         Item_Summary_View.constant = Scroll_Height
         Scroll_height .constant =  Scroll_height .constant  +  Item_Summary_View.constant + 100
+        
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            Scroll_height .constant =  Scroll_height .constant  + 60
+        }
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

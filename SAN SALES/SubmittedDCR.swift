@@ -44,6 +44,8 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
     @IBOutlet weak var scrollView: UIScrollView!
     
     
+    @IBOutlet weak var Retailer_Caption_lbl: UILabel!
+    
     struct mnuItem: Any {
         let MasId: Int
         let MasName: String
@@ -124,6 +126,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
         submittedDCRTB.addSubview(refreshControl)
         refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
         
+        Retailer_Caption_lbl.text = "\(UserSetup.shared.DrCap) Name:"
     }
     @objc func refreshData() {
          
@@ -238,6 +241,8 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
                     cell.Viewbt.layer.cornerRadius = 12
                     cell.EditBton.layer.cornerRadius = 12
                     cell.DeleteButton.layer.cornerRadius = 12
+                
+                cell.Retailer_caption.text = "\(UserSetup.shared.DrCap) Name :"
             }
         if tableView == OrderView {
             cell.lblText.text = OrdeView[indexPath.row].MasName

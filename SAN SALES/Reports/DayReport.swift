@@ -50,6 +50,9 @@ class DayReport:IViewController,UICollectionViewDelegate,UICollectionViewDataSou
     var SFCode: String = "", StateCode: String = "", DivCode: String = "",StrRptDt: String=""
     let LocalStoreage = UserDefaults.standard
     var isDate: Bool = false
+    
+    @IBOutlet weak var Retiler_Caption: UILabel!
+    
     override func viewDidLoad() {
         getUserDetails()
         getDayReport()
@@ -75,6 +78,8 @@ class DayReport:IViewController,UICollectionViewDelegate,UICollectionViewDataSou
             superStockViewTitleHeightConstraint.constant = 0
             superStockViewOrderListHeightConstraints.constant = 0
         }
+        
+        Retiler_Caption.text = UserSetup.shared.DrCap
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
