@@ -209,35 +209,109 @@ class DAY_REPORT_WITH_DATE_RANGE_CELL: UITableViewCell, UICollectionViewDataSour
             
             let Disamount:Double = Double(datas.Disamt)!
             
-            var headers: [String]
-            var values: [String]
-
-            if UserSetup.shared.Liters_Need == 1 {
-                headers = ["TC:", "PC:", "O. Value           ", "Volumes  "]
-                values = ["\(datas.Tc)", "\(datas.pc)", "\(datas.Order_Value)  ", "\(datas.liters)  "]
-                
-                if Disamount > 0 {
-                    headers.append(contentsOf: ["Pri Ord", "Pri.Value"])
-                    values.append(contentsOf: ["\(datas.Pri_Ord)", "\(datas.Disamt)"])
-                } else if UserSetup.shared.StkNeed == 1 {
-                    headers.append("Pri Ord")
-                    values.append("\(datas.Pri_Ord)")
-                }
-            } else {
-                headers = ["TC:", "PC:", "O. Value           "]
-                values = ["\(datas.Tc)", "\(datas.pc)", "\(datas.Order_Value)  "]
-                
-                if Disamount > 0 {
-                    if UserSetup.shared.StkNeed == 1 {
-                        headers.append(contentsOf: ["Pri Ord", "Pri.Value"])
-                        values.append(contentsOf: ["\(datas.Pri_Ord)", "\(datas.Disamt)"])
-                    }
-                } else if UserSetup.shared.StkNeed == 1 {
-                    headers.append("Pri Ord")
-                    values.append("\(datas.Pri_Ord)")
-                }
-            }
-            data = [headers, values]
+//            var headers: [String]
+//            var values: [String]
+//
+//            if UserSetup.shared.Liters_Need == 1 {
+//                headers = ["TC:", "PC:", "O. Value           ", "Volumes  "]
+//                values = ["\(datas.Tc)", "\(datas.pc)", "\(datas.Order_Value)  ", "\(datas.liters)  "]
+//                
+//                if Disamount > 0 {
+//                    headers.append(contentsOf: ["Pri Ord", "Pri.Value"])
+//                    values.append(contentsOf: ["\(datas.Pri_Ord)", "\(datas.Disamt)"])
+//                } else if UserSetup.shared.StkNeed == 1 {
+//                    headers.append("Pri Ord")
+//                    values.append("\(datas.Pri_Ord)")
+//                }
+//            } else {
+//                headers = ["TC:", "PC:", "O. Value           "]
+//                values = ["\(datas.Tc)", "\(datas.pc)", "\(datas.Order_Value)  "]
+//                
+//                if Disamount > 0 {
+//                    if UserSetup.shared.StkNeed == 1 {
+//                        headers.append(contentsOf: ["Pri Ord", "Pri.Value"])
+//                        values.append(contentsOf: ["\(datas.Pri_Ord)", "\(datas.Disamt)"])
+//                    }
+//                } else if UserSetup.shared.StkNeed == 1 {
+//                    headers.append("Pri Ord")
+//                    values.append("\(datas.Pri_Ord)")
+//                }
+//            }
+//            data = [headers, values]
+            
+            if UserSetup.shared.Liters_Need == 1{
+                           if Disamount > 0{
+                               if UserSetup.shared.StkNeed == 1 {
+                                   data = [
+                                       ["TC:", "PC:", "O. Value           ","Volumes  ", "Pri Ord", "Pri.Value"],
+                                       ["\(datas.Tc)","\(datas.pc)","\(datas.Order_Value)  ","\(datas.liters)  ","\(datas.Pri_Ord)","\(datas.Disamt)"]
+                                   ]
+                               }else{
+                                   data = [
+                                       ["TC:", "PC:", "O. Value           ","Volumes  "],
+                                       ["\(datas.Tc)","\(datas.pc)","\(datas.Order_Value)  ","\(datas.liters)  "]
+                                   ]
+                               }
+                               
+                             
+                           }else{
+                               
+                               if UserSetup.shared.StkNeed == 1 {
+                                   data = [
+                                       ["TC:", "PC:", "O. Value           ","Volumes  ", "Pri Ord"],
+                                       ["\(datas.Tc)","\(datas.pc)","\(datas.Order_Value)  ","\(datas.liters)  ","\(datas.Pri_Ord)"]
+                                   ]
+                                   
+                               }else{
+                                   data = [
+                                       ["TC:", "PC:", "O. Value           ","Volumes  "],
+                                       ["\(datas.Tc)","\(datas.pc)","\(datas.Order_Value)  ","\(datas.liters)  "]
+                                   ]
+                               }
+                               
+                             
+                               
+                           }
+                           
+                           
+                           
+                       }else{
+                           
+                           //fghjk
+                           if Disamount > 0{
+                               
+                               if UserSetup.shared.StkNeed == 1 {
+                                   
+                                   data = [
+                                       ["TC:", "PC:", "O. Value           ", "Pri Ord", "Pri.Value"],
+                                       ["\(datas.Tc)","\(datas.pc)","\(datas.Order_Value)  ","\(datas.Pri_Ord)","\(datas.Disamt)"]
+                                   ]
+                               }else{
+                                   data = [
+                                       ["TC:", "PC:", "O. Value           "],
+                                       ["\(datas.Tc)","\(datas.pc)","\(datas.Order_Value)  "]
+                                   ]
+                               }
+                               
+                              
+                           }else{
+                               
+                               if UserSetup.shared.StkNeed == 1 {
+                                   
+                                   data = [
+                                       ["TC:", "PC:", "O. Value           ", "Pri Ord"],
+                                       ["\(datas.Tc)","\(datas.pc)","\(datas.Order_Value)  ","\(datas.Pri_Ord)"]
+                                   ]
+                               }else{
+                                   data = [
+                                       ["TC:", "PC:", "O. Value           "],
+                                       ["\(datas.Tc)","\(datas.pc)","\(datas.Order_Value)  "]
+                                   ]
+                               }
+                              
+                              
+                           }
+                       }
             Tc = datas.Tc
             PC = datas.pc
         }

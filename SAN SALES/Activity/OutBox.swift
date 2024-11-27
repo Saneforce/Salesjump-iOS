@@ -26,6 +26,11 @@ class OutBox : IViewController , UITableViewDelegate , UITableViewDataSource{
         if totalCalls == nil {
             Toast.show(message: "Outbox Empty")
         }
+        if totalCalls != nil{
+                    if totalCalls.isEmpty{
+                        Toast.show(message: "Outbox Empty")
+                    }
+                }
         self.tableView.reloadData()
     }
     

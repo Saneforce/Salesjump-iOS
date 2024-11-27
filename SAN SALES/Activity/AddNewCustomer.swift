@@ -589,7 +589,10 @@ class AddNewCustomer: IViewController, UITableViewDelegate, UITableViewDataSourc
 //                return
 //        }
         
-        
+        if !GlobalFunc().hasInternet() {
+                    Toast.show(message: "Internet is disconnected...Now in offline mode", controller: self)
+                    return
+                }
         self.ShowLoading(Message: "Data Submitting Please wait...")
         fnCreateNewOutlet()
         
