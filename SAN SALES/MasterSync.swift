@@ -242,6 +242,10 @@ import BackgroundTasks
        }
     }
     @objc func clearAllData(){
+        if !GlobalFunc().hasInternet() {
+                    Toast.show(message: "Internet is disconnected...Now in offline mode", controller: self)
+                    return
+                }
        let alert = UIAlertController(title: "Confirmation", message: "Do you want to clear all data?", preferredStyle: .alert)
        alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
            self.clearData()

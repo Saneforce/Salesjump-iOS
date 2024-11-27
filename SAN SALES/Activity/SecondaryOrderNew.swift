@@ -206,8 +206,7 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
         if let list = GlobalFunc.convertToDictionary(text: lstProdData) as? [AnyObject] {
             lstAllProducts = list
             
-            print(lstAllProducts)
-            print(UserSetup.shared.productCard)
+            self.ShowLoading(Message: "Loading")
             DispatchQueue.main.async {
                 if UserSetup.shared.productCard != "1"{
                     self.updateProduct(products: list)
@@ -243,7 +242,13 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
         
         
         if UserSetup.shared.productCard == "1" {
-            self.fetchMarginWiseRate(code: VisitData.shared.CustID)
+           // self.fetchMarginWiseRate(code: VisitData.shared.CustID)
+            
+            if GlobalFunc().hasInternet(){
+                            self.fetchMarginWiseRate(code: VisitData.shared.CustID)
+                        }else {
+                            Toast.show(message: "Margin Wise Rate Card Need Internet.Please Check Internet", controller: self)
+                        }
         }
         
         self.EditSecondaryordervalue()
@@ -738,7 +743,9 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
                 
                 self.lstMarginRates = response
                 print(self.lstMarginRates)
-                self.updateProduct(products: self.lstAllProducts)
+                DispatchQueue.main.async {
+                    self.updateProduct(products: self.lstAllProducts)
+                }
             
                 if let unwrappedProduct = self.productData {
                     print(unwrappedProduct)
@@ -1725,6 +1732,9 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
             
    //         self.allProducts.append(ProductList(product: product, productName: productName, productId: productId,cateId: cateId, rate: rate,rateEdited: "0",retailerPrice: retailorPrice,saleErpCode: saleErpCode,newWt: newWt, sampleQty: "",clQty: "",remarks: "",remarksId: "", selectedRemarks: [], disCountPer: disCountPer, disCountAmount: 0.0, freeCount: 0, unitId: unitId, unitName: unitName, unitCount: unitCount, taxper: tax, taxAmount: 0.0, totalCount: 0.0, isSchemeActive: isSchemeActive,scheme: scheme,offerAvailableCount: offerAvailableCount,offerUnitName: offerUnitName,offerProductCode: offerProductCode,offerProductName: offerProductName,package: package, isMultiSchemeActive: isMultiSchemeActive, multiScheme: multiScheme, competitorProduct: []))
         }
+        DispatchQueue.main.asyncAfter(deadline: .now()+1) {
+                    self.LoadingDismiss()
+                }
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -1761,7 +1771,7 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView == SelectedProductTableView {
-            selectedTableViewHeightConstraint.constant = CGFloat(selectedProducts.count * 115)
+            selectedTableViewHeightConstraint.constant = CGFloat(selectedProducts.count * 125)
             return self.selectedProducts.count
         }else if tableView == self.tbProductTableView {
             return self.products.count
@@ -2589,7 +2599,7 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
         unitVC.didSelect = { unit in
             cell.lblUnit.text = unit["name"] as? String
             cell.product.unitName = unit["name"] as? String ?? ""
-            
+            cell.product.unitId = unit["id"] as? String ?? ""
             let conQty = String(format: "%@", unit["ConQty"] as! CVarArg)
             cell.product.unitCount = Int(conQty) ?? 0
             
@@ -2732,7 +2742,7 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
         unitVC.didSelect = { unit in
             cell.lblUnit.text = unit["name"] as? String
             cell.product.unitName = unit["name"] as? String ?? ""
-            
+            cell.product.unitId = unit["id"] as? String ?? ""
             let conQty = String(format: "%@", unit["ConQty"] as! CVarArg)
             cell.product.unitCount = Int(conQty) ?? 0
             

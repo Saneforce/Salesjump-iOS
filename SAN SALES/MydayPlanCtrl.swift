@@ -1265,14 +1265,18 @@ class MydayPlanCtrl: IViewController, UITableViewDelegate, UITableViewDataSource
             if validateForm() == false {
                 return
             }
-            if(NetworkMonitor.Shared.isConnected != true){
-                let alert = UIAlertController(title: "Information", message: "Check the Internet Connection", preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
-                    return
-                })
-                self.present(alert, animated: true)
-                return
-            }
+//            if(NetworkMonitor.Shared.isConnected != true){
+//                let alert = UIAlertController(title: "Information", message: "Check the Internet Connection", preferredStyle: .alert)
+//                alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
+//                    return
+//                })
+//                self.present(alert, animated: true)
+//                return
+//            }
+            if !GlobalFunc().hasInternet() {
+                        Toast.show(message: "Internet is disconnected...Now in offline mode", controller: self)
+                        return
+                    }
             self.ShowLoading(Message: "Getting Device Location...")
             LocationService.sharedInstance.getNewLocation(location: { location in
                 print ("New  : "+location.coordinate.latitude.description + ":" + location.coordinate.longitude.description)
