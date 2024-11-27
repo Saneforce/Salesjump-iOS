@@ -305,13 +305,12 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
                                     let netAmount = j["finalNetAmnt"] as? String ?? ""
                                     var Remarks = ""
 
-                                    if let Product_Detail = j["products"] as? String, !Product_Detail.isEmpty {
-                                        Remarks = j["secOrdRemark"] as? String ?? ""
+                                    if let secRemark = j["secOrdRemark"] as? String, !secRemark.isEmpty {
+                                        Remarks = secRemark
                                     } else {
                                         Remarks = j["remarks"] as? String ?? ""
                                     }
 
-                                    
                                     let Stkid = j["stockist_code"] as? String ?? ""
                                     let tlDisAmt = j["tlDisAmt"] as? String ?? ""
                                     
@@ -627,7 +626,7 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
             
             let height:CGFloat = (Oredrdatadetisl[indexPath.row].tlDisAmt == "0") ? 20 : 70
             
-            let Height = CGFloat(Row_Height + 340)
+            let Height = CGFloat(Row_Height + 360)
             return Height + height
         }
         return 30
@@ -637,7 +636,7 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
         Table_height.constant = 0
         for i in Oredrdatadetisl{
             let Row_Height = i.Orderlist.count * 55
-            let Height = CGFloat(Row_Height + 340)
+            let Height = CGFloat(Row_Height + 360)
             let height:CGFloat = (i.tlDisAmt == "0") ? 20 : 70
             Table_height.constant = Table_height.constant + CGFloat(Height)
             Table_height.constant = Table_height.constant + height

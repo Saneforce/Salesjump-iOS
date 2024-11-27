@@ -53,6 +53,21 @@ class DayReport:IViewController,UICollectionViewDelegate,UICollectionViewDataSou
     
     @IBOutlet weak var Retiler_Caption: UILabel!
     
+    
+    @IBOutlet weak var Distributors_caption_lbl: UILabel!
+    
+    @IBOutlet weak var Distributors_visit_caption_lbl: UILabel!
+    
+    @IBOutlet weak var Distributors_order_caption_lbl: UILabel!
+    
+    
+    @IBOutlet weak var Distributors_count_lbl: UILabel!
+    
+    @IBOutlet weak var Distributors_count_lbl_2: UILabel!
+    
+    
+    @IBOutlet weak var pri_value_lbl: UILabel!
+    
     override func viewDidLoad() {
         getUserDetails()
         getDayReport()
@@ -79,7 +94,17 @@ class DayReport:IViewController,UICollectionViewDelegate,UICollectionViewDataSou
             superStockViewOrderListHeightConstraints.constant = 0
         }
         
+        if (UserSetup.shared.StkNeed == 0) {
+            Distributors_caption_lbl.isHidden = true
+            Distributors_visit_caption_lbl.isHidden = true
+            Distributors_order_caption_lbl.isHidden = true
+            Distributors_count_lbl.isHidden = true
+            Distributors_count_lbl_2.isHidden = true
+            pri_value_lbl.isHidden = true
+        }
+        
         Retiler_Caption.text = UserSetup.shared.DrCap
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
