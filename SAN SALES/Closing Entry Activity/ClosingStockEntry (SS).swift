@@ -339,6 +339,9 @@ class ClosingStockEntry__SS_: IViewController, UICollectionViewDelegate, UIColle
           cell.Case_Entry.keyboardType = .numberPad
           cell.Piece_Entry.keyboardType = .numberPad
           
+          cell.Case_Entry.delegate = self
+          cell.Piece_Entry.delegate = self
+          
           let items: [AnyObject] = ProductCart.filter ({ (Cart) in
               
               if Cart["product"] as! String == id {
@@ -451,6 +454,13 @@ class ClosingStockEntry__SS_: IViewController, UICollectionViewDelegate, UIColle
       }
       Vw_Sel.isHidden = true
   }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+           let currentText = textField.text ?? ""
+           guard let stringRange = Range(range, in: currentText) else { return false }
+           let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
+           return updatedText.count <= 6
+       }
   
   @objc func Img_Tap(sender: UITapGestureRecognizer) {
       guard let view = sender.view else {

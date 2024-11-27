@@ -1700,6 +1700,11 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="Distributors_caption_lbl" destination="Exx-4m-QTD" id="ijD-Bd-CT5"/>
+                        <outlet property="Distributors_count_lbl" destination="dHa-wE-36f" id="caM-fk-xUi"/>
+                        <outlet property="Distributors_count_lbl_2" destination="GZj-sv-qaH" id="2D4-Jn-eIM"/>
+                        <outlet property="Distributors_order_caption_lbl" destination="Jo4-xG-ZMf" id="lbm-OW-QTd"/>
+                        <outlet property="Distributors_visit_caption_lbl" destination="kVk-qp-3We" id="v4l-gb-kcO"/>
                         <outlet property="Retiler_Caption" destination="JN6-9j-ovW" id="uTe-qH-3IB"/>
                         <outlet property="btnBack" destination="W3e-Ld-Jlr" id="U68-WO-BK9"/>
                         <outlet property="calendar" destination="Gmn-KM-Vgv" id="CWb-IH-4Hg"/>
@@ -1720,6 +1725,7 @@
                         <outlet property="lblSuperStkOrdCnt" destination="GPP-i5-beO" id="bAl-FE-EwC"/>
                         <outlet property="lblSuperStkVal" destination="fob-LX-eob" id="oif-j7-ZKL"/>
                         <outlet property="lblWorkTyp" destination="mdy-ed-gVv" id="GlO-4W-F1y"/>
+                        <outlet property="pri_value_lbl" destination="hnf-Oq-oaz" id="5hq-5H-dBh"/>
                         <outlet property="superStockViewOrderListHeightConstraints" destination="muK-7I-PQS" id="zJh-Dy-8HL"/>
                         <outlet property="superStockViewTitleHeightConstraint" destination="xyP-40-Xdd" id="iV9-jU-aLM"/>
                         <outlet property="vwSelWindow" destination="7cG-9b-SEp" id="8LP-N9-Ico"/>
