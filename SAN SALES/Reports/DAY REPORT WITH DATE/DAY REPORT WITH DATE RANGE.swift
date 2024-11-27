@@ -411,6 +411,8 @@ class DAY_REPORT_WITH_DATE_RANGE: IViewController, UITableViewDelegate, UITableV
                 var Pccall: Int = 0
                 var ovalue: Double = 0
                 var Privalue: Int = 0
+                var Priamt:Double = 0
+                var liter:Double = 0
 
                 for k in Report_Detils {
                     print(k)
@@ -419,21 +421,43 @@ class DAY_REPORT_WITH_DATE_RANGE: IViewController, UITableViewDelegate, UITableV
 
                     // Remove commas and convert to Double
                     let orderValueString = k.Order_Value.replacingOccurrences(of: ",", with: "")
-                    if let orderValue = Double(orderValueString) {
+                    let DisorderValueString = k.Disamt.replacingOccurrences(of: ",", with: "")
+                    let liters = Double(k.liters)
+                    if let orderValue = Double(orderValueString), let DisorderValue = Double(DisorderValueString){
                         ovalue += orderValue
+                        Priamt += DisorderValue
+                        liter += liters!
                     } else {
                         print("Invalid order value: \(k.Order_Value)")
                     }
 
                     Privalue += k.Pri_Ord
+                   // Priamt + =
                 }
 
-                
-                data2 = [
-                    ["TC:", "PC:", "O. Value       ", "Pri Ord"],
-                    ["\(Tccall)","\(Pccall)","\(ovalue)   ","\(Privalue)"]
-                ]
-                
+                var headers: [String] = ["TC:", "PC:", "O. Value           "]
+                var values: [String] = ["\(Tccall)", "\(Pccall)", "\(ovalue)"]
+
+                if UserSetup.shared.Liters_Need == 1 {
+                    headers.append("Volumes")
+                    values.append("\(liter)")
+                }
+
+                if Priamt > 0 {
+                    headers.append("Pri Ord")
+                    values.append("\(Privalue)")
+                    
+                    if UserSetup.shared.StkNeed == 1 {
+                        headers.append("Pri.Value")
+                        values.append("\(Priamt)")
+                    }
+                } else if UserSetup.shared.StkNeed == 1 {
+                    headers.append("Pri Ord")
+                    values.append("\(Privalue)")
+                }
+
+                data2 = [headers, values]
+
 
                 if Report_Detils.isEmpty{
                     Nodata_Lbl.isHidden = false
@@ -447,12 +471,12 @@ class DAY_REPORT_WITH_DATE_RANGE: IViewController, UITableViewDelegate, UITableV
                 
                 Table_View.reloadData()
                 Total_Collection.reloadData()
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                     self.LoadingDismiss()
                 }
             case .failure(let error):
                 Toast.show(message: error.errorDescription ?? "", controller: self)
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                     self.LoadingDismiss()
                 }
             }

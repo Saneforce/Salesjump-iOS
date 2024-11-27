@@ -251,10 +251,10 @@ class ClosingStockEntry__SS_: IViewController, UICollectionViewDelegate, UIColle
   
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
       autoreleasepool{
-      let cell:CollectionCell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! CollectionCell
+     // let cell:CollectionCell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! CollectionCell
       let item: [String: Any]=lstBrands[indexPath.row] as! [String : Any]
       selBrand=String(format: "%@", item["id"] as! CVarArg)
-      cell.vwContent.backgroundColor = UIColor(red: 16/255, green: 173/255, blue: 194/255, alpha: 1)
+     // cell.vwContent.backgroundColor = UIColor(red: 16/255, green: 173/255, blue: 194/255, alpha: 1)
       lstProducts = lstAllProducts.filter({(product) in
           let CatId: String = String(format: "%@", product["cateid"] as! CVarArg)
           return Bool(CatId == selBrand)
@@ -338,6 +338,9 @@ class ClosingStockEntry__SS_: IViewController, UICollectionViewDelegate, UIColle
           
           cell.Case_Entry.keyboardType = .numberPad
           cell.Piece_Entry.keyboardType = .numberPad
+          
+          cell.Case_Entry.delegate = self
+          cell.Piece_Entry.delegate = self
           
           let items: [AnyObject] = ProductCart.filter ({ (Cart) in
               
@@ -451,6 +454,13 @@ class ClosingStockEntry__SS_: IViewController, UICollectionViewDelegate, UIColle
       }
       Vw_Sel.isHidden = true
   }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+           let currentText = textField.text ?? ""
+           guard let stringRange = Range(range, in: currentText) else { return false }
+           let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
+           return updatedText.count <= 6
+       }
   
   @objc func Img_Tap(sender: UITapGestureRecognizer) {
       guard let view = sender.view else {

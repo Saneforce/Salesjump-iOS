@@ -54,7 +54,7 @@ class AddNewCustomer: IViewController, UITableViewDelegate, UITableViewDataSourc
     @IBOutlet weak var Select_dis: LabelSelect!
     
     
-    @IBOutlet weak var Mobile_man: UILabel!
+    @IBOutlet weak var Mobile_Mandator: UILabel!
     
     
     struct lItem: Any {
@@ -78,6 +78,23 @@ class AddNewCustomer: IViewController, UITableViewDelegate, UITableViewDataSourc
     var eKey: String = ""
     var SFCode: String = ""
     var DivCode: String = ""
+    
+    @IBOutlet weak var Hq_View: UIView!
+    
+    @IBOutlet weak var Dis_View: UIView!
+    @IBOutlet weak var Route_View: UIView!
+    @IBOutlet weak var Image_and_Outlet_View: UIView!
+    @IBOutlet weak var Onwer_Nmae: UIView!
+    @IBOutlet weak var Key_OUTLET: UIView!
+    @IBOutlet weak var Map_Outlet: MKMapView!
+    @IBOutlet weak var Address: UIView!
+    @IBOutlet weak var street_view: UIView!
+    @IBOutlet weak var Citty_Vew: UIView!
+    @IBOutlet weak var Pin_Code_View: UIView!
+    @IBOutlet weak var Mboile_NO_VIEW: UIView!
+    @IBOutlet weak var dOB_VIEW: UIView!
+    @IBOutlet weak var Class_View: UIView!
+    @IBOutlet weak var Category_View: UIView!
     
     override func viewDidLoad() {
         vwScroll.contentSize = CGSize(width: view.frame.width, height: vwContent.frame.height)
@@ -145,22 +162,37 @@ class AddNewCustomer: IViewController, UITableViewDelegate, UITableViewDataSourc
         
         Outlet_Nmae.text = "\(UserSetup.shared.DrCap) Name"
         
-        Outlet_Class.text = "\(UserSetup.shared.DrCap) Calss"
+        Outlet_Class.text = "\(UserSetup.shared.DrCap) Class"
         Outlet_Category.text = "\(UserSetup.shared.DrCap) Category"
         Dis.text =   UserSetup.shared.StkCap
         
-        
         Select_dis.text = "Select the \(UserSetup.shared.StkCap)"
         txOutletNm.placeholder = "Enter the \(UserSetup.shared.DrCap) Name"
-        lblCls.text = "Select the \(UserSetup.shared.DrCap) Calss"
+        lblCls.text = "Select the \(UserSetup.shared.DrCap) Class"
         lblCats.text = "Select the \(UserSetup.shared.DrCap) Category"
         
         if UserSetup.shared.Mandator != "phone"{
-            Mobile_man.isHidden = false
+            Mobile_Mandator.isHidden = true
         }else{
-            Mobile_man.isHidden = true
+            Mobile_Mandator.isHidden = false
         }
         
+        if UserSetup.shared.DistBased == 0{
+            Dis_View.isHidden = true
+            self.Route_View.frame.origin.y = Hq_View.frame.origin.y + 90
+            self.Image_and_Outlet_View.frame.origin.y = self.Route_View.frame.origin.y+90
+            self.Onwer_Nmae.frame.origin.y =  self.Image_and_Outlet_View.frame.origin.y + 90
+            self.Key_OUTLET.frame.origin.y = self.Onwer_Nmae.frame.origin.y + 90
+            self.Map_Outlet.frame.origin.y =  self.Key_OUTLET.frame.origin.y + 90
+            self.Address.frame.origin.y =  self.Map_Outlet.frame.origin.y + 90
+            self.street_view.frame.origin.y =  self.Address.frame.origin.y + 90
+            self.Citty_Vew.frame.origin.y = self.street_view.frame.origin.y + 90
+            self.Pin_Code_View.frame.origin.y = self.Citty_Vew.frame.origin.y + 90
+            self.Mboile_NO_VIEW.frame.origin.y = self.Pin_Code_View.frame.origin.y + 90
+            self.dOB_VIEW.frame.origin.y = self.Mboile_NO_VIEW.frame.origin.y + 90
+            self.Class_View.frame.origin.y =  self.dOB_VIEW.frame.origin.y + 90
+            self.Category_View.frame.origin.y =  self.Class_View.frame.origin.y + 90
+        }
     }
     override func viewDidDisappear(_ animated: Bool) {
         vwScroll = nil
@@ -455,10 +487,14 @@ class AddNewCustomer: IViewController, UITableViewDelegate, UITableViewDataSourc
             Toast.show(message: "Select the Headquarter", controller: self)
             return false
         }
-        if NewOutlet.shared.Dist.id == "" {
-            Toast.show(message: "Select the \(UserSetup.shared.StkCap)", controller: self)
-            return false
+        
+        if UserSetup.shared.DistBased == 1{
+            if NewOutlet.shared.Dist.id == "" {
+                Toast.show(message: "Select the \(UserSetup.shared.StkCap)", controller: self)
+                return false
+            }
         }
+       
         if NewOutlet.shared.Route.id == "" {
             Toast.show(message: "Select the Route", controller: self)
             return false
@@ -494,7 +530,7 @@ class AddNewCustomer: IViewController, UITableViewDelegate, UITableViewDataSourc
             return false
         }
         
-        if UserSetup.shared.Mandatory != "phone" && txMobile.text == "" {
+        if UserSetup.shared.Mandator == "phone" && txMobile.text == "" {
             Toast.show(message: "Enter the Mobile Number", controller: self)
             return false
         }
@@ -543,14 +579,17 @@ class AddNewCustomer: IViewController, UITableViewDelegate, UITableViewDataSourc
             return
         }
         
-        if(NetworkMonitor.Shared.isConnected != true){
-            let alert = UIAlertController(title: "Information", message: "Check the Internet Connection", preferredStyle: .alert)
-                 alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
-                     return
-                 })
-                 self.present(alert, animated: true)
-                return
-        }
+        
+//        if(NetworkMonitor.Shared.isConnected != true){
+//            let alert = UIAlertController(title: "Information", message: "Check the Internet Connection", preferredStyle: .alert)
+//                 alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
+//                     return
+//                 })
+//                 self.present(alert, animated: true)
+//                return
+//        }
+        
+        
         self.ShowLoading(Message: "Data Submitting Please wait...")
         fnCreateNewOutlet()
         
@@ -558,7 +597,9 @@ class AddNewCustomer: IViewController, UITableViewDelegate, UITableViewDataSourc
     func fnCreateNewOutlet(){
         let CDate: String = GlobalFunc.getCurrDateAsString()
 
-        let jsonString = "[{\"unlisted_doctor_master\":{\"town_code\":\"'" + NewOutlet.shared.Route.id + "'\",\"wlkg_sequence\":\"null\",\"Retailerphoto\":{\"imgurl\":\"" + NewOutlet.shared.ImgFileName + "\"},\"unlisted_doctor_name\":\"'" + NewOutlet.shared.OutletName + "'\",\"unlisted_doctor_address\":\"'" + NewOutlet.shared.Address + "'\",\"unlisted_doctor_phone\":\"'" + NewOutlet.shared.Mobile + "'\",\"unlisted_doctor_cityname\":\"'" + NewOutlet.shared.City + "'\",\"unlisted_doctor_landmark\":\"''\",\"lat\":\"'" + NewOutlet.shared.Lat + "'\",\"long\":\"'" + NewOutlet.shared.Lng + "'\",\"unlisted_doctor_areaname\":\"'" + NewOutlet.shared.Street + "'\",\"unlisted_doctor_contactperson\":\"'" + NewOutlet.shared.OwnerName + "'\",\"unlisted_doctor_designation\":\"''\",\"unlisted_doctor_gst\":\"''\",\"unlisted_doctor_pincode\":\"'" + NewOutlet.shared.Pincode + "'\",\"unlisted_doctor_email\":\"''\",\"unlisted_doctor_phone2\":\"''\",\"unlisted_doctor_phone3\":\"''\",\"unlisted_doctor_contactperson2\":\"''\",\"unlisted_doctor_contactperson3\":\"''\",\"unlisted_doctor_designation2\":\"''\",\"unlisted_cat_code\":\"null\",\"unlisted_specialty_code\":" + NewOutlet.shared.Category.id + ",\"unlisted_qulifi\":\"'samp'\",\"unlisted_class\":" + NewOutlet.shared.Class.id + ",\"DrKeyId\":\"'" + eKey + "'\",\"ListedDr_DOB\":\"'" + NewOutlet.shared.DOB.id + "'\",\"ListedDr_DOW\":\"''\",\"layer\":\"''\",\"breeder\":\"''\",\"broiler\":\"''\"}}]"
+        let jsonString = "[{\"unlisted_doctor_master\":{\"town_code\":\"'" + NewOutlet.shared.Route.id + "'\",\"wlkg_sequence\":\"null\",\"Retailerphoto\":{\"imgurl\":\"" + NewOutlet.shared.ImgFileName + "\"},\"unlisted_doctor_name\":\"'" + NewOutlet.shared.OutletName + "'\",\"unlisted_doctor_address\":\"'" + NewOutlet.shared.Address + "'\",\"unlisted_doctor_phone\":\"'" + NewOutlet.shared.Mobile + "'\",\"unlisted_doctor_cityname\":\"'" + NewOutlet.shared.City + "'\",\"unlisted_doctor_landmark\":\"''\",\"lat\":\"'" + NewOutlet.shared.Lat + "'\",\"long\":\"'" + NewOutlet.shared.Lng + "'\",\"unlisted_doctor_areaname\":\"'" + NewOutlet.shared.Street + "'\",\"unlisted_doctor_contactperson\":\"'" + NewOutlet.shared.OwnerName + "'\",\"unlisted_doctor_designation\":\"''\",\"unlisted_doctor_gst\":\"''\",\"unlisted_doctor_pincode\":\"'" + NewOutlet.shared.Pincode + "'\",\"unlisted_doctor_email\":\"''\",\"unlisted_doctor_phone2\":\"''\",\"unlisted_doctor_phone3\":\"''\",\"unlisted_doctor_contactperson2\":\"''\",\"unlisted_doctor_contactperson3\":\"''\",\"unlisted_doctor_designation2\":\"''\",\"unlisted_cat_code\":\"null\",\"unlisted_specialty_code\":" + NewOutlet.shared.Category.id + ",\"unlisted_qulifi\":\"'samp'\",\"unlisted_class\":" + NewOutlet.shared.Class.id + ",\"DrKeyId\":\"'" + eKey + "'\",\"ListedDr_DOB\":\"'" + NewOutlet.shared.DOB.id + "'\",\"ListedDr_DOW\":\"''\",\"layer\":\"''\",\"breeder\":\"''\",\"broiler\":\"''\",\"distributor_id\":\"'" +  NewOutlet.shared.Dist.id + "'\"}}]"
+        
+       
         
         let params: Parameters = [
             "data": jsonString //"["+jsonString+"]"//
