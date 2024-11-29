@@ -40,6 +40,9 @@ class cellListItem:UITableViewCell{
     @IBOutlet weak var OrderTime: UILabel!
     @IBOutlet weak var MeetTime: UILabel!
     @IBOutlet weak var Rou: UILabel!
+    
+    @IBOutlet weak var Route_Caption: UILabel!
+    
     @IBOutlet weak var DistributerName: UILabel!
     @IBOutlet weak var Retailer_caption: UILabel!
     @IBOutlet weak var RetailerName: UILabel!

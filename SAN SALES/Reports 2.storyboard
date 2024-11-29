@@ -2143,7 +2143,7 @@ CFByb2R1Y3Q
                             </view>
                             <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DFH-Dw-gVk">
                                 <rect key="frame" x="0.0" y="0.0" width="393" height="1079"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0C8-b5-lcx">
                                         <rect key="frame" x="0.0" y="30" width="393" height="50"/>
