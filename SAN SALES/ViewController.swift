@@ -96,12 +96,15 @@ class ViewController: IViewController {
 //
 //        NotificationCenter.default.addObserver(self, selector: #selector(ViewController.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
 
+        if GlobalFunc().hasInternet() {
+            let formatters = DateFormatter()
+            formatters.dateFormat = "yyyy-MM-dd"
+            let formattedDate = formatters.string(from: Date())
+            let defaults = UserDefaults.standard
+            defaults.set(formattedDate, forKey: "storedDate")
+        }
         
-        let formatters = DateFormatter()
-        formatters.dateFormat = "yyyy-MM-dd"
-        let formattedDate = formatters.string(from: Date())
-        let defaults = UserDefaults.standard
-        defaults.set(formattedDate, forKey: "storedDate")
+        
         
     }
     @IBAction func signin(_ sender: Any) {
@@ -158,7 +161,38 @@ class ViewController: IViewController {
                 
                 APIClient.shared.BaseURL=prettyJsonData["BaseURL"] as? String ?? APIClient.shared.BaseURL
             }
-            userAuth()
+            if GlobalFunc().hasInternet() {
+                userAuth()
+            }else {
+                
+                let formatters = DateFormatter()
+                formatters.dateFormat = "yyyy-MM-dd"
+                let formattedDate = formatters.string(from: Date())
+                let defaults = UserDefaults.standard
+                var storedDate_Today = ""
+                if let storedDate = defaults.string(forKey: "storedDate") {
+                    storedDate_Today = storedDate
+                }
+                if (storedDate_Today != formattedDate){
+                    self.LoadingDismiss()
+                    Toast.show(message: "Internet is disconnected...Now in offline mode")
+                    return
+                }
+                if let loginPassword = LocalStoreage.string(forKey: "loginPassword"){
+                    let password = self.txPwd.text!
+                    if loginPassword == password {
+                        self.LoadingDismiss()
+                        let viewController = self.storyboard?.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
+                        UIApplication.shared.windows.first?.rootViewController = viewController
+                        UIApplication.shared.windows.first?.makeKeyAndVisible()
+                    }else {
+                        self.LoadingDismiss()
+                        Toast.show(message: "Incorrect Password")
+                    }
+                }
+                
+            }
+            
         }
         
     }
@@ -219,6 +253,10 @@ class ViewController: IViewController {
                     LocalStoreage.set(jsonString, forKey: "APPConfig")
                     LocalStoreage.set(prettyPrintedJson, forKey: "UserDetails")
                     LocalStoreage.set("0", forKey: "attendanceView")
+                    
+                    let password = self.txPwd.text ?? ""
+                    
+                    LocalStoreage.set(password, forKey: "loginPassword")
                     //                        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+"login", method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
                     //                            AFdata in
                     self.LoadingDismiss()

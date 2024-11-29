@@ -127,10 +127,10 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
     }
     @IBAction func userLogout(_ sender: Any) {
         //dismissedAllAlert()
-        if !GlobalFunc().hasInternet() {
-                    Toast.show(message: "Internet is disconnected...Now in offline mode", controller: self)
-                    return
-                }
+//        if !GlobalFunc().hasInternet() {
+//                    Toast.show(message: "Internet is disconnected...Now in offline mode", controller: self)
+//                    return
+//                }
         
         LocationService.sharedInstance.getNewLocation(location: { location in
             print ("New  : "+location.coordinate.latitude.description + ":" + location.coordinate.longitude.description)
@@ -187,6 +187,11 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
     
     func DayEndSub(lat:Double,log:Double){
      
+        if !GlobalFunc().hasInternet() {
+            Toast.show(message: "Internet is disconnected...Now in offline mode", controller: self)
+            return
+        }
+        
         print(lat)
         print(log)
         let axn = "get/logouttime"
