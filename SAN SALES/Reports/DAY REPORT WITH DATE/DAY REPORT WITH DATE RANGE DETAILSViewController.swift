@@ -1022,12 +1022,14 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
                print(item)
                cellReport.Item.text = item.productName
                cellReport.Uom.text = item.uomName
-               cellReport.Qty.text = item.qtyValue
+               cellReport.Qty.text = item.eQtyValue
                cellReport.Price.text = item.rateValue
                cellReport.Free.text = item.freeValue
                cellReport.Disc.text = item.discValue
                cellReport.Tax.text = item.taxValue
-               cellReport.Total.text = item.totalValue
+              // cellReport.Total.text = item.totalValue
+               
+               cellReport.Total.text = CurrencyUtils.formatCurrency_WithoutSymbol(amount: item.totalValue, currencySymbol: UserSetup.shared.currency_symbol)
                return cellReport
            }else if Free_TB == tableView{
                let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! cellListItem

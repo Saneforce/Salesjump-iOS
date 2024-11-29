@@ -99,4 +99,40 @@ class CurrencyUtils {
         formatter.locale = Locale(identifier: identifier)
         return formatter.string(from: NSNumber(value: amountAsDouble)) ?? "\(currencySymbol) \(amountAsDouble)"
     }
-}
+    
+    
+    static func formatCurrency_WithoutSymbol(amount: Any, currencySymbol: String) -> String {
+        let amountAsDouble: Double
+        if let doubleValue = amount as? Double {
+            amountAsDouble = doubleValue
+        } else if let intValue = amount as? Int {
+            amountAsDouble = Double(intValue)
+        }else if let intValue = amount as? Float {
+            amountAsDouble = Double(intValue)
+        }else if let stringValue = amount as? String, let doubleValue = Double(stringValue) {
+            amountAsDouble = doubleValue
+        } else {
+            return "\(currencySymbol)0.00"
+        }
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .currency
+        formatter.currencySymbol = currencySymbol
+        formatter.maximumFractionDigits = 2
+        formatter.minimumFractionDigits = 2
+        formatter.groupingSeparator = ","
+        
+        var identifier = Locale.current.identifier
+        if let localeId = findLocaleIdentifier(forCurrencySymbol: currencySymbol) {
+            print("Locale Identifier: \(localeId)")
+            identifier = localeId
+        }
+        
+        formatter.locale = Locale(identifier: identifier)
+        formatter.currencySymbol = ""
+        
+        return formatter.string(from: NSNumber(value: amountAsDouble)) ?? "\(amountAsDouble)"
+    }
+        
+    }
+    
+

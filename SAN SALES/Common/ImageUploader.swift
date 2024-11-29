@@ -13,7 +13,7 @@ class ImageUploader {
     func uploadImage(SFCode: String,image: UIImage,fileName: String)
     {
         
-         let imgData = image.jpegData(compressionQuality: 0.80)
+         let imgData = image.jpegData(compressionQuality: 0.50)
         let compressedImage = UIImage(data: imgData!)
 
         AF.upload(multipartFormData: { multipartFormData in
