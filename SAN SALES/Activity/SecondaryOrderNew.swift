@@ -1762,7 +1762,10 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
                 cell.product.taxAmount = taxAmountRound
                 cell.product.disCountAmount = discountAmountRound
                 cell.product.totalCount =  totalAmountRound
-                cell.lblRate.text = "\(cell.product.rate) x ( \(unitCount) x \(sQty) )  =  \(totalAmountRound)"
+               // cell.lblRate.text = "\(cell.product.rate) x ( \(unitCount) x \(sQty) )  =  \(totalAmountRound)"
+                
+                cell.lblRate.text = "\(cell.product.rate) x ( \(unitCount) x \(sQty) )  =  \(CurrencyUtils.formatCurrency(amount: totalAmountRound, currencySymbol: UserSetup.shared.currency_symbol))"
+                
             }else {
                 let discountAmount = cell.product.disCountAmount // discountPer * Double(unitCount) * rate * Double(sQty) / 100
                 
@@ -1783,14 +1786,22 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
                 let totalAmountRound = Double(round(100 * total) / 100)
                 
                 
+                // set comma in tax and dis
                 
+               // cell.txtDisAmt.text = "\(discountAmountRound)"
                 
-                cell.txtDisAmt.text = "\(discountAmountRound)"
-                cell.txtTaxAmt.text = "\(taxAmountRound)"
+                cell.txtDisAmt.text = CurrencyUtils.formatCurrency_WithoutSymbol(amount: discountAmountRound, currencySymbol: UserSetup.shared.currency_symbol)
+                
+               // cell.txtTaxAmt.text = "\(taxAmountRound)"
+                
+                cell.txtTaxAmt.text = CurrencyUtils.formatCurrency_WithoutSymbol(amount: taxAmountRound, currencySymbol: UserSetup.shared.currency_symbol)
                 cell.product.taxAmount = taxAmountRound
                 cell.product.disCountAmount = discountAmountRound
                 cell.product.totalCount =  totalAmountRound
-                cell.lblRate.text = "\(cell.product.rate) x ( \(unitCount) x \(sQty) )  =  \(totalAmountRound)"
+               // cell.lblRate.text = "\(cell.product.rate) x ( \(unitCount) x \(sQty) )  =  \(totalAmountRound)"
+                
+               let totalAmountRound_string =  CurrencyUtils.formatCurrency_WithoutSymbol(amount: totalAmountRound, currencySymbol: UserSetup.shared.currency_symbol)
+                cell.lblRate.text = "\(cell.product.rate) x ( \(unitCount) x \(sQty) )  =  \(totalAmountRound_string)"
             }
             
         }else {
@@ -1817,12 +1828,24 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
                 
                 
                 
-                cell.txtDisAmt.text = "\(discountAmountRound)"
-                cell.txtTaxAmt.text = "\(taxAmountRound)"
+              //  cell.txtDisAmt.text = "\(discountAmountRound)"
+                
+                cell.txtDisAmt.text = CurrencyUtils.formatCurrency_WithoutSymbol(amount: discountAmountRound, currencySymbol: UserSetup.shared.currency_symbol)
+                
+                
+               // cell.txtTaxAmt.text = "\(taxAmountRound)"
+                
+                cell.txtTaxAmt.text = CurrencyUtils.formatCurrency_WithoutSymbol(amount: taxAmountRound, currencySymbol: UserSetup.shared.currency_symbol)
                 cell.product.taxAmount = taxAmountRound
                 cell.product.disCountAmount = discountAmountRound
                 cell.product.totalCount =  totalAmountRound
-                cell.lblRate.text = "\(cell.product.rate) x ( \(unitCount) x \(sQty) )  =  \(totalAmountRound)"
+                //cell.lblRate.text = "\(cell.product.rate) x ( \(unitCount) x \(sQty) )  =  \(totalAmountRound)"
+                
+             let  totalAmountRound_String = CurrencyUtils.formatCurrency_WithoutSymbol(amount: totalAmountRound, currencySymbol: UserSetup.shared.currency_symbol)
+                
+                
+                cell.lblRate.text = "\(cell.product.rate) x ( \(unitCount) x \(sQty) )  =  \(totalAmountRound_String)"
+                
             }else {
                 let discountAmount = cell.product.disCountAmount // discountPer * Double(unitCount) * rate * Double(sQty) / 100
                 
@@ -1845,12 +1868,22 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
                 
                 
                 
-                cell.txtDisAmt.text = "\(discountAmountRound)"
-                cell.txtTaxAmt.text = "\(taxAmountRound)"
+                //cell.txtDisAmt.text = "\(discountAmountRound)"
+                
+                cell.txtDisAmt.text = CurrencyUtils.formatCurrency_WithoutSymbol(amount: discountAmountRound, currencySymbol: UserSetup.shared.currency_symbol)
+                
+               // cell.txtTaxAmt.text = "\(taxAmountRound)"
+                
+                cell.txtTaxAmt.text = CurrencyUtils.formatCurrency_WithoutSymbol(amount: taxAmountRound, currencySymbol: UserSetup.shared.currency_symbol)
+                
                 cell.product.taxAmount = taxAmountRound
                 cell.product.disCountAmount = discountAmountRound
                 cell.product.totalCount =  totalAmountRound
-                cell.lblRate.text = "\(cell.product.rate) x ( \(unitCount) x \(sQty) )  =  \(totalAmountRound)"
+               // cell.lblRate.text = "\(cell.product.rate) x ( \(unitCount) x \(sQty) )  =  \(totalAmountRound)"
+                
+                let totalAmountRound_string = CurrencyUtils.formatCurrency_WithoutSymbol(amount: totalAmountRound, currencySymbol: UserSetup.shared.currency_symbol)
+                
+                cell.lblRate.text = "\(cell.product.rate) x ( \(unitCount) x \(sQty) )  =  \(totalAmountRound_string)"
             }
             
         }
@@ -2060,12 +2093,22 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
         
         total = total + taxAmount
         
-        cell.txtDisAmt.text = "\(discountAmount)"
-        cell.txtTaxAmt.text = "\(taxAmount)"
+        //cell.txtDisAmt.text = "\(discountAmount)"
+        
+        cell.txtDisAmt.text =  CurrencyUtils.formatCurrency_WithoutSymbol(amount: discountAmount, currencySymbol: UserSetup.shared.currency_symbol)
+        
+      //  cell.txtTaxAmt.text = "\(taxAmount)"
+        
+        cell.txtTaxAmt.text = CurrencyUtils.formatCurrency_WithoutSymbol(amount: taxAmount, currencySymbol: UserSetup.shared.currency_symbol)
+        
         cell.product.taxAmount = taxAmount
         cell.product.disCountAmount = discountAmount
         cell.product.totalCount = total
-        cell.lblRate.text = "\(cell.product.rate) x ( \(unitCount) x \(sQty) )  =  \(total)"
+       // cell.lblRate.text = "\(cell.product.rate) x ( \(unitCount) x \(sQty) )  =  \(total)"
+        
+       let total_string =  CurrencyUtils.formatCurrency_WithoutSymbol(amount: total, currencySymbol: UserSetup.shared.currency_symbol)
+        
+        cell.lblRate.text = "\(cell.product.rate) x ( \(unitCount) x \(sQty) )  =  \(total_string)"
         
         
         if let index = self.allProducts.firstIndex(where: { (productInfo) -> Bool in
@@ -2561,12 +2604,20 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
                 let taxAmountRound = Double(round(100 * taxAmount) / 100)
                 let totalAmountRound = Double(round(100 * total) / 100)
                 
-                cell.lblDisc.text = "₹ " + "\(discountAmountRound)"
-                cell.lblTax.text = "₹ " + "\(taxAmountRound)"
+               // cell.lblDisc.text = "₹ " + "\(discountAmountRound)"
+                
+                cell.lblDisc.text = CurrencyUtils.formatCurrency(amount: discountAmountRound, currencySymbol: UserSetup.shared.currency_symbol)
+                
+               // cell.lblTax.text = "₹ " + "\(taxAmountRound)"
+                cell.lblTax.text = CurrencyUtils.formatCurrency(amount: taxAmountRound, currencySymbol: UserSetup.shared.currency_symbol)
+                
                 cell.product.taxAmount = taxAmountRound
                 cell.product.disCountAmount = discountAmountRound
                 cell.product.totalCount = totalAmountRound
-                cell.lblTotal.text = "₹ " + "\(totalAmountRound)"
+                //cell.lblTotal.text = "₹ " + "\(totalAmountRound)"
+                
+                cell.lblTotal.text = CurrencyUtils.formatCurrency(amount: totalAmountRound, currencySymbol: UserSetup.shared.currency_symbol)
+                
             }else {
                 let discountAmount = cell.product.disCountValue
                 
@@ -2584,12 +2635,19 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
                 let taxAmountRound = Double(round(100 * taxAmount) / 100)
                 let totalAmountRound = Double(round(100 * total) / 100)
                 
-                cell.lblDisc.text = "₹ " + "\(discountAmountRound)"
-                cell.lblTax.text = "₹ " + "\(taxAmountRound)"
+               // cell.lblDisc.text = "₹ " + "\(discountAmountRound)"
+                
+                cell.lblDisc.text = CurrencyUtils.formatCurrency(amount: discountAmountRound, currencySymbol: UserSetup.shared.currency_symbol)
+                
+               // cell.lblTax.text = "₹ " + "\(taxAmountRound)"
+                cell.lblTax.text = CurrencyUtils.formatCurrency(amount: taxAmountRound, currencySymbol: UserSetup.shared.currency_symbol)
+                
                 cell.product.taxAmount = taxAmountRound
                 cell.product.disCountAmount = discountAmountRound
                 cell.product.totalCount = totalAmountRound
-                cell.lblTotal.text = "₹ " + "\(totalAmountRound)"
+                //cell.lblTotal.text = "₹ " + "\(totalAmountRound)"
+                
+                cell.lblTotal.text = CurrencyUtils.formatCurrency(amount: totalAmountRound, currencySymbol: UserSetup.shared.currency_symbol)
             }
             
         }

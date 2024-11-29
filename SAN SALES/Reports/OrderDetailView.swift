@@ -190,8 +190,12 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                 cell.lblUOM.text =  String(detail[indexPath.row].Cl)
                 cell.lblDisc.text = String(format: "%.02f", Dis_Amt)
                 cell.lblTax.text = String(detail[indexPath.row].Tax)
-                cell.lblAmt.text =  (String(format: "%.02f",detail[indexPath.row].value))
-                cell.lblValue.text = String(format: "%.02f",detail[indexPath.row].rate)
+              //  cell.lblAmt.text =  (String(format: "%.02f",detail[indexPath.row].value))
+                cell.lblAmt.text = CurrencyUtils.formatCurrency_WithoutSymbol(amount: (String(format: "%.02f",detail[indexPath.row].value)), currencySymbol: UserSetup.shared.currency_symbol)
+                
+               // cell.lblValue.text = String(format: "%.02f",detail[indexPath.row].rate)
+                cell.lblValue.text =  CurrencyUtils.formatCurrency_WithoutSymbol(amount: String(format: "%.02f",detail[indexPath.row].rate), currencySymbol: UserSetup.shared.currency_symbol)
+                
                 cell.lblText2.text = String(detail[indexPath.row].ClQty)
                  
             }
@@ -345,7 +349,9 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                 let item: [String: Any] = objOrderDetail[i] as! [String: Any]
                 totAmt = totAmt + (item["value"] as! Double)
             }
-            self.lblTotAmt.text=String(format: "Rs. %.02f", totAmt)
+           // self.lblTotAmt.text=String(format: "Rs. %.02f", totAmt)
+            
+            self.lblTotAmt.text = CurrencyUtils.formatCurrency(amount: String(format: "Rs. %.02f", totAmt), currencySymbol: UserSetup.shared.currency_symbol)
 
            // tbOrderDetail.reloadData()
             OrdHeight.constant = CGFloat(55 * self.objOrderDetail.count)
@@ -478,9 +484,11 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                             let Additional_Prod_Dtls = json[indexToDelete]["productList"] as! [AnyObject]
                             for Item2 in Additional_Prod_Dtls {
 //                                detail.append(viewDet(Prname: Item2["Product_Name"] as! String, rate: Item2["Rate"] as! Double, Cl: Item2["Product_Unit_Name"] as! String, Free:Item2["discount"] as! Int, Disc: Item2["discount"] as! Int, Tax: Int(Item2["taxval"] as! Double), qty: Item2["Quantity"] as! Int, value: Item2["sub_total"] as! Double,Product_Code: Item2["Product_Code"] as! String, ClQty: Item2["cl_value"] as! Int))
-                                detail.append(viewDet(Prname: Item2["Product_Name"] as? String ?? "", rate: Item2["Rate"] as? Double ?? 0, Cl: Item2["Product_Unit_Name"] as? String ?? "", Free:Item2["discount"] as? Int ?? 0, Disc: Item2["discount"] as? Int ?? 0, Tax: Int(Item2["taxval"] as? Double ?? 0), qty: Item2["Quantity"] as? Int ?? 0, value: Item2["sub_total"] as? Double ?? 0,Product_Code: Item2["Product_Code"] as? String ?? "", ClQty: Item2["cl_value"] as? Int ?? 0))
-                                self.lblTotAmt.text = String(Item2["OrderVal"] as? Double ?? 0)
-                                self.lblTotAmt.text = String(Item2["OrderVal"] as! Double)
+                                detail.append(viewDet(Prname: Item2["Product_Name"] as? String ?? "", rate: Item2["Rate"] as? Double ?? 0, Cl: Item2["Product_Unit_Name"] as? String ?? "", Free:Item2["discount"] as? Int ?? 0, Disc: Item2["discount"] as? Int ?? 0, Tax: Int(Item2["taxval"] as? Double ?? 0), qty: Item2["eqty"] as? Int ?? 0, value: Item2["sub_total"] as? Double ?? 0,Product_Code: Item2["Product_Code"] as? String ?? "", ClQty: Item2["cl_value"] as? Int ?? 0))
+                               //self.lblTotAmt.text = String(Item2["OrderVal"] as? Double ?? 0)
+                                //self.lblTotAmt.text = String(Item2["OrderVal"] as! Double)
+                                
+                                self.lblTotAmt.text = CurrencyUtils.formatCurrency(amount: String(Item2["OrderVal"] as? Double ?? 0), currencySymbol: UserSetup.shared.currency_symbol)
                             }
                             tbOrderDetail.reloadData()
                             ListOforderTB.reloadData()
@@ -572,7 +580,10 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                                 } else {
                                     print("Error: 'Cl_bal' key not found in the dictionary.")
                                 }
-                                self.lblTotAmt.text = String(Item2["OrderVal"] as! Double)
+                                //self.lblTotAmt.text = String(Item2["OrderVal"] as! Double)
+                                self.lblTotAmt.text = CurrencyUtils.formatCurrency(amount: String(Item2["OrderVal"] as! Double), currencySymbol: UserSetup.shared.currency_symbol)
+
+                                
                             }
                            
                             OrdHeight.constant = 40+CGFloat(55*detail.count)
@@ -677,7 +688,9 @@ class OrderDetailView: IViewController, UITableViewDelegate, UITableViewDataSour
                                 } else {
                                     print("Error: 'Cl_bal' key not found in the dictionary.")
                                 }
-                                self.lblTotAmt.text = String(Item2["OrderVal"] as! Double)
+                                //self.lblTotAmt.text = String(Item2["OrderVal"] as! Double)
+                                
+                                self.lblTotAmt.text = CurrencyUtils.formatCurrency_WithoutSymbol(amount: String(Item2["OrderVal"] as! Double), currencySymbol: UserSetup.shared.currency_symbol)
                             }
                             tbOrderDetail.reloadData()
                             OrdHeight.constant = self.tbOrderDetail.contentSize.height + 50 // 40+CGFloat(55*detail.count)

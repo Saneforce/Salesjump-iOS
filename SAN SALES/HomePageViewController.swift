@@ -158,11 +158,7 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         
                          self.view.layoutIfNeeded()
         
-        if let attendanceView=LocalStoreage.string(forKey: "attendanceView"){
-            if attendanceView == "0"{
-                HomePageViewController.selfieLoginActive = 1
-            }
-        }
+     
         
         var moveMyPln: Bool=false
         if LocalStoreage.string(forKey: "Mydayplan") == nil {
@@ -238,6 +234,12 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
             makeMenuView()
             Dashboard()
         }
+        if let attendanceView=LocalStoreage.string(forKey: "attendanceView"){
+            if attendanceView == "0"{
+                HomePageViewController.selfieLoginActive = 1
+            }
+        }
+        
         
         Navstartfrom()
         DashboardNew()
@@ -710,7 +712,14 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
             lblAdd.font = UIFont(name: "Poppins-Regular", size: 13)
             lblAdd.textAlignment = textAlign
             //lblAdd.backgroundColor = UIColor.orange
-            lblAdd.text = text
+            
+            
+            
+            if Caption == "Visited" ||  Caption == "Ordered"{
+                lblAdd.text = text
+            }else{
+                lblAdd.text = CurrencyUtils.formatCurrency_WithoutSymbol(amount: text, currencySymbol: UserSetup.shared.currency_symbol)
+            }
             vwMnthDash.addSubview(lblCap)
             vwMnthDash.addSubview(lblAdd)
             
