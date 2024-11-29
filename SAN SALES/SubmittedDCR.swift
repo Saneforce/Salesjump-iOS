@@ -243,6 +243,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
                     cell.DeleteButton.layer.cornerRadius = 12
                 
                 cell.Retailer_caption.text = "\(UserSetup.shared.DrCap) Name :"
+                cell.Route_Caption.text = UserSetup.shared.StkRoute
             }
         if tableView == OrderView {
             cell.lblText.text = OrdeView[indexPath.row].MasName

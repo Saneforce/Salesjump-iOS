@@ -161,6 +161,13 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         
         
                          self.view.layoutIfNeeded()
+        
+        if let attendanceView=LocalStoreage.string(forKey: "attendanceView"){
+            if attendanceView == "0"{
+                HomePageViewController.selfieLoginActive = 1
+            }
+        }
+        
         var moveMyPln: Bool=false
         if LocalStoreage.string(forKey: "Mydayplan") == nil {
             LocalStoreage.set("0", forKey: "dayplan")
