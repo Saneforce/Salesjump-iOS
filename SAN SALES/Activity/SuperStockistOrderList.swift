@@ -1425,10 +1425,16 @@ class SuperStockistOrderListTableViewCell : UITableViewCell {
             
             txtQty.text = product.sampleQty
             txtDisPer.text = "\(product.disCountPer)"
-            txtDisAmt.text = "\(product.disCountAmount)"
+            //txtDisAmt.text = "\(product.disCountAmount)"
+            
+            
+            txtDisAmt.text = CurrencyUtils.formatCurrency_WithoutSymbol(amount: product.disCountAmount, currencySymbol: UserSetup.shared.currency_symbol)
+            
             
             txtTaxPer.text = "\(product.taxper)"
-            txtTaxAmt.text = "\(product.taxAmount)"
+           // txtTaxAmt.text = "\(product.taxAmount)"
+            
+            txtTaxAmt.text = CurrencyUtils.formatCurrency_WithoutSymbol(amount: product.taxAmount, currencySymbol: UserSetup.shared.currency_symbol)
             
             txtFreeQty.text = "\(product.freeCount)"
             
@@ -1436,7 +1442,10 @@ class SuperStockistOrderListTableViewCell : UITableViewCell {
             
 //            txtClQty.text = product.clQty
             
-            lblRate.text = "\(product.rate) X ( \(product.unitCount) X \(product.sampleQty == "" ? "0" : product.sampleQty) ) = \(product.totalCount) "
+            lblRate.text = "\(product.rate) X ( \(product.unitCount) X \(product.sampleQty == "" ? "0" : product.sampleQty) ) = \(CurrencyUtils.formatCurrency_WithoutSymbol(amount: product.totalCount, currencySymbol: UserSetup.shared.currency_symbol)) "
+            
+            
+          
             
             print(product.isSchemeActive)
         //    imgScheme.isHidden = product.isSchemeActive == true ? false : true

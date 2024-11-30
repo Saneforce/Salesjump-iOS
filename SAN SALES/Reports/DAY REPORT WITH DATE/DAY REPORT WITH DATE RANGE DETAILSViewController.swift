@@ -589,6 +589,7 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
                                 
                         }else{
                             let Additional_Prod_Dtls = j["productList"] as! [AnyObject]
+                            let stkMobNo = j["mobNo"] as? String ?? ""
                             var itemModelList = [OrderItemModel]()
                             for Item2 in Additional_Prod_Dtls {
                                 let orderItem = OrderItemModel(
@@ -604,10 +605,11 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
                                     uomName: Item2["Product_Unit_Name"] as? String ?? "",
                                     eQtyValue:String(Item2["eqty"] as? Int ?? 0),
                                     litersVal: String(0),
-                                    freeProductName: Item2["Offer_ProductNm"] as? String ?? ""
+                                    freeProductName: {
+                                          let name = Item2["Offer_ProductNm"] as? String ?? ""
+                                          return name.isEmpty ? Item2["Product_Name"] as? String ?? "" : name
+                                      }()
                                 )
-                                print(orderItem)
-
                                 itemModelList.append(orderItem)
                             }
                             
@@ -623,9 +625,9 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
                             }
                             
                             
-                            Orderdata.append(Id(id: id, Stkid: Stockist, RouteId: Route, Orderdata: [OrderDetail(id: id, Route: Route, Routeflg: "0", Stockist: Stockist, name: "\(Sf_Count). "+name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "\(itemList.count)", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: tlDisAmt, Order_date: Order_date, Order_Count: 1,Total_Dic: Total_discValue,Total_Tax: Total_taxValue,Total_disc_lbl:"Total Discount (10%)", Final_Amt: Final_Amt, stkmob: "", Orderlist: itemList)]))
+                            Orderdata.append(Id(id: id, Stkid: Stockist, RouteId: Route, Orderdata: [OrderDetail(id: id, Route: Route, Routeflg: "0", Stockist: Stockist, name: "\(Sf_Count). "+name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: stkMobNo, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "\(itemList.count)", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: tlDisAmt, Order_date: Order_date, Order_Count: 1,Total_Dic: Total_discValue,Total_Tax: Total_taxValue,Total_disc_lbl:"Total Discount (10%)", Final_Amt: Final_Amt, stkmob: "", Orderlist: itemList)]))
                             
-                            Oredrdatadetisl.append(OrderDetail(id: id, Route: Route, Routeflg: "0", Stockist: Stockist, name: "\(Sf_Count). "+name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: Phone, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "\(itemList.count)", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: tlDisAmt, Order_date: Order_date, Order_Count: 1,Total_Dic: Total_discValue,Total_Tax: Total_taxValue,Total_disc_lbl:"Total Discount ()", Final_Amt: Final_Amt, stkmob: "",Orderlist: itemList))
+                            Oredrdatadetisl.append(OrderDetail(id: id, Route: Route, Routeflg: "0", Stockist: Stockist, name: "\(Sf_Count). "+name, nameid: nameid, Adress: Adress, Volumes: String(Volumes), Phone: stkMobNo, Net_amount: Net_amount, Remarks: Remarks, Total_Item: "\(itemList.count)", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: tlDisAmt, Order_date: Order_date, Order_Count: 1,Total_Dic: Total_discValue,Total_Tax: Total_taxValue,Total_disc_lbl:"Total Discount ()", Final_Amt: Final_Amt, stkmob: "",Orderlist: itemList))
                             
                             Total_Value += Double(Net_amount) ?? 0.0
                             
@@ -664,15 +666,9 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
                         
                       //  Add Free ProductDetils here
                         
-                        
-                        
                         for item in Oredrdatadetisl{
                             for j in item.Orderlist{
-                                print(j)
-                                
                                 if j.freeValue != "0"{
-                                
-                                
                                 let qty = Double(j.qtyValue) ?? 0
                                 let free = Double(j.freeValue) ?? 0
                                 let productID = j.ProductID.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -1026,12 +1022,14 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
                print(item)
                cellReport.Item.text = item.productName
                cellReport.Uom.text = item.uomName
-               cellReport.Qty.text = item.qtyValue
+               cellReport.Qty.text = item.eQtyValue
                cellReport.Price.text = item.rateValue
                cellReport.Free.text = item.freeValue
                cellReport.Disc.text = item.discValue
                cellReport.Tax.text = item.taxValue
-               cellReport.Total.text = item.totalValue
+              // cellReport.Total.text = item.totalValue
+               
+               cellReport.Total.text = CurrencyUtils.formatCurrency_WithoutSymbol(amount: item.totalValue, currencySymbol: UserSetup.shared.currency_symbol)
                return cellReport
            }else if Free_TB == tableView{
                let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! cellListItem
@@ -1114,6 +1112,19 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
           To_No.text = Item.Phone
           Order_No.text = Item.nameid
           Order_Date.text = Item.Order_date
+          if Item.Order_date.contains("00:00:00"){
+              let dateTimeString = Item.Order_date
+              let dateFormatter = DateFormatter()
+              dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+              if let fullDate = dateFormatter.date(from: dateTimeString) {
+                  let dateOnlyFormatter = DateFormatter()
+                  dateOnlyFormatter.dateFormat = "yyyy-MM-dd"
+                  let dateOnlyString = dateOnlyFormatter.string(from: fullDate)
+                  print(dateOnlyString)
+                  Order_Date.text = dateOnlyString
+              }
+          }
+          
           Total_item.text = String(Item.Orderlist.count)
           Orderlist = Item.Orderlist
           Tax.text = String(Item.Total_Tax)
@@ -1175,19 +1186,13 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
 
     @objc func Textshare() {
         let data: String = formatOrdersForSharing(orders: Oredrdatadetisl)
-        
-        // Share to WhatsApp if available
         if let urlEncodedText = data.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
            let whatsappURL = URL(string: "whatsapp://send?text=\(urlEncodedText)"),
            UIApplication.shared.canOpenURL(whatsappURL) {
             
-            // Open WhatsApp with the formatted text
             UIApplication.shared.open(whatsappURL, options: [:], completionHandler: nil)
         } else {
-            // If WhatsApp is not installed, use UIActivityViewController
             let activityViewController = UIActivityViewController(activityItems: [data], applicationActivities: nil)
-            
-            // Exclude unnecessary activity types (optional)
             activityViewController.excludedActivityTypes = [
                 .postToFacebook,
                 .postToTwitter,
@@ -1195,15 +1200,24 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
                 .print
             ]
             
-            // Present the activity view controller
             if let topController = UIApplication.shared.keyWindow?.rootViewController {
+                // For iPad, set the popover presentation details
+                if let popoverPresentationController = activityViewController.popoverPresentationController {
+                    popoverPresentationController.sourceView = topController.view
+                    popoverPresentationController.sourceRect = CGRect(
+                        x: topController.view.bounds.midX,
+                        y: topController.view.bounds.midY,
+                        width: 0,
+                        height: 0
+                    )
+                    popoverPresentationController.permittedArrowDirections = [] // No arrow
+                }
                 topController.present(activityViewController, animated: true, completion: nil)
             }
         }
     }
+
     
-    
-    // Function to format the orders for sharing
     func formatOrdersForSharing(orders: [OrderDetail]) -> String {
         var formattedText = ""
         
@@ -1225,7 +1239,6 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
             formattedText += "------------**------------\n"
         }
         
-      //  formattedText += "Order Taken By : \(hq_name_sel.text)"
         
         return formattedText
     }

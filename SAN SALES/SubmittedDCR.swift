@@ -243,6 +243,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
                     cell.DeleteButton.layer.cornerRadius = 12
                 
                 cell.Retailer_caption.text = "\(UserSetup.shared.DrCap) Name :"
+                cell.Route_Caption.text = UserSetup.shared.StkRoute
             }
         if tableView == OrderView {
             cell.lblText.text = OrdeView[indexPath.row].MasName
@@ -252,12 +253,21 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
           
             cell.ProductValue?.text = View[indexPath.row].Product
             cell.Qty?.text = String(View[indexPath.row].qty)
-            cell.Value?.text = String(View[indexPath.row].value)
+           // cell.Value?.text = String(View[indexPath.row].value)
+            
+            cell.Value?.text = CurrencyUtils.formatCurrency_WithoutSymbol(amount: String(View[indexPath.row].qty), currencySymbol: UserSetup.shared.currency_symbol)
           
         }
         if tableView == InputTB {
-            cell.InpuKey.text = Input[indexPath.row].Key
-            cell.inputvalu.text = Input[indexPath.row].Value
+            let item = Input[indexPath.row]
+            if Input[indexPath.row].Key == "Order Value"{
+                cell.InpuKey.text = Input[indexPath.row].Key
+                //cell.inputvalu.text = Input[indexPath.row].Value
+                cell.inputvalu.text =  CurrencyUtils.formatCurrency(amount: Input[indexPath.row].Value, currencySymbol: UserSetup.shared.currency_symbol)
+            }else{
+                cell.InpuKey.text = Input[indexPath.row].Key
+                cell.inputvalu.text = Input[indexPath.row].Value
+            }
         }
             
         return cell

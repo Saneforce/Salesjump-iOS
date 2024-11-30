@@ -514,10 +514,11 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
             let uomNames = extractString(from: product, start: "!", end: "%") ?? ""
             let name = uomNames.split(separator: "!").map { String($0) }
             let uomName = name[1]
-            let eQtyValue = extractDouble(from: product, start: "%", end: "*")
+            var eQtyValue = extractDouble(from: product, start: "%", end: "*")
             var Value =  extractDouble(from: product, start: "(", end: ")")
             
             //let totalValue = Value + taxValue - discValue
+
             
             let Total_Value = Double(qtyValue) * Double(rateValue)
             Value = Total_Value
@@ -533,6 +534,14 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
                     freeValue = Double(freeQtyProduct[1]) ?? 0
                 }
             }
+            
+            if let entry_qty = allProducts.last {
+                let eQtyProduct = entry_qty.split(separator: "*").map { String($0) }
+                if !eQtyProduct.isEmpty {
+                    let getqty = eQtyProduct[0]
+                    eQtyValue = Double(getqty) ?? 0
+                }
+            }
 
             let orderItem = OrderItemModel(
                 productName: productName, 
@@ -545,7 +554,7 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
                 taxValue: String(format: "%.2f", taxValue),
                 clValue: String(format: "%.2f",clValue),
                 uomName: String(uomName),
-                eQtyValue: String(format: "%.2f",eQtyValue),
+                eQtyValue: String(Int(eQtyValue)),
                 litersVal: String(format: "%.2f",litersVal),
                 freeProductName: freeProductName
             )
@@ -724,12 +733,14 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
                print(item)
                cellReport.Item.text = item.productName
                cellReport.Uom.text = item.uomName
-               cellReport.Qty.text = item.qtyValue
+               cellReport.Qty.text = item.eQtyValue
                cellReport.Price.text = item.rateValue
                cellReport.Free.text = item.freeValue
                cellReport.Disc.text = item.discValue
                cellReport.Tax.text = item.taxValue
-               cellReport.Total.text = item.totalValue
+             //  cellReport.Total.text = item.totalValue
+               
+               cellReport.Total.text = CurrencyUtils.formatCurrency_WithoutSymbol(amount: item.totalValue, currencySymbol: UserSetup.shared.currency_symbol)
                return cellReport
            }else if Hq_Table == tableView{
                let cellText = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! cellListItem
@@ -889,20 +900,17 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
     
     
     @objc func Textshare() {
-        let data: String = formatOrdersForSharing(orders: Oredrdatadetisl)
         
-        // Share to WhatsApp if available
+        print(Oredrdatadetisl)
+        
+        let data: String = formatOrdersForSharing(orders: Oredrdatadetisl)
         if let urlEncodedText = data.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
            let whatsappURL = URL(string: "whatsapp://send?text=\(urlEncodedText)"),
            UIApplication.shared.canOpenURL(whatsappURL) {
             
-            // Open WhatsApp with the formatted text
             UIApplication.shared.open(whatsappURL, options: [:], completionHandler: nil)
         } else {
-            // If WhatsApp is not installed, use UIActivityViewController
             let activityViewController = UIActivityViewController(activityItems: [data], applicationActivities: nil)
-            
-            // Exclude unnecessary activity types (optional)
             activityViewController.excludedActivityTypes = [
                 .postToFacebook,
                 .postToTwitter,
@@ -910,8 +918,18 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
                 .print
             ]
             
-            // Present the activity view controller
             if let topController = UIApplication.shared.keyWindow?.rootViewController {
+                // For iPad, set the popover presentation details
+                if let popoverPresentationController = activityViewController.popoverPresentationController {
+                    popoverPresentationController.sourceView = topController.view
+                    popoverPresentationController.sourceRect = CGRect(
+                        x: topController.view.bounds.midX,
+                        y: topController.view.bounds.midY,
+                        width: 0,
+                        height: 0
+                    )
+                    popoverPresentationController.permittedArrowDirections = [] // No arrow
+                }
                 topController.present(activityViewController, animated: true, completion: nil)
             }
         }
