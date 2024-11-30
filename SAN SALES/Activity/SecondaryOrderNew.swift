@@ -247,6 +247,7 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
             if GlobalFunc().hasInternet(){
                             self.fetchMarginWiseRate(code: VisitData.shared.CustID)
                         }else {
+                            self.LoadingDismiss()
                             Toast.show(message: "Margin Wise Rate Card Need Internet.Please Check Internet", controller: self)
                         }
         }
@@ -745,12 +746,14 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
                 print(self.lstMarginRates)
                 DispatchQueue.main.async {
                     self.updateProduct(products: self.lstAllProducts)
+                    
+                    if let unwrappedProduct = self.productData {
+                        print(unwrappedProduct)
+                        self.DemoEdite()
+                    }
                 }
             
-                if let unwrappedProduct = self.productData {
-                    print(unwrappedProduct)
-                    self.DemoEdite()
-                }
+                
                 
             case .failure(let error):
                 DispatchQueue.main.asyncAfter(deadline: .now()) {
@@ -1734,7 +1737,7 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
         }
         DispatchQueue.main.asyncAfter(deadline: .now()+1) {
                     self.LoadingDismiss()
-                }
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
