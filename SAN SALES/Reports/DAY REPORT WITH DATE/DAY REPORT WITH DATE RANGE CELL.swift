@@ -107,6 +107,7 @@ class DAY_REPORT_WITH_DATE_RANGE_CELL: UITableViewCell, UICollectionViewDataSour
         let chartDataSet = BarChartDataSet(entries: dataEntries, label: "Total:\(Tc)")
         let chartDataSet1 = BarChartDataSet(entries: dataEntries1, label: "Effective:\(PC)")
         
+        
         let dataSetColors: [NSUIColor] = [
             NSUIColor(red: 0.06, green: 0.68, blue: 0.76, alpha: 1.00),
             NSUIColor(red: 1.00, green: 0.58, blue: 0.00, alpha: 1.00)

@@ -276,8 +276,9 @@ class DAY_REPORT_WITH_DATE_RANGE: IViewController, UITableViewDelegate, UITableV
                                 
                                 if let dt = item["dt"] as? [String: Any]{
                                    let dateString = dt["date"] as? String
+                                    print(dateString)
                                     let date = dateFormatter.date(from: dateString!)
-                                    return targetFormatter.string(from: date!) == Date
+                                    return targetFormatter.string(from: date ?? Date.toDate(format: "yyyy-MM-dd hh:mm:ss")) == Date
                                 }
                                 return false
                             }
@@ -338,7 +339,7 @@ class DAY_REPORT_WITH_DATE_RANGE: IViewController, UITableViewDelegate, UITableV
                                 if let dt = item["date"] as? [String: Any]{
                                    let dateString = dt["date"] as? String
                                     let date = dateFormatter.date(from: dateString!)
-                                    return targetFormatter.string(from: date!) == Date
+                                    return targetFormatter.string(from: date ?? Date.toDate(format: "yyyy-MM-dd hh:mm:ss")) == Date
                                 }
                                 return false
                             }
@@ -387,7 +388,7 @@ class DAY_REPORT_WITH_DATE_RANGE: IViewController, UITableViewDelegate, UITableV
                                 if let dt = item[""] as? [String: Any]{
                                    let dateString = dt["date"] as? String
                                     let date = dateFormatter.date(from: dateString!)
-                                    return targetFormatter.string(from: date!) == Date
+                                    return targetFormatter.string(from: date ?? Date.toDate(format: "yyyy-MM-dd hh:mm:ss")) == Date
                                 }
                                 return false
                             }
@@ -436,7 +437,7 @@ class DAY_REPORT_WITH_DATE_RANGE: IViewController, UITableViewDelegate, UITableV
                 }
 
                 var headers: [String] = ["TC:", "PC:", "O. Value           "]
-                var values: [String] = ["\(Tccall)", "\(Pccall)", "\(ovalue)"]
+                var values: [String] = ["\(Tccall)", "\(Pccall)", "\(CurrencyUtils.formatCurrency_WithoutSymbol(amount: ovalue, currencySymbol: UserSetup.shared.currency_symbol))"]
 
                 if UserSetup.shared.Liters_Need == 1 {
                     headers.append("Volumes")

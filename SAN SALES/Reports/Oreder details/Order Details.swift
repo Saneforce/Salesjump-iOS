@@ -941,9 +941,7 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
         var formattedText = ""
         
         for order in orders {
-            if order.Orderlist.count == 0{
-                break
-            }
+          
             
             formattedText += "Distributor : \(order.Stockist)\n"
             formattedText += "Retailer : \(order.name)\n"

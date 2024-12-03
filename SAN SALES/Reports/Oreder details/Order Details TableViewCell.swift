@@ -104,7 +104,14 @@ class Order_Details_TableViewCell: UITableViewCell, UITableViewDataSource, UITab
         cell.Free.text = String(item.freeValue)
         cell.Disc.text = String(item.discValue)
         cell.Tax.text = String(item.taxValue)
-        cell.Value.text = String(item.totalValue)
+        
+        if (indexPath.row == 0 ){
+            cell.Value.text = String(item.totalValue)
+        }else {
+            cell.Value.text =  CurrencyUtils.formatCurrency_WithoutSymbol(amount: item.totalValue, currencySymbol: UserSetup.shared.currency_symbol)
+        }
+       //
+        
 
         return cell
     }
