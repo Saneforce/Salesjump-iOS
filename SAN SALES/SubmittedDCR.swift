@@ -255,7 +255,7 @@ class SubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDataSource
             cell.Qty?.text = String(View[indexPath.row].qty)
            // cell.Value?.text = String(View[indexPath.row].value)
             
-            cell.Value?.text = CurrencyUtils.formatCurrency_WithoutSymbol(amount: String(View[indexPath.row].qty), currencySymbol: UserSetup.shared.currency_symbol)
+            cell.Value?.text = CurrencyUtils.formatCurrency_WithoutSymbol(amount: String(View[indexPath.row].value), currencySymbol: UserSetup.shared.currency_symbol)
           
         }
         if tableView == InputTB {

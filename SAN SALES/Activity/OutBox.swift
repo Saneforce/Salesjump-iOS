@@ -48,7 +48,7 @@ class OutBox : IViewController , UITableViewDelegate , UITableViewDataSource{
         cell.lblText2.text = self.totalCalls[indexPath.row]["distributorName"] as? String ?? ""
         cell.lblValue.text = self.totalCalls[indexPath.row]["route"] as? String ?? ""
         cell.lblremark.text = self.totalCalls[indexPath.row]["date"] as? String ?? ""
-        
+        cell.lblUOM.text = ""
         return cell
     }
     

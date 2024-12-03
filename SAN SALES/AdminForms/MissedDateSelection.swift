@@ -71,6 +71,9 @@ class MissedDateSelection : IViewController{
     
     @IBOutlet weak var Primary_Order_Card_view: CardView!
     
+    @IBOutlet weak var Secondary_Order_height: NSLayoutConstraint!
+    
+    
     var secondaryOrderList = [RetailerList](){
         didSet{
             self.lblSecondaryOrderCount.text = secondaryOrderList.count.description
@@ -165,6 +168,8 @@ class MissedDateSelection : IViewController{
         if (UserSetup.shared.StkNeed != 1) {
             Primary_Order_height.constant = 0
             Primary_Order_Card_view.isHidden = true
+            Secondary_Order_height.constant = 60
+            vwOrderListHeightConstraints.constant = 60
         }
         
         lblDate.addTarget(target: self, action: #selector(dateAction))
@@ -688,7 +693,12 @@ class MissedDateSelection : IViewController{
                     if UserSetup.shared.SrtEndKMNd == 2 {
                         self.updateDisplay()
                     }
+                
+                    
                     self.vwOrderListHeightConstraints.constant = 120
+                if (UserSetup.shared.StkNeed != 1) {
+                    self.vwOrderListHeightConstraints.constant = 70
+                }
                     self.vwOrderList.isHidden = false
                 default:
                     self.vwTravelMode.isHidden = true

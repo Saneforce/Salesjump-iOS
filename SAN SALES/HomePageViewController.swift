@@ -126,7 +126,9 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
       
         
         if !GlobalFunc().hasInternet() {
-            Toast.show(message: "Internet is disconnected...Now in offline mode", controller: self)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                Toast.show(message: "Internet is disconnected...Now in offline mode", controller: self)
+            }
         }else{
             self.tpMandatoryNeed()
         }
@@ -246,7 +248,9 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         
         
         if !GlobalFunc().hasInternet() {
-            Toast.show(message: "Internet is disconnected...Now in offline mode", controller: self)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                Toast.show(message: "Internet is disconnected...Now in offline mode", controller: self)
+            }
         }else{
             Navstartfrom()
             DashboardNew()
