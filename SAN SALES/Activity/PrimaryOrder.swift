@@ -1601,24 +1601,17 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
                     if let baseUnitCodeStr = lstAllProducts[indexToDelete]["Base_Unit_code"] as? String,
                        let baseUnitCodeInt = Int(baseUnitCodeStr) {
                         BasUnitCode = baseUnitCodeInt
-                        print(BasUnitCode)
                     } else {
-                        print("Base_Unit_code is nil or not convertible to Int.")
                         let baseUnitCodeInt = lstAllProducts[indexToDelete]["Base_Unit_code"]
-                        print(baseUnitCodeInt as Any)
                         if let transid = baseUnitCodeInt {
-                            
                             if let transid2 = transid{
-                                print(transid2)
                                 BasUnitCode = transid2 as! Int
-                                print(BasUnitCode)
                             } else {
                                 print("Value is nil or not a String")
                             }
                         } else {
                             print("Value is nil or not a String")
                         }
-                        
                     }
                     
                     lProdItem = stkname as! [String : Any]
