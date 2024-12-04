@@ -128,7 +128,6 @@ class ClosingStockEntry__DB_: IViewController, UICollectionViewDelegate, UIColle
                   self.LoadingDismiss()
               }
           }
-          
       }
       
       let lstCatData: String=LocalStoreage.string(forKey: "Brand_Master")!

@@ -116,6 +116,7 @@ class SecondaryVisit: IViewController, UITableViewDelegate, UITableViewDataSourc
         if let lstRetailData = LocalStoreage.string(forKey: "Retail_Master_"+DataSF),
            let list = GlobalFunc.convertToDictionary(text:  lstRetailData) as? [AnyObject] {
             lstRetails = list
+            print(lstRetails)
         }
         
         
