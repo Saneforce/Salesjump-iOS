@@ -142,12 +142,13 @@ class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UI
     var Typ:String?
     var CodeDate:String?
     var Hqname:String?
+    var Hqid:String?
     var GetDate:String = ""
-    
     var Orderid:String?
     var Orderid2:String = ""
     var Stkid:String?
     var Stkid2:String = ""
+    var Headquarterid:String = ""
     
     
     struct OrderItemModels {
@@ -212,10 +213,11 @@ class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UI
         
         
         
-        if let date = CodeDate,let id = Orderid,let stkid = Stkid{
+        if let date = CodeDate,let id = Orderid,let stkid = Stkid,let Get_hq_id = Hqid{
             GetDate = date
             Orderid2 = id
             Stkid2 = stkid
+            Headquarterid = Get_hq_id
         }
         
         Free_TB.delegate = self
@@ -294,7 +296,7 @@ class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UI
     
     func vwVstDet_order(){
        // self.ShowLoading(Message: "Loading...")
-        let apiKey: String = "get%2FvwVstDet_order&State_Code=\(StateCode)&stockist_code=\(Stkid2)&divisionCode=\(DivCode)&orderDt=\(GetDate)&orderNo=\(Orderid2)&code=undefined&rSF=\(SFCode)&typ=3&sfCode=\(SFCode)"
+        let apiKey: String = "get%2FvwVstDet_order&State_Code=\(StateCode)&stockist_code=\(Stkid2)&divisionCode=\(DivCode)&orderDt=\(GetDate)&orderNo=\(Orderid2)&code=undefined&rSF=\(SFCode)&typ=3&sfCode=\(Headquarterid)"
         
         AF.request(APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKey, method: .post, parameters: nil, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self] AFdata in
             switch AFdata.result {
@@ -320,7 +322,7 @@ class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UI
                     Total_Dis = Total_Dis + (discValue ?? 0)
                 }
                 
-                OrderDetils_For_Distributor.append(Distobutor_OrderDetail(Dis_Name: json[0]["name"] as? String ?? "", Order_Id: json[0]["trans_sl_no"] as? String ?? "", Amt: String(json[0]["orderValue"] as? Double ?? 0), Remark: "", date: json[0]["Order_date"] as? String ?? "", Phone_No: json[0]["mobNo"] as? String ?? "", Tax: String(Total_Tax), Dis: String(Total_Dis), Orderitem: orderItems))
+                OrderDetils_For_Distributor.append(Distobutor_OrderDetail(Dis_Name: json[0]["name"] as? String ?? "", Order_Id: json[0]["trans_sl_no"] as? String ?? "", Amt: String(json[0]["orderValue"] as? Double ?? 0), Remark: json[0]["remarks"] as? String ?? "", date: json[0]["Order_date"] as? String ?? "", Phone_No: json[0]["mobNo"] as? String ?? "", Tax: String(Total_Tax), Dis: String(Total_Dis), Orderitem: orderItems))
                 
                 
                 print(OrderDetils_For_Distributor)
@@ -386,8 +388,6 @@ class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UI
                 }
             }
         }
-        
-       
     }
     
     
@@ -891,10 +891,9 @@ class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UI
         var formattedText = ""
         
         for order in orders {
-            if order.Orderlist.count == 0{
-                break
-            }
-            
+//            if order.Orderlist.count == 0{
+//                break
+//            }
             formattedText += "Distributor : \(order.Stockist)\n"
             formattedText += "Retailer : \(order.name)\n"
             formattedText += "Route : \(order.Route)\n"
