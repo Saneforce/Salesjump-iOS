@@ -325,6 +325,7 @@ class Distributor_Order_Details: IViewController, UITableViewDelegate, UITableVi
             myDyPln.Orderid = item.orderid
             myDyPln.Stkid = item.Stkid
             myDyPln.Hqid = Headquarterid
+            myDyPln.Hqname = Headquarterlbl.text
             self.navigationController?.pushViewController(myDyPln, animated: true)
         }else{
             Tb_Invoice = Invoice_Detils[indexPath.row].Invoice
@@ -345,14 +346,19 @@ class Distributor_Order_Details: IViewController, UITableViewDelegate, UITableVi
     }
     
     @objc private func Open_Calendr() {
+        No_data_availablelbl.isHidden = true
         Calender_View.isHidden = false
     }
     @objc private func Close_Calendr() {
         Calender_View.isHidden = true
+        if Invoice_Detils.isEmpty{
+            No_data_availablelbl.isHidden = false
+        }else{
+            No_data_availablelbl.isHidden = true
+        }
     }
     
-    @objc private func Headquarters_Selection() {
-        
+    @objc private func Headquarters_Selection(){
         let distributorVC = ItemViewController(items: lstHQs, configure: { (Cell : SingleSelectionTableViewCell, distributor) in
             Cell.textLabel?.text = distributor["name"] as? String
         })

@@ -105,7 +105,7 @@ class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UI
     
     var Itemwise_Summary_Data:[Itemwise_Summary] = []
     var Orderdata:[Id] = []
-    var Oredrdatadetisl:[OrderDetail] = []
+    var Oredrdatadetisl:[Distributor_Order_Details_cell.OrderItemModels] = []
     var Orderlist:[Distributor_Order_Details_cell.OrderItemModels] = []
     let cardViewInstance = CardViewdata()
     var SFCode: String=""
@@ -149,6 +149,7 @@ class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UI
     var Stkid:String?
     var Stkid2:String = ""
     var Headquarterid:String = ""
+    var HeadquarterName:String = ""
     
     
     struct OrderItemModels {
@@ -178,6 +179,8 @@ class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UI
         var Phone_No:String
         var Tax:String
         var Dis:String
+        var stockist_name:String
+        var Territory:String
         var Orderitem:[OrderItemModels]
     }
     
@@ -196,8 +199,11 @@ class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UI
     @IBOutlet weak var Free_TB: UITableView!
     
     
-    var FreeDetils:[Itemwise_Summary] = []
+    @IBOutlet weak var Free_table_height: NSLayoutConstraint!
     
+    
+    var FreeDetils:[Itemwise_Summary] = []
+    var lstAllProducts: [AnyObject] = []
     override func viewDidLoad() {
         super.viewDidLoad()
         getUserDetails()
@@ -213,11 +219,12 @@ class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UI
         
         
         
-        if let date = CodeDate,let id = Orderid,let stkid = Stkid,let Get_hq_id = Hqid{
+        if let date = CodeDate,let id = Orderid,let stkid = Stkid,let Get_hq_id = Hqid, let get_hq_name = Hqname{
             GetDate = date
             Orderid2 = id
             Stkid2 = stkid
             Headquarterid = Get_hq_id
+            HeadquarterName = get_hq_name
         }
         
         Free_TB.delegate = self
@@ -231,7 +238,12 @@ class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UI
             Hq_View_height.constant = 0
         }
         
+        let lstProdData: String = LocalStoreage.string(forKey: "Products_Master")!
         
+        if let list = GlobalFunc.convertToDictionary(text: lstProdData) as? [AnyObject] {
+            lstAllProducts = list;
+            print(lstProdData)
+        }
         cardViewInstance.styleSummaryView(Hq_View)
         cardViewInstance.styleSummaryView(Date_View)
         Addres_View.layer.cornerRadius = 10
@@ -310,8 +322,6 @@ class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UI
                 let reportType = 1
                 let orderItems = parseProductDetails(productCode: productCode, productDetail: productDetail, reportType: reportType)
                 
-                
-                
                 var Total_Tax:Double = 0
                 var Total_Dis:Double = 0
                 
@@ -322,7 +332,7 @@ class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UI
                     Total_Dis = Total_Dis + (discValue ?? 0)
                 }
                 
-                OrderDetils_For_Distributor.append(Distobutor_OrderDetail(Dis_Name: json[0]["name"] as? String ?? "", Order_Id: json[0]["trans_sl_no"] as? String ?? "", Amt: String(json[0]["orderValue"] as? Double ?? 0), Remark: json[0]["remarks"] as? String ?? "", date: json[0]["Order_date"] as? String ?? "", Phone_No: json[0]["mobNo"] as? String ?? "", Tax: String(Total_Tax), Dis: String(Total_Dis), Orderitem: orderItems))
+                OrderDetils_For_Distributor.append(Distobutor_OrderDetail(Dis_Name: json[0]["name"] as? String ?? "", Order_Id: json[0]["trans_sl_no"] as? String ?? "", Amt: String(json[0]["orderValue"] as? Double ?? 0), Remark: json[0]["remarks"] as? String ?? "", date: json[0]["Order_date"] as? String ?? "", Phone_No: json[0]["mobNo"] as? String ?? "", Tax: String(Total_Tax), Dis: String(Total_Dis), stockist_name: json[0]["stockist_name"] as? String ?? "", Territory: json[0]["Territory"] as? String ?? "", Orderitem: orderItems))
                 
                 
                 print(OrderDetils_For_Distributor)
@@ -484,7 +494,12 @@ class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UI
                 if let freeNameRange = product.range(of: "\\?\\?.*?~~", options: .regularExpression) {
                     freeProductName = String(product[freeNameRange]).replacingOccurrences(of: ["??", "~~"], with: "").trimmingCharacters(in: .whitespaces)
                 }
-
+                if freeProductName == ""{
+                    freeProductName = productName
+                }
+                if let filteredProduct = lstAllProducts.first(where: { $0["id"] as? String == freeProductName }){
+                        freeProductName = filteredProduct["name"] as? String ?? ""
+                }
             } catch {
                 print("Error parsing product details: \(error)")
             }
@@ -518,107 +533,9 @@ class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UI
     }
     
     
-    
-    
-    func parseProducts(_ products: String,_ Idproducts: String, taxArray: [String]?) -> [OrderItemModel] {
-        var itemModelList = [OrderItemModel]()
-        var netAmount: Double = 0
-        let productArray = products.split(separator: ",").map { String($0) }
-        let Additional_Prod_Code_Array = Idproducts.split(separator: "#")
-        var prodcode = [String]()
-        for j in Additional_Prod_Code_Array{
-            let Product_Id = j.split(separator: "~").map { String($0) }
-            prodcode.append(Product_Id[0])
-        }
-        
-        for (i, product) in productArray.enumerated() {
-            var taxAmt = "0"
-            
-            if let taxAmount = taxArray?[i] {
-                taxAmt = taxAmount
-            }
-            let ProductId = prodcode[i]
-            let qtyValue = extractDouble(from: product, start: ") (", end: "@")
-            let freeValue = extractDouble(from: product, start: "+", end: "%")
-          
-            
-            let splitdisc = product.split(separator: "*").map { String($0) }
-            let splitdisc2 = splitdisc[0].split(separator: "-").map { String($0) }
-            let discValue = Double(splitdisc2.last ?? "0") ?? 0
-            let taxValue = Double(taxAmt) ?? 0
-            let rateValue = extractDouble(from: product, start: "*", end: "!")
-            let litersVal = extractDouble(from: product, start: "@", end: "+")
-            let clValue = Int(extractString(from: product, start: "!", end: "!") ?? "0") ?? 0
-            let uomNames = extractString(from: product, start: "!", end: "%") ?? ""
-            let name = uomNames.split(separator: "!").map { String($0) }
-            let uomName = name[1]
-            let eQtyValue = extractDouble(from: product, start: "%", end: "*")
-            let Value =  extractDouble(from: product, start: "(", end: ")")
-            
-            
-            //let totalValue = Value + taxValue - discValue
-            
-            let totalValue = Value
-            netAmount += totalValue
-            
-            
-            let productName = extractProductName(product, totalValue: Value)
-            let freeProductName = extractFreeProductName(product)
-
-            let orderItem = OrderItemModel(
-                productName: productName,
-                ProductID: ProductId,
-                rateValue: String(rateValue),
-                qtyValue: String(qtyValue),
-                freeValue: String(freeValue),
-                discValue: String(discValue),
-                totalValue: String(totalValue),
-                taxValue: String(taxValue),
-                clValue: String(clValue),
-                uomName: String(uomName),
-                eQtyValue: String(eQtyValue),
-                litersVal: String(litersVal),
-                freeProductName: freeProductName
-            )
-            print(orderItem)
-
-            itemModelList.append(orderItem)
-        }
-
-        print("Net Amount: \(String(format: "%.2f", netAmount))")
-        return itemModelList
-    }
-
-    // Helper functions
-    func extractDouble(from text: String, start: String, end: String) -> Double {
-        guard let range = extractString(from: text, start: start, end: end),
-              let value = Double(range.filter { "0123456789.".contains($0) }) else {
-            return 0
-        }
-        return value
-    }
-
-    func extractString(from text: String, start: String, end: String) -> String? {
-        guard let startIndex = text.range(of: start)?.upperBound,
-              let endIndex = text.range(of: end, range: startIndex..<text.endIndex)?.lowerBound else {
-            return nil
-        }
-        return String(text[startIndex..<endIndex])
-    }
-
-    func extractProductName(_ product: String, totalValue: Double) -> String {
-        let splitprod = product.split(separator: "(").map { String($0) }
-        return splitprod[0].trimmingCharacters(in: .whitespaces)
-    }
-
-    func extractFreeProductName(_ product: String) -> String {
-        guard let startIndex = product.range(of: "^")?.upperBound else { return "" }
-        return String(product[startIndex...]).trimmingCharacters(in: .whitespaces)
-    }
-    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if Item_Summary_table == tableView {
-            return 30
+            return 45
         }
         if Day_Report_TB ==  tableView{
             return 50
@@ -653,8 +570,8 @@ class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UI
         
         
         let Height = Item_Summary_View.constant -   Item_Summary_TB_hEIGHT.constant
-        let Scroll_Height = CGFloat(Height) + CGFloat(Itemwise_Summary_Data.count * 32)
-        Item_Summary_TB_hEIGHT.constant = CGFloat(Itemwise_Summary_Data.count * 32)
+        let Scroll_Height = CGFloat(Height) + CGFloat(Itemwise_Summary_Data.count * 46)
+        Item_Summary_TB_hEIGHT.constant = CGFloat(Itemwise_Summary_Data.count * 46)
         Item_Summary_View.constant = Scroll_Height
         Scroll_height .constant =  Scroll_height .constant  +  Item_Summary_View.constant + 100
     }
@@ -673,6 +590,7 @@ class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UI
             return Itemwise_Summary_Data.count
         }
         if Free_TB == tableView{
+            print(FreeDetils.count)
            return FreeDetils.count
          }
         
@@ -815,17 +733,27 @@ class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UI
           Sch_Disc.text = String(Item.Dis)
          // Net_Amt.text = "₹ " + Item.Amt
           Net_Amt.text = CurrencyUtils.formatCurrency(amount: Item.Amt, currencySymbol: UserSetup.shared.currency_symbol)
+          FreeDetils.removeAll()
+          
+          
+          print(Item.Orderitem)
           
           for i in Item.Orderitem{
               let free: Double = Double(i.freeValue) ?? 0
-              if free != 0 {
-                  FreeDetils.append(Itemwise_Summary(productName: i.productName, ProductID: "", Qty: 0, Free: Int(free)))
+              
+              print(free)
+              
+              if free > 0 {
+                  FreeDetils.append(Itemwise_Summary(productName: i.freeProductName, ProductID: "", Qty: 0, Free: Int(free)))
               }}
           if FreeDetils.isEmpty {
               height_for_Free_Tb.constant = 0
               free_view.isHidden = true
           }else{
-              height_for_Free_Tb.constant = 154
+              height_for_Free_Tb.constant =  CGFloat(30 * FreeDetils.count)
+              height_for_Free_Tb.constant = height_for_Free_Tb.constant + 110
+              
+            //  height_for_Free_Tb.constant = 154
               free_view.isHidden = false
           }
           Free_TB.reloadData()
@@ -857,20 +785,14 @@ class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UI
     }
 
     @objc func Textshare() {
-        let data: String = formatOrdersForSharing(orders: Oredrdatadetisl)
-        
-        // Share to WhatsApp if available
+        let data: String = formatOrdersForSharing(orders: OrderDetils_For_Distributor)
         if let urlEncodedText = data.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
            let whatsappURL = URL(string: "whatsapp://send?text=\(urlEncodedText)"),
            UIApplication.shared.canOpenURL(whatsappURL) {
             
-            // Open WhatsApp with the formatted text
             UIApplication.shared.open(whatsappURL, options: [:], completionHandler: nil)
         } else {
-            // If WhatsApp is not installed, use UIActivityViewController
             let activityViewController = UIActivityViewController(activityItems: [data], applicationActivities: nil)
-            
-            // Exclude unnecessary activity types (optional)
             activityViewController.excludedActivityTypes = [
                 .postToFacebook,
                 .postToTwitter,
@@ -878,50 +800,44 @@ class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UI
                 .print
             ]
             
-            // Present the activity view controller
             if let topController = UIApplication.shared.keyWindow?.rootViewController {
+                // For iPad, set the popover presentation details
+                if let popoverPresentationController = activityViewController.popoverPresentationController {
+                    popoverPresentationController.sourceView = topController.view
+                    popoverPresentationController.sourceRect = CGRect(
+                        x: topController.view.bounds.midX,
+                        y: topController.view.bounds.midY,
+                        width: 0,
+                        height: 0
+                    )
+                    popoverPresentationController.permittedArrowDirections = [] // No arrow
+                }
                 topController.present(activityViewController, animated: true, completion: nil)
             }
         }
     }
     
-    
-    // Function to format the orders for sharing
-    func formatOrdersForSharing(orders: [OrderDetail]) -> String {
+    func formatOrdersForSharing(orders: [Distobutor_OrderDetail]) -> String {
         var formattedText = ""
-        
         for order in orders {
-//            if order.Orderlist.count == 0{
-//                break
-//            }
-            formattedText += "Distributor : \(order.Stockist)\n"
-            formattedText += "Retailer : \(order.name)\n"
-            formattedText += "Route : \(order.Route)\n"
-            
-            for item in order.Orderlist {
+            formattedText += "\(UserSetup.shared.StkCap) : \(order.stockist_name)\n"
+            formattedText += "\(UserSetup.shared.DrCap) : \(order.Dis_Name)\n"
+            formattedText += "\(UserSetup.shared.StkRoute) : \(order.Territory)\n"
+            for item in order.Orderitem {
                 formattedText += "\(item.productName)\n"
                 formattedText += "Rate : \(item.rateValue) Qty : \(item.qtyValue) Value : \(item.totalValue)\n"
             }
-            
-            formattedText += "Net Amount : \(order.Net_amount)\n"
+            formattedText += "Net Amount : \(order.Amt)\n"
+            formattedText += "Order Taken By : \(HeadquarterName)\n"
             formattedText += "------------**------------\n"
         }
-        
-      //  formattedText += "Order Taken By : \(hq_name_sel.text)"
-        
         return formattedText
     }
-    
-    
     // MARK: -  Full screan Share
-    
     @objc func cURRENT_iMG(){
         sharePDF(from: Scroll_View)
     }
-    
-    
     // MARK: - Capture Scroll View Content as Image
-
     func captureScrollViewContent(scrollView: UIScrollView) -> UIImage? {
         // Start image context with the full content size of the scroll view
         UIGraphicsBeginImageContextWithOptions(scrollView.contentSize, false, 0.0)
@@ -947,9 +863,6 @@ class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UI
         
         return capturedImage
     }
-
-
-
     // MARK: - Create PDF from Image
     func createPDF(from image: UIImage) -> Data? {
         let pdfData = NSMutableData()
