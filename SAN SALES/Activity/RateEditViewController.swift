@@ -10,15 +10,19 @@ import UIKit
 class RateEditViewController<Item>: IViewController {
     
     
+    @IBOutlet weak var lblTitle: UILabel!
     
     @IBOutlet weak var txtRate: UITextField!
     
     var rate : Double!
     
+    var titleStr : String!
+    
     var updateRate : (Item) -> () = { _ in}
     override func viewDidLoad() {
         super.viewDidLoad()
         self.txtRate.text = "\(rate ?? 0)"
+        self.lblTitle.text = "\(titleStr ?? "")"
         txtRate.addTarget(self, action: #selector(rateEditAction(_:)), for: .editingChanged)
         // Do any additional setup after loading the view.
     }

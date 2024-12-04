@@ -1370,6 +1370,9 @@ class SuperStockistOrderListTableViewCell : UITableViewCell {
     @IBOutlet weak var txtDisPer: UITextField!
     @IBOutlet weak var txtDisAmt: UITextField!
     
+    
+    
+    
     @IBOutlet weak var txtTaxPer: UITextField!
     @IBOutlet weak var txtTaxAmt: UITextField!
     
@@ -1389,6 +1392,8 @@ class SuperStockistOrderListTableViewCell : UITableViewCell {
     
     @IBOutlet weak var lblFreeProductName: UILabel!
     
+    
+    @IBOutlet weak var lblPer: LabelSelect!
     
     @IBOutlet weak var imgRateEdit: UIImageView!
     
@@ -1431,7 +1436,7 @@ class SuperStockistOrderListTableViewCell : UITableViewCell {
             txtTaxAmt.text = "\(product.taxAmount)"
             
             txtFreeQty.text = "\(product.freeCount)"
-            
+            lblPer.text = "\(product.discountType)"
 //            lblRemarks.text = product.remarks == "" ? "Select the Templete" : product.remarks
             
 //            txtClQty.text = product.clQty
