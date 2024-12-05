@@ -262,10 +262,10 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         autoreleasepool{
-            let cell:CollectionCell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! CollectionCell
+         //   let cell:CollectionCell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! CollectionCell
             let item: [String: Any]=lstBrands[indexPath.row] as! [String : Any]
             selBrand=String(format: "%@", item["id"] as! CVarArg)
-            cell.vwContent.backgroundColor = UIColor(red: 16/255, green: 173/255, blue: 194/255, alpha: 1)
+         //   cell.vwContent.backgroundColor = UIColor(red: 16/255, green: 173/255, blue: 194/255, alpha: 1)
             lstProducts = lstAllProducts.filter({(product) in
                 let CatId: String = String(format: "%@", product["cateid"] as! CVarArg)
                 return Bool(CatId == selBrand)
@@ -277,16 +277,16 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
         }
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize
-    {
-        
-        let cell:CollectionCell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! CollectionCell
-        let item: [String: Any]=lstBrands[indexPath.row] as! [String : Any]
-        let tx: String = item["name"] as? String ?? ""
-        let rect: CGSize = tx.sizeOfString(maxWidth: 250, font: cell.lblText.font)
-        
-        return CGSize(width: rect.width+70, height: collectionView.frame.size.height)
-    }
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize
+//    {
+//        
+//        let cell:CollectionCell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! CollectionCell
+//        let item: [String: Any]=lstBrands[indexPath.row] as! [String : Any]
+//        let tx: String = item["name"] as? String ?? ""
+//        let rect: CGSize = tx.sizeOfString(maxWidth: 250, font: cell.lblText.font)
+//        
+//        return CGSize(width: rect.width+70, height: collectionView.frame.size.height)
+//    }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -928,7 +928,16 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
         let TotQty: Double = Double(multipliedResult)
         
         let Schemes: [AnyObject] = lstSchemList.filter ({ (item) in
-            if item["PCode"] as! String == id && (item["Scheme"] as! NSString).doubleValue <= TotQty {
+            
+            var scheme : Double = 0
+            
+            if let schemeVal = item["Scheme"] as? String {
+                scheme = Double(schemeVal) ?? 0
+            }else if let schemeVal = item["Scheme"] as? Int{
+                scheme = Double(schemeVal)
+            }
+            
+            if item["PCode"] as! String == id && scheme <= TotQty {
                 return true
             }
             return false
@@ -938,7 +947,7 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
             ReFresh = 3
         }
         var Scheme: Double = 0
-        var FQ : Int32 = 0
+        var FQ : Int = 0
         var OffQty: Int = 0
         var OffProd: String = ""
         var OffProdNm: String = ""
@@ -964,8 +973,21 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
         }
         var ItmValue: Double = (TotQty*Rate)
         if(Schemes.count>0){
-            Scheme = (Schemes[0]["Scheme"] as! NSString).doubleValue
-            FQ = (Schemes[0]["FQ"] as! NSString).intValue
+            
+            if let schemeVal = Schemes[0]["Scheme"] as? String {
+                Scheme = Double(schemeVal) ?? 0
+            }else if let schemeVal = Schemes[0]["Scheme"] as? Int{
+                Scheme = Double(schemeVal)
+            }
+            
+        //    Scheme = (Schemes[0]["Scheme"] as! NSString).doubleValue
+            
+            if let fqVal = Schemes[0]["FQ"] as? String {
+                FQ = Int(fqVal) ?? 0
+            }else if let fqVal = Schemes[0]["FQ"] as? Int{
+                FQ = fqVal
+            }
+         //   FQ = (Schemes[0]["FQ"] as! NSString).intValue
             let SchmQty: Double
             if(Schemes[0]["pkg"] as! String == "Y"){
                 SchmQty=Double(Int(TotQty / Scheme))

@@ -636,7 +636,10 @@ class PrimaryVisit: IViewController, UITableViewDelegate, UITableViewDataSource,
         if validateForm() == false {
             return
         }
-        let vc=self.storyboard?.instantiateViewController(withIdentifier: "sbPrimaryOrder") as!  PrimaryOrder
+//        let vc=self.storyboard?.instantiateViewController(withIdentifier: "sbPrimaryOrder") as!  PrimaryOrder
+//        self.navigationController?.pushViewController(vc, animated: true)
+        
+        let vc=self.storyboard?.instantiateViewController(withIdentifier: "sbPrimaryOrderNew") as!  PrimaryOrderNew
         self.navigationController?.pushViewController(vc, animated: true)
     }
     func setView(view: UIView) {
