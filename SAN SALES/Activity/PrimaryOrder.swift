@@ -262,10 +262,10 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         autoreleasepool{
-            //            let cell:CollectionCell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! CollectionCell
+         //   let cell:CollectionCell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! CollectionCell
             let item: [String: Any]=lstBrands[indexPath.row] as! [String : Any]
             selBrand=String(format: "%@", item["id"] as! CVarArg)
-    //        cell.vwContent.backgroundColor = UIColor(red: 16/255, green: 173/255, blue: 194/255, alpha: 1)
+         //   cell.vwContent.backgroundColor = UIColor(red: 16/255, green: 173/255, blue: 194/255, alpha: 1)
             lstProducts = lstAllProducts.filter({(product) in
                 let CatId: String = String(format: "%@", product["cateid"] as! CVarArg)
                 return Bool(CatId == selBrand)
@@ -962,6 +962,7 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
         let TotQty: Double = Double(multipliedResult)
         
         let Schemes: [AnyObject] = lstSchemList.filter ({ (item) in
+            
             var scheme : Double = 0
             
             if let schemeVal = item["Scheme"] as? String {
@@ -1013,15 +1014,14 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
                 Scheme = Double(schemeVal)
             }
             
-            // Scheme = (Schemes[0]["Scheme"] as! NSString).doubleValue
+        //    Scheme = (Schemes[0]["Scheme"] as! NSString).doubleValue
             
             if let fqVal = Schemes[0]["FQ"] as? String {
                 FQ = Int(fqVal) ?? 0
             }else if let fqVal = Schemes[0]["FQ"] as? Int{
                 FQ = fqVal
             }
-            
-            // FQ = (Schemes[0]["FQ"] as! NSString).intValue
+         //   FQ = (Schemes[0]["FQ"] as! NSString).intValue
             let SchmQty: Double
             if(Schemes[0]["pkg"] as! String == "Y"){
                 SchmQty=Double(Int(TotQty / Scheme))
