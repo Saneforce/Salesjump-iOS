@@ -48,8 +48,8 @@ class Secondary_Order_Details: IViewController, UITableViewDelegate, UITableView
         var Address:String
     }
     var Invoice_Detils:[Dsitdetils] = []
-   // var Retailer_Details:[Invoice] = []
-    var Retailer_Details = [SAN_SALES.Secondary_Order_Details.Invoice(orderid: "GLLMR0012-24-25-SO-221", Sup_Name: "fsedsgff", Stkid: "1118", Date: "", total_amt: "1080.0", Address: "4, Pasumpon Muthuramalinga Thevar Rd, Nandanam Extension, Nandanam, Chennai, Tamil Nadu 600035, India"), SAN_SALES.Secondary_Order_Details.Invoice(orderid: "GLLMR0012-24-25-SO-222", Sup_Name: "muruku shop", Stkid: "1118", Date: "", total_amt: "2322.4", Address: "6, Pasumpon Muthuramalinga Thevar Salai, Nandanam Extension, Nandanam, Chennai, 600035, Tamil Nadu, India")]
+    var Retailer_Details:[Invoice] = []
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -69,8 +69,7 @@ class Secondary_Order_Details: IViewController, UITableViewDelegate, UITableView
         Order_Details_Table.delegate = self
         Order_Details_Table.dataSource = self
         Order_Details_Table.rowHeight = UITableView.automaticDimension
-        //Order_Details_Table.estimatedRowHeight = 120.0
-        Order_Details_Table.estimatedRowHeight = Order_Details_Table.rowHeight
+        Order_Details_Table.estimatedRowHeight = 130.0
         Calendar.delegate = self
         Calendar.dataSource = self
         
@@ -184,7 +183,7 @@ class Secondary_Order_Details: IViewController, UITableViewDelegate, UITableView
         }
         
         if tableView == Order_Details_Table {
-            return UITableView.automaticDimension 
+            return UITableView.automaticDimension
        }
         return 0
     }
@@ -220,11 +219,13 @@ class Secondary_Order_Details: IViewController, UITableViewDelegate, UITableView
         if Secondary_Order_Table == tableView{
             Retilerlbl.text = Invoice_Detils[indexPath.row].Name
             Retailer_Details = Invoice_Detils[indexPath.row].Invoice
-          //  Order_Details_Table.reloadData()
+            Order_Details_Table.reloadData()
             Order_Details_View.isHidden = false
             
         }else{
-            
+            let storyboard = UIStoryboard(name: "Reports 2", bundle: nil)
+            let myDyPln = storyboard.instantiateViewController(withIdentifier: "sbSecondary_order_details_view") as! Secondary_order_details_view
+            self.navigationController?.pushViewController(myDyPln, animated: true)
         }
     }
     @objc private func CloseView(){
