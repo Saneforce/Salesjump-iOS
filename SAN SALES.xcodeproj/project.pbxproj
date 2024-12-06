@@ -154,6 +154,7 @@
 		3F97F9F62831B5950097166D /* AddNewCustomer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F97F9F52831B5950097166D /* AddNewCustomer.swift */; };
 		3F97F9F8283216BD0097166D /* EditTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F97F9F7283216BD0097166D /* EditTextField.swift */; };
 		3F9ACBC12D02CD5A00504BB4 /* Secondary_Order_Details_CustomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9ACBC02D02CD5A00504BB4 /* Secondary_Order_Details_CustomTableViewCell.swift */; };
+		3F9ACBC32D0316BA00504BB4 /* Secondary order details view.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9ACBC22D0316BA00504BB4 /* Secondary order details view.swift */; };
 		3F9DBA0B2C9BE44B00BDADDB /* Target vs Sales Analysis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9DBA0A2C9BE44B00BDADDB /* Target vs Sales Analysis.swift */; };
 		3F9F379528593C5A002CC408 /* Reports.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3F9F379428593C5A002CC408 /* Reports.storyboard */; };
 		3F9F379828593C99002CC408 /* DayReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9F379728593C99002CC408 /* DayReport.swift */; };
@@ -330,6 +331,7 @@
 		3F97F9F52831B5950097166D /* AddNewCustomer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewCustomer.swift; sourceTree = "<group>"; };
 		3F97F9F7283216BD0097166D /* EditTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTextField.swift; sourceTree = "<group>"; };
 		3F9ACBC02D02CD5A00504BB4 /* Secondary_Order_Details_CustomTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secondary_Order_Details_CustomTableViewCell.swift; sourceTree = "<group>"; };
+		3F9ACBC22D0316BA00504BB4 /* Secondary order details view.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Secondary order details view.swift"; sourceTree = "<group>"; };
 		3F9DBA0A2C9BE44B00BDADDB /* Target vs Sales Analysis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Target vs Sales Analysis.swift"; sourceTree = "<group>"; };
 		3F9F379428593C5A002CC408 /* Reports.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Reports.storyboard; sourceTree = "<group>"; };
 		3F9F379728593C99002CC408 /* DayReport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayReport.swift; sourceTree = "<group>"; };
@@ -669,6 +671,7 @@
 			isa = PBXGroup;
 			children = (
 				3F7FD4ED2D016532006FEDED /* Secondary Order Details.swift */,
+				3F9ACBC22D0316BA00504BB4 /* Secondary order details view.swift */,
 				3F9ACBC02D02CD5A00504BB4 /* Secondary_Order_Details_CustomTableViewCell.swift */,
 			);
 			path = "Secondary order details";
@@ -974,6 +977,7 @@
 				38FBAA2C2BD6279D00E36C0D /* Expense View.swift in Sources */,
 				3F9F379A285B5FBA002CC408 /* ReportMenu.swift in Sources */,
 				3F0861BC28019419006A30FB /* SecondaryOrder.swift in Sources */,
+				3F9ACBC32D0316BA00504BB4 /* Secondary order details view.swift in Sources */,
 				388CD92D2BDA3ABE003A06F9 /* TourPlanSingleEntry.swift in Sources */,
 				3FF57C1D286C4A76009E3FE5 /* RptVisitDetail.swift in Sources */,
 				3F5B297828891D5C002D226C /* CheckPermissions.swift in Sources */,
