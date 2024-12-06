@@ -142,6 +142,7 @@
 		3F61CA692C9157730029CE01 /* Closing Sale Entry (DB).swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F61CA682C9157730029CE01 /* Closing Sale Entry (DB).swift */; };
 		3F6CD0522CD9BD91008AEACE /* Distributor Order Details cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F6CD0512CD9BD91008AEACE /* Distributor Order Details cell.swift */; };
 		3F7CCF0328F14CA3002A7C03 /* GEOTagging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7CCF0228F14CA3002A7C03 /* GEOTagging.swift */; };
+		3F7FD4EE2D016532006FEDED /* Secondary Order Details.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7FD4ED2D016532006FEDED /* Secondary Order Details.swift */; };
 		3F8292FF2CC786100098B191 /* DAY REPORT WITH DATE RANGE CELL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F8292FE2CC786100098B191 /* DAY REPORT WITH DATE RANGE CELL.swift */; };
 		3F886A122C8EEDEB001F9A39 /* ClosingStockView (DB).swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F886A112C8EEDEB001F9A39 /* ClosingStockView (DB).swift */; };
 		3F8B989A2C594C610073D452 /* SFC Details View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F8B98992C594C610073D452 /* SFC Details View.swift */; };
@@ -149,6 +150,7 @@
 		3F94523A2CD9EEDE001A6C53 /* Distributor TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9452392CD9EEDE001A6C53 /* Distributor TableViewCell.swift */; };
 		3F97F9F62831B5950097166D /* AddNewCustomer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F97F9F52831B5950097166D /* AddNewCustomer.swift */; };
 		3F97F9F8283216BD0097166D /* EditTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F97F9F7283216BD0097166D /* EditTextField.swift */; };
+		3F9ACBC12D02CD5A00504BB4 /* Secondary_Order_Details_CustomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9ACBC02D02CD5A00504BB4 /* Secondary_Order_Details_CustomTableViewCell.swift */; };
 		3F9DBA0B2C9BE44B00BDADDB /* Target vs Sales Analysis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9DBA0A2C9BE44B00BDADDB /* Target vs Sales Analysis.swift */; };
 		3F9F379528593C5A002CC408 /* Reports.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3F9F379428593C5A002CC408 /* Reports.storyboard */; };
 		3F9F379828593C99002CC408 /* DayReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9F379728593C99002CC408 /* DayReport.swift */; };
@@ -313,6 +315,7 @@
 		3F61CA682C9157730029CE01 /* Closing Sale Entry (DB).swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Closing Sale Entry (DB).swift"; sourceTree = "<group>"; };
 		3F6CD0512CD9BD91008AEACE /* Distributor Order Details cell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Distributor Order Details cell.swift"; sourceTree = "<group>"; };
 		3F7CCF0228F14CA3002A7C03 /* GEOTagging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GEOTagging.swift; sourceTree = "<group>"; };
+		3F7FD4ED2D016532006FEDED /* Secondary Order Details.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Secondary Order Details.swift"; sourceTree = "<group>"; };
 		3F8292FE2CC786100098B191 /* DAY REPORT WITH DATE RANGE CELL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DAY REPORT WITH DATE RANGE CELL.swift"; sourceTree = "<group>"; };
 		3F886A112C8EEDEB001F9A39 /* ClosingStockView (DB).swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ClosingStockView (DB).swift"; sourceTree = "<group>"; };
 		3F8B98992C594C610073D452 /* SFC Details View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SFC Details View.swift"; sourceTree = "<group>"; };
@@ -320,6 +323,7 @@
 		3F9452392CD9EEDE001A6C53 /* Distributor TableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Distributor TableViewCell.swift"; sourceTree = "<group>"; };
 		3F97F9F52831B5950097166D /* AddNewCustomer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewCustomer.swift; sourceTree = "<group>"; };
 		3F97F9F7283216BD0097166D /* EditTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTextField.swift; sourceTree = "<group>"; };
+		3F9ACBC02D02CD5A00504BB4 /* Secondary_Order_Details_CustomTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secondary_Order_Details_CustomTableViewCell.swift; sourceTree = "<group>"; };
 		3F9DBA0A2C9BE44B00BDADDB /* Target vs Sales Analysis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Target vs Sales Analysis.swift"; sourceTree = "<group>"; };
 		3F9F379428593C5A002CC408 /* Reports.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Reports.storyboard; sourceTree = "<group>"; };
 		3F9F379728593C99002CC408 /* DayReport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayReport.swift; sourceTree = "<group>"; };
@@ -652,6 +656,15 @@
 			path = "Closing Entry Activity";
 			sourceTree = "<group>";
 		};
+		3F7FD4EC2D0164DD006FEDED /* Secondary order details */ = {
+			isa = PBXGroup;
+			children = (
+				3F7FD4ED2D016532006FEDED /* Secondary Order Details.swift */,
+				3F9ACBC02D02CD5A00504BB4 /* Secondary_Order_Details_CustomTableViewCell.swift */,
+			);
+			path = "Secondary order details";
+			sourceTree = "<group>";
+		};
 		3F9F379628593C73002CC408 /* Reports */ = {
 			isa = PBXGroup;
 			children = (
@@ -679,6 +692,7 @@
 				3FD090FA2CBE32850087CEEB /* Oreder details */,
 				3F447B502CD9121B004FF91D /* DISTRIBUTOR ORDER DETAILS */,
 				3F3127AA2CC67561000F756A /* DAY REPORT WITH DATE */,
+				3F7FD4EC2D0164DD006FEDED /* Secondary order details */,
 			);
 			path = Reports;
 			sourceTree = "<group>";
@@ -913,6 +927,7 @@
 				386889E22B1868F90015F20C /* RottPageViewController.swift in Sources */,
 				3F8B989A2C594C610073D452 /* SFC Details View.swift in Sources */,
 				3F886A122C8EEDEB001F9A39 /* ClosingStockView (DB).swift in Sources */,
+				3F7FD4EE2D016532006FEDED /* Secondary Order Details.swift in Sources */,
 				3FBF387527E4488100900007 /* APIClient.swift in Sources */,
 				3FC32E572CB3F2A90092449B /* ClosingStockView (SS).swift in Sources */,
 				3F0861BA28001D47006A30FB /* RoundedCornerView.swift in Sources */,
@@ -981,6 +996,7 @@
 				386A43952A1CC63100CE1833 /* PrimarySubmittedDCR.swift in Sources */,
 				15D4E8A22CEC971900E172E0 /* OfflineCallSync.swift in Sources */,
 				386A43912A1CBB0200CE1833 /* SubmittedDCR.swift in Sources */,
+				3F9ACBC12D02CD5A00504BB4 /* Secondary_Order_Details_CustomTableViewCell.swift in Sources */,
 				159095252BF23AD0001D8347 /* CalendarViewController.swift in Sources */,
 				3F94523A2CD9EEDE001A6C53 /* Distributor TableViewCell.swift in Sources */,
 				3F7CCF0328F14CA3002A7C03 /* GEOTagging.swift in Sources */,
