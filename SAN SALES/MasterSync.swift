@@ -305,6 +305,7 @@ import BackgroundTasks
                
                 case .success(let json):
                    self.downloadCount += 1
+                print(json)
                    guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
                        print("Error: Cannot convert JSON object to Pretty JSON data")
                        return
