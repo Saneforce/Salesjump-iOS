@@ -49,6 +49,8 @@ class Secondary_Order_Details: IViewController, UITableViewDelegate, UITableView
     }
     var Invoice_Detils:[Dsitdetils] = []
     var Retailer_Details:[Invoice] = []
+    var Tb_Invoice:[Invoice] = []
+
     
     
     override func viewDidLoad() {
@@ -126,7 +128,7 @@ class Secondary_Order_Details: IViewController, UITableViewDelegate, UITableView
                     let  Order_No = Oredr["Order_No"] as? String ?? ""
                     let Sup_Name = Oredr["Sup_Name"] as? String ?? ""
                     let Order_Value = String(Oredr["Order_Value"] as? Double ?? 0)
-                    let Order_date = Oredr["Order_date"] as? String ?? ""
+                    let Order_date = Oredr["OrderDDt"] as? String ?? ""
                     let Sup_Code = Oredr["Sup_Code"] as? String ?? ""
                     
                     
@@ -192,7 +194,6 @@ class Secondary_Order_Details: IViewController, UITableViewDelegate, UITableView
         if Secondary_Order_Table == tableView{
             return Invoice_Detils.count
         }
-        
         return Retailer_Details.count
     }
     
@@ -223,8 +224,15 @@ class Secondary_Order_Details: IViewController, UITableViewDelegate, UITableView
             Order_Details_View.isHidden = false
             
         }else{
+            let item = Retailer_Details[indexPath.row]
             let storyboard = UIStoryboard(name: "Reports 2", bundle: nil)
             let myDyPln = storyboard.instantiateViewController(withIdentifier: "sbSecondary_order_details_view") as! Secondary_order_details_view
+            myDyPln.CodeDate = item.Date
+            myDyPln.Orderid = item.orderid
+            myDyPln.Stkid = item.Stkid
+            myDyPln.Hqid = ""//Headquarterid
+            myDyPln.Hqname = ""//Headquarterlbl.text
+            
             self.navigationController?.pushViewController(myDyPln, animated: true)
         }
     }
