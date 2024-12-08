@@ -184,6 +184,14 @@ class cellListItem:UITableViewCell{
     @IBOutlet weak var S_val: UILabel!
     
     
+    // Secondary Order details
+    
+    @IBOutlet weak var Orderid: UILabel!
+    @IBOutlet weak var amt: UILabel!
+    @IBOutlet weak var Retiler_Nmae: UILabel!
+    @IBOutlet weak var Retiler_Address: UILabel!
+    
+    
     
     var ischeck = false
 }

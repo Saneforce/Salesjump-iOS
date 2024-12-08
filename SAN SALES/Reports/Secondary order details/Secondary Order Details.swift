@@ -185,6 +185,8 @@ class Secondary_Order_Details: IViewController, UITableViewDelegate, UITableView
         }
         
         if tableView == Order_Details_Table {
+            
+            print(UITableView.automaticDimension)
             return UITableView.automaticDimension
        }
         return 0
@@ -205,7 +207,7 @@ class Secondary_Order_Details: IViewController, UITableViewDelegate, UITableView
             cardViewInstance.styleSummaryView(cell.Card_View)
             return cell
         }else{
-            let Secondary_Order_cell:Secondary_Order_Details_Customcell = tableView.dequeueReusableCell(withIdentifier: "Cell") as! Secondary_Order_Details_Customcell
+            let Secondary_Order_cell:cellListItem = tableView.dequeueReusableCell(withIdentifier: "Cell") as! cellListItem
             Secondary_Order_cell.Orderid.text = Retailer_Details[indexPath.row].orderid
             Secondary_Order_cell.Retiler_Nmae.text =  Retailer_Details[indexPath.row].Sup_Name
             Secondary_Order_cell.amt.text = Retailer_Details[indexPath.row].total_amt
