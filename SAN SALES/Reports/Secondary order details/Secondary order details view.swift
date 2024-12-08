@@ -8,7 +8,7 @@
 import UIKit
 import Alamofire
 
-class Secondary_order_details_view: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class Secondary_order_details_view: IViewController, UITableViewDelegate, UITableViewDataSource {
   
     @IBOutlet weak var Button_back: UIImageView!
     @IBOutlet weak var Dynamic_Header_lbl: UILabel!
@@ -75,6 +75,8 @@ class Secondary_order_details_view: UIViewController, UITableViewDelegate, UITab
     var HeadquarterName:String = ""
     
     @IBOutlet weak var Secondary_order_details_table: UITableView!
+    @IBOutlet weak var Itemwise_summary: UITableView!
+    
     override func viewDidLoad(){
         super.viewDidLoad()
         getUserDetails()
@@ -91,7 +93,13 @@ class Secondary_order_details_view: UIViewController, UITableViewDelegate, UITab
         Secondary_order_details_table.delegate = self
         Secondary_order_details_table.dataSource = self
         Secondary_order_details_table.rowHeight = UITableView.automaticDimension
-        Secondary_order_details_table.estimatedRowHeight = 500.0
+        Secondary_order_details_table.estimatedRowHeight = 150
+        
+        Itemwise_summary.delegate = self
+        Itemwise_summary.dataSource = self
+        Itemwise_summary.rowHeight = UITableView.automaticDimension
+        Itemwise_summary.estimatedRowHeight = 150
+        
         VstDet_order()
     }
     func getUserDetails(){
@@ -184,7 +192,11 @@ class Secondary_order_details_view: UIViewController, UITableViewDelegate, UITab
                 
                 
                 
-                Secondary_order_details_table.reloadData()
+                DispatchQueue.main.async {
+                    self.Secondary_order_details_table.reloadData()
+                    self.Itemwise_summary.reloadData()
+                    self.printVisibleCellHeights(tableView: self.Secondary_order_details_table)
+                }
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                     self.LoadingDismiss()
                 }
@@ -196,6 +208,18 @@ class Secondary_order_details_view: UIViewController, UITableViewDelegate, UITab
                 }
             }
         }
+    }
+    func printVisibleCellHeights(tableView: UITableView) {
+        var height = 0.0
+        for (index, cell) in tableView.visibleCells.enumerated() {
+            let cellHeight = cell.frame.height
+            print("Visible cell \(index) height: \(cellHeight)")
+            height = height + cellHeight
+        }
+//        DispatchQueue.main.async {
+//            self.Product_Details_table_height.constant = height
+//        }
+        
     }
     
     
@@ -331,8 +355,10 @@ class Secondary_order_details_view: UIViewController, UITableViewDelegate, UITab
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if Secondary_order_details_table == tableView{
             return UITableView.automaticDimension
-            
-          //  return 500
+        }
+        
+        if Itemwise_summary == tableView{
+            return UITableView.automaticDimension
         }
         return 0
     }
@@ -341,30 +367,75 @@ class Secondary_order_details_view: UIViewController, UITableViewDelegate, UITab
         if  Secondary_order_details_table == tableView{
             return OrderDetils_For_Distributor.count
         }
+        
+        if Itemwise_summary == tableView{
+           return Itemwise_Summary_Data.count
+        }
         return 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell:Secondary_Order_Details_Customcell = tableView.dequeueReusableCell(withIdentifier: "Cell") as! Secondary_Order_Details_Customcell
+      
         if Secondary_order_details_table == tableView{
+            let cell:Secondary_Order_Details_Customcell = tableView.dequeueReusableCell(withIdentifier: "Cell") as! Secondary_Order_Details_Customcell
             let item = OrderDetils_For_Distributor[indexPath.row]
             print(item)
             cell.Name_and_idlbl.text = item.Order_Id
-            cell.Addresslbl.text = ""
+            cell.Addresslbl.text = "gh"
             cell.Routelbl.text = item.Territory
             cell.Supply_fromlbl.text = item.stockist_name
             cell.Phonelbl.text = item.Phone_No
             cell.Volumlbl.text = "199"
             cell.Netamtlbl.text = item.Amt
-            cell.TotalDislbl.text = item.Dis
-            cell.Finalamtlbl.text = item.Amt
-            cell.Remarklbl.text = item.Remark
+            cell.Remarklbl.text = ""
+            cell.insideTable1Data = [item]
+            cell.reloadData()
+            return cell
+        }else if Itemwise_summary == tableView{
+            let cellS = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! Item_summary_TB
+
+            if Itemwise_Summary_Data[indexPath.row].productName == "Total" && Itemwise_Summary_Data[indexPath.row].ProductID == "" {
+                // Set the text properties first
+                cellS.Product_Name.text = Itemwise_Summary_Data[indexPath.row].productName
+                cellS.Qty.text = String(Itemwise_Summary_Data[indexPath.row].Qty)
+                cellS.Free.text = String(Itemwise_Summary_Data[indexPath.row].Free)
+                // Apply attributed text (font color in this case)
+                let font = UIFont.systemFont(ofSize: 14, weight: .bold)
+                let attributedText = NSAttributedString(
+                    string: cellS.Product_Name?.text ?? "",
+                    attributes: [
+                        .foregroundColor: UIColor.black,
+                        .font: font
+                    ]
+                )
+                let attributedqty = NSAttributedString(string: cellS.Qty?.text ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor(red: 0.09, green: 0.64, blue: 0.29, alpha: 1.00)])
+                let attributedRate = NSAttributedString(string:  cellS.Free?.text ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor(red: 0.09, green: 0.64, blue: 0.29, alpha: 1.00)])
+                cellS.Product_Name?.attributedText = attributedText
+                cellS.Qty?.attributedText = attributedqty
+                cellS.Free?.attributedText = attributedRate
+            } else {
+                cellS.Product_Name.text = Itemwise_Summary_Data[indexPath.row].productName
+                cellS.Qty.text = String(Itemwise_Summary_Data[indexPath.row].Qty)
+                cellS.Free.text = String(Itemwise_Summary_Data[indexPath.row].Free)
+                // Apply attributed text (font color in this case)
+                let font = UIFont.systemFont(ofSize: 14, weight: .regular)
+                let attributedText = NSAttributedString(
+                    string: cellS.Product_Name?.text ?? "",
+                    attributes: [
+                        .foregroundColor: UIColor.black,
+                        .font: font
+                    ]
+                )
+                let attributedqty = NSAttributedString(string: cellS.Qty?.text ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
+                let attributedRate = NSAttributedString(string:  cellS.Free?.text ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
+                cellS.Product_Name?.attributedText = attributedText
+                cellS.Qty?.attributedText = attributedqty
+                cellS.Free?.attributedText = attributedRate
+                
+            }
+            return cellS
         }
-        
-        
-        
-        
-        return cell
+        return UITableViewCell()
     }
     
     
