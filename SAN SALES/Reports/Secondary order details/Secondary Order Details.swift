@@ -228,10 +228,13 @@ class Secondary_Order_Details: IViewController, UITableViewDelegate, UITableView
         }else{
             let item = Retailer_Details[indexPath.row]
             let storyboard = UIStoryboard(name: "Reports 2", bundle: nil)
-            let myDyPln = storyboard.instantiateViewController(withIdentifier: "sbSecondary_order_details_view") as! Secondary_order_details_view
+//            let myDyPln = storyboard.instantiateViewController(withIdentifier: "sbSecondary_order_details_view") as! Secondary_order_details_view
+            let myDyPln = storyboard.instantiateViewController(withIdentifier: "Order_Details") as! Order_Details
+            
             myDyPln.CodeDate = item.Date
             myDyPln.Orderid = item.orderid
             myDyPln.Stkid = item.Stkid
+            myDyPln.Typ = "2"
             myDyPln.Hqid = ""//Headquarterid
             myDyPln.Hqname = ""//Headquarterlbl.text
             

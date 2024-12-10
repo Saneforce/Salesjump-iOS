@@ -135,11 +135,33 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
     var Sf_Id :String = ""
     var Total_Value:Double = 0
     
+    
+    var Typ:String?
+    var CodeDate:String?
+    var Hqname:String?
+    var Hqid:String?
+    var GetDate:String = ""
+    var Orderid:String?
+    var Orderid2:String = ""
+    var Stkid:String?
+    var Stkid2:String = ""
+    var Headquarterid:String = ""
+    var HeadquarterName:String = ""
+    var GetTyp = ""
     @IBOutlet weak var Text_Share: UIImageView!
     var lstAllProducts: [AnyObject] = []
     override func viewDidLoad(){
         super.viewDidLoad()
         getUserDetails()
+        
+        if let date = CodeDate,let id = Orderid,let stkid = Stkid,let Get_hq_id = Hqid, let get_hq_name = Hqname{
+            GetDate = date
+            Orderid2 = id
+            Stkid2 = stkid
+            Headquarterid = Get_hq_id
+            HeadquarterName = get_hq_name
+        }
+        
         let selectdate = DateFormatter()
         selectdate.dateFormat = "yyyy-MM-dd"
         let dates = selectdate.string(from: Date())
@@ -207,7 +229,15 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
                 Hq_Name_lbl.text = UserSetup.shared.SF_Name
             }
         }
-        OrderDayReport()
+        
+        if let typ = Typ{
+            GetTyp = typ
+            if typ == "2"{
+                VstDet_order()
+            }else{
+                OrderDayReport()
+            }
+        }
     }
     func appendDashedBorder(to view: UIView) {
         let borderColor = UIColor.gray.cgColor
@@ -474,6 +504,229 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
                 }
             }
         }
+    }
+    
+    
+    func VstDet_order(){
+        Oredrdatadetisl.removeAll()
+        let apiKey: String = "get%2FvwVstDet_order&State_Code=\(StateCode)&stockist_code=\(Stkid2)&divisionCode=\(DivCode)&orderDt=\(GetDate)&orderNo=\(Orderid2)&code=&%20rSF=\(SFCode)&typ=1&sfCode=\(SFCode)"
+        
+        AF.request(APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKey, method: .post, parameters: nil, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self] AFdata in
+            switch AFdata.result {
+            case .success(let value):
+               let json = (value as? [AnyObject])!
+                
+                print(json)
+                let productDetail = json[0]["Product_Detail"] as? String ?? ""
+                let productCode = json[0]["Product_Code"] as? String ?? ""
+                
+                let reportType = 1
+                let orderItems = parseProductDetails(productCode: productCode, productDetail: productDetail, reportType: reportType)
+                
+                var Total_Tax:Double = 0
+                var Total_Dis:Double = 0
+                
+                for i in orderItems{
+                    let taxValue = Double(i.taxValue)
+                    Total_Tax = Total_Tax + (taxValue ?? 0)
+                    let discValue =  Double(i.discValue)
+                    Total_Dis = Total_Dis + (discValue ?? 0)
+                }
+                
+//                Oredrdatadetisl.append(OrderDetail(Dis_Name: json[0]["name"] as? String ?? "", Order_Id: json[0]["trans_sl_no"] as? String ?? "", Amt: String(json[0]["orderValue"] as? Double ?? 0), Remark: json[0]["remarks"] as? String ?? "", date: json[0]["Order_date"] as? String ?? "", Phone_No: json[0]["mobNo"] as? String ?? "", Tax: String(Total_Tax), Dis: String(Total_Dis), stockist_name: json[0]["stockist_name"] as? String ?? "", Territory: json[0]["Territory"] as? String ?? "", Orderitem: orderItems))
+                
+                
+                print(json)
+                
+                Oredrdatadetisl.append(OrderDetail(id: "", Route: json[0]["Territory"] as? String ?? "", Routeflg: "1", Stockist: json[0]["name"] as? String ?? "", name:json[0]["name"] as? String ?? "", nameid: json[0]["trans_sl_no"] as? String ?? "", Adress: "", Volumes: "", Phone: json[0]["mobNo"] as? String ?? "", Net_amount: String(json[0]["orderValue"] as? Double ?? 0), Remarks: "", Total_Item: "", Tax: "0", Scheme_Discount: "", Cash_Discount: "", tlDisAmt: "", Order_date: "", Order_Count: 1,Total_Dic: 0,Total_Tax: 0, stkmob: "",Total_disc_lbl:"Total Discount", Final_Amt: "",Orderlist: orderItems))
+                
+                
+                
+                
+                for item in Oredrdatadetisl{
+                    for j in item.Orderlist{
+                        let qty = Double(j.qtyValue)
+                        let free = Double(j.freeValue)
+                            let productID = j.ProductID.trimmingCharacters(in: .whitespacesAndNewlines)
+
+                            if let index = Itemwise_Summary_Data.firstIndex(where: {
+                                $0.ProductID.trimmingCharacters(in: .whitespacesAndNewlines) == productID
+                            }) {
+                                Itemwise_Summary_Data[index].Qty += Int(qty ?? 0)
+                                Itemwise_Summary_Data[index].Free += Int(free ?? 0)
+                            } else {
+                                let newItem = Itemwise_Summary(
+                                    productName: j.productName,
+                                    ProductID: productID,
+                                    Qty: Int(qty ?? 0),
+                                    Free: Int(free ?? 0)
+                                )
+                                Itemwise_Summary_Data.append(newItem)
+                            }
+                    }
+                }
+                var QtyTotal = 0
+                var FreeTota = 0
+                for item in Itemwise_Summary_Data{
+                    QtyTotal = QtyTotal + Int(item.Qty)
+                    FreeTota = FreeTota + Int(item.Free)
+                }
+                
+                Itemwise_Summary_Data.append(Itemwise_Summary(productName: "Total", ProductID: "", Qty: Int(Double(QtyTotal)), Free: Int(Double(FreeTota))))
+                
+                let Total: Double = Double(Oredrdatadetisl[0].Net_amount) ?? 0
+                
+//                Total_Value_Amt.text = CurrencyUtils.formatCurrency(amount: Total, currencySymbol: UserSetup.shared.currency_symbol)
+                
+                
+                Total_Value_Amt.text = CurrencyUtils.formatCurrency(amount: Total, currencySymbol: UserSetup.shared.currency_symbol)
+                
+                Scroll_and_Tb_Height()
+                HQ_and_Route_TB.reloadData()
+                Item_Summary_table.reloadData()
+                Scroll_View.setContentOffset(.zero, animated: true)
+                
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    self.LoadingDismiss()
+                }
+            case .failure(let error):
+                Toast.show(message: error.errorDescription ?? "", controller: self)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    self.LoadingDismiss()
+                }
+            }
+        }
+    }
+    
+    func parseProductDetails(productCode: String,productDetail: String, reportType: Int) -> [OrderItemModel] {
+        var orderItemModelsss: [OrderItemModel] = []
+
+        // Split the main product details using the "#" delimiter
+        let productArray = productDetail.split(separator: "#").map { String($0) }
+        let product_Code_Array = productCode.split(separator: "#").map { String($0) }
+        
+        print(product_Code_Array)
+        for (product, productCode) in zip(productArray, product_Code_Array) {
+            var qtyValue: Double = 0
+            var freeValue: Double = 0
+            var discValue: Double = 0
+            var taxValue: Double = 0
+            var rateValue: Double = 0
+            var totalValue: Double = 0
+            var clValue: Int = 0
+            var eQtyValue: Double = 0
+            var liter: Double = 0
+            var productName = ""
+            var uomName = ""
+            var freeProductName = ""
+
+            // Extract values using substrings and regex
+            do {
+                // Extract quantity
+                if let qtyRange = product.range(of: "\\$.*?@", options: .regularExpression) {
+                    let qty = String(product[qtyRange]).replacingOccurrences(of: ["$", "@"], with: "")
+                    qtyValue = Double(qty) ?? 0
+                }
+
+                // Extract free value
+                if let freeRange = product.range(of: "\\+.*?%", options: .regularExpression) {
+                    let free = String(product[freeRange]).replacingOccurrences(of: ["+", "%"], with: "")
+                    freeValue = Double(free) ?? 0
+                }
+
+                // Extract discount
+                if let discRange = product.range(of: "-.*?\\*", options: .regularExpression) {
+                    let disc = String(product[discRange]).replacingOccurrences(of: ["-", "*"], with: "")
+                    discValue = Double(disc) ?? 0
+                }
+
+                // Extract tax amount
+                if let taxRange = product.range(of: "%.*?-", options: .regularExpression) {
+                    let tax = String(product[taxRange]).replacingOccurrences(of: ["%", "-"], with: "")
+                    taxValue = Double(tax) ?? 0
+                }
+
+                // Extract rate
+                if let rateRange = product.range(of: "\\*.*?!", options: .regularExpression) {
+                    let rate = String(product[rateRange]).replacingOccurrences(of: ["*", "!"], with: "")
+                    rateValue = Double(rate) ?? 0
+                }
+
+                // Extract total value
+                if let totalRange = product.range(of: "~.*?\\$", options: .regularExpression) {
+                    let total = String(product[totalRange]).replacingOccurrences(of: ["~", "$"], with: "")
+                    totalValue = Double(total) ?? 0
+                }
+
+                // Extract product name
+                if let nameRange = product.range(of: "^.*?~", options: .regularExpression) {
+                    productName = String(product[nameRange]).replacingOccurrences(of: "~", with: "").trimmingCharacters(in: .whitespaces)
+                }
+
+                // Extract CL value
+                if let clRange = product.range(of: "!.*?!", options: .regularExpression) {
+                    let cl = String(product[clRange]).replacingOccurrences(of: "!", with: "")
+                    clValue = Int(cl) ?? 0
+                }
+
+                // Extract UOM name
+                if let uomRange = product.range(of: "!.*?%", options: .regularExpression) {
+                    uomName = String(product[uomRange]).replacingOccurrences(of: ["!", "%"], with: "").trimmingCharacters(in: .whitespaces)
+                }
+
+                // Extract eQty value
+                if let eQtyRange = product.range(of: "%.*?\\*", options: .regularExpression) {
+                    let eQty = String(product[eQtyRange]).replacingOccurrences(of: ["%", "*"], with: "")
+                    eQtyValue = Double(eQty) ?? 0
+                }
+
+                // Extract liter value
+                if let literRange = product.range(of: "@.*?\\+", options: .regularExpression) {
+                    let lit = String(product[literRange]).replacingOccurrences(of: ["@", "+"], with: "")
+                    liter = Double(lit) ?? 0
+                }
+
+                // Extract free product name (if available)
+                if let freeNameRange = product.range(of: "\\?\\?.*?~~", options: .regularExpression) {
+                    freeProductName = String(product[freeNameRange]).replacingOccurrences(of: ["??", "~~"], with: "").trimmingCharacters(in: .whitespaces)
+                }
+                if freeProductName == ""{
+                    freeProductName = productName
+                }
+                if let filteredProduct = lstAllProducts.first(where: { $0["id"] as? String == freeProductName }){
+                        freeProductName = filteredProduct["name"] as? String ?? ""
+                }
+            } catch {
+                print("Error parsing product details: \(error)")
+            }
+
+            // Calculate liter value if required
+            liter = qtyValue * liter
+
+            // Create OrderItemModel and add to list
+           
+            let Code = productCode.split(separator: "~").map { String($0) }
+        
+            let orderItem = OrderItemModel(
+                productName: productName, ProductID: Code[0].trimmingCharacters(in: .whitespacesAndNewlines),
+                rateValue: String(rateValue),
+                qtyValue: String(qtyValue),
+                freeValue: String(freeValue),
+                discValue: String(discValue),
+                totalValue: String(totalValue),
+                taxValue: String(taxValue),
+                clValue: String(clValue),
+                uomName: String(uomName),
+                eQtyValue: String(eQtyValue),
+                litersVal: String(liter),
+                freeProductName: freeProductName
+            )
+
+            orderItemModelsss.append(orderItem)
+        }
+
+        return orderItemModelsss
     }
     
     func maximumDate(for calendar: FSCalendar) -> Date {
@@ -833,6 +1086,7 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
           Sch_Disc.text = String(Item.Total_Dic)
           Cas_disc.text = Item.tlDisAmt
           //Net_Amt.text = "₹ " + Item.Final_Amt
+          print(Item)
           Net_Amt.text = CurrencyUtils.formatCurrency(amount: Item.Final_Amt, currencySymbol: UserSetup.shared.currency_symbol)
           
           Day_Report_TB.reloadData()
@@ -875,10 +1129,25 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
     }
     
     @objc private func GotoHome() {
-        let storyboard = UIStoryboard(name: "Reports", bundle: nil)
-        let viewController = storyboard.instantiateViewController(withIdentifier: "sbReportsmnu") as! ReportMenu
-        UIApplication.shared.windows.first?.rootViewController = viewController
-        UIApplication.shared.windows.first?.makeKeyAndVisible()
+        
+        if GetTyp == "2"{
+            if let navigationController = self.navigationController {
+                navigationController.popViewController(animated: true)
+            }else{
+                let storyboard = UIStoryboard(name: "Reports 2", bundle: nil)
+                let viewController = storyboard.instantiateViewController(withIdentifier: "DAY_REPORT_WITH_DATE_RANGE") as! DAY_REPORT_WITH_DATE_RANGE
+                let navController = UINavigationController(rootViewController: viewController)
+                
+                UIApplication.shared.windows.first?.rootViewController = navController
+                UIApplication.shared.windows.first?.makeKeyAndVisible()
+            }
+        }else{
+            let storyboard = UIStoryboard(name: "Reports", bundle: nil)
+            let viewController = storyboard.instantiateViewController(withIdentifier: "sbReportsmnu") as! ReportMenu
+            UIApplication.shared.windows.first?.rootViewController = viewController
+            UIApplication.shared.windows.first?.makeKeyAndVisible()
+        }
+      
     }
     
     
