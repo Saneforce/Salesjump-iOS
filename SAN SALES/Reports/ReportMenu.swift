@@ -66,6 +66,9 @@ class ReportMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
         if (UserSetup.shared.StkNeed == 1) {
             strMasList.append(mnuItem.init(MasId: 14, MasName: "Distributor Order Details", MasImage: "SwitchRoute"))
         }
+        strMasList.append(mnuItem.init(MasId: 15, MasName: " Secondary Order Details", MasImage: "SwitchRoute"))
+        
+       
         btnBack.addTarget(target: self, action: #selector(closeMenuWin))
         menuClose.addTarget(target: self, action: #selector(closeMenuWin))
         tbMenuDetail.delegate=self
@@ -224,19 +227,13 @@ class ReportMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
             
              viewController.setViewControllers([RptMnuVc,attenReportVC], animated: false)
              (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
+        }else if lItm.MasId == 15{
+            let RptMnuVc = storyboard.instantiateViewController(withIdentifier: "sbReportsmnu") as! ReportMenu
+            let attenReportVC = storyboard2.instantiateViewController(withIdentifier: "sbSecondaryOrderDetails") as! Secondary_Order_Details
+             viewController.setViewControllers([RptMnuVc,attenReportVC], animated: false)
+             (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
         }
         
-        /*else if lItm.MasId == 2 {
-            let Homevc = storyboard.instantiateViewController(withIdentifier: "HomePageVwControl") as! HomePageViewController
-            let addCus = storyboard.instantiateViewController(withIdentifier: "AddNewRetailer") as! AddNewCustomer
-            viewController.setViewControllers([Homevc, addCus], animated: false)
-            //viewController.navigationController?.pushViewController(myDyPln, animated: true)
-        }else if lItm.MasId == 11 {
-            let MasSync = storyboard.instantiateViewController(withIdentifier: "MasterSyncVwControl") as! MasterSync
-            MasSync.AutoSync = false
-            viewController.setViewControllers([MasSync], animated: false)
-            //viewController.navigationController?.pushViewController(myDyPln, animated: true)
-        }*/
         (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
         print(strMasList[indexPath.row].MasName)
     }

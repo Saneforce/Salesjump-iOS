@@ -18,6 +18,7 @@ class cellListItem:UITableViewCell{
     @IBOutlet weak var lblFreeProd: UILabel!
     @IBOutlet weak var lblActRate: UILabel!
     @IBOutlet weak var lblremark: UILabel!
+    @IBOutlet weak var Address: UILabel!
     @IBOutlet weak var lblDisc: UILabel!
     @IBOutlet weak var lblSellRate: UILabel!
     @IBOutlet weak var lblTax: UILabel!
@@ -181,6 +182,14 @@ class cellListItem:UITableViewCell{
     @IBOutlet weak var t_val: UILabel!
     @IBOutlet weak var S_qty: UILabel!
     @IBOutlet weak var S_val: UILabel!
+    
+    
+    // Secondary Order details
+    
+    @IBOutlet weak var Orderid: UILabel!
+    @IBOutlet weak var amt: UILabel!
+    @IBOutlet weak var Retiler_Nmae: UILabel!
+    @IBOutlet weak var Retiler_Address: UILabel!
     
     
     

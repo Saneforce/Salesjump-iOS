@@ -9,21 +9,25 @@ import UIKit
 import Alamofire
 import Foundation
 import FSCalendar
-class Distributor_Order_Details: IViewController, UITableViewDelegate, UITableViewDataSource,FSCalendarDelegate {
+class Distributor_Order_Details: IViewController, UITableViewDelegate, UITableViewDataSource,FSCalendarDelegate,FSCalendarDataSource{
    
     @IBOutlet weak var BTback: UIImageView!
     @IBOutlet weak var TB_view: UITableView!
     @IBOutlet weak var Invoice_View: UIView!
     @IBOutlet weak var Invoice_BT: UIImageView!
     @IBOutlet weak var iNVOICE_tb: UITableView!
-    
-    
     @IBOutlet weak var Select_Date: UILabel!
-    
     @IBOutlet weak var Date_View: UIView!
     
+    @IBOutlet weak var Headquarter_height: NSLayoutConstraint!
+    @IBOutlet weak var Headquarter_selection: UIView!
+    @IBOutlet weak var Headquarterlbl: UILabel!
+    var Headquarterid:String = ""
     
     @IBOutlet weak var Close_Calender: UIImageView!
+    
+    
+    @IBOutlet weak var No_data_availablelbl: UILabel!
     let cardViewInstance = CardViewdata()
     var SFCode: String=""
     var DivCode: String=""
@@ -124,30 +128,52 @@ class Distributor_Order_Details: IViewController, UITableViewDelegate, UITableVi
     
     
     @IBOutlet weak var Calendar: FSCalendar!
+    var lstHQs: [AnyObject] = []
     override func viewDidLoad() {
         super.viewDidLoad()
         
         getUserDetails()
         cardViewInstance.styleSummaryView(Date_View)
+        cardViewInstance.styleSummaryView(Headquarter_selection)
         
         let selectdate = DateFormatter()
         selectdate.dateFormat = "yyyy-MM-dd"
         let dates = selectdate.string(from: Date())
         Select_Dtae = dates
-        Select_Date.text = dates
+       // Select_Date.text = dates
+        
+        selectdate.dateFormat = "dd-MM-yyyy"
+        let Showing_dateFormat = selectdate.string(from: Date())
+        Select_Date.text = Showing_dateFormat
         
         BTback.addTarget(target: self, action: #selector(GotoHome))
         Invoice_BT.addTarget(target: self, action: #selector(Close_View))
         Date_View.addTarget(target: self, action: #selector(Open_Calendr))
         Close_Calender.addTarget(target: self, action: #selector(Close_Calendr))
+        Headquarter_selection.addTarget(target: self, action: #selector(Headquarters_Selection))
+        
+        
+        
+        if let HQData = LocalStoreage.string(forKey: "HQ_Master"),
+           let list = GlobalFunc.convertToDictionary(text:  HQData) as? [AnyObject] {
+            lstHQs = list;
+                Headquarterlbl.text = sfName
+                Headquarterid = SFCode
+        }
+        
+        No_data_availablelbl.isHidden = true
+        
         TB_view.delegate = self
         TB_view.dataSource = self
         iNVOICE_tb.delegate = self
         iNVOICE_tb.dataSource = self
         Calendar.delegate = self
-        
+        Calendar.dataSource = self
         TB_view.sectionHeaderHeight = 10
         TB_view.sectionFooterHeight = 10
+        if UserSetup.shared.SF_type == 1{
+            Headquarter_height.constant = 0
+        }
         OrderDayReport()
 
     }
@@ -174,7 +200,12 @@ class Distributor_Order_Details: IViewController, UITableViewDelegate, UITableVi
         let dates = selectdate.string(from: date)
         
         Select_Dtae = dates
-        Select_Date.text = dates
+       // Select_Date.text = dates
+        
+        selectdate.dateFormat = "dd-MM-yyyy"
+        let Showing_dateFormat = selectdate.string(from: date)
+        Select_Date.text = Showing_dateFormat
+        
         OrderDayReport()
         Calender_View.isHidden = true
     }
@@ -185,16 +216,14 @@ class Distributor_Order_Details: IViewController, UITableViewDelegate, UITableVi
         return Date()
     }
 
-    func minimumDate(for calendar: FSCalendar) -> Date {
-        return Date()
-    }
-    
-    
+//    func minimumDate(for calendar: FSCalendar) -> Date {
+//        return Date()
+//    }
     
     func OrderDayReport(){
         Invoice_Detils.removeAll()
         let axn = "get%2Fdistords"
-        let apiKey: String = "\(axn)&State_Code=\(StateCode)&order_date=\(Select_Dtae)&divisionCode=\(DivCode)&code=\(SFCode)&rSF=\(SFCode)&sfCode=\(SFCode)"
+        let apiKey: String = "\(axn)&State_Code=\(StateCode)&order_date=\(Select_Dtae)&divisionCode=\(DivCode)&code=\(SFCode)&rSF=\(SFCode)&sfCode=\(Headquarterid)"
         
         AF.request(APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKey, method: .post, parameters: nil, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self] AFdata in
             switch AFdata.result {
@@ -239,6 +268,12 @@ class Distributor_Order_Details: IViewController, UITableViewDelegate, UITableVi
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                     self.LoadingDismiss()
                 }
+                if Invoice_Detils.isEmpty {
+                    No_data_availablelbl.isHidden = false
+                }else{
+                    No_data_availablelbl.isHidden = true
+                }
+                
             case .failure(let error):
                 Toast.show(message: error.errorDescription ?? "", controller: self)
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
@@ -289,6 +324,8 @@ class Distributor_Order_Details: IViewController, UITableViewDelegate, UITableVi
             myDyPln.CodeDate = item.Date
             myDyPln.Orderid = item.orderid
             myDyPln.Stkid = item.Stkid
+            myDyPln.Hqid = Headquarterid
+            myDyPln.Hqname = Headquarterlbl.text
             self.navigationController?.pushViewController(myDyPln, animated: true)
         }else{
             Tb_Invoice = Invoice_Detils[indexPath.row].Invoice
@@ -309,10 +346,33 @@ class Distributor_Order_Details: IViewController, UITableViewDelegate, UITableVi
     }
     
     @objc private func Open_Calendr() {
+        No_data_availablelbl.isHidden = true
         Calender_View.isHidden = false
     }
     @objc private func Close_Calendr() {
         Calender_View.isHidden = true
+        if Invoice_Detils.isEmpty{
+            No_data_availablelbl.isHidden = false
+        }else{
+            No_data_availablelbl.isHidden = true
+        }
     }
     
+    @objc private func Headquarters_Selection(){
+        let distributorVC = ItemViewController(items: lstHQs, configure: { (Cell : SingleSelectionTableViewCell, distributor) in
+            Cell.textLabel?.text = distributor["name"] as? String
+        })
+        distributorVC.title = "Select the Headquarter"
+        distributorVC.didSelect = { selectedDistributor in
+            let item: [String: Any]=selectedDistributor as! [String : Any]
+            let name=item["name"] as? String ?? ""         
+            let id=String(format: "%@", item["id"] as? CVarArg ?? "")
+                self.Headquarterlbl.text = name
+                self.Headquarterid = id
+                self.OrderDayReport()
+            self.navigationController?.popViewController(animated: true)
+        }
+        self.navigationController?.pushViewController(distributorVC, animated: true)
+        
+    }
 }

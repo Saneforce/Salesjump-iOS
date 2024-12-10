@@ -10,10 +10,8 @@ import UIKit
 
 
 class MyResourcesRetailerList : UIViewController , UITableViewDelegate , UITableViewDataSource {
-    
     @IBOutlet weak var imgBack: UIImageView!
     @IBOutlet weak var tableViewRetailerList: UITableView!
-    
     var lstRetails : [AnyObject] = []
     var lstDistList : [AnyObject] = []
     var isFromRetailer : Bool!
