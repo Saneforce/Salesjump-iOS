@@ -23,6 +23,8 @@
 		159095252BF23AD0001D8347 /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159095232BF23AD0001D8347 /* CalendarViewController.swift */; };
 		159095262BF23AD0001D8347 /* CalendarViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 159095242BF23AD0001D8347 /* CalendarViewController.xib */; };
 		1597B4802C6623A400EAB640 /* RejectedAndCancelledLeaveDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1597B47F2C6623A400EAB640 /* RejectedAndCancelledLeaveDetails.swift */; };
+		15A4CB912D06C6A3008EB1DE /* FreeEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A4CB8F2D06C6A3008EB1DE /* FreeEditViewController.swift */; };
+		15A4CB922D06C6A3008EB1DE /* FreeEditViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15A4CB902D06C6A3008EB1DE /* FreeEditViewController.xib */; };
 		15AB213D2C799F4C004437A6 /* RateEditViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15AB213C2C799F4C004437A6 /* RateEditViewController.xib */; };
 		15AB213E2C799F4C004437A6 /* RateEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15AB213B2C799F4C004437A6 /* RateEditViewController.swift */; };
 		15B518B82C108BCB00DD75C1 /* TourPlanDeviationApproval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B518B72C108BCB00DD75C1 /* TourPlanDeviationApproval.swift */; };
@@ -186,6 +188,8 @@
 		159095232BF23AD0001D8347 /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
 		159095242BF23AD0001D8347 /* CalendarViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CalendarViewController.xib; sourceTree = "<group>"; };
 		1597B47F2C6623A400EAB640 /* RejectedAndCancelledLeaveDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RejectedAndCancelledLeaveDetails.swift; sourceTree = "<group>"; };
+		15A4CB8F2D06C6A3008EB1DE /* FreeEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeEditViewController.swift; sourceTree = "<group>"; };
+		15A4CB902D06C6A3008EB1DE /* FreeEditViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FreeEditViewController.xib; sourceTree = "<group>"; };
 		15AB213B2C799F4C004437A6 /* RateEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RateEditViewController.swift; sourceTree = "<group>"; };
 		15AB213C2C799F4C004437A6 /* RateEditViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RateEditViewController.xib; sourceTree = "<group>"; };
 		15B518B72C108BCB00DD75C1 /* TourPlanDeviationApproval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TourPlanDeviationApproval.swift; sourceTree = "<group>"; };
@@ -471,6 +475,8 @@
 				3F14EAE927F73DAD00B0997B /* SecondaryVisit.swift */,
 				3F0861BB28019419006A30FB /* SecondaryOrder.swift */,
 				15C03D9D2C745DB500079DE7 /* SecondaryOrderNew.swift */,
+				15A4CB8F2D06C6A3008EB1DE /* FreeEditViewController.swift */,
+				15A4CB902D06C6A3008EB1DE /* FreeEditViewController.xib */,
 				15AB213B2C799F4C004437A6 /* RateEditViewController.swift */,
 				15AB213C2C799F4C004437A6 /* RateEditViewController.xib */,
 				3F97F9F52831B5950097166D /* AddNewCustomer.swift */,
@@ -792,6 +798,7 @@
 			files = (
 				3F28CBFB27D3927E00B95964 /* Poppins-ExtraLightItalic.ttf in Resources */,
 				15C4B3182BECAA6B001ACBF4 /* RejectReasonViewController.xib in Resources */,
+				15A4CB922D06C6A3008EB1DE /* FreeEditViewController.xib in Resources */,
 				3F28CC0627D3927E00B95964 /* Poppins-Black.ttf in Resources */,
 				3F28CC0427D3927E00B95964 /* Poppins-LightItalic.ttf in Resources */,
 				3F28CC0727D3927E00B95964 /* Poppins-Thin.ttf in Resources */,
@@ -973,6 +980,7 @@
 				15BFD3562C57BEFF00C37FC6 /* AttendanceReport.swift in Sources */,
 				3F2F810F27CEB30C0015E1CA /* ViewController.swift in Sources */,
 				3FBF387727E4AA8300900007 /* Toast.swift in Sources */,
+				15A4CB912D06C6A3008EB1DE /* FreeEditViewController.swift in Sources */,
 				1514DF6C2BD7839D00E6B45A /* CallPreview.swift in Sources */,
 				3F0822BD29000872009C33EA /* AdminMenus.swift in Sources */,
 				15F4504E2C2A88DF0074D285 /* MissedDateSelection.swift in Sources */,

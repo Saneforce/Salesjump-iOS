@@ -604,11 +604,9 @@ class SuperStockistOrderList : IViewController , UITableViewDelegate, UITableVie
             Cell.imgCountList.addTarget(target: self, action: #selector(dropDown))
             Cell.txtFreeQty.addTarget(target: self, action: #selector(freeQtySelection(_:)))
             Cell.txtDisPer.addTarget(self, action: #selector(addDiscount(_:)), for: .editingChanged)
-            if UserSetup.shared.SchemeBased == 1 && UserSetup.shared.offerMode == 1{
-                Cell.txtDisPer.borderStyle = .none
-                Cell.txtDisPer.isUserInteractionEnabled = false
-                Cell.txtFreeQty.isUserInteractionEnabled = false
-            }
+            Cell.txtDisPer.borderStyle = .none
+            Cell.txtDisPer.isUserInteractionEnabled = false
+            Cell.txtFreeQty.isUserInteractionEnabled = false
             Cell.txtTaxPer.isUserInteractionEnabled = false
             Cell.imgScheme.addTarget(target: self, action: #selector(schemeAction))
             let id = self.products[indexPath.row].productId
@@ -983,6 +981,7 @@ class SuperStockistOrderList : IViewController , UITableViewDelegate, UITableVie
         let cell: SuperStockistOrderListTableViewCell = GlobalFunc.getTableViewCell(view: sender.view!) as! SuperStockistOrderListTableViewCell
         let tbView: UITableView = GlobalFunc.getTableView(view: sender.view!)
         let indxPath: IndexPath = tbView.indexPath(for: cell)!
+        
         
         print("success")
         
@@ -1393,9 +1392,12 @@ class SuperStockistOrderListTableViewCell : UITableViewCell {
     @IBOutlet weak var lblFreeProductName: UILabel!
     
     
-    @IBOutlet weak var lblPer: LabelSelect!
+    @IBOutlet weak var lblPer: UILabel!
     
     @IBOutlet weak var imgRateEdit: UIImageView!
+    
+    
+    @IBOutlet weak var imgFreeEdit: UIImageView!
     
     @IBOutlet weak var imgCompetitorProduct: UIImageView!
     
@@ -1414,6 +1416,9 @@ class SuperStockistOrderListTableViewCell : UITableViewCell {
     @IBOutlet weak var imgCompetitorProductWidthConstraint: NSLayoutConstraint!
     
     
+    
+    @IBOutlet weak var imgFreeEditWidthConstraint: NSLayoutConstraint!
+    
     @IBOutlet weak var imgRateEditWidthConstraint: NSLayoutConstraint!
     
     @IBOutlet weak var imgSchemeWidthConstraint: NSLayoutConstraint!
@@ -1430,7 +1435,7 @@ class SuperStockistOrderListTableViewCell : UITableViewCell {
             
             txtQty.text = product.sampleQty
             txtDisPer.text = "\(product.disCountPer)"
-            //txtDisAmt.text = "\(product.disCountAmount)"
+            // txtDisAmt.text = "\(product.disCountAmount)"
             
             
             txtDisAmt.text = CurrencyUtils.formatCurrency_WithoutSymbol(amount: product.disCountAmount, currencySymbol: UserSetup.shared.currency_symbol)
@@ -1442,7 +1447,7 @@ class SuperStockistOrderListTableViewCell : UITableViewCell {
             txtTaxAmt.text = CurrencyUtils.formatCurrency_WithoutSymbol(amount: product.taxAmount, currencySymbol: UserSetup.shared.currency_symbol)
             
             txtFreeQty.text = "\(product.freeCount)"
-            lblPer.text = "\(product.discountType)"
+         //   lblPer.text = "\(product.discountType)"
 //            lblRemarks.text = product.remarks == "" ? "Select the Templete" : product.remarks
             
 //            txtClQty.text = product.clQty
