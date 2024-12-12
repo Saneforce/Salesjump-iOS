@@ -26,6 +26,11 @@ class Secondary_Order_Details: IViewController, UITableViewDelegate, UITableView
     @IBOutlet weak var Retiler_view: UIView!
     @IBOutlet weak var Retilerlbl: UILabel!
     
+    
+    
+    @IBOutlet weak var No_data_lbl: UILabel!
+    
+    
     let cardViewInstance = CardViewdata()
     var SFCode: String=""
     var DivCode: String=""
@@ -50,7 +55,7 @@ class Secondary_Order_Details: IViewController, UITableViewDelegate, UITableView
     var Invoice_Detils:[Dsitdetils] = []
     var Retailer_Details:[Invoice] = []
     var Tb_Invoice:[Invoice] = []
-
+    var Retiler_name:String = ""
     
     
     override func viewDidLoad() {
@@ -166,7 +171,11 @@ class Secondary_Order_Details: IViewController, UITableViewDelegate, UITableView
                     }
                 }
                 
-                print(Invoice_Detils)
+                if Invoice_Detils.isEmpty{
+                    No_data_lbl.isHidden = false
+                }else{
+                    No_data_lbl.isHidden = true
+                }
                 Secondary_Order_Table.reloadData()
                 
             case .failure(let error):
@@ -222,6 +231,7 @@ class Secondary_Order_Details: IViewController, UITableViewDelegate, UITableView
         if Secondary_Order_Table == tableView{
             Retilerlbl.text = Invoice_Detils[indexPath.row].Name
             Retailer_Details = Invoice_Detils[indexPath.row].Invoice
+            Retiler_name = Invoice_Detils[indexPath.row].Name
             Order_Details_Table.reloadData()
             Order_Details_View.isHidden = false
             
@@ -229,12 +239,13 @@ class Secondary_Order_Details: IViewController, UITableViewDelegate, UITableView
             let item = Retailer_Details[indexPath.row]
             let storyboard = UIStoryboard(name: "Reports 2", bundle: nil)
 //            let myDyPln = storyboard.instantiateViewController(withIdentifier: "sbSecondary_order_details_view") as! Secondary_order_details_view
-            let myDyPln = storyboard.instantiateViewController(withIdentifier: "Order_Details") as! Order_Details
+            let myDyPln = storyboard.instantiateViewController(withIdentifier: "sbSecondary_order_details_view") as! Secondary_order_details_view
             
             myDyPln.CodeDate = item.Date
             myDyPln.Orderid = item.orderid
             myDyPln.Stkid = item.Stkid
             myDyPln.Typ = "2"
+            myDyPln.Retiler_name = Retiler_name
             myDyPln.Hqid = ""//Headquarterid
             myDyPln.Hqname = ""//Headquarterlbl.text
             
@@ -258,5 +269,8 @@ class Secondary_Order_Details: IViewController, UITableViewDelegate, UITableView
         let viewController = storyboard.instantiateViewController(withIdentifier: "sbReportsmnu") as! ReportMenu
         UIApplication.shared.windows.first?.rootViewController = viewController
         UIApplication.shared.windows.first?.makeKeyAndVisible()
+    }
+    func maximumDate(for calendar: FSCalendar) -> Date {
+        return Date()
     }
 }

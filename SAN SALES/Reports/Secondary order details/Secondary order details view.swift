@@ -8,60 +8,119 @@
 import UIKit
 import Alamofire
 
-class Secondary_order_details_view: IViewController, UITableViewDelegate, UITableViewDataSource {
+class Secondary_order_details_view: IViewController, UITableViewDelegate, UITableViewDataSource{
   
+    @IBOutlet weak var Dynamic_header_lbl: UILabel!
     @IBOutlet weak var Button_back: UIImageView!
-    @IBOutlet weak var Dynamic_Header_lbl: UILabel!
+    @IBOutlet weak var Route_Detils_Table: UITableView!
+    @IBOutlet weak var Product_Detils_Table: UITableView!
+    @IBOutlet weak var Amount_table: UITableView!
+    @IBOutlet weak var Item_summary_table: UITableView!
+    @IBOutlet weak var Order_id_and_name: UILabel!
+    @IBOutlet weak var Remarklbl: UILabel!
+    @IBOutlet weak var Total_amount_summary: UILabel!
+    @IBOutlet weak var Scroll_View: UIScrollView!
     
-    @IBOutlet weak var Total_Value_Amt: UILabel!
+    // table View Heights
     
-    var SFCode: String=""
-    var DivCode: String=""
-    var StateCode: String = ""
-    var sfName:String = ""
-    var Desig: String=""
-    let LocalStoreage = UserDefaults.standard
+    @IBOutlet weak var Scroll_VieW_HEIGHT: NSLayoutConstraint!
+    @IBOutlet weak var Route_table_height: NSLayoutConstraint!
+    @IBOutlet weak var Product_detils_table_height: NSLayoutConstraint!
+    @IBOutlet weak var Amount_table_View_height: NSLayoutConstraint!
+    @IBOutlet weak var Summary_table_view_height: NSLayoutConstraint!
+    @IBOutlet weak var Item_summary_view_height: NSLayoutConstraint!
+    @IBOutlet weak var Whatsapp_share: UIImageView!
+    @IBOutlet weak var Text_share: UIImageView!
     
-    struct OrderItemModels {
-        var productName: String
-        var productId:String
-        var rateValue: String
-        var qtyValue: String
-        var freeValue: String
-        var discValue: String
-        var totalValue: String
-        var taxValue: String
-        var clValue: String
-        var uomName: String
-        var eQtyValue: String
-        var liter: String
-        var freeProductName: String
+    
+    @IBOutlet weak var Open_view: UIImageView!
+    @IBOutlet weak var Details_view: UIView!
+    @IBOutlet weak var Details_view_back_button: UIImageView!
+    
+    
+    
+    // Day Report
+    @IBOutlet weak var FRON_RET_LBL: UILabel!
+    @IBOutlet weak var Frommoblbl: UILabel!
+    @IBOutlet weak var To_Ret_lbl: UILabel!
+    @IBOutlet weak var Addresslbl: UILabel!
+    @IBOutlet weak var To_mbolbl: UILabel!
+    @IBOutlet weak var Order_no: UILabel!
+    @IBOutlet weak var Delivery_date: UILabel!
+    @IBOutlet weak var Detils_table: UITableView!
+    @IBOutlet weak var Total_item_lbl: UILabel!
+    @IBOutlet weak var Taxlbl: UILabel!
+    @IBOutlet weak var Schemelbl: UILabel!
+    @IBOutlet weak var Cash_did_lbl: UILabel!
+    @IBOutlet weak var Net_amountlbl: UILabel!
+    @IBOutlet weak var Free_details_table: UITableView!
+    @IBOutlet weak var Addres_View: UIView!
+    @IBOutlet weak var das_Border_Line_View: UIView!
+    
+    @IBOutlet weak var Detils_table_height: NSLayoutConstraint!
+    @IBOutlet weak var Scroll_View_Height_detils: NSLayoutConstraint!
+    @IBOutlet weak var Free_View: UIView!
+    @IBOutlet weak var Free_View_height: NSLayoutConstraint!
+    @IBOutlet weak var Free_Table_height: NSLayoutConstraint!
+    @IBOutlet weak var Share_detils: UIImageView!
+    @IBOutlet weak var Detils_Scroll_View: UIScrollView!
+    
+    
+    @IBOutlet weak var Remark_height: NSLayoutConstraint!
+    
+    struct OrderItemModel {
+        let productName: String
+        let ProductID:String
+        let rateValue: String
+        let qtyValue: String
+        let freeValue: String
+        let discValue: String
+        let totalValue: String
+        let taxValue: String
+        let clValue: String
+        let uomName: String
+        let eQtyValue: String
+        let litersVal: String
+        let freeProductName: String
     }
-    struct Distobutor_OrderDetail:Any{
-        var Dis_Name: String
-        var Order_Id:String
-        var Amt:String
-        var Remark:String
-        var date:String
-        var Phone_No:String
-        var Tax:String
-        var Dis:String
-        var stockist_name:String
-        var Territory:String
-        var Orderitem:[OrderItemModels]
+    
+    var Orderdetils: [OrderItemModel] = []
+    var Orderdetils2: [OrderItemModel] = []
+    
+    // Route table data
+    struct Route_detils {
+        var Route1:String
+        var Route2:String
     }
+    
+    var Route_data:[Route_detils] = []
+    
+    
+    // Amount table data
+    struct Amount_Detils{
+        var Amount1:String
+        var Amount2:String
+    }
+    
+    var Amountdata:[Amount_Detils] = []
+    
     struct Itemwise_Summary:Any{
         let productName: String
         let ProductID:String
         var Qty:Int
         var Free:Int
     }
-    var OrderDetils_For_Distributor:[Distobutor_OrderDetail] = []
-    var Itemwise_Summary_Data:[Itemwise_Summary] = []
-    var lstAllProducts: [AnyObject] = []
     
-    var axn:String?
-    var ACCode:String?
+    var Itemwise_Summary_Data:[Itemwise_Summary] = []
+    
+    var FreeDetils:[Itemwise_Summary] = []
+    
+    var SFCode: String=""
+    var DivCode: String=""
+    var StateCode: String = ""
+    var sfName:String = ""
+    let LocalStoreage = UserDefaults.standard
+    
     var Typ:String?
     var CodeDate:String?
     var Hqname:String?
@@ -73,16 +132,15 @@ class Secondary_order_details_view: IViewController, UITableViewDelegate, UITabl
     var Stkid2:String = ""
     var Headquarterid:String = ""
     var HeadquarterName:String = ""
+    var GetTyp = ""
     
-    @IBOutlet weak var Secondary_order_details_table: UITableView!
-    @IBOutlet weak var Itemwise_summary: UITableView!
+    var lstAllProducts: [AnyObject] = []
     
+    var Retiler_name:String?
     override func viewDidLoad(){
         super.viewDidLoad()
-        getUserDetails()
-        Dynamic_Header_lbl.text = "Secondary Order Details For: 2024-12-06"
-        Button_back.addTarget(target: self, action: #selector(GotoHome))
-        get_localdata()
+       getUserDetails()
+        
         if let date = CodeDate,let id = Orderid,let stkid = Stkid,let Get_hq_id = Hqid, let get_hq_name = Hqname{
             GetDate = date
             Orderid2 = id
@@ -90,18 +148,38 @@ class Secondary_order_details_view: IViewController, UITableViewDelegate, UITabl
             Headquarterid = Get_hq_id
             HeadquarterName = get_hq_name
         }
-        Secondary_order_details_table.delegate = self
-        Secondary_order_details_table.dataSource = self
-        Secondary_order_details_table.rowHeight = UITableView.automaticDimension
-        Secondary_order_details_table.estimatedRowHeight = 150
         
-        Itemwise_summary.delegate = self
-        Itemwise_summary.dataSource = self
-        Itemwise_summary.rowHeight = UITableView.automaticDimension
-        Itemwise_summary.estimatedRowHeight = 150
+        Addres_View.layer.cornerRadius = 10
+        Addres_View.layer.shadowRadius = 2
+        
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            appendDashedBorder(to: das_Border_Line_View)
+           // appendDashedBorder(to: Strik_Line)
+            }
+        
+        Dynamic_header_lbl.text = "Secondary Order Details For : \(GetDate)"
+        
+        let lstProdData: String = LocalStoreage.string(forKey: "Products_Master")!
+        
+        if let list = GlobalFunc.convertToDictionary(text: lstProdData) as? [AnyObject] {
+            lstAllProducts = list;
+            print(lstProdData)
+        }
+        
+        Button_back.addTarget(target: self, action: #selector(GotoHome))
+        
+        calltables()
         
         VstDet_order()
+        Whatsapp_share.addTarget(target: self, action: #selector(cURRENT_iMG))
+        Text_share.addTarget(target: self, action: #selector(Textshare))
+        Share_detils.addTarget(target: self, action: #selector(Share_Order_Bill))
+        
+        Open_view.addTarget(target: self, action: #selector(Opendetils))
+
+        Details_view_back_button.addTarget(target: self, action: #selector(Closedetils))
     }
+    
     func getUserDetails(){
     let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
     let data = Data(prettyPrintedJson!.utf8)
@@ -114,17 +192,57 @@ class Secondary_order_details_view: IViewController, UITableViewDelegate, UITabl
     StateCode = prettyJsonData["State_Code"] as? String ?? ""
     DivCode = prettyJsonData["divisionCode"] as? String ?? ""
     sfName = prettyJsonData["sfName"] as? String ?? ""
-    Desig=prettyJsonData["desigCode"] as? String ?? ""
     }
-    func get_localdata(){
-        let lstProdData: String = LocalStoreage.string(forKey: "Products_Master")!
-        if let list = GlobalFunc.convertToDictionary(text: lstProdData) as? [AnyObject] {
-            lstAllProducts = list;
-            print(lstProdData)
-        }
-    }
-    func VstDet_order(){
+    
+    func calltables(){
+        Route_Detils_Table.delegate = self
+        Route_Detils_Table.dataSource = self
+        Route_Detils_Table.rowHeight = UITableView.automaticDimension
+        Route_Detils_Table.estimatedRowHeight = 150
         
+        Product_Detils_Table.delegate = self
+        Product_Detils_Table.dataSource = self
+        
+        Product_Detils_Table.rowHeight = UITableView.automaticDimension
+        Product_Detils_Table.estimatedRowHeight = 150
+        
+        Amount_table.delegate = self
+        Amount_table.dataSource = self
+        
+        Amount_table.rowHeight = UITableView.automaticDimension
+        Amount_table.estimatedRowHeight = 150
+        
+        Item_summary_table.delegate = self
+        Item_summary_table.dataSource = self
+        
+        Item_summary_table.rowHeight = UITableView.automaticDimension
+        Item_summary_table.estimatedRowHeight = 150
+        
+        
+        Detils_table.delegate = self
+        Detils_table.dataSource = self
+        
+        Free_details_table.delegate = self
+        Free_details_table.dataSource = self
+    }
+    
+    override func viewDidLayoutSubviews() {
+         super.viewDidLayoutSubviews()
+         adjustTableViewHeight()
+     }
+     
+     func adjustTableViewHeight() {
+         Route_table_height.constant = Route_Detils_Table.contentSize.height
+         Product_detils_table_height.constant = Product_Detils_Table.contentSize.height
+         Amount_table_View_height.constant = Amount_table.contentSize.height
+         Summary_table_view_height.constant = Item_summary_table.contentSize.height
+     }
+    
+    func VstDet_order(){
+        Route_data.removeAll()
+        Orderdetils.removeAll()
+        Amountdata.removeAll()
+        Itemwise_Summary_Data.removeAll()
         let apiKey: String = "get%2FvwVstDet_order&State_Code=\(StateCode)&stockist_code=\(Stkid2)&divisionCode=\(DivCode)&orderDt=\(GetDate)&orderNo=\(Orderid2)&code=&%20rSF=\(SFCode)&typ=1&sfCode=\(SFCode)"
         
         AF.request(APIClient.shared.BaseURL + APIClient.shared.DBURL1 + apiKey, method: .post, parameters: nil, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self] AFdata in
@@ -133,33 +251,87 @@ class Secondary_order_details_view: IViewController, UITableViewDelegate, UITabl
                let json = (value as? [AnyObject])!
                 
                 print(json)
+                // set Lbl values
+                FRON_RET_LBL.text = json[0]["stockist_name"] as? String ?? ""
+                Frommoblbl.text = json[0]["stkMobNo"] as? String ?? ""
+                To_Ret_lbl.text = json[0]["name"] as? String ?? ""
+                Addresslbl.text = json[0]["retAddr"] as? String ?? ""
+                To_mbolbl.text = json[0]["phoneNo"] as? String ?? ""
+                Order_no.text = json[0]["trans_sl_no"] as? String ?? ""
+                Delivery_date.text = json[0]["Order_date"] as? String ?? ""
+                
+                
+                
+                
+                
                 let productDetail = json[0]["Product_Detail"] as? String ?? ""
                 let productCode = json[0]["Product_Code"] as? String ?? ""
                 
                 let reportType = 1
                 let orderItems = parseProductDetails(productCode: productCode, productDetail: productDetail, reportType: reportType)
+               
+                Order_id_and_name.text = "\(json[0]["name"] as? String ?? "")(\(json[0]["trans_sl_no"] as? String ?? ""))"
                 
-                var Total_Tax:Double = 0
-                var Total_Dis:Double = 0
                 
-                for i in orderItems{
-                    let taxValue = Double(i.taxValue)
-                    Total_Tax = Total_Tax + (taxValue ?? 0)
-                    let discValue =  Double(i.discValue)
-                    Total_Dis = Total_Dis + (discValue ?? 0)
+                Route_data.append(Route_detils(Route1: "Route:", Route2: json[0]["Territory"] as? String ?? ""))
+                Route_data.append(Route_detils(Route1: "Supply From", Route2: Retiler_name ?? ""))
+                Route_data.append(Route_detils(Route1: "Phone", Route2: json[0]["phoneNo"] as? String ?? ""))
+                
+                
+                let TiteleorderItem = OrderItemModel(
+                    productName: "Product Name", ProductID: "",
+                    rateValue: "Rate",
+                    qtyValue: "Qty",
+                    freeValue: "Free",
+                    discValue: "Disc",
+                    totalValue: "Value",
+                    taxValue: "Tax",
+                    clValue: "CL",
+                    uomName: "",
+                    eQtyValue: "",
+                    litersVal: "",
+                    freeProductName: ""
+                )
+                
+                Orderdetils.append(TiteleorderItem)
+                Orderdetils.append(contentsOf: orderItems)
+                Orderdetils2 = orderItems
+                
+                for i in Orderdetils2{
+                    let free: Double = Double(i.freeValue) ?? 0
+                    if free != 0 {
+                        FreeDetils.append(Itemwise_Summary(productName: i.freeProductName, ProductID: "", Qty: 0, Free: Int(free)))
+                    }}
+
+                
+                
+                Total_item_lbl.text = String(orderItems.count)
+                
+                
+            
+               
+                Amountdata.append(Amount_Detils(Amount1: "Net Amount", Amount2:  CurrencyUtils.formatCurrency(amount: json[0]["finalNetAmnt"] as? String ?? "", currencySymbol: UserSetup.shared.currency_symbol)))
+                
+                let tlDisAmt = json[0]["tlDisAmt"] as? String ?? ""
+                let netAmount = json[0]["finalNetAmnt"] as? String ?? ""
+                
+                let minsAmount = Double(netAmount.isEmpty ? "0" : netAmount)! - Double(tlDisAmt.isEmpty ? "0" : tlDisAmt)!
+                
+                print(tlDisAmt)
+                if  tlDisAmt != "0"{
+                    Amountdata.append(Amount_Detils(Amount1: "Total Discount", Amount2:  CurrencyUtils.formatCurrency(amount: tlDisAmt, currencySymbol: UserSetup.shared.currency_symbol)))
+                    Amountdata.append(Amount_Detils(Amount1: "Final Order Amount", Amount2:  CurrencyUtils.formatCurrency(amount: minsAmount, currencySymbol: UserSetup.shared.currency_symbol)))
                 }
                 
-                OrderDetils_For_Distributor.append(Distobutor_OrderDetail(Dis_Name: json[0]["name"] as? String ?? "", Order_Id: json[0]["trans_sl_no"] as? String ?? "", Amt: String(json[0]["orderValue"] as? Double ?? 0), Remark: json[0]["remarks"] as? String ?? "", date: json[0]["Order_date"] as? String ?? "", Phone_No: json[0]["mobNo"] as? String ?? "", Tax: String(Total_Tax), Dis: String(Total_Dis), stockist_name: json[0]["stockist_name"] as? String ?? "", Territory: json[0]["Territory"] as? String ?? "", Orderitem: orderItems))
                 
+                Total_amount_summary.text = CurrencyUtils.formatCurrency(amount: json[0]["finalNetAmnt"] as? String ?? "", currencySymbol: UserSetup.shared.currency_symbol)
                 
-                print(OrderDetils_For_Distributor)
-                
-                
-                for item in OrderDetils_For_Distributor{
-                    for j in item.Orderitem{
+                Remarklbl.text = json[0]["secOrdRemark"] as? String ?? ""
+             
+                    for j in orderItems{
                         let qty = Double(j.qtyValue)
                         let free = Double(j.freeValue)
-                            let productID = j.productId.trimmingCharacters(in: .whitespacesAndNewlines)
+                            let productID = j.ProductID.trimmingCharacters(in: .whitespacesAndNewlines)
 
                             if let index = Itemwise_Summary_Data.firstIndex(where: {
                                 $0.ProductID.trimmingCharacters(in: .whitespacesAndNewlines) == productID
@@ -176,7 +348,7 @@ class Secondary_order_details_view: IViewController, UITableViewDelegate, UITabl
                                 Itemwise_Summary_Data.append(newItem)
                             }
                     }
-                }
+                
                 var QtyTotal = 0
                 var FreeTota = 0
                 for item in Itemwise_Summary_Data{
@@ -186,21 +358,41 @@ class Secondary_order_details_view: IViewController, UITableViewDelegate, UITabl
                 
                 Itemwise_Summary_Data.append(Itemwise_Summary(productName: "Total", ProductID: "", Qty: Int(Double(QtyTotal)), Free: Int(Double(FreeTota))))
                 
-              //  let Total: Double = Double(OrderDetils_For_Distributor[0].Amt) ?? 0
+                var Total_Tax:Double = 0
+                var Total_Dis:Double = 0
                 
-//                Total_Value_Amt.text = CurrencyUtils.formatCurrency(amount: Total, currencySymbol: UserSetup.shared.currency_symbol)
-                
-                
-                
-                DispatchQueue.main.async {
-                    self.Secondary_order_details_table.reloadData()
-                    self.Itemwise_summary.reloadData()
-                    self.printVisibleCellHeights(tableView: self.Secondary_order_details_table)
+                for i in orderItems{
+                    let taxValue = Double(i.taxValue)
+                    Total_Tax = Total_Tax + (taxValue ?? 0)
+                    let discValue =  Double(i.discValue)
+                    Total_Dis = Total_Dis + (discValue ?? 0)
                 }
+                Taxlbl.text = "\(Total_Tax)"
+                Schemelbl.text = "\(Total_Dis)"
+                Cash_did_lbl.text = "\(tlDisAmt)"
+                //Net_amountlbl.text = json[0]["finalNetAmnt"] as? String ?? ""
+                Net_amountlbl.text =  CurrencyUtils.formatCurrency(amount: minsAmount, currencySymbol: UserSetup.shared.currency_symbol)
+                
+                Route_Detils_Table.reloadData()
+                Product_Detils_Table.reloadData()
+                Amount_table.reloadData()
+                Item_summary_table.reloadData()
+                Detils_table.reloadData()
+                Free_details_table.reloadData()
+                viewDidLayoutSubviews()
+                
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    
+                    self.printVisibleCellHeights(for: [self.Route_Detils_Table,self.Product_Detils_Table,self.Amount_table,self.Item_summary_table]){
+                        print("ok")
+                    }
+                    if json[0]["secOrdRemark"] as? String ?? "" != ""{
+                        self.Remark_height.constant = self.Remarklbl.frame.height
+                    }else{
+                        self.Remark_height.constant = 40
+                    }
                     self.LoadingDismiss()
                 }
-                print(OrderDetils_For_Distributor)
             case .failure(let error):
                 Toast.show(message: error.errorDescription ?? "", controller: self)
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
@@ -209,24 +401,42 @@ class Secondary_order_details_view: IViewController, UITableViewDelegate, UITabl
             }
         }
     }
-    func printVisibleCellHeights(tableView: UITableView) {
-        var height = 0.0
-        for (index, cell) in tableView.visibleCells.enumerated() {
-            let cellHeight = cell.frame.height
-            print("Visible cell \(index) height: \(cellHeight)")
-            height = height + cellHeight
-        }
-//        DispatchQueue.main.async {
-//            self.Product_Details_table_height.constant = height
-//        }
+    
+   
+    
+    
+    func printVisibleCellHeights(for tableViews: [UITableView], completion: @escaping () -> Void) {
+        var heights: [CGFloat] = []
         
+        for tableView in tableViews {
+            var height: CGFloat = 0
+            for cell in tableView.visibleCells {
+                height += cell.frame.height
+            }
+            heights.append(height)
+        }
+        DispatchQueue.main.async {
+            self.Route_table_height.constant = heights[0]
+            self.Product_detils_table_height.constant = heights[1]
+            self.Amount_table_View_height.constant = heights[2]
+            self.Summary_table_view_height.constant = heights[3]
+            print(self.Summary_table_view_height.constant)
+            print(self.Item_summary_view_height.constant)
+            self.Item_summary_view_height.constant = self.Item_summary_view_height.constant - 128
+            print(self.Item_summary_view_height.constant)
+            self.Item_summary_view_height.constant = self.Item_summary_view_height.constant +  self.Summary_table_view_height.constant
+            print(self.Item_summary_view_height.constant)
+            self.Scroll_VieW_HEIGHT.constant = heights[0]+heights[1]+heights[2]+heights[3]
+            print(self.Scroll_VieW_HEIGHT.constant)
+            self.Scroll_VieW_HEIGHT.constant = self.Scroll_VieW_HEIGHT.constant + self.Item_summary_view_height.constant
+            print(self.Scroll_VieW_HEIGHT.constant)
+            self.Scroll_VieW_HEIGHT.constant = self.Scroll_VieW_HEIGHT.constant + self.Remark_height.constant
+            completion()
+        }
     }
     
-    
-    func parseProductDetails(productCode: String,productDetail: String, reportType: Int) -> [OrderItemModels] {
-        var orderItemModelsss: [OrderItemModels] = []
-
-        // Split the main product details using the "#" delimiter
+    func parseProductDetails(productCode: String,productDetail: String, reportType: Int) -> [OrderItemModel] {
+        var orderItemModelsss: [OrderItemModel] = []
         let productArray = productDetail.split(separator: "#").map { String($0) }
         let product_Code_Array = productCode.split(separator: "#").map { String($0) }
         
@@ -297,6 +507,11 @@ class Secondary_order_details_view: IViewController, UITableViewDelegate, UITabl
                 // Extract UOM name
                 if let uomRange = product.range(of: "!.*?%", options: .regularExpression) {
                     uomName = String(product[uomRange]).replacingOccurrences(of: ["!", "%"], with: "").trimmingCharacters(in: .whitespaces)
+                    let freeUomName = product.split(separator: "!").map { String($0) }
+                    if let lastComponent = freeUomName.last {
+                        let getUom = lastComponent.split(separator: "%").map { String($0) }
+                        uomName = getUom.first ?? ""
+                    }
                 }
 
                 // Extract eQty value
@@ -329,11 +544,9 @@ class Secondary_order_details_view: IViewController, UITableViewDelegate, UITabl
             liter = qtyValue * liter
 
             // Create OrderItemModel and add to list
-           
             let Code = productCode.split(separator: "~").map { String($0) }
-        
-            let orderItem = OrderItemModels(
-                productName: productName, productId: Code[0].trimmingCharacters(in: .whitespacesAndNewlines),
+            let orderItem = OrderItemModel(
+                productName: productName, ProductID: Code[0].trimmingCharacters(in: .whitespacesAndNewlines),
                 rateValue: String(rateValue),
                 qtyValue: String(qtyValue),
                 freeValue: String(freeValue),
@@ -342,113 +555,387 @@ class Secondary_order_details_view: IViewController, UITableViewDelegate, UITabl
                 taxValue: String(taxValue),
                 clValue: String(clValue),
                 uomName: String(uomName),
-                eQtyValue: String(eQtyValue),
-                liter: String(liter),
+                //eQtyValue: String(eQtyValue),
+                eQtyValue: String(qtyValue),
+                litersVal: String(liter),
                 freeProductName: freeProductName
             )
-
             orderItemModelsss.append(orderItem)
         }
-
         return orderItemModelsss
     }
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if Secondary_order_details_table == tableView{
-            return UITableView.automaticDimension
+        if Detils_table == tableView{
+            return 50
+        }
+        if Free_details_table == tableView{
+            return 50
         }
         
-        if Itemwise_summary == tableView{
-            return UITableView.automaticDimension
-        }
-        return 0
+      return UITableView.automaticDimension
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if  Secondary_order_details_table == tableView{
-            return OrderDetils_For_Distributor.count
+        
+        if Route_Detils_Table == tableView{
+            return Route_data.count
         }
         
-        if Itemwise_summary == tableView{
-           return Itemwise_Summary_Data.count
+        if Product_Detils_Table == tableView{
+            return Orderdetils.count
         }
+        
+        if Amount_table == tableView{
+            return Amountdata.count
+        }
+        
+        if Item_summary_table == tableView{
+            return Itemwise_Summary_Data.count
+        }
+        
+        if Detils_table == tableView{
+            return Orderdetils2.count
+        }
+        
+        if Free_details_table == tableView{
+            return FreeDetils.count
+        }
+       
         return 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-      
-        if Secondary_order_details_table == tableView{
-            let cell:Secondary_Order_Details_Customcell = tableView.dequeueReusableCell(withIdentifier: "Cell") as! Secondary_Order_Details_Customcell
-            let item = OrderDetils_For_Distributor[indexPath.row]
-            print(item)
-            cell.Name_and_idlbl.text = item.Order_Id
-            cell.Addresslbl.text = "gh"
-            cell.Routelbl.text = item.Territory
-            cell.Supply_fromlbl.text = item.stockist_name
-            cell.Phonelbl.text = item.Phone_No
-            cell.Volumlbl.text = "199"
-            cell.Netamtlbl.text = item.Amt
-            cell.Remarklbl.text = ""
-            cell.insideTable1Data = [item]
-            cell.reloadData()
-            return cell
-        }else if Itemwise_summary == tableView{
-            let cellS = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! Item_summary_TB
-
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! Secondary_Order_Details_Customcell
+        if Route_Detils_Table == tableView{
+            cell.Route_lbl.text = Route_data[indexPath.row].Route1
+            cell.Route_lbl2.text =  Route_data[indexPath.row].Route2
+        }else if Product_Detils_Table == tableView{
+            cell.Product_Name.text = Orderdetils[indexPath.row].productName
+            cell.Ratelbl.text = Orderdetils[indexPath.row].rateValue
+            cell.Qtylbl.text = Orderdetils[indexPath.row].qtyValue
+            cell.cllbl.text = Orderdetils[indexPath.row].clValue
+            cell.Freelbl.text = Orderdetils[indexPath.row].freeValue
+            cell.Dislbl.text = Orderdetils[indexPath.row].discValue
+            cell.Taxlbl.text = Orderdetils[indexPath.row].taxValue
+            cell.Valuelbl.text = Orderdetils[indexPath.row].totalValue
+            cell.Product_Remarklbl.text = ""
+            
+        }else if Amount_table == tableView{
+            cell.Amtlbl.text = Amountdata[indexPath.row].Amount1
+            cell.Amtlbl2.text = Amountdata[indexPath.row].Amount2
+        }else  if Item_summary_table == tableView{
+            
+            print(Itemwise_Summary_Data)
             if Itemwise_Summary_Data[indexPath.row].productName == "Total" && Itemwise_Summary_Data[indexPath.row].ProductID == "" {
                 // Set the text properties first
-                cellS.Product_Name.text = Itemwise_Summary_Data[indexPath.row].productName
-                cellS.Qty.text = String(Itemwise_Summary_Data[indexPath.row].Qty)
-                cellS.Free.text = String(Itemwise_Summary_Data[indexPath.row].Free)
+                cell.Productname.text = Itemwise_Summary_Data[indexPath.row].productName
+                cell.itemqtylbl.text = String(Itemwise_Summary_Data[indexPath.row].Qty)
+                cell.Free_lbl.text = String(Itemwise_Summary_Data[indexPath.row].Free)
                 // Apply attributed text (font color in this case)
                 let font = UIFont.systemFont(ofSize: 14, weight: .bold)
                 let attributedText = NSAttributedString(
-                    string: cellS.Product_Name?.text ?? "",
+                    string: cell.Productname?.text ?? "",
                     attributes: [
                         .foregroundColor: UIColor.black,
                         .font: font
                     ]
                 )
-                let attributedqty = NSAttributedString(string: cellS.Qty?.text ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor(red: 0.09, green: 0.64, blue: 0.29, alpha: 1.00)])
-                let attributedRate = NSAttributedString(string:  cellS.Free?.text ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor(red: 0.09, green: 0.64, blue: 0.29, alpha: 1.00)])
-                cellS.Product_Name?.attributedText = attributedText
-                cellS.Qty?.attributedText = attributedqty
-                cellS.Free?.attributedText = attributedRate
+                let attributedqty = NSAttributedString(string: cell.itemqtylbl?.text ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor(red: 0.09, green: 0.64, blue: 0.29, alpha: 1.00)])
+                let attributedRate = NSAttributedString(string:  cell.Free_lbl?.text ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor(red: 0.09, green: 0.64, blue: 0.29, alpha: 1.00)])
+                cell.Productname?.attributedText = attributedText
+                cell.itemqtylbl?.attributedText = attributedqty
+                cell.Free_lbl?.attributedText = attributedRate
             } else {
-                cellS.Product_Name.text = Itemwise_Summary_Data[indexPath.row].productName
-                cellS.Qty.text = String(Itemwise_Summary_Data[indexPath.row].Qty)
-                cellS.Free.text = String(Itemwise_Summary_Data[indexPath.row].Free)
+                cell.Productname.text = Itemwise_Summary_Data[indexPath.row].productName
+                cell.itemqtylbl.text = String(Itemwise_Summary_Data[indexPath.row].Qty)
+                cell.Free_lbl.text = String(Itemwise_Summary_Data[indexPath.row].Free)
                 // Apply attributed text (font color in this case)
                 let font = UIFont.systemFont(ofSize: 14, weight: .regular)
                 let attributedText = NSAttributedString(
-                    string: cellS.Product_Name?.text ?? "",
+                    string: cell.Productname?.text ?? "",
                     attributes: [
                         .foregroundColor: UIColor.black,
                         .font: font
                     ]
                 )
-                let attributedqty = NSAttributedString(string: cellS.Qty?.text ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
-                let attributedRate = NSAttributedString(string:  cellS.Free?.text ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
-                cellS.Product_Name?.attributedText = attributedText
-                cellS.Qty?.attributedText = attributedqty
-                cellS.Free?.attributedText = attributedRate
+                let attributedqty = NSAttributedString(string: cell.itemqtylbl?.text ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
+                let attributedRate = NSAttributedString(string:  cell.Free_lbl?.text ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
+                cell.Productname?.attributedText = attributedText
+                cell.itemqtylbl?.attributedText = attributedqty
+                cell.Free_lbl?.attributedText = attributedRate
                 
             }
-            return cellS
+        }else  if Detils_table == tableView{
+            cell.detils_Product_Name.text = Orderdetils2[indexPath.row].productName
+            cell.detils_uom.text = Orderdetils2[indexPath.row].uomName
+            cell.detils_Qtylbl.text = Orderdetils2[indexPath.row].qtyValue
+            cell.detils_pric.text = Orderdetils2[indexPath.row].rateValue
+            cell.detils_Freelbl.text = Orderdetils2[indexPath.row].freeValue
+            cell.detils_Dislbl.text = Orderdetils2[indexPath.row].discValue
+            cell.detils_Taxlbl.text = Orderdetils2[indexPath.row].taxValue
+            cell.detils_Valuelbl.text = Orderdetils2[indexPath.row].totalValue
+        } else {
+            cell.text1lblb.text = FreeDetils[indexPath.row].productName
+            cell.test2lbl.text = String(FreeDetils[indexPath.row].Free)
         }
-        return UITableViewCell()
+    
+        return cell
     }
     
+    @objc private func Opendetils() {
+        Details_view_height()
+        Details_view.isHidden = false
+    }
+    
+    func Details_view_height(){
+        
+        //Details table_height
+        Scroll_View_Height_detils.constant = Scroll_View_Height_detils.constant - Detils_table_height.constant
+        Detils_table_height.constant = CGFloat(50*Orderdetils2.count)
+        Scroll_View_Height_detils.constant = Scroll_View_Height_detils.constant + Detils_table_height.constant
+        
+        //Free table_height
+        
+        if FreeDetils.isEmpty{
+            Free_View.isHidden = true
+            Free_View_height.constant = 0
+            Free_Table_height.constant = 0
+        }else{
+            Free_View.isHidden = false
+            Free_View_height.constant = Free_View_height.constant - Free_Table_height.constant
+            Free_Table_height.constant = CGFloat(50*FreeDetils.count)
+            Free_View_height.constant = Free_View_height.constant + Free_Table_height.constant
+        }
+        
+        // Remark Height
+        Scroll_View_Height_detils.constant = Scroll_View_Height_detils.constant +  Free_View_height.constant
+    }
+    
+    @objc private func Closedetils() {
+        Details_view.isHidden = true
+    }
     
     @objc private func GotoHome() {
-        if let navigationController = self.navigationController {
-            navigationController.popViewController(animated: true)
-        }else{
-            let storyboard = UIStoryboard(name: "Reports 2", bundle: nil)
-            let viewController = storyboard.instantiateViewController(withIdentifier: "DAY_REPORT_WITH_DATE_RANGE") as! DAY_REPORT_WITH_DATE_RANGE
-            let navController = UINavigationController(rootViewController: viewController)
+            if let navigationController = self.navigationController {
+                navigationController.popViewController(animated: true)
+            }
+    }
+    
+    
+    
+    @objc func cURRENT_iMG(){
+        sharePDF(from: Scroll_View)
+    }
+    // MARK: - Capture Scroll View Content as Image
+
+    func captureScrollViewContent(scrollView: UIScrollView) -> UIImage? {
+        // Start image context with the full content size of the scroll view
+        UIGraphicsBeginImageContextWithOptions(scrollView.contentSize, false, 0.0)
+        
+        // Save the original scroll position to restore later
+        let originalOffset = scrollView.contentOffset
+        scrollView.contentOffset = .zero
+        
+        // Loop through all subviews in the scroll view
+        for subview in scrollView.subviews {
+            // Render each subview into the current context
+            subview.layer.render(in: UIGraphicsGetCurrentContext()!)
+        }
+        
+        // Capture the generated image from the context
+        let capturedImage = UIGraphicsGetImageFromCurrentImageContext()
+        
+        // End the image context to release resources
+        UIGraphicsEndImageContext()
+        
+        // Restore the original scroll position
+        scrollView.contentOffset = originalOffset
+        
+        return capturedImage
+    }
+
+
+
+    // MARK: - Create PDF from Image
+    func createPDF(from image: UIImage) -> Data? {
+        let pdfData = NSMutableData()
+        UIGraphicsBeginPDFContextToData(pdfData, CGRect(origin: .zero, size: image.size), nil)
+        UIGraphicsBeginPDFPage()
+        image.draw(in: CGRect(origin: .zero, size: image.size))
+        UIGraphicsEndPDFContext()
+        return pdfData as Data
+    }
+    // MARK: - Share PDF using UIActivityViewController
+    func sharePDF(from scrollView: UIScrollView) {
+        guard let image = captureScrollViewContent(scrollView: scrollView),
+              let pdfData = createPDF(from: image) else { return }
+
+        let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent("OrderDetails.pdf")
+        do {
+            try pdfData.write(to: tempURL)
+        } catch {
+            print("Error writing PDF: \(error)")
+            return
+        }
+
+        let activityVC = UIActivityViewController(activityItems: [tempURL], applicationActivities: nil)
+
+        // For iPads: Set source view to avoid crashes
+        if let popoverController = activityVC.popoverPresentationController {
+            popoverController.sourceView = self.view
+            popoverController.sourceRect = CGRect(x: self.view.frame.size.width / 2,
+                                                  y: self.view.frame.size.height / 2,
+                                                  width: 0, height: 0)
+            popoverController.permittedArrowDirections = []
+        }
+
+        self.present(activityVC, animated: true, completion: nil)
+    }
+    
+    
+    
+    @objc func Textshare() {
+        let data: String = formatOrdersForSharing(orders: Orderdetils2)
+        if let urlEncodedText = data.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+           let whatsappURL = URL(string: "whatsapp://send?text=\(urlEncodedText)"),
+           UIApplication.shared.canOpenURL(whatsappURL) {
             
-            UIApplication.shared.windows.first?.rootViewController = navController
-            UIApplication.shared.windows.first?.makeKeyAndVisible()
+            UIApplication.shared.open(whatsappURL, options: [:], completionHandler: nil)
+        } else {
+            let activityViewController = UIActivityViewController(activityItems: [data], applicationActivities: nil)
+            activityViewController.excludedActivityTypes = [
+                .postToFacebook,
+                .postToTwitter,
+                .assignToContact,
+                .print
+            ]
+            
+            if let topController = UIApplication.shared.keyWindow?.rootViewController {
+                // For iPad, set the popover presentation details
+                if let popoverPresentationController = activityViewController.popoverPresentationController {
+                    popoverPresentationController.sourceView = topController.view
+                    popoverPresentationController.sourceRect = CGRect(
+                        x: topController.view.bounds.midX,
+                        y: topController.view.bounds.midY,
+                        width: 0,
+                        height: 0
+                    )
+                    popoverPresentationController.permittedArrowDirections = [] // No arrow
+                }
+                topController.present(activityViewController, animated: true, completion: nil)
+            }
         }
     }
+    
+    // Function to format the orders for sharing
+    func formatOrdersForSharing(orders: [OrderItemModel]) -> String {
+        var formattedText = ""
+        
+        if let Distributor = FRON_RET_LBL.text , let Retailer = To_Ret_lbl.text{
+            formattedText += "Distributor : \(Distributor)\n"
+            formattedText += "Retailer : \(Retailer)\n"
+        }
+        formattedText += "Route : \(Route_data[0].Route2)\n"
+        
+        print(Route_data)
+        for order in orders {
+           
+                formattedText += "\(order.productName)\n"
+                formattedText += "Rate : \(order.rateValue) Qty : \(order.qtyValue) Value : \(order.totalValue)\n"
+            
+        }
+        formattedText += "Net Amount : \(Amountdata[0].Amount2)\n"
+        //  formattedText += "Order Taken By : \(hq_name_sel.text)"
+        formattedText += "------------**------------\n"
+        
+        return formattedText
+    }
+    
+    func appendDashedBorder(to view: UIView) {
+        let borderColor = UIColor.gray.cgColor
+            let yourViewShapeLayer: CAShapeLayer = CAShapeLayer()
+            let yourViewSize = view.frame.size
+            let yourViewShapeRect = CGRect(x: 0, y: 0, width: yourViewSize.width - 10, height: yourViewSize.height)
+            yourViewShapeLayer.bounds = yourViewShapeRect
+            yourViewShapeLayer.position = CGPoint(x: yourViewSize.width / 2.1, y: yourViewSize.height / 2)
+            yourViewShapeLayer.fillColor = UIColor.clear.cgColor
+            yourViewShapeLayer.strokeColor = borderColor
+            yourViewShapeLayer.lineWidth = 1
+            yourViewShapeLayer.lineJoin = .round
+            yourViewShapeLayer.lineDashPattern = [4, 2]
+            yourViewShapeLayer.path = UIBezierPath(roundedRect: yourViewShapeRect, cornerRadius: 3).cgPath
+            view.layer.addSublayer(yourViewShapeLayer)
+        }
+    
+    @objc func Share_Order_Bill() {
+        sharePDF_Detils()
+    }
+    
+    func sharePDF_Detils() {
+        guard let image = captureViewsAsImage(),
+              let pdfData = createPDF(from: image) else { return }
+
+        let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent("OrderDetails.pdf")
+        do {
+            try pdfData.write(to: tempURL)
+        } catch {
+            print("Error writing PDF: \(error)")
+            return
+        }
+
+        let activityVC = UIActivityViewController(activityItems: [tempURL], applicationActivities: nil)
+
+        // For iPads: Set source view to avoid crashes
+        if let popoverController = activityVC.popoverPresentationController {
+            popoverController.sourceView = self.view
+            popoverController.sourceRect = CGRect(x: self.view.frame.size.width / 2,
+                                                  y: self.view.frame.size.height / 2,
+                                                  width: 0, height: 0)
+            popoverController.permittedArrowDirections = []
+        }
+        self.present(activityVC, animated: true, completion: nil)
+    }
+    
+    
+    func captureViewsAsImage() -> UIImage? {
+        // Create a new graphics context with the size of both views combined
+        let totalHeight = Addres_View.frame.height + Detils_Scroll_View.contentSize.height
+        let totalSize = CGSize(width: max(Addres_View.frame.width, Detils_Scroll_View.frame.width), height: totalHeight)
+
+        UIGraphicsBeginImageContextWithOptions(totalSize, false, 0.0)
+
+        // Save the current graphics context
+        guard let context = UIGraphicsGetCurrentContext() else { return nil }
+
+        // Render the Addres_View
+        context.saveGState()
+        context.translateBy(x: 0, y: 0) // Position the Addres_View at the top
+        Addres_View.layer.render(in: context)
+        context.restoreGState()
+
+        // Set the correct position for Detils_Scroll_View
+        let originalOffset = Detils_Scroll_View.contentOffset
+        Detils_Scroll_View.contentOffset = .zero
+
+        // Render the Detils_Scroll_View below the Addres_View
+        context.saveGState()
+        context.translateBy(x: 0, y: Addres_View.frame.height) // Position below Addres_View
+        for subview in Detils_Scroll_View.subviews {
+            subview.layer.render(in: context)
+        }
+        context.restoreGState()
+
+        // Restore the original scroll position
+        Detils_Scroll_View.contentOffset = originalOffset
+
+        // Capture the generated image from the context
+        let capturedImage = UIGraphicsGetImageFromCurrentImageContext()
+
+        // End the image context to release resources
+        UIGraphicsEndImageContext()
+
+        return capturedImage
+    }
+    
 }
