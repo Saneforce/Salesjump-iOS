@@ -28,6 +28,7 @@ class Secondary_Order_Details: IViewController, UITableViewDelegate, UITableView
     
     
     
+    @IBOutlet weak var No_data_lbl: UILabel!
     
     
     let cardViewInstance = CardViewdata()
@@ -170,7 +171,11 @@ class Secondary_Order_Details: IViewController, UITableViewDelegate, UITableView
                     }
                 }
                 
-                print(Invoice_Detils)
+                if Invoice_Detils.isEmpty{
+                    No_data_lbl.isHidden = false
+                }else{
+                    No_data_lbl.isHidden = true
+                }
                 Secondary_Order_Table.reloadData()
                 
             case .failure(let error):
