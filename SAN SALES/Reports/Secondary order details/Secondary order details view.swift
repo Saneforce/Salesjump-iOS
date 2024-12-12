@@ -418,7 +418,7 @@ class Secondary_order_details_view: IViewController, UITableViewDelegate, UITabl
             print(self.Item_summary_view_height.constant)
             self.Item_summary_view_height.constant = self.Item_summary_view_height.constant +  self.Summary_table_view_height.constant
             print(self.Item_summary_view_height.constant)
-            self.Scroll_VieW_HEIGHT.constant = heights[0]+heights[1]+heights[2]+heights[3]+400
+            self.Scroll_VieW_HEIGHT.constant = heights[0]+heights[1]+heights[2]+heights[3]
             print(self.Scroll_VieW_HEIGHT.constant)
             self.Scroll_VieW_HEIGHT.constant = self.Scroll_VieW_HEIGHT.constant + self.Item_summary_view_height.constant
             print(self.Scroll_VieW_HEIGHT.constant)
@@ -428,8 +428,6 @@ class Secondary_order_details_view: IViewController, UITableViewDelegate, UITabl
     
     func parseProductDetails(productCode: String,productDetail: String, reportType: Int) -> [OrderItemModel] {
         var orderItemModelsss: [OrderItemModel] = []
-
-        // Split the main product details using the "#" delimiter
         let productArray = productDetail.split(separator: "#").map { String($0) }
         let product_Code_Array = productCode.split(separator: "#").map { String($0) }
         
@@ -787,9 +785,6 @@ class Secondary_order_details_view: IViewController, UITableViewDelegate, UITabl
     
     
     @objc func Textshare() {
-        
-        print(Orderdetils2)
-        
         let data: String = formatOrdersForSharing(orders: Orderdetils2)
         if let urlEncodedText = data.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
            let whatsappURL = URL(string: "whatsapp://send?text=\(urlEncodedText)"),
@@ -826,9 +821,11 @@ class Secondary_order_details_view: IViewController, UITableViewDelegate, UITabl
     func formatOrdersForSharing(orders: [OrderItemModel]) -> String {
         var formattedText = ""
         
-        formattedText += "Distributor : \(Route_data[0].Route2)\n"
-       // formattedText += "Retailer : \(Route_data[0].Route2)\n"
-       // formattedText += "Route : \(order.Route)\n"
+        if let Distributor = FRON_RET_LBL.text , let Retailer = To_Ret_lbl.text{
+            formattedText += "Distributor : \(Distributor)\n"
+            formattedText += "Retailer : \(Retailer)\n"
+        }
+        formattedText += "Route : \(Route_data[0].Route2)\n"
         
         print(Route_data)
         for order in orders {
@@ -838,9 +835,8 @@ class Secondary_order_details_view: IViewController, UITableViewDelegate, UITabl
             
         }
         formattedText += "Net Amount : \(Amountdata[0].Amount2)\n"
+        //  formattedText += "Order Taken By : \(hq_name_sel.text)"
         formattedText += "------------**------------\n"
-        
-      //  formattedText += "Order Taken By : \(hq_name_sel.text)"
         
         return formattedText
     }
