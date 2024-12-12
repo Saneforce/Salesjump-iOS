@@ -65,6 +65,9 @@ class Secondary_order_details_view: IViewController, UITableViewDelegate, UITabl
     @IBOutlet weak var Share_detils: UIImageView!
     @IBOutlet weak var Detils_Scroll_View: UIScrollView!
     
+    
+    @IBOutlet weak var Remark_height: NSLayoutConstraint!
+    
     struct OrderItemModel {
         let productName: String
         let ProductID:String
@@ -383,6 +386,11 @@ class Secondary_order_details_view: IViewController, UITableViewDelegate, UITabl
                     self.printVisibleCellHeights(for: [self.Route_Detils_Table,self.Product_Detils_Table,self.Amount_table,self.Item_summary_table]){
                         print("ok")
                     }
+                    if json[0]["secOrdRemark"] as? String ?? "" != ""{
+                        self.Remark_height.constant = self.Remarklbl.frame.height
+                    }else{
+                        self.Remark_height.constant = 40
+                    }
                     self.LoadingDismiss()
                 }
             case .failure(let error):
@@ -422,6 +430,7 @@ class Secondary_order_details_view: IViewController, UITableViewDelegate, UITabl
             print(self.Scroll_VieW_HEIGHT.constant)
             self.Scroll_VieW_HEIGHT.constant = self.Scroll_VieW_HEIGHT.constant + self.Item_summary_view_height.constant
             print(self.Scroll_VieW_HEIGHT.constant)
+            self.Scroll_VieW_HEIGHT.constant = self.Scroll_VieW_HEIGHT.constant + self.Remark_height.constant
             completion()
         }
     }
@@ -698,6 +707,8 @@ class Secondary_order_details_view: IViewController, UITableViewDelegate, UITabl
             Free_Table_height.constant = CGFloat(50*FreeDetils.count)
             Free_View_height.constant = Free_View_height.constant + Free_Table_height.constant
         }
+        
+        // Remark Height
         Scroll_View_Height_detils.constant = Scroll_View_Height_detils.constant +  Free_View_height.constant
     }
     
