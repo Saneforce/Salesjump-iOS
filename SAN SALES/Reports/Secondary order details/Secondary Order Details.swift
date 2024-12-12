@@ -26,6 +26,10 @@ class Secondary_Order_Details: IViewController, UITableViewDelegate, UITableView
     @IBOutlet weak var Retiler_view: UIView!
     @IBOutlet weak var Retilerlbl: UILabel!
     
+    
+    
+    
+    
     let cardViewInstance = CardViewdata()
     var SFCode: String=""
     var DivCode: String=""
