@@ -54,7 +54,16 @@ class Secondary_order_details_view: IViewController, UITableViewDelegate, UITabl
     @IBOutlet weak var Cash_did_lbl: UILabel!
     @IBOutlet weak var Net_amountlbl: UILabel!
     @IBOutlet weak var Free_details_table: UITableView!
+    @IBOutlet weak var Addres_View: UIView!
+    @IBOutlet weak var das_Border_Line_View: UIView!
     
+    @IBOutlet weak var Detils_table_height: NSLayoutConstraint!
+    @IBOutlet weak var Scroll_View_Height_detils: NSLayoutConstraint!
+    @IBOutlet weak var Free_View: UIView!
+    @IBOutlet weak var Free_View_height: NSLayoutConstraint!
+    @IBOutlet weak var Free_Table_height: NSLayoutConstraint!
+    @IBOutlet weak var Share_detils: UIImageView!
+    @IBOutlet weak var Detils_Scroll_View: UIScrollView!
     
     struct OrderItemModel {
         let productName: String
@@ -137,6 +146,14 @@ class Secondary_order_details_view: IViewController, UITableViewDelegate, UITabl
             HeadquarterName = get_hq_name
         }
         
+        Addres_View.layer.cornerRadius = 10
+        Addres_View.layer.shadowRadius = 2
+        
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            appendDashedBorder(to: das_Border_Line_View)
+           // appendDashedBorder(to: Strik_Line)
+            }
+        
         Dynamic_header_lbl.text = "Secondary Order Details For : \(GetDate)"
         
         let lstProdData: String = LocalStoreage.string(forKey: "Products_Master")!
@@ -153,6 +170,8 @@ class Secondary_order_details_view: IViewController, UITableViewDelegate, UITabl
         VstDet_order()
         Whatsapp_share.addTarget(target: self, action: #selector(cURRENT_iMG))
         Text_share.addTarget(target: self, action: #selector(Textshare))
+        Share_detils.addTarget(target: self, action: #selector(Share_Order_Bill))
+        
         Open_view.addTarget(target: self, action: #selector(Opendetils))
 
         Details_view_back_button.addTarget(target: self, action: #selector(Closedetils))
@@ -287,8 +306,20 @@ class Secondary_order_details_view: IViewController, UITableViewDelegate, UITabl
                 
                 
             
-                
+               
                 Amountdata.append(Amount_Detils(Amount1: "Net Amount", Amount2:  CurrencyUtils.formatCurrency(amount: json[0]["finalNetAmnt"] as? String ?? "", currencySymbol: UserSetup.shared.currency_symbol)))
+                
+                let tlDisAmt = json[0]["tlDisAmt"] as? String ?? ""
+                let netAmount = json[0]["finalNetAmnt"] as? String ?? ""
+                
+                let minsAmount = Double(netAmount.isEmpty ? "0" : netAmount)! - Double(tlDisAmt.isEmpty ? "0" : tlDisAmt)!
+                
+                print(tlDisAmt)
+                if  tlDisAmt != "0"{
+                    Amountdata.append(Amount_Detils(Amount1: "Total Discount", Amount2:  CurrencyUtils.formatCurrency(amount: tlDisAmt, currencySymbol: UserSetup.shared.currency_symbol)))
+                    Amountdata.append(Amount_Detils(Amount1: "Final Order Amount", Amount2:  CurrencyUtils.formatCurrency(amount: minsAmount, currencySymbol: UserSetup.shared.currency_symbol)))
+                }
+                
                 
                 Total_amount_summary.text = CurrencyUtils.formatCurrency(amount: json[0]["finalNetAmnt"] as? String ?? "", currencySymbol: UserSetup.shared.currency_symbol)
                 
@@ -334,13 +365,10 @@ class Secondary_order_details_view: IViewController, UITableViewDelegate, UITabl
                     Total_Dis = Total_Dis + (discValue ?? 0)
                 }
                 Taxlbl.text = "\(Total_Tax)"
-                Schemelbl.text = "0"
-                Cash_did_lbl.text = "0"
-                Net_amountlbl.text = json[0]["finalNetAmnt"] as? String ?? ""
-                
-        
-               
-                
+                Schemelbl.text = "\(Total_Dis)"
+                Cash_did_lbl.text = "\(tlDisAmt)"
+                //Net_amountlbl.text = json[0]["finalNetAmnt"] as? String ?? ""
+                Net_amountlbl.text =  CurrencyUtils.formatCurrency(amount: minsAmount, currencySymbol: UserSetup.shared.currency_symbol)
                 
                 Route_Detils_Table.reloadData()
                 Product_Detils_Table.reloadData()
@@ -349,7 +377,6 @@ class Secondary_order_details_view: IViewController, UITableViewDelegate, UITabl
                 Detils_table.reloadData()
                 Free_details_table.reloadData()
                 viewDidLayoutSubviews()
-             
                 
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                     
@@ -367,6 +394,9 @@ class Secondary_order_details_view: IViewController, UITableViewDelegate, UITabl
         }
     }
     
+   
+    
+    
     func printVisibleCellHeights(for tableViews: [UITableView], completion: @escaping () -> Void) {
         var heights: [CGFloat] = []
         
@@ -382,9 +412,16 @@ class Secondary_order_details_view: IViewController, UITableViewDelegate, UITabl
             self.Product_detils_table_height.constant = heights[1]
             self.Amount_table_View_height.constant = heights[2]
             self.Summary_table_view_height.constant = heights[3]
-            
+            print(self.Summary_table_view_height.constant)
+            print(self.Item_summary_view_height.constant)
+            self.Item_summary_view_height.constant = self.Item_summary_view_height.constant - 128
+            print(self.Item_summary_view_height.constant)
+            self.Item_summary_view_height.constant = self.Item_summary_view_height.constant +  self.Summary_table_view_height.constant
+            print(self.Item_summary_view_height.constant)
             self.Scroll_VieW_HEIGHT.constant = heights[0]+heights[1]+heights[2]+heights[3]+400
-            
+            print(self.Scroll_VieW_HEIGHT.constant)
+            self.Scroll_VieW_HEIGHT.constant = self.Scroll_VieW_HEIGHT.constant + self.Item_summary_view_height.constant
+            print(self.Scroll_VieW_HEIGHT.constant)
             completion()
         }
     }
@@ -640,8 +677,32 @@ class Secondary_order_details_view: IViewController, UITableViewDelegate, UITabl
     }
     
     @objc private func Opendetils() {
+        Details_view_height()
         Details_view.isHidden = false
     }
+    
+    func Details_view_height(){
+        
+        //Details table_height
+        Scroll_View_Height_detils.constant = Scroll_View_Height_detils.constant - Detils_table_height.constant
+        Detils_table_height.constant = CGFloat(50*Orderdetils2.count)
+        Scroll_View_Height_detils.constant = Scroll_View_Height_detils.constant + Detils_table_height.constant
+        
+        //Free table_height
+        
+        if FreeDetils.isEmpty{
+            Free_View.isHidden = true
+            Free_View_height.constant = 0
+            Free_Table_height.constant = 0
+        }else{
+            Free_View.isHidden = false
+            Free_View_height.constant = Free_View_height.constant - Free_Table_height.constant
+            Free_Table_height.constant = CGFloat(50*FreeDetils.count)
+            Free_View_height.constant = Free_View_height.constant + Free_Table_height.constant
+        }
+        Scroll_View_Height_detils.constant = Scroll_View_Height_detils.constant +  Free_View_height.constant
+    }
+    
     @objc private func Closedetils() {
         Details_view.isHidden = true
     }
@@ -782,6 +843,92 @@ class Secondary_order_details_view: IViewController, UITableViewDelegate, UITabl
       //  formattedText += "Order Taken By : \(hq_name_sel.text)"
         
         return formattedText
+    }
+    
+    func appendDashedBorder(to view: UIView) {
+        let borderColor = UIColor.gray.cgColor
+            let yourViewShapeLayer: CAShapeLayer = CAShapeLayer()
+            let yourViewSize = view.frame.size
+            let yourViewShapeRect = CGRect(x: 0, y: 0, width: yourViewSize.width - 10, height: yourViewSize.height)
+            yourViewShapeLayer.bounds = yourViewShapeRect
+            yourViewShapeLayer.position = CGPoint(x: yourViewSize.width / 2.1, y: yourViewSize.height / 2)
+            yourViewShapeLayer.fillColor = UIColor.clear.cgColor
+            yourViewShapeLayer.strokeColor = borderColor
+            yourViewShapeLayer.lineWidth = 1
+            yourViewShapeLayer.lineJoin = .round
+            yourViewShapeLayer.lineDashPattern = [4, 2]
+            yourViewShapeLayer.path = UIBezierPath(roundedRect: yourViewShapeRect, cornerRadius: 3).cgPath
+            view.layer.addSublayer(yourViewShapeLayer)
+        }
+    
+    @objc func Share_Order_Bill() {
+        sharePDF_Detils()
+    }
+    
+    func sharePDF_Detils() {
+        guard let image = captureViewsAsImage(),
+              let pdfData = createPDF(from: image) else { return }
+
+        let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent("OrderDetails.pdf")
+        do {
+            try pdfData.write(to: tempURL)
+        } catch {
+            print("Error writing PDF: \(error)")
+            return
+        }
+
+        let activityVC = UIActivityViewController(activityItems: [tempURL], applicationActivities: nil)
+
+        // For iPads: Set source view to avoid crashes
+        if let popoverController = activityVC.popoverPresentationController {
+            popoverController.sourceView = self.view
+            popoverController.sourceRect = CGRect(x: self.view.frame.size.width / 2,
+                                                  y: self.view.frame.size.height / 2,
+                                                  width: 0, height: 0)
+            popoverController.permittedArrowDirections = []
+        }
+        self.present(activityVC, animated: true, completion: nil)
+    }
+    
+    
+    func captureViewsAsImage() -> UIImage? {
+        // Create a new graphics context with the size of both views combined
+        let totalHeight = Addres_View.frame.height + Detils_Scroll_View.contentSize.height
+        let totalSize = CGSize(width: max(Addres_View.frame.width, Detils_Scroll_View.frame.width), height: totalHeight)
+
+        UIGraphicsBeginImageContextWithOptions(totalSize, false, 0.0)
+
+        // Save the current graphics context
+        guard let context = UIGraphicsGetCurrentContext() else { return nil }
+
+        // Render the Addres_View
+        context.saveGState()
+        context.translateBy(x: 0, y: 0) // Position the Addres_View at the top
+        Addres_View.layer.render(in: context)
+        context.restoreGState()
+
+        // Set the correct position for Detils_Scroll_View
+        let originalOffset = Detils_Scroll_View.contentOffset
+        Detils_Scroll_View.contentOffset = .zero
+
+        // Render the Detils_Scroll_View below the Addres_View
+        context.saveGState()
+        context.translateBy(x: 0, y: Addres_View.frame.height) // Position below Addres_View
+        for subview in Detils_Scroll_View.subviews {
+            subview.layer.render(in: context)
+        }
+        context.restoreGState()
+
+        // Restore the original scroll position
+        Detils_Scroll_View.contentOffset = originalOffset
+
+        // Capture the generated image from the context
+        let capturedImage = UIGraphicsGetImageFromCurrentImageContext()
+
+        // End the image context to release resources
+        UIGraphicsEndImageContext()
+
+        return capturedImage
     }
     
 }
