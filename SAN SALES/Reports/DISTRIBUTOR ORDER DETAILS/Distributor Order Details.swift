@@ -23,11 +23,10 @@ class Distributor_Order_Details: IViewController, UITableViewDelegate, UITableVi
     @IBOutlet weak var Headquarter_selection: UIView!
     @IBOutlet weak var Headquarterlbl: UILabel!
     var Headquarterid:String = ""
-    
     @IBOutlet weak var Close_Calender: UIImageView!
-    
-    
     @IBOutlet weak var No_data_availablelbl: UILabel!
+    
+    
     let cardViewInstance = CardViewdata()
     var SFCode: String=""
     var DivCode: String=""
@@ -159,6 +158,9 @@ class Distributor_Order_Details: IViewController, UITableViewDelegate, UITableVi
             lstHQs = list;
                 Headquarterlbl.text = sfName
                 Headquarterid = SFCode
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+//            self.Headquarter_height.constant =  self.Headquarterlbl.frame.height + 10
+//            }
         }
         
         No_data_availablelbl.isHidden = true
@@ -173,6 +175,7 @@ class Distributor_Order_Details: IViewController, UITableViewDelegate, UITableVi
         TB_view.sectionFooterHeight = 10
         if UserSetup.shared.SF_type == 1{
             Headquarter_height.constant = 0
+            Headquarter_selection.isHidden = true
         }
         OrderDayReport()
 
@@ -370,6 +373,9 @@ class Distributor_Order_Details: IViewController, UITableViewDelegate, UITableVi
                 self.Headquarterlbl.text = name
                 self.Headquarterid = id
                 self.OrderDayReport()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                self.Headquarter_height.constant =  self.Headquarterlbl.frame.height + 10
+                }
             self.navigationController?.popViewController(animated: true)
         }
         self.navigationController?.pushViewController(distributorVC, animated: true)

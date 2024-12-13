@@ -332,7 +332,13 @@ class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UI
                     Total_Dis = Total_Dis + (discValue ?? 0)
                 }
                 
-                OrderDetils_For_Distributor.append(Distobutor_OrderDetail(Dis_Name: json[0]["name"] as? String ?? "", Order_Id: json[0]["trans_sl_no"] as? String ?? "", Amt: String(json[0]["orderValue"] as? Double ?? 0), Remark: json[0]["remarks"] as? String ?? "", date: json[0]["Order_date"] as? String ?? "", Phone_No: json[0]["mobNo"] as? String ?? "", Tax: String(Total_Tax), Dis: String(Total_Dis), stockist_name: json[0]["stockist_name"] as? String ?? "", Territory: json[0]["Territory"] as? String ?? "", Orderitem: orderItems))
+                var remark: String = ""
+                if let remarkValue = json[0]["Cancel_Reason"] as? String {
+                    remark = remarkValue
+                } else {
+                    remark =  json[0]["remarks"] as? String ?? ""
+                }
+                OrderDetils_For_Distributor.append(Distobutor_OrderDetail(Dis_Name: json[0]["name"] as? String ?? "", Order_Id: json[0]["trans_sl_no"] as? String ?? "", Amt: String(json[0]["orderValue"] as? Double ?? 0), Remark: remark, date: json[0]["Order_date"] as? String ?? "", Phone_No: json[0]["mobNo"] as? String ?? "", Tax: String(Total_Tax), Dis: String(Total_Dis), stockist_name: json[0]["stockist_name"] as? String ?? "", Territory: json[0]["Territory"] as? String ?? "", Orderitem: orderItems))
                 
                 
                 print(OrderDetils_For_Distributor)
