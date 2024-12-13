@@ -67,6 +67,7 @@ class Secondary_order_details_view: IViewController, UITableViewDelegate, UITabl
     
     
     @IBOutlet weak var Remark_height: NSLayoutConstraint!
+    @IBOutlet weak var Orderid_height: NSLayoutConstraint!
     
     struct OrderItemModel {
         let productName: String
@@ -391,6 +392,8 @@ class Secondary_order_details_view: IViewController, UITableViewDelegate, UITabl
                     }else{
                         self.Remark_height.constant = 40
                     }
+                    
+                    self.Orderid_height.constant = self.Order_id_and_name.frame.height
                     self.LoadingDismiss()
                 }
             case .failure(let error):
@@ -430,6 +433,7 @@ class Secondary_order_details_view: IViewController, UITableViewDelegate, UITabl
             print(self.Scroll_VieW_HEIGHT.constant)
             self.Scroll_VieW_HEIGHT.constant = self.Scroll_VieW_HEIGHT.constant + self.Item_summary_view_height.constant
             print(self.Scroll_VieW_HEIGHT.constant)
+            self.Scroll_VieW_HEIGHT.constant = self.Scroll_VieW_HEIGHT.constant + self.Orderid_height.constant
             self.Scroll_VieW_HEIGHT.constant = self.Scroll_VieW_HEIGHT.constant + self.Remark_height.constant
             completion()
         }
