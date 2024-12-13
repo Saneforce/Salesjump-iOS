@@ -340,7 +340,7 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
             let item2 = product["Order_No"] as! String
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let viewController = storyboard.instantiateViewController(withIdentifier: "NavController") as! UINavigationController
-        let myDyPln = storyboard.instantiateViewController(withIdentifier: "sbPrimaryOrder") as! PrimaryOrder
+        let myDyPln = storyboard.instantiateViewController(withIdentifier: "sbPrimaryOrderNew") as! PrimaryOrderNew
         myDyPln.productData1 = item1
         myDyPln.productData2 = item2
         myDyPln.areypostion = arey
