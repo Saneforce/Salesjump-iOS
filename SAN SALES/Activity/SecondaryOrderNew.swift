@@ -232,6 +232,7 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
                 self.ShowLoading(Message: "Loading")
                 DispatchQueue.main.asyncAfter(deadline: .now()+2){
                     self.updateProduct(products: list)
+                    self.DemoEdite()
                 }
 //                DispatchQueue.main.async {
 //                        
@@ -1396,7 +1397,7 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
             }
         }else {
             disCountPer = Double(disPer) ?? 0
-            discountType = disType
+            discountType = disType == "" ? "%" : disType
             freeCount = Int(freecnt) ?? 0
         }
         var discountAmountRound : Double = 0
@@ -2682,7 +2683,7 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
         editView.updateRate = { dis in
             
             if cell.product.discountType != "%" {
-                let total = cell.product.totalCount
+                let total = cell.product.totalAmtWithoutDis()
                 let disCnt = dis as! Double
                 if disCnt > total {
                     Toast.show(message: "Please Enter Discount Amount less than Product Value")
@@ -2902,6 +2903,7 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
         
         
         self.SelectedProductTableView.reloadData()
+        self.freeQtyTableView.reloadData()
         self.updateTotalPriceList()
     }
     
@@ -2929,6 +2931,22 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
         cell.lblQty.text = String(qty)
         cell.product.sampleQty = String(qty)
         
+        let discount = cell.product.disCountPer
+        if cell.product.discountType != "%" {
+            
+            let total = cell.product.totalAmtWithoutDis()
+            
+            if discount > total {
+                Toast.show(message: "Please Enter Discount Amount less than Product Value")
+                cell.product.disCountPer = 0
+            }
+        }else {
+            if discount >= 100 {
+                Toast.show(message: "Please Enter Discount Amount less than Product Value")
+                cell.product.disCountPer = 0
+            }
+        }
+        
         self.calculationForSelectedOrderCell(cell: cell)
     }
     
@@ -2952,6 +2970,22 @@ class SecondaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataS
             cell.product.unitId = unit["id"] as? String ?? ""
             let conQty = String(format: "%@", unit["ConQty"] as! CVarArg)
             cell.product.unitCount = Int(conQty) ?? 0
+            
+            let discount = cell.product.disCountPer
+            if cell.product.discountType != "%" {
+                
+                let total = cell.product.totalAmtWithoutDis()
+                
+                if discount > total {
+                    Toast.show(message: "Please Enter Discount Amount less than Product Value")
+                    cell.product.disCountPer = 0
+                }
+            }else {
+                if discount >= 100 {
+                    Toast.show(message: "Please Enter Discount Amount less than Product Value")
+                    cell.product.disCountPer = 0
+                }
+            }
             
             self.calculationForSelectedOrderCell(cell: cell)
             self.navigationController?.popViewController(animated: true)

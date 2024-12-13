@@ -1609,6 +1609,10 @@ struct ProductList {
         return unitCount * (Int(sampleQty) ?? 0)
     }
     
+    func totalAmtWithoutDis() -> Double{
+        return (Double(unitCount)) * (Double(sampleQty) ?? 0) * rate
+    }
+    
 }
 
 struct Scheme  {
