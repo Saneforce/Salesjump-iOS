@@ -183,7 +183,7 @@ class SuperStockistOrderSubmittedDetails : UIViewController , UITableViewDelegat
             "data": jsonString
         ]
         
-        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseData { AFdata in
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+apiKey, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseData { AFdata in
             self.LoadingDismiss()
             switch AFdata.result
             {
@@ -228,7 +228,7 @@ class SuperStockistOrderSubmittedDetails : UIViewController , UITableViewDelegat
             "data": jsonString
         ]
         
-        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseData { AFdata in
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+apiKey, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseData { AFdata in
             self.LoadingDismiss()
             switch AFdata.result
             {
