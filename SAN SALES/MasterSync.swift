@@ -176,7 +176,9 @@ import BackgroundTasks
             "orderBy":"[\"name asc\"]","desig":"mgr"
          ]))
          
-         
+         strMasList.append(mnuItem.init(MasId: 33, MasName: "Distributor Rate", MasImage: "mnuPrimary",StoreKey: "Distributor_Rate", ApiKey: "get/stockistRate&divisionCode="+(prettyJsonData["divisionCode"] as? String ?? "")+"&rSF="+SFCode+"&sfCode="+SFCode+"&State_Code="+StateCode+"&desig="+desigCode,fromData: [
+            "orderBy":"[\"name asc\"]","desig":"mgr"
+         ]))
 
          btnClearData.addTarget(target: self, action: #selector(clearAllData))
          btnSyncAll.addTarget(target: self, action: #selector(callAllApi))

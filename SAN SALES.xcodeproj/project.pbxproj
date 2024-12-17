@@ -18,6 +18,7 @@
 		155F39722BEA035B0096139B /* TourPlanApproval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 155F39712BEA035B0096139B /* TourPlanApproval.swift */; };
 		155F39752BEA5FED0096139B /* ItemMultipleSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 155F39732BEA5FED0096139B /* ItemMultipleSelectionViewController.swift */; };
 		155F39762BEA5FED0096139B /* ItemMultipleSelectionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 155F39742BEA5FED0096139B /* ItemMultipleSelectionViewController.xib */; };
+		1568FB1A2D103B160045064D /* PrimaryOrderNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1568FB192D103B160045064D /* PrimaryOrderNew.swift */; };
 		159095202BF1E941001D8347 /* TourPlanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1590951F2BF1E941001D8347 /* TourPlanView.swift */; };
 		159095222BF1E954001D8347 /* TourPlanViewDateWise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159095212BF1E954001D8347 /* TourPlanViewDateWise.swift */; };
 		159095252BF23AD0001D8347 /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159095232BF23AD0001D8347 /* CalendarViewController.swift */; };
@@ -186,6 +187,7 @@
 		155F39712BEA035B0096139B /* TourPlanApproval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TourPlanApproval.swift; sourceTree = "<group>"; };
 		155F39732BEA5FED0096139B /* ItemMultipleSelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemMultipleSelectionViewController.swift; sourceTree = "<group>"; };
 		155F39742BEA5FED0096139B /* ItemMultipleSelectionViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ItemMultipleSelectionViewController.xib; sourceTree = "<group>"; };
+		1568FB192D103B160045064D /* PrimaryOrderNew.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimaryOrderNew.swift; sourceTree = "<group>"; };
 		1590951F2BF1E941001D8347 /* TourPlanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TourPlanView.swift; sourceTree = "<group>"; };
 		159095212BF1E954001D8347 /* TourPlanViewDateWise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TourPlanViewDateWise.swift; sourceTree = "<group>"; };
 		159095232BF23AD0001D8347 /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
@@ -488,6 +490,7 @@
 				3F97F9F52831B5950097166D /* AddNewCustomer.swift */,
 				3F06352F283E04580027842E /* PrimaryVisit.swift */,
 				3F063531283F5FEF0027842E /* PrimaryOrder.swift */,
+				1568FB192D103B160045064D /* PrimaryOrderNew.swift */,
 				3F7CCF0228F14CA3002A7C03 /* GEOTagging.swift */,
 				38D0F76729BB2447003EEB03 /* BrandReviewVisit.swift */,
 				3894BC5C2B919A0E0019B40A /* Add Route.swift */,
@@ -1021,6 +1024,7 @@
 				3FC32E552CB3A6310092449B /* ClosingStockEntry (SS).swift in Sources */,
 				159095222BF1E954001D8347 /* TourPlanViewDateWise.swift in Sources */,
 				382103F52BA16B83005C02CD /* Expense Entry.swift in Sources */,
+				1568FB1A2D103B160045064D /* PrimaryOrderNew.swift in Sources */,
 				3F063530283E04580027842E /* PrimaryVisit.swift in Sources */,
 				3F2F810D27CEB30C0015E1CA /* SceneDelegate.swift in Sources */,
 				3F0635392844025C0027842E /* PhotosCollection.swift in Sources */,

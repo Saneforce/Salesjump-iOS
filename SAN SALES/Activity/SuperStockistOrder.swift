@@ -207,11 +207,11 @@ class SuperStockistOrder : IViewController {
             "data": jsonString //"["+jsonString+"]"//
         ]
         print(params)
-        print(APIClient.shared.BaseURL+APIClient.shared.DBURL+"dcr/save&divisionCode=" + self.DivCode + "&sfCode="+self.SFCode)
+        print(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"dcr/save&divisionCode=" + self.DivCode + "&sfCode="+self.SFCode)
         let url = "http://fmcg.sanfmcg.com/server/native_Db_V13.php?axn=dcr/save&divisionCode=29,&sfCode=SEFMR0040"
         
         print(url) //APIClient.shared.BaseURL+APIClient.shared.DBURL+"dcr/save&divisionCode=" + self.DivCode + "&sfCode="+self.SFCode
-        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+"dcr/save&divisionCode=" + self.DivCode + "&sfCode="+self.SFCode, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseData { AFdata in
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"dcr/save&divisionCode=" + self.DivCode + "&sfCode="+self.SFCode, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseData { AFdata in
             self.LoadingDismiss()
             switch AFdata.result
             {

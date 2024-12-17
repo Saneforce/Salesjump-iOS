@@ -127,7 +127,7 @@ class SubmittedCalls: UIViewController, UITableViewDelegate, UITableViewDataSour
         //let apiKey: String = "\(axn)&State_Code=12&desig=MR&divisionCode=\(DivCode)&rSF=MR3533&sfCode=\(SFCode)&stateCode=12"
         let apiKey: String = "\(axn)&divisionCode=\(DivCode)&rSF=\(SFCode)&sfCode=\(SFCode)&State_Code=\(StateCode)"
     
-        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
             AFdata in
             //self.LoadingDismiss()
             switch AFdata.result
