@@ -90,6 +90,10 @@
 		3F0861BF2801D589006A30FB /* CollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0861BE2801D589006A30FB /* CollectionCell.swift */; };
 		3F0861C12802B4F5006A30FB /* VisitData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0861C02802B4F5006A30FB /* VisitData.swift */; };
 		3F0861C328053B3A006A30FB /* UserSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0861C228053B3A006A30FB /* UserSetup.swift */; };
+		3F0A5E4B2D11536C00477F87 /* CustomFields.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0A5E4A2D11536C00477F87 /* CustomFields.swift */; };
+		3F0A5E4D2D11539700477F87 /* Custom Text Field.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0A5E4C2D11539700477F87 /* Custom Text Field.swift */; };
+		3F0A5E4F2D1153BD00477F87 /* Custom Text Number Field.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0A5E4E2D1153BD00477F87 /* Custom Text Number Field.swift */; };
+		3F0A5E512D1153D900477F87 /* Custom check box Field.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0A5E502D1153D900477F87 /* Custom check box Field.swift */; };
 		3F0E5AAA2CB64B7300C97D83 /* Order Details.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0E5AA92CB64B7300C97D83 /* Order Details.swift */; };
 		3F0E5AAC2CB64FA800C97D83 /* Reports 2.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3F0E5AAB2CB64FA800C97D83 /* Reports 2.storyboard */; };
 		3F0ED6BE2872F61A00FF4460 /* OrderDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0ED6BD2872F61A00FF4460 /* OrderDetailView.swift */; };
@@ -264,6 +268,10 @@
 		3F0861BE2801D589006A30FB /* CollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionCell.swift; sourceTree = "<group>"; };
 		3F0861C02802B4F5006A30FB /* VisitData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisitData.swift; sourceTree = "<group>"; };
 		3F0861C228053B3A006A30FB /* UserSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSetup.swift; sourceTree = "<group>"; };
+		3F0A5E4A2D11536C00477F87 /* CustomFields.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFields.swift; sourceTree = "<group>"; };
+		3F0A5E4C2D11539700477F87 /* Custom Text Field.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Custom Text Field.swift"; sourceTree = "<group>"; };
+		3F0A5E4E2D1153BD00477F87 /* Custom Text Number Field.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Custom Text Number Field.swift"; sourceTree = "<group>"; };
+		3F0A5E502D1153D900477F87 /* Custom check box Field.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Custom check box Field.swift"; sourceTree = "<group>"; };
 		3F0E5AA92CB64B7300C97D83 /* Order Details.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Order Details.swift"; sourceTree = "<group>"; };
 		3F0E5AAB2CB64FA800C97D83 /* Reports 2.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Reports 2.storyboard"; sourceTree = "<group>"; };
 		3F0ED6BD2872F61A00FF4460 /* OrderDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderDetailView.swift; sourceTree = "<group>"; };
@@ -468,6 +476,17 @@
 			path = CollectionCell;
 			sourceTree = "<group>";
 		};
+		3F0A5E472D1152F500477F87 /* Custom Fields */ = {
+			isa = PBXGroup;
+			children = (
+				3F0A5E4A2D11536C00477F87 /* CustomFields.swift */,
+				3F0A5E4C2D11539700477F87 /* Custom Text Field.swift */,
+				3F0A5E4E2D1153BD00477F87 /* Custom Text Number Field.swift */,
+				3F0A5E502D1153D900477F87 /* Custom check box Field.swift */,
+			);
+			path = "Custom Fields";
+			sourceTree = "<group>";
+		};
 		3F14EAE827F73D4500B0997B /* Activity */ = {
 			isa = PBXGroup;
 			children = (
@@ -581,6 +600,7 @@
 				3F619F3A27EAED9000F3D05F /* Service */,
 				3FBF387327E4480E00900007 /* Common */,
 				3F28CC1227DC96C300B95964 /* TableCells */,
+				3F0A5E472D1152F500477F87 /* Custom Fields */,
 				3F28CC0D27D74D3B00B95964 /* UI */,
 				3F28CBE627D3927E00B95964 /* Fonts */,
 				3F2F810A27CEB30C0015E1CA /* AppDelegate.swift */,
@@ -934,6 +954,7 @@
 				384E56C12BDB7ABF00B2E8A5 /* New Expense Approval.swift in Sources */,
 				3F5C50E32CCF541700A956BB /* RangeData.swift in Sources */,
 				3F0822BF29000D65009C33EA /* LeaveForm.swift in Sources */,
+				3F0A5E4D2D11539700477F87 /* Custom Text Field.swift in Sources */,
 				386889E22B1868F90015F20C /* RottPageViewController.swift in Sources */,
 				3F8B989A2C594C610073D452 /* SFC Details View.swift in Sources */,
 				3F886A122C8EEDEB001F9A39 /* ClosingStockView (DB).swift in Sources */,
@@ -954,6 +975,7 @@
 				3F28CC0F27D74D7200B95964 /* LabelSelect.swift in Sources */,
 				3F4CC197287B297A00BA2B4E /* NetworkMonitor.swift in Sources */,
 				155F39722BEA035B0096139B /* TourPlanApproval.swift in Sources */,
+				3F0A5E512D1153D900477F87 /* Custom check box Field.swift in Sources */,
 				38F6F5B12B19D305007090BF /* Coverage.swift in Sources */,
 				3F5816F0281172C400659510 /* MainMenu.swift in Sources */,
 				38F6F5A92B19D2AC007090BF /* Attendance.swift in Sources */,
@@ -962,6 +984,7 @@
 				3F0ED6BE2872F61A00FF4460 /* OrderDetailView.swift in Sources */,
 				38B05F542B05D7040025D4C0 /* ManagerDashboard.swift in Sources */,
 				3F8BF29D27E99CCA00E1C41B /* CameraService.swift in Sources */,
+				3F0A5E4B2D11536C00477F87 /* CustomFields.swift in Sources */,
 				3894BC5D2B919A0E0019B40A /* Add Route.swift in Sources */,
 				384E56BA2BDB664B00B2E8A5 /* Expense Approval.swift in Sources */,
 				15B518BA2C12ECEF00DD75C1 /* JsonModel.swift in Sources */,
@@ -1023,6 +1046,7 @@
 				382103F52BA16B83005C02CD /* Expense Entry.swift in Sources */,
 				3F063530283E04580027842E /* PrimaryVisit.swift in Sources */,
 				3F2F810D27CEB30C0015E1CA /* SceneDelegate.swift in Sources */,
+				3F0A5E4F2D1153BD00477F87 /* Custom Text Number Field.swift in Sources */,
 				3F0635392844025C0027842E /* PhotosCollection.swift in Sources */,
 				3FFC65F72C8EEB7D00CC0690 /* ClosingStockEntry (DB).swift in Sources */,
 				15B518B82C108BCB00DD75C1 /* TourPlanDeviationApproval.swift in Sources */,

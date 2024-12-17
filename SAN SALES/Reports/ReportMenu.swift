@@ -67,7 +67,7 @@ class ReportMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
             strMasList.append(mnuItem.init(MasId: 14, MasName: "Distributor Order Details", MasImage: "SwitchRoute"))
         }
         strMasList.append(mnuItem.init(MasId: 15, MasName: " Secondary Order Details", MasImage: "SwitchRoute"))
-        
+        strMasList.append(mnuItem.init(MasId: 16, MasName: "CustomFields", MasImage: "SwitchRoute"))
        
         btnBack.addTarget(target: self, action: #selector(closeMenuWin))
         menuClose.addTarget(target: self, action: #selector(closeMenuWin))
@@ -230,6 +230,11 @@ class ReportMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
         }else if lItm.MasId == 15{
             let RptMnuVc = storyboard.instantiateViewController(withIdentifier: "sbReportsmnu") as! ReportMenu
             let attenReportVC = storyboard2.instantiateViewController(withIdentifier: "sbSecondaryOrderDetails") as! Secondary_Order_Details
+             viewController.setViewControllers([RptMnuVc,attenReportVC], animated: false)
+             (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
+        }else if lItm.MasId == 16{
+            let RptMnuVc = storyboard.instantiateViewController(withIdentifier: "sbReportsmnu") as! ReportMenu
+            let attenReportVC = storyboard.instantiateViewController(withIdentifier: "sbCustomFields") as! CustomFields
              viewController.setViewControllers([RptMnuVc,attenReportVC], animated: false)
              (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
         }
