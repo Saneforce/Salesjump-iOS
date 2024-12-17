@@ -13,8 +13,8 @@ class CustomTextNumberField: UIView {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Title"
-        label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
-        label.textColor = .gray
+        label.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
+        label.textColor = UIColor(red: 0.40, green: 0.40, blue: 0.40, alpha: 1.00)
         label.alpha = 1 // Initially hidden
         return label
     }()

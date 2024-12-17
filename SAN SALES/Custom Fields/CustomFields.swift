@@ -39,39 +39,7 @@ class CustomFields: IViewController {
      override func viewDidLoad() {
          super.viewDidLoad()
          CustomDetails()
-         view.backgroundColor = .white
-                let fields = [
-                    ("First Name", "Enter your first name"),
-                    ("Last Name", "Enter your last name"),
-                    ("Email", "Enter your email"),
-                    ("Password", "Enter your password")
-                ]
-                var previousField: UIView? = nil
-                
- //               for (index, field) in fields.enumerated() {
- //                   let customTextField = CustomTextField()
- //                   customTextField.configure(title: field.0, placeholder: field.1)
- //                   customTextField.translatesAutoresizingMaskIntoConstraints = false
- //
- //                   view.addSubview(customTextField)
- //
- //                   NSLayoutConstraint.activate([
- //                       customTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
- //                       customTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
- //                       customTextField.heightAnchor.constraint(equalToConstant: 70)
- //                   ])
- //
- //                   if let previous = previousField {
- //                       NSLayoutConstraint.activate([
- //                           customTextField.topAnchor.constraint(equalTo: previous.bottomAnchor, constant: 20)
- //                       ])
- //                   } else {
- //                       NSLayoutConstraint.activate([
- //                           customTextField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20)
- //                       ])
- //                   }
- //                   previousField = customTextField
- //               }
+   
             }
      
      
@@ -93,7 +61,6 @@ class CustomFields: IViewController {
                              let filterFields = customData.filter { ($0["FieldGroupId"] as? Int ?? 0) == Int(id) }
                              let Custom_fields = CustomGroup_details(Custom_fields: filterFields)
                              
-                             print(Custom_fields)
                             CustomGroupData.append(CustomGroup(FGTableName: i["FGTableName"] as? String ?? "", FGroupName: i["FGroupName"] as? String ?? "", FieldGroupId: i["FieldGroupId"] as? String ?? "", Customdetails_data: Custom_fields))
                          }
                      }
@@ -144,46 +111,130 @@ class CustomFields: IViewController {
      }
      
      
-     func AddCustom_Fields() {
-         // Create the stack view
-         let stackView = UIStackView()
-         stackView.axis = .vertical
-         stackView.spacing = 16
-         stackView.translatesAutoresizingMaskIntoConstraints = false
+    func AddCustom_Fields() {
+        // Create the scroll view
+        let scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(scrollView)
+        
+        // Set scroll view constraints
+        NSLayoutConstraint.activate([
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+        
+        // Create the stack view
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 16
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.addSubview(stackView)
 
-         // Add the stack view to the parent view
-         view.addSubview(stackView)
+        // Set stack view constraints within the scroll view
+        NSLayoutConstraint.activate([
+            stackView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor, constant: 20),
+            stackView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor, constant: -20),
+            stackView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor, constant: 20),
+            stackView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
+            
+            // Ensure the stack view matches the scroll view's width
+            stackView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor, constant: -40)
+        ])
+        
+        // Populate the stack view with custom fields
+        for AddedFields_Title in CustomGroupData {
+            for AddedFields in AddedFields_Title.Customdetails_data {
+                if AddedFields.Fld_Type == "TAS" {
+                    let customTextField = CustomTextField()
+                    customTextField.configure(title: AddedFields.Field_Name, placeholder: "Enter the \(AddedFields.Field_Name)")
+                    stackView.addArrangedSubview(customTextField)
+                } else if AddedFields.Fld_Type == "NP" {
+                    let customTextField = CustomTextNumberField()
+                    customTextField.configure(title: AddedFields.Field_Name, placeholder: "Enter the \(AddedFields.Field_Name)")
+                    stackView.addArrangedSubview(customTextField)
+                } else if AddedFields.Fld_Type == "CO" {
+                    let customCheckboxView = CustomCheckboxView()
+                    customCheckboxView.configure(
+                        title: "Select Options:",
+                        checkBoxTitles: ["Option 1", "Option 2", "Option 3", "Option 4", "Option 5"]
+                    )
+                    customCheckboxView.frame = CGRect(x: 0, y: 0, width: 300, height: 200)
+                    customCheckboxView.backgroundColor = .white
+                    stackView.addArrangedSubview(customCheckboxView)
+                } else if AddedFields.Fld_Type == "SSO" {
+                    let customCheckboxView = CustomCheckboxView()
+                    customCheckboxView.configure(
+                        title: "Select Options 3:",
+                        checkBoxTitles: ["Option 1", "Option 2", "Option 3", "Option 4", "Option 5", "Option 2", "Option 3", "Option 4", "Option 5", "Option 2", "Option 3", "Option 4", "Option 2", "Option 3", "Option 4"]
+                    )
+                    customCheckboxView.frame = CGRect(x: 0, y: 0, width: 300, height: 200)
+                    customCheckboxView.backgroundColor = .white
+                    stackView.addArrangedSubview(customCheckboxView)
+                }else if AddedFields.Fld_Type == "RO" {
+                    let radioButtonView = CustomRadioButtonView()
+                    radioButtonView.configure(title: "Choose an Option", radioButtonTitles: ["Option 1", "Option 2", "Option 3"])
 
-         // Set constraints for the stack view
-         NSLayoutConstraint.activate([
-             stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-             stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-             stackView.topAnchor.constraint(equalTo: view.topAnchor, constant: 20)
-         ])
+                    // Add to the parent view and set frame or constraints
+                    radioButtonView.translatesAutoresizingMaskIntoConstraints = false
+                    stackView.addArrangedSubview(radioButtonView)
+                    
+                }else if AddedFields.Fld_Type == "RM"{
+                    let radioButtonView = CustomRadioButtonView()
+                    radioButtonView.configure(title: "Choose an Option", radioButtonTitles: ["Option 1 ", "Option 2", "Option 3"])
+                    radioButtonView.translatesAutoresizingMaskIntoConstraints = false
+                    stackView.addArrangedSubview(radioButtonView)
+                    
+                }else if AddedFields.Fld_Type == "D"{
+                    let customLabel = CustomSelectionLabel()
+                    customLabel.configure(title: "Name", value: "John Doe")
+                    stackView.addArrangedSubview(customLabel)
+                    
+                }else if AddedFields.Fld_Type == "SSM"{
+                    let customLabel = CustomSelectionLabel()
+                    customLabel.configure(title: "Single Selection", value: "Select Data")
+                    stackView.addArrangedSubview(customLabel)
+                    
+                }else if AddedFields.Fld_Type == "FSC"{
+                    let customField = CustomFieldUpload()
+                    customField.setTitleText("Dynamic Title")
+                    customField.setDynamicLabelText("Dynamic Content")
+                    stackView.addArrangedSubview(customField)
+                }else if AddedFields.Fld_Type == "SMO"{
+                    let customCheckboxView = CustomCheckboxView()
+                    customCheckboxView.configure(
+                        title: "Select Options 3:",
+                        checkBoxTitles: ["Option 1", "Option 2", "Option 3", "Option 4", "Option 5", "Option 2", "Option 3", "Option 4"]
+                    )
+                    customCheckboxView.frame = CGRect(x: 0, y: 0, width: 300, height: 200)
+                    customCheckboxView.backgroundColor = .white
+                    stackView.addArrangedSubview(customCheckboxView)
+                    
+                }else if AddedFields.Fld_Type == "CM"{
+                    let customCheckboxView = CustomCheckboxView()
+                    customCheckboxView.configure(
+                        title: "Select Options 3:",
+                        checkBoxTitles: ["Option 1", "Option 2", "Option 3", "Option 4", "Option 5", "Option 2", "Option 3", "Option 4"]
+                    )
+                    customCheckboxView.frame = CGRect(x: 0, y: 0, width: 300, height: 200)
+                    customCheckboxView.backgroundColor = .white
+                    stackView.addArrangedSubview(customCheckboxView)
+                    
+                }else{
+                    let customTextField = CustomTextNumberField()
+                    customTextField.configure(title: AddedFields.Field_Name, placeholder: "Enter the \(AddedFields.Field_Name)")
+                    stackView.addArrangedSubview(customTextField)
+                }
+            }
+        }
+        print(scrollView.frame.height)
+    }
 
-         for AddedFields_Title in CustomGroupData {
-             for AddedFields in AddedFields_Title.Customdetails_data {
-                 if AddedFields.Fld_Type == "TAS" {
-                     let customTextField = CustomTextField()
-                     customTextField.configure(title: AddedFields.Field_Name, placeholder: "Enter the \(AddedFields.Field_Name)")
-                     stackView.addArrangedSubview(customTextField)
-                 }else if AddedFields.Fld_Type == "NP" {
-                     let customTextField = CustomTextNumberField()
-                     customTextField.configure(title: AddedFields.Field_Name, placeholder: "Enter the \(AddedFields.Field_Name)")
-                     stackView.addArrangedSubview(customTextField)
-                 }else if AddedFields.Fld_Type == "CO"{
-                     let customCheckboxView = CustomCheckboxView()
-                     customCheckboxView.configure(
-                         title: "Select Options:",
-                         checkBoxTitles: ["Option 1", "Option 2", "Option 3", "Option 4", "Option 5"]
-                     )
-                     customCheckboxView.frame = CGRect(x: 0, y: 0, width: 300, height: 200)
-                     customCheckboxView.backgroundColor = .white
-                     stackView.addArrangedSubview(customCheckboxView)
-                 }
-             }
-         }
-     }
 
      }
      
+
+
+
+

@@ -94,6 +94,10 @@
 		3F0A5E4D2D11539700477F87 /* Custom Text Field.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0A5E4C2D11539700477F87 /* Custom Text Field.swift */; };
 		3F0A5E4F2D1153BD00477F87 /* Custom Text Number Field.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0A5E4E2D1153BD00477F87 /* Custom Text Number Field.swift */; };
 		3F0A5E512D1153D900477F87 /* Custom check box Field.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0A5E502D1153D900477F87 /* Custom check box Field.swift */; };
+		3F0A5E532D11702A00477F87 /* Custom Radio Button .swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0A5E522D11702A00477F87 /* Custom Radio Button .swift */; };
+		3F0A5E552D1176AB00477F87 /* Custom Selection lbl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0A5E542D1176AB00477F87 /* Custom Selection lbl.swift */; };
+		3F0A5E572D117E6B00477F87 /* Custom Field Upload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0A5E562D117E6B00477F87 /* Custom Field Upload.swift */; };
+		3F0A5E592D119AF800477F87 /* Padded UILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0A5E582D119AF800477F87 /* Padded UILabel.swift */; };
 		3F0E5AAA2CB64B7300C97D83 /* Order Details.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0E5AA92CB64B7300C97D83 /* Order Details.swift */; };
 		3F0E5AAC2CB64FA800C97D83 /* Reports 2.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3F0E5AAB2CB64FA800C97D83 /* Reports 2.storyboard */; };
 		3F0ED6BE2872F61A00FF4460 /* OrderDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0ED6BD2872F61A00FF4460 /* OrderDetailView.swift */; };
@@ -272,6 +276,10 @@
 		3F0A5E4C2D11539700477F87 /* Custom Text Field.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Custom Text Field.swift"; sourceTree = "<group>"; };
 		3F0A5E4E2D1153BD00477F87 /* Custom Text Number Field.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Custom Text Number Field.swift"; sourceTree = "<group>"; };
 		3F0A5E502D1153D900477F87 /* Custom check box Field.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Custom check box Field.swift"; sourceTree = "<group>"; };
+		3F0A5E522D11702A00477F87 /* Custom Radio Button .swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Custom Radio Button .swift"; sourceTree = "<group>"; };
+		3F0A5E542D1176AB00477F87 /* Custom Selection lbl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Custom Selection lbl.swift"; sourceTree = "<group>"; };
+		3F0A5E562D117E6B00477F87 /* Custom Field Upload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Custom Field Upload.swift"; sourceTree = "<group>"; };
+		3F0A5E582D119AF800477F87 /* Padded UILabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Padded UILabel.swift"; sourceTree = "<group>"; };
 		3F0E5AA92CB64B7300C97D83 /* Order Details.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Order Details.swift"; sourceTree = "<group>"; };
 		3F0E5AAB2CB64FA800C97D83 /* Reports 2.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Reports 2.storyboard"; sourceTree = "<group>"; };
 		3F0ED6BD2872F61A00FF4460 /* OrderDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderDetailView.swift; sourceTree = "<group>"; };
@@ -483,6 +491,10 @@
 				3F0A5E4C2D11539700477F87 /* Custom Text Field.swift */,
 				3F0A5E4E2D1153BD00477F87 /* Custom Text Number Field.swift */,
 				3F0A5E502D1153D900477F87 /* Custom check box Field.swift */,
+				3F0A5E522D11702A00477F87 /* Custom Radio Button .swift */,
+				3F0A5E542D1176AB00477F87 /* Custom Selection lbl.swift */,
+				3F0A5E562D117E6B00477F87 /* Custom Field Upload.swift */,
+				3F0A5E582D119AF800477F87 /* Padded UILabel.swift */,
 			);
 			path = "Custom Fields";
 			sourceTree = "<group>";
@@ -930,6 +942,7 @@
 				3F2F811F27D0E7430015E1CA /* HomePageViewController.swift in Sources */,
 				3F447B522CD91252004FF91D /* Distributor Order Details.swift in Sources */,
 				38A2E9B22A0E1B940061B854 /* Brand Availability.swift in Sources */,
+				3F0A5E532D11702A00477F87 /* Custom Radio Button .swift in Sources */,
 				15B518BC2C13305D00DD75C1 /* DeviationRemarks.swift in Sources */,
 				1597B4802C6623A400EAB640 /* RejectedAndCancelledLeaveDetails.swift in Sources */,
 				3F0861BF2801D589006A30FB /* CollectionCell.swift in Sources */,
@@ -942,6 +955,7 @@
 				388CD9292BDA3A7C003A06F9 /* SuperStockistOrderSubmittedDetails.swift in Sources */,
 				3F97F9F62831B5950097166D /* AddNewCustomer.swift in Sources */,
 				15F9E7B32C5399D70057D4C6 /* MyResourcesRetailerList.swift in Sources */,
+				3F0A5E552D1176AB00477F87 /* Custom Selection lbl.swift in Sources */,
 				1514DF782BD786CF00E6B45A /* SuperStockistOrderSubmittedDetails.swift in Sources */,
 				3F5B2FC3284B59E400574D7C /* MsgLoader.swift in Sources */,
 				38DDD8492BA1D8120074AEF1 /* Daily Expense Entry.swift in Sources */,
@@ -1031,11 +1045,13 @@
 				386A43952A1CC63100CE1833 /* PrimarySubmittedDCR.swift in Sources */,
 				15D4E8A22CEC971900E172E0 /* OfflineCallSync.swift in Sources */,
 				386A43912A1CBB0200CE1833 /* SubmittedDCR.swift in Sources */,
+				3F0A5E572D117E6B00477F87 /* Custom Field Upload.swift in Sources */,
 				3F9ACBC12D02CD5A00504BB4 /* Secondary_Order_Details_CustomTableViewCell.swift in Sources */,
 				159095252BF23AD0001D8347 /* CalendarViewController.swift in Sources */,
 				3F94523A2CD9EEDE001A6C53 /* Distributor TableViewCell.swift in Sources */,
 				3F7CCF0328F14CA3002A7C03 /* GEOTagging.swift in Sources */,
 				3F5D05E02C6F21EE00457642 /* Leave Approval.swift in Sources */,
+				3F0A5E592D119AF800477F87 /* Padded UILabel.swift in Sources */,
 				3F0861C328053B3A006A30FB /* UserSetup.swift in Sources */,
 				15F9E7B12C5229220057D4C6 /* MyResources.swift in Sources */,
 				38F6F5AF2B19D2ED007090BF /* Location.swift in Sources */,
