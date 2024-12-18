@@ -8,6 +8,10 @@
 import Foundation
 import UIKit
 
+protocol CustomFieldUploadViewDelegate: AnyObject {
+    func CustomFieldUploadDidSelect(_ title: String, isSelected: Bool, tag: Int, tags: [Int],Selectaheckbox:[String:Bool])
+}
+
 class CustomFieldUpload: UIView {
     
     // MARK: - UI Components
@@ -21,21 +25,20 @@ class CustomFieldUpload: UIView {
         return label
     }()
     
-    // Store reference to the dynamic label inside the stack view
     private let dynamicLabel: UILabel = {
         let label = PaddedLabel()
         label.text = "TEST"
         label.backgroundColor = UIColor(red: 0.94, green: 0.95, blue: 0.98, alpha: 1.00)
-        label.font = UIFont.systemFont(ofSize: 14,weight: .semibold)
+        label.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
         label.textColor = UIColor(red: 0.40, green: 0.40, blue: 0.40, alpha: 1.00)
         label.translatesAutoresizingMaskIntoConstraints = false
         label.edgeInsets = UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10)
-        NSLayoutConstraint.activate([
-            label.heightAnchor.constraint(equalToConstant: 40)
-        ])
         label.layer.cornerRadius = 6
         label.layer.masksToBounds = true
         label.clipsToBounds  = true
+        NSLayoutConstraint.activate([
+            label.heightAnchor.constraint(equalToConstant: 40)
+        ])
         return label
     }()
     
@@ -60,6 +63,7 @@ class CustomFieldUpload: UIView {
             imageView.widthAnchor.constraint(equalToConstant: 25),
             imageView.heightAnchor.constraint(equalToConstant: 25)
         ])
+        imageView.isUserInteractionEnabled = true // Enable user interaction
         return imageView
     }()
     
@@ -68,7 +72,6 @@ class CustomFieldUpload: UIView {
     // MARK: - Initializer
     
     override init(frame: CGRect) {
-        // Initialize the stackView after all its components are ready
         stackView = UIStackView(arrangedSubviews: [dynamicLabel, imageView1, imageView2])
         stackView.axis = .horizontal
         stackView.spacing = 8
@@ -76,10 +79,10 @@ class CustomFieldUpload: UIView {
         stackView.translatesAutoresizingMaskIntoConstraints = false
         super.init(frame: frame)
         setupViews()
+        setupActions()
     }
     
     required init?(coder: NSCoder) {
-        // Initialize the stackView after all its components are ready
         stackView = UIStackView(arrangedSubviews: [dynamicLabel, imageView1, imageView2])
         stackView.axis = .horizontal
         stackView.spacing = 8
@@ -87,41 +90,61 @@ class CustomFieldUpload: UIView {
         stackView.translatesAutoresizingMaskIntoConstraints = false
         super.init(coder: coder)
         setupViews()
+        setupActions()
     }
     
-    // MARK: - Setup Method
+    // MARK: - Setup Methods
     
     private func setupViews() {
         addSubview(titleLabel)
         addSubview(stackView)
         
-        // Add constraints for titleLabel
+        // Constraints for titleLabel
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 8),
-            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 0),
-            titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -0)
+            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
+            titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor)
         ])
         
-        // Add constraints for stackView
+        // Constraints for stackView
         NSLayoutConstraint.activate([
             stackView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10),
-            stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 0),
-            stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -0),
-            stackView.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor, constant: -0)
+            stackView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            stackView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            stackView.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor)
         ])
     }
+    
+    private func setupActions() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(uploadImageTapped))
+        imageView2.addGestureRecognizer(tapGesture)
+    }
+    
+    // MARK: - Actions
+    
+    @objc private func uploadImageTapped() {
+        setDynamicLabelText("Uploading...")
+        hideCheckImage()
+        
+        // Simulate an upload process with a delay
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
+            self?.setDynamicLabelText("Upload Complete")
+        }
+    }
+    
+    // MARK: - Public Methods
     
     public func setTitleText(_ text: String) {
         titleLabel.text = text
-        titleLabel.alpha = 1 // Make it visible when updated
+        titleLabel.alpha = 1 // Make titleLabel visible
     }
     
-    /// Update the dynamicLabel text inside stackView
     public func setDynamicLabelText(_ text: String) {
         dynamicLabel.text = text
     }
+    
+    public func hideCheckImage() {
+        imageView1.isHidden = true
+    }
 }
-
-
-

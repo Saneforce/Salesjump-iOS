@@ -7,8 +7,16 @@
 
 import UIKit
 
+protocol CustomCheckboxViewDelegate: AnyObject {
+    func checkboxViewDidSelect(_ title: String, isSelected: Bool, tag: Int, tags: [Int],Selectaheckbox:[String:Bool])
+}
+
 class CustomCheckboxView: UIView {
     
+    // MARK: - Properties
+    private var checkBoxStates: [String: Bool] = [:] // Tracks checkbox states
+    weak var delegate: CustomCheckboxViewDelegate? // Delegate reference
+    var tags: [Int] = []
     // MARK: - UI Components
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -44,7 +52,7 @@ class CustomCheckboxView: UIView {
         addSubview(checkBoxStackView)
     }
     
-    private func setupConstraints(){
+    private func setupConstraints() {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         checkBoxStackView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -66,28 +74,32 @@ class CustomCheckboxView: UIView {
     func configure(title: String, checkBoxTitles: [String]) {
         titleLabel.text = title
         
-        // Clear existing checkboxes
+        // Clear existing checkboxes and reset states
         checkBoxStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        checkBoxStates.removeAll()
         
         // Add new checkboxes
         for title in checkBoxTitles {
             let checkBox = createCheckBox(title: title)
             checkBoxStackView.addArrangedSubview(checkBox)
+            checkBoxStates[title] = false // Default state is unselected
         }
     }
     
     private func createCheckBox(title: String) -> UIView {
         let checkBoxView = UIView()
-        let button = UIButton(type: .system)
-        button.setTitle("☐", for: .normal)
-        button.setTitle("☑", for: .selected)
-        button.addTarget(self, action: #selector(toggleCheckbox(_:)), for: .touchUpInside)
+        checkBoxView.isUserInteractionEnabled = true
         
-        let label = UILabel()
-        label.text = title
-        label.font = UIFont.systemFont(ofSize: 14)
+        let checkBoxLabel = UILabel()
+        checkBoxLabel.text = "☐"
+        checkBoxLabel.font = UIFont.systemFont(ofSize: 18)
+        checkBoxLabel.tag = title.hash // Use hash of title for identification
         
-        let stack = UIStackView(arrangedSubviews: [button, label])
+        let titleLabel = UILabel()
+        titleLabel.text = title
+        titleLabel.font = UIFont.systemFont(ofSize: 14)
+        
+        let stack = UIStackView(arrangedSubviews: [checkBoxLabel, titleLabel])
         stack.axis = .horizontal
         stack.spacing = 8
         stack.alignment = .center
@@ -102,10 +114,29 @@ class CustomCheckboxView: UIView {
             stack.bottomAnchor.constraint(equalTo: checkBoxView.bottomAnchor)
         ])
         
+        // Add tap gesture to handle checkbox toggle
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(toggleCheckbox(_:)))
+        checkBoxView.addGestureRecognizer(tapGesture)
+        
         return checkBoxView
     }
     
-    @objc private func toggleCheckbox(_ sender: UIButton) {
-        sender.isSelected.toggle()
+    @objc private func toggleCheckbox(_ sender: UITapGestureRecognizer) {
+        guard let checkBoxView = sender.view,
+              let stack = checkBoxView.subviews.first as? UIStackView,
+              let checkBoxLabel = stack.arrangedSubviews.first as? UILabel,
+              let titleLabel = stack.arrangedSubviews.last as? UILabel,
+              let title = titleLabel.text else { return }
+        
+        // Toggle checkbox state
+        let isSelected = !(checkBoxStates[title] ?? false)
+        checkBoxStates[title] = isSelected
+        
+        // Update UI
+        checkBoxLabel.text = isSelected ? "☑" : "☐"
+        
+        // Notify the delegate
+       // delegate?.checkboxViewDidSelect(title, isSelected: isSelected, tag: self.tag)
+        delegate?.checkboxViewDidSelect(title, isSelected: isSelected, tag: self.tag, tags: tags, Selectaheckbox: checkBoxStates)
     }
 }

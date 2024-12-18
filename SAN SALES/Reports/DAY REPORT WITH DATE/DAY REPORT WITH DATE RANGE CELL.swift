@@ -198,7 +198,11 @@ class DAY_REPORT_WITH_DATE_RANGE_CELL: UITableViewCell, UICollectionViewDataSour
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if Collection_View == collectionView{
          let item = data[0][indexPath.row]
+            print(indexPath.row)
             if indexPath.row == 2 || indexPath.row == 3  ||  indexPath.row == 5{
+                
+                
+                
                 return
             }
             delegate?.navigateToDetails(data: RangData, id: item)

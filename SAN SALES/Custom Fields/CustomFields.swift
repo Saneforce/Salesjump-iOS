@@ -7,7 +7,8 @@
 
 import UIKit
 import Alamofire
-class CustomFields: IViewController {
+class CustomFields: IViewController,CustomCheckboxViewDelegate {
+   
     
     let customTextField = CustomTextField()
      
@@ -144,11 +145,24 @@ class CustomFields: IViewController {
         ])
         
         // Populate the stack view with custom fields
+        var index = 0
         for AddedFields_Title in CustomGroupData {
+            
+            if !AddedFields_Title.Customdetails_data.isEmpty{
+                let header = HeaderLabel()
+                header.configure(title: AddedFields_Title.FGroupName)
+                stackView.addArrangedSubview(header)
+            }
+           
+            var index2 = 0
             for AddedFields in AddedFields_Title.Customdetails_data {
                 if AddedFields.Fld_Type == "TAS" {
                     let customTextField = CustomTextField()
                     customTextField.configure(title: AddedFields.Field_Name, placeholder: "Enter the \(AddedFields.Field_Name)")
+                    
+                    customTextField.tag = index
+                   // customTextField.addTarget(self, action: #selector(fieldClicked(_:)), for: .editingDidBegin)
+                    customTextField.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(viewClicked(_:))))
                     stackView.addArrangedSubview(customTextField)
                 } else if AddedFields.Fld_Type == "NP" {
                     let customTextField = CustomTextNumberField()
@@ -157,24 +171,33 @@ class CustomFields: IViewController {
                 } else if AddedFields.Fld_Type == "CO" {
                     let customCheckboxView = CustomCheckboxView()
                     customCheckboxView.configure(
-                        title: "Select Options:",
+                        title: AddedFields.Field_Name,
                         checkBoxTitles: ["Option 1", "Option 2", "Option 3", "Option 4", "Option 5"]
                     )
+                    
+                    customCheckboxView.tag = index
+                    customCheckboxView.tags = [index,index2]
+                    
+                    customCheckboxView.delegate = self
+                    customCheckboxView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(viewClicked(_:))))
                     customCheckboxView.frame = CGRect(x: 0, y: 0, width: 300, height: 200)
                     customCheckboxView.backgroundColor = .white
                     stackView.addArrangedSubview(customCheckboxView)
-                } else if AddedFields.Fld_Type == "SSO" {
+                } else if AddedFields.Fld_Type == "SSO"{
                     let customCheckboxView = CustomCheckboxView()
                     customCheckboxView.configure(
-                        title: "Select Options 3:",
-                        checkBoxTitles: ["Option 1", "Option 2", "Option 3", "Option 4", "Option 5", "Option 2", "Option 3", "Option 4", "Option 5", "Option 2", "Option 3", "Option 4", "Option 2", "Option 3", "Option 4"]
+                        title: AddedFields.Field_Name,
+                        checkBoxTitles: ["Option 1", "Option 2", "Option 3", "Option 4", "Option 5", "Option 6", "Option 7", "Option 8", "Option 9", "Option 10", "Option 11", "Option 12", "Option 12", "Option 13", "Option 14"]
                     )
                     customCheckboxView.frame = CGRect(x: 0, y: 0, width: 300, height: 200)
                     customCheckboxView.backgroundColor = .white
+                    customCheckboxView.tag = index
+                    customCheckboxView.tags = [index,index2]
+                    customCheckboxView.delegate = self
                     stackView.addArrangedSubview(customCheckboxView)
-                }else if AddedFields.Fld_Type == "RO" {
+                }else if AddedFields.Fld_Type == "RO"{
                     let radioButtonView = CustomRadioButtonView()
-                    radioButtonView.configure(title: "Choose an Option", radioButtonTitles: ["Option 1", "Option 2", "Option 3"])
+                    radioButtonView.configure(title: AddedFields.Field_Name, radioButtonTitles: ["Option 1", "Option 2", "Option 3"])
 
                     // Add to the parent view and set frame or constraints
                     radioButtonView.translatesAutoresizingMaskIntoConstraints = false
@@ -182,31 +205,33 @@ class CustomFields: IViewController {
                     
                 }else if AddedFields.Fld_Type == "RM"{
                     let radioButtonView = CustomRadioButtonView()
-                    radioButtonView.configure(title: "Choose an Option", radioButtonTitles: ["Option 1 ", "Option 2", "Option 3"])
+                    radioButtonView.configure(title: AddedFields.Field_Name, radioButtonTitles: ["Option 1 ", "Option 2", "Option 3"])
                     radioButtonView.translatesAutoresizingMaskIntoConstraints = false
                     stackView.addArrangedSubview(radioButtonView)
                     
                 }else if AddedFields.Fld_Type == "D"{
                     let customLabel = CustomSelectionLabel()
-                    customLabel.configure(title: "Name", value: "John Doe")
+                    customLabel.configure(title: AddedFields.Field_Name, value: "John Doe")
                     stackView.addArrangedSubview(customLabel)
                     
                 }else if AddedFields.Fld_Type == "SSM"{
                     let customLabel = CustomSelectionLabel()
-                    customLabel.configure(title: "Single Selection", value: "Select Data")
+                    customLabel.configure(title: AddedFields.Field_Name, value: "Select Data")
                     stackView.addArrangedSubview(customLabel)
                     
                 }else if AddedFields.Fld_Type == "FSC"{
                     let customField = CustomFieldUpload()
-                    customField.setTitleText("Dynamic Title")
+                    customField.setTitleText(AddedFields.Field_Name)
                     customField.setDynamicLabelText("Dynamic Content")
                     stackView.addArrangedSubview(customField)
                 }else if AddedFields.Fld_Type == "SMO"{
                     let customCheckboxView = CustomCheckboxView()
                     customCheckboxView.configure(
-                        title: "Select Options 3:",
+                        title: AddedFields.Field_Name,
                         checkBoxTitles: ["Option 1", "Option 2", "Option 3", "Option 4", "Option 5", "Option 2", "Option 3", "Option 4"]
                     )
+                    customCheckboxView.tag = index
+                    customCheckboxView.delegate = self
                     customCheckboxView.frame = CGRect(x: 0, y: 0, width: 300, height: 200)
                     customCheckboxView.backgroundColor = .white
                     stackView.addArrangedSubview(customCheckboxView)
@@ -214,9 +239,11 @@ class CustomFields: IViewController {
                 }else if AddedFields.Fld_Type == "CM"{
                     let customCheckboxView = CustomCheckboxView()
                     customCheckboxView.configure(
-                        title: "Select Options 3:",
+                        title: AddedFields.Field_Name,
                         checkBoxTitles: ["Option 1", "Option 2", "Option 3", "Option 4", "Option 5", "Option 2", "Option 3", "Option 4"]
                     )
+                    customCheckboxView.tag = index
+                    customCheckboxView.delegate = self
                     customCheckboxView.frame = CGRect(x: 0, y: 0, width: 300, height: 200)
                     customCheckboxView.backgroundColor = .white
                     stackView.addArrangedSubview(customCheckboxView)
@@ -226,11 +253,28 @@ class CustomFields: IViewController {
                     customTextField.configure(title: AddedFields.Field_Name, placeholder: "Enter the \(AddedFields.Field_Name)")
                     stackView.addArrangedSubview(customTextField)
                 }
+                index2 += 1
             }
+            index += 1
         }
-        print(scrollView.frame.height)
     }
 
+    @objc func fieldClicked(_ sender: UITextField) {
+        print("Field clicked at position: \(sender.tag)")
+    }
+    
+    @objc func viewClicked(_ sender: UITapGestureRecognizer) {
+        if let clickedView = sender.view {
+            print("View clicked at position: \(clickedView.tag)")
+        }
+    }
+    
+    // MARK: - CustomCheckboxViewDelegate
+    func checkboxViewDidSelect(_ title: String, isSelected: Bool, tag: Int, tags: [Int], Selectaheckbox: [String : Bool]) {
+        print("Checkbox '\(title)' with tag \(tag) is \(isSelected ? "selected" : "deselected")")
+        print(tags)
+        print(Selectaheckbox)
+    }
 
      }
      

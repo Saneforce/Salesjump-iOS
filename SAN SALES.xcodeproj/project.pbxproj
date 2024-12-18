@@ -154,6 +154,7 @@
 		3F7CCF0328F14CA3002A7C03 /* GEOTagging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7CCF0228F14CA3002A7C03 /* GEOTagging.swift */; };
 		3F7FD4EE2D016532006FEDED /* Secondary Order Details.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7FD4ED2D016532006FEDED /* Secondary Order Details.swift */; };
 		3F8292FF2CC786100098B191 /* DAY REPORT WITH DATE RANGE CELL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F8292FE2CC786100098B191 /* DAY REPORT WITH DATE RANGE CELL.swift */; };
+		3F85AE0E2D12CD5A00669DFD /* Header UILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F85AE0D2D12CD5A00669DFD /* Header UILabel.swift */; };
 		3F886A122C8EEDEB001F9A39 /* ClosingStockView (DB).swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F886A112C8EEDEB001F9A39 /* ClosingStockView (DB).swift */; };
 		3F8B989A2C594C610073D452 /* SFC Details View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F8B98992C594C610073D452 /* SFC Details View.swift */; };
 		3F8BF29D27E99CCA00E1C41B /* CameraService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F8BF29C27E99CCA00E1C41B /* CameraService.swift */; };
@@ -338,6 +339,7 @@
 		3F7CCF0228F14CA3002A7C03 /* GEOTagging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GEOTagging.swift; sourceTree = "<group>"; };
 		3F7FD4ED2D016532006FEDED /* Secondary Order Details.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Secondary Order Details.swift"; sourceTree = "<group>"; };
 		3F8292FE2CC786100098B191 /* DAY REPORT WITH DATE RANGE CELL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DAY REPORT WITH DATE RANGE CELL.swift"; sourceTree = "<group>"; };
+		3F85AE0D2D12CD5A00669DFD /* Header UILabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Header UILabel.swift"; sourceTree = "<group>"; };
 		3F886A112C8EEDEB001F9A39 /* ClosingStockView (DB).swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ClosingStockView (DB).swift"; sourceTree = "<group>"; };
 		3F8B98992C594C610073D452 /* SFC Details View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SFC Details View.swift"; sourceTree = "<group>"; };
 		3F8BF29C27E99CCA00E1C41B /* CameraService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraService.swift; sourceTree = "<group>"; };
@@ -495,6 +497,7 @@
 				3F0A5E542D1176AB00477F87 /* Custom Selection lbl.swift */,
 				3F0A5E562D117E6B00477F87 /* Custom Field Upload.swift */,
 				3F0A5E582D119AF800477F87 /* Padded UILabel.swift */,
+				3F85AE0D2D12CD5A00669DFD /* Header UILabel.swift */,
 			);
 			path = "Custom Fields";
 			sourceTree = "<group>";
@@ -953,6 +956,7 @@
 				38D0F76829BB2447003EEB03 /* BrandReviewVisit.swift in Sources */,
 				3F8292FF2CC786100098B191 /* DAY REPORT WITH DATE RANGE CELL.swift in Sources */,
 				388CD9292BDA3A7C003A06F9 /* SuperStockistOrderSubmittedDetails.swift in Sources */,
+				3F85AE0E2D12CD5A00669DFD /* Header UILabel.swift in Sources */,
 				3F97F9F62831B5950097166D /* AddNewCustomer.swift in Sources */,
 				15F9E7B32C5399D70057D4C6 /* MyResourcesRetailerList.swift in Sources */,
 				3F0A5E552D1176AB00477F87 /* Custom Selection lbl.swift in Sources */,
