@@ -26,6 +26,8 @@ class UserSetup{
     var SF_Name:String = ""
     var offerMode: Int = 0
     var SchemeBased : Int = 0
+    var primarySchemeBased : String = ""
+    var primarySchemeVisibility : String = ""
     var SuperStockistNeed : Int = 0
     var distributorBased : Int = 0
     var tpTargetBased : Int = 0
@@ -61,6 +63,7 @@ class UserSetup{
     var productRemark : Int = 0
     var productRCPA : String = ""
     var rateEditable : Int = 0
+    var primaryRateEditable : Int = 0
     var Eligibility_Nd:Int = 0
     var ClSaleEntryNd:Int = 0
     var hideClosingStockBatch:Int = 0
@@ -123,6 +126,7 @@ class UserSetup{
         productRCPA = lstSetups[0]["Product_RCPA"] as? String ?? ""
         productCard = lstSetups[0]["Prod_Card"] as? String ?? ""
         rateEditable = lstSetups[0]["RateEditable"] as? Int ?? 0
+        primaryRateEditable = lstSetups[0]["PriRateEditable"] as? Int ?? 0
         ExpDist_HQ = lstSetups[0]["ExpDist_HQ"] as? Int ?? 0
         ExpDist_HQEX = lstSetups[0]["ExpDist_HQEX"] as? Int ?? 0
         Eligibility_Nd = lstSetups[0]["Eligibility_Nd"] as? Int ?? 0
@@ -134,6 +138,8 @@ class UserSetup{
         Liters_Need = lstSetups[0]["Liters_Need"] as? Int ?? 0
         StkNeed = lstSetups[0]["StkNeed"] as? Int ?? 0
         currency_symbol = lstSetups[0]["currency_symbol"] as? String ?? ""
+        primarySchemeBased = lstSetups[0]["pri_scheme_based"] as? String ?? "0"
+        primarySchemeVisibility = lstSetups[0]["pri_scheme_visibility"] as? String ?? "0"
         DrCap = lstSetups[0]["DrCap"] as? String ?? ""
         Mandatory = lstSetups[0]["Mandatory"] as? String ?? ""
         

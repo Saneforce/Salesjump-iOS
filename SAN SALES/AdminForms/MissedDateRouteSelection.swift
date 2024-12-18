@@ -384,7 +384,7 @@ class MissedDateRouteSelection : IViewController , UITableViewDelegate,UITableVi
                 }
             }
             
-            savePrimaryOrder()
+            savePrimaryOrder1()
         }
         
         
@@ -490,171 +490,253 @@ class MissedDateRouteSelection : IViewController , UITableViewDelegate,UITableVi
         missedDateSubmit(self.allRetailerList.filter{$0.isSelected})
     }
     
-    func saveSecondaryOrder() {
+    func savePrimaryOrder1() {
         let retailerLists = self.allRetailerList.filter{$0.isSelected}
-        
-        
+
         for retailerList in retailerLists {
-            
+
             var productString = ""
-            
+
             var stkcode = ""
             var stkName = ""
-            
+
             for i in 0..<retailerList.orderList.count {
-                
+
                 print(i)
-                let item : [String:Any] = retailerList.orderList[i].item as! [String:Any]
                 
-                let id=String(format: "%@", item["id"] as! CVarArg)
-                let uom=String(format: "%@", item["UOM"] as! CVarArg)
-                let uomName=String(format: "%@", item["UOMNm"] as! String)
-                let uomConv=String(format: "%@", item["UOMConv"] as! CVarArg)
-                let netWt=String(format: "%@", item["NetWt"] as! CVarArg)
-                let netVal=(String(format: "%.2f", item["NetVal"] as! Double))
-                let Qty=String(format: "%@", item["Qty"] as? String ?? "")
-                let saleQty=String(format: "%.0f", item["SalQty"] as! Double)
-                let offQty=(String(format: "%.2f", item["OffQty"] as! Int))
-                let fq=String(format: "%@", item["FQ"] as? Int ?? "")
-                let offProd=String(format: "%@", item["OffProd"] as? CVarArg ?? "")
-                let rate=(String(format: "%.2f", item["Rate"] as! Double))
-                let offProdNm=String(format: "%@", item["OffProdNm"] as? CVarArg ?? "")
-                let scheme=String(format: "%@", item["Scheme"] as? Int ?? "")
-                let disc=String(format: "%@", item["Disc"] as? CVarArg ?? "")
-                let disVal=String(format: "%@", item["DisVal"] as? CVarArg ?? "")
+                let qty = retailerList.orderList[i].product.unitCount * (Int(retailerList.orderList[i].product.sampleQty) ?? 0)
+                var scheme : Int = 0
+                var offerProductCode : String = ""
+                var offerProductName:String = ""
+                var freePCount = retailerList.orderList[i].product.productId
+                var freePName = retailerList.orderList[i].product.productName
+                let sampleQty = (Int(retailerList.orderList[i].product.sampleQty) ?? 0)
+                let totalCount = retailerList.orderList[i].product.totalCount
                 
+                if UserSetup.shared.SchemeBased == 1 && UserSetup.shared.offerMode == 1 {
+                    scheme = retailerList.orderList[i].product.scheme
+                    offerProductCode = retailerList.orderList[i].product.offerProductCode
+                    offerProductName = retailerList.orderList[i].product.offerProductName
+                    freePCount = retailerList.orderList[i].product.offerProductCode
+                    freePName = retailerList.orderList[i].product.productName
+                }
+
                 stkcode = retailerList.orderList[i].distributorId ?? ""
                 stkName = retailerList.orderList[i].distributorName ?? ""
+
+                let rxQty = (Int(retailerList.orderList[i].product.sampleQty) ?? 0)
+
+                let productStr = "{\"product_code\":\"\(retailerList.orderList[i].product.productId)\",\"product_Name\":\"\(retailerList.orderList[i].product.productName)\",\"rx_Conqty\":\"\(rxQty)\",\"Qty\":\"\(qty)\",\"PQty\":0,\"cb_qty\":0,\"free\":\"\(retailerList.orderList[i].product.freeCount)\",\"Pfree\":0,\"Rate\":\"\(retailerList.orderList[i].product.rate)\",\"PieseRate\":\"\(retailerList.orderList[i].product.rate)\",\"discount\":\"\(retailerList.orderList[i].product.disCountPer)\",\"FreeP_Code\":\"\(freePCount)\",\"Fname\":\"\(freePName)\",\"discount_price\":\"\(retailerList.orderList[i].product.disCountAmount)\",\"tax\":\"\(retailerList.orderList[i].product.taxper)\",\"tax_price\":\"\(retailerList.orderList[i].product.taxAmount)\",\"OrdConv\":\"\(retailerList.orderList[i].product.unitCount)\",\"product_unit_name\":\"\(retailerList.orderList[i].product.unitName)\",\"Trans_POrd_No\":\"\",\"Order_Flag\":\"0\",\"Division_code\":\"0\",\"rateedited\":\"\(retailerList.orderList[i].product.rateEdited)\",\"distributor_price\":\"\(retailerList.orderList[i].product.retailerPrice)\",\"sample_qty\":\"\(retailerList.orderList[i].product.totalCount)\",\"selectedScheme\":\"\(scheme)\",\"selectedOffProCode\":\"\(offerProductCode)\",\"selectedOffProName\":\"\(offerProductName)\",\"selectedOffProUnit\":\"\(retailerList.orderList[i].product.unitCount)\",\"f_key\":{\"activity_stockist_code\":\"Activity_Stockist_Report\"}},"
+
+
                 
-                let productStr = "{\"product_code\":\"\(id)\",\"product_Name\":\"\(retailerList.orderList[i].productName ?? "")\",\"Product_Rx_Qty\":\(saleQty),\"UnitId\":\"\(uom)\",\"UnitName\":\"\(uomName)\",\"rx_Conqty\":\(Qty),\"Product_Rx_NQty\":\"0\",\"Product_Sample_Qty\":\"\(netVal)\",\"vanSalesOrder\":0,\"net_weight\":\"0.0\",\"free\":\"\(offQty)\",\"FreePQty\":\"\(fq)\",\"FreeP_Code\":\"\(offProd)\",\"Fname\":\"\(offProdNm)\",\"discount\":\"\(disc)\",\"discount_price\":\"\(disVal)\",\"tax\":\"0.0\",\"tax_price\":\"0.0\",\"Rate\":\"\(rate)\",\"Mfg_Date\":\"\",\"cb_qty\":\"0\",\"RcpaId\":\"\",\"Ccb_qty\":0,\"PromoVal\":0,\"rx_remarks\":\"\",\"rx_remarks_Id\":\"\",\"OrdConv\":\"\(uomConv)\",\"selectedScheme\":\"\(scheme)\",\"selectedOffProCode\":\"\(uom)\",\"selectedOffProName\":\"\(uomName)\",\"selectedOffProUnit\":\"1\",\"f_key\":{\"Activity_MSL_Code\":\"Activity_Doctor_Report\"}},"
-                
+
                 productString = productString + productStr
             }
-            
+
             print(productString)
             if productString.hasSuffix(","){
                 productString.removeLast()
             }
-            
+
             let workType = (String(format: "%@", self.selectedWorktype["id"] as? CVarArg ?? ""))
             let date = (selectedDate["name"] as? String ?? "") + " 00:00:00"
             let routeCode = retailerList.routeCode ?? ""
             let routeName = retailerList.routeName ?? ""
             let hqCode = retailerList.hqCode ?? ""
             let hqName = retailerList.hqName ?? ""
-            
-            let currentDate = GlobalFunc.getCurrDateAsString()
-            
-            eKey = String(format: "EK%@-%i", sfCode,Int((Date().timeIntervalSince1970)+Double(Int.random(in: 0..<500))))
-            
+
             let dataSF = hqCode == "" ? self.sfCode : hqCode
-            
-            let jsonString = "[{\"Activity_Report_APP\":{\"Worktype_code\":\"\'\(workType)\'\",\"Town_code\":\"\'\(routeCode)\'\",\"RateEditable\":\"\'\'\",\"dcr_activity_date\":\"\'\(date)\'\",\"workTypFlag_Missed\":\"\(selectedWorktype["FWFlg"] as? String ?? "")\",\"mydayplan\":1,\"mypln_town\":\"\'\(routeName)\'\",\"mypln_town_id\":\"\'\(routeCode)\'\",\"hq_code\":\"\'\(hqCode)\'\",\"hq_name\":\"\'\(hqName)\'\",\"missed_date_entry\":1,\"Daywise_Remarks\":\"\(retailerList.remarks ?? "")\",\"eKey\":\"\(self.eKey)\",\"rx\":\"\'1\'\",\"rx_t\":\"\'\'\",\"DataSF\":\"\'\(dataSF)\'\"}},{\"Activity_Doctor_Report\":{\"Doctor_POB\":0,\"Worked_With\":\"\'\'\",\"Doc_Meet_Time\":\"\'\(date)\'\",\"modified_time\":\"\'\(currentDate)\'\",\"net_weight_value\":\"1\",\"stockist_code\":\"\'\(stkcode)\'\",\"stockist_name\":\"\'\(stkName)\'\",\"superstockistid\":\"\'\'\",\"Discountpercent\":0,\"CheckinTime\":\"\(currentDate)\",\"CheckoutTime\":\"\(currentDate)\",\"location\":\"\'1\'\",\"geoaddress\":\"\",\"retLatitude\":\"\",\"retLongitude\":\"\",\"PhoneOrderTypes\":\"0\",\"Order_Stk\":\"\'\'\",\"Order_No\":\"\'\'\",\"rootTarget\":\"\",\"orderValue\":\"\(retailerList.orderList.first?.subtotal ?? "")\",\"rateMode\":\"free\",\"discount_price\":0,\"doctor_code\":\"\'\(retailerList.id)\'\",\"doctor_name\":\"\'\(retailerList.name ?? "")\'\",\"f_key\":{\"Activity_Report_Code\":\"\'Activity_Report_APP\'\"}}},{\"Activity_Sample_Report\":[\(productString)]},{\"Trans_Order_Details\":[]},{\"Activity_Input_Report\":[]},{\"Activity_Event_Captures\":[]},{\"PENDING_Bills\":[]},{\"Compititor_Product\":[]}]"
-            
-            
-            
-            
-           // retailerList.params = jsonString
-            if let index = self.allRetailerList.firstIndex(where: { (productInfo) -> Bool in
-                return retailerList.id == productInfo.id
-            }){
-                self.allRetailerList[index] = (RetailerList(id: retailerList.id,name: retailerList.name,townCode: retailerList.townCode, isSelected: retailerList.isSelected,orderList: retailerList.orderList,params: jsonString,mapId: retailerList.mapId))
-            }
-            
-            
-            
-        }
-        print(retailerLists)
-        
-        missedDateSubmit(self.allRetailerList.filter{$0.isSelected})
-    
-        
-        
-        
-    }
-    
-    func savePrimaryOrder() {
-        let retailerLists = self.allRetailerList.filter{$0.isSelected}
-        
-        for retailerList in retailerLists {
-            
-            var productString = ""
-            
-            var stkcode = ""
-            var stkName = ""
-            
-            for i in 0..<retailerList.orderList.count {
-                
-                let item : [String:Any] = retailerList.orderList[i].item as! [String:Any]
-                let id=String(format: "%@", item["id"] as! CVarArg)
-                let uom=String(format: "%@", item["UOM"] as! String)
-                let uomName=String(format: "%@", item["UOMNm"] as! String)
-                let uomConv=String(format: "%@", item["UOMConv"] as! String)
-                let netWt=String(format: "%@", item["NetWt"] as! CVarArg)
-                let netVal=(String(format: "%.2f", item["NetVal"] as! Double))
-                let Qty=String(format: "%@", item["Qty"] as? String ?? "")
-                let saleQty=String(format: "%.0f", item["SalQty"] as! Double)
-                let offQty=(String(format: "%.2f", item["OffQty"] as! Int))
-               // let fq=String(format: "%@", item["FQ"] as? Int ?? 0)
-                let offProd=String(format: "%@", item["OffProd"] as? String ?? "")
-                let rate=(String(format: "%.2f", item["Rate"] as! Double))
-                let offProdNm=String(format: "%@", item["OffProdNm"] as? String ?? "")
-                let scheme=(String(format: "%.0f", item["Scheme"] as! Double))
-                let disc=String(format: "%@", item["Disc"] as? String ?? "")
-                let disVal=String(format: "%@", item["DisVal"] as? String ?? "")
-                
-                stkcode = retailerList.orderList[i].distributorId ?? ""
-                stkName = retailerList.orderList[i].distributorName ?? ""
-                
-              //  let productStr = "{\"product_code\":\"\(id)\",\"product_Name\":\"\(retailerList.orderList[i].productName ?? "")\",\"Product_Rx_Qty\":\(saleQty),\"UnitId\":\"\(uom)\",\"UnitName\":\"\(uomName)\",\"rx_Conqty\":\(Qty),\"Product_Rx_NQty\":\"0\",\"Product_Sample_Qty\":\"\(netVal)\",\"vanSalesOrder\":0,\"net_weight\":\"0.0\",\"free\":\"\(offQty)\",\"FreePQty\":\"\(fq)\",\"FreeP_Code\":\"\(offProd)\",\"Fname\":\"\(offProdNm)\",\"discount\":\"\(disc)\",\"discount_price\":\"\(disVal)\",\"tax\":\"0.0\",\"tax_price\":\"0.0\",\"Rate\":\"\(rate)\",\"Mfg_Date\":\"\",\"cb_qty\":\"0\",\"RcpaId\":\"\",\"Ccb_qty\":0,\"PromoVal\":0,\"rx_remarks\":\"\",\"rx_remarks_Id\":\"\",\"OrdConv\":\"\(uomConv)\",\"selectedScheme\":\"\(scheme)\",\"selectedOffProCode\":\"\(uom)\",\"selectedOffProName\":\"\(uomName)\",\"selectedOffProUnit\":\"1\",\"f_key\":{\"Activity_MSL_Code\":\"Activity_Doctor_Report\"}},"
-                
-                
-                let productStr = "{\"product_code\":\"\(id)\",\"product_Name\":\"\(retailerList.orderList[i].productName ?? "")\",\"rx_Conqty\":\"\(Qty)\",\"Qty\":\"\(saleQty)\",\"PQty\":0,\"cb_qty\":0,\"free\":\"\(offQty)\",\"Pfree\":0,\"Rate\":\"\(rate)\",\"PieseRate\":\"\(rate)\",\"discount\":\"\(disc)\",\"FreeP_Code\":\"\(offProd)\",\"Fname\":\"\(offProdNm)\",\"discount_price\":\"\(disVal)\",\"tax\":\"0.0\",\"tax_price\":\"0.0\",\"OrdConv\":\"\(uomConv)\",\"product_unit_name\":\"\(uomName)\",\"selectedScheme\":\"\(scheme)\",\"selectedOffProCode\":\"\(uom)\",\"selectedOffProName\":\"\(uomName)\",\"selectedOffProUnit\":\"\(uomConv)\",\"f_key\":{\"activity_stockist_code\":\"Activity_Stockist_Report\"}},"
-                
-                
-                
-                
-                productString = productString + productStr
-            }
-            
-            print(productString)
-            if productString.hasSuffix(","){
-                productString.removeLast()
-            }
-            
-            let workType = (String(format: "%@", self.selectedWorktype["id"] as? CVarArg ?? ""))
-            let date = (selectedDate["name"] as? String ?? "") + " 00:00:00"
-            let routeCode = retailerList.routeCode ?? ""
-            let routeName = retailerList.routeName ?? ""
-            let hqCode = retailerList.hqCode ?? ""
-            let hqName = retailerList.hqName ?? ""
-            
-            let dataSF = hqCode == "" ? self.sfCode : hqCode
-            
+
             let currentDate = GlobalFunc.getCurrDateAsString()
-            
+
             eKey = String(format: "EK%@-%i", sfCode,Int((Date().timeIntervalSince1970)+Double(Int.random(in: 0..<500))))
-            
+
             let jsonString = "[{\"Activity_Report_APP\":{\"Worktype_code\":\"'\(workType)'\",\"Town_code\":\"'\(routeCode)'\",\"RateEditable\":\"\'\'\",\"dcr_activity_date\":\"\'\(date)\'\",\"workTypFlag_Missed\":\"\(selectedWorktype["FWFlg"] as? String ?? "")\",\"mydayplan\":1,\"mypln_town\":\"\'\(routeName)\'\",\"mypln_town_id\":\"\'\(routeCode)\'\",\"hq_code\":\"\'\(hqCode)\'\",\"hq_name\":\"\'\(hqName)\'\",\"missed_date_entry\":1,\"Daywise_Remarks\":\"\(retailerList.remarks ?? "")\",\"eKey\":\"\(self.eKey)\",\"rx\":\"\'1\'\",\"rx_t\":\"\'\'\",\"DataSF\":\"\'\(dataSF)\'\"}},{\"Activity_Stockist_Report\":{\"Worked_With\":\"\'\'\",\"Stk_Meet_Time\":\"\'\(date)\'\",\"modified_time\":\"\'\(currentDate)\'\",\"net_weight_value\":\"0.0\",\"stockist_code\":\"\'\(retailerList.id)\'\",\"stockist_name\":\"\'\(retailerList.name ?? "")\'\",\"superstockistid\":\"\'\'\",\"Discountpercent\":0,\"CheckinTime\":\"\(currentDate)\",\"CheckoutTime\":\"\(currentDate)\",\"location\":\"\'1.5\'\",\"geoaddress\":\"\",\"Super_Stck_code\":\"\'\(stkcode)\'\",\"Stockist_POB\":\"0\",\"date_of_intrument\":\"\",\"intrumenttype\":\"\",\"orderValue\":\"\(retailerList.orderList.first?.subtotal ?? "")\",\"Aob\":0,\"PhoneOrderTypes\":\"0\",\"f_key\":{\"Activity_Report_Code\":\"\'Activity_Report_APP\'\"}}},{\"Activity_Stk_POB_Report\":[\(productString)]},{\"Activity_Stk_Sample_Report\":[]},{\"Activity_Event_Captures\":[]},{\"PENDING_Bills\":[]},{\"Compititor_Product\":[]}]"
-            
-            
-            
+
+
+
            // retailerList.params = jsonString
             if let index = self.allRetailerList.firstIndex(where: { (productInfo) -> Bool in
                 return retailerList.id == productInfo.id
             }){
-               // self.allRetailerList[index] = (RetailerList(id: retailerList.id,name: retailerList.name,townCode: retailerList.townCode, isSelected: retailerList.isSelected,orderList: retailerList.orderList,params: jsonString,mapId: retailerList.mapId))
                 self.allRetailerList[index] = (RetailerList(id: retailerList.id,name: retailerList.name,townCode: retailerList.townCode, isSelected: retailerList.isSelected,routeName: retailerList.routeName,routeCode: retailerList.routeCode,hqCode: retailerList.hqCode,hqName: retailerList.hqName,distributorCode: retailerList.distributorCode,distributorName: retailerList.distributorName,orderList: retailerList.orderList,secOrderList: retailerList.secOrderList,params: jsonString,remarks: retailerList.remarks,remarksId: retailerList.remarksId,mapId: retailerList.mapId))
             }
-            
-            
-            
+
+
+
         }
-        
-        
+
+
         missedDateSubmit(self.allRetailerList.filter{$0.isSelected})
-        
+
     }
+    
+//    func saveSecondaryOrder() {
+//        let retailerLists = self.allRetailerList.filter{$0.isSelected}
+//        
+//        
+//        for retailerList in retailerLists {
+//            
+//            var productString = ""
+//            
+//            var stkcode = ""
+//            var stkName = ""
+//            
+//            for i in 0..<retailerList.orderList.count {
+//                
+//                print(i)
+//                let item : [String:Any] = retailerList.orderList[i].item as! [String:Any]
+//                
+//                let id=String(format: "%@", item["id"] as! CVarArg)
+//                let uom=String(format: "%@", item["UOM"] as! CVarArg)
+//                let uomName=String(format: "%@", item["UOMNm"] as! String)
+//                let uomConv=String(format: "%@", item["UOMConv"] as! CVarArg)
+//                let netWt=String(format: "%@", item["NetWt"] as! CVarArg)
+//                let netVal=(String(format: "%.2f", item["NetVal"] as! Double))
+//                let Qty=String(format: "%@", item["Qty"] as? String ?? "")
+//                let saleQty=String(format: "%.0f", item["SalQty"] as! Double)
+//                let offQty=(String(format: "%.2f", item["OffQty"] as! Int))
+//                let fq=String(format: "%@", item["FQ"] as? Int ?? "")
+//                let offProd=String(format: "%@", item["OffProd"] as? CVarArg ?? "")
+//                let rate=(String(format: "%.2f", item["Rate"] as! Double))
+//                let offProdNm=String(format: "%@", item["OffProdNm"] as? CVarArg ?? "")
+//                let scheme=String(format: "%@", item["Scheme"] as? Int ?? "")
+//                let disc=String(format: "%@", item["Disc"] as? CVarArg ?? "")
+//                let disVal=String(format: "%@", item["DisVal"] as? CVarArg ?? "")
+//                
+//                stkcode = retailerList.orderList[i].distributorId ?? ""
+//                stkName = retailerList.orderList[i].distributorName ?? ""
+//                
+//                let productStr = "{\"product_code\":\"\(id)\",\"product_Name\":\"\(retailerList.orderList[i].productName ?? "")\",\"Product_Rx_Qty\":\(saleQty),\"UnitId\":\"\(uom)\",\"UnitName\":\"\(uomName)\",\"rx_Conqty\":\(Qty),\"Product_Rx_NQty\":\"0\",\"Product_Sample_Qty\":\"\(netVal)\",\"vanSalesOrder\":0,\"net_weight\":\"0.0\",\"free\":\"\(offQty)\",\"FreePQty\":\"\(fq)\",\"FreeP_Code\":\"\(offProd)\",\"Fname\":\"\(offProdNm)\",\"discount\":\"\(disc)\",\"discount_price\":\"\(disVal)\",\"tax\":\"0.0\",\"tax_price\":\"0.0\",\"Rate\":\"\(rate)\",\"Mfg_Date\":\"\",\"cb_qty\":\"0\",\"RcpaId\":\"\",\"Ccb_qty\":0,\"PromoVal\":0,\"rx_remarks\":\"\",\"rx_remarks_Id\":\"\",\"OrdConv\":\"\(uomConv)\",\"selectedScheme\":\"\(scheme)\",\"selectedOffProCode\":\"\(uom)\",\"selectedOffProName\":\"\(uomName)\",\"selectedOffProUnit\":\"1\",\"f_key\":{\"Activity_MSL_Code\":\"Activity_Doctor_Report\"}},"
+//                
+//                productString = productString + productStr
+//            }
+//            
+//            print(productString)
+//            if productString.hasSuffix(","){
+//                productString.removeLast()
+//            }
+//            
+//            let workType = (String(format: "%@", self.selectedWorktype["id"] as? CVarArg ?? ""))
+//            let date = (selectedDate["name"] as? String ?? "") + " 00:00:00"
+//            let routeCode = retailerList.routeCode ?? ""
+//            let routeName = retailerList.routeName ?? ""
+//            let hqCode = retailerList.hqCode ?? ""
+//            let hqName = retailerList.hqName ?? ""
+//            
+//            let currentDate = GlobalFunc.getCurrDateAsString()
+//            
+//            eKey = String(format: "EK%@-%i", sfCode,Int((Date().timeIntervalSince1970)+Double(Int.random(in: 0..<500))))
+//            
+//            let dataSF = hqCode == "" ? self.sfCode : hqCode
+//            
+//            let jsonString = "[{\"Activity_Report_APP\":{\"Worktype_code\":\"\'\(workType)\'\",\"Town_code\":\"\'\(routeCode)\'\",\"RateEditable\":\"\'\'\",\"dcr_activity_date\":\"\'\(date)\'\",\"workTypFlag_Missed\":\"\(selectedWorktype["FWFlg"] as? String ?? "")\",\"mydayplan\":1,\"mypln_town\":\"\'\(routeName)\'\",\"mypln_town_id\":\"\'\(routeCode)\'\",\"hq_code\":\"\'\(hqCode)\'\",\"hq_name\":\"\'\(hqName)\'\",\"missed_date_entry\":1,\"Daywise_Remarks\":\"\(retailerList.remarks ?? "")\",\"eKey\":\"\(self.eKey)\",\"rx\":\"\'1\'\",\"rx_t\":\"\'\'\",\"DataSF\":\"\'\(dataSF)\'\"}},{\"Activity_Doctor_Report\":{\"Doctor_POB\":0,\"Worked_With\":\"\'\'\",\"Doc_Meet_Time\":\"\'\(date)\'\",\"modified_time\":\"\'\(currentDate)\'\",\"net_weight_value\":\"1\",\"stockist_code\":\"\'\(stkcode)\'\",\"stockist_name\":\"\'\(stkName)\'\",\"superstockistid\":\"\'\'\",\"Discountpercent\":0,\"CheckinTime\":\"\(currentDate)\",\"CheckoutTime\":\"\(currentDate)\",\"location\":\"\'1\'\",\"geoaddress\":\"\",\"retLatitude\":\"\",\"retLongitude\":\"\",\"PhoneOrderTypes\":\"0\",\"Order_Stk\":\"\'\'\",\"Order_No\":\"\'\'\",\"rootTarget\":\"\",\"orderValue\":\"\(retailerList.orderList.first?.subtotal ?? "")\",\"rateMode\":\"free\",\"discount_price\":0,\"doctor_code\":\"\'\(retailerList.id)\'\",\"doctor_name\":\"\'\(retailerList.name ?? "")\'\",\"f_key\":{\"Activity_Report_Code\":\"\'Activity_Report_APP\'\"}}},{\"Activity_Sample_Report\":[\(productString)]},{\"Trans_Order_Details\":[]},{\"Activity_Input_Report\":[]},{\"Activity_Event_Captures\":[]},{\"PENDING_Bills\":[]},{\"Compititor_Product\":[]}]"
+//            
+//            
+//            
+//            
+//           // retailerList.params = jsonString
+//            if let index = self.allRetailerList.firstIndex(where: { (productInfo) -> Bool in
+//                return retailerList.id == productInfo.id
+//            }){
+//                self.allRetailerList[index] = (RetailerList(id: retailerList.id,name: retailerList.name,townCode: retailerList.townCode, isSelected: retailerList.isSelected,orderList: retailerList.orderList,params: jsonString,mapId: retailerList.mapId))
+//            }
+//            
+//            
+//            
+//        }
+//        print(retailerLists)
+//        
+//        missedDateSubmit(self.allRetailerList.filter{$0.isSelected})
+//    
+//        
+//        
+//        
+//    }
+    
+//    func savePrimaryOrder() {
+//        let retailerLists = self.allRetailerList.filter{$0.isSelected}
+//        
+//        for retailerList in retailerLists {
+//            
+//            var productString = ""
+//            
+//            var stkcode = ""
+//            var stkName = ""
+//            
+//            for i in 0..<retailerList.orderList.count {
+//                
+//                let item : [String:Any] = retailerList.orderList[i].item as! [String:Any]
+//                let id=String(format: "%@", item["id"] as! CVarArg)
+//                let uom=String(format: "%@", item["UOM"] as! String)
+//                let uomName=String(format: "%@", item["UOMNm"] as! String)
+//                let uomConv=String(format: "%@", item["UOMConv"] as! String)
+//                let netWt=String(format: "%@", item["NetWt"] as! CVarArg)
+//                let netVal=(String(format: "%.2f", item["NetVal"] as! Double))
+//                let Qty=String(format: "%@", item["Qty"] as? String ?? "")
+//                let saleQty=String(format: "%.0f", item["SalQty"] as! Double)
+//                let offQty=(String(format: "%.2f", item["OffQty"] as! Int))
+//               // let fq=String(format: "%@", item["FQ"] as? Int ?? 0)
+//                let offProd=String(format: "%@", item["OffProd"] as? String ?? "")
+//                let rate=(String(format: "%.2f", item["Rate"] as! Double))
+//                let offProdNm=String(format: "%@", item["OffProdNm"] as? String ?? "")
+//                let scheme=(String(format: "%.0f", item["Scheme"] as! Double))
+//                let disc=String(format: "%@", item["Disc"] as? String ?? "")
+//                let disVal=String(format: "%@", item["DisVal"] as? String ?? "")
+//                
+//                stkcode = retailerList.orderList[i].distributorId ?? ""
+//                stkName = retailerList.orderList[i].distributorName ?? ""
+//                
+//              //  let productStr = "{\"product_code\":\"\(id)\",\"product_Name\":\"\(retailerList.orderList[i].productName ?? "")\",\"Product_Rx_Qty\":\(saleQty),\"UnitId\":\"\(uom)\",\"UnitName\":\"\(uomName)\",\"rx_Conqty\":\(Qty),\"Product_Rx_NQty\":\"0\",\"Product_Sample_Qty\":\"\(netVal)\",\"vanSalesOrder\":0,\"net_weight\":\"0.0\",\"free\":\"\(offQty)\",\"FreePQty\":\"\(fq)\",\"FreeP_Code\":\"\(offProd)\",\"Fname\":\"\(offProdNm)\",\"discount\":\"\(disc)\",\"discount_price\":\"\(disVal)\",\"tax\":\"0.0\",\"tax_price\":\"0.0\",\"Rate\":\"\(rate)\",\"Mfg_Date\":\"\",\"cb_qty\":\"0\",\"RcpaId\":\"\",\"Ccb_qty\":0,\"PromoVal\":0,\"rx_remarks\":\"\",\"rx_remarks_Id\":\"\",\"OrdConv\":\"\(uomConv)\",\"selectedScheme\":\"\(scheme)\",\"selectedOffProCode\":\"\(uom)\",\"selectedOffProName\":\"\(uomName)\",\"selectedOffProUnit\":\"1\",\"f_key\":{\"Activity_MSL_Code\":\"Activity_Doctor_Report\"}},"
+//                
+//                
+//                let productStr = "{\"product_code\":\"\(id)\",\"product_Name\":\"\(retailerList.orderList[i].productName ?? "")\",\"rx_Conqty\":\"\(Qty)\",\"Qty\":\"\(saleQty)\",\"PQty\":0,\"cb_qty\":0,\"free\":\"\(offQty)\",\"Pfree\":0,\"Rate\":\"\(rate)\",\"PieseRate\":\"\(rate)\",\"discount\":\"\(disc)\",\"FreeP_Code\":\"\(offProd)\",\"Fname\":\"\(offProdNm)\",\"discount_price\":\"\(disVal)\",\"tax\":\"0.0\",\"tax_price\":\"0.0\",\"OrdConv\":\"\(uomConv)\",\"product_unit_name\":\"\(uomName)\",\"selectedScheme\":\"\(scheme)\",\"selectedOffProCode\":\"\(uom)\",\"selectedOffProName\":\"\(uomName)\",\"selectedOffProUnit\":\"\(uomConv)\",\"f_key\":{\"activity_stockist_code\":\"Activity_Stockist_Report\"}},"
+//                
+//                
+//                
+//                
+//                productString = productString + productStr
+//            }
+//            
+//            print(productString)
+//            if productString.hasSuffix(","){
+//                productString.removeLast()
+//            }
+//            
+//            let workType = (String(format: "%@", self.selectedWorktype["id"] as? CVarArg ?? ""))
+//            let date = (selectedDate["name"] as? String ?? "") + " 00:00:00"
+//            let routeCode = retailerList.routeCode ?? ""
+//            let routeName = retailerList.routeName ?? ""
+//            let hqCode = retailerList.hqCode ?? ""
+//            let hqName = retailerList.hqName ?? ""
+//            
+//            let dataSF = hqCode == "" ? self.sfCode : hqCode
+//            
+//            let currentDate = GlobalFunc.getCurrDateAsString()
+//            
+//            eKey = String(format: "EK%@-%i", sfCode,Int((Date().timeIntervalSince1970)+Double(Int.random(in: 0..<500))))
+//            
+//            let jsonString = "[{\"Activity_Report_APP\":{\"Worktype_code\":\"'\(workType)'\",\"Town_code\":\"'\(routeCode)'\",\"RateEditable\":\"\'\'\",\"dcr_activity_date\":\"\'\(date)\'\",\"workTypFlag_Missed\":\"\(selectedWorktype["FWFlg"] as? String ?? "")\",\"mydayplan\":1,\"mypln_town\":\"\'\(routeName)\'\",\"mypln_town_id\":\"\'\(routeCode)\'\",\"hq_code\":\"\'\(hqCode)\'\",\"hq_name\":\"\'\(hqName)\'\",\"missed_date_entry\":1,\"Daywise_Remarks\":\"\(retailerList.remarks ?? "")\",\"eKey\":\"\(self.eKey)\",\"rx\":\"\'1\'\",\"rx_t\":\"\'\'\",\"DataSF\":\"\'\(dataSF)\'\"}},{\"Activity_Stockist_Report\":{\"Worked_With\":\"\'\'\",\"Stk_Meet_Time\":\"\'\(date)\'\",\"modified_time\":\"\'\(currentDate)\'\",\"net_weight_value\":\"0.0\",\"stockist_code\":\"\'\(retailerList.id)\'\",\"stockist_name\":\"\'\(retailerList.name ?? "")\'\",\"superstockistid\":\"\'\'\",\"Discountpercent\":0,\"CheckinTime\":\"\(currentDate)\",\"CheckoutTime\":\"\(currentDate)\",\"location\":\"\'1.5\'\",\"geoaddress\":\"\",\"Super_Stck_code\":\"\'\(stkcode)\'\",\"Stockist_POB\":\"0\",\"date_of_intrument\":\"\",\"intrumenttype\":\"\",\"orderValue\":\"\(retailerList.orderList.first?.subtotal ?? "")\",\"Aob\":0,\"PhoneOrderTypes\":\"0\",\"f_key\":{\"Activity_Report_Code\":\"\'Activity_Report_APP\'\"}}},{\"Activity_Stk_POB_Report\":[\(productString)]},{\"Activity_Stk_Sample_Report\":[]},{\"Activity_Event_Captures\":[]},{\"PENDING_Bills\":[]},{\"Compititor_Product\":[]}]"
+//            
+//            
+//            
+//           // retailerList.params = jsonString
+//            if let index = self.allRetailerList.firstIndex(where: { (productInfo) -> Bool in
+//                return retailerList.id == productInfo.id
+//            }){
+//               // self.allRetailerList[index] = (RetailerList(id: retailerList.id,name: retailerList.name,townCode: retailerList.townCode, isSelected: retailerList.isSelected,orderList: retailerList.orderList,params: jsonString,mapId: retailerList.mapId))
+//                self.allRetailerList[index] = (RetailerList(id: retailerList.id,name: retailerList.name,townCode: retailerList.townCode, isSelected: retailerList.isSelected,routeName: retailerList.routeName,routeCode: retailerList.routeCode,hqCode: retailerList.hqCode,hqName: retailerList.hqName,distributorCode: retailerList.distributorCode,distributorName: retailerList.distributorName,orderList: retailerList.orderList,secOrderList: retailerList.secOrderList,params: jsonString,remarks: retailerList.remarks,remarksId: retailerList.remarksId,mapId: retailerList.mapId))
+//            }
+//            
+//            
+//            
+//        }
+//        
+//        
+//        missedDateSubmit(self.allRetailerList.filter{$0.isSelected})
+//        
+//    }
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -815,13 +897,30 @@ class MissedDateRouteSelection : IViewController , UITableViewDelegate,UITableVi
         }else {
 
             
-            let primaryOrder = UIStoryboard.primaryOrder
-            primaryOrder.isFromMissedEntry = true
-            primaryOrder.selectedProducts = self.retailerList[indexPath.row].orderList
-            primaryOrder.missedDateEditData = { paramString in
+//            let primaryOrder = UIStoryboard.primaryOrder
+//            primaryOrder.isFromMissedEntry = true
+//            primaryOrder.selectedProducts = self.retailerList[indexPath.row].orderList
+//            primaryOrder.missedDateEditData = { paramString in
+//                print(paramString)
+//                self.retailerList[indexPath.row].orderList = paramString
+//                
+//                if let index = self.allRetailerList.firstIndex(where: { (productInfo) -> Bool in
+//                    return self.retailerList[indexPath.row].id == productInfo.id
+//                }){
+//                    self.allRetailerList[index] = self.retailerList[indexPath.row]
+//                }
+//                
+//                self.tableViewOrderList.reloadRows(at: [indexPath], with: .automatic)
+//            }
+//            self.navigationController?.pushViewController(primaryOrder, animated: true)
+            
+            let primaryOrderNew = UIStoryboard.primaryOrderNew
+            primaryOrderNew.isFromMissedEntry = true
+            primaryOrderNew.selectedProductsforMissed = self.retailerList[indexPath.row].orderList
+            primaryOrderNew.missedDateEditData = { paramString in
                 print(paramString)
                 self.retailerList[indexPath.row].orderList = paramString
-                
+                 
                 if let index = self.allRetailerList.firstIndex(where: { (productInfo) -> Bool in
                     return self.retailerList[indexPath.row].id == productInfo.id
                 }){
@@ -830,7 +929,7 @@ class MissedDateRouteSelection : IViewController , UITableViewDelegate,UITableVi
                 
                 self.tableViewOrderList.reloadRows(at: [indexPath], with: .automatic)
             }
-            self.navigationController?.pushViewController(primaryOrder, animated: true)
+            self.navigationController?.pushViewController(primaryOrderNew, animated: true)
         }
      
     }
@@ -978,7 +1077,7 @@ struct RetailerList {
     var distributorCode : String!
     var distributorName : String!
     
-    var orderList = [SecondaryOrderSelectedList]()
+    var orderList = [SecondaryOrderNewSelectedList]()
     var secOrderList = [SecondaryOrderNewSelectedList]()
     var params : String!
     var remarks : String!
@@ -1022,5 +1121,12 @@ extension UIStoryboard {
             fatalError("primaryOrder couldn't be found in Storyboard file")
         }
         return primaryOrder
+    }
+    
+    static var primaryOrderNew:PrimaryOrderNew {
+        guard let primaryOrderNew = UIStoryboard.main.instantiateViewController(withIdentifier: "sbPrimaryOrderNew") as? PrimaryOrderNew else {
+            fatalError("PrimaryOrderNew couldn't be found in Storyboard file")
+        }
+        return primaryOrderNew
     }
 }

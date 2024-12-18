@@ -202,7 +202,7 @@ class TourPlanCalenderScreen : UIViewController, FSCalendarDelegate, FSCalendarD
         // http://fmcg.salesjump.in/server/native_Db_V13.php?axn=gettour_month_value&divisionCode=29%2C&sfCode=SEFMR0040&TourMont=04&Tyear=2024
         
        // print(<#T##items: Any...##Any#>)
-        print(APIClient.shared.BaseURL+APIClient.shared.DBURL+"gettour_month_value&divisionCode=" + self.divCode + "&sfCode="+self.sfCode + "&TourMont=\(month)" + "&Tyear=\(year)")
+        print(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"gettour_month_value&divisionCode=" + self.divCode + "&sfCode="+self.sfCode + "&TourMont=\(month)" + "&Tyear=\(year)")
         
         AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL1+"gettour_month_value&divisionCode=" + self.divCode + "&sfCode="+self.sfCode + "&TourMont=\(month)" + "&Tyear=\(year)",method : .get,parameters: nil,encoding: URLEncoding.httpBody,headers: nil).validate(statusCode: 200..<209).responseData { AFData in
             DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
