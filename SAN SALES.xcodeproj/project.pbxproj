@@ -151,6 +151,12 @@
 		3F619F3E27EB275000F3D05F /* CLocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F619F3D27EB274F00F3D05F /* CLocationService.swift */; };
 		3F61CA692C9157730029CE01 /* Closing Sale Entry (DB).swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F61CA682C9157730029CE01 /* Closing Sale Entry (DB).swift */; };
 		3F6CD0522CD9BD91008AEACE /* Distributor Order Details cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F6CD0512CD9BD91008AEACE /* Distributor Order Details cell.swift */; };
+		3F7A1F5C2D142CB0002C6776 /* UploadPopUpController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7A1F5A2D142CB0002C6776 /* UploadPopUpController.swift */; };
+		3F7A1F5D2D142CB0002C6776 /* UploadPopUpController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3F7A1F5B2D142CB0002C6776 /* UploadPopUpController.xib */; };
+		3F7A1F602D1437D3002C6776 /* SelectDatePopUpController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7A1F5E2D1437D3002C6776 /* SelectDatePopUpController.swift */; };
+		3F7A1F612D1437D3002C6776 /* SelectDatePopUpController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3F7A1F5F2D1437D3002C6776 /* SelectDatePopUpController.xib */; };
+		3F7A1F642D1448F5002C6776 /* DatePickerPopUPController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7A1F622D1448F5002C6776 /* DatePickerPopUPController.swift */; };
+		3F7A1F652D1448F5002C6776 /* DatePickerPopUPController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3F7A1F632D1448F5002C6776 /* DatePickerPopUPController.xib */; };
 		3F7CCF0328F14CA3002A7C03 /* GEOTagging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7CCF0228F14CA3002A7C03 /* GEOTagging.swift */; };
 		3F7FD4EE2D016532006FEDED /* Secondary Order Details.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7FD4ED2D016532006FEDED /* Secondary Order Details.swift */; };
 		3F8292FF2CC786100098B191 /* DAY REPORT WITH DATE RANGE CELL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F8292FE2CC786100098B191 /* DAY REPORT WITH DATE RANGE CELL.swift */; };
@@ -336,6 +342,12 @@
 		3F619F3D27EB274F00F3D05F /* CLocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CLocationService.swift; sourceTree = "<group>"; };
 		3F61CA682C9157730029CE01 /* Closing Sale Entry (DB).swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Closing Sale Entry (DB).swift"; sourceTree = "<group>"; };
 		3F6CD0512CD9BD91008AEACE /* Distributor Order Details cell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Distributor Order Details cell.swift"; sourceTree = "<group>"; };
+		3F7A1F5A2D142CB0002C6776 /* UploadPopUpController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadPopUpController.swift; sourceTree = "<group>"; };
+		3F7A1F5B2D142CB0002C6776 /* UploadPopUpController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UploadPopUpController.xib; sourceTree = "<group>"; };
+		3F7A1F5E2D1437D3002C6776 /* SelectDatePopUpController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectDatePopUpController.swift; sourceTree = "<group>"; };
+		3F7A1F5F2D1437D3002C6776 /* SelectDatePopUpController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SelectDatePopUpController.xib; sourceTree = "<group>"; };
+		3F7A1F622D1448F5002C6776 /* DatePickerPopUPController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerPopUPController.swift; sourceTree = "<group>"; };
+		3F7A1F632D1448F5002C6776 /* DatePickerPopUPController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DatePickerPopUPController.xib; sourceTree = "<group>"; };
 		3F7CCF0228F14CA3002A7C03 /* GEOTagging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GEOTagging.swift; sourceTree = "<group>"; };
 		3F7FD4ED2D016532006FEDED /* Secondary Order Details.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Secondary Order Details.swift"; sourceTree = "<group>"; };
 		3F8292FE2CC786100098B191 /* DAY REPORT WITH DATE RANGE CELL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DAY REPORT WITH DATE RANGE CELL.swift"; sourceTree = "<group>"; };
@@ -498,6 +510,12 @@
 				3F0A5E562D117E6B00477F87 /* Custom Field Upload.swift */,
 				3F0A5E582D119AF800477F87 /* Padded UILabel.swift */,
 				3F85AE0D2D12CD5A00669DFD /* Header UILabel.swift */,
+				3F7A1F5A2D142CB0002C6776 /* UploadPopUpController.swift */,
+				3F7A1F5B2D142CB0002C6776 /* UploadPopUpController.xib */,
+				3F7A1F5E2D1437D3002C6776 /* SelectDatePopUpController.swift */,
+				3F7A1F5F2D1437D3002C6776 /* SelectDatePopUpController.xib */,
+				3F7A1F622D1448F5002C6776 /* DatePickerPopUPController.swift */,
+				3F7A1F632D1448F5002C6776 /* DatePickerPopUPController.xib */,
 			);
 			path = "Custom Fields";
 			sourceTree = "<group>";
@@ -856,6 +874,7 @@
 				3F28CC0727D3927E00B95964 /* Poppins-Thin.ttf in Resources */,
 				3F28CC0227D3927E00B95964 /* Poppins-BlackItalic.ttf in Resources */,
 				384E56BC2BDB669F00B2E8A5 /* Approval.storyboard in Resources */,
+				3F7A1F612D1437D3002C6776 /* SelectDatePopUpController.xib in Resources */,
 				3F28CC0827D3927E00B95964 /* Poppins-SemiBold.ttf in Resources */,
 				3F28CC0527D3927E00B95964 /* Poppins-Bold.ttf in Resources */,
 				1514DF712BD7853B00E6B45A /* ItemViewController.xib in Resources */,
@@ -874,9 +893,11 @@
 				38B05F502B04CAE50025D4C0 /* ManagerDashboard.storyboard in Resources */,
 				1514DF6E2BD7839D00E6B45A /* CustomAlertVCViewController.xib in Resources */,
 				386A43932A1CC3E000CE1833 /* Submittedcalls.storyboard in Resources */,
+				3F7A1F5D2D142CB0002C6776 /* UploadPopUpController.xib in Resources */,
 				3F28CBFA27D3927E00B95964 /* Poppins-ThinItalic.ttf in Resources */,
 				3F28CBFE27D3927E00B95964 /* Poppins-Medium.ttf in Resources */,
 				3F2F811427CEB30D0015E1CA /* Assets.xcassets in Resources */,
+				3F7A1F652D1448F5002C6776 /* DatePickerPopUPController.xib in Resources */,
 				3F28CC0927D3927E00B95964 /* Poppins-Italic.ttf in Resources */,
 				15AB213D2C799F4C004437A6 /* RateEditViewController.xib in Resources */,
 				3F28CC0A27D3927E00B95964 /* Poppins-MediumItalic.ttf in Resources */,
@@ -954,6 +975,7 @@
 				15C4E4542CEE21970087281D /* OutBox.swift in Sources */,
 				3F06352A283A8C920027842E /* ColorTheme.swift in Sources */,
 				38D0F76829BB2447003EEB03 /* BrandReviewVisit.swift in Sources */,
+				3F7A1F642D1448F5002C6776 /* DatePickerPopUPController.swift in Sources */,
 				3F8292FF2CC786100098B191 /* DAY REPORT WITH DATE RANGE CELL.swift in Sources */,
 				388CD9292BDA3A7C003A06F9 /* SuperStockistOrderSubmittedDetails.swift in Sources */,
 				3F85AE0E2D12CD5A00669DFD /* Header UILabel.swift in Sources */,
@@ -974,6 +996,7 @@
 				3F0822BF29000D65009C33EA /* LeaveForm.swift in Sources */,
 				3F0A5E4D2D11539700477F87 /* Custom Text Field.swift in Sources */,
 				386889E22B1868F90015F20C /* RottPageViewController.swift in Sources */,
+				3F7A1F5C2D142CB0002C6776 /* UploadPopUpController.swift in Sources */,
 				3F8B989A2C594C610073D452 /* SFC Details View.swift in Sources */,
 				3F886A122C8EEDEB001F9A39 /* ClosingStockView (DB).swift in Sources */,
 				3F7FD4EE2D016532006FEDED /* Secondary Order Details.swift in Sources */,
@@ -1041,6 +1064,7 @@
 				3F2F810F27CEB30C0015E1CA /* ViewController.swift in Sources */,
 				3FBF387727E4AA8300900007 /* Toast.swift in Sources */,
 				15A4CB912D06C6A3008EB1DE /* FreeEditViewController.swift in Sources */,
+				3F7A1F602D1437D3002C6776 /* SelectDatePopUpController.swift in Sources */,
 				1514DF6C2BD7839D00E6B45A /* CallPreview.swift in Sources */,
 				3F0822BD29000872009C33EA /* AdminMenus.swift in Sources */,
 				15F4504E2C2A88DF0074D285 /* MissedDateSelection.swift in Sources */,

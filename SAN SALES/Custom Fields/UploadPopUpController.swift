@@ -9,21 +9,39 @@ import UIKit
 
 class UploadPopUpController: UIViewController {
 
+    @IBOutlet weak var PopupView: UIView!
+    @IBOutlet weak var Closepopup: UIImageView!
+    @IBOutlet weak var LiveCamera: UIImageView!
+    @IBOutlet weak var SelectFile: UIImageView!
+    
+     var didSelect : (String) -> () = { _ in}
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        PopupView.layer.cornerRadius = 8
+        Closepopup.addTarget(target: self, action: #selector(closeAction))
+        SelectFile.addTarget(target: self, action: #selector(selectedfileName))
     }
-
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+   @objc func closeAction() {
+        self.dismiss(animated: true)
     }
-    */
+    
+    init() {
+        super.init(nibName: "UploadPopUpController", bundle: Bundle(for: UploadPopUpController.self))
+        self.modalPresentationStyle = .overCurrentContext
+        self.modalTransitionStyle = .crossDissolve
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    
+    func show() {
+        UIApplication.shared.windows.first?.rootViewController?.present(self, animated: true, completion: nil)
+    }
+    
+    @objc func selectedfileName () {
+        didSelect("Test")
+     }
 
 }

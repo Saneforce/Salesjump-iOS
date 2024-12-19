@@ -9,8 +9,15 @@ import Foundation
 import UIKit
 
 
+protocol CustomSelectionLabelViewDelegate: AnyObject {
+    func CustomSelectionLabelDidSelect(tags: [Int],typ:String)
+}
+
+
 class CustomSelectionLabel: UIView {
-    
+    weak var delegate: CustomSelectionLabelViewDelegate?
+    var tags: [Int] = []
+    var Typ:String = ""
     // MARK: - UI Components
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -22,11 +29,17 @@ class CustomSelectionLabel: UIView {
     }()
     
     private let valueLabel: UILabel = {
-        let label = UILabel()
+        let label = PaddedLabel()
         label.text = "Value"
-        label.font = UIFont.systemFont(ofSize: 15, weight: .medium)
-        label.textColor = .black
-        label.numberOfLines = 1
+        label.backgroundColor = UIColor(red: 0.94, green: 0.95, blue: 0.98, alpha: 1.00)
+        label.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
+        label.textColor = UIColor(red: 0.40, green: 0.40, blue: 0.40, alpha: 1.00)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.edgeInsets = UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10)
+        label.numberOfLines = 0
+        label.layer.cornerRadius = 6
+        label.layer.masksToBounds = true
+        label.clipsToBounds  = true
         return label
     }()
     
@@ -47,6 +60,8 @@ class CustomSelectionLabel: UIView {
     private func setupView() {
         addSubview(titleLabel)
         addSubview(valueLabel)
+        valueLabel.isUserInteractionEnabled = true
+        setupActions()
     }
     
     private func setupConstraints() {
@@ -68,11 +83,24 @@ class CustomSelectionLabel: UIView {
         ])
     }
     
+    private func setupActions() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(valueLabelTapped))
+        valueLabel.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc private func valueLabelTapped() {
+        delegate?.CustomSelectionLabelDidSelect(tags: tags, typ: Typ)
+    }
+    
     // MARK: - Configuration
     func configure(title: String, value: String) {
         titleLabel.text = title
         valueLabel.text = value
         titleLabel.alpha = value.isEmpty ? 0 : 1
+    }
+    
+    func SetDatetext(Date:String){
+        valueLabel.text = Date
     }
     
     // MARK: - Animation

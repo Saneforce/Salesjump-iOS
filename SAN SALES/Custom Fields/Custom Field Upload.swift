@@ -9,10 +9,13 @@ import Foundation
 import UIKit
 
 protocol CustomFieldUploadViewDelegate: AnyObject {
-    func CustomFieldUploadDidSelect(_ title: String, isSelected: Bool, tag: Int, tags: [Int],Selectaheckbox:[String:Bool])
+    func CustomFieldUploadDidSelect(tags: [Int])
 }
 
 class CustomFieldUpload: UIView {
+    
+    weak var delegate: CustomFieldUploadViewDelegate? // Delegate reference
+    var tags: [Int] = []
     
     // MARK: - UI Components
     
@@ -33,6 +36,7 @@ class CustomFieldUpload: UIView {
         label.textColor = UIColor(red: 0.40, green: 0.40, blue: 0.40, alpha: 1.00)
         label.translatesAutoresizingMaskIntoConstraints = false
         label.edgeInsets = UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10)
+        label.numberOfLines = 0
         label.layer.cornerRadius = 6
         label.layer.masksToBounds = true
         label.clipsToBounds  = true
@@ -124,13 +128,8 @@ class CustomFieldUpload: UIView {
     // MARK: - Actions
     
     @objc private func uploadImageTapped() {
-        setDynamicLabelText("Uploading...")
-        hideCheckImage()
-        
-        // Simulate an upload process with a delay
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
-            self?.setDynamicLabelText("Upload Complete")
-        }
+
+        delegate?.CustomFieldUploadDidSelect(tags: tags)
     }
     
     // MARK: - Public Methods
@@ -142,9 +141,10 @@ class CustomFieldUpload: UIView {
     
     public func setDynamicLabelText(_ text: String) {
         dynamicLabel.text = text
+       
     }
     
-    public func hideCheckImage() {
-        imageView1.isHidden = true
+    public func hideCheckImage(_ Bool:Bool) {
+        imageView1.isHidden = Bool
     }
 }

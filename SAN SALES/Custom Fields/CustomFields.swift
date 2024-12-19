@@ -7,9 +7,10 @@
 
 import UIKit
 import Alamofire
-class CustomFields: IViewController,CustomCheckboxViewDelegate {
+class CustomFields: IViewController,CustomCheckboxViewDelegate,CustomFieldUploadViewDelegate,CustomSelectionLabelViewDelegate,CustomTextFieldDelegate{
    
     
+   
     let customTextField = CustomTextField()
      
      
@@ -123,6 +124,7 @@ class CustomFields: IViewController,CustomCheckboxViewDelegate {
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             scrollView.topAnchor.constraint(equalTo: view.topAnchor),
+            //scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor,constant: -40)
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
         
@@ -161,8 +163,9 @@ class CustomFields: IViewController,CustomCheckboxViewDelegate {
                     customTextField.configure(title: AddedFields.Field_Name, placeholder: "Enter the \(AddedFields.Field_Name)")
                     
                     customTextField.tag = index
-                   // customTextField.addTarget(self, action: #selector(fieldClicked(_:)), for: .editingDidBegin)
-                    customTextField.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(viewClicked(_:))))
+                    customTextField.tags = [index,index2]
+                    customTextField.delegate = self
+                 
                     stackView.addArrangedSubview(customTextField)
                 } else if AddedFields.Fld_Type == "NP" {
                     let customTextField = CustomTextNumberField()
@@ -179,7 +182,6 @@ class CustomFields: IViewController,CustomCheckboxViewDelegate {
                     customCheckboxView.tags = [index,index2]
                     
                     customCheckboxView.delegate = self
-                    customCheckboxView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(viewClicked(_:))))
                     customCheckboxView.frame = CGRect(x: 0, y: 0, width: 300, height: 200)
                     customCheckboxView.backgroundColor = .white
                     stackView.addArrangedSubview(customCheckboxView)
@@ -212,17 +214,27 @@ class CustomFields: IViewController,CustomCheckboxViewDelegate {
                 }else if AddedFields.Fld_Type == "D"{
                     let customLabel = CustomSelectionLabel()
                     customLabel.configure(title: AddedFields.Field_Name, value: "John Doe")
+                    customLabel.tags = [index,index2]
+                    customLabel.Typ = AddedFields.Fld_Type
+                    customLabel.delegate = self
                     stackView.addArrangedSubview(customLabel)
                     
                 }else if AddedFields.Fld_Type == "SSM"{
                     let customLabel = CustomSelectionLabel()
                     customLabel.configure(title: AddedFields.Field_Name, value: "Select Data")
+                    customLabel.tags = [index,index2]
+                    customLabel.Typ = AddedFields.Fld_Type
+                    customLabel.delegate = self
                     stackView.addArrangedSubview(customLabel)
                     
                 }else if AddedFields.Fld_Type == "FSC"{
                     let customField = CustomFieldUpload()
                     customField.setTitleText(AddedFields.Field_Name)
                     customField.setDynamicLabelText("Dynamic Content")
+                    customField.hideCheckImage(true)
+                    customField.tags = [index,index2]
+                    customField.delegate = self
+                    
                     stackView.addArrangedSubview(customField)
                 }else if AddedFields.Fld_Type == "SMO"{
                     let customCheckboxView = CustomCheckboxView()
@@ -259,23 +271,69 @@ class CustomFields: IViewController,CustomCheckboxViewDelegate {
         }
     }
 
-    @objc func fieldClicked(_ sender: UITextField) {
-        print("Field clicked at position: \(sender.tag)")
-    }
-    
-    @objc func viewClicked(_ sender: UITapGestureRecognizer) {
-        if let clickedView = sender.view {
-            print("View clicked at position: \(clickedView.tag)")
-        }
-    }
-    
     // MARK: - CustomCheckboxViewDelegate
     func checkboxViewDidSelect(_ title: String, isSelected: Bool, tag: Int, tags: [Int], Selectaheckbox: [String : Bool]) {
         print("Checkbox '\(title)' with tag \(tag) is \(isSelected ? "selected" : "deselected")")
         print(tags)
         print(Selectaheckbox)
     }
-
+    
+    func CustomFieldUploadDidSelect(tags: [Int]) {
+        print(tags)
+        let ShowPopup = UploadPopUpController()
+        ShowPopup.didSelect = { data in
+            
+            print(data)
+                self.ChangeText(text: "\(tags)", tags: tags)
+        }
+        ShowPopup.show()
+    }
+    
+    
+    func ChangeText(text:String,tags: [Int]){
+        guard let scrollView = view.subviews.compactMap({ $0 as? UIScrollView }).first,
+                  let stackView = scrollView.subviews.compactMap({ $0 as? UIStackView }).first else {
+                print("StackView or ScrollView not found")
+                return
+            }
+            
+            // Iterate through stackView's arrangedSubviews
+            for subview in stackView.arrangedSubviews {
+                if let customField = subview as? CustomFieldUpload, customField.tags == tags {
+                    customField.setDynamicLabelText(text)
+                    customField.hideCheckImage(false)
+                }
+            }
+    }
+    
+    
+    func CustomSelectionLabelDidSelect(tags: [Int], typ: String) {
+        print(tags,typ)
+        let ShowPopup = SelectDatePopUpController()
+        ShowPopup.didSelect = { data in
+            guard let scrollView = self.view.subviews.compactMap({ $0 as? UIScrollView }).first,
+                      let stackView = scrollView.subviews.compactMap({ $0 as? UIStackView }).first else {
+                    print("StackView or ScrollView not found")
+                    return
+                }
+                
+                // Iterate through stackView's arrangedSubviews
+                for subview in stackView.arrangedSubviews {
+                    if let customField = subview as? CustomSelectionLabel, customField.tags == tags {
+                        customField.SetDatetext(Date:data )
+                        
+                    }
+                }
+            
+        }
+        ShowPopup.show()
+        
+    }
+    
+    func customTextField(_ customTextField: CustomTextField, didUpdateText text: String, tags: [Int]) {
+        print(tags)
+        print(text)
+    }
      }
      
 

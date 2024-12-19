@@ -8,19 +8,26 @@
 import Foundation
 import UIKit
 
+protocol CustomTextFieldDelegate: AnyObject {
+    func customTextField(_ customTextField: CustomTextField, didUpdateText text: String,tags:[Int])
+}
 
-class CustomTextField: UIView {
-    
+class CustomTextField: UIView, UITextFieldDelegate {
+
+    // MARK: - Properties
+    weak var delegate: CustomTextFieldDelegate? // Delegate property
+    var tags: [Int] = []
+
     // MARK: - UI Components
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Title"
         label.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
         label.textColor = UIColor(red: 0.40, green: 0.40, blue: 0.40, alpha: 1.00)
-        label.alpha = 1 // Initially hidden
+        label.alpha = 1
         return label
     }()
-    
+
     let textField: UITextField = {
         let tf = UITextField()
         tf.borderStyle = .roundedRect
@@ -28,7 +35,7 @@ class CustomTextField: UIView {
         tf.textColor = .black
         return tf
     }()
-    
+
     // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -36,66 +43,72 @@ class CustomTextField: UIView {
         setupConstraints()
         setupActions()
     }
-    
+
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         setupView()
         setupConstraints()
         setupActions()
     }
-    
+
     // MARK: - Setup Methods
     private func setupView() {
         addSubview(titleLabel)
         addSubview(textField)
+        textField.delegate = self // Set the delegate
     }
-    
-    private func setupConstraints(){
+
+    private func setupConstraints() {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         textField.translatesAutoresizingMaskIntoConstraints = false
-        
+
         NSLayoutConstraint.activate([
-            // Title label constraints
             titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
             titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
             titleLabel.topAnchor.constraint(equalTo: topAnchor),
-            
-            // Text field constraints
+
             textField.leadingAnchor.constraint(equalTo: leadingAnchor),
             textField.trailingAnchor.constraint(equalTo: trailingAnchor),
             textField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 4),
             textField.heightAnchor.constraint(equalToConstant: 40),
-            textField.bottomAnchor.constraint(equalTo: bottomAnchor) // For dynamic height
+            textField.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }
-    
+
     private func setupActions() {
         textField.addTarget(self, action: #selector(textFieldDidBeginEditing), for: .editingDidBegin)
         textField.addTarget(self, action: #selector(textFieldDidEndEditing), for: .editingDidEnd)
     }
-    
+
     // MARK: - Actions
     @objc private func textFieldDidBeginEditing() {
         animateTitle(visible: true)
     }
-    
-    @objc private func textFieldDidEndEditing(){
-        if textField.text?.isEmpty == true {
-            animateTitle(visible: false)
+
+    @objc private func textFieldDidEndEditing() {
+        if let text = textField.text, !text.isEmpty {
+            delegate?.customTextField(self, didUpdateText: text, tags: tags) // Notify delegate
         }
     }
-    
+
     private func animateTitle(visible: Bool) {
         UIView.animate(withDuration: 0.3) {
             self.titleLabel.alpha = visible ? 1 : 1
             self.titleLabel.transform = visible ? .identity : CGAffineTransform(translationX: 0, y: 0)
         }
     }
-    
+
+    // MARK: - UITextFieldDelegate Methods
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        let currentText = textField.text ?? ""
+        let updatedText = (currentText as NSString).replacingCharacters(in: range, with: string)
+        delegate?.customTextField(self, didUpdateText: updatedText, tags: tags) // Notify delegate
+        return true
+    }
+
     // MARK: - Configuration
     func configure(title: String, placeholder: String) {
         titleLabel.text = title
         textField.placeholder = placeholder
     }
 }
-
