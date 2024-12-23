@@ -150,6 +150,7 @@
 		3F619F3C27EAEDC000F3D05F /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F619F3B27EAEDC000F3D05F /* LocationService.swift */; };
 		3F619F3E27EB275000F3D05F /* CLocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F619F3D27EB274F00F3D05F /* CLocationService.swift */; };
 		3F61CA692C9157730029CE01 /* Closing Sale Entry (DB).swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F61CA682C9157730029CE01 /* Closing Sale Entry (DB).swift */; };
+		3F62B3C02D1937D600F3416C /* AddNewCustomer_New.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F62B3BF2D1937D600F3416C /* AddNewCustomer_New.swift */; };
 		3F6CD0522CD9BD91008AEACE /* Distributor Order Details cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F6CD0512CD9BD91008AEACE /* Distributor Order Details cell.swift */; };
 		3F7A1F5C2D142CB0002C6776 /* UploadPopUpController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7A1F5A2D142CB0002C6776 /* UploadPopUpController.swift */; };
 		3F7A1F5D2D142CB0002C6776 /* UploadPopUpController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3F7A1F5B2D142CB0002C6776 /* UploadPopUpController.xib */; };
@@ -342,6 +343,7 @@
 		3F619F3B27EAEDC000F3D05F /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
 		3F619F3D27EB274F00F3D05F /* CLocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CLocationService.swift; sourceTree = "<group>"; };
 		3F61CA682C9157730029CE01 /* Closing Sale Entry (DB).swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Closing Sale Entry (DB).swift"; sourceTree = "<group>"; };
+		3F62B3BF2D1937D600F3416C /* AddNewCustomer_New.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewCustomer_New.swift; sourceTree = "<group>"; };
 		3F6CD0512CD9BD91008AEACE /* Distributor Order Details cell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Distributor Order Details cell.swift"; sourceTree = "<group>"; };
 		3F7A1F5A2D142CB0002C6776 /* UploadPopUpController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadPopUpController.swift; sourceTree = "<group>"; };
 		3F7A1F5B2D142CB0002C6776 /* UploadPopUpController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UploadPopUpController.xib; sourceTree = "<group>"; };
@@ -551,6 +553,7 @@
 				38A1859E2BB53D5D00E01407 /* End Expense.swift */,
 				3FCF2AA72C5B5392000D8070 /* Day End SFC.swift */,
 				15C4E4532CEE21970087281D /* OutBox.swift */,
+				3F62B3BF2D1937D600F3416C /* AddNewCustomer_New.swift */,
 			);
 			path = Activity;
 			sourceTree = "<group>";
@@ -975,6 +978,7 @@
 				3F0861BF2801D589006A30FB /* CollectionCell.swift in Sources */,
 				38A1859D2BB53D4700E01407 /* Start Expense.swift in Sources */,
 				3F06352E283BF36A0027842E /* FlowLayout.swift in Sources */,
+				3F62B3C02D1937D600F3416C /* AddNewCustomer_New.swift in Sources */,
 				15C4E4542CEE21970087281D /* OutBox.swift in Sources */,
 				3F06352A283A8C920027842E /* ColorTheme.swift in Sources */,
 				38D0F76829BB2447003EEB03 /* BrandReviewVisit.swift in Sources */,

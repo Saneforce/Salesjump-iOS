@@ -69,6 +69,7 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
             
         }
 
+        strMasList.append(mnuItem.init(MasId: 22, MasName: "Custom Form New", MasImage: "SwitchRoute"))
         strMasList.append(mnuItem.init(MasId: 1, MasName: "Switch \(UserSetup.shared.StkRoute)", MasImage: "SwitchRoute"))
         strMasList.append(mnuItem.init(MasId: 2, MasName: "Add New \(UserSetup.shared.DrCap)", MasImage: "NewRetailer"))
        /* strMasList.append(mnuItem.init(MasId: 3, MasName: "Edit Retailer", MasImage: "EditRetailer"))
@@ -381,6 +382,10 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
         }else if lItm.MasId == 21{
             let rptstoryboard = UIStoryboard(name: "Main", bundle: nil)
             let RptMnuVc = rptstoryboard.instantiateViewController(withIdentifier: "sbOutbox") as! OutBox
+            viewController.setViewControllers([RptMnuVc], animated: false)
+        }else if lItm.MasId == 22{
+            let rptstoryboard = UIStoryboard(name: "Main", bundle: nil)
+            let RptMnuVc = rptstoryboard.instantiateViewController(withIdentifier: "sbAddNewCustomer_New") as! AddNewCustomer_New
             viewController.setViewControllers([RptMnuVc], animated: false)
         }
         (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
