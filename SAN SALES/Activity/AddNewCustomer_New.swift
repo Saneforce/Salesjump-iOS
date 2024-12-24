@@ -15,8 +15,11 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
     @IBOutlet weak var Outlet_Category_View: UIView!
     // Add dynamic field
     let customTextField = CustomTextField()
+    @IBOutlet weak var Custom_field_view: UIView!
     
-     struct CustomGroup:Any{
+    
+    @IBOutlet weak var Scroll_View_Height: NSLayoutConstraint!
+    struct CustomGroup:Any{
          let FGTableName:String
          let FGroupName:String
          let FieldGroupId:String
@@ -42,7 +45,7 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
     override func viewDidLoad() {
         super.viewDidLoad()
         btnBack.addTarget(target: self, action: #selector(GotoHome))
-        CustomDetails()
+       // CustomDetails()
         
     }
     
@@ -120,7 +123,7 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
           stackView.translatesAutoresizingMaskIntoConstraints = false
 
           // Add the stack view to the main view
-          view.addSubview(stackView)
+          Custom_field_view.addSubview(stackView)
 
           // Set stack view constraints below Outlet_Category_View
           NSLayoutConstraint.activate([
@@ -253,6 +256,7 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
            }
            index += 1
        }
+      // Scroll_View_Height.constant = Scroll_View_Height.constant + 5000
    }
     
  
