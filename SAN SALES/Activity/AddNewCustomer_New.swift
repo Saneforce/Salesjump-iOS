@@ -11,14 +11,14 @@ import Alamofire
 class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomFieldUploadViewDelegate,CustomSelectionLabelViewDelegate,CustomTextFieldDelegate{
 
     @IBOutlet weak var btnBack: UIImageView!
-    
     @IBOutlet weak var Outlet_Category_View: UIView!
     // Add dynamic field
     let customTextField = CustomTextField()
-    @IBOutlet weak var Custom_field_view: UIView!
-    
-    
+    @IBOutlet weak var StackView: UIStackView!
     @IBOutlet weak var Scroll_View_Height: NSLayoutConstraint!
+    
+    @IBOutlet weak var Stack_view_height: NSLayoutConstraint!
+    
     struct CustomGroup:Any{
          let FGTableName:String
          let FGroupName:String
@@ -41,18 +41,33 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
          let FGTableName:String
      }
      var CustomGroupData:[CustomGroup] = []
-     
+    var SFCode: String = "", StateCode: String = "", DivCode: String = "",attendanceViews = 0,Desig: String = ""
+    let LocalStoreage = UserDefaults.standard
     override func viewDidLoad() {
         super.viewDidLoad()
+        getUserDetails()
         btnBack.addTarget(target: self, action: #selector(GotoHome))
-       // CustomDetails()
+        CustomDetails()
+        
+    }
+    func getUserDetails(){
+        let prettyPrintedJson=LocalStoreage.string(forKey: "UserDetails")
+        let data = Data(prettyPrintedJson!.utf8)
+        guard let prettyJsonData = try? JSONSerialization.jsonObject(with: data, options:[]) as? [String: Any] else {
+            print("Error: Cannot convert JSON object to Pretty JSON data")
+            return
+        }
+        SFCode = prettyJsonData["sfCode"] as? String ?? ""
+        StateCode = prettyJsonData["State_Code"] as? String ?? ""
+        DivCode = prettyJsonData["divisionCode"] as? String ?? ""
+        Desig=prettyJsonData["desigCode"] as? String ?? ""
         
     }
     
     func CustomDetails(){
         let formatters = DateFormatter()
         formatters.dateFormat = "yyyy-MM-dd"
-        let apiKey1: String = "get/CustomDetails&desig=MR&divisionCode=29&rSF=MR4126&sfCode=MR4126&stateCode=24&moduleId=3"
+        let apiKey1: String = "get/CustomDetails&desig=\(Desig)&divisionCode=\(DivCode)&rSF=\(SFCode)&sfCode=\(SFCode)&stateCode=\(StateCode)&moduleId=3"
         let apiKeyWithoutCommas = apiKey1.replacingOccurrences(of: ",&", with: "&")
         AF.request(APIClient.shared.BaseURL + APIClient.shared.CustomFieldDB + apiKeyWithoutCommas, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
             AFdata in
@@ -117,30 +132,42 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
     
     
    func AddCustom_Fields() {
-       let stackView = UIStackView()
-          stackView.axis = .vertical
-          stackView.spacing = 16
-          stackView.translatesAutoresizingMaskIntoConstraints = false
-
-          // Add the stack view to the main view
-          Custom_field_view.addSubview(stackView)
-
-          // Set stack view constraints below Outlet_Category_View
-          NSLayoutConstraint.activate([
-              stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-              stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-              stackView.topAnchor.constraint(equalTo: Outlet_Category_View.bottomAnchor, constant: 20), // Positioned below Outlet_Category_View
-              stackView.bottomAnchor.constraint(lessThanOrEqualTo: view.bottomAnchor, constant: -20) // Optional, ensures stackView doesn't overflow
-          ])
+//       let stackView = UIStackView()
+//          stackView.axis = .vertical
+//          stackView.spacing = 16
+//          stackView.translatesAutoresizingMaskIntoConstraints = false
+//
+//          // Add the stack view to the main view
+//          Custom_field_view.addSubview(stackView)
+//
+//          // Set stack view constraints below Outlet_Category_View
+//          NSLayoutConstraint.activate([
+//              stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+//              stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+//              stackView.topAnchor.constraint(equalTo: Outlet_Category_View.bottomAnchor, constant: 20), // Positioned below Outlet_Category_View
+//              stackView.bottomAnchor.constraint(lessThanOrEqualTo: view.bottomAnchor, constant: -20) // Optional, ensures stackView doesn't overflow
+//          ])
        
        // Populate the stack view with custom fields
+//       StackView.axis = .vertical
+//       StackView.distribution = .fill
+//       StackView.alignment = .fill
+       StackView.spacing = 10
        var index = 0
+       var height:Double = 0
        for AddedFields_Title in CustomGroupData {
            
            if !AddedFields_Title.Customdetails_data.isEmpty{
                let header = HeaderLabel()
                header.configure(title: AddedFields_Title.FGroupName)
-               stackView.addArrangedSubview(header)
+               header.layoutIfNeeded()
+
+               // Calculate height
+               let fittingSize = header.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+               print("Calculated height: \(fittingSize.height)")
+               height = height+fittingSize.height + 10
+               
+               StackView.addArrangedSubview(header)
            }
           
            var index2 = 0
@@ -152,12 +179,24 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
                    customTextField.tag = index
                    customTextField.tags = [index,index2]
                    customTextField.delegate = self
+                   customTextField.layoutIfNeeded()
+
+                   // Calculate height
+                   let fittingSize = customTextField.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+                   print("Calculated height: \(fittingSize.height)")
+                   height = height+fittingSize.height + 10
                 
-                   stackView.addArrangedSubview(customTextField)
+                   StackView.addArrangedSubview(customTextField)
                } else if AddedFields.Fld_Type == "NP" {
                    let customTextField = CustomTextNumberField()
                    customTextField.configure(title: AddedFields.Field_Name, placeholder: "Enter the \(AddedFields.Field_Name)")
-                   stackView.addArrangedSubview(customTextField)
+                   customTextField.layoutIfNeeded()
+
+                   // Calculate height
+                   let fittingSize = customTextField.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+                   print("Calculated height: \(fittingSize.height)")
+                   height = height+fittingSize.height + 10
+                   StackView.addArrangedSubview(customTextField)
                } else if AddedFields.Fld_Type == "CO" {
                    let customCheckboxView = CustomCheckboxView()
                    customCheckboxView.configure(
@@ -171,7 +210,13 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
                    customCheckboxView.delegate = self
                    customCheckboxView.frame = CGRect(x: 0, y: 0, width: 300, height: 200)
                    customCheckboxView.backgroundColor = .white
-                   stackView.addArrangedSubview(customCheckboxView)
+                   customCheckboxView.layoutIfNeeded()
+
+                   // Calculate height
+                   let fittingSize = customCheckboxView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+                   print("Calculated height: \(fittingSize.height)")
+                   height = height+fittingSize.height + 10
+                   StackView.addArrangedSubview(customCheckboxView)
                } else if AddedFields.Fld_Type == "SSO"{
                    let customCheckboxView = CustomCheckboxView()
                    customCheckboxView.configure(
@@ -183,20 +228,40 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
                    customCheckboxView.tag = index
                    customCheckboxView.tags = [index,index2]
                    customCheckboxView.delegate = self
-                   stackView.addArrangedSubview(customCheckboxView)
+                   customCheckboxView.layoutIfNeeded()
+
+                   // Calculate height
+                   let fittingSize = customCheckboxView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+                   print("Calculated height: \(fittingSize.height)")
+                   height = height+fittingSize.height + 10
+                   StackView.addArrangedSubview(customCheckboxView)
                }else if AddedFields.Fld_Type == "RO"{
                    let radioButtonView = CustomRadioButtonView()
                    radioButtonView.configure(title: AddedFields.Field_Name, radioButtonTitles: ["Option 1", "Option 2", "Option 3"])
 
                    // Add to the parent view and set frame or constraints
                    radioButtonView.translatesAutoresizingMaskIntoConstraints = false
-                   stackView.addArrangedSubview(radioButtonView)
+                   
+                   radioButtonView.layoutIfNeeded()
+
+                   // Calculate height
+                   let fittingSize = radioButtonView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+                   print("Calculated height: \(fittingSize.height)")
+                   height = height+fittingSize.height + 10
+                   StackView.addArrangedSubview(radioButtonView)
                    
                }else if AddedFields.Fld_Type == "RM"{
                    let radioButtonView = CustomRadioButtonView()
                    radioButtonView.configure(title: AddedFields.Field_Name, radioButtonTitles: ["Option 1 ", "Option 2", "Option 3"])
                    radioButtonView.translatesAutoresizingMaskIntoConstraints = false
-                   stackView.addArrangedSubview(radioButtonView)
+                   
+                   radioButtonView.layoutIfNeeded()
+
+                   // Calculate height
+                   let fittingSize = radioButtonView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+                   print("Calculated height: \(fittingSize.height)")
+                   height = height+fittingSize.height + 10
+                   StackView.addArrangedSubview(radioButtonView)
                    
                }else if AddedFields.Fld_Type == "D"{
                    let customLabel = CustomSelectionLabel()
@@ -204,7 +269,14 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
                    customLabel.tags = [index,index2]
                    customLabel.Typ = AddedFields.Fld_Type
                    customLabel.delegate = self
-                   stackView.addArrangedSubview(customLabel)
+                   
+                   customLabel.layoutIfNeeded()
+
+                   // Calculate height
+                   let fittingSize = customLabel.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+                   print("Calculated height: \(fittingSize.height)")
+                   height = height+fittingSize.height + 10
+                   StackView.addArrangedSubview(customLabel)
                    
                }else if AddedFields.Fld_Type == "SSM"{
                    let customLabel = CustomSelectionLabel()
@@ -212,17 +284,29 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
                    customLabel.tags = [index,index2]
                    customLabel.Typ = AddedFields.Fld_Type
                    customLabel.delegate = self
-                   stackView.addArrangedSubview(customLabel)
                    
-               }else if AddedFields.Fld_Type == "FSC"{
+                   customLabel.layoutIfNeeded()
+
+                   // Calculate height
+                   let fittingSize = customLabel.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+                   print("Calculated height: \(fittingSize.height)")
+                   height = height+fittingSize.height + 10
+                   StackView.addArrangedSubview(customLabel)
+                   
+               }else if AddedFields.Fld_Type == "FSC" || AddedFields.Fld_Type == "FC" {
                    let customField = CustomFieldUpload()
                    customField.setTitleText(AddedFields.Field_Name)
                    customField.setDynamicLabelText("Dynamic Content")
                    customField.hideCheckImage(true)
                    customField.tags = [index,index2]
                    customField.delegate = self
-                   
-                   stackView.addArrangedSubview(customField)
+                   customField.layoutIfNeeded()
+
+                   // Calculate height
+                   let fittingSize = customField.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+                   print("Calculated height: \(fittingSize.height)")
+                   height = height+fittingSize.height + 10
+                   StackView.addArrangedSubview(customField)
                }else if AddedFields.Fld_Type == "SMO"{
                    let customCheckboxView = CustomCheckboxView()
                    customCheckboxView.configure(
@@ -233,7 +317,13 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
                    customCheckboxView.delegate = self
                    customCheckboxView.frame = CGRect(x: 0, y: 0, width: 300, height: 200)
                    customCheckboxView.backgroundColor = .white
-                   stackView.addArrangedSubview(customCheckboxView)
+                   customCheckboxView.layoutIfNeeded()
+
+                   // Calculate height
+                   let fittingSize = customCheckboxView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+                   print("Calculated height: \(fittingSize.height)")
+                   height = height+fittingSize.height + 10
+                   StackView.addArrangedSubview(customCheckboxView)
                    
                }else if AddedFields.Fld_Type == "CM"{
                    let customCheckboxView = CustomCheckboxView()
@@ -245,18 +335,37 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
                    customCheckboxView.delegate = self
                    customCheckboxView.frame = CGRect(x: 0, y: 0, width: 300, height: 200)
                    customCheckboxView.backgroundColor = .white
-                   stackView.addArrangedSubview(customCheckboxView)
+                   
+                   customCheckboxView.layoutIfNeeded()
+
+                   // Calculate height
+                   let fittingSize = customCheckboxView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+                   print("Calculated height: \(fittingSize.height)")
+                   height = height+fittingSize.height + 10
+                   StackView.addArrangedSubview(customCheckboxView)
                    
                }else{
                    let customTextField = CustomTextNumberField()
                    customTextField.configure(title: AddedFields.Field_Name, placeholder: "Enter the \(AddedFields.Field_Name)")
-                   stackView.addArrangedSubview(customTextField)
+                   
+                   customTextField.layoutIfNeeded()
+
+                   // Calculate height
+                   let fittingSize = customTextField.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+                   print("Calculated height: \(fittingSize.height)")
+                   height = height+fittingSize.height + 10
+                   StackView.addArrangedSubview(customTextField)
                }
                index2 += 1
            }
            index += 1
        }
       // Scroll_View_Height.constant = Scroll_View_Height.constant + 5000
+       
+       print(height)
+       Stack_view_height.constant = height
+      Scroll_View_Height.constant = Scroll_View_Height.constant + Stack_view_height.constant
+       StackView.layoutIfNeeded()
    }
     
  
