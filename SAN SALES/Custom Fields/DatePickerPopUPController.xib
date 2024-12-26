@@ -11,6 +11,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="DatePickerPopUPController" customModule="SAN_SALES" customModuleProvider="target">
             <connections>
+                <outlet property="time_picker" destination="a5v-MS-0ok" id="Yt3-G0-428"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -25,13 +26,100 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UXk-gp-pi1">
-                                <rect key="frame" x="76" y="362" width="240" height="128"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UXk-gp-pi1">
+                                <rect key="frame" x="35" y="276" width="323" height="300"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LZ2-93-JlJ">
+                                        <rect key="frame" x="0.0" y="0.0" width="323" height="59"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Set time" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eal-VR-u5k">
+                                                <rect key="frame" x="36.000000000000007" y="17" width="96.666666666666686" height="25"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="25" id="xeH-mP-Rgw"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="24"/>
+                                                <color key="textColor" red="0.93725490199999995" green="0.95294117649999999" blue="0.98431372549999996" alpha="1" colorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                        <color key="backgroundColor" red="0.062745098040000002" green="0.67843137249999996" blue="0.76078431369999999" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="bottom" secondItem="eal-VR-u5k" secondAttribute="bottom" constant="17" id="41b-f6-5Lw"/>
+                                            <constraint firstItem="eal-VR-u5k" firstAttribute="top" secondItem="LZ2-93-JlJ" secondAttribute="top" constant="17" id="Lh3-D9-nxa"/>
+                                            <constraint firstItem="eal-VR-u5k" firstAttribute="leading" secondItem="LZ2-93-JlJ" secondAttribute="leading" constant="36" id="MEa-BL-ZRQ"/>
+                                            <constraint firstAttribute="height" constant="59" id="ykk-if-OOV"/>
+                                        </constraints>
+                                    </view>
+                                    <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="a5v-MS-0ok">
+                                        <rect key="frame" x="8" y="67" width="307" height="177"/>
+                                    </datePicker>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0Vg-Dy-WVu">
+                                        <rect key="frame" x="8" y="252" width="307" height="40"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lOT-5G-ciM">
+                                                <rect key="frame" x="251.33333333333329" y="2" width="47.666666666666657" height="35"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="35" id="NXf-zW-1JP"/>
+                                                </constraints>
+                                                <state key="normal" title="Button"/>
+                                                <buttonConfiguration key="configuration" style="plain" title="OK"/>
+                                                <connections>
+                                                    <action selector="OK:" destination="-1" eventType="touchUpInside" id="dVQ-Vx-8kF"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="12v-NR-xhX">
+                                                <rect key="frame" x="154" y="2" width="89.333333333333314" height="35"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="35" id="ErN-za-f4A"/>
+                                                </constraints>
+                                                <state key="normal" title="Button"/>
+                                                <buttonConfiguration key="configuration" style="plain" title="CANCEL"/>
+                                                <connections>
+                                                    <action selector="Cancel:" destination="-1" eventType="touchUpInside" id="Orq-hi-ztt"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <constraints>
+                                            <constraint firstItem="12v-NR-xhX" firstAttribute="top" secondItem="0Vg-Dy-WVu" secondAttribute="top" constant="2" id="2Fh-Zj-x6g"/>
+                                            <constraint firstItem="lOT-5G-ciM" firstAttribute="leading" secondItem="12v-NR-xhX" secondAttribute="trailing" constant="8" symbolic="YES" id="72Y-gK-vlx"/>
+                                            <constraint firstAttribute="trailing" secondItem="lOT-5G-ciM" secondAttribute="trailing" constant="8" id="Hak-ms-7Me"/>
+                                            <constraint firstItem="lOT-5G-ciM" firstAttribute="top" secondItem="0Vg-Dy-WVu" secondAttribute="top" constant="2" id="TgZ-mc-RpM"/>
+                                            <constraint firstAttribute="bottom" secondItem="lOT-5G-ciM" secondAttribute="bottom" constant="3" id="hIl-wg-dJm"/>
+                                            <constraint firstAttribute="height" constant="40" id="hoM-99-ogy"/>
+                                            <constraint firstItem="lOT-5G-ciM" firstAttribute="leading" secondItem="12v-NR-xhX" secondAttribute="trailing" constant="8" id="iX9-HX-bjo"/>
+                                            <constraint firstAttribute="bottom" secondItem="12v-NR-xhX" secondAttribute="bottom" constant="3" id="yLu-Bs-HGA"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstItem="a5v-MS-0ok" firstAttribute="leading" secondItem="UXk-gp-pi1" secondAttribute="leading" constant="8" id="5PT-du-VpP"/>
+                                    <constraint firstItem="0Vg-Dy-WVu" firstAttribute="top" secondItem="a5v-MS-0ok" secondAttribute="bottom" constant="8" symbolic="YES" id="Jar-wZ-44c"/>
+                                    <constraint firstItem="0Vg-Dy-WVu" firstAttribute="top" secondItem="a5v-MS-0ok" secondAttribute="bottom" constant="8" symbolic="YES" id="QcN-aa-47O"/>
+                                    <constraint firstItem="LZ2-93-JlJ" firstAttribute="leading" secondItem="UXk-gp-pi1" secondAttribute="leading" id="SMx-CG-vNj"/>
+                                    <constraint firstAttribute="trailing" secondItem="0Vg-Dy-WVu" secondAttribute="trailing" constant="8" id="YI7-tH-s2p"/>
+                                    <constraint firstItem="a5v-MS-0ok" firstAttribute="top" secondItem="LZ2-93-JlJ" secondAttribute="bottom" constant="8" id="Ybs-Eh-3cZ"/>
+                                    <constraint firstAttribute="width" constant="323" id="feB-OT-V0k"/>
+                                    <constraint firstAttribute="bottom" secondItem="0Vg-Dy-WVu" secondAttribute="bottom" constant="8" id="jN4-ps-NPk"/>
+                                    <constraint firstAttribute="height" constant="300" id="lDz-uW-CQH"/>
+                                    <constraint firstItem="0Vg-Dy-WVu" firstAttribute="leading" secondItem="UXk-gp-pi1" secondAttribute="leading" constant="8" id="vnd-hB-qNr"/>
+                                    <constraint firstAttribute="trailing" secondItem="a5v-MS-0ok" secondAttribute="trailing" constant="8" id="w3J-jw-Cpg"/>
+                                    <constraint firstItem="LZ2-93-JlJ" firstAttribute="top" secondItem="UXk-gp-pi1" secondAttribute="top" id="wQD-b3-aCZ"/>
+                                    <constraint firstAttribute="trailing" secondItem="LZ2-93-JlJ" secondAttribute="trailing" id="z9v-MU-N7z"/>
+                                </constraints>
                             </view>
                         </subviews>
+                        <constraints>
+                            <constraint firstItem="UXk-gp-pi1" firstAttribute="top" secondItem="tUA-sR-A1r" secondAttribute="top" constant="276" id="7sQ-a5-AVN"/>
+                            <constraint firstItem="UXk-gp-pi1" firstAttribute="leading" secondItem="tUA-sR-A1r" secondAttribute="leading" constant="35" id="ONO-jW-xAo"/>
+                            <constraint firstAttribute="bottom" secondItem="UXk-gp-pi1" secondAttribute="bottom" constant="276" id="UID-jL-LvP"/>
+                            <constraint firstItem="UXk-gp-pi1" firstAttribute="centerY" secondItem="tUA-sR-A1r" secondAttribute="centerY" id="gOC-6g-5Xd"/>
+                            <constraint firstItem="UXk-gp-pi1" firstAttribute="centerX" secondItem="tUA-sR-A1r" secondAttribute="centerX" id="rPh-2R-Q8g"/>
+                            <constraint firstAttribute="trailing" secondItem="UXk-gp-pi1" secondAttribute="trailing" constant="35" id="si0-nv-omD"/>
+                        </constraints>
                     </view>
+                    <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <blurEffect style="regular"/>
                 </visualEffectView>
             </subviews>

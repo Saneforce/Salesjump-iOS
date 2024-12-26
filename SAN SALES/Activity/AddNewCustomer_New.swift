@@ -49,10 +49,11 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
     // placeHolder
     
     @IBOutlet weak var Select_dis: LabelSelect!
-    
-    
     @IBOutlet weak var Mobile_Mandator: UILabel!
     
+    @IBOutlet weak var ViewDistributor: UIView!
+    
+    @IBOutlet weak var ViewDis_height: NSLayoutConstraint!
     
     struct lItem: Any {
         let id: String
@@ -84,6 +85,9 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
     @IBOutlet weak var Outlet_Category_View: UIView!
    
     let customTextField = CustomTextField()
+    
+    
+    @IBOutlet weak var ScrollView: UIScrollView!
     @IBOutlet weak var StackView: UIStackView!
     @IBOutlet weak var Scroll_View_Height: NSLayoutConstraint!
     
@@ -199,11 +203,9 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
         }
         
         if UserSetup.shared.DistBased == 0{
-          
+            ViewDistributor.isHidden = true
+            ViewDis_height.constant = 0
         }
-        
-        
-        
         
         CustomDetails()
         
@@ -697,7 +699,7 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
     
     
     
-    // MARK: Custom Fields areya
+    // MARK: Custom Fields area
     
     func CustomDetails(){
         let formatters = DateFormatter()
@@ -979,6 +981,26 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
                    height = height+fittingSize.height + 10
                    StackView.addArrangedSubview(customCheckboxView)
                    
+               }else if AddedFields.Fld_Type == "T"{
+                   let customLabel = CustomSelectionLabel()
+                   customLabel.configure(title: AddedFields.Field_Name, value: "Select \(AddedFields.Field_Name)")
+                   customLabel.tags = [index,index2]
+                   customLabel.Typ = AddedFields.Fld_Type
+                   customLabel.delegate = self
+                   customLabel.layoutIfNeeded()
+                   // Calculate height
+                   let fittingSize = customLabel.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+                   print("Calculated height: \(fittingSize.height)")
+                   height = height+fittingSize.height + 10
+                   StackView.addArrangedSubview(customLabel)
+                   
+               }else if AddedFields.Fld_Type == "TR"{
+                   let CustomRange = CustomRangeField()
+                   CustomRange.configure(title: AddedFields.Field_Name, from: "Select From Time", to: "Select To Time", mandatory: AddedFields.Mandate)
+                   CustomRange.layoutIfNeeded()
+                   let fittingSize = CustomRange.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+                   height = height+fittingSize.height + 10
+                   StackView.addArrangedSubview(CustomRange)
                }else{
                    let customTextField = CustomTextNumberField()
                    customTextField.configure(title: AddedFields.Field_Name, placeholder: "Enter the \(AddedFields.Field_Name)")
@@ -1025,11 +1047,10 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
    
    
    func ChangeText(text:String,tags: [Int]){
-       guard let scrollView = view.subviews.compactMap({ $0 as? UIScrollView }).first,
-                 let stackView = scrollView.subviews.compactMap({ $0 as? UIStackView }).first else {
-               print("StackView or ScrollView not found")
-               return
-           }
+       guard let stackView = StackView else {
+              print("StackView is not connected")
+              return
+          }
            
            // Iterate through stackView's arrangedSubviews
            for subview in stackView.arrangedSubviews {
@@ -1043,11 +1064,13 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
    
    func CustomSelectionLabelDidSelect(tags: [Int], typ: String) {
        print(tags,typ)
-       let ShowPopup = SelectDatePopUpController()
-       ShowPopup.didSelect = { data in
-           guard let scrollView = self.view.subviews.compactMap({ $0 as? UIScrollView }).first,
-                     let stackView = scrollView.subviews.compactMap({ $0 as? UIStackView }).first else {
-                   print("StackView or ScrollView not found")
+       
+       if typ == "D"{
+           
+           let ShowPopup = SelectDatePopUpController()
+           ShowPopup.didSelect = { data in
+               guard let stackView = self.StackView else {
+                   print("StackView is not connected")
                    return
                }
                
@@ -1058,9 +1081,28 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
                        
                    }
                }
-           
+               
+           }
+           ShowPopup.show()
+       }else if typ == "T"{
+           let ShowPopup = DatePickerPopUPController()
+           ShowPopup.didSelect = { data in
+               guard let stackView = self.StackView else {
+                   print("StackView is not connected")
+                   return
+               }
+               
+               // Iterate through stackView's arrangedSubviews
+               for subview in stackView.arrangedSubviews {
+                   if let customField = subview as? CustomSelectionLabel, customField.tags == tags {
+                       customField.SetDatetext(Date:data )
+                       
+                   }
+               }
+               
+           }
+           ShowPopup.show()
        }
-       ShowPopup.show()
        
    }
    

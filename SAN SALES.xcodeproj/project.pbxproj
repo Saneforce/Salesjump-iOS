@@ -151,6 +151,7 @@
 		3F619F3E27EB275000F3D05F /* CLocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F619F3D27EB274F00F3D05F /* CLocationService.swift */; };
 		3F61CA692C9157730029CE01 /* Closing Sale Entry (DB).swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F61CA682C9157730029CE01 /* Closing Sale Entry (DB).swift */; };
 		3F62B3C02D1937D600F3416C /* AddNewCustomer_New.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F62B3BF2D1937D600F3416C /* AddNewCustomer_New.swift */; };
+		3F6B912F2D1D56A9005555AD /* Custom Range Field.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F6B912E2D1D56A9005555AD /* Custom Range Field.swift */; };
 		3F6CD0522CD9BD91008AEACE /* Distributor Order Details cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F6CD0512CD9BD91008AEACE /* Distributor Order Details cell.swift */; };
 		3F7A1F5C2D142CB0002C6776 /* UploadPopUpController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7A1F5A2D142CB0002C6776 /* UploadPopUpController.swift */; };
 		3F7A1F5D2D142CB0002C6776 /* UploadPopUpController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3F7A1F5B2D142CB0002C6776 /* UploadPopUpController.xib */; };
@@ -344,6 +345,7 @@
 		3F619F3D27EB274F00F3D05F /* CLocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CLocationService.swift; sourceTree = "<group>"; };
 		3F61CA682C9157730029CE01 /* Closing Sale Entry (DB).swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Closing Sale Entry (DB).swift"; sourceTree = "<group>"; };
 		3F62B3BF2D1937D600F3416C /* AddNewCustomer_New.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewCustomer_New.swift; sourceTree = "<group>"; };
+		3F6B912E2D1D56A9005555AD /* Custom Range Field.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Custom Range Field.swift"; sourceTree = "<group>"; };
 		3F6CD0512CD9BD91008AEACE /* Distributor Order Details cell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Distributor Order Details cell.swift"; sourceTree = "<group>"; };
 		3F7A1F5A2D142CB0002C6776 /* UploadPopUpController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadPopUpController.swift; sourceTree = "<group>"; };
 		3F7A1F5B2D142CB0002C6776 /* UploadPopUpController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UploadPopUpController.xib; sourceTree = "<group>"; };
@@ -513,6 +515,7 @@
 				3F0A5E542D1176AB00477F87 /* Custom Selection lbl.swift */,
 				3F0A5E562D117E6B00477F87 /* Custom Field Upload.swift */,
 				3FF0EF912D15536400F21141 /* Custom dropdown field.swift */,
+				3F6B912E2D1D56A9005555AD /* Custom Range Field.swift */,
 				3F0A5E582D119AF800477F87 /* Padded UILabel.swift */,
 				3F85AE0D2D12CD5A00669DFD /* Header UILabel.swift */,
 				3F7A1F5A2D142CB0002C6776 /* UploadPopUpController.swift */,
@@ -1062,6 +1065,7 @@
 				3F9F379828593C99002CC408 /* DayReport.swift in Sources */,
 				155F39752BEA5FED0096139B /* ItemMultipleSelectionViewController.swift in Sources */,
 				3F0861C12802B4F5006A30FB /* VisitData.swift in Sources */,
+				3F6B912F2D1D56A9005555AD /* Custom Range Field.swift in Sources */,
 				3F5B297A28894AB3002D226C /* GradientView.swift in Sources */,
 				3FD090FC2CBE32F20087CEEB /* Order Details TableViewCell.swift in Sources */,
 				15C4B3192BECAA6B001ACBF4 /* RejectReasonViewController.swift in Sources */,
