@@ -40,6 +40,10 @@ class PrimaryVisit: IViewController, UITableViewDelegate, UITableViewDataSource,
     @IBOutlet weak var vwBtnOrder: RoundedCornerView!
     @IBOutlet weak var vwBtnCam: RoundedCornerView!
     
+    
+    @IBOutlet weak var heightViewPayTypeConstraint: NSLayoutConstraint!
+    
+    
     struct lItem: Any {
         let id: String
         let name: String
@@ -129,11 +133,27 @@ class PrimaryVisit: IViewController, UITableViewDelegate, UITableViewDataSource,
             lstPayTypes = list;
         }
         
+        let mode1 : AnyObject = ["id" : "1","name" : "Cash"] as AnyObject
+        let mode2 : AnyObject = ["id" : "2","name" : "Check"] as AnyObject
+        let mode3 : AnyObject = ["id" : "3","name" : "RTGS"] as AnyObject
+        
+        var modes = [AnyObject]()
+        modes.append(mode1)
+        modes.append(mode2)
+        modes.append(mode3)
+        lstPayTypes = modes
+        
+        if UserSetup.shared.collectedAmount == 0 {
+            vwVstDetCtrl.isHidden = true
+            heightViewPayTypeConstraint.constant = 0
+        }
+        
+        
         VisitData.shared.OrderMode.id = "0"
         VisitData.shared.OrderMode.name = "Field Order"
         
         
-        lblTitleCap.text = UserSetup.shared.PrimaryCaption
+        lblTitleCap.text = UserSetup.shared.StkCap
         
         lblCustNm.addTarget(target: self, action: #selector(selCustomer))
         lblPayType.addTarget(target: self, action: #selector(selPayTypes))
@@ -489,7 +509,7 @@ class PrimaryVisit: IViewController, UITableViewDelegate, UITableViewDataSource,
         self.lAllObjSel = []
         self.lObjSel = []
         self.tbDataSelect.reloadData()
-        if UserSetup.shared.Fenching == true && VisitData.shared.OrderMode.id == "0" {
+        if UserSetup.shared.DistributorFenching == true && VisitData.shared.OrderMode.id == "0" {
             LocationService.sharedInstance.getNewLocation(location: { location in
                 print ("New  : "+location.coordinate.latitude.description + ":" + location.coordinate.longitude.description)
                 self.lObjSel=self.lstCustomers.filter({(Cust) in

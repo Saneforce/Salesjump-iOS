@@ -109,8 +109,9 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
 //        <#code#>
 //    }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if PrimayOrderViewTB  == tableView { return 210}
-        return 42
+       // if PrimayOrderViewTB  == tableView { return 210}
+       // return 42
+        return UITableView.automaticDimension
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -157,7 +158,7 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
             print(item)
             var Id_For_Route2 = ""
             if let Id_For_Route = item["SDP"] as? String{
-                Id_For_Route2
+                Id_For_Route2 = Id_For_Route
             }
             print(Id_For_Route2)
             print(lstAllRoutes)
@@ -181,9 +182,18 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
                 cell.EditButton.isHidden = true
                 cell.DeleteButton.isHidden = true
             } else {
-                cell.EditButton.isHidden = false
-                cell.DeleteButton.isHidden = false
+                print(UserSetup.shared.editSubmittedCallNeed)
+                if UserSetup.shared.editSubmittedCallNeed != 1 {
+                    cell.EditButton.isHidden = true
+                    cell.DeleteButton.isHidden = true
+                }else {
+                    cell.EditButton.isHidden = false
+                    cell.DeleteButton.isHidden = false
+                }
+                
             }
+            cell.Rou.text = "\(UserSetup.shared.StkRoute)"
+           
             
            
            

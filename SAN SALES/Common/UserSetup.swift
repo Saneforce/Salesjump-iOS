@@ -14,6 +14,7 @@ class UserSetup{
     }
     
     var Fenching: Bool = false
+    var DistributorFenching : Bool = false
     var PrimaryCaption: String = "Primary Order"
     var SecondaryCaption: String = "Secondary Order"
     var BrandReviewVisit: String = "Brand Review"
@@ -76,6 +77,8 @@ class UserSetup{
     var currency_symbol:String = ""
     var DrCap:String = ""
     var Mandatory:String = ""
+    var editSubmittedCallNeed : Int = 0
+    var collectedAmount : Int = 0
     func initUserSetup(){
         let SetupStoreage = UserDefaults.standard
         let SetupData: String=SetupStoreage.string(forKey: "UserSetup")!
@@ -142,12 +145,18 @@ class UserSetup{
         primarySchemeVisibility = lstSetups[0]["pri_scheme_visibility"] as? String ?? "0"
         DrCap = lstSetups[0]["DrCap"] as? String ?? ""
         Mandatory = lstSetups[0]["Mandatory"] as? String ?? ""
-        
+        editSubmittedCallNeed = lstSetups[0]["EdSubCalls"] as? Int ?? 0
+        collectedAmount = lstSetups[0]["CollectedAmount"] as? Int ?? 0
         //Mandatory = "phone"
         if(lstSetups[0]["Geo_Fencing"] as? Int == 1){
             Fenching = true
         }else{
             Fenching=false
+        }
+        if(lstSetups[0]["Dist_Geo_Fencing"] as? Int == 1){
+            DistributorFenching = true
+        }else{
+            DistributorFenching=false
         }
     }
 }

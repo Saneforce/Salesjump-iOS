@@ -916,6 +916,8 @@ class MissedDateRouteSelection : IViewController , UITableViewDelegate,UITableVi
             
             let primaryOrderNew = UIStoryboard.primaryOrderNew
             primaryOrderNew.isFromMissedEntry = true
+            primaryOrderNew.custId = self.retailerList[indexPath.row].id
+            primaryOrderNew.custName = self.retailerList[indexPath.row].name
             primaryOrderNew.selectedProductsforMissed = self.retailerList[indexPath.row].orderList
             primaryOrderNew.missedDateEditData = { paramString in
                 print(paramString)

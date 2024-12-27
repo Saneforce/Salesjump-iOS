@@ -143,7 +143,7 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         strMenuList.append(mnuItem.init(MnuId: 1, MenuName: UserSetup.shared.SecondaryCaption, MenuImage: "mnuPrimary"))
         
         if (UserSetup.shared.StkNeed == 1) {
-            strMenuList.append(mnuItem.init(MnuId: 2, MenuName: UserSetup.shared.PrimaryCaption, MenuImage: "mnuPrimary"))
+            strMenuList.append(mnuItem.init(MnuId: 2, MenuName: UserSetup.shared.StkCap, MenuImage: "mnuPrimary"))
         }
         
         if (UserSetup.shared.BrndRvwNd > 0) {

@@ -217,7 +217,7 @@ class MissedDateSelection : IViewController{
             
         }
         
-        self.lblPrimaryOrder.text = UserSetup.shared.PrimaryCaption
+        self.lblPrimaryOrder.text = UserSetup.shared.StkCap
         self.lblSecondaryOrder.text = UserSetup.shared.SecondaryCaption
         
     }
