@@ -171,7 +171,7 @@ class PrimaryOrder: IViewController, UITableViewDelegate, UITableViewDataSource,
         lblSuppNm.addTarget(target: self, action: #selector(selOrdSuppName))
         btnBack.addTarget(target: self, action: #selector(GotoHome))
         
-        lblTitleCap.text = UserSetup.shared.PrimaryCaption
+        lblTitleCap.text = UserSetup.shared.StkCap
         lblCustName.text = VisitData.shared.CustName
         lblOrderMode.text = VisitData.shared.OrderMode.name
         vwBuget.layer.cornerRadius = 10

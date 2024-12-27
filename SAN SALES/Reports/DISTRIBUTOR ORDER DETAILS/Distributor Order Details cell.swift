@@ -500,6 +500,10 @@ class Distributor_Order_Details_cell: IViewController, UITableViewDataSource, UI
                 if let freeNameRange = product.range(of: "\\?\\?.*?~~", options: .regularExpression) {
                     freeProductName = String(product[freeNameRange]).replacingOccurrences(of: ["??", "~~"], with: "").trimmingCharacters(in: .whitespaces)
                 }
+                let products = product.components(separatedBy:"??").filter { !$0.isEmpty }
+                 let get_free = products[1].components(separatedBy:"~~").filter { !$0.isEmpty }
+                 freeProductName = get_free[0]
+                
                 if freeProductName == ""{
                     freeProductName = productName
                 }
