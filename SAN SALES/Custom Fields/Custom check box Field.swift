@@ -152,7 +152,7 @@ class CustomCheckboxView: UIView {
     private var checkBoxStates: [String: Bool] = [:] // Tracks checkbox states
     weak var delegate: CustomCheckboxViewDelegate? // Delegate reference
     var tags: [Int] = []
-    
+    var Mandate = 0
     // MARK: - UI Components
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -161,6 +161,27 @@ class CustomCheckboxView: UIView {
         label.textColor = UIColor(red: 0.40, green: 0.40, blue: 0.40, alpha: 1.00)
         return label
     }()
+    
+    
+    func updateTitleLabel(setTital:String) {
+        if Mandate == 1 {
+            // Create attributed text with a red asterisk
+            let title = setTital
+            let asterisk = " *"
+            let attributedString = NSMutableAttributedString(string: title + asterisk)
+            
+            // Set default title attributes
+            attributedString.addAttribute(.foregroundColor, value: titleLabel.textColor!, range: NSRange(location: 0, length: title.count))
+            
+            // Set red color for the asterisk
+            attributedString.addAttribute(.foregroundColor, value: UIColor.red, range: NSRange(location: title.count, length: asterisk.count))
+            
+            titleLabel.attributedText = attributedString
+        } else {
+            // Set plain text without an asterisk
+            titleLabel.text = setTital
+        }
+    }
     
     private let checkBoxStackView: UIStackView = {
         let stackView = UIStackView()
@@ -209,7 +230,7 @@ class CustomCheckboxView: UIView {
     // MARK: - Configuration
     func configure(title: String, checkBoxTitles: [String]) {
         titleLabel.text = title
-        
+        updateTitleLabel(setTital: title)
         // Clear existing checkboxes and reset states
         checkBoxStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
         checkBoxStates.removeAll()

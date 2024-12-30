@@ -188,7 +188,6 @@
 		3FD090FC2CBE32F20087CEEB /* Order Details TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD090FB2CBE32F20087CEEB /* Order Details TableViewCell.swift */; };
 		3FEA6C312CA6E1A200F1EC2C /* AWSS3Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FEA6C302CA6E1A200F1EC2C /* AWSS3Manager.swift */; };
 		3FEA6C332CA6E1CD00F1EC2C /* AWSS3_Download_Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FEA6C322CA6E1CD00F1EC2C /* AWSS3_Download_Manager.swift */; };
-		3FF0EF922D15536400F21141 /* Custom dropdown field.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF0EF912D15536400F21141 /* Custom dropdown field.swift */; };
 		3FF57C1D286C4A76009E3FE5 /* RptVisitDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF57C1C286C4A76009E3FE5 /* RptVisitDetail.swift */; };
 		3FFB59D72C613BE5008AE109 /* Expense approval SFC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FFB59D62C613BE5008AE109 /* Expense approval SFC.swift */; };
 		3FFC65F72C8EEB7D00CC0690 /* ClosingStockEntry (DB).swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FFC65F62C8EEB7D00CC0690 /* ClosingStockEntry (DB).swift */; };
@@ -384,7 +383,6 @@
 		3FD090FB2CBE32F20087CEEB /* Order Details TableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Order Details TableViewCell.swift"; sourceTree = "<group>"; };
 		3FEA6C302CA6E1A200F1EC2C /* AWSS3Manager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AWSS3Manager.swift; sourceTree = "<group>"; };
 		3FEA6C322CA6E1CD00F1EC2C /* AWSS3_Download_Manager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AWSS3_Download_Manager.swift; sourceTree = "<group>"; };
-		3FF0EF912D15536400F21141 /* Custom dropdown field.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Custom dropdown field.swift"; sourceTree = "<group>"; };
 		3FF57C1C286C4A76009E3FE5 /* RptVisitDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RptVisitDetail.swift; sourceTree = "<group>"; };
 		3FFB59D62C613BE5008AE109 /* Expense approval SFC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Expense approval SFC.swift"; sourceTree = "<group>"; };
 		3FFC65F62C8EEB7D00CC0690 /* ClosingStockEntry (DB).swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ClosingStockEntry (DB).swift"; sourceTree = "<group>"; };
@@ -518,7 +516,6 @@
 				3F0A5E522D11702A00477F87 /* Custom Radio Button .swift */,
 				3F0A5E542D1176AB00477F87 /* Custom Selection lbl.swift */,
 				3F0A5E562D117E6B00477F87 /* Custom Field Upload.swift */,
-				3FF0EF912D15536400F21141 /* Custom dropdown field.swift */,
 				3F6B912E2D1D56A9005555AD /* Custom Range Field.swift */,
 				3F0A5E582D119AF800477F87 /* Padded UILabel.swift */,
 				3F85AE0D2D12CD5A00669DFD /* Header UILabel.swift */,
@@ -1108,7 +1105,6 @@
 				159095222BF1E954001D8347 /* TourPlanViewDateWise.swift in Sources */,
 				382103F52BA16B83005C02CD /* Expense Entry.swift in Sources */,
 				3F063530283E04580027842E /* PrimaryVisit.swift in Sources */,
-				3FF0EF922D15536400F21141 /* Custom dropdown field.swift in Sources */,
 				3F2F810D27CEB30C0015E1CA /* SceneDelegate.swift in Sources */,
 				3F0A5E4F2D1153BD00477F87 /* Custom Text Number Field.swift in Sources */,
 				3F0635392844025C0027842E /* PhotosCollection.swift in Sources */,

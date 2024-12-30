@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 class CustomRadioButtonView: UIView {
-    
+    var Mandate = 0
     // MARK: - UI Components
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -18,6 +18,26 @@ class CustomRadioButtonView: UIView {
         label.textColor = UIColor(red: 0.40, green: 0.40, blue: 0.40, alpha: 1.00)
         return label
     }()
+    
+    func updateTitleLabel(setTital:String) {
+        if Mandate == 1 {
+            // Create attributed text with a red asterisk
+            let title = setTital
+            let asterisk = " *"
+            let attributedString = NSMutableAttributedString(string: title + asterisk)
+            
+            // Set default title attributes
+            attributedString.addAttribute(.foregroundColor, value: titleLabel.textColor!, range: NSRange(location: 0, length: title.count))
+            
+            // Set red color for the asterisk
+            attributedString.addAttribute(.foregroundColor, value: UIColor.red, range: NSRange(location: title.count, length: asterisk.count))
+            
+            titleLabel.attributedText = attributedString
+        } else {
+            // Set plain text without an asterisk
+            titleLabel.text = setTital
+        }
+    }
     
     private let radioButtonStackView: UIStackView = {
         let stackView = UIStackView()
@@ -69,7 +89,7 @@ class CustomRadioButtonView: UIView {
     // MARK: - Configuration
     func configure(title: String, radioButtonTitles: [String]) {
         titleLabel.text = title
-        
+        updateTitleLabel(setTital: title)
         print(radioButtonTitles)
         
         // Clear existing radio buttons

@@ -16,6 +16,7 @@ class CustomFieldUpload: UIView {
     
     weak var delegate: CustomFieldUploadViewDelegate? // Delegate reference
     var tags: [Int] = []
+    var Mandate = 0
     
     // MARK: - UI Components
     
@@ -27,6 +28,27 @@ class CustomFieldUpload: UIView {
         label.alpha = 0 // Initially hidden
         return label
     }()
+    
+    
+    func updateTitleLabel(setTitle:String) {
+        if Mandate == 1 {
+            // Create attributed text with a red asterisk
+            let title = setTitle
+            let asterisk = " *"
+            let attributedString = NSMutableAttributedString(string: title + asterisk)
+            
+            // Set default title attributes
+            attributedString.addAttribute(.foregroundColor, value: titleLabel.textColor!, range: NSRange(location: 0, length: title.count))
+            
+            // Set red color for the asterisk
+            attributedString.addAttribute(.foregroundColor, value: UIColor.red, range: NSRange(location: title.count, length: asterisk.count))
+            
+            titleLabel.attributedText = attributedString
+        } else {
+            // Set plain text without an asterisk
+            titleLabel.text = setTitle
+        }
+    }
     
     private let dynamicLabel: UILabel = {
         let label = PaddedLabel()
@@ -137,6 +159,7 @@ class CustomFieldUpload: UIView {
     public func setTitleText(_ text: String) {
         titleLabel.text = text
         titleLabel.alpha = 1 // Make titleLabel visible
+        updateTitleLabel(setTitle: text)
     }
     
     public func setDynamicLabelText(_ text: String) {

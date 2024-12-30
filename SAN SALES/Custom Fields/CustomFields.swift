@@ -8,12 +8,8 @@
 import UIKit
 import Alamofire
 class CustomFields: IViewController,CustomCheckboxViewDelegate,CustomFieldUploadViewDelegate,CustomSelectionLabelViewDelegate,CustomTextFieldDelegate{
-  
-   
     
-   
     let customTextField = CustomTextField()
-     
      
      struct CustomGroup:Any{
          let FGTableName:String

@@ -90,7 +90,7 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
     var DivCode: String = ""
     var StateCode:String = ""
     var Desig:String = ""
-
+    var CustomTag:[Int] = []
     
     // MARK: Add dynamic field
     @IBOutlet weak var btnBack: UIImageView!
@@ -277,10 +277,26 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
      if SelMode == "CUS"{
-            print("OK")
+         let item: [String: Any]=lObjSel[indexPath.row] as! [String : Any]
+        print(item)
+         let customLabel = CustomSelectionLabel()
+         guard let stackView = self.StackView else {
+             print("StackView is not connected")
+             return
+         }
+         // Iterate through stackView's arrangedSubviews
+         for subview in stackView.arrangedSubviews {
+             if let customField = subview as? CustomSelectionLabel, customField.tags == CustomTag {
+                 customField.SetDatetext(Date:item["name"] as? String ?? "" )
+                 print(self.CustomGroupData)
+                 let tag1 = CustomTag[0]
+                 let tag2 = CustomTag[1]
+                 self.CustomGroupData[CustomTag[0]].Customdetails_data[CustomTag[1]].data_value = item["name"] as? String ?? ""
+             }
+         }
+         closeWin(self)
          return
         }
-        
         
         let item: [String: Any]=lObjSel[indexPath.row] as! [String : Any]
         let name=item["name"] as! String
@@ -947,8 +963,10 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
            for AddedFields in AddedFields_Title.Customdetails_data {
                if AddedFields.Fld_Type == "TAS" {
                    let customTextField = CustomTextField()
+                   customTextField.Mandate = AddedFields.Mandate
                    customTextField.configure(title: AddedFields.Field_Name, placeholder: "Enter the \(AddedFields.Field_Name)")
                    customTextField.tag = index
+                   
                    customTextField.tags = [index,index2]
                    customTextField.delegate = self
                    customTextField.layoutIfNeeded()
@@ -959,6 +977,7 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
                    StackView.addArrangedSubview(customTextField)
                } else if AddedFields.Fld_Type == "NP" {
                    let customTextField = CustomTextNumberField()
+                   customTextField.Mandate = AddedFields.Mandate
                    customTextField.configure(title: AddedFields.Field_Name, placeholder: "Enter the \(AddedFields.Field_Name)")
                    customTextField.tags = [index,index2]
                    customTextField.delegate = self
@@ -971,6 +990,7 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
                    let CheckBoxdata = AddedFields.Fld_Src_Field.split(separator: ",").map { String($0) }
                    
                    let customCheckboxView = CustomCheckboxView()
+                   customCheckboxView.Mandate = AddedFields.Mandate
                    customCheckboxView.configure(
                        title: AddedFields.Field_Name,
                        checkBoxTitles: CheckBoxdata
@@ -992,6 +1012,7 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
                } else if AddedFields.Fld_Type == "SSO"{
                    let CheckBoxdata = AddedFields.Fld_Src_Field.split(separator: ",").map { String($0) }
                    let customLabel = CustomSelectionLabel()
+                   customLabel.Mandate = AddedFields.Mandate
                    customLabel.configure(title: AddedFields.Field_Name, value: "Select Data")
                    customLabel.tags = [index,index2]
                    customLabel.Typ = AddedFields.Fld_Type
@@ -1007,6 +1028,7 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
                    
                    let Radiobuttondata = AddedFields.Fld_Src_Field.split(separator: ",").map { String($0) }
                    let radioButtonView = CustomRadioButtonView()
+                   radioButtonView.Mandate = AddedFields.Mandate
                    radioButtonView.configure(title: AddedFields.Field_Name, radioButtonTitles: Radiobuttondata)
 
                    // Add to the parent view and set frame or constraints
@@ -1024,6 +1046,7 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
                    let Filterdata = mastersyn_data.filter { $0.name == AddedFields.Fld_Src_Name }
                    print(Filterdata)
                    let radioButtonView = CustomRadioButtonView()
+                   radioButtonView.Mandate = AddedFields.Mandate
                    radioButtonView.configure(title: AddedFields.Field_Name, radioButtonTitles: Filterdata[0].Fieldata)
                    radioButtonView.translatesAutoresizingMaskIntoConstraints = false
                    radioButtonView.layoutIfNeeded()
@@ -1036,6 +1059,7 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
       
                }else if AddedFields.Fld_Type == "D"{
                    let customLabel = CustomSelectionLabel()
+                   customLabel.Mandate = AddedFields.Mandate
                    customLabel.configure(title: AddedFields.Field_Name, value: "John Doe")
                    customLabel.tags = [index,index2]
                    customLabel.Typ = AddedFields.Fld_Type
@@ -1051,6 +1075,7 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
                    
                }else if AddedFields.Fld_Type == "SSM"{
                    let customLabel = CustomSelectionLabel()
+                   customLabel.Mandate = AddedFields.Mandate
                    customLabel.configure(title: AddedFields.Field_Name, value: "Select Data")
                    customLabel.tags = [index,index2]
                    customLabel.Typ = AddedFields.Fld_Type
@@ -1069,6 +1094,8 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
                    
                }else if AddedFields.Fld_Type == "FSC" || AddedFields.Fld_Type == "FC" {
                    let customField = CustomFieldUpload()
+                   customField.Mandate = AddedFields.Mandate
+                   
                    customField.setTitleText(AddedFields.Field_Name)
                    customField.setDynamicLabelText("Dynamic Content")
                    customField.hideCheckImage(true)
@@ -1086,6 +1113,7 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
                    let CheckBoxdata = AddedFields.Fld_Src_Field.split(separator: ",").map { String($0) }
                    
                    let customCheckboxView = CustomCheckboxView()
+                   customCheckboxView.Mandate = AddedFields.Mandate
                    customCheckboxView.configure(
                        title: AddedFields.Field_Name,
                        checkBoxTitles: CheckBoxdata
@@ -1109,6 +1137,7 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
                    let Filterdata = mastersyn_data.filter { $0.name == AddedFields.Fld_Src_Name }
                    print(Filterdata)
                    let customCheckboxView = CustomCheckboxView()
+                   customCheckboxView.Mandate = AddedFields.Mandate
                    customCheckboxView.configure(
                        title: AddedFields.Field_Name,
                        checkBoxTitles:Filterdata[0].Fieldata
@@ -1131,6 +1160,7 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
                    let Filterdata = mastersyn_data.filter { $0.name == AddedFields.Fld_Src_Name }
                    print(Filterdata)
                    let customCheckboxView = CustomCheckboxView()
+                   customCheckboxView.Mandate = AddedFields.Mandate
                    customCheckboxView.configure(
                        title: AddedFields.Field_Name,
                        checkBoxTitles:Filterdata[0].Fieldata
@@ -1150,6 +1180,7 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
                    
                }else if AddedFields.Fld_Type == "T"{
                    let customLabel = CustomSelectionLabel()
+                   customLabel.Mandate = AddedFields.Mandate
                    customLabel.configure(title: AddedFields.Field_Name, value: "Select \(AddedFields.Field_Name)")
                    customLabel.tags = [index,index2]
                    customLabel.Typ = AddedFields.Fld_Type
@@ -1163,6 +1194,7 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
                    
                }else if AddedFields.Fld_Type == "TR"{
                    let CustomRange = CustomRangeField()
+                   CustomRange.Mandate = AddedFields.Mandate
                    CustomRange.configure(title: AddedFields.Field_Name, from: "Select From Time", to: "Select To Time", mandatory: AddedFields.Mandate)
                    CustomRange.delegate = self
                    CustomRange.layoutIfNeeded()
@@ -1171,6 +1203,7 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
                    StackView.addArrangedSubview(CustomRange)
                }else{
                    let customTextField = CustomTextNumberField()
+                   customTextField.Mandate = AddedFields.Mandate
                    customTextField.configure(title: AddedFields.Field_Name, placeholder: "Enter the \(AddedFields.Field_Name)")
                    
                    customTextField.layoutIfNeeded()
@@ -1277,7 +1310,8 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
            let transformedData = selection
                .filter { !$0.trimmingCharacters(in: .whitespaces).isEmpty }
                .map { ["name": $0] as NSDictionary }
- 
+           
+           CustomTag = tags
            isDate=false
            lObjSel=transformedData
            openWin(Mode: "CUS")

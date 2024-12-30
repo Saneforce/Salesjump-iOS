@@ -18,7 +18,7 @@ class CustomRangeField: UIView {
     
     var tags: [Int] = []
     var Typ:String = ""
-    
+    var Mandate = 0
     // MARK: - UI Components
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -28,6 +28,27 @@ class CustomRangeField: UIView {
         label.alpha = 1 // Make it visible by default
         return label
     }()
+    
+    
+    func updateTitleLabel(title:String) {
+        if Mandate == 1 {
+            // Create attributed text with a red asterisk
+            let title = title
+            let asterisk = " *"
+            let attributedString = NSMutableAttributedString(string: title + asterisk)
+            
+            // Set default title attributes
+            attributedString.addAttribute(.foregroundColor, value: titleLabel.textColor!, range: NSRange(location: 0, length: title.count))
+            
+            // Set red color for the asterisk
+            attributedString.addAttribute(.foregroundColor, value: UIColor.red, range: NSRange(location: title.count, length: asterisk.count))
+            
+            titleLabel.attributedText = attributedString
+        } else {
+            // Set plain text without an asterisk
+            titleLabel.text = title
+        }
+    }
     
     private let mandatoryLabel: UILabel = {
         let label = UILabel()
@@ -183,7 +204,7 @@ class CustomRangeField: UIView {
         titleLabel.text = title
         fromLabel.text = from
         toLabel.text = to
-        
+        updateTitleLabel(title: title)
         if mandatory == 0 {
             mandatoryLabel.text = ""
         } else {
