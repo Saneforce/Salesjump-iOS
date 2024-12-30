@@ -70,6 +70,8 @@ class CustomRadioButtonView: UIView {
     func configure(title: String, radioButtonTitles: [String]) {
         titleLabel.text = title
         
+        print(radioButtonTitles)
+        
         // Clear existing radio buttons
         radioButtonStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
         radioButtons.removeAll()

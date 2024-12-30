@@ -8,6 +8,7 @@
 import UIKit
 import Alamofire
 class CustomFields: IViewController,CustomCheckboxViewDelegate,CustomFieldUploadViewDelegate,CustomSelectionLabelViewDelegate,CustomTextFieldDelegate{
+  
    
     
    
@@ -307,7 +308,7 @@ class CustomFields: IViewController,CustomCheckboxViewDelegate,CustomFieldUpload
     }
     
     
-    func CustomSelectionLabelDidSelect(tags: [Int], typ: String) {
+    func CustomSelectionLabelDidSelect(tags: [Int], typ: String, selection: [String]) {
         print(tags,typ)
         let ShowPopup = SelectDatePopUpController()
         ShowPopup.didSelect = { data in

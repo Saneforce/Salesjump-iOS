@@ -123,6 +123,11 @@ class DAY_REPORT_WITH_DATE_RANGE: IViewController, UITableViewDelegate, UITableV
         if let HQData = LocalStoreage.string(forKey: "HQ_Master"),
            let list = GlobalFunc.convertToDictionary(text:  HQData) as? [AnyObject] {
             lstHQs = list;
+            let newHQ: [String: Any] = [
+                  "id": SFCode,
+                  "name": UserSetup.shared.SF_Name
+              ]
+            lstHQs.insert(newHQ as NSDictionary, at: 0)
         }
         
         let dateFormatter = DateFormatter()
@@ -196,10 +201,6 @@ class DAY_REPORT_WITH_DATE_RANGE: IViewController, UITableViewDelegate, UITableV
         Date_Selection_View.isHidden = true
     }
     
-    
-    
-
-
     func maximumDate(for calendar: FSCalendar) -> Date {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"

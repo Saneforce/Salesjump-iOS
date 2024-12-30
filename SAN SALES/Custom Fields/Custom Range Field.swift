@@ -8,7 +8,16 @@
 import Foundation
 import UIKit
 
+
+protocol CustomRangeFieldViewDelegate: AnyObject {
+    func CustomRangeSelectionLabelDidSelect(tags: [Int],typ:String,selmod:String)
+}
+
 class CustomRangeField: UIView {
+    weak var delegate: CustomRangeFieldViewDelegate?
+    
+    var tags: [Int] = []
+    var Typ:String = ""
     
     // MARK: - UI Components
     private let titleLabel: UILabel = {
@@ -162,11 +171,11 @@ class CustomRangeField: UIView {
     }
     
     @objc private func fromLabelTapped() {
-        print("From label tapped")
+        delegate?.CustomRangeSelectionLabelDidSelect(tags: tags, typ: Typ, selmod: "FROM")
     }
     
     @objc private func toLabelTapped() {
-        print("To label tapped")
+        delegate?.CustomRangeSelectionLabelDidSelect(tags: tags, typ: Typ, selmod: "TO")
     }
     
     // MARK: - Configuration

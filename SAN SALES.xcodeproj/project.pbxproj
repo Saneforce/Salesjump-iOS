@@ -161,6 +161,8 @@
 		3F7A1F652D1448F5002C6776 /* DatePickerPopUPController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3F7A1F632D1448F5002C6776 /* DatePickerPopUPController.xib */; };
 		3F7CCF0328F14CA3002A7C03 /* GEOTagging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7CCF0228F14CA3002A7C03 /* GEOTagging.swift */; };
 		3F7FD4EE2D016532006FEDED /* Secondary Order Details.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7FD4ED2D016532006FEDED /* Secondary Order Details.swift */; };
+		3F8214962D22B88E00B42A17 /* Spinnerselection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F8214942D22B88E00B42A17 /* Spinnerselection.swift */; };
+		3F8214972D22B88E00B42A17 /* Spinnerselection.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3F8214952D22B88E00B42A17 /* Spinnerselection.xib */; };
 		3F8292FF2CC786100098B191 /* DAY REPORT WITH DATE RANGE CELL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F8292FE2CC786100098B191 /* DAY REPORT WITH DATE RANGE CELL.swift */; };
 		3F85AE0E2D12CD5A00669DFD /* Header UILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F85AE0D2D12CD5A00669DFD /* Header UILabel.swift */; };
 		3F886A122C8EEDEB001F9A39 /* ClosingStockView (DB).swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F886A112C8EEDEB001F9A39 /* ClosingStockView (DB).swift */; };
@@ -355,6 +357,8 @@
 		3F7A1F632D1448F5002C6776 /* DatePickerPopUPController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DatePickerPopUPController.xib; sourceTree = "<group>"; };
 		3F7CCF0228F14CA3002A7C03 /* GEOTagging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GEOTagging.swift; sourceTree = "<group>"; };
 		3F7FD4ED2D016532006FEDED /* Secondary Order Details.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Secondary Order Details.swift"; sourceTree = "<group>"; };
+		3F8214942D22B88E00B42A17 /* Spinnerselection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spinnerselection.swift; sourceTree = "<group>"; };
+		3F8214952D22B88E00B42A17 /* Spinnerselection.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Spinnerselection.xib; sourceTree = "<group>"; };
 		3F8292FE2CC786100098B191 /* DAY REPORT WITH DATE RANGE CELL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DAY REPORT WITH DATE RANGE CELL.swift"; sourceTree = "<group>"; };
 		3F85AE0D2D12CD5A00669DFD /* Header UILabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Header UILabel.swift"; sourceTree = "<group>"; };
 		3F886A112C8EEDEB001F9A39 /* ClosingStockView (DB).swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ClosingStockView (DB).swift"; sourceTree = "<group>"; };
@@ -524,6 +528,8 @@
 				3F7A1F5F2D1437D3002C6776 /* SelectDatePopUpController.xib */,
 				3F7A1F622D1448F5002C6776 /* DatePickerPopUPController.swift */,
 				3F7A1F632D1448F5002C6776 /* DatePickerPopUPController.xib */,
+				3F8214942D22B88E00B42A17 /* Spinnerselection.swift */,
+				3F8214952D22B88E00B42A17 /* Spinnerselection.xib */,
 			);
 			path = "Custom Fields";
 			sourceTree = "<group>";
@@ -909,6 +915,7 @@
 				3F7A1F652D1448F5002C6776 /* DatePickerPopUPController.xib in Resources */,
 				3F28CC0927D3927E00B95964 /* Poppins-Italic.ttf in Resources */,
 				15AB213D2C799F4C004437A6 /* RateEditViewController.xib in Resources */,
+				3F8214972D22B88E00B42A17 /* Spinnerselection.xib in Resources */,
 				3F28CC0A27D3927E00B95964 /* Poppins-MediumItalic.ttf in Resources */,
 				3F2F811227CEB30C0015E1CA /* Main.storyboard in Resources */,
 				3F0822BA28FE721A009C33EA /* AdminForms.storyboard in Resources */,
@@ -965,6 +972,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				388CD92C2BDA3ABE003A06F9 /* TourPlanCalenderScreen.swift in Sources */,
+				3F8214962D22B88E00B42A17 /* Spinnerselection.swift in Sources */,
 				3F619F3E27EB275000F3D05F /* CLocationService.swift in Sources */,
 				3F619F3C27EAEDC000F3D05F /* LocationService.swift in Sources */,
 				1514DF752BD785D900E6B45A /* SuperStockistOrder.swift in Sources */,

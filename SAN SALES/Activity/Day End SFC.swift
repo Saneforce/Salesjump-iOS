@@ -83,7 +83,6 @@ class Day_End_SFC: IViewController, UITableViewDataSource, UITableViewDelegate {
             case .success(let value):
                 if let json = value as? [AnyObject]{
                     print(json)
-                    
                     for i in json{
                         let From = i["From_Place"] as? String ?? ""
                         let To = i["To_Place"] as? String ?? ""

@@ -7,23 +7,38 @@
 
 import UIKit
 
-class Spinnerselection: UIViewController {
-
+class Spinnerselection: UIViewController{
+    @IBOutlet weak var BTBack: UIImageView!
+    
+    var didSelect: (String) -> () = { _ in }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
+        // Add gesture recognizer for back button
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(closeAction))
+        BTBack.isUserInteractionEnabled = true
+        BTBack.addGestureRecognizer(tapGesture)
+        
+   
     }
-
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    
+    @objc func closeAction() {
+        self.dismiss(animated: true)
     }
-    */
-
+    
+    init() {
+        super.init(nibName: "Spinnerselection", bundle: Bundle(for: Spinnerselection.self))
+        self.modalPresentationStyle = .overCurrentContext
+        self.modalTransitionStyle = .crossDissolve
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func show() {
+        UIApplication.shared.windows.first?.rootViewController?.present(self, animated: true, completion: nil)
+    }
+    
 }

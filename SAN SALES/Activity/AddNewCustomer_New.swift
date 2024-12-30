@@ -10,8 +10,9 @@ import UIKit
 import MapKit
 import Alamofire
 import FSCalendar
-class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomFieldUploadViewDelegate,CustomSelectionLabelViewDelegate,CustomTextFieldDelegate,UITableViewDelegate, UITableViewDataSource,FSCalendarDelegate,FSCalendarDataSource{
-    
+import Foundation
+class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomFieldUploadViewDelegate,CustomSelectionLabelViewDelegate,CustomTextFieldDelegate,UITableViewDelegate, UITableViewDataSource,FSCalendarDelegate,FSCalendarDataSource,CustomRangeFieldViewDelegate,CustomTextNumberFieldDelegate{
+   
     @IBOutlet weak var mapOutletLoc: MKMapView!
     @IBOutlet weak var lblHQ: LabelSelect!
     @IBOutlet weak var lblRoute: LabelSelect!
@@ -70,6 +71,17 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
     var lstCat: [AnyObject] = []
     var lstCls: [AnyObject] = []
     
+    
+    struct syncdata: Any {
+        let name: String
+        let data: [AnyObject]
+        let Fieldata:[String]
+    }
+    
+    var mastersyn_data:[syncdata] = []
+    
+    
+    
     var SelMode: String = ""
     var isDate: Bool = false
     var sDOB: String = ""
@@ -97,7 +109,7 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
          let FGTableName:String
          let FGroupName:String
          let FieldGroupId:String
-         let Customdetails_data:[Customdetails]
+        var Customdetails_data:[Customdetails]
      }
      
      struct Customdetails:Any{
@@ -113,6 +125,7 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
          let Fld_Src_Field:String
          let FieldGroupId:Int
          let FGTableName:String
+         var data_value:String
      }
      var CustomGroupData:[CustomGroup] = []
     //var SFCode: String = "", StateCode: String = "", DivCode: String = "",attendanceViews = 0,Desig: String = ""
@@ -262,6 +275,13 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
         return cell
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+     if SelMode == "CUS"{
+            print("OK")
+         return
+        }
+        
+        
         let item: [String: Any]=lObjSel[indexPath.row] as! [String : Any]
         let name=item["name"] as! String
         let id=String(format: "%@", item["id"] as! CVarArg)
@@ -591,6 +611,8 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
         
     }
     @IBAction func CreateNewOutlet(_ sender: Any) {
+        //Save_RetailerDynamicData()
+        
         NewOutlet.shared.Address = self.txOutletAdd.text
         NewOutlet.shared.Street = self.txStreet.text ?? ""
         NewOutlet.shared.City = self.txCity.text ?? ""
@@ -600,6 +622,11 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
         NewOutlet.shared.OwnerName = txOwnerNm.text ?? ""
         
         NewOutlet.shared.Mobile = txMobile.text ?? ""
+        
+        if validateCustomForm() == false{
+            return
+        }
+        
         if validateForm() == false {
             return
         }
@@ -663,6 +690,49 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
         }
     }
     
+    func Save_RetailerDynamicData(){
+        var Fieldstems:String = ""
+        for data in CustomGroupData{
+            var Fielsdata:String = ""
+            var Fielsdata2:String = ""
+            for i in data.Customdetails_data{
+                Fielsdata = Fielsdata + "{\"column_name\":\"\(i.Field_Col)\","
+                Fielsdata = Fielsdata + "\"data_value\":\"\(i.data_value)\"},"
+            }
+            if Fielsdata.hasSuffix(",") {
+                while Fielsdata.hasSuffix(",") {
+                    Fielsdata.removeLast()
+                }
+                Fielsdata2 = Fielsdata
+            }
+            Fieldstems = Fieldstems + "{\"groupId\":\"\(data.FieldGroupId)\","
+            Fieldstems = Fieldstems + "\"grpTableName\":\"\(data.FGTableName)\","
+            Fieldstems = Fieldstems + "\"itemdetail\":[" + Fielsdata2 + "]},"
+        }
+        if Fieldstems.hasSuffix(",") {
+            while Fieldstems.hasSuffix(",") {
+                Fieldstems.removeLast()
+            }
+        }
+        
+  let jsonString = "[{\"retailer_dynamic_data\":{\"sf_code\":\"'\(SFCode)'\",\"town_code\":\"'\(NewOutlet.shared.Route.id)'\"}},{\"dynamic_data_detail\":[" + Fieldstems + "]}]"
+        let params: Parameters = [
+            "data": jsonString
+        ]
+        let apikey = "dcr/save&divisionCode=\(DivCode)&sfCode=\(SFCode)&desig=\(Desig)"
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.CustomFieldDB+apikey, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
+            AFdata in
+            switch AFdata.result
+            {
+                case .success(let json):
+                print(json)
+                
+               case .failure(let error):
+                   print(error.errorDescription!)
+            }
+        }
+    }
+    
     func MasSync(apiKey: String,aFormData: [String: Any],aStoreKey:String) {
         let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
         let jsonString = String(data: jsonData!, encoding: .utf8)!
@@ -693,12 +763,7 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
             }
         }
     }
-    
-    
 
-    
-    
-    
     // MARK: Custom Fields area
     
     func CustomDetails(){
@@ -722,8 +787,8 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
                         }
                     }
                 }
-                print(CustomGroupData)
-                    self.AddCustom_Fields()
+                processCustomGroupData(data: CustomGroupData)
+                
             case .failure(let error):
                 Toast.show(message: error.errorDescription!)  //, controller: self
             }
@@ -758,7 +823,7 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
                                          Fld_Src_Name: Fld_Src_Name,
                                          Fld_Src_Field: Fld_Src_Field,
                                          FieldGroupId: FieldGroupId,
-                                         FGTableName: FGTableName
+                                         FGTableName: FGTableName, data_value: ""
         )
         CustomdetailsModels.append(Custom_Model)
     }
@@ -767,6 +832,77 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
         
     }
     
+    
+  
+    func processCustomGroupData(data: [CustomGroup]) {
+        let dispatchGroup = DispatchGroup()
+
+        for currentGroup in data {
+            for sync in currentGroup.Customdetails_data {
+                if sync.Fld_Type == "CM" || sync.Fld_Type == "RM" || sync.Fld_Type == "SSM" || sync.Fld_Type == "SMM" {
+                    let input = sync.Fld_Src_Field
+                    let parts = input.split(separator: ",").map { String($0) }
+                    let fieldType = parts.joined(separator: " ")
+                    
+                    // Enter the dispatch group
+                    dispatchGroup.enter()
+                    
+                    masterDatasync(getfieldName1: parts[0], getfieldName2:parts[1],fieldName: fieldType, masterName: sync.Fld_Src_Name) {
+                        // Leave the dispatch group after this API call completes
+                        dispatchGroup.leave()
+                    }
+                }
+            }
+        }
+
+        // Notify when all tasks are complete
+        dispatchGroup.notify(queue: .main) {
+            print("All API calls are complete.")
+            print(self.mastersyn_data)
+            self.AddCustom_Fields()
+        }
+    }
+
+    // Updated masterDatasync to use the same dispatch group logic
+    func masterDatasync(getfieldName1:String,getfieldName2:String,fieldName: String, masterName: String, completion: @escaping () -> Void) {
+        let axn = "get/masterData"
+        let apikey = "\(axn)&State_Code=\(StateCode)&divisionCode=\(DivCode)&fieldName=\(fieldName)&sfCode=\(SFCode)&masterName=\(masterName)"
+        let apiKeyWithoutCommas = apikey.replacingOccurrences(of: ",&", with: "&")
+        let apiKeyEncoded = apiKeyWithoutCommas.replacingOccurrences(of: " ", with: "%2C")
+        
+        AF.request(
+            APIClient.shared.BaseURL + APIClient.shared.CustomFieldDB + apiKeyEncoded,
+            method: .post,
+            parameters: nil,
+            encoding: URLEncoding(),
+            headers: nil
+        )
+        .validate(statusCode: 200..<299)
+        .responseJSON { response in
+            switch response.result {
+            case .success(let value):
+                if let json = value as? [AnyObject] {
+                    var data:[String] = []
+                    for i in json{
+                        let id:String = ""//i[getfieldName1] as? String ?? ""
+                        let name:String = i[getfieldName2] as? String ?? ""
+                      //  data.append(name + "-" + id)
+                        data.append(name )
+                    }
+                    self.mastersyn_data.append(syncdata(name: masterName, data: json, Fieldata: data))
+                }
+            case .failure(let error):
+                let alert = UIAlertController(title: "Information", message: error.errorDescription, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
+                    return
+                })
+                self.present(alert, animated: true)
+            }
+            completion()
+        }
+    }
+
+
     
    func AddCustom_Fields() {
 //       let stackView = UIStackView()
@@ -812,33 +948,32 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
                if AddedFields.Fld_Type == "TAS" {
                    let customTextField = CustomTextField()
                    customTextField.configure(title: AddedFields.Field_Name, placeholder: "Enter the \(AddedFields.Field_Name)")
-                   
                    customTextField.tag = index
                    customTextField.tags = [index,index2]
                    customTextField.delegate = self
                    customTextField.layoutIfNeeded()
-
                    // Calculate height
                    let fittingSize = customTextField.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
                    print("Calculated height: \(fittingSize.height)")
                    height = height+fittingSize.height + 10
-                
                    StackView.addArrangedSubview(customTextField)
                } else if AddedFields.Fld_Type == "NP" {
                    let customTextField = CustomTextNumberField()
                    customTextField.configure(title: AddedFields.Field_Name, placeholder: "Enter the \(AddedFields.Field_Name)")
+                   customTextField.tags = [index,index2]
+                   customTextField.delegate = self
                    customTextField.layoutIfNeeded()
-
                    // Calculate height
                    let fittingSize = customTextField.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
-                   print("Calculated height: \(fittingSize.height)")
                    height = height+fittingSize.height + 10
                    StackView.addArrangedSubview(customTextField)
                } else if AddedFields.Fld_Type == "CO" {
+                   let CheckBoxdata = AddedFields.Fld_Src_Field.split(separator: ",").map { String($0) }
+                   
                    let customCheckboxView = CustomCheckboxView()
                    customCheckboxView.configure(
                        title: AddedFields.Field_Name,
-                       checkBoxTitles: ["Option 1", "Option 2", "Option 3", "Option 4", "Option 5"]
+                       checkBoxTitles: CheckBoxdata
                    )
                    
                    customCheckboxView.tag = index
@@ -855,26 +990,24 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
                    height = height+fittingSize.height + 10
                    StackView.addArrangedSubview(customCheckboxView)
                } else if AddedFields.Fld_Type == "SSO"{
-                   let customCheckboxView = CustomCheckboxView()
-                   customCheckboxView.configure(
-                       title: AddedFields.Field_Name,
-                       checkBoxTitles: ["Option 1", "Option 2", "Option 3", "Option 4", "Option 5", "Option 6", "Option 7", "Option 8", "Option 9", "Option 10", "Option 11", "Option 12", "Option 12", "Option 13", "Option 14"]
-                   )
-                   customCheckboxView.frame = CGRect(x: 0, y: 0, width: 300, height: 200)
-                   customCheckboxView.backgroundColor = .white
-                   customCheckboxView.tag = index
-                   customCheckboxView.tags = [index,index2]
-                   customCheckboxView.delegate = self
-                   customCheckboxView.layoutIfNeeded()
-
+                   let CheckBoxdata = AddedFields.Fld_Src_Field.split(separator: ",").map { String($0) }
+                   let customLabel = CustomSelectionLabel()
+                   customLabel.configure(title: AddedFields.Field_Name, value: "Select Data")
+                   customLabel.tags = [index,index2]
+                   customLabel.Typ = AddedFields.Fld_Type
+                   customLabel.SelectionDatas = CheckBoxdata
+                   customLabel.delegate = self
+                   customLabel.layoutIfNeeded()
                    // Calculate height
-                   let fittingSize = customCheckboxView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+                   let fittingSize = customLabel.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
                    print("Calculated height: \(fittingSize.height)")
                    height = height+fittingSize.height + 10
-                   StackView.addArrangedSubview(customCheckboxView)
+                   StackView.addArrangedSubview(customLabel)
                }else if AddedFields.Fld_Type == "RO"{
+                   
+                   let Radiobuttondata = AddedFields.Fld_Src_Field.split(separator: ",").map { String($0) }
                    let radioButtonView = CustomRadioButtonView()
-                   radioButtonView.configure(title: AddedFields.Field_Name, radioButtonTitles: ["Option 1", "Option 2", "Option 3"])
+                   radioButtonView.configure(title: AddedFields.Field_Name, radioButtonTitles: Radiobuttondata)
 
                    // Add to the parent view and set frame or constraints
                    radioButtonView.translatesAutoresizingMaskIntoConstraints = false
@@ -888,18 +1021,19 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
                    StackView.addArrangedSubview(radioButtonView)
                    
                }else if AddedFields.Fld_Type == "RM"{
+                   let Filterdata = mastersyn_data.filter { $0.name == AddedFields.Fld_Src_Name }
+                   print(Filterdata)
                    let radioButtonView = CustomRadioButtonView()
-                   radioButtonView.configure(title: AddedFields.Field_Name, radioButtonTitles: ["Option 1 ", "Option 2", "Option 3"])
+                   radioButtonView.configure(title: AddedFields.Field_Name, radioButtonTitles: Filterdata[0].Fieldata)
                    radioButtonView.translatesAutoresizingMaskIntoConstraints = false
-                   
                    radioButtonView.layoutIfNeeded()
-
                    // Calculate height
                    let fittingSize = radioButtonView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
                    print("Calculated height: \(fittingSize.height)")
                    height = height+fittingSize.height + 10
-                   StackView.addArrangedSubview(radioButtonView)
+                   self.StackView.addArrangedSubview(radioButtonView)
                    
+      
                }else if AddedFields.Fld_Type == "D"{
                    let customLabel = CustomSelectionLabel()
                    customLabel.configure(title: AddedFields.Field_Name, value: "John Doe")
@@ -920,6 +1054,9 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
                    customLabel.configure(title: AddedFields.Field_Name, value: "Select Data")
                    customLabel.tags = [index,index2]
                    customLabel.Typ = AddedFields.Fld_Type
+                   let Filterdata = mastersyn_data.filter { $0.name == AddedFields.Fld_Src_Name }
+                   print(Filterdata)
+                   customLabel.SelectionDatas = Filterdata[0].Fieldata
                    customLabel.delegate = self
                    
                    customLabel.layoutIfNeeded()
@@ -945,10 +1082,13 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
                    height = height+fittingSize.height + 10
                    StackView.addArrangedSubview(customField)
                }else if AddedFields.Fld_Type == "SMO"{
+                   
+                   let CheckBoxdata = AddedFields.Fld_Src_Field.split(separator: ",").map { String($0) }
+                   
                    let customCheckboxView = CustomCheckboxView()
                    customCheckboxView.configure(
                        title: AddedFields.Field_Name,
-                       checkBoxTitles: ["Option 1", "Option 2", "Option 3", "Option 4", "Option 5", "Option 2", "Option 3", "Option 4"]
+                       checkBoxTitles: CheckBoxdata
                    )
                    customCheckboxView.tag = index
                    customCheckboxView.delegate = self
@@ -963,10 +1103,37 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
                    StackView.addArrangedSubview(customCheckboxView)
                    
                }else if AddedFields.Fld_Type == "CM"{
+                   
+                   // CheckBox and data required
+                   
+                   let Filterdata = mastersyn_data.filter { $0.name == AddedFields.Fld_Src_Name }
+                   print(Filterdata)
                    let customCheckboxView = CustomCheckboxView()
                    customCheckboxView.configure(
                        title: AddedFields.Field_Name,
-                       checkBoxTitles: ["Option 1", "Option 2", "Option 3", "Option 4", "Option 5", "Option 2", "Option 3", "Option 4"]
+                       checkBoxTitles:Filterdata[0].Fieldata
+                   )
+                   customCheckboxView.tag = index
+                   customCheckboxView.delegate = self
+                   customCheckboxView.frame = CGRect(x: 0, y: 0, width: 300, height: 200)
+                   customCheckboxView.backgroundColor = .white
+                   
+                   customCheckboxView.layoutIfNeeded()
+
+                   // Calculate height
+                   let fittingSize = customCheckboxView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+                   print("Calculated height: \(fittingSize.height)")
+                   height = height+fittingSize.height + 10
+                   StackView.addArrangedSubview(customCheckboxView)
+                   
+               }else if AddedFields.Fld_Type == "SMM"{
+                   // CheckBox and data required
+                   let Filterdata = mastersyn_data.filter { $0.name == AddedFields.Fld_Src_Name }
+                   print(Filterdata)
+                   let customCheckboxView = CustomCheckboxView()
+                   customCheckboxView.configure(
+                       title: AddedFields.Field_Name,
+                       checkBoxTitles:Filterdata[0].Fieldata
                    )
                    customCheckboxView.tag = index
                    customCheckboxView.delegate = self
@@ -997,6 +1164,7 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
                }else if AddedFields.Fld_Type == "TR"{
                    let CustomRange = CustomRangeField()
                    CustomRange.configure(title: AddedFields.Field_Name, from: "Select From Time", to: "Select To Time", mandatory: AddedFields.Mandate)
+                   CustomRange.delegate = self
                    CustomRange.layoutIfNeeded()
                    let fittingSize = CustomRange.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
                    height = height+fittingSize.height + 10
@@ -1038,9 +1206,10 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
        print(tags)
        let ShowPopup = UploadPopUpController()
        ShowPopup.didSelect = { data in
-           
-           print(data)
-               self.ChangeText(text: "\(tags)", tags: tags)
+           self.ChangeText(text: data, tags: tags)
+           let tag1 = tags[0]
+           let tag2 = tags[1]
+           self.CustomGroupData[tag1].Customdetails_data[tag2].data_value = data
        }
        ShowPopup.show()
    }
@@ -1057,31 +1226,31 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
                if let customField = subview as? CustomFieldUpload, customField.tags == tags {
                    customField.setDynamicLabelText(text)
                    customField.hideCheckImage(false)
+                   let tag1 = tags[0]
+                   let tag2 = tags[1]
+                   self.CustomGroupData[tag1].Customdetails_data[tag2].data_value = text
                }
            }
    }
    
    
-   func CustomSelectionLabelDidSelect(tags: [Int], typ: String) {
-       print(tags,typ)
-       
+    func CustomSelectionLabelDidSelect(tags: [Int], typ: String, selection: [String]) {
        if typ == "D"{
-           
            let ShowPopup = SelectDatePopUpController()
            ShowPopup.didSelect = { data in
                guard let stackView = self.StackView else {
                    print("StackView is not connected")
                    return
                }
-               
                // Iterate through stackView's arrangedSubviews
                for subview in stackView.arrangedSubviews {
                    if let customField = subview as? CustomSelectionLabel, customField.tags == tags {
                        customField.SetDatetext(Date:data )
-                       
+                       let tag1 = tags[0]
+                       let tag2 = tags[1]
+                       self.CustomGroupData[tag1].Customdetails_data[tag2].data_value = data
                    }
                }
-               
            }
            ShowPopup.show()
        }else if typ == "T"{
@@ -1091,25 +1260,61 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
                    print("StackView is not connected")
                    return
                }
-               
                // Iterate through stackView's arrangedSubviews
                for subview in stackView.arrangedSubviews {
                    if let customField = subview as? CustomSelectionLabel, customField.tags == tags {
                        customField.SetDatetext(Date:data )
-                       
+                       print(self.CustomGroupData)
+                       let tag1 = tags[0]
+                       let tag2 = tags[1]
+                       self.CustomGroupData[tag1].Customdetails_data[tag2].data_value = data
                    }
                }
-               
            }
            ShowPopup.show()
+       }else if typ == "SSO" || typ == "SSM" {
+           
+           let transformedData = selection
+               .filter { !$0.trimmingCharacters(in: .whitespaces).isEmpty }
+               .map { ["name": $0] as NSDictionary }
+ 
+           isDate=false
+           lObjSel=transformedData
+           openWin(Mode: "CUS")
+           tbDataSelect.reloadData()
+           lblSelTitle.text="Select Data"
        }
-       
-   }
-   
-   func customTextField(_ customTextField: CustomTextField, didUpdateText text: String, tags: [Int]) {
-       print(tags)
-       print(text)
    }
     
-
+   
+   
+   func customTextField(_ customTextField: CustomTextField, didUpdateText text: String, tags: [Int]) {
+       let tag1 = tags[0]
+       let tag2 = tags[1]
+       self.CustomGroupData[tag1].Customdetails_data[tag2].data_value = text
+   }
+    
+    func customTextNumberField(_ customTextField: CustomTextNumberField, didUpdateText text: String, tags: [Int]) {
+        let tag1 = tags[0]
+        let tag2 = tags[1]
+        self.CustomGroupData[tag1].Customdetails_data[tag2].data_value = text
+    }
+    
+    
+    func CustomRangeSelectionLabelDidSelect(tags: [Int], typ: String, selmod: String) {
+        print(selmod)
+    }
+    
+    func validateCustomForm() -> Bool {
+        for i in CustomGroupData{
+            for j in i.Customdetails_data{
+                print(j)
+                if j.Mandate == 1  && j.data_value.isEmpty {
+                    Toast.show(message: j.Field_Name, controller: self)
+                    return false
+                }
+            }
+        }
+        return true
+    }
 }

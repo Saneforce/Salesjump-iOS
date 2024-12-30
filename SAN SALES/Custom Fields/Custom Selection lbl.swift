@@ -10,7 +10,7 @@ import UIKit
 
 
 protocol CustomSelectionLabelViewDelegate: AnyObject {
-    func CustomSelectionLabelDidSelect(tags: [Int],typ:String)
+    func CustomSelectionLabelDidSelect(tags: [Int],typ:String,selection:[String])
 }
 
 
@@ -18,6 +18,7 @@ class CustomSelectionLabel: UIView {
     weak var delegate: CustomSelectionLabelViewDelegate?
     var tags: [Int] = []
     var Typ:String = ""
+    var SelectionDatas:[String] = []
     // MARK: - UI Components
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -89,7 +90,7 @@ class CustomSelectionLabel: UIView {
     }
     
     @objc private func valueLabelTapped() {
-        delegate?.CustomSelectionLabelDidSelect(tags: tags, typ: Typ)
+        delegate?.CustomSelectionLabelDidSelect(tags: tags, typ: Typ, selection: SelectionDatas)
     }
     
     // MARK: - Configuration
