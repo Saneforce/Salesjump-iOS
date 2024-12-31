@@ -8,8 +8,15 @@
 import Foundation
 import UIKit
 
+protocol CustomRadioButtonViewDelegate: AnyObject {
+    func radioButtonTapped(at index: Int, title: String,flag:String,MasterName:String,tags:[Int])
+}
 class CustomRadioButtonView: UIView {
+    weak var delegate: CustomRadioButtonViewDelegate?
+    var tags: [Int] = []
     var Mandate = 0
+    var flag = ""
+    var MasterName = ""
     // MARK: - UI Components
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -148,9 +155,13 @@ class CustomRadioButtonView: UIView {
         for button in radioButtons {
             button.isSelected = false
         }
-        
         // Select the tapped button
         sender.isSelected = true
+        // Find the index of the tapped button
+          if let index = radioButtons.firstIndex(of: sender),
+             let title = (sender.superview as? UIStackView)?.arrangedSubviews.last as? UILabel {
+              delegate?.radioButtonTapped(at: index, title: title.text ?? "", flag: flag, MasterName: MasterName, tags: tags)
+          }
     }
 }
 

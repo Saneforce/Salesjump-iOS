@@ -17,6 +17,7 @@ class CustomTextNumberField: UIView, UITextFieldDelegate {
     weak var delegate: CustomTextNumberFieldDelegate?
     var tags: [Int] = []
     var Mandate = 0
+    var TextCount = 100
     // MARK: - UI Components
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -123,10 +124,22 @@ class CustomTextNumberField: UIView, UITextFieldDelegate {
         }
     }
 
+    // MARK: - UITextFieldDelegate Methods
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        let currentText = textField.text ?? ""
+        let updatedText = (currentText as NSString).replacingCharacters(in: range, with: string)
+        if updatedText.count > TextCount {
+            return false
+        }
+        delegate?.customTextNumberField(self, didUpdateText: updatedText, tags: tags)
+        return true
+    }
+    
     // MARK: - Configuration
-    func configure(title: String, placeholder: String) {
+    func configure(title: String, placeholder: String,textcount:Int) {
         titleLabel.text = title
         textField.placeholder = placeholder
+        TextCount = textcount
         updateTitleLabel(setTital: title)
     }
 }

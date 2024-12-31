@@ -157,7 +157,7 @@ class CustomFields: IViewController,CustomCheckboxViewDelegate,CustomFieldUpload
             for AddedFields in AddedFields_Title.Customdetails_data {
                 if AddedFields.Fld_Type == "TAS" {
                     let customTextField = CustomTextField()
-                    customTextField.configure(title: AddedFields.Field_Name, placeholder: "Enter the \(AddedFields.Field_Name)")
+                    customTextField.configure(title: AddedFields.Field_Name, placeholder: "Enter the \(AddedFields.Field_Name)", textCount: 10)
                     
                     customTextField.tag = index
                     customTextField.tags = [index,index2]
@@ -166,7 +166,7 @@ class CustomFields: IViewController,CustomCheckboxViewDelegate,CustomFieldUpload
                     stackView.addArrangedSubview(customTextField)
                 } else if AddedFields.Fld_Type == "NP" {
                     let customTextField = CustomTextNumberField()
-                    customTextField.configure(title: AddedFields.Field_Name, placeholder: "Enter the \(AddedFields.Field_Name)")
+                    customTextField.configure(title: AddedFields.Field_Name, placeholder: "Enter the \(AddedFields.Field_Name)", textcount: AddedFields.Fld_Length)
                     stackView.addArrangedSubview(customTextField)
                 } else if AddedFields.Fld_Type == "CO" {
                     let customCheckboxView = CustomCheckboxView()
@@ -259,7 +259,7 @@ class CustomFields: IViewController,CustomCheckboxViewDelegate,CustomFieldUpload
                     
                 }else{
                     let customTextField = CustomTextNumberField()
-                    customTextField.configure(title: AddedFields.Field_Name, placeholder: "Enter the \(AddedFields.Field_Name)")
+                    customTextField.configure(title: AddedFields.Field_Name, placeholder: "Enter the \(AddedFields.Field_Name)", textcount: AddedFields.Fld_Length)
                     stackView.addArrangedSubview(customTextField)
                 }
                 index2 += 1
@@ -269,7 +269,8 @@ class CustomFields: IViewController,CustomCheckboxViewDelegate,CustomFieldUpload
     }
 
     // MARK: - CustomCheckboxViewDelegate
-    func checkboxViewDidSelect(_ title: String, isSelected: Bool, tag: Int, tags: [Int], Selectaheckbox: [String : Bool]) {
+    func checkboxViewDidSelect(_ title: String, isSelected: Bool, tag: Int, tags: [Int], Selectaheckbox: [String : Bool], flag: String, MasterName: String) {
+        
         print("Checkbox '\(title)' with tag \(tag) is \(isSelected ? "selected" : "deselected")")
         print(tags)
         print(Selectaheckbox)

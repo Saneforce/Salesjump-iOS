@@ -69,7 +69,7 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
             
         }
 
-        strMasList.append(mnuItem.init(MasId: 22, MasName: "Custom Form New", MasImage: "SwitchRoute"))
+      //  strMasList.append(mnuItem.init(MasId: 22, MasName: "Custom Form New", MasImage: "SwitchRoute"))
         strMasList.append(mnuItem.init(MasId: 1, MasName: "Switch \(UserSetup.shared.StkRoute)", MasImage: "SwitchRoute"))
         strMasList.append(mnuItem.init(MasId: 2, MasName: "Add New \(UserSetup.shared.DrCap)", MasImage: "NewRetailer"))
        /* strMasList.append(mnuItem.init(MasId: 3, MasName: "Edit Retailer", MasImage: "EditRetailer"))
@@ -289,10 +289,15 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
             //viewController.navigationController?.pushViewController(myDyPln, animated: true)
             (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
         }else if lItm.MasId == 2 {
-            let Homevc = storyboard.instantiateViewController(withIdentifier: "HomePageVwControl") as! HomePageViewController
-            let addCus = storyboard.instantiateViewController(withIdentifier: "AddNewRetailer") as! AddNewCustomer
-            viewController.setViewControllers([Homevc, addCus], animated: false)
-            //viewController.navigationController?.pushViewController(myDyPln, animated: true)
+            // Old
+            
+//            let Homevc = storyboard.instantiateViewController(withIdentifier: "HomePageVwControl") as! HomePageViewController
+//            let addCus = storyboard.instantiateViewController(withIdentifier: "AddNewRetailer") as! AddNewCustomer
+//            viewController.setViewControllers([Homevc, addCus], animated: false)
+            // New
+            let rptstoryboard = UIStoryboard(name: "Main", bundle: nil)
+            let RptMnuVc = rptstoryboard.instantiateViewController(withIdentifier: "sbAddNewCustomer_New") as! AddNewCustomer_New
+            viewController.setViewControllers([RptMnuVc], animated: false)
         }else if lItm.MasId == 6{
             let rptstoryboard = UIStoryboard(name: "AdminForms", bundle: nil)
             let RptMnuVc = rptstoryboard.instantiateViewController(withIdentifier: "sbAdminMnu") as! AdminMenus
