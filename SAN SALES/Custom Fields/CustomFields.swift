@@ -276,7 +276,7 @@ class CustomFields: IViewController,CustomCheckboxViewDelegate,CustomFieldUpload
         print(Selectaheckbox)
     }
     
-    func CustomFieldUploadDidSelect(tags: [Int]) {
+    func CustomFieldUploadDidSelect(tags: [Int], typ: String) {
         print(tags)
         let ShowPopup = UploadPopUpController()
         ShowPopup.didSelect = { data in

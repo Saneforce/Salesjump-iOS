@@ -104,6 +104,9 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
             strMasList.append(mnuItem.init(MasId:20, MasName: "Closing Stock Entry (SS)", MasImage: "SubmittedCalls"))
         }
         strMasList.append(mnuItem.init(MasId: 21, MasName: "Outbox", MasImage: "SwitchRoute"))
+        
+        strMasList.append(mnuItem.init(MasId:22, MasName: " Edit \(UserSetup.shared.DrCap)", MasImage: "NewRetailer"))
+        
         menuClose.addTarget(target: self, action: #selector(closeMenuWin))
         tbMenuDetail.delegate=self
         tbMenuDetail.dataSource=self
@@ -297,6 +300,8 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
             // New
             let rptstoryboard = UIStoryboard(name: "Main", bundle: nil)
             let RptMnuVc = rptstoryboard.instantiateViewController(withIdentifier: "sbAddNewCustomer_New") as! AddNewCustomer_New
+            RptMnuVc.Add_or_Edit_typ = "ADD"
+            RptMnuVc.Header_title = "Add New\(UserSetup.shared.DrCap)"
             viewController.setViewControllers([RptMnuVc], animated: false)
         }else if lItm.MasId == 6{
             let rptstoryboard = UIStoryboard(name: "AdminForms", bundle: nil)
@@ -389,9 +394,15 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
             let RptMnuVc = rptstoryboard.instantiateViewController(withIdentifier: "sbOutbox") as! OutBox
             viewController.setViewControllers([RptMnuVc], animated: false)
         }else if lItm.MasId == 22{
+//            let rptstoryboard = UIStoryboard(name: "Main", bundle: nil)
+//            let RptMnuVc = rptstoryboard.instantiateViewController(withIdentifier: "sbAddNewCustomer_New") as! AddNewCustomer_New
+//            viewController.setViewControllers([RptMnuVc], animated: false)
             let rptstoryboard = UIStoryboard(name: "Main", bundle: nil)
             let RptMnuVc = rptstoryboard.instantiateViewController(withIdentifier: "sbAddNewCustomer_New") as! AddNewCustomer_New
+            RptMnuVc.Add_or_Edit_typ = "EDIT"
+            RptMnuVc.Header_title = "Edit \(UserSetup.shared.DrCap)"
             viewController.setViewControllers([RptMnuVc], animated: false)
+            
         }
         (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(viewController)
         print(strMasList[indexPath.row].MasName)

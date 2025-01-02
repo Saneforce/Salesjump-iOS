@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 protocol CustomFieldUploadViewDelegate: AnyObject {
-    func CustomFieldUploadDidSelect(tags: [Int])
+    func CustomFieldUploadDidSelect(tags: [Int],typ:String)
 }
 
 class CustomFieldUpload: UIView {
@@ -17,6 +17,7 @@ class CustomFieldUpload: UIView {
     weak var delegate: CustomFieldUploadViewDelegate? // Delegate reference
     var tags: [Int] = []
     var Mandate = 0
+    var typ = ""
     
     // MARK: - UI Components
     
@@ -28,8 +29,6 @@ class CustomFieldUpload: UIView {
         label.alpha = 0 // Initially hidden
         return label
     }()
-    
-    
     func updateTitleLabel(setTitle:String) {
         if Mandate == 1 {
             // Create attributed text with a red asterisk
@@ -151,7 +150,7 @@ class CustomFieldUpload: UIView {
     
     @objc private func uploadImageTapped() {
 
-        delegate?.CustomFieldUploadDidSelect(tags: tags)
+        delegate?.CustomFieldUploadDidSelect(tags: tags, typ: typ)
     }
     
     // MARK: - Public Methods

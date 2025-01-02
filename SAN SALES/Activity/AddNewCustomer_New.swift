@@ -11,10 +11,8 @@ import MapKit
 import Alamofire
 import FSCalendar
 import Foundation
-class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomFieldUploadViewDelegate,CustomSelectionLabelViewDelegate,CustomTextFieldDelegate,UITableViewDelegate, UITableViewDataSource,FSCalendarDelegate,FSCalendarDataSource,CustomRangeFieldViewDelegate,CustomTextNumberFieldDelegate,CustomTextField_Multiple_lineDelegate,CustomRadioButtonViewDelegate{
-   
-    
-   
+class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomFieldUploadViewDelegate,CustomSelectionLabelViewDelegate,CustomTextFieldDelegate,UITableViewDelegate, UITableViewDataSource,FSCalendarDelegate,FSCalendarDataSource,CustomRangeFieldViewDelegate,CustomTextNumberFieldDelegate,CustomTextField_Multiple_lineDelegate,CustomRadioButtonViewDelegate,CustomCurrencyTextNumberFieldDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate{
+
     @IBOutlet weak var mapOutletLoc: MKMapView!
     @IBOutlet weak var lblHQ: LabelSelect!
     @IBOutlet weak var lblRoute: LabelSelect!
@@ -93,6 +91,9 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
     var StateCode:String = ""
     var Desig:String = ""
     var CustomTag:[Int] = []
+    var CameraTag:[Int] = []
+    var Add_or_Edit_typ:String?
+    var Header_title:String?
     
     // MARK: Add dynamic field
     @IBOutlet weak var btnBack: UIImageView!
@@ -136,9 +137,6 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
         super.viewDidLoad()
         getUserDetails()
         btnBack.addTarget(target: self, action: #selector(GotoHome))
-        
-        
-        
         btnBack.addTarget(target: self, action: #selector(GotoHome))
         imgOutlet.addTarget(target: self, action: #selector(takePhoto))
         SetSalValu.isHidden = true
@@ -198,7 +196,9 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
         
        // imgOutlet.image = UIImage(imageLiteralResourceName: "")
         
-        lblTitleCap.text = "Add New \(UserSetup.shared.DrCap)"
+        if let title = Header_title {
+            lblTitleCap.text = title
+        }
         
         Outlet_Nmae.text = "\(UserSetup.shared.DrCap) Name"
         
@@ -992,7 +992,23 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
                    let fittingSize = customTextField.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
                    height = height+fittingSize.height + 10
                    StackView.addArrangedSubview(customTextField)
-               } else if AddedFields.Fld_Type == "CO" {
+               }else if AddedFields.Fld_Type == "NC" {
+                   let customTextField = CustomCurrencyTextNumberField()
+                   if AddedFields.Mandate == 1{
+                       customTextField.isMandatory = false
+                   }else{
+                       customTextField.isMandatory = true
+                   }
+                   customTextField.currencysymbol = AddedFields.Fld_Symbol
+                   customTextField.configure(title: AddedFields.Field_Name, placeholder: "Enter the amount", textCountLimit: AddedFields.Fld_Length, currencysymbol: AddedFields.Fld_Symbol)
+                   customTextField.tags = [index,index2]
+                   customTextField.delegate = self
+                   customTextField.layoutIfNeeded()
+                   // Calculate height
+                   let fittingSize = customTextField.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+                   height = height+fittingSize.height + 10
+                   StackView.addArrangedSubview(customTextField)
+               }else if AddedFields.Fld_Type == "CO" {
                    let CheckBoxdata = AddedFields.Fld_Src_Field.split(separator: ",").map { String($0) }
                    
                    
@@ -1101,12 +1117,13 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
                    height = height+fittingSize.height + 10
                    StackView.addArrangedSubview(customLabel)
                    
-               }else if AddedFields.Fld_Type == "FSC" || AddedFields.Fld_Type == "FC" {
+               }else if AddedFields.Fld_Type == "FSC" {
+                   // MARK: File and Camera
                    let customField = CustomFieldUpload()
                    customField.Mandate = AddedFields.Mandate
-                   
+                   customField.typ = AddedFields.Fld_Type
                    customField.setTitleText(AddedFields.Field_Name)
-                   customField.setDynamicLabelText("Dynamic Content")
+                   customField.setDynamicLabelText("")
                    customField.hideCheckImage(true)
                    customField.tags = [index,index2]
                    customField.delegate = self
@@ -1115,6 +1132,21 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
                    // Calculate height
                    let fittingSize = customField.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
                    print("Calculated height: \(fittingSize.height)")
+                   height = height+fittingSize.height + 10
+                   StackView.addArrangedSubview(customField)
+               }else if AddedFields.Fld_Type == "FC" {
+                   // MARK: Camera
+                   let customField = CustomFieldUpload()
+                   customField.Mandate = AddedFields.Mandate
+                   customField.typ = AddedFields.Fld_Type
+                   customField.setTitleText(AddedFields.Field_Name)
+                   customField.setDynamicLabelText("")
+                   customField.hideCheckImage(true)
+                   customField.tags = [index,index2]
+                   customField.delegate = self
+                   customField.layoutIfNeeded()
+                   // Calculate height
+                   let fittingSize = customField.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
                    height = height+fittingSize.height + 10
                    StackView.addArrangedSubview(customField)
                }else if AddedFields.Fld_Type == "SMO"{
@@ -1205,7 +1237,7 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
                }else if AddedFields.Fld_Type == "T"{
                    let customLabel = CustomSelectionLabel()
                    customLabel.Mandate = AddedFields.Mandate
-                   customLabel.configure(title: AddedFields.Field_Name, value: "Select \(AddedFields.Field_Name)")
+                   customLabel.configure(title: AddedFields.Field_Name, value: "Select Time")
                    customLabel.tags = [index,index2]
                    customLabel.Typ = AddedFields.Fld_Type
                    customLabel.delegate = self
@@ -1219,25 +1251,39 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
                }else if AddedFields.Fld_Type == "TR"{
                    let CustomRange = CustomRangeField()
                    CustomRange.Mandate = AddedFields.Mandate
-                   CustomRange.configure(title: AddedFields.Field_Name, from: "Select From Time", to: "Select To Time", mandatory: AddedFields.Mandate)
+                   CustomRange.Typ = AddedFields.Fld_Type
+                   CustomRange.configure(title: AddedFields.Field_Name, from: "  Select From Time", to: "Select To Time  ", mandatory: AddedFields.Mandate)
+                   CustomRange.tags = [index,index2]
                    CustomRange.delegate = self
                    CustomRange.layoutIfNeeded()
                    let fittingSize = CustomRange.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
                    height = height+fittingSize.height + 10
                    StackView.addArrangedSubview(CustomRange)
-               }else{
-                   let customTextField = CustomTextNumberField()
-                   customTextField.Mandate = AddedFields.Mandate
-                   customTextField.configure(title: AddedFields.Field_Name, placeholder: "Enter the \(AddedFields.Field_Name)", textcount: AddedFields.Fld_Length)
-                   
-                   customTextField.layoutIfNeeded()
-
-                   // Calculate height
-                   let fittingSize = customTextField.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
-                   print("Calculated height: \(fittingSize.height)")
+               }else if AddedFields.Fld_Type == "DR"{
+                   let CustomRange = CustomRangeField()
+                   CustomRange.Mandate = AddedFields.Mandate
+                   CustomRange.Typ = AddedFields.Fld_Type
+                   CustomRange.configure(title: AddedFields.Field_Name, from: "  Select From Date", to: "Select To Date  ", mandatory: AddedFields.Mandate)
+                   CustomRange.tags = [index,index2]
+                   CustomRange.delegate = self
+                   CustomRange.layoutIfNeeded()
+                   let fittingSize = CustomRange.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
                    height = height+fittingSize.height + 10
-                   StackView.addArrangedSubview(customTextField)
+                   StackView.addArrangedSubview(CustomRange)
                }
+//               else{
+//                   let customTextField = CustomTextNumberField()
+//                   customTextField.Mandate = AddedFields.Mandate
+//                   customTextField.configure(title: AddedFields.Field_Name, placeholder: "Enter the \(AddedFields.Field_Name)", textcount: AddedFields.Fld_Length)
+//                   
+//                   customTextField.layoutIfNeeded()
+//
+//                   // Calculate height
+//                   let fittingSize = customTextField.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+//                   print("Calculated height: \(fittingSize.height)")
+//                   height = height+fittingSize.height + 10
+//                   StackView.addArrangedSubview(customTextField)
+//               }
                index2 += 1
            }
            index += 1
@@ -1282,18 +1328,53 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
   
    }
    
-   func CustomFieldUploadDidSelect(tags: [Int]) {
-       print(tags)
-       let ShowPopup = UploadPopUpController()
-       ShowPopup.didSelect = { data in
-           self.ChangeText(text: data, tags: tags)
-           let tag1 = tags[0]
-           let tag2 = tags[1]
-           self.CustomGroupData[tag1].Customdetails_data[tag2].data_value = data
-       }
-       ShowPopup.show()
+    func CustomFieldUploadDidSelect(tags: [Int], typ: String) {
+        if typ == "FSC"{
+            let ShowPopup = UploadPopUpController()
+            ShowPopup.didSelect = { data in
+                self.ChangeText(text: data, tags: tags)
+                let tag1 = tags[0]
+                let tag2 = tags[1]
+                self.CustomGroupData[tag1].Customdetails_data[tag2].data_value = data
+            }
+            ShowPopup.show()
+        }else{
+            CameraTag = tags
+            if UIImagePickerController.isSourceTypeAvailable(.camera) {
+                      let imagePicker = UIImagePickerController()
+                      imagePicker.delegate = self
+                      imagePicker.sourceType = .camera
+                      imagePicker.allowsEditing = true // Set to false if you don't need editing
+                      self.present(imagePicker, animated: true, completion: nil)
+                  } else {
+                      // Alert user if camera is not available
+                      let alert = UIAlertController(title: "Error", message: "Camera is not available", preferredStyle: .alert)
+                      alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                      self.present(alert, animated: true, completion: nil)
+                  }
+            
+        }
    }
+    
+    // MARK: - UIImagePickerControllerDelegate Methods
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if let selectedImage = info[.originalImage] as? UIImage {
+            print("Image picked successfully.")
+            let fileName: String = String(Int(Date().timeIntervalSince1970))
+            let filenameno="\(SFCode)__\(fileName).jpg"
+            self.ChangeText(text: filenameno, tags: CameraTag)
+            let tag1 = CameraTag[0]
+            let tag2 = CameraTag[1]
+            self.CustomGroupData[tag1].Customdetails_data[tag2].data_value = filenameno
+            ImageUploader().uploadImage(SFCode: self.SFCode, image: selectedImage, fileName: fileName)
+            self.dismiss(animated: true)
+        }
+        picker.dismiss(animated: true, completion: nil)
+    }
    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true, completion: nil)
+    }
    
    func ChangeText(text:String,tags: [Int]){
        guard let stackView = StackView else {
@@ -1382,12 +1463,18 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
         self.CustomGroupData[tag1].Customdetails_data[tag2].data_value = text
         print(CustomGroupData)
     }
-    // Number  Text Field Update
+    // MARK: Number  Text Field Update
     func customTextNumberField(_ customTextField: CustomTextNumberField, didUpdateText text: String, tags: [Int]) {
         let tag1 = tags[0]
         let tag2 = tags[1]
         self.CustomGroupData[tag1].Customdetails_data[tag2].data_value = text
     }
+    // MARK: Number Currency Field Update
+    func customCurrencyTextNumberField(_ customTextField: CustomCurrencyTextNumberField, didUpdateText text: String, tags: [Int], currencysymbol: String) {
+        print(tags)
+    }
+    
+    
     
     func radioButtonTapped(at index: Int, title: String, flag: String, MasterName: String, tags: [Int]) {
         if flag == "RM"{
@@ -1406,7 +1493,55 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
     }
     
     func CustomRangeSelectionLabelDidSelect(tags: [Int], typ: String, selmod: String) {
-        print(selmod)
+    
+        if typ == "DR"{
+            let ShowPopup = SelectDatePopUpController()
+            ShowPopup.didSelect = { data in
+                guard let stackView = self.StackView else {
+                    print("StackView is not connected")
+                    return
+                }
+                // Iterate through stackView's arrangedSubviews
+                for subview in stackView.arrangedSubviews {
+                    if let customField = subview as? CustomRangeField, customField.tags == tags {
+                        if selmod == "FROM"{
+                            customField.setFromValue(from: "  "+data)
+                        }else{
+                            customField.setToValue(to: data+"  ")
+                        }
+                        
+                        let tag1 = tags[0]
+                        let tag2 = tags[1]
+                       // self.CustomGroupData[tag1].Customdetails_data[tag2].data_value = data
+                    }
+                }
+            }
+            ShowPopup.show()
+        }else if typ == "TR"{
+            let ShowPopup = DatePickerPopUPController()
+            ShowPopup.didSelect = { data in
+                guard let stackView = self.StackView else {
+                    print("StackView is not connected")
+                    return
+                }
+                // Iterate through stackView's arrangedSubviews
+                for subview in stackView.arrangedSubviews {
+                    if let customField = subview as? CustomRangeField, customField.tags == tags {
+                        if selmod == "FROM"{
+                            customField.setFromValue(from: "  "+data)
+                        }else{
+                            customField.setToValue(to: data+"  ")
+                        }
+                        
+                        let tag1 = tags[0]
+                        let tag2 = tags[1]
+                       // self.CustomGroupData[tag1].Customdetails_data[tag2].data_value = data
+                       
+                    }
+                }
+            }
+            ShowPopup.show()      
+        }
     }
     
     func validateCustomForm() -> Bool {

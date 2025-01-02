@@ -101,6 +101,7 @@
 		3F0E5AAA2CB64B7300C97D83 /* Order Details.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0E5AA92CB64B7300C97D83 /* Order Details.swift */; };
 		3F0E5AAC2CB64FA800C97D83 /* Reports 2.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3F0E5AAB2CB64FA800C97D83 /* Reports 2.storyboard */; };
 		3F0ED6BE2872F61A00FF4460 /* OrderDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0ED6BD2872F61A00FF4460 /* OrderDetailView.swift */; };
+		3F1047BB2D26666B00469471 /* Custom currency symbol Text Number Field.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F1047BA2D26666B00469471 /* Custom currency symbol Text Number Field.swift */; };
 		3F14EAEA27F73DAD00B0997B /* SecondaryVisit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F14EAE927F73DAD00B0997B /* SecondaryVisit.swift */; };
 		3F28CBF927D3927E00B95964 /* Poppins-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3F28CBE727D3927E00B95964 /* Poppins-ExtraLight.ttf */; };
 		3F28CBFA27D3927E00B95964 /* Poppins-ThinItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3F28CBE827D3927E00B95964 /* Poppins-ThinItalic.ttf */; };
@@ -294,6 +295,7 @@
 		3F0E5AA92CB64B7300C97D83 /* Order Details.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Order Details.swift"; sourceTree = "<group>"; };
 		3F0E5AAB2CB64FA800C97D83 /* Reports 2.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Reports 2.storyboard"; sourceTree = "<group>"; };
 		3F0ED6BD2872F61A00FF4460 /* OrderDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderDetailView.swift; sourceTree = "<group>"; };
+		3F1047BA2D26666B00469471 /* Custom currency symbol Text Number Field.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Custom currency symbol Text Number Field.swift"; sourceTree = "<group>"; };
 		3F14EAE927F73DAD00B0997B /* SecondaryVisit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondaryVisit.swift; sourceTree = "<group>"; };
 		3F28CBE727D3927E00B95964 /* Poppins-ExtraLight.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-ExtraLight.ttf"; sourceTree = "<group>"; };
 		3F28CBE827D3927E00B95964 /* Poppins-ThinItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-ThinItalic.ttf"; sourceTree = "<group>"; };
@@ -512,6 +514,7 @@
 				3F0A5E4A2D11536C00477F87 /* CustomFields.swift */,
 				3F0A5E4C2D11539700477F87 /* Custom Text Field.swift */,
 				3F0A5E4E2D1153BD00477F87 /* Custom Text Number Field.swift */,
+				3F1047BA2D26666B00469471 /* Custom currency symbol Text Number Field.swift */,
 				3F0A5E502D1153D900477F87 /* Custom check box Field.swift */,
 				3F0A5E522D11702A00477F87 /* Custom Radio Button .swift */,
 				3F0A5E542D1176AB00477F87 /* Custom Selection lbl.swift */,
@@ -1081,6 +1084,7 @@
 				3FBF387727E4AA8300900007 /* Toast.swift in Sources */,
 				15A4CB912D06C6A3008EB1DE /* FreeEditViewController.swift in Sources */,
 				3F7A1F602D1437D3002C6776 /* SelectDatePopUpController.swift in Sources */,
+				3F1047BB2D26666B00469471 /* Custom currency symbol Text Number Field.swift in Sources */,
 				1514DF6C2BD7839D00E6B45A /* CallPreview.swift in Sources */,
 				3F0822BD29000872009C33EA /* AdminMenus.swift in Sources */,
 				15F4504E2C2A88DF0074D285 /* MissedDateSelection.swift in Sources */,
