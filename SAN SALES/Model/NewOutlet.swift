@@ -33,6 +33,7 @@ class NewOutlet{
     var DOB: item = item()
     var Class: item = item()
     var Category: item = item()
+    var Retailer: item = item()
     
     func Clear(){
         HQ = item()

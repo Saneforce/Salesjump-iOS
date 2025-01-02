@@ -37,6 +37,7 @@ class Edit_Customer: IViewController,CustomCheckboxViewDelegate,CustomFieldUploa
     @IBOutlet weak var SetSalValu: UIButton!
     
     
+    @IBOutlet weak var SelectName: LabelSelect!
     
     // Dynamic Caption
     
@@ -55,6 +56,9 @@ class Edit_Customer: IViewController,CustomCheckboxViewDelegate,CustomFieldUploa
     
     @IBOutlet weak var ViewDis_height: NSLayoutConstraint!
     
+    
+    @IBOutlet weak var Customer_Details: LabelSelect!
+    
     struct lItem: Any {
         let id: String
         let name: String
@@ -69,7 +73,10 @@ class Edit_Customer: IViewController,CustomCheckboxViewDelegate,CustomFieldUploa
     var lstRoutes: [AnyObject] = []
     var lstCat: [AnyObject] = []
     var lstCls: [AnyObject] = []
-    
+    var lstAllRetails: [AnyObject] = []
+    var lstRetails: [AnyObject] = []
+    var lstPlnDetail: [AnyObject] = []
+    var DataSF: String = ""
     
     struct syncdata: Any {
         let name: String
@@ -180,11 +187,23 @@ class Edit_Customer: IViewController,CustomCheckboxViewDelegate,CustomFieldUploa
         if let list = GlobalFunc.convertToDictionary(text: ClassData) as? [AnyObject] {
             lstCls = list
         }
+        let PlnDets: String=LocalStoreage.string(forKey: "Mydayplan")!
+        if let list = GlobalFunc.convertToDictionary(text: PlnDets) as? [AnyObject] {
+            lstPlnDetail = list;
+        }
+        
+        DataSF = self.lstPlnDetail[0]["subordinateid"] as! String
+        if let lstRetailData = LocalStoreage.string(forKey: "Retail_Master_"+DataSF),
+           let list = GlobalFunc.convertToDictionary(text:  lstRetailData) as? [AnyObject] {
+            lstAllRetails = list
+            print(lstRetails)
+        }
         
         btnBack.addTarget(target: self, action: #selector(GotoHome))
-        
         lblHQ.addTarget(target: self, action: #selector(selHeadquaters))
         lblRoute.addTarget(target: self, action: #selector(selRoutes))
+        
+        SelectName.addTarget(target: self, action: #selector(selName))
         lblDOB.addTarget(target: self, action: #selector(selDOB))
         lblCls.addTarget(target: self, action: #selector(selCls))
         lblCats.addTarget(target: self, action: #selector(selCats))
@@ -196,6 +215,7 @@ class Edit_Customer: IViewController,CustomCheckboxViewDelegate,CustomFieldUploa
        // imgOutlet.image = UIImage(imageLiteralResourceName: "")
         
         lblTitleCap.text = "Edit \(UserSetup.shared.DrCap)"
+        Customer_Details.text = "\(UserSetup.shared.DrCap) Details"
         Outlet_Nmae.text = "\(UserSetup.shared.DrCap) Name"
         Outlet_Class.text = "\(UserSetup.shared.DrCap) Class"
         Outlet_Category.text = "\(UserSetup.shared.DrCap) Category"
@@ -307,12 +327,20 @@ class Edit_Customer: IViewController,CustomCheckboxViewDelegate,CustomFieldUploa
                 return Bool(StkId.range(of: String(format: ",%@,", id))?.lowerBound != nil )
             })
         } else if SelMode == "RUT" {
-            print(item)
-            
             lblRoute.text = name  //+(item["id"] as! String)
             NewOutlet.shared.Route.id = id
             NewOutlet.shared.Route.name = name
             NewOutlet.shared.Route.Stk_Id = item["stockist_code"] as! String
+            
+            self.lstRetails=self.lstAllRetails.filter({(retail) in
+//                if VisitData.shared.OrderMode.id == "1" {
+//                    return true
+//                }
+                if retail["town_code"] as! String == id {
+                    return true
+                }
+                return false
+            })
         }else if SelMode == "HQ" {
             lblHQ.text = name  //+(item["id"] as! String)
             NewOutlet.shared.HQ.id = id
@@ -366,6 +394,11 @@ class Edit_Customer: IViewController,CustomCheckboxViewDelegate,CustomFieldUploa
             lblCats.text = name  //+(item["id"] as! String)
             NewOutlet.shared.Category.id = id
             NewOutlet.shared.Category.name = name
+        }else if SelMode == "RET"{
+            SelectName.text = name
+            NewOutlet.shared.Retailer.id = id
+            NewOutlet.shared.Retailer.name = name
+            GetRetailerDetails()
         }
         outletData.updateValue(lItem(id: id, name: name), forKey: SelMode)
         closeWin(self)
@@ -417,6 +450,13 @@ class Edit_Customer: IViewController,CustomCheckboxViewDelegate,CustomFieldUploa
         openWin(Mode: "RUT")
         tbDataSelect.reloadData()
         lblSelTitle.text="Select the Route"
+    }
+    @objc private func selName() {
+        isDate=false
+        lObjSel=lstRetails
+        openWin(Mode: "RET")
+        tbDataSelect.reloadData()
+        lblSelTitle.text="Select the Name"
     }
     @objc private func selCats() {
         isDate=false
@@ -778,9 +818,22 @@ class Edit_Customer: IViewController,CustomCheckboxViewDelegate,CustomFieldUploa
             }
         }
     }
-
-    // MARK: Custom Fields area
     
+    func GetRetailerDetails(){
+        let apiKey1: String = "get/Cusretailer&divisionCode=\(DivCode)&rSF=\(SFCode)&sfCode=\(SFCode)&stateCode=\(StateCode)"
+        let apiKeyWithoutCommas = apiKey1.replacingOccurrences(of: ",&", with: "&")
+        AF.request(APIClient.shared.BaseURL + APIClient.shared.CustomFieldDB + apiKeyWithoutCommas, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { [self]
+            AFdata in
+            switch AFdata.result {
+            case .success(let value):
+              print("ok")
+            case .failure(let error):
+                Toast.show(message: error.errorDescription!)  //, controller: self
+            }
+        }
+    }
+    
+    // MARK: Custom Fields area
     func CustomDetails(){
         let formatters = DateFormatter()
         formatters.dateFormat = "yyyy-MM-dd"

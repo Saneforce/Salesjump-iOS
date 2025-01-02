@@ -158,6 +158,12 @@ class Distributor_Order_Details: IViewController, UITableViewDelegate, UITableVi
             lstHQs = list;
                 Headquarterlbl.text = sfName
                 Headquarterid = SFCode
+            
+            let newHQ: [String: Any] = [
+                  "id": SFCode,
+                  "name": UserSetup.shared.SF_Name
+              ]
+            lstHQs.insert(newHQ as NSDictionary, at: 0)
 //            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
 //            self.Headquarter_height.constant =  self.Headquarterlbl.frame.height + 10
 //            }
