@@ -196,9 +196,10 @@ class AddNewCustomer_New: IViewController,CustomCheckboxViewDelegate,CustomField
         
        // imgOutlet.image = UIImage(imageLiteralResourceName: "")
         
-        if let title = Header_title {
-            lblTitleCap.text = title
-        }
+        
+        
+        
+        lblTitleCap.text = "Add New \(UserSetup.shared.DrCap)"
         
         Outlet_Nmae.text = "\(UserSetup.shared.DrCap) Name"
         

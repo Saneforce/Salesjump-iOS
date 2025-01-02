@@ -398,9 +398,7 @@ class MainMenu: IViewController, UITableViewDelegate, UITableViewDataSource  {
 //            let RptMnuVc = rptstoryboard.instantiateViewController(withIdentifier: "sbAddNewCustomer_New") as! AddNewCustomer_New
 //            viewController.setViewControllers([RptMnuVc], animated: false)
             let rptstoryboard = UIStoryboard(name: "Main", bundle: nil)
-            let RptMnuVc = rptstoryboard.instantiateViewController(withIdentifier: "sbAddNewCustomer_New") as! AddNewCustomer_New
-            RptMnuVc.Add_or_Edit_typ = "EDIT"
-            RptMnuVc.Header_title = "Edit \(UserSetup.shared.DrCap)"
+            let RptMnuVc = rptstoryboard.instantiateViewController(withIdentifier: "sbEditCustomer") as! Edit_Customer
             viewController.setViewControllers([RptMnuVc], animated: false)
             
         }
