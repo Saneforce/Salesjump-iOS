@@ -156,17 +156,14 @@ class Distributor_Order_Details: IViewController, UITableViewDelegate, UITableVi
         if let HQData = LocalStoreage.string(forKey: "HQ_Master"),
            let list = GlobalFunc.convertToDictionary(text:  HQData) as? [AnyObject] {
             lstHQs = list;
-                Headquarterlbl.text = sfName
-                Headquarterid = SFCode
-            
-            let newHQ: [String: Any] = [
-                  "id": SFCode,
-                  "name": UserSetup.shared.SF_Name
-              ]
-            lstHQs.insert(newHQ as NSDictionary, at: 0)
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-//            self.Headquarter_height.constant =  self.Headquarterlbl.frame.height + 10
-//            }
+            print(lstHQs)
+            if UserSetup.shared.SF_type == 2{
+                Headquarterlbl.text = lstHQs[0]["name"] as? String ?? ""
+                Headquarterid = lstHQs[0]["id"] as? String ?? SFCode
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                self.Headquarter_height.constant =  self.Headquarterlbl.frame.height + 20
+                }
+            }
         }
         
         No_data_availablelbl.isHidden = true
@@ -180,6 +177,8 @@ class Distributor_Order_Details: IViewController, UITableViewDelegate, UITableVi
         TB_view.sectionHeaderHeight = 10
         TB_view.sectionFooterHeight = 10
         if UserSetup.shared.SF_type == 1{
+            Headquarterlbl.text = sfName
+            Headquarterid = SFCode
             Headquarter_height.constant = 0
             Headquarter_selection.isHidden = true
         }
@@ -374,13 +373,13 @@ class Distributor_Order_Details: IViewController, UITableViewDelegate, UITableVi
         distributorVC.title = "Select the Headquarter"
         distributorVC.didSelect = { selectedDistributor in
             let item: [String: Any]=selectedDistributor as! [String : Any]
-            let name=item["name"] as? String ?? ""         
+            let name=item["name"] as? String ?? ""
             let id=String(format: "%@", item["id"] as? CVarArg ?? "")
                 self.Headquarterlbl.text = name
                 self.Headquarterid = id
                 self.OrderDayReport()
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                self.Headquarter_height.constant =  self.Headquarterlbl.frame.height + 10
+                self.Headquarter_height.constant =  self.Headquarterlbl.frame.height + 20
                 }
             self.navigationController?.popViewController(animated: true)
         }

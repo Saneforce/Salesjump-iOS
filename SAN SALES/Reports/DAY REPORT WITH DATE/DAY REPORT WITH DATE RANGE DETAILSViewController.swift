@@ -63,6 +63,9 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
     @IBOutlet weak var Cash_Discount_Height: NSLayoutConstraint!
     @IBOutlet weak var Free_TB: UITableView!
     @IBOutlet weak var height_for_Free_Tb: NSLayoutConstraint!
+    
+    @IBOutlet weak var Free_Table_Height: NSLayoutConstraint!
+    
     @IBOutlet weak var free_view: UIView!
     
     
@@ -707,11 +710,11 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
 //                        formatter.numberStyle = .currency
 //                        formatter.locale = Locale(identifier: "en_IN") // Indian locale
 //                        print(Total_Value)
-//                        
+//
 //                        if let formattedValue = formatter.string(from: NSNumber(value: Total_Value)) {
 //                            Total_Value_Amt.text = formattedValue
 //                        }
-//                        
+//
                         Total_Value_Amt.text =   CurrencyUtils.formatCurrency(amount: Total_Value, currencySymbol: UserSetup.shared.currency_symbol)
                         
                         print(Oredrdatadetisl)
@@ -943,7 +946,7 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
         }
         if Day_Report_TB == tableView {
             Day_Report_TB_height.constant = CGFloat(Orderlist.count * 50)
-            Scroll_Height_TB.constant =  Day_Report_TB_height.constant + 300
+            Scroll_Height_TB.constant =  Day_Report_TB_height.constant //+ 300
             return Orderlist.count
         }
         if Item_Summary_table == tableView{
@@ -999,7 +1002,7 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
                cell.insideTable1Data = [Oredrdatadetisl[indexPath.row]]
                
 //               print(Oredrdatadetisl[indexPath.row].Remarks)
-//               
+//
 //               if Oredrdatadetisl[indexPath.row].Remarks != ""{
 //                   DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
 //                       cell.Remark_View_height.constant = cell.Remark.layer.frame.height
@@ -1149,7 +1152,11 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
               height_for_Free_Tb.constant = 0
               free_view.isHidden = true
           }else{
-              height_for_Free_Tb.constant = 154
+              height_for_Free_Tb.constant = height_for_Free_Tb.constant - Free_Table_Height.constant
+              Free_Table_Height.constant = 0
+              Free_Table_Height.constant = CGFloat(FreeDetils.count * 30)
+              height_for_Free_Tb.constant =  height_for_Free_Tb.constant + Free_Table_Height.constant
+              Scroll_Height_TB.constant =  Scroll_Height_TB.constant + height_for_Free_Tb.constant + 100
               free_view.isHidden = false
           }
           Free_TB.reloadData()
