@@ -1,3 +1,4 @@
+
 //
 //  DAY REPORT WITH DATE RANGE DETAILSViewController.swift
 //  SAN SALES
@@ -63,12 +64,10 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
     @IBOutlet weak var Cash_Discount_Height: NSLayoutConstraint!
     @IBOutlet weak var Free_TB: UITableView!
     @IBOutlet weak var height_for_Free_Tb: NSLayoutConstraint!
-    
-    @IBOutlet weak var Free_Table_Height: NSLayoutConstraint!
-    
     @IBOutlet weak var free_view: UIView!
     
     
+    @IBOutlet weak var Free_Table_Height: NSLayoutConstraint!
     
     // View Open BY Primary Order
     
@@ -946,7 +945,7 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
         }
         if Day_Report_TB == tableView {
             Day_Report_TB_height.constant = CGFloat(Orderlist.count * 50)
-            Scroll_Height_TB.constant =  Day_Report_TB_height.constant //+ 300
+            Scroll_Height_TB.constant =  Day_Report_TB_height.constant + 300
             return Orderlist.count
         }
         if Item_Summary_table == tableView{
@@ -1402,3 +1401,4 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
 
     
 }
+
