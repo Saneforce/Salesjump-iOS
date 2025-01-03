@@ -661,7 +661,7 @@ class Order_Details: IViewController, UITableViewDataSource, UITableViewDelegate
             let height:CGFloat = (Oredrdatadetisl[indexPath.row].tlDisAmt == "0") ? 20 : 70
             
             let Height = CGFloat(Row_Height + 360)
-            return Height + height
+            return Height + height + 20
         }
         return 30
     }

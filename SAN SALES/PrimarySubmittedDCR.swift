@@ -35,6 +35,8 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
     @IBOutlet weak var lblnodata: UILabel!
     
     
+    @IBOutlet weak var lblDistributorsName: UILabel!
+    
     struct Viewval: Any {
         let Product : String
         let qty : Int
@@ -86,6 +88,8 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
         BackButton.addTarget(target: self, action: #selector(closeMenuWin))
         PrimayOrderViewTB.addSubview(refreshControl)
         refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
+        
+        lblDistributorsName.text = "\(UserSetup.shared.StkCap) Name"
         // Do any additional setup after loading the view.
     }
     @objc func refreshData() {
@@ -193,7 +197,7 @@ class PrimarySubmittedDCR: UIViewController, UITableViewDelegate, UITableViewDat
                 
             }
             cell.Rou.text = "\(UserSetup.shared.StkRoute)"
-           
+            cell.DistributerName.text = "\(UserSetup.shared.StkCap) Name"
             
            
            

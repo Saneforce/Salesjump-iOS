@@ -104,7 +104,7 @@ class DayReport:IViewController,UICollectionViewDelegate,UICollectionViewDataSou
         }
         
         Retiler_Caption.text = UserSetup.shared.DrCap
-        
+        Distributors_caption_lbl.text = UserSetup.shared.StkCap
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

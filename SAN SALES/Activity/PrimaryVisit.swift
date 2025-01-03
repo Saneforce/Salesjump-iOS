@@ -44,6 +44,8 @@ class PrimaryVisit: IViewController, UITableViewDelegate, UITableViewDataSource,
     @IBOutlet weak var heightViewPayTypeConstraint: NSLayoutConstraint!
     
     
+    @IBOutlet weak var lblDistributor: UILabel!
+    
     struct lItem: Any {
         let id: String
         let name: String
@@ -143,7 +145,7 @@ class PrimaryVisit: IViewController, UITableViewDelegate, UITableViewDataSource,
         modes.append(mode3)
         lstPayTypes = modes
         
-        if UserSetup.shared.collectedAmount == 0 {
+        if UserSetup.shared.collectedAmount == 1 {
             vwVstDetCtrl.isHidden = true
             heightViewPayTypeConstraint.constant = 0
         }
@@ -153,7 +155,9 @@ class PrimaryVisit: IViewController, UITableViewDelegate, UITableViewDataSource,
         VisitData.shared.OrderMode.name = "Field Order"
         
         
-        lblTitleCap.text = UserSetup.shared.StkCap
+        lblTitleCap.text = UserSetup.shared.PrimaryCaption
+        lblDistributor.text = UserSetup.shared.StkCap
+        lblCustNm.text = "Select the \(UserSetup.shared.StkCap)"
         
         lblCustNm.addTarget(target: self, action: #selector(selCustomer))
         lblPayType.addTarget(target: self, action: #selector(selPayTypes))
@@ -319,7 +323,7 @@ class PrimaryVisit: IViewController, UITableViewDelegate, UITableViewDataSource,
     func validateForm() -> Bool {
         VisitData.shared.VstRemarks.name = txvRmks.text
         if VisitData.shared.CustID == "" {
-            Toast.show(message: "Select the Distributor") //, controller: self
+            Toast.show(message: "Select the \(UserSetup.shared.StkCap)") //, controller: self
             return false
         }
         return true
@@ -551,7 +555,7 @@ class PrimaryVisit: IViewController, UITableViewDelegate, UITableViewDataSource,
             self.tbDataSelect.reloadData()
         }
         
-        lblSelTitle.text="Select the Distributor"
+        lblSelTitle.text="Select the \(UserSetup.shared.StkCap)"
         openWin(Mode: "DIS")
     }
     

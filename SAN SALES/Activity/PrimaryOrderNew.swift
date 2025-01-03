@@ -236,7 +236,7 @@ class PrimaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataSou
         lblStockist.addTarget(target: self, action: #selector(stkSelection))
         imgBack.addTarget(target: self, action: #selector(backVC))
         
-        lblTitle.text = UserSetup.shared.StkCap
+        lblTitle.text = UserSetup.shared.PrimaryCaption
         lblName.text = VisitData.shared.CustName
         lblDate.text = VisitData.shared.OrderMode.name
         lblDistributorName.text = VisitData.shared.CustName
@@ -268,11 +268,12 @@ class PrimaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataSou
             }
             
             let filteredArray = lstSuppList.filter {($0["id"] as? Int) == Int(self.selectedProductsforMissed.first?.distributorId ?? "0")}
+            print(filteredArray)
             if (filteredArray.isEmpty){
                 VisitData.shared.Dist.id = ""
                 lblStockist.text = ""
             }else{
-                VisitData.shared.Dist.id = String((filteredArray[0]["id"] as? Int)!)
+                VisitData.shared.Dist.id = filteredArray[0]["id"] as? String ?? "" //String((filteredArray[0]["id"] as? Int)!)
                 VisitData.shared.Dist.name = filteredArray[0]["name"] as? String ?? ""
                 lblDistributorName.text = filteredArray[0]["name"] as? String
                 lblName.text = filteredArray[0]["name"] as? String
@@ -492,14 +493,20 @@ class PrimaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataSou
                         if (rateCards.count>0) {
                             
                             if let rateValue = rateCards.first?["price"] as? String {
-                                rate = Double(rateValue) ?? 0
-                                retailorPrice = Double(rateValue) ?? 0
+                                if (Double(rateValue) ?? 0) > 0{
+                                    rate = Double(rateValue) ?? 0
+                                    retailorPrice = Double(rateValue) ?? 0
+                                }
                             }else if let rateValue = rateCards.first?["price"] as? Int {
-                                rate = Double(rateValue)
-                                retailorPrice = Double(rateValue)
+                                if (Double(rateValue)) > 0{
+                                    rate = Double(rateValue)
+                                    retailorPrice = Double(rateValue)
+                                }
                             }else if let rateValue = rateCards.first?["price"] as? Double {
-                                rate = rateValue
-                                retailorPrice = rateValue
+                                if (rateValue) > 0{
+                                    rate = rateValue
+                                    retailorPrice = rateValue
+                                }
                             }
                         }
                     }
@@ -1901,7 +1908,7 @@ class PrimaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataSou
         
         self.allProducts.append(ProductList(product: cell.product.product, productName: cell.product.productName, productId: cell.product.productId,cateId: cell.product.cateId, rate: cell.product.rate,rateEdited: cell.product.rateEdited,retailerPrice: cell.product.retailerPrice,saleErpCode: cell.product.saleErpCode,newWt: cell.product.newWt, sampleQty: "",clQty: "",remarks: "",remarksId: "", selectedRemarks: cell.product.selectedRemarks, disCountPer: cell.product.disCountPer, disCountValue: cell.product.disCountValue, disCountAmount: 0.0, freeCount: 0, unitId: cell.product.unitId, unitName: cell.product.unitName, unitCount: cell.product.unitCount, taxper: cell.product.taxper, taxAmount: 0.0, totalCount: 0.0, isSchemeActive: cell.product.isSchemeActive,scheme: cell.product.scheme,offerAvailableCount: cell.product.offerAvailableCount,offerUnitName: cell.product.offerUnitName,offerProductCode: cell.product.offerProductCode,offerProductName: cell.product.offerProductName,package: cell.product.package,schemeType: cell.product.schemeType,discountType: cell.product.discountType,isMultiSchemeActive: cell.product.isMultiSchemeActive, stockistCode: cell.product.stockistCode,multiScheme: cell.product.multiScheme, competitorProduct: []))
         
-        
+        self.freeQtyTableView.reloadData()
         self.SelectedProductTableView.reloadData()
         self.updateTotalPriceList()
     }
@@ -2056,14 +2063,14 @@ class PrimaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataSou
             return
         }
         
-        if(NetworkMonitor.Shared.isConnected != true){
-            let alert = UIAlertController(title: "Information", message: "Check the Internet Connection", preferredStyle: .alert)
-                 alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
-                     return
-                 })
-                 self.present(alert, animated: true)
-                return
-        }
+//        if(NetworkMonitor.Shared.isConnected != true){
+//            let alert = UIAlertController(title: "Information", message: "Check the Internet Connection", preferredStyle: .alert)
+//                 alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
+//                     return
+//                 })
+//                 self.present(alert, animated: true)
+//                return
+//        }
         
         let alert = UIAlertController(title: "Confirmation", message: "Do you want to submit order?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
@@ -2192,7 +2199,7 @@ class PrimaryOrderNew : IViewController, UITableViewDelegate, UITableViewDataSou
             VisitData.shared.VstRemarks.name = ""
         }
         
-        let jsonString = "[{\"Activity_Report_APP\":{\"Worktype_code\":\"'\(self.lstPlnDetail[0]["worktype"] as! String)'\",\"Town_code\":\"'" + (self.lstPlnDetail[0]["clusterid"] as! String) + "'\",\"RateEditable\":\"''\",\"dcr_activity_date\":\"'" + VisitData.shared.cInTime + "'\",\"Daywise_Remarks\":\"" + VisitData.shared.VstRemarks.name.trimmingCharacters(in: .whitespacesAndNewlines) + "\",\"eKey\":\"" + self.eKey + "\",\"rx\":\"'1'\",\"rx_t\":\"''\",\"DataSF\":\"'" + DataSF + "'\"}},{\"Activity_Stockist_Report\":{\"Stockist_POB\":\"" + VisitData.shared.PayValue + "\",\"Worked_With\":\"'" + (lstPlnDetail[0]["worked_with_code"] as! String) + "'\",\"location\":\"'" + sLocation + "'\",\"geoaddress\":\"" + sAddress + "\",\"superstockistid\":\"''\",\"Stk_Meet_Time\":\"'" + VisitData.shared.cInTime + "'\",\"modified_time\":\"'" + VisitData.shared.cInTime + "'\",\"date_of_intrument\":\"" + VisitData.shared.DOP.id + "\",\"intrumenttype\":\""+VisitData.shared.PayType.id+"\",\"orderValue\":\(totalAmount),\"Aob\":0,\"CheckinTime\":\"" + VisitData.shared.cInTime + "\",\"CheckoutTime\":\"" + VisitData.shared.cOutTime + "\",\"PhoneOrderTypes\":" + VisitData.shared.OrderMode.id + ",\"Super_Stck_code\":\"'\(VisitData.shared.Dist.id)'\",\"stockist_code\":\"'" + VisitData.shared.CustID + "'\",\"stockist_name\":\"''\",\"f_key\":{\"Activity_Report_Code\":\"'Activity_Report_APP'\"}}},{\"Activity_Stk_POB_Report\":[" + productString +  "]},{\"Activity_Stk_Sample_Report\":[]},{\"Activity_Event_Captures\":[" + sImgItems +  "]},{\"PENDING_Bills\":[]},{\"Compititor_Product\":[]},{\"Activity_Event_Captures_Call\":[]}]"
+        let jsonString = "[{\"Activity_Report_APP\":{\"Worktype_code\":\"'\(self.lstPlnDetail[0]["worktype"] as! String)'\",\"Town_code\":\"'" + (self.lstPlnDetail[0]["clusterid"] as! String) + "'\",\"RateEditable\":\"''\",\"dcr_activity_date\":\"'" + VisitData.shared.cInTime + "'\",\"Daywise_Remarks\":\"" + VisitData.shared.VstRemarks.name.trimmingCharacters(in: .whitespacesAndNewlines) + "\",\"eKey\":\"" + self.eKey + "\",\"rx\":\"'1'\",\"rx_t\":\"''\",\"DataSF\":\"'" + DataSF + "'\"}},{\"Activity_Stockist_Report\":{\"Stockist_POB\":\"" + VisitData.shared.PayValue + "\",\"Worked_With\":\"'" + (lstPlnDetail[0]["worked_with_code"] as! String) + "'\",\"location\":\"'" + sLocation + "'\",\"geoaddress\":\"" + sAddress + "\",\"superstockistid\":\"''\",\"Stk_Meet_Time\":\"'" + VisitData.shared.cInTime + "'\",\"modified_time\":\"'" + VisitData.shared.cInTime + "'\",\"date_of_intrument\":\"" + VisitData.shared.DOP.id + "\",\"intrumenttype\":\""+VisitData.shared.PayType.name+"\",\"orderValue\":\(totalAmount),\"Aob\":0,\"CheckinTime\":\"" + VisitData.shared.cInTime + "\",\"CheckoutTime\":\"" + VisitData.shared.cOutTime + "\",\"PhoneOrderTypes\":" + VisitData.shared.OrderMode.id + ",\"Super_Stck_code\":\"'\(VisitData.shared.Dist.id)'\",\"stockist_code\":\"'" + VisitData.shared.CustID + "'\",\"stockist_name\":\"''\",\"f_key\":{\"Activity_Report_Code\":\"'Activity_Report_APP'\"}}},{\"Activity_Stk_POB_Report\":[" + productString +  "]},{\"Activity_Stk_Sample_Report\":[]},{\"Activity_Event_Captures\":[" + sImgItems +  "]},{\"PENDING_Bills\":[]},{\"Compititor_Product\":[]},{\"Activity_Event_Captures_Call\":[]}]"
         
         
         
