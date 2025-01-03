@@ -19,6 +19,7 @@
 		155F39752BEA5FED0096139B /* ItemMultipleSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 155F39732BEA5FED0096139B /* ItemMultipleSelectionViewController.swift */; };
 		155F39762BEA5FED0096139B /* ItemMultipleSelectionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 155F39742BEA5FED0096139B /* ItemMultipleSelectionViewController.xib */; };
 		1568FB1A2D103B160045064D /* PrimaryOrderNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1568FB192D103B160045064D /* PrimaryOrderNew.swift */; };
+		157557742D23D19800BC4215 /* SampleGRN.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157557732D23D19800BC4215 /* SampleGRN.swift */; };
 		159095202BF1E941001D8347 /* TourPlanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1590951F2BF1E941001D8347 /* TourPlanView.swift */; };
 		159095222BF1E954001D8347 /* TourPlanViewDateWise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159095212BF1E954001D8347 /* TourPlanViewDateWise.swift */; };
 		159095252BF23AD0001D8347 /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159095232BF23AD0001D8347 /* CalendarViewController.swift */; };
@@ -188,6 +189,7 @@
 		155F39732BEA5FED0096139B /* ItemMultipleSelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemMultipleSelectionViewController.swift; sourceTree = "<group>"; };
 		155F39742BEA5FED0096139B /* ItemMultipleSelectionViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ItemMultipleSelectionViewController.xib; sourceTree = "<group>"; };
 		1568FB192D103B160045064D /* PrimaryOrderNew.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimaryOrderNew.swift; sourceTree = "<group>"; };
+		157557732D23D19800BC4215 /* SampleGRN.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleGRN.swift; sourceTree = "<group>"; };
 		1590951F2BF1E941001D8347 /* TourPlanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TourPlanView.swift; sourceTree = "<group>"; };
 		159095212BF1E954001D8347 /* TourPlanViewDateWise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TourPlanViewDateWise.swift; sourceTree = "<group>"; };
 		159095232BF23AD0001D8347 /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
@@ -499,6 +501,7 @@
 				38A1859E2BB53D5D00E01407 /* End Expense.swift */,
 				3FCF2AA72C5B5392000D8070 /* Day End SFC.swift */,
 				15C4E4532CEE21970087281D /* OutBox.swift */,
+				157557732D23D19800BC4215 /* SampleGRN.swift */,
 			);
 			path = Activity;
 			sourceTree = "<group>";
@@ -932,6 +935,7 @@
 				384E56BF2BDB674700B2E8A5 /* Approval Menu.swift in Sources */,
 				3F28CC0C27D5302100B95964 /* MydayPlanCtrl.swift in Sources */,
 				3FCF2AA82C5B5392000D8070 /* Day End SFC.swift in Sources */,
+				157557742D23D19800BC4215 /* SampleGRN.swift in Sources */,
 				3FB83A772CCD0D3E008EB529 /* DATE RANGE  CELL.swift in Sources */,
 				3F6CD0522CD9BD91008AEACE /* Distributor Order Details cell.swift in Sources */,
 				384E56C12BDB7ABF00B2E8A5 /* New Expense Approval.swift in Sources */,

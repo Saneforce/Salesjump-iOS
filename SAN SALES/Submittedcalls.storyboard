@@ -53,7 +53,7 @@
                                 <rect key="frame" x="0.0" y="30" width="393" height="50"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" fixedFrame="YES" text="Secondary Submitted DCR" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YZm-3X-YD5">
-                                        <rect key="frame" x="40" y="15" width="318" height="23"/>
+                                        <rect key="frame" x="39" y="15" width="319" height="23"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" name="Poppins-Bold" family="Poppins" pointSize="20"/>
                                         <color key="textColor" red="0.21176470589999999" green="0.20784313730000001" blue="0.20784313730000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -150,7 +150,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dZ2-EB-ZF1">
-                                                    <rect key="frame" x="50" y="136.66666666666669" width="85" height="35.333333333333314"/>
+                                                    <rect key="frame" x="50" y="136.66666666666666" width="85" height="35.333333333333343"/>
                                                     <color key="backgroundColor" red="0.062745098040000002" green="0.67843137249999996" blue="0.76078431369999999" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="85" id="LCq-H6-WTg"/>
@@ -177,7 +177,7 @@
                                                     </connections>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="giK-Um-dWX">
-                                                    <rect key="frame" x="258" y="136.66666666666669" width="85" height="35.333333333333314"/>
+                                                    <rect key="frame" x="258" y="136.66666666666666" width="85" height="35.333333333333343"/>
                                                     <color key="backgroundColor" red="0.062745098040000002" green="0.67843137249999996" blue="0.76078431369999999" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="85" id="sGe-0X-oNh"/>
@@ -325,7 +325,7 @@
                                         <rect key="frame" x="0.0" y="0.0" width="393" height="96"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="scaleAspectFill" verticalHuggingPriority="251" fixedFrame="YES" text="Order View" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="W28-y9-1yL">
-                                                <rect key="frame" x="83" y="57" width="195" height="28"/>
+                                                <rect key="frame" x="83" y="57" width="194" height="28"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <fontDescription key="fontDescription" name="Poppins-Bold" family="Poppins" pointSize="20"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -595,7 +595,7 @@
                                                                             <nil key="highlightedColor"/>
                                                                         </label>
                                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zrQ-mG-kV4">
-                                                                            <rect key="frame" x="173" y="0.0" width="203" height="44"/>
+                                                                            <rect key="frame" x="172" y="0.0" width="204" height="44"/>
                                                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
                                                                             <fontDescription key="fontDescription" name="Poppins-SemiBold" family="Poppins" pointSize="12"/>
                                                                             <nil key="textColor"/>
@@ -734,7 +734,7 @@
                                 <rect key="frame" x="0.0" y="78" width="393" height="47"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Primary Submitted DCR" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GJg-wQ-kUV">
-                                        <rect key="frame" x="47" y="15" width="336" height="23"/>
+                                        <rect key="frame" x="47" y="15" width="336" height="28"/>
                                         <fontDescription key="fontDescription" name="Poppins-Bold" family="Poppins" pointSize="20"/>
                                         <color key="textColor" red="0.21176470589999999" green="0.20784313730000001" blue="0.20784313730000001" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -776,7 +776,7 @@
                                                     <rect key="frame" x="10" y="8" width="373" height="192"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Distributor Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="M07-X6-BsB">
-                                                            <rect key="frame" x="10" y="7.0000000000000009" width="150" height="15.333333333333336"/>
+                                                            <rect key="frame" x="10" y="6.9999999999999982" width="150" height="18.333333333333329"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="150" id="c52-iv-Gfz"/>
                                                             </constraints>
@@ -785,7 +785,7 @@
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Rou" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aqE-BJ-RlT">
-                                                            <rect key="frame" x="10" y="36" width="150" height="15.333333333333336"/>
+                                                            <rect key="frame" x="10" y="36" width="150" height="18.333333333333329"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="150" id="tBN-qE-pKr"/>
                                                             </constraints>
@@ -794,7 +794,7 @@
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Meet Time" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zAL-Eb-CqY">
-                                                            <rect key="frame" x="10" y="65" width="150" height="15.333333333333329"/>
+                                                            <rect key="frame" x="10" y="65" width="150" height="18.333333333333329"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="150" id="qVN-u1-h9g"/>
                                                             </constraints>
@@ -803,7 +803,7 @@
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Order Time" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="T0f-dN-v8V">
-                                                            <rect key="frame" x="10" y="94" width="150" height="15.333333333333329"/>
+                                                            <rect key="frame" x="10" y="94" width="150" height="18.333333333333329"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="150" id="VCB-F0-ug3"/>
                                                             </constraints>
@@ -812,7 +812,7 @@
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Submitted Calls" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FTq-kR-oNK">
-                                                            <rect key="frame" x="180" y="7" width="92.666666666666686" height="21"/>
+                                                            <rect key="frame" x="180" y="7" width="106" height="21"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="21" id="3Pj-7M-dB9"/>
                                                             </constraints>
@@ -943,6 +943,7 @@
                                         <connections>
                                             <outlet property="DeleteButton" destination="rYz-dc-5p8" id="ecH-jw-fS5"/>
                                             <outlet property="Disbutor" destination="FTq-kR-oNK" id="uEe-ax-moP"/>
+                                            <outlet property="DistributerName" destination="M07-X6-BsB" id="pqe-ld-Wlq"/>
                                             <outlet property="EditButton" destination="6A7-cT-EsG" id="49d-fZ-Mg9"/>
                                             <outlet property="Rou" destination="aqE-BJ-RlT" id="EyG-sI-Eq5"/>
                                             <outlet property="ViewButton" destination="eHp-4b-7kl" id="mhZ-9G-npt"/>
@@ -1152,7 +1153,7 @@
                                                                                     </constraints>
                                                                                 </view>
                                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zS8-QS-z9o">
-                                                                                    <rect key="frame" x="125" y="10" width="90" height="14"/>
+                                                                                    <rect key="frame" x="125" y="10" width="90" height="17"/>
                                                                                     <constraints>
                                                                                         <constraint firstAttribute="width" constant="90" id="84V-K8-PTE"/>
                                                                                     </constraints>
@@ -1378,6 +1379,7 @@
                         <outlet property="Route" destination="tds-8m-XPq" id="Fag-h6-rdR"/>
                         <outlet property="ScHig" destination="ok7-HJ-KMp" id="H2O-W1-6OB"/>
                         <outlet property="inputTB_Hed" destination="IZz-fv-48o" id="gY3-lH-QR9"/>
+                        <outlet property="lblDistributorsName" destination="ih5-9b-hsn" id="Amf-fD-TjY"/>
                         <outlet property="lblnodata" destination="pzZ-bF-Q6O" id="wcC-y1-hhW"/>
                         <outlet property="veselwindow" destination="a0E-cT-sUJ" id="IfC-IV-P7d"/>
                     </connections>

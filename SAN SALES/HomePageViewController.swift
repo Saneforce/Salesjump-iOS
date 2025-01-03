@@ -143,7 +143,7 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
         strMenuList.append(mnuItem.init(MnuId: 1, MenuName: UserSetup.shared.SecondaryCaption, MenuImage: "mnuPrimary"))
         
         if (UserSetup.shared.StkNeed == 1) {
-            strMenuList.append(mnuItem.init(MnuId: 2, MenuName: UserSetup.shared.StkCap, MenuImage: "mnuPrimary"))
+            strMenuList.append(mnuItem.init(MnuId: 2, MenuName: UserSetup.shared.PrimaryCaption, MenuImage: "mnuPrimary"))
         }
         
         if (UserSetup.shared.BrndRvwNd > 0) {
@@ -153,6 +153,9 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
             strMenuList.append(mnuItem.init(MnuId: 4, MenuName: UserSetup.shared.SuperStockistOrder, MenuImage: "mnuPrimary"))
         }
         
+ //       strMenuList.append(mnuItem.init(MnuId: 5, MenuName: "SAMPLE GRN", MenuImage: "mnuPrimary"))
+        
+ //       strMenuList.append(mnuItem.init(MnuId: 6, MenuName: "SAMPLE ACTIVITY", MenuImage: "mnuPrimary"))
         
         if strMenuList.count == 1{
             mnulist.constant = CGFloat(87*2)
@@ -800,6 +803,9 @@ class HomePageViewController: IViewController, UITableViewDelegate, UITableViewD
             self.navigationController?.pushViewController(vc, animated: true)
         case 4:
             let vc=self.storyboard?.instantiateViewController(withIdentifier:"superStockistOrder") as! SuperStockistOrder
+            self.navigationController?.pushViewController(vc, animated: true)
+        case 5:
+            let vc=self.storyboard?.instantiateViewController(withIdentifier:"sbSampleGRN") as! SampleGRN
             self.navigationController?.pushViewController(vc, animated: true)
         default:
             return

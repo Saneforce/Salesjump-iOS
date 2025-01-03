@@ -66,6 +66,7 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
     @IBOutlet weak var free_view: UIView!
     
     
+    @IBOutlet weak var Free_Table_Height: NSLayoutConstraint!
     
     // View Open BY Primary Order
     
@@ -1149,7 +1150,11 @@ class DAY_REPORT_WITH_DATE_RANGE_DETAILSViewController:UIViewController, UITable
               height_for_Free_Tb.constant = 0
               free_view.isHidden = true
           }else{
-              height_for_Free_Tb.constant = 154
+              height_for_Free_Tb.constant = height_for_Free_Tb.constant - Free_Table_Height.constant
+            Free_Table_Height.constant = 0
+                Free_Table_Height.constant = CGFloat(FreeDetils.count * 30)
+                height_for_Free_Tb.constant =  height_for_Free_Tb.constant + Free_Table_Height.constant
+                Scroll_Height_TB.constant =  Scroll_Height_TB.constant + height_for_Free_Tb.constant + 100
               free_view.isHidden = false
           }
           Free_TB.reloadData()
